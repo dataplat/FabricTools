@@ -8,7 +8,7 @@
    Finally, it sets an alias for the PowerBI login function.
 
 .EXAMPLE
-   .\Fabtools.psm1
+   .\FabricTools.psm1
 
    This command runs the script.
 
@@ -19,7 +19,7 @@
    None. This script does not return any output.
 
 .NOTES
-   This script is part of the Fabtools module.
+   This script is part of the FabricTools module.
 #>
 
 
@@ -27,8 +27,8 @@
 $script:apiUrl = "https://api.fabric.microsoft.com/v1"
 $script:resourceUrl = "https://api.fabric.microsoft.com"
 $script:fabricToken = $null
-# Get all .ps1 files in the Functions folder
-$functions = Get-ChildItem -Path "$PSScriptRoot\Functions" -Filter *.ps1
+# Get all .ps1 files in the (public) Functions folder
+$functions = Get-ChildItem -Path "$PSScriptRoot\public" -Filter *.ps1
 
 # Loop over each function file
 foreach ($function in $functions) {

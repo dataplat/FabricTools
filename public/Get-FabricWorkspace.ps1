@@ -39,5 +39,5 @@ Function Get-FabricWorkspace {
 
 
     # Output the result
-    Write-Output $result
+    return $result.value
 }

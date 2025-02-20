@@ -46,6 +46,6 @@ Function Get-FabricItem {
     $result = Invoke-FabricAPIRequest -Uri "workspaces/$($workspaceID)/items" -Method Get
     }
     # Output the result
-    Write-Output $result
+    Write-Output $result.value
 }
 }

@@ -18,7 +18,7 @@ Retrieves the tenant settings from the Fabric API.
 function Get-FabricTenantSettings  {
     [Alias("Get-FabTenantSettings")]
     Param ()
-    $reply = Invoke-FabricAPIRequest -uri  "admin/tenantsettings"  -Method GET
+    $result = Invoke-FabricAPIRequest -uri  "admin/tenantsettings"  -Method GET
 
-    return $reply[0].tenantSettings
+    return $result.tenantSettings
 }

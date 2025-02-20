@@ -35,5 +35,5 @@ function Get-FabricAuthToken {
    }
 
    # Output the Fabric token
-   Write-Output $script:fabricToken
+   return $script:fabricToken
 }

@@ -27,10 +27,11 @@ function Get-FabricCapacity  {
     )
 
     if ($capacity) {
-        return Invoke-FabricAPIRequest -uri "capacities/$capacity" -Method GET
+        $result = Invoke-FabricAPIRequest -uri "capacities/$capacity" -Method GET
     } else {
-        return Invoke-FabricAPIRequest -uri "capacities" -Method GET
+        $result = Invoke-FabricAPIRequest -uri "capacities" -Method GET
     }
 
+    return $result.value
 
 }
