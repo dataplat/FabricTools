@@ -1,4 +1,8 @@
 # Release Notes
+## Version 0.8.0.0:
+- Import original code from FabTools project and rename to FabricTools with new guid
+- Refactoring of few functions
+
 ## Version 0.7.0.4:
 - Fix a bug where the Fabric API didn't have a result URI
 

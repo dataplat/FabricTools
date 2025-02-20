@@ -1,8 +1,8 @@
-<img src="Fabtools.png" alt="drawing" width="200"/>
+<img src="images/FabricToolsLogo.png" alt="drawing" width="297"/>
 
-# Fabtools PowerShell Module
+# FabricTools PowerShell Module
 
-Fabtools is a PowerShell module to be able to able to do more with Microsoft Fabric and Power BI.
+FabricTools is a PowerShell module to be able to able to do more with Microsoft Fabric and Power BI.
 It allows for various administrative tasks to be automated and integrated into workflows.
 
 ## Features
@@ -27,20 +27,20 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Installing
 
-To install the Fabtools module, you can install it from the PowerShell Gallery:
+To install the FabricTools module, you can install it from the PowerShell Gallery:
 
 ```powershell
-Install-Module Fabtools 
+Install-Module FabricTools 
 ```
 
 Or clone the repository to your local machine and import the module:
 
 ```powershell
 # Clone the repository
-git clone https://github.com/Jojobit/fabtools.git
+git clone https://github.com/dataplat/FabricTools.git
 
 # Import the module
-Import-Module ./Fabtools/Fabtools.psm1
+Import-Module ./FabricTools/FabricTools.psm1
 ```
 
 
@@ -88,19 +88,19 @@ Set-FabricAuthToken -reset
 
 ## Contributing
 
-Contributions to Fabtools are welcome. Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, 
+Contributions to FabricTools are welcome. Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, 
 and the process for submitting pull requests to us.
 
 ## Authors
 
 - **Ioana Bouariu** - *Initial work* - [Jojobit](https://github.com/Jojobit)
+- **Kamil Nowinski** - *Refactoring, unification, further commands* - [NowinskiK](https://github.com/NowinskiK)
 
-
-See also the list of [contributors](https://github.com/Jojobit/fabtools/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/dataplat/FabricTools/contributors) who participated in this project.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Acknowledgments
 
