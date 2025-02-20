@@ -28,9 +28,17 @@
 #     road.
 #----------------------------------------------------------------------------
 
-$basepath = 'C:\Users\fgeisler\repos\github\powerrit'
-$moduleName = 'powerrti'
-$modulePathName = "$basepath\powerrti\$moduleName.psd1"
+Import-Module platyPS
+
+$rootPath = Switch ($Host.name) {
+	'Visual Studio Code Host' { split-path $psEditor.GetEditorContext().CurrentFile.Path }
+	'Windows PowerShell ISE Host' { Split-Path -Path $psISE.CurrentFile.FullPath }
+	'ConsoleHost' { $PSScriptRoot }
+}
+
+$basepath = Split-Path $rootPath -Parent
+$moduleName = 'FabricTools'
+$modulePathName = "$basepath\$moduleName\$moduleName.psd1"
 $markdownPath = "$basepath\documentation"
 $mamlPath = "$basepath\en-US"
 

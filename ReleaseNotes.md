@@ -4,6 +4,7 @@
 - Import functions from powerrti project authored by [Frank Geisler](https://github.com/Frank-Geisler)
 - Rename project to FabricTools with new guid 
 - Refactoring of few functions
+- Documentation generated & helper folder with scripts
 
 ## Version 0.7.0.4:
 - Fix a bug where the Fabric API didn't have a result URI
