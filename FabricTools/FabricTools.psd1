@@ -104,7 +104,33 @@
         "Resume-FabricCapacity",
         "Set-FabricAuthToken",
         "Suspend-FabricCapacity",
-        "Unregister-FabricWorkspaceToCapacity"
+        "Unregister-FabricWorkspaceToCapacity",
+
+        'Connect-FabricAccount',
+        'Get-FabricEventhouse',
+        'Get-FabricEventstream',
+        'Get-FabricKQLDashboard',
+        'Get-FabricKQLDatabase',
+        'Get-FabricKQLQueryset',
+        'Get-FabricWorkspace',
+        'Invoke-FabricKQLCommand',
+        'New-FabricEventhouse',
+        'New-FabricEventstream',
+        'New-FabricKQLDashboard',
+        'New-FabricKQLDatabase',
+        'New-FabricWorkspace',
+        'Remove-FabricEventhouse',
+        'Remove-FabricEventstream',
+        'Remove-FabricKQLDatabase',
+        'Remove-FabricKQLQueryset',
+        'Set-FabricEventhouse',
+        'Set-FabricEventstream',
+        'Set-FabricKQLDatabase',
+        'Set-FabricKQLQueryset',
+        'Add-FabricWorkspaceRoleAssignment',
+        'Get-FabricWorkspaceRoleAssignment',
+        'Get-FabricKQLDashboardDefinition',
+        'Get-FabricDebugInfo'
     )
 
     # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.

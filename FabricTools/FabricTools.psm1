@@ -22,7 +22,13 @@
    This script is part of the FabricTools module.
 #>
 
-
+$FabricSession = [ordered]@{
+   BaseFabricUrl       = 'https://api.fabric.microsoft.com'
+   FabricToken         = $null
+   HeaderParams        = $null
+   ContentType         = @{'Content-Type' = "application/json"}
+   KustoURL            = "https://api.kusto.windows.net"
+}
 
 $script:apiUrl = "https://api.fabric.microsoft.com/v1"
 $script:resourceUrl = "https://api.fabric.microsoft.com"
@@ -51,3 +57,6 @@ Set-Alias -Name Get-FabricReport -Value Get-PowerBIReport
 Export-ModuleMember -Alias Get-FabricReport
 Set-Alias -Name Logout-Fabric -Value Logout-PowerBI
 Export-ModuleMember -Alias Logout-Fabric
+
+$moduleName = 'FabricTools'
+Write-Host "Module $moduleName imported."

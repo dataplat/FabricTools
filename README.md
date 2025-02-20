@@ -94,6 +94,7 @@ and the process for submitting pull requests to us.
 ## Authors
 
 - **Ioana Bouariu** - *Initial work* - [Jojobit](https://github.com/Jojobit)
+- **Frank Geisler** - *Author of RTI functions* - [Frank Geisler](https://github.com/Frank-Geisler)
 - **Kamil Nowinski** - *Refactoring, unification, further commands* - [NowinskiK](https://github.com/NowinskiK)
 
 See also the list of [contributors](https://github.com/dataplat/FabricTools/contributors) who participated in this project.

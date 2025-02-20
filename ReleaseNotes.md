@@ -1,6 +1,8 @@
 # Release Notes
 ## Version 0.8.0.0:
-- Import original code from FabTools project and rename to FabricTools with new guid
+- Import original code from FabTools project authored by [Ioana Bouariu](https://github.com/Jojobit)
+- Import functions from powerrti project authored by [Frank Geisler](https://github.com/Frank-Geisler)
+- Rename project to FabricTools with new guid 
 - Refactoring of few functions
 
 ## Version 0.7.0.4:
