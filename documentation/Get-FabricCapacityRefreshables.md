@@ -6,8 +6,7 @@
 ## SYNTAX
 
 ```
-Get-FabricCapacityRefreshables [[-top] <String>] [[-authToken] <String>] [-ProgressAction <ActionPreference>]
- [<CommonParameters>]
+Get-FabricCapacityRefreshables [[-top] <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -23,21 +22,6 @@ PS C:\> {{ Add example code here }}
 {{ Add example description here }}
 
 ## PARAMETERS
-
-### -authToken
-{{ Fill authToken Description }}
-
-```yaml
-Type: System.String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 1
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
 
 ### -ProgressAction
 {{ Fill ProgressAction Description }}

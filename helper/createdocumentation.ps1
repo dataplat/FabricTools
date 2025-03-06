@@ -49,7 +49,7 @@ $mamlPath = "$basepath\en-US"
 
 # FGE: Remove the module from PowerShell
 Remove-Module `
-    -Name powerrti `
+    -Name FabricTools `
     -ErrorAction SilentlyContinue
 
 Import-Module `

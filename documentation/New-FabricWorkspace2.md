@@ -1,28 +1,48 @@
-# New-FabricWorkspaceUsageMetricsReport
+# New-FabricWorkspace2
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Creates a new Fabric Workspace
 
 ## SYNTAX
 
 ```
-New-FabricWorkspaceUsageMetricsReport [-workspaceId] <String> [-ProgressAction <ActionPreference>] [-WhatIf]
- [-Confirm] [<CommonParameters>]
+New-FabricWorkspace2 [-CapacityId] <String> [-WorkspaceName] <String> [[-WorkspaceDescription] <String>]
+ [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+Creates a new Fabric Workspace
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
+```
+New-FabricWorkspace `
+    -CapacityID '12345678-1234-1234-1234-123456789012' `
+    -WorkspaceName 'TestWorkspace' `
+    -WorkspaceDescription 'This is a Test Workspace'
 ```
 
-{{ Add example description here }}
+This example will create a new Workspace with the name 'TestWorkspace' and the description 'This is a test workspace'.
 
 ## PARAMETERS
+
+### -CapacityId
+Id of the Fabric Capacity for which the Workspace should be created.
+The value for CapacityID is a GUID.
+An example of a GUID is '12345678-1234-1234-1234-123456789012'.
+
+```yaml
+Type: System.String
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: 1
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ### -ProgressAction
 {{ Fill ProgressAction Description }}
@@ -39,16 +59,32 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -workspaceId
-{{ Fill workspaceId Description }}
+### -WorkspaceDescription
+The description of the Workspace to create.
 
 ```yaml
 Type: System.String
 Parameter Sets: (All)
-Aliases:
+Aliases: Description
+
+Required: False
+Position: 3
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -WorkspaceName
+The name of the Workspace to create.
+This parameter is mandatory.
+
+```yaml
+Type: System.String
+Parameter Sets: (All)
+Aliases: Name, DisplayName
 
 Required: True
-Position: 0
+Position: 2
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -90,11 +126,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
-
 ## OUTPUTS
 
-### System.Object
 ## NOTES
+Revsion History:
+
+- 2024-12-22 - FGE: Added Verbose Output
 
 ## RELATED LINKS

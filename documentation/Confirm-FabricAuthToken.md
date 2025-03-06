@@ -1,42 +1,29 @@
-# Get-FabricCapacityWorkload
+# Confirm-FabricAuthToken
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Check whether the Fabric API authentication token is set and not expired and reset it if necessary.
 
 ## SYNTAX
 
 ```
-Get-FabricCapacityWorkload [-capacityID] <String> [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Confirm-FabricAuthToken [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The Confirm-FabricAuthToken function retrieves the Fabric API authentication token.
+If the token is not already set, it calls the Set-FabricAuthToken function to set it.
+It then outputs the token.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
+```
+Confirm-FabricAuthToken
 ```
 
-{{ Add example description here }}
+This command retrieves the Fabric API authentication token.
 
 ## PARAMETERS
-
-### -capacityID
-{{ Fill capacityID Description }}
-
-```yaml
-Type: System.String
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: 0
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
 
 ### -ProgressAction
 {{ Fill ProgressAction Description }}
@@ -58,11 +45,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
-
+### None. You cannot pipe inputs to this function.
 ## OUTPUTS
 
-### System.Object
+### Returns object as Get-FabricDebugInfo function
 ## NOTES
 
 ## RELATED LINKS

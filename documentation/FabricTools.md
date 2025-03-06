@@ -1,6 +1,6 @@
 ---
 Module Name: FabricTools
-Module Guid: 00000000-0000-0000-0000-000000000000
+Module Guid: f2a0f9e6-fab6-41fc-9e1c-0c94ff38f794
 Download Help Link: {{ Update Download Link }}
 Help Version: {{ Please enter version of help manually (X.X.X.X) format }}
 Locale: en-US
@@ -12,6 +12,9 @@ Locale: en-US
 
 ## FabricTools Cmdlets
 ### [Add-FabricWorkspaceRoleAssignment](Add-FabricWorkspaceRoleAssignment.md)
+{{ Fill in the Description }}
+
+### [Confirm-FabricAuthToken](Confirm-FabricAuthToken.md)
 {{ Fill in the Description }}
 
 ### [Connect-FabricAccount](Connect-FabricAccount.md)
@@ -36,6 +39,9 @@ Locale: en-US
 {{ Fill in the Description }}
 
 ### [Get-FabricCapacityRefreshables](Get-FabricCapacityRefreshables.md)
+{{ Fill in the Description }}
+
+### [Get-FabricCapacitySkus](Get-FabricCapacitySkus.md)
 {{ Fill in the Description }}
 
 ### [Get-FabricCapacityState](Get-FabricCapacityState.md)
@@ -74,6 +80,9 @@ Locale: en-US
 ### [Get-FabricKQLQueryset](Get-FabricKQLQueryset.md)
 {{ Fill in the Description }}
 
+### [Get-FabricSQLDatabase](Get-FabricSQLDatabase.md)
+{{ Fill in the Description }}
+
 ### [Get-FabricTenantSettings](Get-FabricTenantSettings.md)
 {{ Fill in the Description }}
 
@@ -81,6 +90,9 @@ Locale: en-US
 {{ Fill in the Description }}
 
 ### [Get-FabricWorkspace](Get-FabricWorkspace.md)
+{{ Fill in the Description }}
+
+### [Get-FabricWorkspace2](Get-FabricWorkspace2.md)
 {{ Fill in the Description }}
 
 ### [Get-FabricWorkspaceDatasetRefreshes](Get-FabricWorkspaceDatasetRefreshes.md)
@@ -125,6 +137,9 @@ Locale: en-US
 ### [New-FabricWorkspace](New-FabricWorkspace.md)
 {{ Fill in the Description }}
 
+### [New-FabricWorkspace2](New-FabricWorkspace2.md)
+{{ Fill in the Description }}
+
 ### [New-FabricWorkspaceUsageMetricsReport](New-FabricWorkspaceUsageMetricsReport.md)
 {{ Fill in the Description }}
 
@@ -144,6 +159,9 @@ Locale: en-US
 {{ Fill in the Description }}
 
 ### [Remove-FabricKQLQueryset](Remove-FabricKQLQueryset.md)
+{{ Fill in the Description }}
+
+### [Remove-FabricSQLDatabase](Remove-FabricSQLDatabase.md)
 {{ Fill in the Description }}
 
 ### [Remove-FabricWorkspace](Remove-FabricWorkspace.md)

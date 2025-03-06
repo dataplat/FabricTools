@@ -1,46 +1,39 @@
-# Get-FabricItem
+# Get-FabricCapacitySkus
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Retrieves the fabric capacity information.
 
 ## SYNTAX
 
-### WorkspaceId
 ```
-Get-FabricItem -workspaceId <String> [-type <String>] [-itemID <String>] [-ProgressAction <ActionPreference>]
- [<CommonParameters>]
-```
-
-### WorkspaceObject
-```
-Get-FabricItem -Workspace <Object> [-type <String>] [-itemID <String>] [-ProgressAction <ActionPreference>]
- [<CommonParameters>]
+Get-FabricCapacitySkus [-subscriptionID] <String> [-ResourceGroupName] <String> [-capacity] <String>
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+This function makes a GET request to the Fabric API to retrieve the tenant settings.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
 ```
-
-{{ Add example description here }}
+Get-FabricCapacitySkus -capacity "exampleCapacity"
+Retrieves the fabric capacity information for the specified capacity.
+```
 
 ## PARAMETERS
 
-### -itemID
-{{ Fill itemID Description }}
+### -capacity
+Specifies the capacity to retrieve information for.
+If not provided, all capacities will be retrieved.
 
 ```yaml
 Type: System.String
 Parameter Sets: (All)
 Aliases:
 
-Required: False
-Position: Named
+Required: True
+Position: 3
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -61,46 +54,31 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -type
-{{ Fill type Description }}
+### -ResourceGroupName
+{{ Fill ResourceGroupName Description }}
 
 ```yaml
 Type: System.String
 Parameter Sets: (All)
-Aliases: itemType
+Aliases:
 
-Required: False
-Position: Named
+Required: True
+Position: 2
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Workspace
-{{ Fill Workspace Description }}
-
-```yaml
-Type: System.Object
-Parameter Sets: WorkspaceObject
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: True (ByValue)
-Accept wildcard characters: False
-```
-
-### -workspaceId
-{{ Fill workspaceId Description }}
+### -subscriptionID
+{{ Fill subscriptionID Description }}
 
 ```yaml
 Type: System.String
-Parameter Sets: WorkspaceId
+Parameter Sets: (All)
 Aliases:
 
 Required: True
-Position: Named
+Position: 1
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -111,11 +89,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### System.Object
-
 ## OUTPUTS
 
-### System.Object
 ## NOTES
 
 ## RELATED LINKS

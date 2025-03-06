@@ -6,8 +6,7 @@ This function invokes a refresh of a PowerBI dataset
 ## SYNTAX
 
 ```
-Invoke-FabricDatasetRefresh -DatasetID <String> [-authToken <String>] [-ProgressAction <ActionPreference>]
- [<CommonParameters>]
+Invoke-FabricDatasetRefresh -DatasetID <String> [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -27,21 +26,6 @@ Invoke-FabricDatasetRefresh  -DatasetID "12345678-1234-1234-1234-123456789012"
 This command invokes a refresh of the dataset with the ID "12345678-1234-1234-1234-123456789012"
 
 ## PARAMETERS
-
-### -authToken
-Optional parameter for the authentication token
-
-```yaml
-Type: System.String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
 
 ### -DatasetID
 A mandatory parameter that specifies the dataset ID.

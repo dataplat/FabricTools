@@ -47,7 +47,7 @@ Aliases:
 
 Required: False
 Position: 3
-Default value: { $_.type -in @("Report", "SemanticModel", "Notebook","SparkJobDefinitionV1") }
+Default value: { $_.type -in @("Report", "SemanticModel", "Notebook", "SparkJobDefinitionV1") }
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

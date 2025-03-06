@@ -7,8 +7,7 @@
 
 ```
 Get-FabricUsageMetricsQuery [-DatasetID] <String> [-groupId] <String> [-reportname] <Object>
- [[-ImpersonatedUser] <String>] [[-authToken] <String>] [-ProgressAction <ActionPreference>]
- [<CommonParameters>]
+ [[-ImpersonatedUser] <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -24,21 +23,6 @@ PS C:\> {{ Add example code here }}
 {{ Add example description here }}
 
 ## PARAMETERS
-
-### -authToken
-{{ Fill authToken Description }}
-
-```yaml
-Type: System.String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 4
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
 
 ### -DatasetID
 {{ Fill DatasetID Description }}
