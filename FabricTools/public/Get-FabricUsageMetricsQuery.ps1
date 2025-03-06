@@ -46,19 +46,11 @@ function Get-FabricUsageMetricsQuery {
     [Parameter(Mandatory = $true)]
     $reportname,
     [Parameter(Mandatory = $false)]
-    [string]$ImpersonatedUser = "",
-    [Parameter(Mandatory = $false)]
-    [string]$authToken
+    [string]$ImpersonatedUser = ""
   )
 
-  if ([string]::IsNullOrEmpty($authToken)) {
-    $authToken = Get-FabricAuthToken
-  }
-
-  $fabricHeaders = @{
-    "Content-Type"  = "application/json"
-    'Authorization' = "Bearer {0}" -f $authToken
-  }
+  # Confirm the authentication token.
+  $s = Confirm-FabricAuthToken
 
   # Define the body of the POST request.
   if ($ImpersonatedUser -ne "") {
@@ -88,5 +80,5 @@ function Get-FabricUsageMetricsQuery {
   }
   # Make a POST request to the PowerBI API to retrieve the usage metrics for the specified dataset.
   # The function returns the response of the POST request.
-  return Invoke-RestMethod -uri "https://api.powerbi.com/v1.0/myorg/groups/$groupId/datasets/$DatasetID/executeQueries" -Headers $fabricHeaders -Body $reportbody -Method Post
+  return Invoke-RestMethod -uri "https://api.powerbi.com/v1.0/myorg/groups/$groupId/datasets/$DatasetID/executeQueries" -Headers $s.FabricSession.HeaderParams -Body $reportbody -Method Post
 }

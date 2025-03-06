@@ -22,30 +22,42 @@ https://github.com/RuiRomano/fabricps-pbip
 
 #>
 
+
 Function Get-FabricItem {
-    [CmdletBinding()]
-    param
-    (
-         [Parameter(Mandatory=$true)]
-         [string]$workspaceId,
-         [Parameter(Mandatory=$false)]
-         [string]$type,
-         [Parameter(Mandatory=$false)]
-         [string]$itemID
-      )
+  [CmdletBinding()]
+  param
+  (
+    [Parameter(Mandatory = $true, ParameterSetName = 'WorkspaceId')]
+    [string]$workspaceId,
+  
+    [Parameter(Mandatory = $true, ParameterSetName = 'WorkspaceObject', ValueFromPipeline = $true )]
+    $Workspace,
+  
+    [Parameter(Mandatory = $false)]
+    [Alias("itemType")]
+    [string]$type,
 
-      if ($itemID) {
-        $result = Invoke-FabricAPIRequest -Uri "workspaces/$($workspaceID)/items/$($itemID)" -Method Get
-      } else {
-   if ($type) {
+    [Parameter(Mandatory = $false)]
+    [string]$itemID
+  )
 
-        $result = Invoke-FabricAPIRequest -Uri "workspaces/$($workspaceID)/items?type=$type" -Method Get
-
-    } else {
-    # Invoke the Fabric API to get the workspaces
-    $result = Invoke-FabricAPIRequest -Uri "workspaces/$($workspaceID)/items" -Method Get
+  process {
+    if ($PSCmdlet.ParameterSetName -eq 'WorkspaceObject') {
+      $workspaceID = $Workspace.id
     }
-    # Output the result
-    Write-Output $result.value
-}
+    if ($itemID) {
+      $result = Invoke-FabricAPIRequest -Uri "workspaces/$($workspaceID)/items/$($itemID)" -Method Get
+    }
+    else {
+      if ($type) {
+        $result = Invoke-FabricAPIRequest -Uri "workspaces/$($workspaceID)/items?type=$type" -Method Get
+      }
+      else {
+        # Invoke the Fabric API to get the workspaces
+        $result = Invoke-FabricAPIRequest -Uri "workspaces/$($workspaceID)/items" -Method Get
+      }
+      # Output the result
+      return $result.value
+    }
+  }
 }

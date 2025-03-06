@@ -82,7 +82,7 @@ begin {
 
     Write-Verbose "Checking if session is established. If not throw error"
     if ($null -eq $FabricSession.headerParams) {
-        throw "No session established to Fabric Real-Time Intelligence. Please run Connect-RTISession"
+        throw "No session established to Fabric Real-Time Intelligence. Please run Connect-FabricAccount"
     }
 
     # You can either use Name or WorkspaceID

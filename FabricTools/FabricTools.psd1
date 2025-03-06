@@ -12,7 +12,7 @@
     RootModule = 'FabricTools.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '0.8.0.0'
+    ModuleVersion     = '0.9.0.0'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -112,13 +112,13 @@
         'Get-FabricKQLDashboard',
         'Get-FabricKQLDatabase',
         'Get-FabricKQLQueryset',
-        'Get-FabricWorkspace',
+        'Get-FabricWorkspace2',
         'Invoke-FabricKQLCommand',
         'New-FabricEventhouse',
         'New-FabricEventstream',
         'New-FabricKQLDashboard',
         'New-FabricKQLDatabase',
-        'New-FabricWorkspace',
+        'New-FabricWorkspace2',
         'Remove-FabricEventhouse',
         'Remove-FabricEventstream',
         'Remove-FabricKQLDatabase',
@@ -130,7 +130,12 @@
         'Add-FabricWorkspaceRoleAssignment',
         'Get-FabricWorkspaceRoleAssignment',
         'Get-FabricKQLDashboardDefinition',
-        'Get-FabricDebugInfo'
+        'Get-FabricDebugInfo',
+
+        'Get-FabricSQLDatabase',
+        'Remove-FabricSQLDatabase',
+        'Get-FabricCapacitySkus',
+        'Confirm-FabricAuthToken'
     )
 
     # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.

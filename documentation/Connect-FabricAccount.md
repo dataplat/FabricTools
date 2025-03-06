@@ -17,7 +17,7 @@ This function retrieves the authentication token for the Fabric API and sets up 
 
 ### EXAMPLE 1
 ```
-Connect-RTIAccount `
+Connect-FabricAccount `
     -TenantID '12345678-1234-1234-1234-123456789012'
 ```
 

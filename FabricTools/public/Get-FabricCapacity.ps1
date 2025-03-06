@@ -26,6 +26,8 @@ function Get-FabricCapacity  {
         [string]$capacity
     )
 
+    Confirm-FabricAuthToken | Out-Null
+
     if ($capacity) {
         $result = Invoke-FabricAPIRequest -uri "capacities/$capacity" -Method GET
     } else {

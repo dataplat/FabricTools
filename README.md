@@ -2,16 +2,19 @@
 
 # FabricTools PowerShell Module
 
-FabricTools is a PowerShell module to be able to able to do more with Microsoft Fabric and Power BI.
+**FabricTools** is a PowerShell module to able to do more with Microsoft Fabric and Power BI.
 It allows for various administrative tasks to be automated and integrated into workflows.
+
+> We are at an early stage of development and the module is in its **Public PREVIEW**.  
+> Do NOT use it with Production environments.
 
 ## Features
 
-- Manage PowerBI workspaces and datasets.
-- Assign PowerBI workspaces to capacities.
-- Retrieve and manipulate PowerBI tenant settings.
-- Handle PowerBI access tokens for authentication.
-- Suspend and resume Azure capacities.
+- Manage Microsoft Fabric workspaces and datasets.
+- Assign Microsoft Fabric workspaces to capacities.
+- Retrieve and manipulate Microsoft Fabric tenant settings.
+- Handle Microsoft Fabric access tokens for authentication.
+- Suspend and resume Microsoft Fabric capacities.
 - Fabric-friendly aliases for lots of the old PowerBI cmdlets
 
 ## Getting Started
@@ -67,29 +70,18 @@ Set-FabricAuthToken -reset
 ```
 
 
-## [Release Notes](ReleaseNotes.md)
-### Version 0.7.0.3:
-- Fixed the functions related to checking, pausing and activating Fabric capacities in Azure
+## Release Notes
 
-### Version 0.7.0.2:
-- Fixed a bug that made the the module return an error on the first attempt to get data from the Rest API.
-
-### Version 0.7.0.1:
-- Removed the parameter outfile in the function Invoke-FabricAPIRequest, as it led to an error in PowerShell version 7.4
-
-### Version 0.7.0:
-- The official Rest API for Microsoft Fabric is now Public. This means that there are a lot of new possibilities for this module.
-- After a great talk with Rui Romano, he's graciously allowed us to integrate the functions from his project: fabricps-pbip ([GitHub Repository](https://github.com/RuiRomano/fabricps-pbip)) into Fabtools.
-- Lots of new functions to make it easier to work with Microsoft Fabric.
-- It is now possible to export and import items from a workspace. Currently that includes reports (pbip), semantic models (datasets), spark jobs, and notebooks (ipynb).
-- It is now possible to register and unregister a workspace to/from a capacity.
-- Several functions have been rewritten to use the new fabric API endpoint rather than the old PowerBI API endpoint.
+The entire history of changes to this module can be find here: [Release Notes](ReleaseNotes.md)
 
 
 ## Contributing
 
-Contributions to FabricTools are welcome. Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, 
-and the process for submitting pull requests to us.
+Contributions to FabricTools are welcome.  
+
+> Note: In this early stage of development, we are working hard to build strong foundations for this module and further contribution guidance to ensure the quality of this code. **Therefore, please get in touch with us before you commit any code and create a PR.**
+
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
 
 ## Authors
 

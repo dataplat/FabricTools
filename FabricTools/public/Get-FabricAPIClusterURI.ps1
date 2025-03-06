@@ -22,20 +22,12 @@ function Get-FabricAPIclusterURI  {
     # Define aliases for the function for flexibility.
     [Alias("Get-FabAPIClusterURI")]
     Param (
-        [Parameter(Mandatory=$false)]
-        [string]$authToken
     )
 
-    if ([string]::IsNullOrEmpty($authToken)) {
-        $authToken = Get-FabricAuthToken
-    }
+    $s = Confirm-FabricAuthToken
 
-    $fabricHeaders = @{
-        'Content-Type'  = $contentType
-        'Authorization' = "Bearer {0}" -f $authToken
-    }
     # Make a GET request to the PowerBI API to retrieve the datasets.
-    $reply = Invoke-RestMethod -uri "https://api.powerbi.com/v1.0/myorg/datasets" -Headers $fabricHeaders -Method GET
+    $reply = Invoke-RestMethod -uri "https://api.powerbi.com/v1.0/myorg/datasets" -Headers $s.FabricSession.HeaderParams -Method GET
 
     # Extract the '@odata.context' property from the response.
     $unaltered = $reply.'@odata.context'

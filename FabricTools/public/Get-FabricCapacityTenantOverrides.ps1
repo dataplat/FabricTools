@@ -23,18 +23,11 @@ function Get-FabricCapacityTenantOverrides  {
     [Alias("Get-FabCapacityTenantOverrides")]
 
     Param (
-        [Parameter(Mandatory=$false)]
-        [string]$authToken
     )
 
-    if ([string]::IsNullOrEmpty($authToken)) {
-        $authToken = Get-FabricAuthToken
-    }
+    $s = Confirm-FabricAuthToken
 
-    $fabricHeaders = @{
-        'Authorization' = "Bearer {0}" -f $authToken
-    }
     # Make a GET request to the Fabric API to retrieve the tenant overrides for all capacities.
     # The function returns the response of the GET request.
-    return Invoke-RestMethod -uri "https://api.fabric.microsoft.com/v1/admin/capacities/delegatedTenantSettingOverrides" -Headers $fabricHeaders -Method GET
+    return Invoke-RestMethod -uri "$($FabricSession.ApiUrl)/admin/capacities/delegatedTenantSettingOverrides" -Headers $s.FabricSession.HeaderParams -Method GET
 }

@@ -1,4 +1,20 @@
 # Release Notes
+
+## Version 0.9.0:
+* Added few new functions:
+  - 'Get-FabricSQLDatabase',
+  - 'Remove-FabricSQLDatabase',
+  - 'Get-FabricCapacitySkus',
+  - 'Confirm-FabricAuthToken'
+* Unified objects in module scope (`FabricSession`, `AzureSession`)
+* Module scope holds all api urls, header params for requests
+* Unified function to authenticate to Fabric API with bearer token
+* Auto-refresh token when expires
+* Removed `$authToken` as input param in several functions
+* Removed usage of `$env:azToken` from several functions
+* Get-FabricItem accepts Workspaces as input-pipeline
+* Minor cosmetic changes
+
 ## Version 0.8.0.0:
 - Import original code from FabTools project authored by [Ioana Bouariu](https://github.com/Jojobit)
 - Import functions from powerrti project authored by [Frank Geisler](https://github.com/Frank-Geisler)

@@ -14,7 +14,7 @@ function Connect-FabricAccount {
     and in which your Fabric Capacity is.
 
 .EXAMPLE
-    Connect-RTIAccount `
+    Connect-FabricAccount `
         -TenantID '12345678-1234-1234-1234-123456789012'
 
 .NOTES
@@ -44,8 +44,7 @@ process {
                 Out-Null
 
     Write-Verbose "Get authentication token"
-    $FabricSession.FabricToken = (Get-AzAccessToken `
-                                    -ResourceUrl $FabricSession.BaseFabricUrl).Token
+    $FabricSession.FabricToken = (Get-AzAccessToken -ResourceUrl $FabricSession.BaseFabricUrl).Token
     Write-Verbose "Token: $($FabricSession.FabricToken)"
 
     Write-Verbose "Setup headers for API calls"

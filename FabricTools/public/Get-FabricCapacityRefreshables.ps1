@@ -25,20 +25,12 @@ function Get-FabricCapacityRefreshables  {
     # Define a mandatory parameter for the number of top refreshable capacities to retrieve.
     Param (
         [Parameter(Mandatory=$false)]
-        [string]$top = 5,
-        [Parameter(Mandatory=$false)]
-        [string]$authToken
+        [string]$top = 5
     )
 
-    if ([string]::IsNullOrEmpty($authToken)) {
-        $authToken = Get-FabricAuthToken
-    }
+    $s = Confirm-FabricAuthToken
 
-    $fabricHeaders = @{
-        'Content-Type'  = $contentType
-        'Authorization' = "Bearer {0}" -f $authToken
-    }
     # Make a GET request to the PowerBI API to retrieve the top refreshable capacities.
     # The function returns the 'value' property of the response.
-    return (Invoke-RestMethod -uri "https://api.powerbi.com/v1.0/myorg/capacities/refreshables?`$top=$top" -Headers $fabricHeaders -Method GET).value
+    return (Invoke-RestMethod -uri "https://api.powerbi.com/v1.0/myorg/capacities/refreshables?`$top=$top" -Headers $s.FabricSession.HeaderParams -Method GET).value
 }

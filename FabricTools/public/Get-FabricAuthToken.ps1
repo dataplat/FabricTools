@@ -29,11 +29,11 @@ function Get-FabricAuthToken {
    )
 
    # Check if the Fabric token is already set
-   if (!$script:fabricToken) {
+   if (!$FabricSession.FabricToken) {
       # If not, set the Fabric token
       Set-FabricAuthToken
    }
 
    # Output the Fabric token
-   return $script:fabricToken
+   return $FabricSession.FabricToken
 }

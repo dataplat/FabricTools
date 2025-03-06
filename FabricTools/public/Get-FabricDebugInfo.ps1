@@ -33,7 +33,12 @@ begin {
 
 process {
     Write-Verbose "Show current session object"
-    $FabricSession
+
+    return @{
+        FabricSession = $script:FabricSession
+        AzureSession = $script:AzureSession
+    }
+
 }
 
 end {

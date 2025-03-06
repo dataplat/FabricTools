@@ -28,19 +28,15 @@ function Get-FabricCapacityWorkload  {
     # Define a mandatory parameter for the capacity ID.
     Param (
         [Parameter(Mandatory=$true)]
-        [string]$capacityID,
-        [Parameter(Mandatory=$false)]
-        [string]$authToken
+        [string]$capacityID
     )
-    if ([string]::IsNullOrEmpty($authToken)) {
-        $authToken = Get-FabricAuthToken
-    }
 
-    $fabricHeaders = @{
-        'Authorization' = "Bearer {0}" -f $authToken
-    }
+    $s = Confirm-FabricAuthToken
 
     # Make a GET request to the PowerBI API to retrieve the workloads for the specified capacity.
     # The function returns the 'value' property of the response.
-    return (Invoke-RestMethod -uri "https://api.powerbi.com/v1.0/myorg/capacities/$capacityID/Workloads" -Headers $fabricHeaders -Method GET).value
+    return (Invoke-RestMethod -uri "https://api.powerbi.com/v1.0/myorg/capacities/$capacityID/Workloads" -Headers $s.FabricSession.HeaderParams -Method GET).value
 }
+
+
+#https://learn.microsoft.com/en-us/rest/api/power-bi/capacities/get-workloads

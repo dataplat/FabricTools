@@ -36,7 +36,7 @@ begin {
 
     # Check if session is established - if not throw error
     if ($null -eq $FabricSession.headerParams) {
-        throw "No session established to Fabric Real-Time Intelligence. Please run Connect-RTISession"
+        throw "No session established to Fabric Real-Time Intelligence. Please run Connect-FabricAccount"
     }
 
     # Create Workspace API URL

@@ -44,16 +44,11 @@ function Set-FabricAuthToken {
    [CmdletBinding(SupportsShouldProcess)]
    param
    (
-      [string]$servicePrincipalId
-      ,
-      [string]$servicePrincipalSecret
-      ,
-      [PSCredential]$credential
-      ,
-      [string]$tenantId
-      ,
-      [switch]$reset
-      ,
+      [string]$servicePrincipalId      ,
+      [string]$servicePrincipalSecret      ,
+      [PSCredential]$credential      ,
+      [string]$tenantId     ,
+      [switch]$reset      ,
       [string]$apiUrl
    )
 
@@ -62,7 +57,7 @@ function Set-FabricAuthToken {
    }
 
    if ($apiUrl) {
-      $script:apiUrl = $apiUrl
+      $FabricSession.apiUrl = $apiUrl
    }
 
    if (!$azContext) {
@@ -84,7 +79,20 @@ function Set-FabricAuthToken {
    }
    if ($PSCmdlet.ShouldProcess("Setting Fabric authentication token for $($azContext.Account)")) {
       Write-output "Connnected: $($azContext.Account)"
+      Write-Output "BaseFabricUrl: $($FabricSession.BaseFabricUrl)"
 
-      $script:fabricToken = (Get-AzAccessToken -ResourceUrl $script:resourceUrl).Token
+      $FabricSession.AccessToken = (Get-AzAccessToken -AsSecureString -ResourceUrl $FabricSession.BaseFabricUrl)
+      $ssPtr = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($FabricSession.AccessToken.Token)
+      $FabricSession.FabricToken = ([System.Runtime.InteropServices.Marshal]::PtrToStringBSTR($ssPtr))
+      Write-Verbose "Setup headers for API calls"
+      $FabricSession.HeaderParams = @{ Authorization = $FabricSession.AccessToken.Type + ' ' + $FabricSession.FabricToken }
+
+      $script:AzureSession.AccessToken = (Get-AzAccessToken -AsSecureString -ResourceUrl $AzureSession.BaseUrl)
+      $ssPtr = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($AzureSession.AccessToken.Token)
+      $script:AzureSession.Token = ([System.Runtime.InteropServices.Marshal]::PtrToStringBSTR($ssPtr))
+      $AzureSession.HeaderParams = @{ Authorization = $AzureSession.AccessToken.Type + ' ' + $AzureSession.Token }
+
+      return $($FabricSession.FabricToken)
+
    }
 }

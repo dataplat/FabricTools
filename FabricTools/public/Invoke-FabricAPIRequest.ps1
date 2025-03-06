@@ -63,27 +63,15 @@ Function Invoke-FabricAPIRequest {
         [Parameter(Mandatory = $false)] [string] $contentType = "application/json; charset=utf-8",
         [Parameter(Mandatory = $false)] [int] $timeoutSec = 240,
         [Parameter(Mandatory = $false)] [int] $retryCount = 0
-
     )
 
-    if ([string]::IsNullOrEmpty($authToken)) {
-        $authToken = Get-FabricAuthToken
-        $authToken = Get-FabricAuthToken
-    }
-
-    $fabricHeaders = @{
-        'Content-Type'  = $contentType
-        'Authorization' = "Bearer {0}" -f $authToken
-    }
-    write-verbose  "authToken: $authToken"
+    $s = Confirm-FabricAuthToken
+    $fabricHeaders = $s.FabricSession.HeaderParams
 
     try {
 
-
-        $requestUrl = "$($script:apiUrl)/$uri"
-
+        $requestUrl = "$($FabricSession.apiUrl)/$uri"
         Write-Verbose "Calling $requestUrl"
-
         $response = Invoke-WebRequest -Headers $fabricHeaders -Method $method -Uri $requestUrl -Body $body -TimeoutSec $timeoutSec 
 
         if ($response.StatusCode -eq 202) {
@@ -94,13 +82,9 @@ Function Invoke-FabricAPIRequest {
                 do {
                     $asyncUrl = [string]$response.Headers.Location
                 
-
                     Write-Output "Waiting for request to complete. Sleeping..."
-
                     Start-Sleep -Seconds 5
-
                     $response2 = Invoke-WebRequest -Headers $fabricHeaders -Method Get -Uri $asyncUrl
-
                     $lroStatusContent = $response2.Content | ConvertFrom-Json
                 }
                 while ($lroStatusContent.status -ine "succeeded" -and $lroStatusContent.status -ine "failed")
@@ -124,12 +108,9 @@ Function Invoke-FabricAPIRequest {
             else {
                 $contentText = $response.Content
             }
-
             $jsonResult = $contentText | ConvertFrom-Json
-
             Write-Output $jsonResult -NoEnumerate
         }
-        
         else {
             Write-Output $response -NoEnumerate
         }
@@ -138,7 +119,6 @@ Function Invoke-FabricAPIRequest {
         $ex = $_.Exception
         $message = $null
        
-
         if ($null -ne $ex.Response) {
 
             $responseStatusCode = [int]$ex.Response.StatusCode
@@ -181,9 +161,7 @@ Function Invoke-FabricAPIRequest {
                 }
 
                 # TODO: Investigate why response.Content is empty but powershell can read it on throw
-
                 #$errorContent = $ex.Response.Content.ReadAsStringAsync().Result;
-
                 #$message = "$($ex.Message) - StatusCode: '$($ex.Response.StatusCode)'; Content: '$errorContent'"
             }
         }

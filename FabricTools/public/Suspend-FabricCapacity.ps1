@@ -39,21 +39,14 @@ function Suspend-FabricCapacity {
         [string]$capacity
     )
 
-    # If the 'azToken' environment variable is null, connect to the Azure account and set the 'azToken' environment variable.
-    if ($null -eq $env:azToken) {
-        Connect-azaccount -Subscription $subscriptionID
-        $env:aztoken = "Bearer " + (get-azAccessToken).Token
-    }
-
-    # Define the headers for the request.
-    $headers = @{"Authorization" = $env:aztoken }
+    Confirm-FabricAuthToken | Out-Null
 
     # Define the URI for the request.
-    $suspendCapacity = "https://management.azure.com/subscriptions/$subscriptionID/resourceGroups/$resourcegroup/providers/Microsoft.Fabric/capacities/$capacity/suspend?api-version=2022-07-01-preview"
+    $suspendCapacity = "$($AzureSession.BaseUrl)/subscriptions/$subscriptionID/resourceGroups/$resourcegroup/providers/Microsoft.Fabric/capacities/$capacity/suspend?api-version=2023-11-01"
 
     # Make a GET request to the URI and return the response.
-    if($PSCmdlet.ShouldProcess("Suspend capacity $capacity")) {
-        return Invoke-RestMethod -Method POST -Uri $suspendCapacity -Headers $headers -ErrorAction Stop
+    if ($PSCmdlet.ShouldProcess("Suspend capacity $capacity")) {
+        return Invoke-RestMethod -Method POST -Uri $suspendCapacity -Headers $script:AzureSession.HeaderParams -ErrorAction Stop
     }
 
 }

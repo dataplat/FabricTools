@@ -24,31 +24,24 @@ function Invoke-FabricDatasetRefresh {
     param(
         # Mandatory parameter for the dataset ID
         [Parameter(Mandatory = $true, ParameterSetName = "DatasetId")]
-        [string]$DatasetID,
-        # Optional parameter for the authentication token
-        [Parameter(Mandatory = $false)]
-        [string]$authToken
+        [string]$DatasetID
     )
+
+    $s = Confirm-FabricAuthToken
 
     # Check if the dataset is refreshable
     if ((Get-FabricDataset -DatasetId $DatasetID).isrefreshable -eq $false) {
         # If the dataset is not refreshable, write an error
-        Write-error "Dataset is not refreshable"
+        Write-Error "Dataset is not refreshable"
     }
     else {
         # If the dataset is refreshable, invoke a PowerBI REST method to refresh the dataset
         # The URL for the request is constructed using the provided workspace ID and dataset ID.
-        if ([string]::IsNullOrEmpty($authToken)) {
-            $authToken = Get-FabricAuthToken
-        }
-        $fabricHeaders = @{
-            'Content-Type'  = $contentType
-            'Authorization' = "Bearer {0}" -f $authToken
-        }
+
         # Check if the dataset is refreshable
 
         # If the dataset is refreshable, invoke a PowerBI REST method to refresh the dataset
         # The URL for the request is constructed using the provided workspace ID and dataset ID.
-        return invoke-restmethod -Method POST -uri ("https://api.powerbi.com/v1.0/myorg/datasets/$datasetid/refreshes") -Headers $fabricHeaders
+        return Invoke-RestMethod -Method POST -uri ("https://api.powerbi.com/v1.0/myorg/datasets/$datasetid/refreshes") -Headers $s.FabricSession.HeaderParams
     }
 }

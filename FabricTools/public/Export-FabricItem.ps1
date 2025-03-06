@@ -39,7 +39,7 @@ Function Export-FabricItem {
     (
         [string]$path = '.\pbipOutput',
         [string]$workspaceId = '',
-        [scriptblock]$filter = { $_.type -in @("Report", "SemanticModel", "Notebook","SparkJobDefinitionV1") },
+        [scriptblock]$filter = { $_.type -in @("Report", "SemanticModel", "Notebook", "SparkJobDefinitionV1") },
         [string]$itemID = ''
     )
     if (![string]::IsNullOrEmpty($itemID)) {
@@ -68,10 +68,13 @@ Function Export-FabricItem {
         $items = Invoke-FabricAPIRequest -Uri "workspaces/$workspaceId/items" -Method Get
 
         if ($filter) {
-            $items = $items | Where-Object $filter
+            $items = $items.value | Where-Object $filter
+        }
+        else {
+            $items = $items.value
         }
 
-        write-output "Existing items: $($items.Count)"
+        Write-Output "Existing items: $($items.Count)"
 
         foreach ($item in $items) {
             $itemId = $item.id
@@ -79,7 +82,7 @@ Function Export-FabricItem {
             $itemType = $item.type
             $itemOutputPath = "$path\$workspaceId\$($itemName).$($itemType)"
 
-            if ($itemType -in @("report", "semanticmodel", "notebook", "SparkJobDefinitionV1")) {
+            if ($itemType -in @("report", "semanticmodel", "notebook", "SparkJobDefinitionV1", "DataPipeline")) {
                 write-output "Getting definition of: $itemId / $itemName / $itemType"
 
                 $response = Invoke-FabricAPIRequest -Uri "workspaces/$workspaceId/items/$itemId/getDefinition" -Method Post

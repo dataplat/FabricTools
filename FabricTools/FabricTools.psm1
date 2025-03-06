@@ -22,17 +22,23 @@
    This script is part of the FabricTools module.
 #>
 
-$FabricSession = [ordered]@{
+$script:FabricSession = [ordered]@{
    BaseFabricUrl       = 'https://api.fabric.microsoft.com'
+   ApiUrl              = 'https://api.fabric.microsoft.com/v1'
    FabricToken         = $null
    HeaderParams        = $null
    ContentType         = @{'Content-Type' = "application/json"}
    KustoURL            = "https://api.kusto.windows.net"
+   AccessToken         = $null
 }
 
-$script:apiUrl = "https://api.fabric.microsoft.com/v1"
-$script:resourceUrl = "https://api.fabric.microsoft.com"
-$script:fabricToken = $null
+$script:AzureSession = [ordered]@{
+   BaseUrl             = "https://management.azure.com"
+   AccessToken         = $null
+   Token               = $null
+   HeaderParams        = $null
+}
+
 # Get all .ps1 files in the (public) Functions folder
 $functions = Get-ChildItem -Path "$PSScriptRoot\public" -Filter *.ps1
 
