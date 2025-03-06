@@ -12,7 +12,7 @@
     RootModule = 'FabricTools.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '0.9.0.0'
+    ModuleVersion     = '0.9.0'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -21,13 +21,13 @@
     GUID              = 'f2a0f9e6-fab6-41fc-9e1c-0c94ff38f794'
 
     # Author of this module
-    Author            = 'Ioana Bouariu AKA Jojobit'
+    Author            = 'The FabricTools Team'
 
     # Company or vendor of this module
-    CompanyName       = ''
+    CompanyName       = 'fabrictools.io'
 
     # Copyright statement for this module
-    Copyright         = 'Ioana Bouariu'
+    Copyright         = 'Copyright (c) 2025 by FabricTools, licensed under MIT'
 
     # Description of the functionality provided by this module
     Description       = 'A module to be able to do more with Microsoft Fabric.
@@ -207,7 +207,7 @@
             IconUri      = 'https://raw.githubusercontent.com/dataplat/FabricTools/main/images/FabricToolsLogo.ico'
 
             # ReleaseNotes of this module
-            ReleaseNotes = 'https://github.com/dataplat/FabricTools/ReleaseNotes.md'
+            ReleaseNotes = 'https://github.com/dataplat/FabricTools/blob/main/ReleaseNotes.md'
 
             # Prerelease string of this module
             # Prerelease = ''
