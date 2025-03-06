@@ -17,6 +17,8 @@ jobs:
           Install-Module -Name PowerShellGet -Force -AllowClobber -Scope CurrentUser
           Install-Module -Name PSScriptAnalyzer -Force -Scope CurrentUser
           Install-Module -Name Az.Accounts -Scope CurrentUser -Force
+          Install-Module -Name Az.Resources -Scope CurrentUser -Force
+          Install-Module -Name MicrosoftPowerBIMgmt -Scope CurrentUser -Force
 
       - name: Publish PowerShell Module
         shell: pwsh
