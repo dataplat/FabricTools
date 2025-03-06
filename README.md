@@ -2,6 +2,10 @@
 
 # FabricTools PowerShell Module
 
+[![PowerShell Gallery Version](https://img.shields.io/powershellgallery/v/FabricTools?label=PowerShell%20Gallery&color=blue)](https://www.powershellgallery.com/packages/FabricTools)
+![PowerShell Gallery Downloads](https://img.shields.io/powershellgallery/dt/FabricTools?label=PSGallery%20downloads) 
+
+
 **FabricTools** is a PowerShell module to able to do more with Microsoft Fabric and Power BI.
 It allows for various administrative tasks to be automated and integrated into workflows.
 
