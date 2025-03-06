@@ -204,7 +204,7 @@
             ProjectUri   = 'https://www.github.com/dataplat/FabricTools'
 
             # A URL to an icon representing this module.
-            IconUri      = 'https://raw.githubusercontent.com/dataplat/FabricTools/main/Fabtools.ico'
+            IconUri      = 'https://raw.githubusercontent.com/dataplat/FabricTools/main/images/FabricToolsLogo.ico'
 
             # ReleaseNotes of this module
             ReleaseNotes = 'https://github.com/dataplat/FabricTools/ReleaseNotes.md'
