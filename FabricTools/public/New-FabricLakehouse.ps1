@@ -28,7 +28,7 @@ function New-FabricLakehouse {
     This example will create a new Lakehouse with the name 'MyLakehouse' and the description 'This is my Lakehouse'.
 
   .EXAMPLE
-  Get-FabricEventhouse `
+  Get-FabricLakehouse `
       -WorkspaceID '12345678-1234-1234-1234-123456789012' `
         -LakehouseName 'MyLakehouse' `
         -LakehouseSchemaEnabled $true `
