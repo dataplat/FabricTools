@@ -55,8 +55,8 @@ function New-FabricLakehouse {
         [string]$LakehouseName,
 
         [Parameter(Mandatory=$true)]
-        [Alias("Schema", "SchemaEnabled")]
-        [bool]$LakehouseSchemaEnabled,
+        [Alias("LakehouseSchemaEnabled")]
+        [bool]$SchemaEnabled,
 
         [ValidateLength(0, 256)]
         [Alias("Description")]
@@ -64,11 +64,8 @@ function New-FabricLakehouse {
     )
 
 begin {
-    Write-Verbose "Checking if session is established. If not throw error"
-    if ($null -eq $FabricSession.headerParams) {
-        throw "No session established to Fabric. Please run Connect-FabricAccount"
-    }
-
+    Confirm-FabricAuthToken | Out-Null
+    
     #create payload
     $body = [ordered]@{
         'displayName' = $LakehouseName
@@ -87,7 +84,7 @@ begin {
 
     # Create Eventhouse API URL
     $lakehouseApiUrl = "$($FabricSession.BaseFabricUrl)/v1/workspaces/$WorkspaceId/lakehouses"
-    }
+}
 
 process {
 

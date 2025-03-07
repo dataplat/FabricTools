@@ -1,5 +1,10 @@
 # Release Notes
 
+## Version 0.10.0:
+* Added new functions:
+- `New-FabricLakehouse`
+- `Get-FabricConnection`
+
 ## Version 0.9.0:
 * Added few new functions:
   - 'Get-FabricSQLDatabase',
