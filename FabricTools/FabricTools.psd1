@@ -118,6 +118,7 @@
         'New-FabricEventstream',
         'New-FabricKQLDashboard',
         'New-FabricKQLDatabase',
+        'New-FabricLakehouse',
         'New-FabricWorkspace2',
         'Remove-FabricEventhouse',
         'Remove-FabricEventstream',
