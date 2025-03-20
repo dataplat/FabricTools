@@ -41,6 +41,10 @@ Function Get-FabricItem {
     [string]$itemID
   )
 
+  begin {
+    Confirm-FabricAuthToken | Out-Null
+  }
+
   process {
     if ($PSCmdlet.ParameterSetName -eq 'WorkspaceObject') {
       $workspaceID = $Workspace.id

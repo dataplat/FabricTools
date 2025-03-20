@@ -67,10 +67,7 @@ function Get-FabricKQLQueryset {
 
 begin {
 
-    Write-Verbose "Check if session is established - if not throw error"
-    if ($null -eq $FabricSession.headerParams) {
-        throw "No session established to Fabric Real-Time Intelligence. Please run Connect-FabricAccount"
-    }
+    Confirm-FabricAuthToken | Out-Null
 
     Write-Verbose "You can either use Name or WorkspaceID"
     if ($PSBoundParameters.ContainsKey("KQLQuerysetName") -and $PSBoundParameters.ContainsKey("KQLQuerysetId")) {
@@ -78,9 +75,9 @@ begin {
     }
 
     # Create KQLQueryset API
-    $KQLQuerysetAPI = "$($FabricSession.BaseFabricUrl)/v1/workspaces/$WorkspaceId/KQLQuerysets"
+    $KQLQuerysetAPI = "$($FabricSession.BaseApiUrl)/workspaces/$WorkspaceId/KQLQuerysets"
 
-    $KQLQuerysetAPIKQLQuerysetId = "$($FabricSession.BaseFabricUrl)/v1/workspaces/$WorkspaceId/KQLQuerysets/$KQLQuerysetId"
+    $KQLQuerysetAPIKQLQuerysetId = "$($FabricSession.BaseApiUrl)/workspaces/$WorkspaceId/KQLQuerysets/$KQLQuerysetId"
 
 }
 

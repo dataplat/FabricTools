@@ -65,12 +65,12 @@ Function Invoke-FabricAPIRequest {
         [Parameter(Mandatory = $false)] [int] $retryCount = 0
     )
 
-    $s = Confirm-FabricAuthToken
-    $fabricHeaders = $s.FabricSession.HeaderParams
+    Confirm-FabricAuthToken | Out-Null
+    $fabricHeaders = $FabricSession.HeaderParams
 
     try {
 
-        $requestUrl = "$($FabricSession.apiUrl)/$uri"
+        $requestUrl = "$($FabricSession.BaseApiUrl)/$uri"
         Write-Verbose "Calling $requestUrl"
         $response = Invoke-WebRequest -Headers $fabricHeaders -Method $method -Uri $requestUrl -Body $body -TimeoutSec $timeoutSec 
 

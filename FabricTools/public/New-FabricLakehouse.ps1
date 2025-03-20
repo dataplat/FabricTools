@@ -83,7 +83,7 @@ begin {
     $body = $body | ConvertTo-Json -Depth 1 
 
     # Create Eventhouse API URL
-    $lakehouseApiUrl = "$($FabricSession.BaseFabricUrl)/v1/workspaces/$WorkspaceId/lakehouses"
+    $lakehouseApiUrl = "$($FabricSession.BaseApiUrl)/workspaces/$WorkspaceId/lakehouses"
 }
 
 process {

@@ -59,13 +59,13 @@ function Register-FabricWorkspaceToCapacity {
             capacityId = $CapacityId
         } 
  
-        $s = Confirm-FabricAuthToken
+        Confirm-FabricAuthToken | Out-Null
 
         # The workspace is Seted to the capacity by making a POST request to the PowerBI API.
         # The function returns the value property of the response.
         if ($PSCmdlet.ShouldProcess("Set workspace $workspaceid to capacity $CapacityId")) {
             #return (Invoke-FabricAPIRequest -Uri "workspaces/$($workspaceID)/assignToCapacity" -Method POST -Body $body).value
-            return Invoke-WebRequest -Headers $s.FabricSession.HeaderParams -Method POST -Uri "$($FabricSession.ApiUrl)/workspaces/$($workspaceID)/assignToCapacity" -Body $body
+            return Invoke-WebRequest -Headers $FabricSession.HeaderParams -Method POST -Uri "$($FabricSession.BaseApiUrl)/workspaces/$($workspaceID)/assignToCapacity" -Body $body
         }
    }
 }

@@ -71,7 +71,7 @@ begin {
             -Depth 1
 
     # Create Workspace API URL
-    $workspaceApiUrl = "$($FabricSession.BaseFabricUrl)/v1/admin/workspaces/$WorkspaceId/roleassignments"
+    $workspaceApiUrl = "$($FabricSession.BaseApiUrl)/admin/workspaces/$WorkspaceId/roleassignments"
 }
 
 process {

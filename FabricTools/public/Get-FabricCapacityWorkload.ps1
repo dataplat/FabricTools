@@ -31,11 +31,11 @@ function Get-FabricCapacityWorkload  {
         [string]$capacityID
     )
 
-    $s = Confirm-FabricAuthToken
+    Confirm-FabricAuthToken | Out-Null
 
     # Make a GET request to the PowerBI API to retrieve the workloads for the specified capacity.
     # The function returns the 'value' property of the response.
-    return (Invoke-RestMethod -uri "https://api.powerbi.com/v1.0/myorg/capacities/$capacityID/Workloads" -Headers $s.FabricSession.HeaderParams -Method GET).value
+    return (Invoke-RestMethod -uri "$($PowerBI.BaseApiUrl)/capacities/$capacityID/Workloads" -Headers $FabricSession.HeaderParams -Method GET).value
 }
 
 

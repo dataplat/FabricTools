@@ -19,6 +19,8 @@ function Get-AllFabricDatasetRefreshes {
     # Define aliases for the function for flexibility.
     [Alias("Get-AllFabDatasetRefreshes")]
 
+    Confirm-FabricAuthToken | Out-Null
+
     # Retrieve all PowerBI workspaces.
     $wsps = Get-FabricWorkspace
     # Initialize an array to store the refreshes.

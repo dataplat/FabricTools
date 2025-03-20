@@ -66,10 +66,7 @@ function Get-FabricKQLDatabase {
 
 begin {
 
-    Write-Verbose "Check if session is established - if not throw error"
-    if ($null -eq $FabricSession.headerParams) {
-        throw "No session established to Fabric Real-Time Intelligence. Please run Connect-FabricAccount"
-    }
+    Confirm-FabricAuthToken | Out-Null
 
     Write-Verbose "You can either use KQLDatabaseName or KQLDatabaseID not both. If both are used throw error"
     if ($PSBoundParameters.ContainsKey("KQLDatabaseName") -and $PSBoundParameters.ContainsKey("KQLDatabaseId")) {
@@ -77,9 +74,9 @@ begin {
     }
 
     # Create KQLDatabase API
-    $KQLDatabaseAPI = "$($FabricSession.BaseFabricUrl)/v1/workspaces/$WorkspaceId/kqldatabases"
+    $KQLDatabaseAPI = "$($FabricSession.BaseApiUrl)/workspaces/$WorkspaceId/kqldatabases"
 
-    $KQLDatabaseAPIKQLDatabaseId = "$($FabricSession.BaseFabricUrl)/v1/workspaces/$WorkspaceId/kqldatabases/$KQLDatabaseId"
+    $KQLDatabaseAPIKQLDatabaseId = "$($FabricSession.BaseApiUrl)/workspaces/$WorkspaceId/kqldatabases/$KQLDatabaseId"
 
 }
 

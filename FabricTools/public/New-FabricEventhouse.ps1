@@ -64,10 +64,7 @@ function New-FabricEventhouse {
     )
 
 begin {
-    Write-Verbose "Checking if session is established. If not throw error"
-    if ($null -eq $FabricSession.headerParams) {
-        throw "No session established to Fabric Real-Time Intelligence. Please run Connect-FabricAccount"
-    }
+    Confirm-FabricAuthToken | Out-Null
 
     # Create body of request
     $body = @{
@@ -77,7 +74,7 @@ begin {
             -Depth 1
 
     # Create Eventhouse API URL
-    $eventhouseApiUrl = "$($FabricSession.BaseFabricUrl)/v1/workspaces/$WorkspaceId/eventhouses"
+    $eventhouseApiUrl = "$($FabricSession.BaseApiUrl)/workspaces/$WorkspaceId/eventhouses"
     }
 
 process {

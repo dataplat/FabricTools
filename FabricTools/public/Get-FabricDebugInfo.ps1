@@ -28,8 +28,7 @@ function Get-FabricDebugInfo {
 
     )
 
-begin {
-}
+begin {}
 
 process {
     Write-Verbose "Show current session object"
@@ -41,7 +40,6 @@ process {
 
 }
 
-end {
-}
+end {}
 
 }

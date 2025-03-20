@@ -30,6 +30,8 @@ Function Get-FabricWorkspace {
          [string]$workspaceId
     )
     
+    Confirm-FabricAuthToken | Out-Null
+
     # Invoke the Fabric API to get the workspaces
     if ($workspaceId) {
         $result = Invoke-FabricAPIRequest -Uri "workspaces/$($workspaceID)" -Method Get

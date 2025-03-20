@@ -39,8 +39,7 @@ Function Remove-FabricItem {
       [string]$itemID
    )
 
-   # Check if the Fabric headers are already set
-
+   Confirm-FabricAuthToken | Out-Null
 
    # Invoke the Fabric API to get the items in the workspace
    if ($PSCmdlet.ShouldProcess("Remove items from workspace $workspaceId")) {

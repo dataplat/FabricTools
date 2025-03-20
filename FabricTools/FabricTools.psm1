@@ -23,8 +23,7 @@
 #>
 
 $script:FabricSession = [ordered]@{
-   BaseFabricUrl       = 'https://api.fabric.microsoft.com'
-   ApiUrl              = 'https://api.fabric.microsoft.com/v1'
+   BaseApiUrl          = 'https://api.fabric.microsoft.com/v1'
    FabricToken         = $null
    HeaderParams        = $null
    ContentType         = @{'Content-Type' = "application/json"}
@@ -33,10 +32,14 @@ $script:FabricSession = [ordered]@{
 }
 
 $script:AzureSession = [ordered]@{
-   BaseUrl             = "https://management.azure.com"
+   BaseApiUrl          = "https://management.azure.com"
    AccessToken         = $null
    Token               = $null
    HeaderParams        = $null
+}
+
+$script:PowerBI = [ordered]@{
+   BaseApiUrl          = "https://api.powerbi.com/v1.0/myorg"
 }
 
 # Get all .ps1 files in the (public) Functions folder

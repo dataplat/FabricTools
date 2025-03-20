@@ -50,7 +50,7 @@ function Get-FabricUsageMetricsQuery {
   )
 
   # Confirm the authentication token.
-  $s = Confirm-FabricAuthToken
+  Confirm-FabricAuthToken | Out-Null
 
   # Define the body of the POST request.
   if ($ImpersonatedUser -ne "") {
@@ -80,5 +80,5 @@ function Get-FabricUsageMetricsQuery {
   }
   # Make a POST request to the PowerBI API to retrieve the usage metrics for the specified dataset.
   # The function returns the response of the POST request.
-  return Invoke-RestMethod -uri "https://api.powerbi.com/v1.0/myorg/groups/$groupId/datasets/$DatasetID/executeQueries" -Headers $s.FabricSession.HeaderParams -Body $reportbody -Method Post
+  return Invoke-RestMethod -uri "$($PowerBI.BaseApiUrl)/groups/$groupId/datasets/$DatasetID/executeQueries" -Headers $FabricSession.HeaderParams -Body $reportbody -Method Post
 }

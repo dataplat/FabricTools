@@ -58,7 +58,7 @@ function Get-FabricSQLDatabase {
         [string]$SQLDatabaseId
     )
 
-    $s = Confirm-FabricAuthToken
+    Confirm-FabricAuthToken | Out-Null
 
     Write-Verbose "You can either use SQLDatabaseName or SQLDatabaseID not both. If both are used throw error"
     if ($PSBoundParameters.ContainsKey("SQLDatabaseName") -and $PSBoundParameters.ContainsKey("SQLDatabaseId")) {
@@ -66,7 +66,7 @@ function Get-FabricSQLDatabase {
     }
 
     # Create SQLDatabase API
-    $uri = "$($FabricSession.BaseFabricUrl)/v1/workspaces/$workspaceId/SqlDatabases"
+    $uri = "$($FabricSession.BaseApiUrl)/workspaces/$workspaceId/SqlDatabases"
     if ($SQLDatabaseId) {
         $uri = "$uri/$SQLDatabaseId"
     }

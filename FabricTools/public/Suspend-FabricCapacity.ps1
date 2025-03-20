@@ -42,7 +42,7 @@ function Suspend-FabricCapacity {
     Confirm-FabricAuthToken | Out-Null
 
     # Define the URI for the request.
-    $suspendCapacity = "$($AzureSession.BaseUrl)/subscriptions/$subscriptionID/resourceGroups/$resourcegroup/providers/Microsoft.Fabric/capacities/$capacity/suspend?api-version=2023-11-01"
+    $suspendCapacity = "$($AzureSession.BaseApiUrl)/subscriptions/$subscriptionID/resourceGroups/$resourcegroup/providers/Microsoft.Fabric/capacities/$capacity/suspend?api-version=2023-11-01"
 
     # Make a GET request to the URI and return the response.
     if ($PSCmdlet.ShouldProcess("Suspend capacity $capacity")) {

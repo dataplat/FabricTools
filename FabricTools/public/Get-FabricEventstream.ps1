@@ -67,10 +67,7 @@ function Get-FabricEventstream {
 
 begin {
 
-    Write-Verbose "Check if session is established - if not throw error"
-    if ($null -eq $FabricSession.headerParams) {
-        throw "No session established to Fabric Real-Time Intelligence. Please run Connect-FabricAccount"
-    }
+    Confirm-FabricAuthToken | Out-Null
 
     Write-Verbose "You can either use Name or WorkspaceID not both. If both are used throw error"
     if ($PSBoundParameters.ContainsKey("EventstreamName") -and $PSBoundParameters.ContainsKey("EventstreamID")) {
@@ -78,9 +75,9 @@ begin {
     }
 
     # Create Eventhouse API
-    $eventstreamApiUrl = "$($FabricSession.BaseFabricUrl)/v1/workspaces/$WorkspaceId/eventstreams"
+    $eventstreamApiUrl = "$($FabricSession.BaseApiUrl)/workspaces/$WorkspaceId/eventstreams"
 
-    $eventstreamAPIEventstreamIdUrl = "$($FabricSession.BaseFabricUrl)/v1/workspaces/$WorkspaceId/eventstreams/$EventstreamId"
+    $eventstreamAPIEventstreamIdUrl = "$($FabricSession.BaseApiUrl)/workspaces/$WorkspaceId/eventstreams/$EventstreamId"
 
 }
 

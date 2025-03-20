@@ -45,14 +45,11 @@ function Remove-FabricKQLQueryset {
     )
 
 begin {
-    Write-Verbose "Check if session is established - if not throw error"
-    if ($null -eq $FabricSession.headerParams) {
-        throw "No session established to Fabric Real-Time Intelligence. Please run Connect-FabricAccount"
-    }
+    Confirm-FabricAuthToken | Out-Null
 
     # Create KQLQueryset API URL
-    $querysetApiUrl = "$($FabricSession.BaseFabricUrl)/v1/workspaces/$WorkspaceId/KQLQuerysets/$KQLQuerysetId"
-    }
+    $querysetApiUrl = "$($FabricSession.BaseApiUrl)/workspaces/$WorkspaceId/KQLQuerysets/$KQLQuerysetId"
+}
 
 process {
 

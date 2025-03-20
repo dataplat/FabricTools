@@ -57,10 +57,7 @@ function Remove-FabricEventstream {
     )
 
 begin {
-    Write-Verbose "Check if session is established - if not throw error"
-    if ($null -eq $FabricSession.headerParams) {
-        throw "No session established to Fabric Real-Time Intelligence. Please run Connect-FabricAccount"
-    }
+    Confirm-FabricAuthToken | Out-Null
 
     Write-Verbose "You can either use Name or WorkspaceID not both. If both are used throw error"
     if ($PSBoundParameters.ContainsKey("EventstreamId") -and $PSBoundParameters.ContainsKey("EventstreamName")) {
@@ -78,7 +75,7 @@ begin {
         Write-Verbose "EventstreamId: $EventstreamId"
     }
 
-    $eventstreamApiUrl = "$($FabricSession.BaseFabricUrl)/v1/workspaces/$WorkspaceId/eventstreams/$EventstreamId"
+    $eventstreamApiUrl = "$($FabricSession.BaseApiUrl)/workspaces/$WorkspaceId/eventstreams/$EventstreamId"
 
 }
 

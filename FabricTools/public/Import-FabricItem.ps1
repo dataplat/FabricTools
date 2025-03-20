@@ -37,16 +37,15 @@ Function Import-FabricItem {
     [CmdletBinding()]
     param
     (
-        [string]$path = '.\pbipOutput'
-        ,
-        [string]$workspaceId
-        ,
-        [string]$filter = $null
-        ,
-        [hashtable]$fileOverrides
+          [string]    $path = '.\pbipOutput'
+        , [string]    $workspaceId
+        , [string]    $filter = $null
+        , [hashtable] $fileOverrides
     )
 
     # Search for folders with .pbir and .pbidataset in it
+
+    Confirm-FabricAuthToken | Out-Null
 
     $itemsFolders = Get-ChildItem  -Path $path -recurse -include *.pbir, *.pbidataset
 

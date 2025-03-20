@@ -33,6 +33,9 @@ function Get-FabricWorkspaceDatasetRefreshes {
         [Parameter(Mandatory=$true)]
         [string]$WorkspaceID
     )
+
+    Confirm-FabricAuthToken | Out-Null
+
     # Get the workspace using the workspace ID
     $wsp = Get-FabricWorkspace -workspaceid $WorkspaceID
     # Initialize an array to store the refresh history

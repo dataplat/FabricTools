@@ -105,7 +105,7 @@ function Get-FabricWorkspace2 {
 
 begin {
 
-    $s = Confirm-FabricAuthToken
+    Confirm-FabricAuthToken | Out-Null
     
     Write-Verbose "WorkspaceID has to be used alone"
     if ($PSBoundParameters.ContainsKey("WorkspaceName") -and
@@ -117,7 +117,7 @@ begin {
     }
 
     # Create Workspace API URL
-    $workspaceApiUrl = "$($FabricSession.BaseFabricUrl)/v1/admin/workspaces"
+    $workspaceApiUrl = "$($FabricSession.BaseApiUrl)/admin/workspaces"
 
     # Create URL for WebAPI Call if WorkspaceID is provided
     if ($PSBoundParameters.ContainsKey("WorkspaceID")) {

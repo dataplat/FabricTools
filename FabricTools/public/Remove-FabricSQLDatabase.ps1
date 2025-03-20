@@ -42,20 +42,20 @@ function Remove-FabricSQLDatabase {
         [string]$SQLDatabaseId
     )
 
-    $s = Confirm-FabricAuthToken
+    Confirm-FabricAuthToken | Out-Null
 
     Write-Verbose "Create API URL"
-    $ApiUrl = "$($FabricSession.BaseFabricUrl)/v1/workspaces/$WorkspaceId/SQLDatabases/$SQLDatabaseId"
+    $ApiUrl = "$($FabricSession.BaseApiUrl)/workspaces/$WorkspaceId/SQLDatabases/$SQLDatabaseId"
 
     Write-Verbose "Calling SQLDatabase API"
     Write-Verbose "-----------------------"
     Write-Verbose "Sending the following values to the REST API:"
-    Write-Verbose "Headers: $($s.FabricSession.HeaderParams | Format-List | Out-String)"
+    Write-Verbose "Headers: $($FabricSession.HeaderParams | Format-List | Out-String)"
     Write-Verbose "Method: DELETE"
     Write-Verbose "URI: $ApiUrl"
     Write-Verbose "ContentType: application/json"
     $response = Invoke-RestMethod `
-                        -Headers $s.FabricSession.HeaderParams `
+                        -Headers $FabricSession.HeaderParams `
                         -Method DELETE `
                         -Uri $ApiUrl `
                         -ContentType "application/json"

@@ -39,6 +39,10 @@ function Get-FabricWorkspaceUsers {
         $Workspace
     )
 
+    begin {
+        Confirm-FabricAuthToken | Out-Null
+    }
+
     process {
         # If the parameter set name is 'WorkspaceId', retrieve the workspace object.
         if ($PSCmdlet.ParameterSetName -eq 'WorkspaceId') {

@@ -64,10 +64,7 @@ function Set-FabricKQLQueryset {
     )
 
 begin {
-    Write-Verbose "Check if session is established - if not throw error"
-    if ($null -eq $FabricSession.headerParams) {
-        throw "No session established to Fabric Real-Time Intelligence. Please run Connect-FabricAccount"
-    }
+    Confirm-FabricAuthToken | Out-Null
 
     Write-Verbose "Create body of request"
     $body = @{}
@@ -80,12 +77,10 @@ begin {
         $body["description"] = $KQLQuerysetDescription
     }
 
-    $body = $body `
-                | ConvertTo-Json `
-                    -Depth 1
+    $body = $body | ConvertTo-Json -Depth 1
 
     # Create KQLQueryset API URL
-    $KQLQuerysetApiUrl = "$($FabricSession.BaseFabricUrl)/v1/workspaces/$WorkspaceId/KQLQuerysets/$KQLQuerysetId"
+    $KQLQuerysetApiUrl = "$($FabricSession.BaseApiUrl)/workspaces/$WorkspaceId/KQLQuerysets/$KQLQuerysetId"
     }
 
 process {

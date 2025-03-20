@@ -60,10 +60,7 @@ function Remove-FabricEventhouse {
     )
 
 begin {
-    Write-Verbose "Check if session is established - if not throw error"
-    if ($null -eq $FabricSession.headerParams) {
-        throw "No session established to Fabric Real-Time Intelligence. Please run Connect-FabricAccount"
-    }
+    Confirm-FabricAuthToken | Out-Null
 
     Write-Verbose "Check if EventhouseName and EventhouseID are used together. This is not allowed"
     if ($PSBoundParameters.ContainsKey("EventhouseName") -and $PSBoundParameters.ContainsKey("EventhouseID")) {
@@ -81,7 +78,7 @@ begin {
     }
 
     # Create Eventhouse API URL
-    $eventhouseApiUrl = "$($FabricSession.BaseFabricUrl)/v1/workspaces/$WorkspaceId/eventhouses/$EventhouseId"
+    $eventhouseApiUrl = "$($FabricSession.BaseApiUrl)/workspaces/$WorkspaceId/eventhouses/$EventhouseId"
 }
 
 process {

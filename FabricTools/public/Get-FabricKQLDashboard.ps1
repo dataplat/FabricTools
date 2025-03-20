@@ -48,10 +48,7 @@ function Get-FabricKQLDashboard {
 
 begin {
 
-    Write-Verbose "Check if session is established - if not throw error"
-    if ($null -eq $FabricSession.headerParams) {
-        throw "No session established to Fabric Real-Time Intelligence. Please run Connect-FabricAccount"
-    }
+    Confirm-FabricAuthToken | Out-Null
 
     Write-Verbode "You can either use Name or WorkspaceID"
     if ($PSBoundParameters.ContainsKey("KQLDashboardName") -and $PSBoundParameters.ContainsKey("KQLDashboardId")) {
@@ -59,9 +56,9 @@ begin {
     }
 
     # Create KQLDashboard API
-    $KQLDashboardAPI = "$($FabricSession.BaseFabricUrl)/v1/workspaces/$WorkspaceId/KQLDashboards"
+    $KQLDashboardAPI = "$($FabricSession.BaseApiUrl)/workspaces/$WorkspaceId/KQLDashboards"
 
-    $KQLDashboardAPIKQLDashboardId = "$($FabricSession.BaseFabricUrl)/v1/workspaces/$WorkspaceId/KQLDashboards/$KQLDashboardId"
+    $KQLDashboardAPIKQLDashboardId = "$($FabricSession.BaseApiUrl)/workspaces/$WorkspaceId/KQLDashboards/$KQLDashboardId"
 
 }
 

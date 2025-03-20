@@ -39,12 +39,10 @@ begin {
 
 process {
     Write-Verbose "Connect to Azure Account"
-    Connect-AzAccount `
-            -TenantId $TenantId | `
-                Out-Null
+    Connect-AzAccount -TenantId $TenantId | Out-Null
 
     Write-Verbose "Get authentication token"
-    $FabricSession.FabricToken = (Get-AzAccessToken -ResourceUrl $FabricSession.BaseFabricUrl).Token
+    $FabricSession.FabricToken = (Get-AzAccessToken -ResourceUrl $FabricSession.BaseApiUrl).Token
     Write-Verbose "Token: $($FabricSession.FabricToken)"
 
     Write-Verbose "Setup headers for API calls"

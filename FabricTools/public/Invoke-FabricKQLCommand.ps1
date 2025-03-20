@@ -95,10 +95,7 @@ function Invoke-FabricKQLCommand {
 
 begin {
 
-    Write-Verbose "Check if session is established - if not throw error"
-    if ($null -eq $FabricSession.headerParams) {
-        throw "No session established to Fabric Real-Time Intelligence. Please run Connect-FabricAccount"
-    }
+    Confirm-FabricAuthToken | Out-Null
 
     Write-Verbose "Check if KQLDatabaseName and KQLDatabaseId are used together"
     if ($PSBoundParameters.ContainsKey("KQLDatabaseName") -and $PSBoundParameters.ContainsKey("KQLDatabaseId")) {
@@ -150,22 +147,13 @@ begin {
 
 process {
 
-    Write-Verbose "Authenticate against Kusto"
-    $kustoToken = (Get-AzAccessToken `
-                        -ResourceUrl $FabricSession.KustoURL).Token
-
-    $headerParams = @{'Authorization'="Bearer {0}" -f $kustoToken}
-
-
-
     Write-Verbose "The KQL-Command is: $KQLCommand"
 
     Write-Verbose "Create body of the request"
     $body = @{
-    'csl' = $KQLCommand;
-    'db'= $kustDB.displayName
+        'csl' = $KQLCommand;
+        'db'= $kustDB.displayName
     } | ConvertTo-Json -Depth 1
-
 
 
     if ($isManamgentCommand) {

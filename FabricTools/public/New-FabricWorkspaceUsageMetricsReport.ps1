@@ -28,14 +28,14 @@ function New-FabricWorkspaceUsageMetricsReport {
         [string]$workspaceId
     )
 
-    $s = Confirm-FabricAuthToken
+    Confirm-FabricAuthToken | Out-Null
 
     # Retrieve the Fabric API cluster URI.
     $url = get-FabricAPIclusterURI
 
     # Make a GET request to the Fabric API to retrieve the workspace usage metrics dataset ID.
     if ($PSCmdlet.ShouldProcess("Workspace Usage Metrics Report", "Retrieve")) {
-        $data = Invoke-WebRequest -Uri "$url/$workspaceId/usageMetricsReportV2?experience=power-bi" -Headers $s.FabricSession.HeaderParams -ErrorAction SilentlyContinue
+        $data = Invoke-WebRequest -Uri "$url/$workspaceId/usageMetricsReportV2?experience=power-bi" -Headers $FabricSession.HeaderParams -ErrorAction SilentlyContinue
         # Parse the response and replace certain keys to match the expected format.
         $response = $data.Content.ToString().Replace("nextRefreshTime", "NextRefreshTime").Replace("lastRefreshTime", "LastRefreshTime") | ConvertFrom-Json
 

@@ -29,7 +29,7 @@ function Get-FabricCapacitySkus  {
     Confirm-FabricAuthToken | Out-Null
 
     #GET https://management.azure.com/subscriptions/548B7FB7-3B2A-4F46-BB02-66473F1FC22C/resourceGroups/TestRG/providers/Microsoft.Fabric/capacities/azsdktest/skus?api-version=2023-11-01
-    $uri = "$($AzureSession.BaseUrl)/subscriptions/$subscriptionID/resourceGroups/$ResourceGroupName/providers/Microsoft.Fabric/capacities/$capacity/skus?api-version=2023-11-01"
+    $uri = "$($AzureSession.BaseApiUrl)/subscriptions/$subscriptionID/resourceGroups/$ResourceGroupName/providers/Microsoft.Fabric/capacities/$capacity/skus?api-version=2023-11-01"
     $result = Invoke-RestMethod -Headers $AzureSession.HeaderParams -Uri $uri -Method GET
 
     return $result.value

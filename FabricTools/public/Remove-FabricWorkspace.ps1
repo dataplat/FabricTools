@@ -21,13 +21,14 @@ The function retrieves the PowerBI access token and makes a DELETE request to th
 function Remove-FabricWorkspace {
     [CmdletBinding(SupportsShouldProcess)]
     # Define aliases for the function for flexibility.
-    [Alias("Remove-FabWorkspace")]
 
     # Define a parameter for the group ID.
     Param (
         [Parameter(Mandatory = $true)]
         [string]$workspaceID
     )
+
+    Confirm-FabricAuthToken | Out-Null
 
     # Make a DELETE request to the PowerBI API to remove the workspace.
     if ($PSCmdlet.ShouldProcess("Remove workspace $workspaceID")) {

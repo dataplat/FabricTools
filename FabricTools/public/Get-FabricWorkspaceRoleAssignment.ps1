@@ -33,15 +33,10 @@ function Get-FabricWorkspaceRoleAssignment {
     )
 
 begin {
-
-    # Check if session is established - if not throw error
-    if ($null -eq $FabricSession.headerParams) {
-        throw "No session established to Fabric Real-Time Intelligence. Please run Connect-FabricAccount"
-    }
+    Confirm-FabricAuthToken | Out-Null
 
     # Create Workspace API URL
-    $workspaceApiUrl = "$($FabricSession.BaseFabricUrl)/v1/admin/workspaces/$WorkspaceId/roleassignments"
-
+    $workspaceApiUrl = "$($FabricSession.BaseApiUrl)/admin/workspaces/$WorkspaceId/roleassignments"
 }
 
 process {

@@ -42,7 +42,7 @@ function Resume-FabricCapacity {
     Confirm-FabricAuthToken | Out-Null
 
     # Define the URI for the request.
-    $resumeCapacity = "$($AzureSession.BaseUrl)/subscriptions/$subscriptionID/resourceGroups/$resourcegroup/providers/Microsoft.Fabric/capacities/$capacity/resume?api-version=2022-07-01-preview"
+    $resumeCapacity = "$($AzureSession.BaseApiUrl)/subscriptions/$subscriptionID/resourceGroups/$resourcegroup/providers/Microsoft.Fabric/capacities/$capacity/resume?api-version=2022-07-01-preview"
 
     # Make a GET request to the URI and return the response.
     if ($PSCmdlet.ShouldProcess("Resume capacity $capacity")) {

@@ -44,12 +44,12 @@ function Set-FabricAuthToken {
    [CmdletBinding(SupportsShouldProcess)]
    param
    (
-      [string]$servicePrincipalId      ,
-      [string]$servicePrincipalSecret      ,
-      [PSCredential]$credential      ,
-      [string]$tenantId     ,
-      [switch]$reset      ,
-      [string]$apiUrl
+        [string]       $servicePrincipalId
+      , [string]       $servicePrincipalSecret
+      , [PSCredential] $credential
+      , [string]       $tenantId
+      , [switch]       $reset
+      , [string]       $apiUrl
    )
 
    if (!$reset) {
@@ -57,7 +57,7 @@ function Set-FabricAuthToken {
    }
 
    if ($apiUrl) {
-      $FabricSession.apiUrl = $apiUrl
+      $FabricSession.BaseApiUrl = $apiUrl
    }
 
    if (!$azContext) {
@@ -78,16 +78,16 @@ function Set-FabricAuthToken {
       $azContext = Get-AzContext
    }
    if ($PSCmdlet.ShouldProcess("Setting Fabric authentication token for $($azContext.Account)")) {
-      Write-output "Connnected: $($azContext.Account)"
-      Write-Output "BaseFabricUrl: $($FabricSession.BaseFabricUrl)"
+      Write-Output "Connnected: $($azContext.Account)"
+      Write-Output "BaseFabricUrl: $($FabricSession.BaseApiUrl)"
 
-      $FabricSession.AccessToken = (Get-AzAccessToken -AsSecureString -ResourceUrl $FabricSession.BaseFabricUrl)
+      $FabricSession.AccessToken = (Get-AzAccessToken -AsSecureString -ResourceUrl $FabricSession.BaseApiUrl)
       $ssPtr = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($FabricSession.AccessToken.Token)
       $FabricSession.FabricToken = ([System.Runtime.InteropServices.Marshal]::PtrToStringBSTR($ssPtr))
       Write-Verbose "Setup headers for API calls"
       $FabricSession.HeaderParams = @{ Authorization = $FabricSession.AccessToken.Type + ' ' + $FabricSession.FabricToken }
 
-      $script:AzureSession.AccessToken = (Get-AzAccessToken -AsSecureString -ResourceUrl $AzureSession.BaseUrl)
+      $script:AzureSession.AccessToken = (Get-AzAccessToken -AsSecureString -ResourceUrl $AzureSession.BaseApiUrl)
       $ssPtr = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($AzureSession.AccessToken.Token)
       $script:AzureSession.Token = ([System.Runtime.InteropServices.Marshal]::PtrToStringBSTR($ssPtr))
       $AzureSession.HeaderParams = @{ Authorization = $AzureSession.AccessToken.Type + ' ' + $AzureSession.Token }

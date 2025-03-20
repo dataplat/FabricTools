@@ -28,9 +28,9 @@ function Get-FabricCapacityRefreshables  {
         [string]$top = 5
     )
 
-    $s = Confirm-FabricAuthToken
+    Confirm-FabricAuthToken | Out-Null
 
     # Make a GET request to the PowerBI API to retrieve the top refreshable capacities.
     # The function returns the 'value' property of the response.
-    return (Invoke-RestMethod -uri "https://api.powerbi.com/v1.0/myorg/capacities/refreshables?`$top=$top" -Headers $s.FabricSession.HeaderParams -Method GET).value
+    return (Invoke-RestMethod -uri "$($PowerBI.BaseApiUrl)/capacities/refreshables?`$top=$top" -Headers $FabricSession.HeaderParams -Method GET).value
 }

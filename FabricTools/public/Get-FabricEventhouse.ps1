@@ -80,10 +80,7 @@ function Get-FabricEventhouse {
 
 begin {
 
-    Write-Verbose "Checking if session is established. If not throw error"
-    if ($null -eq $FabricSession.headerParams) {
-        throw "No session established to Fabric Real-Time Intelligence. Please run Connect-FabricAccount"
-    }
+    Confirm-FabricAuthToken | Out-Null
 
     # You can either use Name or WorkspaceID
     Write-Verbose "Checking if EventhouseName and EventhouseID are used together. This is not allowed"
@@ -92,10 +89,10 @@ begin {
     }
 
     # Create Eventhouse API
-    $eventhouseAPI = "$($FabricSession.BaseFabricUrl)/v1/workspaces/$WorkspaceId/eventhouses"
+    $eventhouseAPI = "$($FabricSession.BaseApiUrl)/workspaces/$WorkspaceId/eventhouses"
     Write-Verbose "Creating the URL for the Eventhouse API: $eventhouseAPI"
 
-    $eventhouseAPIEventhouseId = "$($FabricSession.BaseFabricUrl)/v1/workspaces/$WorkspaceId/eventhouses/$EventhouseId"
+    $eventhouseAPIEventhouseId = "$($FabricSession.BaseApiUrl)/workspaces/$WorkspaceId/eventhouses/$EventhouseId"
     Write-Verbose "Creating the URL for the Eventhouse API when the Id is used: $eventhouseAPIEventhouseId"
 
 }

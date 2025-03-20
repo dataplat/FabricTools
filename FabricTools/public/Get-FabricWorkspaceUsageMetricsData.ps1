@@ -34,7 +34,7 @@ function Get-FabricWorkspaceUsageMetricsData {
     )
 
     # Create a new workspace usage metrics dataset.
-    $datasetId = New-FabWorkspaceUsageMetricsReport -workspaceId $workspaceId
+    $datasetId = New-FabricWorkspaceUsageMetricsReport -workspaceId $workspaceId
 
     # Define the names of the reports to retrieve.
     $reportnames = @("'Workspace views'", "'Report pages'", "Users", "Reports", "'Report views'", "'Report page views'", "'Report load times'")
