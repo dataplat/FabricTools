@@ -43,6 +43,12 @@ $script:PowerBI = [ordered]@{
    BaseApiUrl          = "https://api.powerbi.com/v1.0/myorg"
 }
 
+$FabricTools = @{
+   FeatureFlags = @{
+      AutoRenewExpiredToken = $true
+   }
+}
+
 $FabricConfig = @{
    BaseUrl      = "https://api.fabric.microsoft.com/v1"
    ResourceUrl  = "https://api.fabric.microsoft.com"
@@ -52,6 +58,7 @@ $FabricConfig = @{
 }
 
 Export-ModuleMember -Variable FabricConfig
+Export-ModuleMember -Variable FabricTools
 
 # Get all .ps1 files in the (public) Functions folder
 $publicFunctions = Get-ChildItem -Path "$PSScriptRoot\public" -Filter '*.ps1' -Recurse
