@@ -24,6 +24,7 @@
 
 $script:FabricSession = [ordered]@{
    BaseApiUrl          = 'https://api.fabric.microsoft.com/v1'
+   ResourceUrl         = 'https://api.fabric.microsoft.com'
    FabricToken         = $null
    HeaderParams        = $null
    ContentType         = @{'Content-Type' = "application/json"}
@@ -42,16 +43,29 @@ $script:PowerBI = [ordered]@{
    BaseApiUrl          = "https://api.powerbi.com/v1.0/myorg"
 }
 
+$FabricConfig = @{
+   BaseUrl      = "https://api.fabric.microsoft.com/v1"
+   ResourceUrl  = "https://api.fabric.microsoft.com"
+   FabricHeaders = @{}
+   TenantIdGlobal = ""
+   TokenExpiresOn = ""
+}
+
+Export-ModuleMember -Variable FabricConfig
+
 # Get all .ps1 files in the (public) Functions folder
-$functions = Get-ChildItem -Path "$PSScriptRoot\public" -Filter *.ps1
+$publicFunctions = Get-ChildItem -Path "$PSScriptRoot\public" -Filter '*.ps1' -Recurse
 
 # Loop over each function file
-foreach ($function in $functions) {
+foreach ($function in $publicFunctions) {
     # Dot-source the function
     . $function.fullname
     # Export the function as a module member
     Export-ModuleMember -Function $function.basename
 }
+
+$privateFunctions = Get-ChildItem -Path "$PSScriptRoot\private" -Filter '*.ps1' -Recurse
+$privateFunctions | ForEach-Object { . $_.FullName }
 
 # Set aliases for PowerBI functions
 Set-Alias -Name Login-Fabric -Value Login-PowerBI

@@ -35,7 +35,8 @@ process {
 
     return @{
         FabricSession = $script:FabricSession
-        AzureSession = $script:AzureSession
+        AzureSession  = $script:AzureSession
+        FabricConfig  = $script:FabricConfig
     }
 
 }

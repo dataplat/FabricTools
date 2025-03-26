@@ -12,7 +12,7 @@
     RootModule = 'FabricTools.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '0.10.0'
+    ModuleVersion     = '0.20.0'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -137,7 +137,9 @@
         'Remove-FabricSQLDatabase',
         'Get-FabricCapacitySkus',
         'Confirm-FabricAuthToken',
-        'Get-FabricConnection'
+        'Get-FabricConnection',
+        'New-FabricSQLDatabase',
+        'Test-FabricApiResponse'
     )
 
     # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
@@ -149,37 +151,10 @@
     # Aliases to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no aliases to export.
     AliasesToExport   = @(
     "Export-FabItem",
-    "Get-AllFabCapacities",
-    "Get-AllFabDatasetRefreshes",
-    "Get-FabAPIclusterURI",
-    "Get-FabAuthToken",
-    "Get-FabCapacity",
-    "Get-FabCapacityRefreshables",
-    "Get-FabCapacityState",
-    "Get-FabCapacityTenantOverides",
-    "Get-FabCapacityWorkload",
-    "Get-FabDataset",
-    "Get-FabDatasetRefreshes",
-    "Get-FabItem",
-    "Get-FabReport",
     "Get-FabricDataset",
     "Get-FabricReport",
-    "Get-FabTenantSettings",
-    "Get-FabUsagemetricsQuery",
-    "Get-FabWorkspace",
-    "Get-FabWorkspaceDatasetRefreshes",
-    "Get-FabWorkspaceUsageMetricsData",
-    "Get-FabWorkspaceUsers",
-    "Invoke-FabDatasetRefresh",
     "Login-Fabric",
-    "Logout-Fabric",
-    "New-FabWorkspace",
-    "New-FabWorkspaceUsageMetrics",
-    "Register-FabWorkspaceToCapacity",
-    "Remove-FabWorkspace",
-    "Resume-FabCapacity",
-    "Suspend-FabCapacity",
-    "Unregister-FabWorkspaceToCapacity"
+    "Logout-Fabric"
     )
 
     # DSC resources to export from this module

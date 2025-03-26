@@ -23,7 +23,6 @@
 #>
 function Get-AllFabricCapacities {
     # Define aliases for the function for flexibility.
-    [Alias("Get-AllFabCapacities")]
 
     # Define parameters for the function
     Param (
