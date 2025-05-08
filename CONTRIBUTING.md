@@ -59,18 +59,17 @@ Add this to your VS Code settings to enable it:
     ```
     This will build the module and create a new folder in the root of the repository called `output`. It will also load the new module into your current session.
     
-4. You can then run the Pester tests to ensure that everything is working as expected. The tests are located in the `tests` folder and can be run using the following command:
+4. AFTER building, you can then run the Pester tests to ensure that everything is working as expected. The tests are located in the `tests` folder and can be run using the following command:
     ```PowerShell
-    Invoke-Pester
+    Invoke-Pester ./tests/
     ```
     This will run all the tests in the `tests` folder and output the results to the console.
     
 5. You can also simulate the deployment testing by running the following command:
     ```PowerShell
-    ./build.ps1 -Tasks test
+    ./build.ps1 -Tasks build,test
     ```
 
-    
 6. Once you are happy with your code, push your branch to GitHub and create a PR against the repo.
 
 # Thanks!
