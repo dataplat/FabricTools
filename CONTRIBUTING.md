@@ -65,6 +65,8 @@ Add this to your VS Code settings to enable it:
     ```
     This will run all the tests in the `tests` folder and output the results to the console.
     
+You can also run specific tags such as FunctionalQuality,TestQuality, HelpQuality
+    
 5. You can also simulate the deployment testing by running the following command:
     ```PowerShell
     ./build.ps1 -Tasks build,test
