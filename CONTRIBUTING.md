@@ -38,27 +38,42 @@ If you change the code in the output folder and then build the module again, it 
 
 Ask Rob how he knows this!
 
-1. Build the module. From the root of the repository run the following command:
+2. Use GitHub CoPilot to write your commit messages by clicking on the sparkles in the commit message box. This will generate a commit message based on the changes you made. You can then edit the message to make it more descriptive if you want. This uses the prompt in the `.github\copilot-commit-message-instructions.md` file. 
+
+Add this to your VS Code settings to enable it:
+```json
+"github.copilot.chat.commitMessageGeneration.instructions": [
+    
+
+
+        {
+            "file": ".github/copilot-commit-message-instructions.md"
+        }
+    ],
+    ```
+
+
+3. Build the module. From the root of the repository run the following command:
     ```PowerShell
     ./build.ps1 -Tasks build
     ```
     This will build the module and create a new folder in the root of the repository called `output`. It will also load the new module into your current session.
     
-You can then run the Pester tests to ensure that everything is working as expected. The tests are located in the `tests` folder and can be run using the following command:
+4. You can then run the Pester tests to ensure that everything is working as expected. The tests are located in the `tests` folder and can be run using the following command:
     ```PowerShell
     Invoke-Pester
     ```
     This will run all the tests in the `tests` folder and output the results to the console.
     
-You can also simulate the deployment testing by running the following command:
+5. You can also simulate the deployment testing by running the following command:
     ```PowerShell
     ./build.ps1 -Tasks test
     ```
 
     
-1. Once you are happy with your code, push your branch to GitHub and create a PR against the repo.
+6. Once you are happy with your code, push your branch to GitHub and create a PR against the repo.
 
-1. Thanks!
+# Thanks!
     We will review your PR and get back to you as soon as we can. We are all volunteers and do this in our spare time, so please be patient with us. We will try to get back to you within a week, but it may take longer if we are busy.
     If you have any questions or need help, please feel free to reach out to us on the [GitHub Discussions](    )
 ## How to submit changes: 
