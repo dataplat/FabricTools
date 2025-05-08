@@ -1,105 +1,73 @@
-function Remove-FabricEventstream {
-#Requires -Version 7.1
-
 <#
 .SYNOPSIS
-    Removes an existing Fabric Eventstream
+Deletes an Eventstream from a specified workspace in Microsoft Fabric.
 
 .DESCRIPTION
-    Removes an existing Fabric Eventstream
+The `Remove-FabricEventstream` function sends a DELETE request to the Fabric API to remove a specified Eventstream from a given workspace.
 
 .PARAMETER WorkspaceId
-    Id of the Fabric Workspace for which the Eventstream should be deleted. The value for WorkspaceId is a GUID.
-    An example of a GUID is '12345678-1234-1234-1234-123456789012'.
+(Mandatory) The ID of the workspace containing the Eventstream to delete.
 
 .PARAMETER EventstreamId
-    The Id of the Eventstream to delete. The value for Eventstream is a GUID.
-    An example of a GUID is '12345678-1234-1234-1234-123456789012'.
+(Mandatory) The ID of the Eventstream to be deleted.
 
 .EXAMPLE
-    Remove-FabricEventstream `
-        -WorkspaceId '12345678-1234-1234-1234-123456789012' `
-        -EventstreamId '12345678-1234-1234-1234-123456789012'
+Remove-FabricEventstream -WorkspaceId "12345" -EventstreamId "67890"
 
-    This example will delete the Eventstream with the Id '12345678-1234-1234-1234-123456789012' from
-    the Workspace.
-
-.EXAMPLE
-    Remove-FabricEventstream `
-        -WorkspaceId '12345678-1234-1234-1234-123456789012' `
-        -EventstreamName 'MyEventstream'
-
-    This example will delete the Eventstream with the name 'MyEventstream' from the Workspace.
+Deletes the Eventstream with ID "67890" from workspace "12345".
 
 .NOTES
+- Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
+- Validates token expiration before making the API request.
 
-    Revsion History:
+Author: Tiago Balabuch  
 
-    - 2024-11-07 - FGE: Implemented SupportShouldProcess
-    - 2024-11-09 - FGE: Added DisplaName as Alias for EventStreamName
-    - 2024-12-08 - FGE: Added Verbose Output
 #>
 
-
-
-[CmdletBinding(SupportsShouldProcess)]
+function Remove-FabricEventstream {
+    [CmdletBinding()]
     param (
-
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
         [string]$WorkspaceId,
 
-        [Alias("Id")]
-        [string]$EventstreamId,
-
-        [Alias("Name","DisplayName")]
-        [string]$EventstreamName
-
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [string]$EventstreamId
     )
 
-begin {
-    Confirm-FabricAuthToken | Out-Null
+    try {
+        # Step 1: Ensure token validity
+        Write-Message -Message "Validating token..." -Level Debug
+        Test-TokenExpired
+        Write-Message -Message "Token validation completed." -Level Debug
 
-    Write-Verbose "You can either use Name or WorkspaceID not both. If both are used throw error"
-    if ($PSBoundParameters.ContainsKey("EventstreamId") -and $PSBoundParameters.ContainsKey("EventstreamName")) {
-        throw "Parameters EventstreamId and EventstreamName cannot be used together"
-    }
+        # Step 2: Construct the API URL
+        $apiEndpointUrl = "{0}/workspaces/{1}/eventstreams/{2}" -f $FabricConfig.BaseUrl, $WorkspaceId, $EventstreamId
+        Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
-    if ($PSBoundParameters.ContainsKey("EventstreamName")) {
-        Write-Verbose "The name $EventstreamName was provided. Fetching EventstreamId."
-
-        $eh = Get-FabricEventstream `
-                    -WorkspaceId $WorkspaceId `
-                    -EventstreamName $EventstreamName
-
-        $EventstreamId = $eh.id
-        Write-Verbose "EventstreamId: $EventstreamId"
-    }
-
-    $eventstreamApiUrl = "$($FabricSession.BaseApiUrl)/workspaces/$WorkspaceId/eventstreams/$EventstreamId"
-
-}
-
-process {
-
-    # Call Eventstream API
-    if($PSCmdlet.ShouldProcess($EventstreamName)) {
-        Write-Verbose "Calling Eventstream API with EventstreamId"
-        Write-Verbose "------------------------------------------"
-        Write-Verbose "Sending the following values to the Eventstream API:"
-        Write-Verbose "Headers: $($FabricSession.headerParams | Format-List | Out-String)"
-        Write-Verbose "Method: DELETE"
-        Write-Verbose "URI: $eventstreamApiUrl"
-        Write-Verbose "ContentType: application/json"
+        # Step 3: Make the API request
         $response = Invoke-RestMethod `
-                            -Headers $FabricSession.headerParams `
-                            -Method DELETE `
-                            -Uri $eventstreamApiUrl `
-                            -ContentType "application/json"
+            -Headers $FabricConfig.FabricHeaders `
+            -Uri $apiEndpointUrl `
+            -Method Delete `
+            -ErrorAction Stop `
+            -SkipHttpErrorCheck `
+            -StatusCodeVariable "statusCode"
 
-        $response
+        # Step 4: Validate the response code
+        if ($statusCode -ne 200) {
+            Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
+            Write-Message -Message "Error: $($response.message)" -Level Error
+            Write-Message "Error Code: $($response.errorCode)" -Level Error
+            return $null
+        }
+        Write-Message -Message "Eventstream '$EventstreamId' deleted successfully from workspace '$WorkspaceId'." -Level Info
+        
     }
-}
-
-end {}
-
+    catch {
+        # Step 5: Log and handle errors
+        $errorDetails = $_.Exception.Message
+        Write-Message -Message "Failed to delete Eventstream '$EventstreamId' from workspace '$WorkspaceId'. Error: $errorDetails" -Level Error
+    }
 }
