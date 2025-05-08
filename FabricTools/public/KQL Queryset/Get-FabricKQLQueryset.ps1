@@ -1,130 +1,154 @@
-function Get-FabricKQLQueryset {
-#Requires -Version 7.1
-
 <#
 .SYNOPSIS
-    Retrieves Fabric KQLQuerysets
+Retrieves an KQLQueryset or a list of KQLQuerysets from a specified workspace in Microsoft Fabric.
 
 .DESCRIPTION
-    Retrieves Fabric KQLQuerysets. Without the KQLQuerysetName or KQLQuerysetId parameter,
-    all KQLQuerysets are returned in the given Workspace. If you want to retrieve a specific
-    KQLQueryset, you can use the KQLQuerysetName or KQLQuerysetId parameter. These parameters
-    cannot be used together.
+The `Get-FabricKQLQueryset` function sends a GET request to the Fabric API to retrieve KQLQueryset details for a given workspace. It can filter the results by `KQLQuerysetName`.
 
 .PARAMETER WorkspaceId
-    Id of the Fabric Workspace for which the KQLQuerysets should be retrieved. The value for WorkspaceId is a GUID.
-    An example of a GUID is '12345678-1234-1234-1234-123456789012'. This parameter is mandatory.
+(Mandatory) The ID of the workspace to query KQLQuerysets.
 
 .PARAMETER KQLQuerysetName
-    The name of the KQLQueryset to retrieve. This parameter cannot be used together with KQLQuerysetId.
-
-.PARAMETER KQLQuerysetId
-    The Id of the KQLQueryset to retrieve. This parameter cannot be used together with KQLQuerysetName.
-    The value for KQLQuerysetId is a GUID. An example of a GUID is '12345678-1234-1234-1234-123456789012'.
+(Optional) The name of the specific KQLQueryset to retrieve.
 
 .EXAMPLE
-    Get-FabricKQLQueryset `
-        -WorkspaceId '12345678-1234-1234-1234-123456789012' `
-        -KQLQuerysetName 'MyKQLQueryset'
+Get-FabricKQLQueryset -WorkspaceId "12345" -KQLQuerysetName "Development"
 
-    This example will retrieve the KQLQueryset with the name 'MyKQLQueryset'.
+Retrieves the "Development" KQLQueryset from workspace "12345".
 
 .EXAMPLE
-    Get-FabricKQLQueryset `
-        -WorkspaceId '12345678-1234-1234-1234-123456789012'
+Get-FabricKQLQueryset -WorkspaceId "12345"
 
-    This example will retrieve all KQLQuerysets in the workspace that is specified
-    by the WorkspaceId.
-
-.EXAMPLE
-    Get-FabricKQLQueryset `
-        -WorkspaceId '12345678-1234-1234-1234-123456789012' `
-        -KQLQuerysetId '12345678-1234-1234-1234-123456789012'
-
-    This example will retrieve the KQLQueryset with the ID '12345678-1234-1234-1234-123456789012'.
+Retrieves all KQLQuerysets in workspace "12345".
 
 .NOTES
-    TODO: Add functionality to list all KQLQuerysets. To do so fetch all workspaces and
-        then all KQLQuerysets in each workspace.
+- Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
+- Calls `Test-TokenExpired` to ensure token validity before making the API request.
 
-    Revision History:
-        - 2024-11-09 - FGE: Added DisplaName as Alias for KQLQuerysetName
-        - 2024-12-22 - FGE: Added Verbose Output
+Author: Tiago Balabuch  
+
 #>
 
-
-[CmdletBinding()]
+function Get-FabricKQLQueryset {
+    [CmdletBinding()]
     param (
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
         [string]$WorkspaceId,
 
-        [Alias("Name","DisplayName")]
-        [string]$KQLQuerysetName,
+        [Parameter(Mandatory = $false)]
+        [ValidateNotNullOrEmpty()]
+        [string]$KQLQuerysetId,
 
-        [Alias("Id")]
-        [string]$KQLQuerysetId
+        [Parameter(Mandatory = $false)]
+        [ValidateNotNullOrEmpty()]
+        [ValidatePattern('^[a-zA-Z0-9_ ]*$')]
+        [string]$KQLQuerysetName
     )
 
-begin {
+    try {
+        # Step 1: Handle ambiguous input
+        if ($KQLQuerysetId -and $KQLQuerysetName) {
+            Write-Message -Message "Both 'KQLQuerysetId' and 'KQLQuerysetName' were provided. Please specify only one." -Level Error
+            return $null
+        }
 
-    Confirm-FabricAuthToken | Out-Null
+        # Step 2: Ensure token validity
+        Write-Message -Message "Validating token..." -Level Debug
+        Test-TokenExpired
+        Write-Message -Message "Token validation completed." -Level Debug
+        
+        # Step 3: Initialize variables
+        $continuationToken = $null
+        $KQLQuerysets = @()
 
-    Write-Verbose "You can either use Name or WorkspaceID"
-    if ($PSBoundParameters.ContainsKey("KQLQuerysetName") -and $PSBoundParameters.ContainsKey("KQLQuerysetId")) {
-        throw "Parameters KQLQuerysetName and KQLQuerysetId cannot be used together"
-    }
+        if (-not ([AppDomain]::CurrentDomain.GetAssemblies() | Where-Object { $_.GetName().Name -eq "System.Web" })) {
+            Add-Type -AssemblyName System.Web
+        }
+ 
+        # Step 4: Loop to retrieve all capacities with continuation token
+        Write-Message -Message "Loop started to get continuation token" -Level Debug
+        $baseApiEndpointUrl = "{0}/workspaces/{1}/kqlQuerysets" -f $FabricConfig.BaseUrl, $WorkspaceId
+        do {
+            # Step 5: Construct the API URL
+            $apiEndpointUrl = $baseApiEndpointUrl
 
-    # Create KQLQueryset API
-    $KQLQuerysetAPI = "$($FabricSession.BaseApiUrl)/workspaces/$WorkspaceId/KQLQuerysets"
-
-    $KQLQuerysetAPIKQLQuerysetId = "$($FabricSession.BaseApiUrl)/workspaces/$WorkspaceId/KQLQuerysets/$KQLQuerysetId"
-
-}
-
-process {
-
-    if ($PSBoundParameters.ContainsKey("KQLQuerysetId")) {
-        Write-Verbose "Calling KQLQueryset API with KQLQuerysetId $KQLQuerysetId"
-        Write-Verbose "------------------------------------------------------------------------------------"
-        Write-Verbose "Sending the following values to the KQLQueryset API:"
-        Write-Verbose "Headers: $($FabricSession.headerParams | Format-List | Out-String)"
-        Write-Verbose "Method: GET"
-        Write-Verbose "URI: $KQLQuerysetAPIKQLQuerysetId"
-        Write-Verbose "ContentType: application/json"
-        $response = Invoke-RestMethod `
-                    -Headers $FabricSession.headerParams `
-                    -Method GET `
-                    -Uri $KQLQuerysetAPIKQLQuerysetId `
-                    -ContentType "application/json"
-
-        $response
-    }
-    else {
-        Write-Verbose "Calling KQLQueryset API"
-        Write-Verbose "------------------------------------------------------------------------------------"
-        Write-Verbose "Sending the following values to the KQLQueryset API:"
-        Write-Verbose "Headers: $($FabricSession.headerParams | Format-List | Out-String)"
-        Write-Verbose "Method: GET"
-        Write-Verbose "URI: $KQLQuerysetAPI"
-        Write-Verbose "ContentType: application/json"
-        $response = Invoke-RestMethod `
-                    -Headers $FabricSession.headerParams `
-                    -Method GET `
-                    -Uri $KQLQuerysetAPI `
-                    -ContentType "application/json"
-
-        if ($PSBoundParameters.ContainsKey("KQLQuerysetName")) {
-            Write-Verbose "Filtering KQLQuerysets by name. Name: $KQLQuerysetName"
-            $response.value | `
-                Where-Object { $_.displayName -eq $KQLQuerysetName }
+            if ($null -ne $continuationToken) {
+                # URL-encode the continuation token
+                $encodedToken = [System.Web.HttpUtility]::UrlEncode($continuationToken)
+                $apiEndpointUrl = "{0}?continuationToken={1}" -f $apiEndpointUrl, $encodedToken
+            }
+            Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
+ 
+            # Step 6: Make the API request
+            $response = Invoke-RestMethod `
+                -Headers $FabricConfig.FabricHeaders `
+                -Uri $apiEndpointUrl `
+                -Method Get `
+                -ErrorAction Stop `
+                -SkipHttpErrorCheck `
+                -ResponseHeadersVariable "responseHeader" `
+                -StatusCodeVariable "statusCode"
+ 
+            # Step 7: Validate the response code
+            if ($statusCode -ne 200) {
+                Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
+                Write-Message -Message "Error: $($response.message)" -Level Error
+                Write-Message -Message "Error Details: $($response.moreDetails)" -Level Error
+                Write-Message "Error Code: $($response.errorCode)" -Level Error
+                return $null
+            }
+ 
+            # Step 8: Add data to the list
+            if ($null -ne $response) {
+                Write-Message -Message "Adding data to the list" -Level Debug
+                $KQLQuerysets += $response.value
+         
+                # Update the continuation token if present
+                if ($response.PSObject.Properties.Match("continuationToken")) {
+                    Write-Message -Message "Updating the continuation token" -Level Debug
+                    $continuationToken = $response.continuationToken
+                    Write-Message -Message "Continuation token: $continuationToken" -Level Debug
+                }
+                else {
+                    Write-Message -Message "Updating the continuation token to null" -Level Debug
+                    $continuationToken = $null
+                }
+            }
+            else {
+                Write-Message -Message "No data received from the API." -Level Warning
+                break
+            }
+        } while ($null -ne $continuationToken)
+        Write-Message -Message "Loop finished and all data added to the list" -Level Debug
+      
+        # Step 8: Filter results based on provided parameters
+        $KQLQueryset = if ($KQLQuerysetId) {
+            $KQLQuerysets | Where-Object { $_.Id -eq $KQLQuerysetId }
+        }
+        elseif ($KQLQuerysetName) {
+            $KQLQuerysets | Where-Object { $_.DisplayName -eq $KQLQuerysetName }
         }
         else {
-            Write-Verbose "Returning all KQLQuerysets"
-            $response.value
+            # Return all KQLQuerysets if no filter is provided
+            Write-Message -Message "No filter provided. Returning all KQLQuerysets." -Level Debug
+            $KQLQuerysets
+        }
+
+        # Step 9: Handle results
+        if ($KQLQueryset) {
+            Write-Message -Message "KQLQueryset found matching the specified criteria." -Level Debug
+            return $KQLQueryset
+        }
+        else {
+            Write-Message -Message "No KQLQueryset found matching the provided criteria." -Level Warning
+            return $null
         }
     }
-}
-
-end {}
-
+    catch {
+        # Step 10: Capture and log error details
+        $errorDetails = $_.Exception.Message
+        Write-Message -Message "Failed to retrieve KQLQueryset. Error: $errorDetails" -Level Error
+    } 
+ 
 }

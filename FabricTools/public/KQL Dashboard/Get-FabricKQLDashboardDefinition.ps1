@@ -1,119 +1,120 @@
-function Get-FabricKQLDashboardDefinition {
-#Requires -Version 7.1
 
 <#
 .SYNOPSIS
-    Retrieves Fabric KQLDashboard Definitions for a given KQLDashboard.
+Retrieves the definition of a KQLDashboard from a specific workspace in Microsoft Fabric.
 
 .DESCRIPTION
-    Retrieves the Definition of the Fabric KQLDashboard that is specified by the KQLDashboardName or KQLDashboardID.
-    The KQLDashboard Definition contains the parts of the KQLDashboard, which are the visualizations and their configuration.
-    This is provided as a JSON object.
+This function fetches the KQLDashboard's content or metadata from a workspace. 
+Handles both synchronous and asynchronous operations, with detailed logging and error handling.
 
 .PARAMETER WorkspaceId
-    Id of the Fabric Workspace in which the KQLDashboard exists. The value for WorkspaceId is a GUID.
-    An example of a GUID is '12345678-1234-1234-1234-123456789012'.
+(Mandatory) The unique identifier of the workspace from which the KQLDashboard definition is to be retrieved.
 
-.PARAMETER KQLDashboardName
-    The name of the KQLDashboard to retrieve. This parameter cannot be used together with KQLDashboardID.
+.PARAMETER KQLDashboardId
+(Optional)The unique identifier of the KQLDashboard whose definition needs to be retrieved.
 
-.PARAMETER KQLDashboardID
-    The Id of the KQLDashboard to retrieve. This parameter cannot be used together with KQLDashboardName. The value for KQLDashboardID is a GUID.
-    An example of a GUID is '12345678-1234-1234-1234-123456789012'.
+.PARAMETER KQLDashboardFormat
+Specifies the format of the KQLDashboard definition.
 
 .EXAMPLE
-    Get-FabricKQLDashboardDefinition `
-        -WorkspaceId "12345678-1234-1234-1234-123456789012" `
-        -KQLDashboardName "MyKQLDashboard"
+Get-FabricKQLDashboardDefinition -WorkspaceId "12345" -KQLDashboardId "67890"
 
-    This example retrieves the KQLDashboard Definition for the KQLDashboard named "MyKQLDashboard" in the
-    Workspace with the ID "12345678-1234-1234-1234-123456789012".
+Retrieves the definition of the KQLDashboard with ID `67890` from the workspace with ID `12345` in the `ipynb` format.
 
 .EXAMPLE
-    $db = Get-FabricKQLDashboardDefinition `
-            -WorkspaceId "12345678-1234-1234-1234-123456789012" `
-            -KQLDashboardName "MyKQLDashboard"
+Get-FabricKQLDashboardDefinition -WorkspaceId "12345"
 
-     $db[0].payload | `
-        Set-Content `
-            -Path "C:\temp\mydashboard.json"
-
-    This example retrieves the KQLDashboard Definition for the KQLDashboard named "MyKQLDashboard" in the
-    Workspace with the ID "12345678-1234-1234-1234-123456789012".
-    The definition is saved to a file named "mydashboard.json".
-
+Retrieves the definitions of all KQLDashboards in the workspace with ID `12345` in the `ipynb` format.
 
 .NOTES
+- Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
+- Calls `Test-TokenExpired` to ensure token validity before making the API request.
+- Handles long-running operations asynchronously.
 
-    Revision History:
-        - 2024-11-16 - FGE: First version
-        - 2024-12-08 - FGE: Added Verbose Output
 #>
-
-
-[CmdletBinding()]
+function Get-FabricKQLDashboardDefinition {
+    [CmdletBinding()]
     param (
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
         [string]$WorkspaceId,
 
-        [Alias("Name","DisplayName")]
-        [string]$KQLDashboardName,
-
-        [Alias("Id")]
+        [Parameter(Mandatory = $false)]
+        [ValidateNotNullOrEmpty()]
         [string]$KQLDashboardId,
 
-        [string]$Format
+        [Parameter(Mandatory = $false)]
+        [ValidateNotNullOrEmpty()]
+        [string]$KQLDashboardFormat
     )
 
-begin {
+    try {
+        # Step 2: Ensure token validity
+        Write-Message -Message "Validating token..." -Level Debug
+        Test-TokenExpired
+        Write-Message -Message "Token validation completed." -Level Debug
 
-    Confirm-FabricAuthToken | Out-Null
+        # Step 3: Construct the API URL
+        $apiEndpointUrl = "{0}/workspaces/{1}/kqlDashboards/{2}/getDefinition" -f $FabricConfig.BaseUrl, $WorkspaceId, $KQLDashboardId
 
-    Write-Verbose "You can either use Name or WorkspaceID"
-    if ($PSBoundParameters.ContainsKey("KQLDashboardName") -and $PSBoundParameters.ContainsKey("KQLDashboardId")) {
-        throw "Parameters KQLDashboardName and KQLDashboardId cannot be used together"
-    }
-
-    # Create KQLDashboard API
-
-    $KQLDashboardAPIKQLDashboardId = "$($FabricSession.BaseApiUrl)/workspaces/$WorkspaceId/KQLDashboards/$KQLDashboardId/getDefinition"
-
-}
-
-process {
-
-    if ($PSBoundParameters.ContainsKey("KQLDashboardId")) {
-        Write-Verbose "Get KQLDashboardDefinition with ID $KQLDashboardId"
-        Write-Verbose "Calling KQLDashboard API with KQLDashboardId"
-        Write-Verbose "--------------------------------------------"
-        Write-Verbose "Sending the following values to the KQLDashboard API:"
-        Write-Verbose "Headers: $($FabricSession.headerParams | Format-List | Out-String)"
-        Write-Verbose "Method: POST"
-        Write-Verbose "URI: $KQLDashboardAPIKQLDashboardId"
-        Write-Verbose "Body of request: $$null"
-        Write-Verbose "ContentType: application/json"
-        $response = Invoke-RestMethod `
-                    -Headers $FabricSession.headerParams `
-                    -Method POST `
-                    -Uri $KQLDashboardAPIKQLDashboardId `
-                    -Body $null `
-                    -ContentType "application/json"
-
-        $parts = $response.definition.parts
-        Write-Verbose "Decoding the payload of the parts: $parts"
-
-        foreach ($part in $parts) {
-            $bytes = [System.Convert]::FromBase64String($part.payload)
-            Write-Verbose "Returned bytes for part $part.name: $bytes"
-            $decodedText = [System.Text.Encoding]::UTF8.GetString($bytes)
-            Write-Verbose "decodedText for part $part.name: $decodedText"
-            $part.payload = $decodedText
+        if ($KQLDashboardFormat) {
+            $apiEndpointUrl = "{0}?format={1}" -f $apiEndpointUrl, $KQLDashboardFormat
         }
+        Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
-        $parts
+        # Step 4: Make the API request
+        $response = Invoke-RestMethod `
+            -Headers $FabricConfig.FabricHeaders `
+            -Uri $apiEndpointUrl `
+            -Method Post `
+            -ErrorAction Stop `
+            -ResponseHeadersVariable "responseHeader" `
+            -StatusCodeVariable "statusCode"
+
+        # Step 5: Validate the response code and handle the response
+        switch ($statusCode) {
+            200 {
+                Write-Message -Message "KQLDashboard '$KQLDashboardId' definition retrieved successfully!" -Level Debug
+                return $response.definition.parts
+            }
+            202 {
+
+                Write-Message -Message "Getting KQLDashboard '$KQLDashboardId' definition request accepted. Retrieving in progress!" -Level Debug
+
+                [string]$operationId = $responseHeader["x-ms-operation-id"]
+                Write-Message -Message "Operation ID: '$operationId'" -Level Debug
+                Write-Message -Message "Getting Long Running Operation status" -Level Debug
+               
+                $operationStatus = Get-FabricLongRunningOperation -operationId $operationId
+                Write-Message -Message "Long Running Operation status: $operationStatus" -Level Debug
+                # Handle operation result
+                if ($operationStatus.status -eq "Succeeded") {
+                    Write-Message -Message "Operation Succeeded" -Level Debug
+                    Write-Message -Message "Getting Long Running Operation result" -Level Debug
+                
+                    $operationResult = Get-FabricLongRunningOperationResult -operationId $operationId
+                    Write-Message -Message "Long Running Operation status: $operationResult" -Level Debug
+                
+                    return $operationResult.definition.parts
+                }
+                else {
+                    Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Debug
+                    Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Error
+                    return $operationStatus
+                } 
+            }
+            default {
+                Write-Message -Message "Unexpected response code: $statusCode" -Level Error
+                Write-Message -Message "Error details: $($response.message)" -Level Error
+                throw "API request failed with status code $statusCode."
+            }
+        
+        }
     }
-}
-
-end {}
-
+    catch {
+        # Step 9: Capture and log error details
+        $errorDetails = $_.Exception.Message
+        Write-Message -Message "Failed to retrieve KQLDashboard. Error: $errorDetails" -Level Error
+    } 
+ 
 }

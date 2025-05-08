@@ -1,133 +1,159 @@
-function Get-FabricEventstream {
-#Requires -Version 7.1
-
 <#
 .SYNOPSIS
-    Retrieves Fabric Eventstreams
+Retrieves an Eventstream or a list of Eventstreams from a specified workspace in Microsoft Fabric.
 
 .DESCRIPTION
-    Retrieves Fabric Eventstreams. Without the EventstreamName or EventstreamID parameter, all Eventstreams are returned.
-    If you want to retrieve a specific Eventstream, you can use the EventstreamName or EventstreamID parameter. These
-    parameters cannot be used together.
+The `Get-FabricEventstream` function sends a GET request to the Fabric API to retrieve Eventstream details for a given workspace. It can filter the results by `EventstreamName`.
 
 .PARAMETER WorkspaceId
-    Id of the Fabric Workspace for which the Eventstreams should be retrieved. The value for WorkspaceId is a GUID.
-    An example of a GUID is '12345678-1234-1234-1234-123456789012'.
+(Mandatory) The ID of the workspace to query Eventstreams.
 
 .PARAMETER EventstreamName
-    The name of the Eventstream to retrieve. This parameter cannot be used together with EventstreamID.
-
-.PARAMETER EventstreamId
-    The Id of the Eventstream to retrieve. This parameter cannot be used together with EventstreamName. The value for EventstreamId is a GUID.
-    An example of a GUID is '12345678-1234-1234-1234-123456789012'.
+(Optional) The name of the specific Eventstream to retrieve.
 
 .EXAMPLE
-    Get-FabricEventstream `
-        -WorkspaceId '12345678-1234-1234-1234-123456789012'
+Get-FabricEventstream -WorkspaceId "12345" -EventstreamName "Development"
 
-    This example will give you all Eventstreams in the Workspace.
-
-.EXAMPLE
-    Get-FabricEventstream `
-        -WorkspaceId '12345678-1234-1234-1234-123456789012' `
-        -EventstreamName 'MyEventstream'
-
-    This example will give you all Information about the Eventstream with the name 'MyEventstream'.
+Retrieves the "Development" Eventstream from workspace "12345".
 
 .EXAMPLE
-    Get-FabricEventstream `
-        -WorkspaceId '12345678-1234-1234-1234-123456789012' `
-        -EventstreamId '12345678-1234-1234-1234-123456789012'
+Get-FabricEventstream -WorkspaceId "12345"
 
-    This example will give you all Information about the Eventstream with the Id '12345678-1234-1234-1234-123456789012'.
-
-.LINK
-    https://learn.microsoft.com/en-us/rest/api/fabric/eventstream/items/get-eventstream?tabs=HTTP
+Retrieves all Eventstreams in workspace "12345".
 
 .NOTES
-    TODO: Add functionality to list all Eventhouses. To do so fetch all workspaces and
-          then all eventhouses in each workspace.
+- Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
+- Calls `Test-TokenExpired` to ensure token validity before making the API request.
 
-    Revision History:
-        - 2024-11-09 - FGE: Added DisplaName as Alias for EventStreamName
-        - 2024-11-27 - FGE: Added Verbose Output
+Author: Tiago Balabuch  
+
 #>
 
-[CmdletBinding()]
+function Get-FabricEventstream {
+    [CmdletBinding()]
     param (
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
         [string]$WorkspaceId,
 
-        [Alias("Name", "DisplayName")]
-        [string]$EventstreamName,
+        [Parameter(Mandatory = $false)]
+        [ValidateNotNullOrEmpty()]
+        [string]$EventstreamId,
 
-        [Alias("Id")]
-        [string]$EventstreamId
+        [Parameter(Mandatory = $false)]
+        [ValidateNotNullOrEmpty()]
+        [ValidatePattern('^[a-zA-Z0-9_ ]*$')]
+        [string]$EventstreamName
     )
 
-begin {
+    try {
+        # Step 1: Handle ambiguous input
+        if ($EventstreamId -and $EventstreamName) {
+            Write-Message -Message "Both 'EventstreamId' and 'EventstreamName' were provided. Please specify only one." -Level Error
+            return $null
+        }
 
-    Confirm-FabricAuthToken | Out-Null
+        # Step 2: Ensure token validity
+        Write-Message -Message "Validating token..." -Level Debug
+        Test-TokenExpired
+        Write-Message -Message "Token validation completed." -Level Debug
 
-    Write-Verbose "You can either use Name or WorkspaceID not both. If both are used throw error"
-    if ($PSBoundParameters.ContainsKey("EventstreamName") -and $PSBoundParameters.ContainsKey("EventstreamID")) {
-        throw "Parameters EventstreamName and EventstreamID cannot be used together"
-    }
+        $continuationToken = $null
+        $eventstreams = @()
 
-    # Create Eventhouse API
-    $eventstreamApiUrl = "$($FabricSession.BaseApiUrl)/workspaces/$WorkspaceId/eventstreams"
-
-    $eventstreamAPIEventstreamIdUrl = "$($FabricSession.BaseApiUrl)/workspaces/$WorkspaceId/eventstreams/$EventstreamId"
-
-}
-
-process {
-
-    if ($PSBoundParameters.ContainsKey("EventstreamId")) {
-        Write-Verbose "Calling Eventstream API with EventstreamId"
-        Write-Verbose "------------------------------------------"
-        Write-Verbose "Sending the following values to the Eventstream API:"
-        Write-Verbose "Headers: $($FabricSession.headerParams | Format-List | Out-String)"
-        Write-Verbose "Method: PATCH"
-        Write-Verbose "URI: $eventstreamAPIEventstreamIdUrl"
-        Write-Verbose "Body of request: $body"
-        Write-Verbose "ContentType: application/json"
-        $response = Invoke-RestMethod `
-                    -Headers $FabricSession.headerParams `
-                    -Method GET `
-                    -Uri $eventstreamAPIEventstreamIdUrl `
-                    -ContentType "application/json"
-
-        $response
-    }
-    else {
-            Write-Verbose "Calling Eventstream API"
-            Write-Verbose "-----------------------"
-            Write-Verbose "Sending the following values to the Eventstream API:"
-            Write-Verbose "Headers: $($FabricSession.headerParams | Format-List | Out-String)"
-            Write-Verbose "Method: PATCH"
-            Write-Verbose "URI: $eventstreamApiUrl"
-            Write-Verbose "Body of request: $body"
-            Write-Verbose "ContentType: application/json"
+        if (-not ([AppDomain]::CurrentDomain.GetAssemblies() | Where-Object { $_.GetName().Name -eq "System.Web" })) {
+            Add-Type -AssemblyName System.Web
+        }
+ 
+        # Step 4: Loop to retrieve all capacities with continuation token
+        Write-Message -Message "Loop started to get continuation token" -Level Debug
+        $baseApiEndpointUrl = "{0}/workspaces/{1}/eventstreams" -f $FabricConfig.BaseUrl, $WorkspaceId
+        
+        # Step 3:  Loop to retrieve data with continuation token
+        
+                
+        
+        do {
+            # Step 5: Construct the API URL
+            $apiEndpointUrl = $baseApiEndpointUrl
+        
+            if ($null -ne $continuationToken) {
+                # URL-encode the continuation token
+                $encodedToken = [System.Web.HttpUtility]::UrlEncode($continuationToken)
+                $apiEndpointUrl = "{0}?continuationToken={1}" -f $apiEndpointUrl, $encodedToken
+            }
+            Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
+         
+            # Step 6: Make the API request
             $response = Invoke-RestMethod `
-                        -Headers $FabricSession.headerParams `
-                        -Method GET `
-                        -Uri $eventstreamApiUrl `
-                        -ContentType "application/json"
+                -Headers $FabricConfig.FabricHeaders `
+                -Uri $apiEndpointUrl `
+                -Method Get `
+                -ErrorAction Stop `
+                -SkipHttpErrorCheck `
+                -ResponseHeadersVariable "responseHeader" `
+                -StatusCodeVariable "statusCode"
+         
+            # Step 7: Validate the response code
+            if ($statusCode -ne 200) {
+                Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
+                Write-Message -Message "Error: $($response.message)" -Level Error
+                Write-Message -Message "Error Details: $($response.moreDetails)" -Level Error
+                Write-Message "Error Code: $($response.errorCode)" -Level Error
+                return $null
+            }
+         
+            # Step 8: Add data to the list
+            if ($null -ne $response) {
+                Write-Message -Message "Adding data to the list" -Level Debug
+                $eventstreams += $response.value
+                 
+                # Update the continuation token if present
+                if ($response.PSObject.Properties.Match("continuationToken")) {
+                    Write-Message -Message "Updating the continuation token" -Level Debug
+                    $continuationToken = $response.continuationToken
+                    Write-Message -Message "Continuation token: $continuationToken" -Level Debug
+                }
+                else {
+                    Write-Message -Message "Updating the continuation token to null" -Level Debug
+                    $continuationToken = $null
+                }
+            }
+            else {
+                Write-Message -Message "No data received from the API." -Level Warning
+                break
+            }
+        } while ($null -ne $continuationToken)
+        Write-Message -Message "Loop finished and all data added to the list" -Level Debug
 
-        if ($PSBoundParameters.ContainsKey("EventstreamName")) {
-            Write-Verbose "Filtering Eventstream with name $EventstreamName"
-            $response.value | `
-                Where-Object { $_.displayName -eq $EventstreamName }
+       
+        # Step 8: Filter results based on provided parameters
+        $eventstream = if ($EventstreamId) {
+            $eventstreams | Where-Object { $_.Id -eq $EventstreamId }
+        }
+        elseif ($EventstreamName) {
+            $eventstreams | Where-Object { $_.DisplayName -eq $EventstreamName }
         }
         else {
-            Write-Verbose "Returning all Eventstreams"
-            $response.value
+            # Return all eventstreams if no filter is provided
+            Write-Message -Message "No filter provided. Returning all Eventstreams." -Level Debug
+            $eventstreams
+        }
+
+        # Step 9: Handle results
+        if ($eventstream) {
+            Write-Message -Message "Eventstream found matching the specified criteria." -Level Debug
+            return $eventstream
+        }
+        else {
+            Write-Message -Message "No Eventstream found matching the provided criteria." -Level Warning
+            return $null
         }
     }
-
-}
-
-end {}
-
+    catch {
+        # Step 10: Capture and log error details
+        $errorDetails = $_.Exception.Message
+        Write-Message -Message "Failed to retrieve Eventstream. Error: $errorDetails" -Level Error
+    } 
+ 
 }
