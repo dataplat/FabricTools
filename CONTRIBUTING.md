@@ -24,6 +24,16 @@ The workflow for using this and developing the code is shown below.
     git checkout -b newStuff # give it a proper name!
     ```
 
+1. Make sure you have the latest Microsoft.PowerShell.PSResourceGet module
+
+```PowerShell
+-- Find the latest version on the gallery
+Find-Module Microsoft.PowerShell.PSResourceGet
+
+-- Install side-by-side
+Install-Module Microsoft.PowerShell.PSResourceGet -Force
+```
+
 1. Develop your updates in the source repository
 
 You should also resolve all dependencies before you start developing. This will ensure that you have all the required modules installed and loaded into your session.
@@ -77,6 +87,7 @@ You can also run specific tags such as FunctionalQuality,TestQuality, HelpQualit
 # Thanks!
     We will review your PR and get back to you as soon as we can. We are all volunteers and do this in our spare time, so please be patient with us. We will try to get back to you within a week, but it may take longer if we are busy.
     If you have any questions or need help, please feel free to reach out to us on the [GitHub Discussions](    )
+
 ## How to submit changes: 
 TODO:
 Pull Request protocol etc. You might also include what response they'll get back from the team on submission, or any caveats about the speed of response.
