@@ -5,6 +5,9 @@ Updates the properties of a Fabric Notebook.
 .DESCRIPTION
 The `Update-FabricNotebook` function updates the name and/or description of a specified Fabric Notebook by making a PATCH request to the API.
 
+.PARAMETER WorkspaceId
+The unique identifier of the workspace where the Notebook exists.
+
 .PARAMETER NotebookId
 The unique identifier of the Notebook to be updated.
 
@@ -28,7 +31,7 @@ Updates both the name and description of the Notebook "Notebook123".
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
 - Calls `Test-TokenExpired` to ensure token validity before making the API request.
 
-Author: Tiago Balabuch  
+Author: Tiago Balabuch
 
 #>
 
@@ -37,8 +40,8 @@ function Update-FabricNotebook {
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,   
-        
+        [string]$WorkspaceId,
+
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
         [string]$NotebookId,
