@@ -5,6 +5,9 @@ Updates the properties of a Fabric KQLDatabase.
 .DESCRIPTION
 The `Update-FabricKQLDatabase` function updates the name and/or description of a specified Fabric KQLDatabase by making a PATCH request to the API.
 
+.PARAMETER WorkspaceId
+The unique identifier of the workspace where the KQLDatabase resides.
+
 .PARAMETER KQLDatabaseId
 The unique identifier of the KQLDatabase to be updated.
 
@@ -28,7 +31,7 @@ Updates both the name and description of the KQLDatabase "KQLDatabase123".
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
 - Calls `Test-TokenExpired` to ensure token validity before making the API request.
 
-Author: Tiago Balabuch  
+Author: Tiago Balabuch
 
 #>
 
@@ -37,8 +40,8 @@ function Update-FabricKQLDatabase {
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,   
-        
+        [string]$WorkspaceId,
+
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
         [string]$KQLDatabaseId,

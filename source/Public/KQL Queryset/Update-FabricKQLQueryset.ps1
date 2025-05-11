@@ -14,6 +14,9 @@ The new name for the KQLQueryset.
 .PARAMETER KQLQuerysetDescription
 (Optional) The new description for the KQLQueryset.
 
+.PARAMETER WorkspaceId
+The unique identifier of the workspace where the KQLQueryset exists.
+
 .EXAMPLE
 Update-FabricKQLQueryset -KQLQuerysetId "KQLQueryset123" -KQLQuerysetName "NewKQLQuerysetName"
 
@@ -28,7 +31,7 @@ Updates both the name and description of the KQLQueryset "KQLQueryset123".
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
 - Calls `Test-TokenExpired` to ensure token validity before making the API request.
 
-Author: Tiago Balabuch  
+Author: Tiago Balabuch
 
 #>
 
@@ -37,8 +40,8 @@ function Update-FabricKQLQueryset {
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,   
-        
+        [string]$WorkspaceId,
+
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
         [string]$KQLQuerysetId,
