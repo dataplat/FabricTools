@@ -1,6 +1,7 @@
-<#
+function Register-FabricWorkspaceToCapacity {
+    <#
 .SYNOPSIS
-Sets a PowerBI workspace to a capacity.
+This function Sets a PowerBI workspace to a capacity.
 
 .DESCRIPTION
 The Register-FabricWorkspaceToCapacity function Sets a PowerBI workspace to a capacity. It supports multiple aliases for flexibility.
@@ -28,10 +29,6 @@ This example Sets the workspace object stored in the $workspace variable to the 
 The function makes a POST request to the PowerBI API to Set the workspace to the capacity. The PowerBI access token is retrieved using the Get-PowerBIAccessToken function.
 #>
 
-
-# This function Sets a PowerBI workspace to a capacity.
-# It supports multiple aliases for flexibility.
-function Register-FabricWorkspaceToCapacity {
     [Alias("Register-FabWorkspaceToCapacity")]
     [CmdletBinding(SupportsShouldProcess)]
     param(
@@ -57,8 +54,8 @@ function Register-FabricWorkspaceToCapacity {
         # The body of the request is created. It contains the capacity ID.
         $body = @{
             capacityId = $CapacityId
-        } 
- 
+        }
+
         Confirm-FabricAuthToken | Out-Null
 
         # The workspace is Seted to the capacity by making a POST request to the PowerBI API.
