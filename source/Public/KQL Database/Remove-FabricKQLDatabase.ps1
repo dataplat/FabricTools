@@ -1,6 +1,4 @@
 function Remove-FabricKQLDatabase {
-#Requires -Version 7.1
-
 <#
 .SYNOPSIS
     Removes an existing Fabric Eventhouse
@@ -15,6 +13,11 @@ function Remove-FabricKQLDatabase {
 .PARAMETER EventhouseId
     The Id of the Eventhouse to remove. The value for EventhouseId is a GUID.
     An example of a GUID is '12345678-1234-1234-1234-123456789012'.
+
+.PARAMETER KQLDatabaseId
+    The Id of the Eventhouse to remove. The value for EventhouseId is a GUID.
+    An example of a GUID is '12345678-1234-1234-1234-123456789012'.
+    This parameter is an alias for EventhouseId.
 
 .EXAMPLE
     Remove-FabricEventhouse `

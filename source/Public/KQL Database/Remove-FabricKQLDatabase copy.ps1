@@ -1,3 +1,4 @@
+function Remove-FabricKQLDatabase {
 <#
 .SYNOPSIS
 Deletes an KQLDatabase from a specified workspace in Microsoft Fabric.
@@ -20,11 +21,9 @@ Deletes the KQLDatabase with ID "67890" from workspace "12345".
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
 - Validates token expiration before making the API request.
 
-Author: Tiago Balabuch  
+Author: Tiago Balabuch
 
 #>
-
-function Remove-FabricKQLDatabase {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
@@ -64,7 +63,7 @@ function Remove-FabricKQLDatabase {
             return $null
         }
         Write-Message -Message "KQLDatabase '$KQLDatabaseId' deleted successfully from workspace '$WorkspaceId'." -Level Info
-        
+
     }
     catch {
         # Step 5: Log and handle errors
