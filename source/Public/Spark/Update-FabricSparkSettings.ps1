@@ -3,7 +3,7 @@
     Updates an existing Spark custom pool in a specified Microsoft Fabric workspace.
 
 .DESCRIPTION
-    This function sends a PATCH request to the Microsoft Fabric API to update an existing Spark custom pool 
+    This function sends a PATCH request to the Microsoft Fabric API to update an existing Spark custom pool
     in the specified workspace. It supports various parameters for Spark custom pool configuration.
 
 .PARAMETER WorkspaceId
@@ -39,6 +39,12 @@
 .PARAMETER DynamicExecutorAllocationMaxExecutors
     The maximum number of executors for dynamic executor allocation in the Spark custom pool. This parameter is mandatory.
 
+.PARAMETER automaticLogEnabled
+    Specifies whether automatic logging is enabled for the Spark custom pool. This parameter is optional.
+
+.PARAMETER notebookInteractiveRunEnabled
+    Specifies whether notebook interactive run is enabled for the Spark custom pool. This parameter is optional.
+
 .EXAMPLE
     Update-FabricSparkSettings -WorkspaceId "workspace-12345" -SparkSettingsId "pool-67890" -InstancePoolName "Updated Spark Pool" -NodeFamily "MemoryOptimized" -NodeSize "Large" -AutoScaleEnabled $true -AutoScaleMinNodeCount 1 -AutoScaleMaxNodeCount 10 -DynamicExecutorAllocationEnabled $true -DynamicExecutorAllocationMinExecutors 1 -DynamicExecutorAllocationMaxExecutors 10
     This example updates the Spark custom pool with ID "pool-67890" in the workspace with ID "workspace-12345" with a new name and configuration.
@@ -48,15 +54,15 @@
     - Calls `Test-TokenExpired` to ensure token validity before making the API request.
 
     Author: Tiago Balabuch
-    
+
 #>
 function Update-FabricSparkSettings {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,   
-        
+        [string]$WorkspaceId,
+
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
@@ -65,7 +71,7 @@ function Update-FabricSparkSettings {
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
         [bool]$notebookInteractiveRunEnabled,
-        
+
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
         [bool]$customizeComputeEnabled,
@@ -110,7 +116,7 @@ function Update-FabricSparkSettings {
         # Construct the request body with optional properties
 
         $body = @{}
-        
+
         if ($PSBoundParameters.ContainsKey('automaticLogEnabled')) {
             $body.automaticLog = @{
                 enabled = $automaticLogEnabled
@@ -138,10 +144,10 @@ function Update-FabricSparkSettings {
             }
             } else {
                 Write-Message -Message "Both 'defaultPoolName' and 'defaultPoolType' must be provided together." -Level Error
-                throw 
+                throw
             }
         }
-        
+
         if ($PSBoundParameters.ContainsKey('EnvironmentName') -or $PSBoundParameters.ContainsKey('EnvironmentRuntimeVersion')) {
             $body.environment = @{
                 name = $EnvironmentName
