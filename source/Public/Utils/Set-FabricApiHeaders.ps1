@@ -1,41 +1,23 @@
 function Set-FabricApiHeaders {
 <#
 .SYNOPSIS
-Sets the Fabric API headers with a valid token for the specified Azure tenant.
-
+    Configures the Fabric API headers for authentication using Azure credentials.
 .DESCRIPTION
-The `Set-FabricApiHeaders` function logs into the specified Azure tenant, retrieves an access token for the Fabric API, and sets the necessary headers for subsequent API requests.
-It also updates the token expiration time and global tenant ID.
+    This function sets the Fabric API headers by logging into Azure with the specified tenant ID and retrieving an access token.
+    It updates the global configuration with the token and tenant ID for subsequent API requests.
 
 .PARAMETER TenantId
-The Azure tenant ID for which the access token is requested.
-
+    The Azure tenant ID for which the access token is requested.
 .PARAMETER AppId
-The Azure app ID for which the service principal access token is requested.
-
+    The Azure app ID for which the service principal access token is requested.
 .PARAMETER AppSecret
-The Azure App secret for which the service principal access token is requested.
-
+    The Azure App secret for which the service principal access token is requested.
 .EXAMPLE
-Set-FabricApiHeaders -TenantId "your-tenant-id"
-
-Logs in to Azure with the specified tenant ID, retrieves an access token for the current user, and configures the Fabric headers.
-
+    Set-FabricApiHeaders -TenantId "your-tenant-id"
+    Logs in to Azure with the specified tenant ID, retrieves an access token for the current user, and configures the Fabric headers.
 .EXAMPLE
-$tenantId = "999999999-99999-99999-9999-999999999999"
-$appId = "888888888-88888-88888-8888-888888888888"
-$appSecret = "your-app-secret"
-$secureAppSecret = $appSecret | ConvertTo-SecureString -AsPlainText -Force
-
-Set-FabricApiHeader -TenantId $tenantId -AppId $appId -AppSecret $secureAppSecret
-Logs in to Azure with the specified tenant ID, retrieves an access token for the service principal, and configures the Fabric headers.
-
-.NOTES
-- Ensure the `Connect-AzAccount` and `Get-AzAccessToken` commands are available (Azure PowerShell module required).
-- Relies on a global `$FabricConfig` object for storing headers and token metadata.
-
-.AUTHOR
-Tiago Balabuch
+    $tenantId = "999999999-99999-99999-9999-999999999999"
+    $appId = "888888888-88888-88888-8888-888888888888"
 #>
     [CmdletBinding()]
     param (
