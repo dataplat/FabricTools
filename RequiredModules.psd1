@@ -13,7 +13,7 @@
     #}
     Assert = "0.9.6"
     InvokeBuild                 = 'latest'
-    PSScriptAnalyzer            = 'latest'
+    PSScriptAnalyzer            = '1.19.1'
     Pester                      = 'latest'
     ModuleBuilder               = 'latest'
     ChangelogManagement         = 'latest'

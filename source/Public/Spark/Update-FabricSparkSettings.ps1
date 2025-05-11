@@ -45,6 +45,27 @@
 .PARAMETER notebookInteractiveRunEnabled
     Specifies whether notebook interactive run is enabled for the Spark custom pool. This parameter is optional.
 
+.PARAMETER customizeComputeEnabled
+    Specifies whether compute customization is enabled for the Spark custom pool. This parameter is optional.
+
+.PARAMETER defaultPoolName
+    The name of the default pool for the Spark custom pool. This parameter is optional.
+
+.PARAMETER defaultPoolType
+    The type of the default pool for the Spark custom pool. This parameter is optional and must be either 'Workspace' or 'Capacity'.
+
+.PARAMETER starterPoolMaxNode
+    The maximum number of nodes for the starter pool in the Spark custom pool. This parameter is optional.
+
+.PARAMETER starterPoolMaxExecutors
+    The maximum number of executors for the starter pool in the Spark custom pool. This parameter is optional.
+
+.PARAMETER EnvironmentName
+    The name of the environment for the Spark custom pool. This parameter is optional.
+
+.PARAMETER EnvironmentRuntimeVersion
+    The runtime version of the environment for the Spark custom pool. This parameter is optional.
+
 .EXAMPLE
     Update-FabricSparkSettings -WorkspaceId "workspace-12345" -SparkSettingsId "pool-67890" -InstancePoolName "Updated Spark Pool" -NodeFamily "MemoryOptimized" -NodeSize "Large" -AutoScaleEnabled $true -AutoScaleMinNodeCount 1 -AutoScaleMaxNodeCount 10 -DynamicExecutorAllocationEnabled $true -DynamicExecutorAllocationMinExecutors 1 -DynamicExecutorAllocationMaxExecutors 10
     This example updates the Spark custom pool with ID "pool-67890" in the workspace with ID "workspace-12345" with a new name and configuration.

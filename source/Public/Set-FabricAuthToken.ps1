@@ -1,3 +1,4 @@
+function Set-FabricAuthToken {
 <#
 .SYNOPSIS
    Sets the Fabric authentication token.
@@ -20,6 +21,12 @@
 .PARAMETER credential
    The credential. If provided, the function uses this credential to connect to the Azure account.
 
+.PARAMETER reset
+   A switch parameter. If provided, the function resets the Fabric authentication token.
+
+.PARAMETER apiUrl
+   The API URL. If provided, the function sets the Fabric API URL to this value.
+
 .EXAMPLE
    Set-FabricAuthToken -servicePrincipalId "12345678-90ab-cdef-1234-567890abcdef" -servicePrincipalSecret "secret" -tenantId "12345678-90ab-cdef-1234-567890abcdef"
 
@@ -36,11 +43,6 @@
    https://github.com/RuiRomano/fabricps-pbip
 #>
 
-function Set-FabricAuthToken {
-   <#
-    .SYNOPSIS
-        Set authentication token for the Fabric service
-    #>
    [CmdletBinding(SupportsShouldProcess)]
    param
    (

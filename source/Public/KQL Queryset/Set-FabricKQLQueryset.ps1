@@ -1,6 +1,4 @@
 function Set-FabricKQLQueryset {
-#Requires -Version 7.1
-
 <#
 .SYNOPSIS
     Updates Properties of an existing Fabric KQLQueryset
@@ -17,7 +15,7 @@ function Set-FabricKQLQueryset {
     The Id of the KQLQueryset to update. The value for KQLQuerysetId is a GUID. An example of a GUID is '12345678-1234-1234-1234-123456789012'.
     This parameter is mandatory.
 
-.PARAMETER KQLQuerysetName
+.PARAMETER KQLQuerysetNewName
     The new name of the KQLQueryset. This parameter is optional.
 
 .PARAMETER KQLQuerysetDescription

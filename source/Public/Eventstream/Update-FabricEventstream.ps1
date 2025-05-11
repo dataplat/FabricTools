@@ -14,6 +14,9 @@ The new name for the Eventstream.
 .PARAMETER EventstreamDescription
 (Optional) The new description for the Eventstream.
 
+.PARAMETER WorkspaceId
+The unique identifier of the workspace where the Eventstream resides.
+
 .EXAMPLE
 Update-FabricEventstream -EventstreamId "Eventstream123" -EventstreamName "NewEventstreamName"
 
@@ -28,7 +31,7 @@ Updates both the name and description of the Eventstream "Eventstream123".
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
 - Calls `Test-TokenExpired` to ensure token validity before making the API request.
 
-Author: Tiago Balabuch  
+Author: Tiago Balabuch
 
 #>
 
@@ -37,8 +40,8 @@ function Update-FabricEventstream {
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,   
-        
+        [string]$WorkspaceId,
+
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
         [string]$EventstreamId,

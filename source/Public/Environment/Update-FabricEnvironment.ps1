@@ -14,6 +14,9 @@ The new name for the Environment.
 .PARAMETER EnvironmentDescription
 (Optional) The new description for the Environment.
 
+.PARAMETER WorkspaceId
+The unique identifier of the workspace where the Environment resides.
+
 .EXAMPLE
 Update-FabricEnvironment -EnvironmentId "Environment123" -EnvironmentName "NewEnvironmentName"
 
@@ -28,7 +31,7 @@ Updates both the name and description of the Environment "Environment123".
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
 - Calls `Test-TokenExpired` to ensure token validity before making the API request.
 
-Author: Tiago Balabuch  
+Author: Tiago Balabuch
 
 #>
 
@@ -37,8 +40,8 @@ function Update-FabricEnvironment {
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,   
-        
+        [string]$WorkspaceId,
+
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
         [string]$EnvironmentId,

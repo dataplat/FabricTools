@@ -1,3 +1,6 @@
+
+# This function suspends a capacity.
+function Suspend-FabricCapacity {
 <#
 .SYNOPSIS
 Suspends a capacity.
@@ -23,8 +26,6 @@ This example suspends a capacity given the subscription ID, resource group, and 
 The function defines parameters for the subscription ID, resource group, and capacity. If the 'azToken' environment variable is null, it connects to the Azure account and sets the 'azToken' environment variable. It then defines the headers for the request, defines the URI for the request, and makes a GET request to the URI.
 #>
 
-# This function suspends a capacity.
-function Suspend-FabricCapacity {
     # Define aliases for the function for flexibility.
     [Alias("Suspend-PowerBICapacity", "Suspend-FabCapacity")]
     [CmdletBinding(SupportsShouldProcess)]
