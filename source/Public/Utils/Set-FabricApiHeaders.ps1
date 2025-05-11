@@ -1,9 +1,10 @@
+function Set-FabricApiHeaders {
 <#
 .SYNOPSIS
 Sets the Fabric API headers with a valid token for the specified Azure tenant.
 
 .DESCRIPTION
-The `Set-FabricApiHeaders` function logs into the specified Azure tenant, retrieves an access token for the Fabric API, and sets the necessary headers for subsequent API requests. 
+The `Set-FabricApiHeaders` function logs into the specified Azure tenant, retrieves an access token for the Fabric API, and sets the necessary headers for subsequent API requests.
 It also updates the token expiration time and global tenant ID.
 
 .PARAMETER TenantId
@@ -36,8 +37,6 @@ Logs in to Azure with the specified tenant ID, retrieves an access token for the
 .AUTHOR
 Tiago Balabuch
 #>
-
-function Set-FabricApiHeaders {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
@@ -60,7 +59,7 @@ function Set-FabricApiHeaders {
         if ($PSBoundParameters.ContainsKey('AppId') -and -not $PSBoundParameters.ContainsKey('AppSecret')) {
             Write-Message -Message "AppSecret is required when using AppId: $AppId" -Level Error
             throw "AppSecret is required when using AppId."
-        } 
+        }
         if ($PSBoundParameters.ContainsKey('AppSecret') -and -not $PSBoundParameters.ContainsKey('AppId')) {
             Write-Message -Message "AppId is required when using AppSecret." -Level Error
             throw "AppId is required when using AppId."
@@ -68,16 +67,16 @@ function Set-FabricApiHeaders {
         # Step 3: Connect to the Azure account
         # Using AppId and AppSecret
         if ($PSBoundParameters.ContainsKey('AppId') -and $PSBoundParameters.ContainsKey('AppSecret')) {
-            
+
             Write-Message -Message "Logging in using the AppId: $AppId" -Level Debug
             Write-Message -Message "Logging in using the AppId: $AppId" -Level Info
             $psCredential = [pscredential]::new($AppId, $AppSecret)
             Connect-AzAccount -ServicePrincipal -Credential $psCredential -Tenant $tenantId
 
-        } 
+        }
         # Using the current user
         else {
-            
+
             Write-Message -Message "Logging in using the current user" -Level Debug
             Write-Message -Message "Logging in using the current user" -Level Info
             Connect-AzAccount -Tenant $TenantId -ErrorAction Stop | Out-Null
