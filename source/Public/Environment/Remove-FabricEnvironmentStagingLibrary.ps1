@@ -1,10 +1,10 @@
-
+function Remove-FabricEnvironmentStagingLibrary {
 <#
 .SYNOPSIS
 Deletes a specified library from the staging environment in a Microsoft Fabric workspace.
 
 .DESCRIPTION
-This function allows for the deletion of a library from the staging environment, one file at a time. 
+This function allows for the deletion of a library from the staging environment, one file at a time.
 It ensures token validity, constructs the appropriate API request, and handles both success and failure responses.
 
 .PARAMETER WorkspaceId
@@ -25,12 +25,9 @@ Deletes the specified library from the staging environment in the specified work
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
 - Validates token expiration before making the API request.
 - This function currently supports deleting one library at a time.
-Author: Tiago Balabuch  
+Author: Tiago Balabuch
 
 #>
-
-
-function Remove-FabricEnvironmentStagingLibrary {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
@@ -40,7 +37,7 @@ function Remove-FabricEnvironmentStagingLibrary {
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
         [string]$EnvironmentId,
-        
+
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
         [string]$LibraryName
@@ -51,7 +48,7 @@ function Remove-FabricEnvironmentStagingLibrary {
         Write-Message -Message "Validating token..." -Level Debug
         Test-TokenExpired
         Write-Message -Message "Token validation completed." -Level Debug
-        
+
         Write-Message -Message "Token validation completed." -Level Debug
 
         # Step 2: Construct the API URL
@@ -67,7 +64,7 @@ function Remove-FabricEnvironmentStagingLibrary {
             -SkipHttpErrorCheck `
             -ResponseHeadersVariable "responseHeader" `
             -StatusCodeVariable "statusCode"
-        
+
             # Step 4: Validate the response code
         if ($statusCode -ne 200) {
             Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error

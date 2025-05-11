@@ -1,6 +1,4 @@
 function Remove-FabricEventstream {
-#Requires -Version 7.1
-
 <#
 .SYNOPSIS
     Removes an existing Fabric Eventstream
@@ -15,6 +13,11 @@ function Remove-FabricEventstream {
 .PARAMETER EventstreamId
     The Id of the Eventstream to delete. The value for Eventstream is a GUID.
     An example of a GUID is '12345678-1234-1234-1234-123456789012'.
+
+.PARAMETER EventstreamName
+    The name of the Eventstream to delete. The value for Eventstream is a string.
+    An example of a string is 'MyEventstream'.
+    The name of the Eventstream to delete. The value for Eventstream is a string.
 
 .EXAMPLE
     Remove-FabricEventstream `

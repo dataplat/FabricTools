@@ -1,3 +1,4 @@
+function Remove-FabricEventstream {
 <#
 .SYNOPSIS
 Deletes an Eventstream from a specified workspace in Microsoft Fabric.
@@ -20,11 +21,9 @@ Deletes the Eventstream with ID "67890" from workspace "12345".
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
 - Validates token expiration before making the API request.
 
-Author: Tiago Balabuch  
+Author: Tiago Balabuch
 
 #>
-
-function Remove-FabricEventstream {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
@@ -63,7 +62,7 @@ function Remove-FabricEventstream {
             return $null
         }
         Write-Message -Message "Eventstream '$EventstreamId' deleted successfully from workspace '$WorkspaceId'." -Level Info
-        
+
     }
     catch {
         # Step 5: Log and handle errors
