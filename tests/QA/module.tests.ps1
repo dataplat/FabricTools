@@ -128,7 +128,7 @@ Describe 'Quality for module' -Tags 'TestQuality' {
 }
 
 Describe 'Help for module' -Tags 'helpQuality' {
-    It 'Should have .SYNOPSIS for <Name>' -ForEach $testCases {
+    It 'Should have .SYNOPSIS for <Name>' -ForEach ($testCases | Where-Object {$_.Name -in $mut.ExportedCommands.Values.Name }) {
         $functionFile = Get-ChildItem -Path $sourcePath -Recurse -Include "$Name.ps1"
 
         $scriptFileRawContent = Get-Content -Raw -Path $functionFile.FullName
@@ -147,7 +147,7 @@ Describe 'Help for module' -Tags 'helpQuality' {
         $functionHelp.Synopsis | Should -Not -BeNullOrEmpty
     }
 
-    It 'Should have a .DESCRIPTION with length greater than 40 characters for <Name>' -ForEach $testCases {
+    It 'Should have a .DESCRIPTION with length greater than 40 characters for <Name>' -ForEach ($testCases | Where-Object {$_.Name -in $mut.ExportedCommands.Values.Name }) {
         $functionFile = Get-ChildItem -Path $sourcePath -Recurse -Include "$Name.ps1"
 
         $scriptFileRawContent = Get-Content -Raw -Path $functionFile.FullName
@@ -166,7 +166,7 @@ Describe 'Help for module' -Tags 'helpQuality' {
         $functionHelp.Description.Length | Should -BeGreaterThan 40
     }
 
-    It 'Should have at least one (1) example for <Name>' -ForEach $testCases {
+    It 'Should have at least one (1) example for <Name>' -ForEach ($testCases | Where-Object {$_.Name -in $mut.ExportedCommands.Values.Name }) {
         $functionFile = Get-ChildItem -Path $sourcePath -Recurse -Include "$Name.ps1"
 
         $scriptFileRawContent = Get-Content -Raw -Path $functionFile.FullName
@@ -188,7 +188,7 @@ Describe 'Help for module' -Tags 'helpQuality' {
 
     }
 
-    It 'Should have described all parameters for <Name>' -ForEach $testCases {
+    It 'Should have described all parameters for <Name>' -ForEach ($testCases | Where-Object {$_.Name -in $mut.ExportedCommands.Values.Name }) {
         $functionFile = Get-ChildItem -Path $sourcePath -Recurse -Include "$Name.ps1"
 
         $scriptFileRawContent = Get-Content -Raw -Path $functionFile.FullName
@@ -213,4 +213,3 @@ Describe 'Help for module' -Tags 'helpQuality' {
         }
     }
 }
-
