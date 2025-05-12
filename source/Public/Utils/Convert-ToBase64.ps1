@@ -1,10 +1,11 @@
+function Convert-ToBase64 {
 <#
 .SYNOPSIS
     Encodes the content of a file into a Base64-encoded string.
 
 .DESCRIPTION
-    The Convert-ToBase64  function takes a file path as input, reads the file's content as a byte array, 
-    and converts it into a Base64-encoded string. This is useful for embedding binary data (e.g., images, 
+    The Convert-ToBase64  function takes a file path as input, reads the file's content as a byte array,
+    and converts it into a Base64-encoded string. This is useful for embedding binary data (e.g., images,
     documents) in text-based formats such as JSON or XML.
 
 .PARAMETER filePath
@@ -26,10 +27,9 @@
     - Ensure the file exists at the specified path before running this function.
     - Large files may cause memory constraints due to full loading into memory.
 
-.AUTHOR
-Tiago Balabuch
+
+    Tiago Balabuch
 #>
-function Convert-ToBase64 {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
@@ -37,7 +37,7 @@ function Convert-ToBase64 {
         [string]$filePath
     )
     try {
-        
+
         # Step 1: Reading all the bytes from the file
         #$bytes = [System.Text.Encoding]::UTF8.GetBytes($InputString)
         Write-Message -Message "Reading all the bytes from the file specified: $filePath" -Level Debug
