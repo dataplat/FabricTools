@@ -1,32 +1,41 @@
 <#
 .SYNOPSIS
-Unassigns a Fabric workspace from its capacity.
+Removes a role assignment from a Fabric workspace.
 
 .DESCRIPTION
-The `Unassign-FabricWorkspaceCapacity` function sends a POST request to unassign a workspace from its assigned capacity.
+The `Remove-FabricWorkspaceRoleAssignment` function deletes a specific role assignment from a Fabric workspace by making a DELETE request to the API.
 
 .PARAMETER WorkspaceId
-The unique identifier of the workspace to be unassigned from its capacity.
+The unique identifier of the workspace.
+
+.PARAMETER WorkspaceRoleAssignmentId
+The unique identifier of the role assignment to be removed.
 
 .EXAMPLE
-Unassign-FabricWorkspaceCapacity -WorkspaceId "workspace123"
+Remove-FabricWorkspaceRoleAssignment -WorkspaceId "workspace123" -WorkspaceRoleAssignmentId "role123"
 
-Unassigns the workspace with ID "workspace123" from its capacity.
+Removes the role assignment with the ID "role123" from the workspace "workspace123".
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
 - Calls `Test-TokenExpired` to ensure token validity before making the API request.
 
 Author: Tiago Balabuch
+
 #>
 
-function Unassign-FabricWorkspaceCapacity {
-    [CmdletBinding()]
+function Remove-FabricWorkspaceRoleAssignment {
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId
+        [string]$WorkspaceId,
+
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [string]$WorkspaceRoleAssignmentId
     )
+
     try {
         # Step 1: Ensure token validity
         Write-Message -Message "Validating token..." -Level Debug
@@ -34,34 +43,32 @@ function Unassign-FabricWorkspaceCapacity {
         Write-Message -Message "Token validation completed." -Level Debug
 
         # Step 2: Construct the API URL
-        $apiEndpointUrl = "{0}/workspaces/{1}/unassignFromCapacity" -f $FabricConfig.BaseUrl, $WorkspaceId
-        Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Message
+        $apiEndpointUrl = "{0}/workspaces/{1}/roleAssignments/{2}" -f $FabricConfig.BaseUrl, $WorkspaceId, $WorkspaceRoleAssignmentId
+        Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
         # Step 3: Make the API request
         $response = Invoke-RestMethod `
             -Headers $FabricConfig.FabricHeaders `
             -Uri $apiEndpointUrl `
-            -Method Post `
-            -ContentType "application/json" `
+            -Method Delete `
             -ErrorAction Stop `
             -SkipHttpErrorCheck `
             -ResponseHeadersVariable "responseHeader" `
             -StatusCodeVariable "statusCode"
 
-
         # Step 4: Validate the response code
-        if ($statusCode -ne 202) {
+        if ($statusCode -ne 200) {
             Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
             Write-Message -Message "Error: $($response.message)" -Level Error
             Write-Message "Error Code: $($response.errorCode)" -Level Error
             return $null
         }
 
-        Write-Message -Message "Workspace capacity has been successfully unassigned from workspace '$WorkspaceId'." -Level Info         
+        Write-Message -Message "Role assignment '$WorkspaceRoleAssignmentId' successfully removed from workspace '$WorkspaceId'." -Level Info
     }
     catch {
         # Step 5: Capture and log error details
         $errorDetails = $_.Exception.Message
-        Write-Message -Message "Failed to unassign workspace from capacity. Error: $errorDetails" -Level Error
+        Write-Message -Message "Failed to remove role assignments for WorkspaceId '$WorkspaceId'. Error: $errorDetails" -Level Error
     }
 }

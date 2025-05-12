@@ -32,7 +32,7 @@ Author: Tiago Balabuch
 #>
 
 function Update-FabricWorkspace {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
