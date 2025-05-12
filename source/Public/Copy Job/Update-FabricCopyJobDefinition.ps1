@@ -3,7 +3,7 @@
 Updates the definition of a Copy Job in a Microsoft Fabric workspace.
 
 .DESCRIPTION
-This function updates the content or metadata of a Copy Job within a Microsoft Fabric workspace. 
+This function updates the content or metadata of a Copy Job within a Microsoft Fabric workspace.
 The Copy Job content and platform-specific definitions can be provided as file paths, which will be encoded as Base64 and sent in the request.
 
 .PARAMETER WorkspaceId
@@ -51,7 +51,7 @@ function Update-FabricCopyJobDefinition {
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
         [string]$CopyJobPathDefinition,
-        
+
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
         [string]$CopyJobPathPlatformDefinition
@@ -67,7 +67,7 @@ function Update-FabricCopyJobDefinition {
         $apiEndpointUrl = "{0}/workspaces/{1}/copyJobs/{2}/updateDefinition" -f $FabricConfig.BaseUrl, $WorkspaceId, $CopyJobId
 
         if ($CopyJobPathPlatformDefinition) {
-            $apiEndpointUrl = "?updateMetadata=true" -f $apiEndpointUrl 
+            $apiEndpointUrl = "?updateMetadata=true" -f $apiEndpointUrl
         }
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
@@ -75,12 +75,12 @@ function Update-FabricCopyJobDefinition {
         $body = @{
             definition = @{
                 parts = @()
-            } 
+            }
         }
-      
+
         if ($CopyJobPathDefinition) {
             $CopyJobEncodedContent = Convert-ToBase64 -filePath $CopyJobPathDefinition
-            
+
             if (-not [string]::IsNullOrEmpty($CopyJobEncodedContent)) {
                 # Add new part to the parts array
                 $body.definition.parts += @{
@@ -88,8 +88,7 @@ function Update-FabricCopyJobDefinition {
                     payload     = $CopyJobEncodedContent
                     payloadType = "InlineBase64"
                 }
-            }
-            else {
+            } else {
                 Write-Message -Message "Invalid or empty content in Copy Job definition." -Level Error
                 return $null
             }
@@ -104,8 +103,7 @@ function Update-FabricCopyJobDefinition {
                     payload     = $CopyJobEncodedPlatformContent
                     payloadType = "InlineBase64"
                 }
-            }
-            else {
+            } else {
                 Write-Message -Message "Invalid or empty content in platform definition." -Level Error
                 return $null
             }
@@ -121,12 +119,11 @@ function Update-FabricCopyJobDefinition {
             -Method Post `
             -Body $bodyJson
 
-        Write-Message -Message "Copy Job updated successfully!" -Level Info        
+        Write-Message -Message "Copy Job updated successfully!" -Level Info
         return $response
-       
-   
-    }
-    catch {
+
+
+    } catch {
         # Step 6: Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to update Copy Job. Error: $errorDetails" -Level Error

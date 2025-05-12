@@ -1,5 +1,5 @@
 function Get-FabricLongRunningOperation {
-<#
+    <#
 .SYNOPSIS
 Monitors the status of a long-running operation in Microsoft Fabric.
 
@@ -26,7 +26,7 @@ This command polls the status of the operation with the given operationId every 
 
     AUTHOR
     Tiago Balabuch
-#>
+    #>
     param (
         [Parameter(Mandatory = $false)]
         [string]$operationId,
@@ -42,8 +42,7 @@ This command polls the status of the operation with the given operationId every 
     if ($location) {
         # Use the Location header to define the operationUrl
         $apiEndpointUrl = $location
-    }
-    else {
+    } else {
         $apiEndpointUrl = "https://api.fabric.microsoft.com/v1/operations/{0}" -f $operationId
     }
     Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
@@ -54,8 +53,7 @@ This command polls the status of the operation with the given operationId every 
             # Step 2: Wait before the next request
             if ($retryAfter) {
                 Start-Sleep -Seconds $retryAfter
-            }
-            else {
+            } else {
                 Start-Sleep -Seconds 5  # Default retry interval if no Retry-After header
             }
 
@@ -80,8 +78,7 @@ This command polls the status of the operation with the given operationId every 
 
         # Step 5: Return the operation result
         return $operation
-    }
-    catch {
+    } catch {
         # Step 6: Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "An error occurred while checking the operation: $errorDetails" -Level Error

@@ -1,5 +1,5 @@
 function Get-FabricEventstream {
-<#
+    <#
 .SYNOPSIS
 Retrieves an Eventstream or a list of Eventstreams from a specified workspace in Microsoft Fabric.
 
@@ -33,7 +33,7 @@ Retrieves all Eventstreams in workspace "12345".
 
 Author: Tiago Balabuch
 
-#>
+    #>
 
 
     [CmdletBinding()]
@@ -119,13 +119,11 @@ Author: Tiago Balabuch
                     Write-Message -Message "Updating the continuation token" -Level Debug
                     $continuationToken = $response.continuationToken
                     Write-Message -Message "Continuation token: $continuationToken" -Level Debug
-                }
-                else {
+                } else {
                     Write-Message -Message "Updating the continuation token to null" -Level Debug
                     $continuationToken = $null
                 }
-            }
-            else {
+            } else {
                 Write-Message -Message "No data received from the API." -Level Warning
                 break
             }
@@ -136,11 +134,9 @@ Author: Tiago Balabuch
         # Step 8: Filter results based on provided parameters
         $eventstream = if ($EventstreamId) {
             $eventstreams | Where-Object { $_.Id -eq $EventstreamId }
-        }
-        elseif ($EventstreamName) {
+        } elseif ($EventstreamName) {
             $eventstreams | Where-Object { $_.DisplayName -eq $EventstreamName }
-        }
-        else {
+        } else {
             # Return all eventstreams if no filter is provided
             Write-Message -Message "No filter provided. Returning all Eventstreams." -Level Debug
             $eventstreams
@@ -150,13 +146,11 @@ Author: Tiago Balabuch
         if ($eventstream) {
             Write-Message -Message "Eventstream found matching the specified criteria." -Level Debug
             return $eventstream
-        }
-        else {
+        } else {
             Write-Message -Message "No Eventstream found matching the provided criteria." -Level Warning
             return $null
         }
-    }
-    catch {
+    } catch {
         # Step 10: Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to retrieve Eventstream. Error: $errorDetails" -Level Error

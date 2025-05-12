@@ -1,5 +1,5 @@
 function Get-FabricEnvironmentStagingSparkCompute {
-<#
+    <#
 .SYNOPSIS
 Retrieves staging Spark compute details for a specific environment in a Microsoft Fabric workspace.
 
@@ -23,7 +23,7 @@ Retrieves the staging Spark compute configurations for the specified environment
 - Uses `Test-TokenExpired` to validate the token before making API calls.
 
 Author: Tiago Balabuch
-#>
+    #>
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
@@ -66,8 +66,7 @@ Author: Tiago Balabuch
 
         # Step 5: Handle results
         return $response
-    }
-    catch {
+    } catch {
         # Step 6: Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to retrieve environment spark compute. Error: $errorDetails" -Level Error

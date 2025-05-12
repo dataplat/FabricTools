@@ -47,12 +47,11 @@ function Revoke-FabricCapacityTenantSettingOverrides {
         $response = Invoke-FabricAPIRequest `
             -BaseURI $apiEndpointURI `
             -Headers $FabricConfig.FabricHeaders `
-            -Method Delete 
+            -Method Delete
 
         Write-Message -Message "Successfully removed the tenant setting override '$tenantSettingName' from the capacity with ID '$capacityId'." -Level Info
         return $response
-    }
-    catch {
+    } catch {
         # Step 5: Log detailed error information if the API request fails
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Error retrieving capacity tenant setting overrides: $errorDetails" -Level Error

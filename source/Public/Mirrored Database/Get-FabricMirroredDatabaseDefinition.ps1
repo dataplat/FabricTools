@@ -4,7 +4,7 @@
 Retrieves the definition of a MirroredDatabase from a specific workspace in Microsoft Fabric.
 
 .DESCRIPTION
-This function fetches the MirroredDatabase's content or metadata from a workspace. 
+This function fetches the MirroredDatabase's content or metadata from a workspace.
 Handles both synchronous and asynchronous operations, with detailed logging and error handling.
 
 .PARAMETER WorkspaceId
@@ -73,37 +73,35 @@ function Get-FabricMirroredDatabaseDefinition {
                 [string]$operationId = $responseHeader["x-ms-operation-id"]
                 Write-Message -Message "Operation ID: '$operationId'" -Level Debug
                 Write-Message -Message "Getting Long Running Operation status" -Level Debug
-               
+
                 $operationStatus = Get-FabricLongRunningOperation -operationId $operationId
                 Write-Message -Message "Long Running Operation status: $operationStatus" -Level Debug
                 # Handle operation result
                 if ($operationStatus.status -eq "Succeeded") {
                     Write-Message -Message "Operation Succeeded" -Level Debug
                     Write-Message -Message "Getting Long Running Operation result" -Level Debug
-                
+
                     $operationResult = Get-FabricLongRunningOperationResult -operationId $operationId
                     Write-Message -Message "Long Running Operation status: $operationResult" -Level Debug
-                
+
                     return $operationResult.definition.parts
-                }
-                else {
+                } else {
                     Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Debug
                     Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Error
                     return $operationStatus
-                }  
+                }
             }
             default {
                 Write-Message -Message "Unexpected response code: $statusCode" -Level Error
                 Write-Message -Message "Error details: $($response.message)" -Level Error
                 throw "API request failed with status code $statusCode."
             }
-        
+
         }
-    }
-    catch {
+    } catch {
         # Step 9: Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to retrieve MirroredDatabase. Error: $errorDetails" -Level Error
-    } 
- 
+    }
+
 }

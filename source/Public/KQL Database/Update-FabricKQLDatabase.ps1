@@ -102,8 +102,7 @@ function Update-FabricKQLDatabase {
         # Step 6: Handle results
         Write-Message -Message "KQLDatabase '$KQLDatabaseName' updated successfully!" -Level Info
         return $response
-    }
-    catch {
+    } catch {
         # Step 7: Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to update KQLDatabase. Error: $errorDetails" -Level Error

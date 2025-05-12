@@ -40,7 +40,7 @@ function Unregister-FabricWorkspaceToCapacity {
         [Parameter(Mandatory = $true, ParameterSetName = 'WorkspaceObject', ValueFromPipeline = $true)]
         $Workspace
     )
-    
+
     begin {
         Confirm-FabricAuthToken | Out-Null
     }
@@ -49,10 +49,10 @@ function Unregister-FabricWorkspaceToCapacity {
         if ($PSCmdlet.ParameterSetName -eq 'WorkspaceObject') {
             $workspaceid = $workspace.id
         }
-        
+
         if ($PSCmdlet.ShouldProcess("Unassigns workspace $workspaceid from a capacity")) {
             return Invoke-WebRequest -Headers $FabricSession.HeaderParams -Method POST -Uri "$($FabricSession.BaseApiUrl)/workspaces/$($workspaceID)/unassignFromCapacity"
             #return (Invoke-FabricAPIRequest -Uri "workspaces/$workspaceid/unassignFromCapacity" -Method POST).value
         }
-   }
+    }
 }

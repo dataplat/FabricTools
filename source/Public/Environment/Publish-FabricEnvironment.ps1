@@ -3,7 +3,7 @@
 Publishes a staging environment in a specified Microsoft Fabric workspace.
 
 .DESCRIPTION
-This function interacts with the Microsoft Fabric API to initiate the publishing process for a staging environment. 
+This function interacts with the Microsoft Fabric API to initiate the publishing process for a staging environment.
 It validates the authentication token, constructs the API request, and handles both immediate and long-running operations.
 
 
@@ -22,7 +22,7 @@ Initiates the publishing process for the specified staging environment.
 - Requires the `$FabricConfig` global object, including `BaseUrl` and `FabricHeaders`.
 - Uses `Test-TokenExpired` to validate the token before making API calls.
 
-Author: Tiago Balabuch  
+Author: Tiago Balabuch
 #>
 
 function Publish-FabricEnvironment {
@@ -70,24 +70,23 @@ function Publish-FabricEnvironment {
                 [string]$operationId = $responseHeader["x-ms-operation-id"]
                 Write-Message -Message "Operation ID: '$operationId'" -Level Debug
                 Write-Message -Message "Getting Long Running Operation status" -Level Debug
-               
+
                 $operationStatus = Get-FabricLongRunningOperation -operationId $operationId
                 Write-Message -Message "Long Running Operation status: $operationStatus" -Level Debug
                 # Handle operation result
                 if ($operationStatus.status -eq "Succeeded") {
                     Write-Message -Message "Operation Succeeded" -Level Debug
                     Write-Message -Message "Getting Long Running Operation result" -Level Debug
-                
+
                     $operationResult = Get-FabricLongRunningOperationResult -operationId $operationId
                     Write-Message -Message "Long Running Operation status: $operationResult" -Level Debug
-                
+
                     return $operationResult
-                }
-                else {
+                } else {
                     Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Debug
                     Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Error
                     return $operationStatus
-                } 
+                }
             }
             default {
                 Write-Message -Message "Unexpected response code: $statusCode" -Level Error
@@ -95,8 +94,7 @@ function Publish-FabricEnvironment {
                 throw "API request failed with status code $statusCode."
             }
         }
-    }
-    catch {
+    } catch {
         # Step 6: Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to create environment. Error: $errorDetails" -Level Error

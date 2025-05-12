@@ -1,5 +1,5 @@
 function Get-FabricEventhouse {
-<#
+    <#
     .SYNOPSIS
         Retrieves Fabric Eventhouses
 
@@ -60,7 +60,7 @@ function Get-FabricEventhouse {
         - 2024-11-09 - FGE: Added DisplaName as Alias for EventhouseName
         - 2024-11-16 - FGE: Added Verbose Output
         - 2024-11-27 - FGE: Added more Verbose Output
-#>
+    #>
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
@@ -141,13 +141,11 @@ function Get-FabricEventhouse {
                     Write-Message -Message "Updating the continuation token" -Level Debug
                     $continuationToken = $response.continuationToken
                     Write-Message -Message "Continuation token: $continuationToken" -Level Debug
-                }
-                else {
+                } else {
                     Write-Message -Message "Updating the continuation token to null" -Level Debug
                     $continuationToken = $null
                 }
-            }
-            else {
+            } else {
                 Write-Message -Message "No data received from the API." -Level Warning
                 break
             }
@@ -157,11 +155,9 @@ function Get-FabricEventhouse {
         # Step 8: Filter results based on provided parameters
         $eventhouse = if ($EventhouseId) {
             $eventhouses | Where-Object { $_.Id -eq $EventhouseId }
-        }
-        elseif ($EventhouseName) {
+        } elseif ($EventhouseName) {
             $eventhouses | Where-Object { $_.DisplayName -eq $EventhouseName }
-        }
-        else {
+        } else {
             # Return all eventhouses if no filter is provided
             Write-Message -Message "No filter provided. Returning all Eventhouses." -Level Debug
             $eventhouses
@@ -171,13 +167,11 @@ function Get-FabricEventhouse {
         if ($eventhouse) {
             Write-Message -Message "Eventhouse found in the Workspace '$WorkspaceId'." -Level Debug
             return $eventhouse
-        }
-        else {
+        } else {
             Write-Message -Message "No Eventhouse found matching the provided criteria." -Level Warning
             return $null
         }
-    }
-    catch {
+    } catch {
         # Step 10: Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to retrieve Eventhouse. Error: $errorDetails" -Level Error

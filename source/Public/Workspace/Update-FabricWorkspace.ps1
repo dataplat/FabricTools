@@ -94,8 +94,7 @@ function Update-FabricWorkspace {
         # Step 6: Handle results
         Write-Message -Message "Workspace '$WorkspaceName' updated successfully!" -Level Info
         return $response
-    }
-    catch {
+    } catch {
         # Step 7: Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to update workspace. Error: $errorDetails" -Level Error

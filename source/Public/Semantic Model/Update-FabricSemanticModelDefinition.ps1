@@ -3,7 +3,7 @@
     Updates the definition of an existing SemanticModel in a specified Microsoft Fabric workspace.
 
 .DESCRIPTION
-    This function sends a PATCH request to the Microsoft Fabric API to update the definition of an existing SemanticModel 
+    This function sends a PATCH request to the Microsoft Fabric API to update the definition of an existing SemanticModel
     in the specified workspace. It supports optional parameters for SemanticModel definition and platform-specific definition.
 
 .PARAMETER WorkspaceId
@@ -24,7 +24,7 @@
     - Calls `Test-TokenExpired` to ensure token validity before making the API request.
 
     Author: Tiago Balabuch
-    
+
 #>
 function Update-FabricSemanticModelDefinition {
     [CmdletBinding()]
@@ -54,9 +54,9 @@ function Update-FabricSemanticModelDefinition {
         $body = @{
             definition = @{
                 parts = @()
-            } 
+            }
         }
-      
+
         $jsonObjectParts = Get-FileDefinitionParts -sourceDirectory $SemanticModelPathDefinition
         # Add new part to the parts array
         $body.definition.parts = $jsonObjectParts.parts
@@ -69,7 +69,7 @@ function Update-FabricSemanticModelDefinition {
         }
 
         if ($hasPlatformFile -eq $true) {
-            $apiEndpointUrl = "?updateMetadata=true" -f $apiEndpointUrl 
+            $apiEndpointUrl = "?updateMetadata=true" -f $apiEndpointUrl
         }
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
@@ -87,7 +87,7 @@ function Update-FabricSemanticModelDefinition {
             -ErrorAction Stop `
             -ResponseHeadersVariable "responseHeader" `
             -StatusCodeVariable "statusCode"
-       
+
         # Step 5: Handle and log the response
         switch ($statusCode) {
             200 {
@@ -96,16 +96,16 @@ function Update-FabricSemanticModelDefinition {
             }
             202 {
                 Write-Message -Message "Update definition for SemanticModel '$SemanticModelId' accepted. Operation in progress!" -Level Info
-                
+
                 [string]$operationId = $responseHeader["x-ms-operation-id"]
                 [string]$location = $responseHeader["Location"]
-                [string]$retryAfter = $responseHeader["Retry-After"] 
+                [string]$retryAfter = $responseHeader["Retry-After"]
 
                 Write-Message -Message "Operation ID: '$operationId'" -Level Debug
                 Write-Message -Message "Location: '$location'" -Level Debug
                 Write-Message -Message "Retry-After: '$retryAfter'" -Level Debug
                 Write-Message -Message "Getting Long Running Operation status" -Level Debug
-               
+
                 $operationStatus = Get-FabricLongRunningOperation -operationId $operationId -location $location
                 Write-Message -Message "Long Running Operation status: $operationStatus" -Level Debug
                 # Handle operation result
@@ -113,21 +113,19 @@ function Update-FabricSemanticModelDefinition {
                     Write-Message -Message "Operation Succeeded" -Level Debug
                     Write-Message -Message "Update definition operation for Semantic Model '$SemanticModelId' succeeded!" -Level Info
                     return $operationStatus
-                } 
-                else {
+                } else {
                     Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Debug
                     Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Error
                     return $operationStatus
-                } 
-            } 
+                }
+            }
             default {
                 Write-Message -Message "Unexpected response code: $statusCode" -Level Error
                 Write-Message -Message "Error details: $($response.message)" -Level Error
                 throw "API request failed with status code $statusCode."
             }
         }
-    }
-    catch {
+    } catch {
         # Step 6: Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to update SemanticModel. Error: $errorDetails" -Level Error

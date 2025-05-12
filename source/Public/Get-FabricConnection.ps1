@@ -1,5 +1,5 @@
 function Get-FabricConnection {
-<#
+    <#
 .SYNOPSIS
 Retrieves Fabric connections.
 
@@ -22,26 +22,25 @@ This example retrieves specific connection from Fabric with ID "12345".
 .NOTES
 https://learn.microsoft.com/en-us/rest/api/fabric/core/connections/get-connection?tabs=HTTP
 https://learn.microsoft.com/en-us/rest/api/fabric/core/connections/list-connections?tabs=HTTP
-#>
-  [CmdletBinding()]
-  param
-  (
-    [Parameter(Mandatory = $false)]
-    [string]$connectionId
-  )
+    #>
+    [CmdletBinding()]
+    param
+    (
+        [Parameter(Mandatory = $false)]
+        [string]$connectionId
+    )
 
-  begin {
-    Confirm-FabricAuthToken | Out-Null
-  }
-
-  process {
-    if ($connectionId) {
-      $result = Invoke-FabricAPIRequest -Uri "/connections/$($connectionId)" -Method GET
-    }
-    else {
-      $result = Invoke-FabricAPIRequest -Uri "/connections" -Method GET
+    begin {
+        Confirm-FabricAuthToken | Out-Null
     }
 
-    return $result.value
-  }
+    process {
+        if ($connectionId) {
+            $result = Invoke-FabricAPIRequest -Uri "/connections/$($connectionId)" -Method GET
+        } else {
+            $result = Invoke-FabricAPIRequest -Uri "/connections" -Method GET
+        }
+
+        return $result.value
+    }
 }

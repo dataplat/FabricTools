@@ -17,7 +17,7 @@ Deletes the domain with ID "12345".
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
 - Calls `Test-TokenExpired` to ensure token validity before making the API request.
 
-Author: Tiago Balabuch  
+Author: Tiago Balabuch
 
 #>
 
@@ -58,9 +58,8 @@ function Remove-FabricDomain {
         }
 
         Write-Message -Message "Domain '$DomainId' deleted successfully!" -Level Info
-       
-    }
-    catch {
+
+    } catch {
         # Step 5: Log and handle errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to delete domain '$DomainId'. Error: $errorDetails" -Level Error

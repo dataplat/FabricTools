@@ -12,7 +12,7 @@ The ID of the domain to which workspaces will be assigned. This parameter is man
 An array representing the principals with their `id` and `type` properties. Must contain a `principals` key with an array of objects.
 
 .EXAMPLE
-$PrincipalIds = @( 
+$PrincipalIds = @(
     @{id = "813abb4a-414c-4ac0-9c2c-bd17036fd58c";  type = "User"},
     @{id = "b5b9495c-685a-447a-b4d3-2d8e963e6288"; type = "User"}
     )
@@ -90,15 +90,14 @@ function Assign-FabricDomainWorkspaceByPrincipal {
                 [string]$operationId = $responseHeader["x-ms-operation-id"]
                 Write-Message -Message "Operation ID: '$operationId'" -Level Debug
                 Write-Message -Message "Getting Long Running Operation status" -Level Debug
-               
+
                 $operationStatus = Get-FabricLongRunningOperation -operationId $operationId
                 Write-Message -Message "Long Running Operation status: $operationStatus" -Level Debug
                 # Handle operation result
                 if ($operationStatus.status -eq "Succeeded") {
                     Write-Message -Message "Operation Succeeded" -Level Debug
                     return $operationStatus
-                }
-                else {
+                } else {
                     Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Debug
                     Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Error
                     return operationStatus
@@ -110,8 +109,7 @@ function Assign-FabricDomainWorkspaceByPrincipal {
                 throw "API request failed with status code $statusCode."
             }
         }
-    }
-    catch {
+    } catch {
         # Step 7: Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to assign domain workspaces by principals. Error: $errorDetails" -Level Error

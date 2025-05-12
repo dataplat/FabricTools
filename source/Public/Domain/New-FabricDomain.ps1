@@ -23,7 +23,7 @@ Creates a "Finance" domain under the parent domain with ID "12345".
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
 - Calls `Test-TokenExpired` to ensure token validity before making the API request.
 
-Author: Tiago Balabuch  
+Author: Tiago Balabuch
 
 #>
 
@@ -82,7 +82,7 @@ function New-FabricDomain {
             -SkipHttpErrorCheck `
             -ResponseHeadersVariable "responseHeader" `
             -StatusCodeVariable "statusCode"
-        
+
         # Step 5: Handle and log the response
         switch ($statusCode) {
             201 {
@@ -94,24 +94,23 @@ function New-FabricDomain {
                 [string]$operationId = $responseHeader["x-ms-operation-id"]
                 Write-Message -Message "Operation ID: '$operationId'" -Level Debug
                 Write-Message -Message "Getting Long Running Operation status" -Level Debug
-               
+
                 $operationStatus = Get-FabricLongRunningOperation -operationId $operationId
                 Write-Message -Message "Long Running Operation status: $operationStatus" -Level Debug
                 # Handle operation result
                 if ($operationStatus.status -eq "Succeeded") {
                     Write-Message -Message "Operation Succeeded" -Level Debug
                     Write-Message -Message "Getting Long Running Operation result" -Level Debug
-                
+
                     $operationResult = Get-FabricLongRunningOperationResult -operationId $operationId
                     Write-Message -Message "Long Running Operation status: $operationResult" -Level Debug
-                
+
                     return $operationResult
-                }
-                else {
+                } else {
                     Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Debug
                     Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Error
                     return $operationStatus
-                } 
+                }
             }
             default {
                 Write-Message -Message "Unexpected response code: $statusCode" -Level Error
@@ -119,8 +118,7 @@ function New-FabricDomain {
                 throw "API request failed with status code $statusCode."
             }
         }
-    }
-    catch {
+    } catch {
         # Step 6: Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to create domain. Error: $errorDetails" -Level Error

@@ -1,5 +1,5 @@
 function Remove-FabricEventstream {
-<#
+    <#
 .SYNOPSIS
 Deletes an Eventstream from a specified workspace in Microsoft Fabric.
 
@@ -28,9 +28,9 @@ Deletes the Eventstream with ID "67890" from workspace "12345".
 
 Author: Tiago Balabuch
 
-#>
+    #>
 
-#TODO SupportsShouldProcess
+    #TODO SupportsShouldProcess
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
@@ -40,7 +40,7 @@ Author: Tiago Balabuch
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
         [string]$EventstreamId
-#TODO Add EventstreamName parameter to validate the name of the Eventstream to delete.
+        #TODO Add EventstreamName parameter to validate the name of the Eventstream to delete.
     )
 
     try {
@@ -71,8 +71,7 @@ Author: Tiago Balabuch
         }
         Write-Message -Message "Eventstream '$EventstreamId' deleted successfully from workspace '$WorkspaceId'." -Level Info
 
-    }
-    catch {
+    } catch {
         # Step 5: Log and handle errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to delete Eventstream '$EventstreamId' from workspace '$WorkspaceId'. Error: $errorDetails" -Level Error

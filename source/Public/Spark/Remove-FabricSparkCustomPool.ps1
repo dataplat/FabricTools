@@ -3,7 +3,7 @@
     Removes a Spark custom pool from a specified Microsoft Fabric workspace.
 
 .DESCRIPTION
-    This function sends a DELETE request to the Microsoft Fabric API to remove a Spark custom pool 
+    This function sends a DELETE request to the Microsoft Fabric API to remove a Spark custom pool
     from the specified workspace using the provided WorkspaceId and SparkCustomPoolId.
 
 .PARAMETER WorkspaceId
@@ -21,7 +21,7 @@
     - Calls `Test-TokenExpired` to ensure token validity before making the API request.
 
     Author: Tiago Balabuch
-    
+
 #>
 function Remove-FabricSparkCustomPool {
     [CmdletBinding()]
@@ -62,9 +62,8 @@ function Remove-FabricSparkCustomPool {
             return $null
         }
         Write-Message -Message "Spark Custom Pool '$SparkCustomPoolId' deleted successfully from workspace '$WorkspaceId'." -Level Info
-        
-    }
-    catch {
+
+    } catch {
         # Step 5: Log and handle errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to delete SparkCustomPool '$SparkCustomPoolId' from workspace '$WorkspaceId'. Error: $errorDetails" -Level Error

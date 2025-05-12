@@ -22,18 +22,18 @@
 #>
 
 function Get-FabricAuthToken {
-   [Alias("Get-FabAuthToken")]
-   [CmdletBinding()]
-   param
-   (
-   )
+    [Alias("Get-FabAuthToken")]
+    [CmdletBinding()]
+    param
+    (
+    )
 
-   # Check if the Fabric token is already set
-   if (!$FabricSession.FabricToken) {
-      # If not, set the Fabric token
-      Set-FabricAuthToken
-   }
+    # Check if the Fabric token is already set
+    if (!$FabricSession.FabricToken) {
+        # If not, set the Fabric token
+        Set-FabricAuthToken
+    }
 
-   # Output the Fabric token
-   return $FabricSession.FabricToken
+    # Output the Fabric token
+    return $FabricSession.FabricToken
 }

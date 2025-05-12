@@ -1,5 +1,5 @@
 function New-FabricEventhouse {
-<#
+    <#
     .SYNOPSIS
         Creates a new Eventhouse in a specified Microsoft Fabric workspace.
 
@@ -32,7 +32,7 @@ function New-FabricEventhouse {
 
         Author: Tiago Balabuch
 
-#>
+    #>
 
     [CmdletBinding()]
     param (
@@ -82,7 +82,7 @@ function New-FabricEventhouse {
                 # Initialize definition if it doesn't exist
                 if (-not $body.definition) {
                     $body.definition = @{
-                        parts  = @()
+                        parts = @()
                     }
                 }
 
@@ -92,8 +92,7 @@ function New-FabricEventhouse {
                     payload     = $eventhouseEncodedContent
                     payloadType = "InlineBase64"
                 }
-            }
-            else {
+            } else {
                 Write-Message -Message "Invalid or empty content in Eventhouse definition." -Level Error
                 return $null
             }
@@ -106,7 +105,7 @@ function New-FabricEventhouse {
                 # Initialize definition if it doesn't exist
                 if (-not $body.definition) {
                     $body.definition = @{
-                        parts  = @()
+                        parts = @()
                     }
                 }
 
@@ -116,8 +115,7 @@ function New-FabricEventhouse {
                     payload     = $eventhouseEncodedPlatformContent
                     payloadType = "InlineBase64"
                 }
-            }
-            else {
+            } else {
                 Write-Message -Message "Invalid or empty content in platform definition." -Level Error
                 return $null
             }
@@ -170,8 +168,7 @@ function New-FabricEventhouse {
                     Write-Message -Message "Long Running Operation status: $operationResult" -Level Debug
 
                     return $operationResult
-                }
-                else {
+                } else {
                     Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Debug
                     Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Error
                     return $operationStatus
@@ -185,8 +182,7 @@ function New-FabricEventhouse {
                 throw "API request failed with status code $statusCode."
             }
         }
-    }
-    catch {
+    } catch {
         # Step 6: Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to create Eventhouse. Error: $errorDetails" -Level Error

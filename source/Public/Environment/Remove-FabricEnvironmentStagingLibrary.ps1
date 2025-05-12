@@ -1,5 +1,5 @@
 function Remove-FabricEnvironmentStagingLibrary {
-<#
+    <#
 .SYNOPSIS
 Deletes a specified library from the staging environment in a Microsoft Fabric workspace.
 
@@ -27,7 +27,7 @@ Deletes the specified library from the staging environment in the specified work
 - This function currently supports deleting one library at a time.
 Author: Tiago Balabuch
 
-#>
+    #>
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
@@ -65,7 +65,7 @@ Author: Tiago Balabuch
             -ResponseHeadersVariable "responseHeader" `
             -StatusCodeVariable "statusCode"
 
-            # Step 4: Validate the response code
+        # Step 4: Validate the response code
         if ($statusCode -ne 200) {
             Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
             Write-Message -Message "Error: $($response.message)" -Level Error
@@ -73,8 +73,7 @@ Author: Tiago Balabuch
             return $null
         }
         Write-Message -Message "Staging library $LibraryName for the Environment '$EnvironmentId' deleted successfully from workspace '$WorkspaceId'." -Level Info
-    }
-    catch {
+    } catch {
         # Step 5: Log and handle errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to delete environment '$EnvironmentId' from workspace '$WorkspaceId'. Error: $errorDetails" -Level Error

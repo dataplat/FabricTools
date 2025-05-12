@@ -3,7 +3,7 @@
     Removes an SparkJobDefinition from a specified Microsoft Fabric workspace.
 
 .DESCRIPTION
-    This function sends a DELETE request to the Microsoft Fabric API to remove an SparkJobDefinition 
+    This function sends a DELETE request to the Microsoft Fabric API to remove an SparkJobDefinition
     from the specified workspace using the provided WorkspaceId and SparkJobDefinitionId.
 
 .PARAMETER WorkspaceId
@@ -52,8 +52,8 @@ function Remove-FabricSparkJobDefinition {
             -SkipHttpErrorCheck `
             -ResponseHeadersVariable "responseHeader" `
             -StatusCodeVariable "statusCode"
-        
-            # Step 4: Handle response
+
+        # Step 4: Handle response
         if ($statusCode -ne 200) {
             Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
             Write-Message -Message "Error: $($response.message)" -Level Error
@@ -62,9 +62,8 @@ function Remove-FabricSparkJobDefinition {
             return $null
         }
 
-        Write-Message -Message "Spark Job Definition '$SparkJobDefinitionId' deleted successfully from workspace '$WorkspaceId'." -Level Info  
-    }
-    catch {
+        Write-Message -Message "Spark Job Definition '$SparkJobDefinitionId' deleted successfully from workspace '$WorkspaceId'." -Level Info
+    } catch {
         # Step 5: Log and handle errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to delete SparkJobDefinition '$SparkJobDefinitionId'. Error: $errorDetails" -Level Error

@@ -1,5 +1,5 @@
 function Get-FabricLongRunningOperationResult {
-<#
+    <#
 .SYNOPSIS
 Retrieves the result of a completed long-running operation from the Microsoft Fabric API.
 
@@ -21,7 +21,7 @@ This command fetches the result of the operation with the specified operationId.
 
     AUTHOR
     Tiago Balabuch
-#>
+    #>
     param (
         [Parameter(Mandatory = $true)]
         [string]$operationId
@@ -34,13 +34,13 @@ This command fetches the result of the operation with the specified operationId.
     try {
         # Step 2: Make the API request
         $response = Invoke-RestMethod `
-        -Headers $FabricConfig.FabricHeaders `
-        -Uri $apiEndpointUrl `
-        -Method Get `
-        -ErrorAction Stop `
-        -SkipHttpErrorCheck `
-        -ResponseHeadersVariable "responseHeader" `
-        -StatusCodeVariable "statusCode"
+            -Headers $FabricConfig.FabricHeaders `
+            -Uri $apiEndpointUrl `
+            -Method Get `
+            -ErrorAction Stop `
+            -SkipHttpErrorCheck `
+            -ResponseHeadersVariable "responseHeader" `
+            -StatusCodeVariable "statusCode"
 
 
         # Step 3: Return the result
@@ -56,8 +56,7 @@ This command fetches the result of the operation with the specified operationId.
         }
 
         return $response
-    }
-    catch {
+    } catch {
         # Step 3: Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "An error occurred while returning the operation result: $errorDetails" -Level Error

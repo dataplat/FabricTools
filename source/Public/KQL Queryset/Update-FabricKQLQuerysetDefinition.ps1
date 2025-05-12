@@ -3,7 +3,7 @@
 Updates the definition of a KQLQueryset in a Microsoft Fabric workspace.
 
 .DESCRIPTION
-This function allows updating the content or metadata of a KQLQueryset in a Microsoft Fabric workspace. 
+This function allows updating the content or metadata of a KQLQueryset in a Microsoft Fabric workspace.
 The KQLQueryset content can be provided as file paths, and metadata updates can optionally be enabled.
 
 .PARAMETER WorkspaceId
@@ -25,7 +25,7 @@ Update-FabricKQLQuerysetDefinition -WorkspaceId "12345" -KQLQuerysetId "67890" -
 Updates the content of the KQLQueryset with ID `67890` in the workspace `12345` using the specified KQLQueryset file.
 
 .EXAMPLE
-Update-FabricKQLQuerysetDefinition -WorkspaceId "12345" -KQLQuerysetId "67890" -KQLQuerysetPathDefinition "C:\KQLQuerysets\KQLQueryset.ipynb" 
+Update-FabricKQLQuerysetDefinition -WorkspaceId "12345" -KQLQuerysetId "67890" -KQLQuerysetPathDefinition "C:\KQLQuerysets\KQLQueryset.ipynb"
 
 Updates both the content and metadata of the KQLQueryset with ID `67890` in the workspace `12345`.
 
@@ -35,7 +35,7 @@ Updates both the content and metadata of the KQLQueryset with ID `67890` in the 
 - The KQLQueryset content is encoded as Base64 before being sent to the Fabric API.
 - This function handles asynchronous operations and retrieves operation results if required.
 
-Author: Tiago Balabuch  
+Author: Tiago Balabuch
 
 #>
 
@@ -53,7 +53,7 @@ function Update-FabricKQLQuerysetDefinition {
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
         [string]$KQLQuerysetPathDefinition,
-        
+
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
         [string]$KQLQuerysetPathPlatformDefinition
@@ -68,8 +68,8 @@ function Update-FabricKQLQuerysetDefinition {
         # Step 2: Construct the API URL
         $apiEndpointUrl = "{0}/workspaces/{1}/kqlQuerysets/{2}/updateDefinition" -f $FabricConfig.BaseUrl, $WorkspaceId, $KQLQuerysetId
 
-        if($KQLQuerysetPathPlatformDefinition){
-            $apiEndpointUrl = "?updateMetadata=true" -f $apiEndpointUrl 
+        if ($KQLQuerysetPathPlatformDefinition) {
+            $apiEndpointUrl = "?updateMetadata=true" -f $apiEndpointUrl
         }
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
@@ -78,12 +78,12 @@ function Update-FabricKQLQuerysetDefinition {
             definition = @{
                 format = $null
                 parts  = @()
-            } 
+            }
         }
-      
+
         if ($KQLQuerysetPathDefinition) {
             $KQLQuerysetEncodedContent = Convert-ToBase64 -filePath $KQLQuerysetPathDefinition
-            
+
             if (-not [string]::IsNullOrEmpty($KQLQuerysetEncodedContent)) {
                 # Add new part to the parts array
                 $body.definition.parts += @{
@@ -91,8 +91,7 @@ function Update-FabricKQLQuerysetDefinition {
                     payload     = $KQLQuerysetEncodedContent
                     payloadType = "InlineBase64"
                 }
-            }
-            else {
+            } else {
                 Write-Message -Message "Invalid or empty content in KQLQueryset definition." -Level Error
                 return $null
             }
@@ -107,8 +106,7 @@ function Update-FabricKQLQuerysetDefinition {
                     payload     = $KQLQuerysetEncodedPlatformContent
                     payloadType = "InlineBase64"
                 }
-            }
-            else {
+            } else {
                 Write-Message -Message "Invalid or empty content in platform definition." -Level Error
                 return $null
             }
@@ -127,7 +125,7 @@ function Update-FabricKQLQuerysetDefinition {
             -ErrorAction Stop `
             -ResponseHeadersVariable "responseHeader" `
             -StatusCodeVariable "statusCode"
-       
+
         # Step 5: Handle and log the response
         switch ($statusCode) {
             200 {
@@ -142,23 +140,21 @@ function Update-FabricKQLQuerysetDefinition {
                 # Handle operation result
                 if ($operationResult.status -eq "Succeeded") {
                     Write-Message -Message "Operation Succeeded" -Level Debug
-                    
+
                     $result = Get-FabricLongRunningOperationResult -operationId $operationId
                     return $result.definition.parts
-                }
-                else {
+                } else {
                     Write-Message -Message "Operation Failed" -Level Debug
                     return $operationResult.definition.parts
-                }   
-            } 
+                }
+            }
             default {
                 Write-Message -Message "Unexpected response code: $statusCode" -Level Error
                 Write-Message -Message "Error details: $($response.message)" -Level Error
                 throw "API request failed with status code $statusCode."
             }
         }
-    }
-    catch {
+    } catch {
         # Step 6: Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to update KQLQueryset. Error: $errorDetails" -Level Error

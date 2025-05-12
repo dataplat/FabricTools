@@ -1,6 +1,6 @@
 function Get-FabricSQLDatabase {
 
-<#
+    <#
 .SYNOPSIS
     Retrieves Fabric SQLDatabases
 
@@ -43,15 +43,15 @@ function Get-FabricSQLDatabase {
 .NOTES
     Revision History:
         - 2025-03-06 - KNO: Init version of the function
-#>
+    #>
 
 
-[CmdletBinding()]
+    [CmdletBinding()]
     param (
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [string]$WorkspaceId,
 
-        [Alias("Name","DisplayName")]
+        [Alias("Name", "DisplayName")]
         [string]$SQLDatabaseName,
 
         [Alias("Id")]

@@ -1,5 +1,5 @@
 function Remove-FabricEventhouse {
-<#
+    <#
 .SYNOPSIS
     Removes an Eventhouse from a specified Microsoft Fabric workspace.
 
@@ -35,7 +35,7 @@ function Remove-FabricEventhouse {
 
     Author: Tiago Balabuch
 
-#>
+    #>
 
     [CmdletBinding()]
     param (
@@ -67,7 +67,7 @@ function Remove-FabricEventhouse {
             -ResponseHeadersVariable "responseHeader" `
             -StatusCodeVariable "statusCode"
 
-            # Step 4: Handle response
+        # Step 4: Handle response
         if ($statusCode -ne 200) {
             Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
             Write-Message -Message "Error: $($response.message)" -Level Error
@@ -77,8 +77,7 @@ function Remove-FabricEventhouse {
         }
 
         Write-Message -Message "Eventhouse '$EventhouseId' deleted successfully from workspace '$WorkspaceId'." -Level Info
-    }
-    catch {
+    } catch {
         # Step 5: Log and handle errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to delete Eventhouse '$EventhouseId'. Error: $errorDetails" -Level Error

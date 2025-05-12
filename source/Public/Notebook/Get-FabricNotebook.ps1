@@ -1,5 +1,5 @@
 function Get-FabricNotebook {
-<#
+    <#
 .SYNOPSIS
 Retrieves an Notebook or a list of Notebooks from a specified workspace in Microsoft Fabric.
 
@@ -31,7 +31,7 @@ Retrieves all Notebooks in workspace "12345".
 
 Author: Tiago Balabuch
 
-#>
+    #>
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
@@ -112,13 +112,11 @@ Author: Tiago Balabuch
                     Write-Message -Message "Updating the continuation token" -Level Debug
                     $continuationToken = $response.continuationToken
                     Write-Message -Message "Continuation token: $continuationToken" -Level Debug
-                }
-                else {
+                } else {
                     Write-Message -Message "Updating the continuation token to null" -Level Debug
                     $continuationToken = $null
                 }
-            }
-            else {
+            } else {
                 Write-Message -Message "No data received from the API." -Level Warning
                 break
             }
@@ -128,11 +126,9 @@ Author: Tiago Balabuch
         # Step 8: Filter results based on provided parameters
         $notebook = if ($NotebookId) {
             $notebooks | Where-Object { $_.Id -eq $NotebookId }
-        }
-        elseif ($NotebookName) {
+        } elseif ($NotebookName) {
             $notebooks | Where-Object { $_.DisplayName -eq $NotebookName }
-        }
-        else {
+        } else {
             # Return all notebooks if no filter is provided
             Write-Message -Message "No filter provided. Returning all Notebooks." -Level Debug
             $notebooks
@@ -142,13 +138,11 @@ Author: Tiago Balabuch
         if ($notebook) {
             Write-Message -Message "Notebook found matching the specified criteria." -Level Debug
             return $notebook
-        }
-        else {
+        } else {
             Write-Message -Message "No notebook found matching the provided criteria." -Level Warning
             return $null
         }
-    }
-    catch {
+    } catch {
         # Step 10: Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to retrieve Notebook. Error: $errorDetails" -Level Error

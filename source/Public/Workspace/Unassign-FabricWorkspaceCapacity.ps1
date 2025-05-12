@@ -58,8 +58,7 @@ function Unassign-FabricWorkspaceCapacity {
         }
 
         Write-Message -Message "Workspace capacity has been successfully unassigned from workspace '$WorkspaceId'." -Level Info
-    }
-    catch {
+    } catch {
         # Step 5: Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to unassign workspace from capacity. Error: $errorDetails" -Level Error

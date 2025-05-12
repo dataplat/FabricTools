@@ -58,25 +58,23 @@ function Get-FabricWarehouse {
         Test-TokenExpired
         Write-Message -Message "Token validation completed." -Level Debug
         # Step 3: Initialize variables
-        
+
 
         # Step 4: Loop to retrieve all capacities with continuation token
         $apiEndpointURI = "{0}/workspaces/{1}/warehouses" -f $FabricConfig.BaseUrl, $WorkspaceId
-               
-        $Warehouses =  Invoke-FabricAPIRequest `
-        -BaseURI $apiEndpointURI `
-        -Headers $FabricConfig.FabricHeaders `
-        -Method Get `
-        -Body $null
+
+        $Warehouses = Invoke-FabricAPIRequest `
+            -BaseURI $apiEndpointURI `
+            -Headers $FabricConfig.FabricHeaders `
+            -Method Get `
+            -Body $null
 
         # Step 8: Filter results based on provided parameters
         $Warehouse = if ($WarehouseId) {
             $Warehouses | Where-Object { $_.Id -eq $WarehouseId }
-        }
-        elseif ($WarehouseName) {
+        } elseif ($WarehouseName) {
             $Warehouses | Where-Object { $_.DisplayName -eq $WarehouseName }
-        }
-        else {
+        } else {
             # Return all Warehouses if no filter is provided
             Write-Message -Message "No filter provided. Returning all Warehouses." -Level Debug
             $Warehouses
@@ -86,16 +84,14 @@ function Get-FabricWarehouse {
         if ($Warehouse) {
             Write-Message -Message "Warehouse found matching the specified criteria." -Level Debug
             return $Warehouse
-        }
-        else {
+        } else {
             Write-Message -Message "No Warehouse found matching the provided criteria." -Level Warning
             return $null
         }
-    }
-    catch {
+    } catch {
         # Step 10: Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to retrieve Warehouse. Error: $errorDetails" -Level Error
-    } 
- 
+    }
+
 }

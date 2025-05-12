@@ -3,8 +3,8 @@
     Creates a new DataPipeline in a specified Microsoft Fabric workspace.
 
 .DESCRIPTION
-    This function sends a POST request to the Microsoft Fabric API to create a new DataPipeline 
-    in the specified workspace. It supports optional parameters for DataPipeline description 
+    This function sends a POST request to the Microsoft Fabric API to create a new DataPipeline
+    in the specified workspace. It supports optional parameters for DataPipeline description
     and path definitions for the DataPipeline content.
 
 .PARAMETER WorkspaceId
@@ -17,7 +17,7 @@
     An optional description for the DataPipeline.
 
 .EXAMPLE
-     New-FabricDataPipeline -WorkspaceId "workspace-12345" -DataPipelineName "New DataPipeline" 
+     New-FabricDataPipeline -WorkspaceId "workspace-12345" -DataPipelineName "New DataPipeline"
     This example creates a new DataPipeline named "New DataPipeline" in the workspace with ID "workspace-12345" and uploads the definition file from the specified path.
 
 .NOTES
@@ -72,11 +72,10 @@ function New-FabricDataPipeline {
             -Headers $FabricConfig.FabricHeaders `
             -Method Post `
             -Body $bodyJson
-    
-        Write-Message -Message "Data Pipeline created successfully!" -Level Info        
+
+        Write-Message -Message "Data Pipeline created successfully!" -Level Info
         return $response
-    }
-    catch {
+    } catch {
         # Step 6: Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to create DataPipeline. Error: $errorDetails" -Level Error

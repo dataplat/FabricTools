@@ -3,7 +3,7 @@
 Updates the definition of a notebook in a Microsoft Fabric workspace.
 
 .DESCRIPTION
-This function allows updating the content or metadata of a notebook in a Microsoft Fabric workspace. 
+This function allows updating the content or metadata of a notebook in a Microsoft Fabric workspace.
 The notebook content can be provided as file paths, and metadata updates can optionally be enabled.
 
 .PARAMETER WorkspaceId
@@ -34,7 +34,7 @@ Updates both the content and metadata of the notebook with ID `67890` in the wor
 - The notebook content is encoded as Base64 before being sent to the Fabric API.
 - This function handles asynchronous operations and retrieves operation results if required.
 
-Author: Tiago Balabuch  
+Author: Tiago Balabuch
 
 #>
 
@@ -52,7 +52,7 @@ function Update-FabricNotebookDefinition {
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
         [string]$NotebookPathDefinition,
-        
+
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
         [string]$NotebookPathPlatformDefinition
@@ -68,7 +68,7 @@ function Update-FabricNotebookDefinition {
         $apiEndpointUrl = "{0}/workspaces/{1}/notebooks/{2}/updateDefinition" -f $FabricConfig.BaseUrl, $WorkspaceId, $NotebookId
 
         if ($NotebookPathPlatformDefinition) {
-            $apiEndpointUrl += "?updateMetadata=true" -f $apiEndpointUrl 
+            $apiEndpointUrl += "?updateMetadata=true" -f $apiEndpointUrl
         }
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
@@ -77,12 +77,12 @@ function Update-FabricNotebookDefinition {
             definition = @{
                 format = "ipynb"
                 parts  = @()
-            } 
+            }
         }
-      
+
         if ($NotebookPathDefinition) {
             $notebookEncodedContent = Convert-ToBase64 -filePath $NotebookPathDefinition
-            
+
             if (-not [string]::IsNullOrEmpty($notebookEncodedContent)) {
                 # Add new part to the parts array
                 $body.definition.parts += @{
@@ -90,8 +90,7 @@ function Update-FabricNotebookDefinition {
                     payload     = $notebookEncodedContent
                     payloadType = "InlineBase64"
                 }
-            }
-            else {
+            } else {
                 Write-Message -Message "Invalid or empty content in notebook definition." -Level Error
                 return $null
             }
@@ -106,8 +105,7 @@ function Update-FabricNotebookDefinition {
                     payload     = $notebookEncodedPlatformContent
                     payloadType = "InlineBase64"
                 }
-            }
-            else {
+            } else {
                 Write-Message -Message "Invalid or empty content in platform definition." -Level Error
                 return $null
             }
@@ -126,7 +124,7 @@ function Update-FabricNotebookDefinition {
             -ErrorAction Stop `
             -ResponseHeadersVariable "responseHeader" `
             -StatusCodeVariable "statusCode"
-       
+
         # Step 5: Handle and log the response
         switch ($statusCode) {
             200 {
@@ -150,18 +148,17 @@ function Update-FabricNotebookDefinition {
                 if ($operationStatus.status -eq "Succeeded") {
                     Write-Message -Message "Operation Succeeded" -Level Debug
                     Write-Message -Message "Getting Long Running Operation result" -Level Debug
-                
+
                     $operationResult = Get-FabricLongRunningOperationResult -operationId $operationId
                     Write-Message -Message "Long Running Operation status: $operationResult" -Level Debug
-                
+
                     return $operationResult
-                } 
-                else {
+                } else {
                     Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Debug
                     Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Error
                     return $operationStatus
-                }  
-            } 
+                }
+            }
             default {
                 Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
                 Write-Message -Message "Error: $($response.message)" -Level Error
@@ -170,8 +167,7 @@ function Update-FabricNotebookDefinition {
                 throw "API request failed with status code $statusCode."
             }
         }
-    }
-    catch {
+    } catch {
         # Step 6: Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to update notebook. Error: $errorDetails" -Level Error

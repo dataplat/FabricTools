@@ -44,12 +44,12 @@ function Assign-FabricDomainWorkspaceById {
         # Step 2: Construct the API URL
         $apiEndpointUrl = "{0}/admin/domains/{1}/assignWorkspaces" -f $FabricConfig.BaseUrl, $DomainId
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
-        
+
         # Step 3: Construct the request body
         $body = @{
             workspacesIds = $WorkspaceIds
         }
-      
+
         # Convert the body to JSON
         $bodyJson = $body | ConvertTo-Json -Depth 2
         Write-Message -Message "Request Body: $bodyJson" -Level Debug
@@ -74,8 +74,7 @@ function Assign-FabricDomainWorkspaceById {
             return $null
         }
         Write-Message -Message "Successfully assigned workspaces to the domain with ID '$DomainId'." -Level Info
-    }
-    catch {
+    } catch {
         # Step 6: Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to assign workspaces to the domain with ID '$DomainId'. Error: $errorDetails" -Level Error

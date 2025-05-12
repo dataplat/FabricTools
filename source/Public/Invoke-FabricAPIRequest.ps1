@@ -1,6 +1,6 @@
 Function Invoke-FabricAPIRequest {
 
-<#
+    <#
     .SYNOPSIS
         Sends an HTTP request to a Fabric API endpoint and retrieves the response.
         Takes care of: authentication, 429 throttling, Long-Running-Operation (LRO) response
@@ -69,9 +69,8 @@ Function Invoke-FabricAPIRequest {
 
         if ($response.StatusCode -eq 202) {
             if ($uri -match "jobType=Pipeline") {
-                write-output "Waiting for pipeline to complete. Please check the status in the Power BI Service."
-            }
-            else {
+                Write-Output "Waiting for pipeline to complete. Please check the status in the Power BI Service."
+            } else {
                 do {
                     $asyncUrl = [string]$response.Headers.Location
 
@@ -84,9 +83,8 @@ Function Invoke-FabricAPIRequest {
 
                 try {
                     $response = Invoke-WebRequest -Headers $fabricHeaders -Method Get -Uri "$asyncUrl/result"
-                }
-                catch {
-                    write-output "No result URL"
+                } catch {
+                    Write-Output "No result URL"
                 }
             }
         }
@@ -97,18 +95,15 @@ Function Invoke-FabricAPIRequest {
 
             if ($contentBytes[0] -eq 0xef -and $contentBytes[1] -eq 0xbb -and $contentBytes[2] -eq 0xbf) {
                 $contentText = [System.Text.Encoding]::UTF8.GetString($contentBytes[3..$contentBytes.Length])
-            }
-            else {
+            } else {
                 $contentText = $response.Content
             }
             $jsonResult = $contentText | ConvertFrom-Json
             Write-Output $jsonResult -NoEnumerate
-        }
-        else {
+        } else {
             Write-Output $response -NoEnumerate
         }
-    }
-    catch {
+    } catch {
         $ex = $_.Exception
         $message = $null
 
@@ -133,14 +128,12 @@ Function Invoke-FabricAPIRequest {
 
                 if ($retryCount -le $maxRetries) {
                     Invoke-FabricAPIRequest -authToken $authToken -uri $uri -method $method -body $body -contentType $contentType -timeoutSec $timeoutSec -retryCount ($retryCount + 1)
-                }
-                else {
+                } else {
                     throw "Exceeded the amount of retries ($maxRetries) after 429 error."
                 }
 
-            }
-            else {
-                $apiErrorObj = $ex.Response.Headers | Where-Object { $_.key -ieq "x-ms-public-api-error-code" } | Select-object -First 1
+            } else {
+                $apiErrorObj = $ex.Response.Headers | Where-Object { $_.key -ieq "x-ms-public-api-error-code" } | Select-Object -First 1
 
                 if ($apiErrorObj) {
                     $apiError = $apiErrorObj.Value[0]
@@ -148,8 +141,7 @@ Function Invoke-FabricAPIRequest {
 
                 if ($apiError -ieq "ItemHasProtectedLabel") {
                     Write-Warning "Item has a protected label."
-                }
-                else {
+                } else {
                     throw
                 }
 
@@ -157,8 +149,7 @@ Function Invoke-FabricAPIRequest {
                 #$errorContent = $ex.Response.Content.ReadAsStringAsync().Result;
                 #$message = "$($ex.Message) - StatusCode: '$($ex.Response.StatusCode)'; Content: '$errorContent'"
             }
-        }
-        else {
+        } else {
             $message = "$($ex.Message)"
         }
         if ($message) {

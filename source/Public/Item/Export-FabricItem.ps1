@@ -51,7 +51,7 @@ Function Export-FabricItem {
 
         $parts = $item.definition.parts
 
-        if (!(test-path $path)) {
+        if (!(Test-Path $path)) {
             New-Item -ItemType Directory -Force -Path $path
         }
 
@@ -63,14 +63,13 @@ Function Export-FabricItem {
         }
 
         # Display a message indicating the items were exported
-        write-output "Items exported to $path"
+        Write-Output "Items exported to $path"
     } else {
         $items = Invoke-FabricAPIRequest -Uri "workspaces/$workspaceId/items" -Method Get
 
         if ($filter) {
             $items = $items.value | Where-Object $filter
-        }
-        else {
+        } else {
             $items = $items.value
         }
 
@@ -83,22 +82,22 @@ Function Export-FabricItem {
             $itemOutputPath = "$path\$workspaceId\$($itemName).$($itemType)"
 
             if ($itemType -in @("report", "semanticmodel", "notebook", "SparkJobDefinitionV1", "DataPipeline")) {
-                write-output "Getting definition of: $itemId / $itemName / $itemType"
+                Write-Output "Getting definition of: $itemId / $itemName / $itemType"
 
                 $response = Invoke-FabricAPIRequest -Uri "workspaces/$workspaceId/items/$itemId/getDefinition" -Method Post
 
                 $partCount = $response.definition.parts.Count
 
-                write-output "Parts: $partCount"
+                Write-Output "Parts: $partCount"
                 if ($partCount -gt 0) {
                     foreach ($part in $response.definition.parts) {
-                        write-output "Saving part: $($part.path)"
+                        Write-Output "Saving part: $($part.path)"
                         $outputFilePath = "$itemOutputPath\$($part.path.Replace("/", "\"))"
 
                         New-Item -ItemType Directory -Path (Split-Path $outputFilePath -Parent) -ErrorAction SilentlyContinue | Out-Null
                         $payload = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($part.payload))
                         $payload | Out-File -FilePath "$outputFilePath"
-             
+
                     }
 
                     @{
@@ -107,9 +106,8 @@ Function Export-FabricItem {
 
                     } | ConvertTo-Json | Out-File "$itemOutputPath\item.metadata.json"
                 }
-            }
-            else {
-                write-output "Type '$itemType' not available for export."
+            } else {
+                Write-Output "Type '$itemType' not available for export."
             }
         }
     }

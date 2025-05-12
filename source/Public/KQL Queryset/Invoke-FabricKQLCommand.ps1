@@ -1,5 +1,5 @@
 function Invoke-FabricKQLCommand {
-<#
+    <#
 .SYNOPSIS
     Executes a KQL command in a Kusto Database.
 
@@ -59,156 +59,153 @@ function Invoke-FabricKQLCommand {
     2024-12-22 - FGE: Added Verbose Output
     2024-12-27 - FGE: Major Update to support KQL Queries and Management Commands
 
-#>
+    #>
 
-[CmdletBinding()]
+    [CmdletBinding()]
     param (
 
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [string]$WorkspaceId,
 
         [string]$KQLDatabaseName,
 
         [string]$KQLDatabaseId,
 
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [string]$KQLCommand,
 
         [switch]$ReturnRawResult
     )
 
-begin {
+    begin {
 
-    Confirm-FabricAuthToken | Out-Null
+        Confirm-FabricAuthToken | Out-Null
 
-    Write-Verbose "Check if KQLDatabaseName and KQLDatabaseId are used together"
-    if ($PSBoundParameters.ContainsKey("KQLDatabaseName") -and $PSBoundParameters.ContainsKey("KQLDatabaseId")) {
-        throw "Parameters KQLDatabaseName and KQLDatabaseId cannot be used together"
-    }
+        Write-Verbose "Check if KQLDatabaseName and KQLDatabaseId are used together"
+        if ($PSBoundParameters.ContainsKey("KQLDatabaseName") -and $PSBoundParameters.ContainsKey("KQLDatabaseId")) {
+            throw "Parameters KQLDatabaseName and KQLDatabaseId cannot be used together"
+        }
 
-    Write-Verbose "Get Kusto Database"
-    if ($PSBoundParameters.ContainsKey("KQLDatabaseName")) {
-        Write-Verbose "Getting Kusto Database by Name: $KQLDatabaseName"
-        $kustDB = Get-FabricKQLDatabase `
-                        -WorkspaceId $WorkspaceId `
-                        -KQLDatabaseName $KQLDatabaseName
-    }
+        Write-Verbose "Get Kusto Database"
+        if ($PSBoundParameters.ContainsKey("KQLDatabaseName")) {
+            Write-Verbose "Getting Kusto Database by Name: $KQLDatabaseName"
+            $kustDB = Get-FabricKQLDatabase `
+                -WorkspaceId $WorkspaceId `
+                -KQLDatabaseName $KQLDatabaseName
+        }
 
-    if ($PSBoundParameters.ContainsKey("KQLDatabaseId")) {
-        Write-Verbose "Getting Kusto Database by Id: $KQLDatabaseId"
-        $kustDB = Get-FabricKQLDatabase `
-                        -WorkspaceId $WorkspaceId `
-                        -KQLDatabaseId $KQLDatabaseId
-    }
+        if ($PSBoundParameters.ContainsKey("KQLDatabaseId")) {
+            Write-Verbose "Getting Kusto Database by Id: $KQLDatabaseId"
+            $kustDB = Get-FabricKQLDatabase `
+                -WorkspaceId $WorkspaceId `
+                -KQLDatabaseId $KQLDatabaseId
+        }
 
-    Write-Verbose "Check if Kusto Database was found"
-    if ($null -eq $kustDB) {
-        throw "Kusto Database not found"
-    }
+        Write-Verbose "Check if Kusto Database was found"
+        if ($null -eq $kustDB) {
+            throw "Kusto Database not found"
+        }
 
-    Write-Verbose "Generate the Management API URL"
-    $mgmtAPI = "$($kustDB.queryServiceUri)/v1/rest/mgmt"
+        Write-Verbose "Generate the Management API URL"
+        $mgmtAPI = "$($kustDB.queryServiceUri)/v1/rest/mgmt"
 
-    Write-Verbose "Generate the query API URL"
-    $queryAPI = "$($kustDB.queryServiceUri)/v1/rest/query"
+        Write-Verbose "Generate the query API URL"
+        $queryAPI = "$($kustDB.queryServiceUri)/v1/rest/query"
 
 
-    $KQLCommand = $KQLCommand | Out-String
+        $KQLCommand = $KQLCommand | Out-String
 
-    Write-Verbose "Check if the KQL command starts with a dot so it is a management command. Otherwise it is a query command"
-    if (-not ($KQLCommand -match "^\.")) {
-        $isManamgentCommand = $false
-        Write-Verbose "The command is a query command."
-    }
-    else {
-        $isManamgentCommand = $true
-        Write-Verbose "The command is a management command. It is crucial to have the .execute database script <| in the beginning, otherwise the Kusto API will not execute the script."
-        if (-not ($KQLCommand -match "\.execute database script <\|")) {
-            $KQLCommand = ".execute database script <| $KQLCommand"
+        Write-Verbose "Check if the KQL command starts with a dot so it is a management command. Otherwise it is a query command"
+        if (-not ($KQLCommand -match "^\.")) {
+            $isManamgentCommand = $false
+            Write-Verbose "The command is a query command."
+        } else {
+            $isManamgentCommand = $true
+            Write-Verbose "The command is a management command. It is crucial to have the .execute database script <| in the beginning, otherwise the Kusto API will not execute the script."
+            if (-not ($KQLCommand -match "\.execute database script <\|")) {
+                $KQLCommand = ".execute database script <| $KQLCommand"
+            }
         }
     }
-}
 
-process {
+    process {
 
-    Write-Verbose "The KQL-Command is: $KQLCommand"
+        Write-Verbose "The KQL-Command is: $KQLCommand"
 
-    Write-Verbose "Create body of the request"
-    $body = @{
-        'csl' = $KQLCommand;
-        'db'= $kustDB.displayName
-    } | ConvertTo-Json -Depth 1
+        Write-Verbose "Create body of the request"
+        $body = @{
+            'csl' = $KQLCommand;
+            'db'  = $kustDB.displayName
+        } | ConvertTo-Json -Depth 1
 
 
-    if ($isManamgentCommand) {
-        Write-Verbose "Calling Management API"
-        Write-Verbose "----------------------"
-        Write-Verbose "Sending the following values to the Query API:"
-        Write-Verbose "Headers: $($FabricSession.headerParams | Format-List | Out-String)"
-        Write-Verbose "Method: POST"
-        Write-Verbose "URI: $mgmtAPI"
-        Write-Verbose "Body of request: $body"
-        Write-Verbose "ContentType: application/json"
+        if ($isManamgentCommand) {
+            Write-Verbose "Calling Management API"
+            Write-Verbose "----------------------"
+            Write-Verbose "Sending the following values to the Query API:"
+            Write-Verbose "Headers: $($FabricSession.headerParams | Format-List | Out-String)"
+            Write-Verbose "Method: POST"
+            Write-Verbose "URI: $mgmtAPI"
+            Write-Verbose "Body of request: $body"
+            Write-Verbose "ContentType: application/json"
 
-        $result = Invoke-RestMethod `
-                    -Headers $headerParams `
-                    -Method POST `
-                    -Uri $mgmtAPI `
-                    -Body ($body) `
-                    -ContentType "application/json; charset=utf-8"
+            $result = Invoke-RestMethod `
+                -Headers $headerParams `
+                -Method POST `
+                -Uri $mgmtAPI `
+                -Body ($body) `
+                -ContentType "application/json; charset=utf-8"
 
-        Write-Verbose "Result of the Management API: $($result | `
+            Write-Verbose "Result of the Management API: $($result | `
                                                             ConvertTo-Json `
                                                                 -Depth 10)"
-        $result
-    }
-    else {
-        Write-Verbose "Calling Query API"
-        Write-Verbose "-----------------"
-        Write-Verbose "Sending the following values to the Query API:"
-        Write-Verbose "Headers: $($FabricSession.headerParams | Format-List | Out-String)"
-        Write-Verbose "Method: POST"
-        Write-Verbose "URI: $queryAPI"
-        Write-Verbose "Body of request: $body"
-        Write-Verbose "ContentType: application/json"
+            $result
+        } else {
+            Write-Verbose "Calling Query API"
+            Write-Verbose "-----------------"
+            Write-Verbose "Sending the following values to the Query API:"
+            Write-Verbose "Headers: $($FabricSession.headerParams | Format-List | Out-String)"
+            Write-Verbose "Method: POST"
+            Write-Verbose "URI: $queryAPI"
+            Write-Verbose "Body of request: $body"
+            Write-Verbose "ContentType: application/json"
 
-        $result = Invoke-RestMethod `
-                    -Headers $headerParams `
-                    -Method POST `
-                    -Uri $queryAPI `
-                    -Body ($body) `
-                    -ContentType "application/json; charset=utf-8"
-        Write-Verbose "Result of the Query API: $($result | `
+            $result = Invoke-RestMethod `
+                -Headers $headerParams `
+                -Method POST `
+                -Uri $queryAPI `
+                -Body ($body) `
+                -ContentType "application/json; charset=utf-8"
+            Write-Verbose "Result of the Query API: $($result | `
                                                         ConvertTo-Json `
                                                              -Depth 10)"
 
 
 
-        if ($ReturnRawResult) {
-            $result
-        }
-        else {
+            if ($ReturnRawResult) {
+                $result
+            } else {
                 $myRecords = @()
 
                 for ($j = 0; $j -lt $Result.tables[0].rows.Count; $j++) {
-                    $myTableRow = [PSCustomObject]@{}
+                    $myTableRow = [PSCustomObject]@{ }
 
                     for ($i = 0; $i -lt $Result.tables[0].rows[0].Count; $i++) {
-                            $myTableRow | `
+                        $myTableRow | `
                                 Add-Member `
-                                    -MemberType NoteProperty `
-                                    -Name $Result.Tables[0].Columns[$i].ColumnName `
-                                    -Value $Result.Tables[0].rows[$j][$i]
+                                -MemberType NoteProperty `
+                                -Name $Result.Tables[0].Columns[$i].ColumnName `
+                                -Value $Result.Tables[0].rows[$j][$i]
                     }
                     $myRecords += $myTableRow
                 }
 
                 $myRecords
+            }
+
         }
-
     }
-}
 
-end {}
+    end { }
 
 }

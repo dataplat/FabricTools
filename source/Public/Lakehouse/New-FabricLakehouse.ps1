@@ -63,8 +63,8 @@ function New-FabricLakehouse {
 
         # Step 3: Construct the request body
         $body = @{
-            displayName     = $LakehouseName
-            }
+            displayName = $LakehouseName
+        }
 
         if ($LakehouseDescription) {
             $body.description = $LakehouseDescription
@@ -114,8 +114,7 @@ function New-FabricLakehouse {
                     Write-Message -Message "Long Running Operation status: $operationResult" -Level Debug
 
                     return $operationResult
-                }
-                else {
+                } else {
                     Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Debug
                     Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Error
                     return $operationStatus
@@ -127,8 +126,7 @@ function New-FabricLakehouse {
                 throw "API request failed with status code $statusCode."
             }
         }
-    }
-    catch {
+    } catch {
         # Step 6: Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to create Lakehouse. Error: $errorDetails" -Level Error

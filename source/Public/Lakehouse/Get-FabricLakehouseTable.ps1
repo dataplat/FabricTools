@@ -1,5 +1,5 @@
 function Get-FabricLakehouseTable {
-<#
+    <#
 .SYNOPSIS
 Retrieves tables from a specified Lakehouse in a Fabric workspace.
 
@@ -13,7 +13,7 @@ The ID of the Lakehouse from which to retrieve tables.
 Get-FabricLakehouseTable -WorkspaceId "your-workspace-id" -LakehouseId "your-lakehouse-id"
 This example retrieves all tables from the specified Lakehouse in the specified workspace.
 
-#>
+    #>
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
@@ -86,13 +86,11 @@ This example retrieves all tables from the specified Lakehouse in the specified 
                     Write-Message -Message "Updating the continuation token" -Level Debug
                     $continuationToken = $response.continuationToken
                     Write-Message -Message "Continuation token: $continuationToken" -Level Debug
-                }
-                else {
+                } else {
                     Write-Message -Message "Updating the continuation token to null" -Level Debug
                     $continuationToken = $null
                 }
-            }
-            else {
+            } else {
                 Write-Message -Message "No data received from the API." -Level Warning
                 break
             }
@@ -102,13 +100,11 @@ This example retrieves all tables from the specified Lakehouse in the specified 
         if ($tables) {
             Write-Message -Message "Tables found in the Lakehouse '$LakehouseId'." -Level Debug
             return $tables
-        }
-        else {
+        } else {
             Write-Message -Message "No tables found matching in the Lakehouse '$LakehouseId'." -Level Warning
             return $null
         }
-    }
-    catch {
+    } catch {
         # Step 10: Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to retrieve Lakehouse. Error: $errorDetails" -Level Error

@@ -3,7 +3,7 @@
     Updates an existing paginated report in a specified Microsoft Fabric workspace.
 
 .DESCRIPTION
-    This function sends a PATCH request to the Microsoft Fabric API to update an existing paginated report 
+    This function sends a PATCH request to the Microsoft Fabric API to update an existing paginated report
     in the specified workspace. It supports optional parameters for paginated report description.
 
 .PARAMETER WorkspaceId
@@ -27,15 +27,15 @@
     - Calls `Test-TokenExpired` to ensure token validity before making the API request.
 
     Author: Tiago Balabuch
-    
+
 #>
 function Update-FabricPaginatedReport {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,   
-        
+        [string]$WorkspaceId,
+
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
         [string]$PaginatedReportId,
@@ -96,8 +96,7 @@ function Update-FabricPaginatedReport {
         # Step 6: Handle results
         Write-Message -Message "Paginated Report '$PaginatedReportName' updated successfully!" -Level Info
         return $response
-    }
-    catch {
+    } catch {
         # Step 7: Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to update Paginated Report. Error: $errorDetails" -Level Error

@@ -3,7 +3,7 @@
     Updates an existing Copy Job in a specified Microsoft Fabric workspace.
 
 .DESCRIPTION
-    Sends a PATCH request to the Microsoft Fabric API to update an existing Copy Job 
+    Sends a PATCH request to the Microsoft Fabric API to update an existing Copy Job
     in the specified workspace. Allows updating the Copy Job's name and optionally its description.
 
 .PARAMETER WorkspaceId
@@ -33,8 +33,8 @@ function Update-FabricCopyJob {
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,   
-        
+        [string]$WorkspaceId,
+
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
         [string]$CopyJobId,
@@ -71,18 +71,17 @@ function Update-FabricCopyJob {
         # Convert the body to JSON
         $bodyJson = $body | ConvertTo-Json
         Write-Message -Message "Request Body: $bodyJson" -Level Debug
-        
+
         # Make the API request
         $response = Invoke-FabricAPIRequest `
             -Headers $FabricConfig.FabricHeaders `
             -BaseURI $apiEndpointURI `
             -Method Patch `
-            -Body $bodyJson 
+            -Body $bodyJson
 
         Write-Message -Message "Copy Job '$CopyJobName' updated successfully!" -Level Info
         return $response
-    }
-    catch {
+    } catch {
         # Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to update Copy Job. Error: $errorDetails" -Level Error

@@ -1,5 +1,5 @@
 function Get-FabricUsageMetricsQuery {
-<#
+    <#
 .SYNOPSIS
 Retrieves usage metrics for a specific dataset.
 
@@ -31,30 +31,30 @@ This example retrieves the usage metrics for a specific dataset given the datase
 
 .NOTES
 The function defines the headers and body for a POST request to the PowerBI API to retrieve the usage metrics for the specified dataset. It then makes the POST request and returns the response.
-#>
+    #>
 
-# This function retrieves usage metrics for a specific dataset.
-  # Define aliases for the function for flexibility.
-  [Alias("Get-FabUsageMetricsQuery")]
+    # This function retrieves usage metrics for a specific dataset.
+    # Define aliases for the function for flexibility.
+    [Alias("Get-FabUsageMetricsQuery")]
 
-  # Define parameters for the dataset ID, group ID, report name, token, and impersonated user.
-  param (
-    [Parameter(Mandatory = $true)]
-    [string]$DatasetID,
-    [Parameter(Mandatory = $true)]
-    [string]$groupId,
-    [Parameter(Mandatory = $true)]
-    $reportname,
-    [Parameter(Mandatory = $false)]
-    [string]$ImpersonatedUser = ""
-  )
+    # Define parameters for the dataset ID, group ID, report name, token, and impersonated user.
+    param (
+        [Parameter(Mandatory = $true)]
+        [string]$DatasetID,
+        [Parameter(Mandatory = $true)]
+        [string]$groupId,
+        [Parameter(Mandatory = $true)]
+        $reportname,
+        [Parameter(Mandatory = $false)]
+        [string]$ImpersonatedUser = ""
+    )
 
-  # Confirm the authentication token.
-  Confirm-FabricAuthToken | Out-Null
+    # Confirm the authentication token.
+    Confirm-FabricAuthToken | Out-Null
 
-  # Define the body of the POST request.
-  if ($ImpersonatedUser -ne "") {
-    $reportbody = '{
+    # Define the body of the POST request.
+    if ($ImpersonatedUser -ne "") {
+        $reportbody = '{
       "queries": [
         {
           "query": "EVALUATE VALUES(' + $reportname + ')"
@@ -63,11 +63,10 @@ The function defines the headers and body for a POST request to the PowerBI API 
       "serializerSettings": {
         "includeNulls": true
       },
-      "impersonatedUserName": "'+ $ImpersonatedUser + '"
+      "impersonatedUserName": "' + $ImpersonatedUser + '"
     }'
-  }
-  else {
-    $reportbody = '{
+    } else {
+        $reportbody = '{
       "queries": [
         {
           "query": "EVALUATE VALUES(' + $reportname + ')"
@@ -77,8 +76,8 @@ The function defines the headers and body for a POST request to the PowerBI API 
         "includeNulls": true
       }
     }'
-  }
-  # Make a POST request to the PowerBI API to retrieve the usage metrics for the specified dataset.
-  # The function returns the response of the POST request.
-  return Invoke-RestMethod -uri "$($PowerBI.BaseApiUrl)/groups/$groupId/datasets/$DatasetID/executeQueries" -Headers $FabricSession.HeaderParams -Body $reportbody -Method Post
+    }
+    # Make a POST request to the PowerBI API to retrieve the usage metrics for the specified dataset.
+    # The function returns the response of the POST request.
+    return Invoke-RestMethod -uri "$($PowerBI.BaseApiUrl)/groups/$groupId/datasets/$DatasetID/executeQueries" -Headers $FabricSession.HeaderParams -Body $reportbody -Method Post
 }

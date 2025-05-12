@@ -27,7 +27,7 @@
         This function requires the Invoke-FabricAPIRequest function to be available in the current session.
         This function was originally written by Rui Romano.
         https://github.com/RuiRomano/fabricps-pbip
-    #>
+#>
 
 Function Import-FabricItem {
     <#
@@ -40,7 +40,7 @@ Function Import-FabricItem {
     [CmdletBinding()]
     param
     (
-          [string]    $path = '.\pbipOutput'
+        [string]    $path = '.\pbipOutput'
         , [string]    $workspaceId
         , [string]    $filter = $null
         , [hashtable] $fileOverrides
@@ -53,27 +53,27 @@ Function Import-FabricItem {
     $itemsFolders = Get-ChildItem  -Path $path -recurse -include *.pbir, *.pbidataset
 
     if ($filter) {
-        $itemsFolders = $itemsFolders | where-object { $_.Directory.FullName -like $filter }
+        $itemsFolders = $itemsFolders | Where-Object { $_.Directory.FullName -like $filter }
     }
 
     # Get existing items of the workspace
 
     $items = Invoke-FabricAPIRequest -Uri "workspaces/$workspaceId/items" -Method Get
 
-    write-output "Existing items: $($items.Count)"
+    Write-Output "Existing items: $($items.Count)"
 
     # Datasets first
 
-    $itemsFolders = $itemsFolders | Select-Object  @{n = "Order"; e = { if ($_.Name -like "*.pbidataset") { 1 } else { 2 } } }, * | sort-object Order
+    $itemsFolders = $itemsFolders | Select-Object  @{n = "Order"; e = { if ($_.Name -like "*.pbidataset") { 1 } else { 2 } } }, * | Sort-Object Order
 
-    $datasetReferences = @{}
+    $datasetReferences = @{ }
 
     foreach ($itemFolder in $itemsFolders) {
         # Get the parent folder
 
         $itemPath = $itemFolder.Directory.FullName
 
-        write-output "Processing item: '$itemPath'"
+        Write-Output "Processing item: '$itemPath'"
 
         $files = Get-ChildItem -Path $itemPath -Recurse -Attributes !Directory
 
@@ -85,12 +85,12 @@ Function Import-FabricItem {
 
         $itemMetadataStr = Get-Content "$itemPath\item.metadata.json"
         if ($fileOverrides) {
-        $fileOverrideMatch = $fileOverrides.GetEnumerator() | where-object { "$itemPath\item.metadata.json" -ilike $_.Name } | select-object -First 1
+            $fileOverrideMatch = $fileOverrides.GetEnumerator() | Where-Object { "$itemPath\item.metadata.json" -ilike $_.Name } | Select-Object -First 1
 
-        if ($fileOverrideMatch) {
-            $itemMetadataStr = $fileOverrideMatch.Value
+            if ($fileOverrideMatch) {
+                $itemMetadataStr = $fileOverrideMatch.Value
+            }
         }
-    }
         $itemMetadata = $itemMetadataStr | ConvertFrom-Json
         $itemType = $itemMetadata.type
 
@@ -108,7 +108,7 @@ Function Import-FabricItem {
             #$fileName = $_.Name
             $filePath = $_.FullName
             if ($fileOverrides) {
-            $fileOverrideMatch = $fileOverrides.GetEnumerator() | Where-Object { $filePath -ilike $_.Name } | select-object -First 1
+                $fileOverrideMatch = $fileOverrides.GetEnumerator() | Where-Object { $filePath -ilike $_.Name } | Select-Object -First 1
             }
             if ($fileOverrideMatch) {
                 $fileContent = $fileOverrideMatch.Value
@@ -117,12 +117,10 @@ Function Import-FabricItem {
 
                 if ($fileContent -is [string]) {
                     $fileContent = [system.Text.Encoding]::UTF8.GetBytes($fileContent)
-                }
-                elseif (!($fileContent -is [byte[]])) {
+                } elseif (!($fileContent -is [byte[]])) {
                     throw "FileOverrides value type must be string or byte[]"
                 }
-            }
-            else {
+            } else {
                 if ($filePath -like "*.pbir") {
 
                     $pbirJson = Get-Content -Path $filePath | ConvertFrom-Json
@@ -131,7 +129,7 @@ Function Import-FabricItem {
 
                         # try to swap byPath to byConnection
 
-                        $reportDatasetPath = (Resolve-path (Join-Path $itemPath $pbirJson.datasetReference.byPath.path.Replace("/", "\"))).Path
+                        $reportDatasetPath = (Resolve-Path (Join-Path $itemPath $pbirJson.datasetReference.byPath.path.Replace("/", "\"))).Path
 
                         $datasetReference = $datasetReferences[$reportDatasetPath]
 
@@ -155,22 +153,20 @@ Function Import-FabricItem {
 
                             $fileContent = [system.Text.Encoding]::UTF8.GetBytes($newPBIR)
 
-                        }
-                        else {
+                        } else {
                             throw "Item API dont support byPath connection, switch the connection in the *.pbir file to 'byConnection'."
                         }
                     } else {
                         $fileContent = Get-Content -Path $filePath -AsByteStream -Raw
                     }
-                }
-                else {
+                } else {
 
                     $fileContent = Get-Content -Path $filePath -AsByteStream -Raw
                 }
             }
 
             $partPath = $filePath.Replace($itemPathAbs, "").TrimStart("\").Replace("\", "/")
-            write-host "Processing part: '$partPath'"
+            Write-Host "Processing part: '$partPath'"
             $fileEncodedContent = [Convert]::ToBase64String($fileContent)
 
             Write-Output @{
@@ -191,13 +187,13 @@ Function Import-FabricItem {
                 throw "Found more than one item for displayName '$displayName'"
             }
 
-            Write-output "Item '$displayName' of type '$itemType' already exists." -ForegroundColor Yellow
+            Write-Output "Item '$displayName' of type '$itemType' already exists." -ForegroundColor Yellow
 
             $itemId = $foundItem.id
         }
 
         if ($null -eq $itemId) {
-            write-output "Creating a new item"
+            Write-Output "Creating a new item"
 
             # Prepare the request
 
@@ -213,12 +209,11 @@ Function Import-FabricItem {
 
             $itemId = $createItemResult.id
 
-            write-output "Created a new item with ID '$itemId' $([datetime]::Now.ToString("s"))" -ForegroundColor Green
+            Write-Output "Created a new item with ID '$itemId' $([datetime]::Now.ToString("s"))" -ForegroundColor Green
 
             Write-Output $itemId
-        }
-        else {
-            write-output "Updating item definition"
+        } else {
+            Write-Output "Updating item definition"
 
             $itemRequest = @{
                 definition = @{
@@ -227,7 +222,7 @@ Function Import-FabricItem {
             } | ConvertTo-Json -Depth 3
             Invoke-FabricAPIRequest -Uri "workspaces/$workspaceId/items/$itemId/updateDefinition" -Method Post -Body $itemRequest
 
-            write-output "Updated new item with ID '$itemId' $([datetime]::Now.ToString("s"))" -ForegroundColor Green
+            Write-Output "Updated new item with ID '$itemId' $([datetime]::Now.ToString("s"))" -ForegroundColor Green
 
             Write-Output $itemId
         }

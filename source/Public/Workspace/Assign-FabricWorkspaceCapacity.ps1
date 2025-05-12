@@ -20,7 +20,7 @@ Assigns the workspace with ID "workspace123" to the capacity "capacity456".
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
 - Calls `Test-TokenExpired` to ensure token validity before making the API request.
 
-Author: Tiago Balabuch  
+Author: Tiago Balabuch
 #>
 
 function Assign-FabricWorkspaceCapacity {
@@ -74,8 +74,7 @@ function Assign-FabricWorkspaceCapacity {
             return $null
         }
         Write-Message -Message "Successfully assigned workspace with ID '$WorkspaceId' to capacity with ID '$CapacityId'." -Level Info
-    }
-    catch {
+    } catch {
         # Step 6: Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to assign workspace with ID '$WorkspaceId' to capacity with ID '$CapacityId'. Error: $errorDetails" -Level Error

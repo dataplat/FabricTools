@@ -1,5 +1,5 @@
 function Get-FabricMirroredDatabaseStatus {
-<#
+    <#
 .SYNOPSIS
 Retrieves the status of a mirrored database in a specified workspace.
 .DESCRIPTION
@@ -12,7 +12,7 @@ the ID of the mirrored database whose status is to be retrieved.
 .EXAMPLE
 Get-FabricMirroredDatabaseStatus -WorkspaceId "your-workspace-id" -MirroredDatabaseId "your-mirrored-database-id"
 This example retrieves the status of a mirrored database with the specified ID in the specified workspace.
-#>
+    #>
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
@@ -56,8 +56,7 @@ This example retrieves the status of a mirrored database with the specified ID i
 
         Write-Message -Message "Returning status of MirroredDatabases." -Level Debug
         return $response
-    }
-    catch {
+    } catch {
         # Step 10: Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to retrieve MirroredDatabase. Error: $errorDetails" -Level Error

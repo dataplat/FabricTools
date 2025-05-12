@@ -3,7 +3,7 @@
 Updates a Fabric domain by its ID.
 
 .DESCRIPTION
-The `Update-FabricDomain` function modifies a specified domain in Microsoft Fabric using the provided parameters. 
+The `Update-FabricDomain` function modifies a specified domain in Microsoft Fabric using the provided parameters.
 
 .PARAMETER DomainId
 The unique identifier of the domain to be updated.
@@ -26,7 +26,7 @@ Updates the domain with ID "12345" with a new name, description, and contributor
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
 - Calls `Test-TokenExpired` to ensure token validity before making the API request.
 
-Author: Tiago Balabuch  
+Author: Tiago Balabuch
 
 #>
 
@@ -98,15 +98,13 @@ function Update-FabricDomain {
             Write-Message "Error Code: $($response.errorCode)" -Level Error
             return $null
         }
-        
+
         # Step 6: Handle results
         Write-Message -Message "Domain '$DomainName' updated successfully!" -Level Info
         return $response
-    }
-    catch {
+    } catch {
         # Step 7: Log and handle errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to update domain '$DomainId'. Error: $errorDetails" -Level Error
     }
 }
- 

@@ -65,8 +65,7 @@ function Remove-FabricWorkspaceRoleAssignment {
         }
 
         Write-Message -Message "Role assignment '$WorkspaceRoleAssignmentId' successfully removed from workspace '$WorkspaceId'." -Level Info
-    }
-    catch {
+    } catch {
         # Step 5: Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to remove role assignments for WorkspaceId '$WorkspaceId'. Error: $errorDetails" -Level Error

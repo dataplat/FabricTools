@@ -49,44 +49,40 @@ function Get-FabricCapacity {
         Write-Message -Message "Validating token..." -Level Debug
         Test-TokenExpired
         Write-Message -Message "Token validation completed." -Level Debug
- 
+
         # Construct the API endpoint URL
         $apiEndpointURI = "{0}/capacities" -f $FabricConfig.BaseUrl
-        
+
         # Invoke the Fabric API to retrieve capacity details
         $capacities = Invoke-FabricAPIRequest `
             -BaseURI $apiEndpointURI `
             -Headers $FabricConfig.FabricHeaders `
             -Method Get
 
- 
+
         # Filter results based on provided parameters
         $response = if ($capacityId) {
             $capacities | Where-Object { $_.Id -eq $capacityId }
-        }
-        elseif ($capacityName) {
+        } elseif ($capacityName) {
             $capacities | Where-Object { $_.DisplayName -eq $capacityName }
-        }
-        else {
+        } else {
             # No filter, return all capacities
             Write-Message -Message "No filter specified. Returning all capacities." -Level Debug
             return $capacities
         }
- 
+
         # Handle results
         if ($response) {
             Write-Message -Message "Capacity found matching the specified criteria." -Level Debug
             return $response
-        }
-        else {
+        } else {
             Write-Message -Message "No capacity found matching the specified criteria." -Level Warning
             return $null
         }
-    }
-    catch {
+    } catch {
         # Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to retrieve capacity. Error: $errorDetails" -Level Error
         return $null
     }
-} 
+}

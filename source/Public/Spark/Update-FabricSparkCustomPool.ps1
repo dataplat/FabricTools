@@ -3,7 +3,7 @@
     Updates an existing Spark custom pool in a specified Microsoft Fabric workspace.
 
 .DESCRIPTION
-    This function sends a PATCH request to the Microsoft Fabric API to update an existing Spark custom pool 
+    This function sends a PATCH request to the Microsoft Fabric API to update an existing Spark custom pool
     in the specified workspace. It supports various parameters for Spark custom pool configuration.
 
 .PARAMETER WorkspaceId
@@ -48,15 +48,15 @@
     - Calls `Test-TokenExpired` to ensure token validity before making the API request.
 
     Author: Tiago Balabuch
-    
+
 #>
 function Update-FabricSparkCustomPool {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,   
-        
+        [string]$WorkspaceId,
+
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
         [string]$SparkCustomPoolId,
@@ -70,7 +70,7 @@ function Update-FabricSparkCustomPool {
         [ValidateNotNullOrEmpty()]
         [ValidateSet('MemoryOptimized')]
         [string]$NodeFamily,
-        
+
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
         [ValidateSet('Large', 'Medium', 'Small', 'XLarge', 'XXLarge')]
@@ -113,14 +113,14 @@ function Update-FabricSparkCustomPool {
 
         # Step 3: Construct the request body
         $body = @{
-                name       = $InstancePoolName
-                nodeFamily = $NodeFamily
-                nodeSize   = $NodeSize
-                autoScale  = @{
-                    enabled      = $AutoScaleEnabled
-                    minNodeCount = $AutoScaleMinNodeCount
-                    maxNodeCount = $AutoScaleMaxNodeCount
-                }
+            name                      = $InstancePoolName
+            nodeFamily                = $NodeFamily
+            nodeSize                  = $NodeSize
+            autoScale                 = @{
+                enabled      = $AutoScaleEnabled
+                minNodeCount = $AutoScaleMinNodeCount
+                maxNodeCount = $AutoScaleMaxNodeCount
+            }
             dynamicExecutorAllocation = @{
                 enabled      = $DynamicExecutorAllocationEnabled
                 minExecutors = $DynamicExecutorAllocationMinExecutors
@@ -155,8 +155,7 @@ function Update-FabricSparkCustomPool {
         # Step 6: Handle results
         Write-Message -Message "Spark Custom Pool '$SparkCustomPoolName' updated successfully!" -Level Info
         return $response
-    }
-    catch {
+    } catch {
         # Step 7: Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to update SparkCustomPool. Error: $errorDetails" -Level Error

@@ -28,7 +28,7 @@
     - Calls `Test-TokenExpired` to ensure token validity before making the API request.
 
     Author: Tiago Balabuch
-    
+
 #>
 function Get-FabricPaginatedReport {
     [CmdletBinding()]
@@ -61,27 +61,27 @@ function Get-FabricPaginatedReport {
         # Step 3: Initialize variables
         $continuationToken = $null
         $PaginatedReports = @()
-        
+
         if (-not ([AppDomain]::CurrentDomain.GetAssemblies() | Where-Object { $_.GetName().Name -eq "System.Web" })) {
             Add-Type -AssemblyName System.Web
         }
- 
+
         # Step 4: Loop to retrieve all capacities with continuation token
         Write-Message -Message "Loop started to get continuation token" -Level Debug
         $baseApiEndpointUrl = "{0}/workspaces/{1}/paginatedReports" -f $FabricConfig.BaseUrl, $WorkspaceId
-        
+
 
         do {
             # Step 5: Construct the API URL
             $apiEndpointUrl = $baseApiEndpointUrl
-        
+
             if ($null -ne $continuationToken) {
                 # URL-encode the continuation token
                 $encodedToken = [System.Web.HttpUtility]::UrlEncode($continuationToken)
                 $apiEndpointUrl = "{0}?continuationToken={1}" -f $apiEndpointUrl, $encodedToken
             }
             Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
-         
+
             # Step 6: Make the API request
             $response = Invoke-RestMethod `
                 -Headers $FabricConfig.FabricHeaders `
@@ -91,7 +91,7 @@ function Get-FabricPaginatedReport {
                 -SkipHttpErrorCheck `
                 -ResponseHeadersVariable "responseHeader" `
                 -StatusCodeVariable "statusCode"
-         
+
             # Step 7: Validate the response code
             if ($statusCode -ne 200) {
                 Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
@@ -100,38 +100,34 @@ function Get-FabricPaginatedReport {
                 Write-Message "Error Code: $($response.errorCode)" -Level Error
                 return $null
             }
-         
+
             # Step 8: Add data to the list
             if ($null -ne $response) {
                 Write-Message -Message "Adding data to the list" -Level Debug
                 $PaginatedReports += $response.value
-                 
+
                 # Update the continuation token if present
                 if ($response.PSObject.Properties.Match("continuationToken")) {
                     Write-Message -Message "Updating the continuation token" -Level Debug
                     $continuationToken = $response.continuationToken
                     Write-Message -Message "Continuation token: $continuationToken" -Level Debug
-                }
-                else {
+                } else {
                     Write-Message -Message "Updating the continuation token to null" -Level Debug
                     $continuationToken = $null
                 }
-            }
-            else {
+            } else {
                 Write-Message -Message "No data received from the API." -Level Warning
                 break
             }
         } while ($null -ne $continuationToken)
         Write-Message -Message "Loop finished and all data added to the list" -Level Debug
-       
+
         # Step 8: Filter results based on provided parameters
         $PaginatedReport = if ($PaginatedReportId) {
             $PaginatedReports | Where-Object { $_.Id -eq $PaginatedReportId }
-        }
-        elseif ($PaginatedReportName) {
+        } elseif ($PaginatedReportName) {
             $PaginatedReports | Where-Object { $_.DisplayName -eq $PaginatedReportName }
-        }
-        else {
+        } else {
             # Return all PaginatedReports if no filter is provided
             Write-Message -Message "No filter provided. Returning all Paginated Reports." -Level Debug
             $PaginatedReports
@@ -141,15 +137,13 @@ function Get-FabricPaginatedReport {
         if ($PaginatedReport) {
             Write-Message -Message "Paginated Report found matching the specified criteria." -Level Debug
             return $PaginatedReport
-        }
-        else {
+        } else {
             Write-Message -Message "No Paginated Report found matching the provided criteria." -Level Warning
             return $null
         }
-    }
-    catch {
+    } catch {
         # Step 10: Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to retrieve Paginated Report. Error: $errorDetails" -Level Error
-    } 
+    }
 }

@@ -1,5 +1,5 @@
-function Stop-FabricMirroredDatabaseMirroring{
-<#
+function Stop-FabricMirroredDatabaseMirroring {
+    <#
 .SYNOPSIS
     Stops the mirroring of a specified mirrored database in a given workspace.
 .DESCRIPTION
@@ -21,7 +21,7 @@ function Stop-FabricMirroredDatabaseMirroring{
     - Calls `Test-TokenExpired` to ensure token validity before making the API request.
     - This function handles asynchronous operations and retrieves operation results if required.
 
-#>
+    #>
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
@@ -64,8 +64,7 @@ function Stop-FabricMirroredDatabaseMirroring{
         # Step 9: Handle results
         Write-Message -Message "Database mirroring stopped successfully for MirroredDatabaseId: $MirroredDatabaseId" -Level Info
         return
-    }
-    catch {
+    } catch {
         # Step 10: Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to stop MirroredDatabase. Error: $errorDetails" -Level Error

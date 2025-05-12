@@ -3,7 +3,7 @@
     Updates an existing warehouse in a specified Microsoft Fabric workspace.
 
 .DESCRIPTION
-    This function sends a PATCH request to the Microsoft Fabric API to update an existing warehouse 
+    This function sends a PATCH request to the Microsoft Fabric API to update an existing warehouse
     in the specified workspace. It supports optional parameters for warehouse description.
 
 .PARAMETER WorkspaceId
@@ -27,15 +27,15 @@
     - Calls `Test-TokenExpired` to ensure token validity before making the API request.
 
     Author: Tiago Balabuch
-    
+
 #>
 function Update-FabricWarehouse {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,   
-        
+        [string]$WorkspaceId,
+
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
         [string]$WarehouseId,
@@ -72,18 +72,17 @@ function Update-FabricWarehouse {
         # Convert the body to JSON
         $bodyJson = $body | ConvertTo-Json
         Write-Message -Message "Request Body: $bodyJson" -Level Debug
-        
+
         $response = Invoke-FabricAPIRequest `
-        -Headers $FabricConfig.FabricHeaders `
-        -BaseURI $apiEndpointURI `
-        -Method Patch `
-        -Body $bodyJson 
+            -Headers $FabricConfig.FabricHeaders `
+            -BaseURI $apiEndpointURI `
+            -Method Patch `
+            -Body $bodyJson
 
         # Step 6: Handle results
         Write-Message -Message "Warehouse '$WarehouseName' updated successfully!" -Level Info
         return $response
-    }
-    catch {
+    } catch {
         # Step 7: Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to update Warehouse. Error: $errorDetails" -Level Error

@@ -4,7 +4,7 @@
 Unassign workspaces from a specified Fabric domain.
 
 .DESCRIPTION
-The `Unassign -FabricDomainWorkspace` function allows you to Unassign  specific workspaces from a given Fabric domain or unassign all workspaces if no workspace IDs are specified. 
+The `Unassign -FabricDomainWorkspace` function allows you to Unassign  specific workspaces from a given Fabric domain or unassign all workspaces if no workspace IDs are specified.
 It makes a POST request to the relevant API endpoint for this operation.
 
 .PARAMETER DomainId
@@ -28,7 +28,7 @@ Unassigns the specified workspaces from the domain with ID "12345".
 - Calls `Test-TokenExpired` to ensure token validity before making the API request.
 
 
-Author: Tiago Balabuch  
+Author: Tiago Balabuch
 
 #>
 function Unassign-FabricDomainWorkspace {
@@ -37,7 +37,7 @@ function Unassign-FabricDomainWorkspace {
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
         [string]$DomainId,
-        
+
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
         [array]$WorkspaceIds
@@ -55,17 +55,16 @@ function Unassign-FabricDomainWorkspace {
 
         $apiEndpointUrl = "{0}/admin/domains/{1}/{2}" -f $FabricConfig.BaseUrl, $DomainId, $endpointSuffix
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
-        
+
 
         # Step 3: Construct the request body (if needed)
         $bodyJson = if ($WorkspaceIds) {
             $body = @{ workspacesIds = $WorkspaceIds }
             $body | ConvertTo-Json -Depth 2
-        }
-        else {
+        } else {
             $null
         }
-    
+
         Write-Message -Message "Request Body: $bodyJson" -Level Debug
         # Step 4: Make the API request to unassign specific workspaces
         $response = Invoke-RestMethod `
@@ -87,8 +86,7 @@ function Unassign-FabricDomainWorkspace {
             return $null
         }
         Write-Message -Message "Successfully unassigned workspaces to the domain with ID '$DomainId'." -Level Info
-    }
-    catch {
+    } catch {
         # Step 6: Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to unassign workspaces to the domain with ID '$DomainId'. Error: $errorDetails" -Level Error

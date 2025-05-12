@@ -3,7 +3,7 @@
     Updates an existing Reflex in a specified Microsoft Fabric workspace.
 
 .DESCRIPTION
-    This function sends a PATCH request to the Microsoft Fabric API to update an existing Reflex 
+    This function sends a PATCH request to the Microsoft Fabric API to update an existing Reflex
     in the specified workspace. It supports optional parameters for Reflex description.
 
 .PARAMETER WorkspaceId
@@ -27,15 +27,15 @@
     - Calls `Test-TokenExpired` to ensure token validity before making the API request.
 
     Author: Tiago Balabuch
-    
+
 #>
 function Update-FabricReflex {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,   
-        
+        [string]$WorkspaceId,
+
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
         [string]$ReflexId,
@@ -96,8 +96,7 @@ function Update-FabricReflex {
         # Step 6: Handle results
         Write-Message -Message "Reflex '$ReflexName' updated successfully!" -Level Info
         return $response
-    }
-    catch {
+    } catch {
         # Step 7: Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to update Reflex. Error: $errorDetails" -Level Error

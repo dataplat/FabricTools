@@ -62,9 +62,8 @@ function Remove-FabricMirroredDatabase {
             return $null
         }
         Write-Message -Message "MirroredDatabase '$MirroredDatabaseId' deleted successfully from workspace '$WorkspaceId'." -Level Info
-        
-    }
-    catch {
+
+    } catch {
         # Step 5: Log and handle errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to delete MirroredDatabase '$MirroredDatabaseId' from workspace '$WorkspaceId'. Error: $errorDetails" -Level Error

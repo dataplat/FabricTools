@@ -3,8 +3,8 @@
 Retrieves the Spark compute details for a specific environment in a Microsoft Fabric workspace.
 
 .DESCRIPTION
-The Get-FabricEnvironmentSparkCompute function communicates with the Microsoft Fabric API to fetch information 
-about Spark compute resources associated with a specified environment. It ensures that the API token is valid 
+The Get-FabricEnvironmentSparkCompute function communicates with the Microsoft Fabric API to fetch information
+about Spark compute resources associated with a specified environment. It ensures that the API token is valid
 and gracefully handles errors during the API call.
 
 .PARAMETER WorkspaceId
@@ -22,7 +22,7 @@ Retrieves Spark compute details for the specified environment in the given works
 - Requires the `$FabricConfig` global object, including `BaseUrl` and `FabricHeaders`.
 - Uses `Test-TokenExpired` to validate the token before making API calls.
 
-Author: Tiago Balabuch  
+Author: Tiago Balabuch
 #>
 function Get-FabricEnvironmentSparkCompute {
     [CmdletBinding()]
@@ -63,14 +63,13 @@ function Get-FabricEnvironmentSparkCompute {
             Write-Message "Error Code: $($response.errorCode)" -Level Error
             return $null
         }
-                    
+
         # Step 5: Handle results
         return $response
-    }
-    catch {
+    } catch {
         # Step 6: Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to retrieve environment Spark compute. Error: $errorDetails" -Level Error
-    } 
- 
+    }
+
 }

@@ -20,7 +20,7 @@ Upload-FabricEnvironmentStagingLibrary -WorkspaceId "workspace-12345" -Environme
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
 - Calls `Test-TokenExpired` to ensure token validity before making the API request.
 
-Author: Tiago Balabuch  
+Author: Tiago Balabuch
 
 #>
 function Upload-FabricEnvironmentStagingLibrary {
@@ -29,7 +29,7 @@ function Upload-FabricEnvironmentStagingLibrary {
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
         [string]$WorkspaceId,
-        
+
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
         [string]$EnvironmentId
@@ -46,9 +46,9 @@ function Upload-FabricEnvironmentStagingLibrary {
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
         # Step 3: Construct the request body
-        
+
         # Step 4: Make the API request
-       $response = Invoke-RestMethod `
+        $response = Invoke-RestMethod `
             -Headers $FabricConfig.FabricHeaders `
             -Uri $apiEndpointUrl `
             -Method Post `
@@ -70,8 +70,7 @@ function Upload-FabricEnvironmentStagingLibrary {
         # Step 6: Handle results
         Write-Message -Message "Environment staging library uploaded successfully!" -Level Info
         return $response
-    }
-    catch {
+    } catch {
         # Step 7: Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to upload environment staging library. Error: $errorDetails" -Level Error

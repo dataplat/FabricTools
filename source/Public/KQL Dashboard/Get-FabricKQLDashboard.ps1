@@ -114,13 +114,11 @@ function Get-FabricKQLDashboard {
                     Write-Message -Message "Updating the continuation token" -Level Debug
                     $continuationToken = $response.continuationToken
                     Write-Message -Message "Continuation token: $continuationToken" -Level Debug
-                }
-                else {
+                } else {
                     Write-Message -Message "Updating the continuation token to null" -Level Debug
                     $continuationToken = $null
                 }
-            }
-            else {
+            } else {
                 Write-Message -Message "No data received from the API." -Level Warning
                 break
             }
@@ -130,11 +128,9 @@ function Get-FabricKQLDashboard {
         # Step 8: Filter results based on provided parameters
         $KQLDashboard = if ($KQLDashboardId) {
             $KQLDashboards | Where-Object { $_.Id -eq $KQLDashboardId }
-        }
-        elseif ($KQLDashboardName) {
+        } elseif ($KQLDashboardName) {
             $KQLDashboards | Where-Object { $_.DisplayName -eq $KQLDashboardName }
-        }
-        else {
+        } else {
             # Return all KQLDashboards if no filter is provided
             Write-Message -Message "No filter provided. Returning all KQLDashboards." -Level Debug
             $KQLDashboards
@@ -144,13 +140,11 @@ function Get-FabricKQLDashboard {
         if ($KQLDashboard) {
             Write-Message -Message "KQLDashboard found matching the specified criteria." -Level Debug
             return $KQLDashboard
-        }
-        else {
+        } else {
             Write-Message -Message "No KQLDashboard found matching the provided criteria." -Level Warning
             return $null
         }
-    }
-    catch {
+    } catch {
         # Step 10: Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to retrieve KQLDashboard. Error: $errorDetails" -Level Error

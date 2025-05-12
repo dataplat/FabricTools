@@ -17,7 +17,7 @@ Fetches workspaces for the domain with ID "12345".
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
 - Calls `Test-TokenExpired` to ensure token validity before making the API request.
 
-Author: Tiago Balabuch  
+Author: Tiago Balabuch
 
 #>
 
@@ -56,7 +56,7 @@ function Get-FabricDomainWorkspace {
             Write-Message "Error Code: $($response.errorCode)" -Level Error
             return $null
         }
-                    
+
         # Step 5: Handle empty response
         if (-not $response) {
             Write-Message -Message "No data returned from the API." -Level Warning
@@ -65,14 +65,12 @@ function Get-FabricDomainWorkspace {
         # Step 6: Handle results
         if ($response) {
             return $response.value
-        }
-        else {
+        } else {
             Write-Message -Message "No workspace found for the '$DomainId'." -Level Warning
             return $null
         }
 
-    }
-    catch {
+    } catch {
         # Step 7: Capture and log error details
         $errorDetails = Get-ErrorResponse($_.Exception)
         Write-Message -Message "Failed to retrieve domain workspaces. Error: $errorDetails" -Level Error

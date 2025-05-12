@@ -1,5 +1,5 @@
 function Load-FabricLakehouseTable {
-<#
+    <#
 .SYNOPSIS
 Loads data into a specified table in a Lakehouse within a Fabric workspace.
 .DESCRIPTION
@@ -30,7 +30,7 @@ This example loads data from a CSV file into the specified table in the Lakehous
 .EXAMPLE
 Load-FabricLakehouseTable -WorkspaceId "your-workspace-id" -LakehouseId "your-lakehouse-id" -TableName "your-table-name" -PathType "Folder" -RelativePath "path/to/your/folder" -FileFormat "Parquet" -Mode "overwrite" -Recursive $true
 This example loads data from a folder into the specified table in the Lakehouse, overwriting any existing data.
-#>
+    #>
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
@@ -145,8 +145,7 @@ This example loads data from a folder into the specified table in the Lakehouse,
                     Write-Message -Message "Operation Succeeded" -Level Debug
                     Write-Message -Message "Load table '$TableName' operation complete successfully!" -Level Info
                     return $operationStatus
-                }
-                else {
+                } else {
                     Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Debug
                     Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Error
                     return $operationStatus
@@ -162,8 +161,7 @@ This example loads data from a folder into the specified table in the Lakehouse,
 
         # Step 6: Handle results
 
-    }
-    catch {
+    } catch {
         # Step 7: Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to update Lakehouse. Error: $errorDetails" -Level Error

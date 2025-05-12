@@ -1,5 +1,5 @@
 function Get-FabricKQLDatabase {
-<#
+    <#
 .SYNOPSIS
 Retrieves an KQLDatabase or a list of KQLDatabases from a specified workspace in Microsoft Fabric.
 
@@ -31,7 +31,7 @@ Retrieves all KQLDatabases in workspace "12345".
 
 Author: Tiago Balabuch
 
-#>
+    #>
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
@@ -111,13 +111,11 @@ Author: Tiago Balabuch
                     Write-Message -Message "Updating the continuation token" -Level Debug
                     $continuationToken = $response.continuationToken
                     Write-Message -Message "Continuation token: $continuationToken" -Level Debug
-                }
-                else {
+                } else {
                     Write-Message -Message "Updating the continuation token to null" -Level Debug
                     $continuationToken = $null
                 }
-            }
-            else {
+            } else {
                 Write-Message -Message "No data received from the API." -Level Warning
                 break
             }
@@ -127,11 +125,9 @@ Author: Tiago Balabuch
         # Step 8: Filter results based on provided parameters
         $KQLDatabase = if ($KQLDatabaseId) {
             $KQLDatabases | Where-Object { $_.Id -eq $KQLDatabaseId }
-        }
-        elseif ($KQLDatabaseName) {
+        } elseif ($KQLDatabaseName) {
             $KQLDatabases | Where-Object { $_.DisplayName -eq $KQLDatabaseName }
-        }
-        else {
+        } else {
             # Return all KQLDatabases if no filter is provided
             Write-Message -Message "No filter provided. Returning all KQLDatabases." -Level Debug
             $KQLDatabases
@@ -141,13 +137,11 @@ Author: Tiago Balabuch
         if ($KQLDatabase) {
             Write-Message -Message "KQLDatabase found matching the specified criteria." -Level Debug
             return $KQLDatabase
-        }
-        else {
+        } else {
             Write-Message -Message "No KQLDatabase found matching the provided criteria." -Level Warning
             return $null
         }
-    }
-    catch {
+    } catch {
         # Step 10: Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to retrieve KQLDatabase. Error: $errorDetails" -Level Error

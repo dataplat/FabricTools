@@ -1,10 +1,10 @@
 function Get-FabricCopyJob {
-<#
+    <#
 .SYNOPSIS
     Retrieves CopyJob details from a specified Microsoft Fabric workspace.
 
 .DESCRIPTION
-    This function retrieves CopyJob details from a specified workspace using either the provided CopyJobId or CopyJobName.
+    This function retrieves CopyJob details from a specified workspace using either the provided CopyJobId or CopyJob.
     It handles token validation, constructs the API URL, makes the API request, and processes the response.
 
 .PARAMETER WorkspaceId
@@ -17,11 +17,11 @@ function Get-FabricCopyJob {
     The name of the CopyJob to retrieve. This parameter is optional.
 
 .EXAMPLE
-     FabricCopyJob -WorkspaceId "workspace-12345" -CopyJobId "CopyJob-67890"
+    FabricCopyJob -WorkspaceId "workspace-12345" -CopyJobId "CopyJob-67890"
     This example retrieves the CopyJob details for the CopyJob with ID "CopyJob-67890" in the workspace with ID "workspace-12345".
 
 .EXAMPLE
-     FabricCopyJob -WorkspaceId "workspace-12345" -CopyJobName "My CopyJob"
+    FabricCopyJob -WorkspaceId "workspace-12345" -CopyJob "My CopyJob"
     This example retrieves the CopyJob details for the CopyJob named "My CopyJob" in the workspace with ID "workspace-12345".
 
 .NOTES
@@ -29,7 +29,7 @@ function Get-FabricCopyJob {
     Calls `Test-TokenExpired` to ensure token validity before making the API request.
 
     Author: Tiago Balabuch
-#>
+    #>
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
@@ -48,8 +48,8 @@ function Get-FabricCopyJob {
 
     try {
         # Handle ambiguous input
-        if ($CopyJobId -and $CopyJobName) {
-            Write-Message -Message "Both 'CopyJobId' and 'CopyJobName' were provided. Please specify only one." -Level Error
+        if ($CopyJobId -and $CopyJob) {
+            Write-Message -Message "Both 'CopyJobId' and 'CopyJob' were provided. Please specify only one." -Level Error
             return $null
         }
 
@@ -63,19 +63,17 @@ function Get-FabricCopyJob {
         $apiEndpointURI = "{0}/workspaces/{1}/copyJobs" -f $FabricConfig.BaseUrl, $WorkspaceId
 
         # Invoke the Fabric API to retrieve capacity details
-        $copyJobs =  Invoke-FabricAPIRequest `
-        -BaseURI $apiEndpointURI `
-        -Headers $FabricConfig.FabricHeaders `
-        -Method Get
+        $copyJobs = Invoke-FabricAPIRequest `
+            -BaseURI $apiEndpointURI `
+            -Headers $FabricConfig.FabricHeaders `
+            -Method Get
 
         #  Filter results based on provided parameters
         $response = if ($CopyJobId) {
             $copyJobs | Where-Object { $_.Id -eq $CopyJobId }
-        }
-        elseif ($CopyJobName) {
-            $copyJobs | Where-Object { $_.DisplayName -eq $CopyJobName }
-        }
-        else {
+        } elseif ($CopyJob) {
+            $copyJobs | Where-Object { $_.DisplayName -eq $CopyJob }
+        } else {
             # Return all CopyJobs if no filter is provided
             Write-Message -Message "No filter provided. Returning all CopyJobs." -Level Debug
             $copyJobs
@@ -85,13 +83,11 @@ function Get-FabricCopyJob {
         if ($response) {
             Write-Message -Message "CopyJob found matching the specified criteria." -Level Debug
             return $response
-        }
-        else {
+        } else {
             Write-Message -Message "No CopyJob found matching the provided criteria." -Level Warning
             return $null
         }
-    }
-    catch {
+    } catch {
         # Step 10: Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to retrieve CopyJob. Error: $errorDetails" -Level Error

@@ -3,7 +3,7 @@
     Updates an existing DataPipeline in a specified Microsoft Fabric workspace.
 
 .DESCRIPTION
-    This function sends a PATCH request to the Microsoft Fabric API to update an existing DataPipeline 
+    This function sends a PATCH request to the Microsoft Fabric API to update an existing DataPipeline
     in the specified workspace. It supports optional parameters for DataPipeline description.
 
 .PARAMETER WorkspaceId
@@ -33,8 +33,8 @@ function Update-FabricDataPipeline {
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,   
-        
+        [string]$WorkspaceId,
+
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
         [string]$DataPipelineId,
@@ -77,12 +77,11 @@ function Update-FabricDataPipeline {
             -Headers $FabricConfig.FabricHeaders `
             -BaseURI $apiEndpointURI `
             -Method Patch `
-            -Body $bodyJson 
-        
+            -Body $bodyJson
+
         Write-Message -Message "DataPipeline '$DataPipelineName' updated successfully!" -Level Info
         return $response
-    }
-    catch {
+    } catch {
         # Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to update DataPipeline. Error: $errorDetails" -Level Error
