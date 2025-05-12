@@ -4,7 +4,7 @@ function Get-FabricCopyJob {
     Retrieves CopyJob details from a specified Microsoft Fabric workspace.
 
 .DESCRIPTION
-    This function retrieves CopyJob details from a specified workspace using either the provided CopyJobId or CopyJobName.
+    This function retrieves CopyJob details from a specified workspace using either the provided CopyJobId or CopyJob.
     It handles token validation, constructs the API URL, makes the API request, and processes the response.
 
 .PARAMETER WorkspaceId
@@ -21,7 +21,7 @@ function Get-FabricCopyJob {
     This example retrieves the CopyJob details for the CopyJob with ID "CopyJob-67890" in the workspace with ID "workspace-12345".
 
 .EXAMPLE
-    FabricCopyJob -WorkspaceId "workspace-12345" -CopyJobName "My CopyJob"
+    FabricCopyJob -WorkspaceId "workspace-12345" -CopyJob "My CopyJob"
     This example retrieves the CopyJob details for the CopyJob named "My CopyJob" in the workspace with ID "workspace-12345".
 
 .NOTES
@@ -48,8 +48,8 @@ function Get-FabricCopyJob {
 
     try {
         # Handle ambiguous input
-        if ($CopyJobId -and $CopyJobName) {
-            Write-Message -Message "Both 'CopyJobId' and 'CopyJobName' were provided. Please specify only one." -Level Error
+        if ($CopyJobId -and $CopyJob) {
+            Write-Message -Message "Both 'CopyJobId' and 'CopyJob' were provided. Please specify only one." -Level Error
             return $null
         }
 
@@ -71,8 +71,8 @@ function Get-FabricCopyJob {
         #  Filter results based on provided parameters
         $response = if ($CopyJobId) {
             $copyJobs | Where-Object { $_.Id -eq $CopyJobId }
-        } elseif ($CopyJobName) {
-            $copyJobs | Where-Object { $_.DisplayName -eq $CopyJobName }
+        } elseif ($CopyJob) {
+            $copyJobs | Where-Object { $_.DisplayName -eq $CopyJob }
         } else {
             # Return all CopyJobs if no filter is provided
             Write-Message -Message "No filter provided. Returning all CopyJobs." -Level Debug
