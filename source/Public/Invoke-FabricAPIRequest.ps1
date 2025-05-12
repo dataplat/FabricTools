@@ -1,3 +1,4 @@
+Function Invoke-FabricAPIRequest {
 
 <#
     .SYNOPSIS
@@ -46,14 +47,6 @@
         This function was originally written by Rui Romano.
         https://github.com/RuiRomano/fabricps-pbip
     #>
-
-
-Function Invoke-FabricAPIRequest {
-    <#
-    .SYNOPSIS
-        Sends an HTTP request to a Fabric API endpoint and retrieves the response.
-        Takes care of: authentication, 429 throttling, Long-Running-Operation (LRO) response
-    #>
     [CmdletBinding()]
     param(
         [Parameter(Mandatory = $false)] [string] $authToken,
@@ -72,7 +65,7 @@ Function Invoke-FabricAPIRequest {
 
         $requestUrl = "$($FabricSession.BaseApiUrl)/$uri"
         Write-Verbose "Calling $requestUrl"
-        $response = Invoke-WebRequest -Headers $fabricHeaders -Method $method -Uri $requestUrl -Body $body -TimeoutSec $timeoutSec 
+        $response = Invoke-WebRequest -Headers $fabricHeaders -Method $method -Uri $requestUrl -Body $body -TimeoutSec $timeoutSec
 
         if ($response.StatusCode -eq 202) {
             if ($uri -match "jobType=Pipeline") {
@@ -81,14 +74,14 @@ Function Invoke-FabricAPIRequest {
             else {
                 do {
                     $asyncUrl = [string]$response.Headers.Location
-                
+
                     Write-Output "Waiting for request to complete. Sleeping..."
                     Start-Sleep -Seconds 5
                     $response2 = Invoke-WebRequest -Headers $fabricHeaders -Method Get -Uri $asyncUrl
                     $lroStatusContent = $response2.Content | ConvertFrom-Json
                 }
                 while ($lroStatusContent.status -ine "succeeded" -and $lroStatusContent.status -ine "failed")
-            
+
                 try {
                     $response = Invoke-WebRequest -Headers $fabricHeaders -Method Get -Uri "$asyncUrl/result"
                 }
@@ -118,7 +111,7 @@ Function Invoke-FabricAPIRequest {
     catch {
         $ex = $_.Exception
         $message = $null
-       
+
         if ($null -ne $ex.Response) {
 
             $responseStatusCode = [int]$ex.Response.StatusCode
@@ -169,7 +162,7 @@ Function Invoke-FabricAPIRequest {
             $message = "$($ex.Message)"
         }
         if ($message) {
-            throw $message 
+            throw $message
         }
     }
 }
