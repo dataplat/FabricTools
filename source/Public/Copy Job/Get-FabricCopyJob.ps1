@@ -17,11 +17,11 @@ function Get-FabricCopyJob {
     The name of the CopyJob to retrieve. This parameter is optional.
 
 .EXAMPLE
-     FabricCopyJob -WorkspaceId "workspace-12345" -CopyJobId "CopyJob-67890"
+    FabricCopyJob -WorkspaceId "workspace-12345" -CopyJobId "CopyJob-67890"
     This example retrieves the CopyJob details for the CopyJob with ID "CopyJob-67890" in the workspace with ID "workspace-12345".
 
 .EXAMPLE
-     FabricCopyJob -WorkspaceId "workspace-12345" -CopyJobName "My CopyJob"
+    FabricCopyJob -WorkspaceId "workspace-12345" -CopyJobName "My CopyJob"
     This example retrieves the CopyJob details for the CopyJob named "My CopyJob" in the workspace with ID "workspace-12345".
 
 .NOTES
