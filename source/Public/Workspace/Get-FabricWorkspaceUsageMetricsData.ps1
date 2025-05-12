@@ -1,3 +1,4 @@
+function Get-FabricWorkspaceUsageMetricsData {
 <#
 .SYNOPSIS
 Retrieves workspace usage metrics data.
@@ -21,7 +22,6 @@ The function retrieves the PowerBI access token and creates a new usage metrics 
 #>
 
 # This function retrieves workspace usage metrics.
-function Get-FabricWorkspaceUsageMetricsData {
     # Define aliases for the function for flexibility.
     [Alias("Get-FabWorkspaceUsageMetricsData")]
 

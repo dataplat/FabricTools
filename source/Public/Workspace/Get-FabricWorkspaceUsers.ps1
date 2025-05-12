@@ -1,3 +1,4 @@
+function Get-FabricWorkspaceUsers {
 <#
 .SYNOPSIS
 Retrieves the users of a workspace.
@@ -26,7 +27,6 @@ The function defines parameters for the workspace ID and workspace object. If th
 #>
 
 # This function retrieves the users of a workspace.
-function Get-FabricWorkspaceUsers {
     # Define aliases for the function for flexibility.
     [Alias("Get-FabWorkspaceUsers")]
 

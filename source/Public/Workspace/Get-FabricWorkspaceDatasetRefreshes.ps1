@@ -1,3 +1,4 @@
+function Get-FabricWorkspaceDatasetRefreshes {
 <#
 .SYNOPSIS
    Retrieves the refresh history of all datasets in a specified PowerBI workspace.
@@ -25,7 +26,6 @@
 #>
 
 # Define a function to get the refresh history of all datasets in a PowerBI workspace
-function Get-FabricWorkspaceDatasetRefreshes {
     # Set aliases for the function
     [Alias("Get-FabWorkspaceDatasetRefreshes")]
     param(
