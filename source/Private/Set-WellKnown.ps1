@@ -1,4 +1,26 @@
 function Write-Log {
+<#
+.SYNOPSIS
+    Write a log message to the console with color coding based on the log level.
+
+.DESCRIPTION
+    This function writes a log message to the console with color coding based on the log level. It supports different log levels such as INFO, WARN, ERROR, and DEBUG. The function also has an option to stop execution if an error occurs.
+
+.PARAMETER Message
+    The log message to be written to the console.
+
+.PARAMETER Level
+    The log level for the message. Default is INFO. Other options are WARN, ERROR, and DEBUG.
+
+.PARAMETER Stop
+    A boolean value indicating whether to stop execution if an error occurs. Default is true.
+
+.EXAMPLE
+    Write-Log -Message "This is an info message." -Level "INFO"
+    Write-Log -Message "This is a warning message." -Level "WARN"
+    Write-Log -Message "This is an error message." -Level "ERROR" -Stop $true
+    Write-Log -Message "This is a debug message." -Level "DEBUG" -Stop $false
+#>
     param (
       [Parameter(Mandatory = $true)]
       [string]$Message,
@@ -31,9 +53,21 @@ function Write-Log {
     if ($Stop -and $Level -eq 'ERROR') {
       exit 1
     }
-  }
+}
 
-  function Install-ModuleIfNotInstalled {
+function Install-ModuleIfNotInstalled {
+<#
+.SYNOPSIS
+    Installs a PowerShell module if it is not already installed.
+.DESCRIPTION
+    This function checks if a specified PowerShell module is installed. If the module is not found, it attempts to install it from the PSGallery repository. The function handles errors during installation and logs messages accordingly.
+.PARAMETER ModuleName
+    The name of the PowerShell module to be installed.
+.EXAMPLE
+    Install-ModuleIfNotInstalled -ModuleName "Az.Accounts"
+    This example installs the Az.Accounts module if it is not already installed.
+
+#>
     param (
       [Parameter(Mandatory = $true)]
       [string]$ModuleName
@@ -49,9 +83,21 @@ function Write-Log {
         Write-Log -Message "Unable to install module: $ModuleName" -Level 'ERROR'
       }
     }
-  }
+}
 
-  function Import-ModuleIfNotImported {
+function Import-ModuleIfNotImported {
+<#
+.SYNOPSIS
+
+    Imports a PowerShell module if it is not already imported.
+.DESCRIPTION
+    This function checks if a specified PowerShell module is already imported. If the module is not found, it attempts to import it. The function handles errors during import and logs messages accordingly.
+.PARAMETER ModuleName
+    The name of the PowerShell module to be imported.
+.EXAMPLE
+    Import-ModuleIfNotImported -ModuleName "Az.Accounts"
+    This example imports the Az.Accounts module if it is not already imported.
+#>
     param (
       [Parameter(Mandatory = $true)]
       [string]$ModuleName
@@ -67,9 +113,32 @@ function Write-Log {
         Write-Log -Message "Unable to import module: $ModuleName" -Level 'ERROR'
       }
     }
-  }
+}
 
-  function Invoke-FabricRest {
+function Invoke-FabricRest {
+<#
+.SYNOPSIS
+    Invokes a REST API call to the Fabric API with retry logic.
+.DESCRIPTION
+    This function invokes a REST API call to the Fabric API with retry logic. It handles throttling and long-running operations. The function retrieves the Fabric access token and constructs the request URI based on the provided endpoint. It supports GET, POST, PUT, and DELETE methods.
+.PARAMETER Method
+    The HTTP method to use for the request. Default is GET. Other options are POST, PUT, and DELETE.
+.PARAMETER Endpoint
+    The API endpoint to call. This is a required parameter.
+.PARAMETER Payload
+    The payload to send with the request. This is an optional parameter.
+.PARAMETER RetryCount
+    The number of retry attempts in case of throttling. Default is 3.
+.PARAMETER RetryDelaySeconds
+    The delay in seconds between retry attempts. Default is 30 seconds.
+.EXAMPLE
+    Invoke-FabricRest -Method 'GET' -Endpoint 'workspaces'
+    This example retrieves a list of workspaces from the Fabric API.
+.EXAMPLE
+    Invoke-FabricRest -Method 'POST' -Endpoint 'workspaces' -Payload @{ displayName = 'MyWorkspace' }
+    This example creates a new workspace in the Fabric API with the specified display name.
+#>
+
     param (
       [Parameter(Mandatory = $false)]
       [string]$Method = 'GET',
@@ -161,9 +230,23 @@ function Write-Log {
     catch {
       Write-Log -Message $_.Exception.Message -Level 'ERROR'
     }
-  }
+}
 
-  function Get-LroResult {
+function Get-LroResult {
+<#
+.SYNOPSIS
+    Retrieves the result of a long-running operation using the operation ID.
+
+.DESCRIPTION
+    This function retrieves the result of a long-running operation using the operation ID. It checks the status of the operation and waits for it to complete. If the operation fails, it logs an error message.
+
+.PARAMETER OperationId
+    The ID of the long-running operation to retrieve the result for.
+
+.EXAMPLE
+    Get-LroResult -OperationId '12345678-1234-1234-1234-123456789012'
+    This example retrieves the result of a long-running operation using the specified operation ID.
+#>
     param (
       [Parameter(Mandatory = $true)]
       [string]$OperationId
@@ -186,9 +269,38 @@ function Write-Log {
     }
 
     return Invoke-FabricRest -Method 'GET' -Endpoint "operations/$OperationId/result"
-  }
+}
 
-  function Set-FabricItem {
+function Set-FabricItem {
+<#
+.SYNOPSIS
+    Creates or retrieves a Fabric item (e.g., DataPipeline, Environment, Eventhouse, etc.) in a specified workspace.
+.DESCRIPTION
+    This function creates or retrieves a Fabric item (e.g., DataPipeline, Environment, Eventhouse, etc.) in a specified workspace. It checks if the item already exists and creates it if it doesn't. The function also validates the input parameters and handles errors.
+
+.PARAMETER DisplayName
+    The display name of the item to be created or retrieved.
+
+.PARAMETER WorkspaceId
+    The ID of the workspace where the item will be created or retrieved.
+
+.PARAMETER Type
+    The type of the item to be created or retrieved. Valid options are DataPipeline, Environment, Eventhouse, Eventstream, GraphQLApi, KQLDashboard, KQLDatabase, KQLQueryset, Lakehouse, MirroredDatabase, MLExperiment, MLModel, Notebook, Reflex, Report, SemanticModel, SparkJobDefinition, SQLDatabase, Warehouse.
+
+.PARAMETER CreationPayload
+    The payload to be used for creating the item. This is an optional parameter.
+
+.PARAMETER Definition
+    The definition to be used for creating the item. This is an optional parameter.
+
+.EXAMPLE
+    Set-FabricItem -DisplayName 'MyDataPipeline' -WorkspaceId '12345678-1234-1234-1234-123456789012' -Type 'DataPipeline'
+    This example creates or retrieves a DataPipeline item with the specified display name in the specified workspace.
+
+.EXAMPLE
+    Set-FabricItem -DisplayName 'MyEnvironment' -WorkspaceId '12345678-1234-1234-1234-123456789012' -Type 'Environment' -CreationPayload @{}
+    This example creates or retrieves an Environment item with the specified display name in the specified workspace using the provided creation payload.
+#>
     param (
       [Parameter(Mandatory = $true)]
       [string]$DisplayName,
@@ -305,9 +417,26 @@ function Write-Log {
     Write-Log -Message "${Type} - Name: $($result.displayName) / ID: $($result.id)"
 
     return $result
-  }
+}
 
-  function Get-DefinitionPartBase64 {
+function Get-DefinitionPartBase64 {
+<#
+.SYNOPSIS
+
+    Converts a file to a Base64 string.
+.DESCRIPTION
+    Converts a file to a Base64 string. It reads the content of the file, replaces specified values, and encodes it in Base64 format.
+
+.PARAMETER Path
+    The path to the file to be converted.
+
+.PARAMETER Values
+    An object containing key-value pairs to replace in the file content.
+
+.EXAMPLE
+    Get-DefinitionPartBase64 -Path 'C:\path\to\file.txt' -Values @{ key = 'oldValue'; value = 'newValue' }
+    This example converts the specified file to a Base64 string and replaces 'oldValue' with 'newValue' in the file content.
+#>
     param (
       [Parameter(Mandatory = $true)]
       [string]$Path,
@@ -329,9 +458,23 @@ function Write-Log {
     }
 
     return [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($content))
-  }
+}
 
-  function Set-FabricDomain {
+function Set-FabricDomain {
+<#
+.SYNOPSIS
+    Creates or retrieves a Fabric domain in a specified parent domain.
+.DESCRIPTION
+    This function creates or retrieves a Fabric domain in a specified parent domain. It checks if the domain already exists and creates it if it doesn't. The function also handles errors and logs messages accordingly.
+.PARAMETER DisplayName
+    The display name of the domain to be created or retrieved.
+.PARAMETER ParentDomainId
+    The ID of the parent domain for the domain. This is an optional parameter.
+.EXAMPLE
+    Set-FabricDomain -DisplayName 'MyDomain' -ParentDomainId '12345678-1234-1234-1234-123456789012'
+    This example creates or retrieves a Fabric domain with the specified display name in the specified parent domain.
+
+#>
     param (
       [Parameter(Mandatory = $true)]
       [string]$DisplayName,
@@ -364,9 +507,22 @@ function Write-Log {
     }
 
     return $result
-  }
+}
 
-  function Get-BaseName {
+function Get-BaseName {
+<#
+.SYNOPSIS
+    Generates a base name based on the provided length or environment variable.
+.DESCRIPTION
+    This function generates a base name based on the provided length or environment variable. If the environment variable FABRIC_TESTACC_WELLKNOWN_NAME_BASE is set, it uses that value. Otherwise, it generates a random string of the specified length.
+.PARAMETER Length
+    The length of the random string to be generated. Default is 10. This is an optional parameter.
+
+.EXAMPLE
+    Get-BaseName -Length 15
+    This example generates a random string of length 15 if the environment variable FABRIC_TESTACC_WELLKNOWN_NAME_BASE is not set.
+
+#>
     param (
       [Parameter(Mandatory = $false)]
       [int]$Length = 10
@@ -379,9 +535,26 @@ function Write-Log {
     }
 
     return $base
-  }
+}
 
   function Get-DisplayName {
+<#
+.SYNOPSIS
+    Generates a display name based on the provided base, prefix, suffix, and separator.
+.DESCRIPTION
+    This function generates a display name based on the provided base, prefix, suffix, and separator. It concatenates the prefix, base, and suffix with the specified separator. The function also retrieves the base name if not provided.
+.PARAMETER Base
+    The base name to be used in the display name. This is a required parameter.
+.PARAMETER Prefix
+    The prefix to be added to the base name. This is an optional parameter.
+.PARAMETER Suffix
+    The suffix to be added to the base name. This is an optional parameter.
+.PARAMETER Separator
+    The separator to be used between the prefix, base, and suffix. Default is '_'. This is an optional parameter.
+.EXAMPLE
+    Get-DisplayName -Base 'MyBaseName' -Prefix 'MyPrefix' -Suffix 'MySuffix' -Separator '-'
+    This example generates a display name with the specified base, prefix, suffix, and separator.
+#>
     param (
       [Parameter(Mandatory = $true)]
       [string]$Base,
@@ -411,6 +584,22 @@ function Write-Log {
   }
 
   function Set-FabricWorkspace {
+<#
+.SYNOPSIS
+    Creates or retrieves a Fabric workspace in a specified capacity.
+.DESCRIPTION
+    This function creates or retrieves a Fabric workspace in a specified capacity. It checks if the workspace already exists and creates it if it doesn't. The function also handles errors and logs messages accordingly.
+.PARAMETER DisplayName
+    The display name of the workspace to be created or retrieved.
+.PARAMETER CapacityId
+    The ID of the capacity where the workspace will be created or retrieved.
+.PARAMETER ParentDomainId
+    The ID of the parent domain for the workspace. This is an optional parameter.
+.EXAMPLE
+    Set-FabricWorkspace -DisplayName 'MyWorkspace' -CapacityId '12345678-1234-1234-1234-123456789012'
+    This example creates or retrieves a Fabric workspace with the specified display name in the specified capacity.
+
+#>
     param (
       [Parameter(Mandatory = $true)]
       [string]$DisplayName,
@@ -435,6 +624,19 @@ function Write-Log {
   }
 
   function Set-FabricWorkspaceCapacity {
+<#
+.SYNOPSIS
+    Assigns a Fabric workspace to a specified capacity.
+.DESCRIPTION
+    This function assigns a Fabric workspace to a specified capacity. It checks if the workspace is already assigned to the specified capacity and assigns it if not. The function also handles errors and logs messages accordingly.
+.PARAMETER WorkspaceId
+    The ID of the Fabric workspace to be assigned to the capacity.
+.PARAMETER CapacityId
+    The ID of the capacity to which the workspace will be assigned.
+.EXAMPLE
+    Set-FabricWorkspaceCapacity -WorkspaceId '12345678-1234-1234-1234-123456789012' -CapacityId '87654321-4321-4321-4321-210987654321'
+    This example assigns the specified workspace to the specified capacity.
+#>
     param (
       [Parameter(Mandatory = $true)]
       [string]$WorkspaceId,
@@ -457,6 +659,20 @@ function Write-Log {
   }
 
   function Set-FabricWorkspaceRoleAssignment {
+<#
+.SYNOPSIS
+    Assigns a Service Principal Name (SPN) to a Fabric workspace with the Admin role.
+.DESCRIPTION
+    This function assigns a Service Principal Name (SPN) to a Fabric workspace with the Admin role. It checks if the SPN is already assigned to the workspace and assigns it if not. The function also handles errors and logs messages accordingly.
+.PARAMETER WorkspaceId
+    The ID of the Fabric workspace where the SPN will be assigned.
+.PARAMETER SPN
+    The Service Principal Name (SPN) to be assigned to the workspace. This should be an object containing the Id and DisplayName of the SPN.
+.EXAMPLE
+    Set-FabricWorkspaceRoleAssignment -WorkspaceId '12345678-1234-1234-1234-123456789012' -SPN $spn
+    This example assigns the specified SPN to the Fabric workspace with the specified ID.
+
+#>
     param (
       [Parameter(Mandatory = $true)]
       [string]$WorkspaceId,
@@ -481,6 +697,32 @@ function Write-Log {
   }
 
   function Set-FabricGatewayVirtualNetwork {
+<#
+.SYNOPSIS
+    Creates or retrieves a Virtual Network gateway in the Fabric API.
+.DESCRIPTION
+    This function creates or retrieves a Virtual Network gateway in the Fabric API. It checks if the gateway already exists and creates it if it doesn't. The function also validates the input parameters and handles errors.
+.PARAMETER DisplayName
+    The display name of the gateway to be created or retrieved.
+.PARAMETER CapacityId
+    The ID of the capacity to be used for the gateway.
+.PARAMETER InactivityMinutesBeforeSleep
+    The inactivity time (in minutes) before the gateway goes to auto-sleep. Allowed values: 30, 60, 90, 120, 150, 240, 360, 480, 720, 1440.
+.PARAMETER NumberOfMemberGateways
+    The number of member gateways (between 1 and 7).
+.PARAMETER SubscriptionId
+    The Azure subscription ID where the gateway will be created.
+.PARAMETER ResourceGroupName
+    The name of the Azure Resource Group where the gateway will be created.
+.PARAMETER VirtualNetworkName
+    The name of the Azure Virtual Network where the gateway will be created.
+.PARAMETER SubnetName
+    The name of the subnet where the gateway will be created.
+.EXAMPLE
+    Set-FabricGatewayVirtualNetwork -DisplayName 'MyGateway' -CapacityId '12345678-1234-1234-1234-123456789012' -InactivityMinutesBeforeSleep 30 -NumberOfMemberGateways 2 -SubscriptionId '12345678-1234-1234-1234-123456789012' -ResourceGroupName 'MyResourceGroup' -VirtualNetworkName 'MyVNet' -SubnetName 'MySubnet'
+    This example creates or retrieves a Virtual Network gateway with the specified parameters.
+
+#>
     [CmdletBinding()]
     param(
       [Parameter(Mandatory = $true)]
@@ -545,6 +787,36 @@ function Write-Log {
 
 
   function Set-AzureVirtualNetwork {
+<#
+.SYNOPSIS
+    Creates or retrieves an Azure Virtual Network (VNet) with a specified subnet and delegation.
+.DESCRIPTION
+    This function creates or retrieves an Azure Virtual Network (VNet) with a specified subnet and delegation. It checks if the VNet already exists and creates it if it doesn't. The function also checks for the existence of the subnet and adds it if necessary.
+    It assigns the "Network Contributor" role to the current user on the VNet.
+
+.PARAMETER ResourceGroupName
+    The name of the Azure Resource Group where the VNet will be created or retrieved.
+
+.PARAMETER VNetName
+    The name of the Azure Virtual Network.
+
+.PARAMETER Location
+    The Azure region where the VNet will be created.
+
+.PARAMETER AddressPrefixes
+    The address prefixes for the VNet.
+
+.PARAMETER SubnetName
+    The name of the subnet to be created or retrieved.
+
+.PARAMETER SubnetAddressPrefixes
+    The address prefixes for the subnet.
+
+.EXAMPLE
+    Set-AzureVirtualNetwork -ResourceGroupName 'MyResourceGroup' -VNetName 'MyVNet' -Location 'East US' -AddressPrefixes '
+    Create a new Azure Virtual Network with the specified parameters.
+
+#>
     param(
       [Parameter(Mandatory = $true)]
       [string]$ResourceGroupName,
@@ -642,6 +914,19 @@ function Write-Log {
   }
 
   function Invoke-DontRunThisCode {
+
+<#
+.SYNOPSIS
+    This function is used to set up the environment for the script. It installs required modules, imports the .env file, and logs in to Azure and Azure DevOps.
+.DESCRIPTION
+    This function is used to set up the environment for the script. It installs required modules, imports the .env file, and logs in to Azure and Azure DevOps. It also checks if the required environment variables are set and logs in to Azure if not already logged in.
+    It retrieves the Fabric Capacity ID and logs in to Azure DevOps using the provided access token. The function also retrieves the Service Principal Name (SPN) if provided and logs messages accordingly.
+.PARAMETER None
+    This function does not take any parameters.
+.EXAMPLE
+    Invoke-DontRunThisCode
+    This example sets up the environment for the script by installing required modules, importing the .env file, and logging in to Azure and Azure DevOps.  It also retrieves the Fabric Capacity ID and logs in to Azure DevOps using the provided access token.
+#>
 
   # Define an array of modules to install
   $modules = @('Az.Accounts', 'Az.Resources', 'Az.Fabric', 'pwsh-dotenv', 'ADOPS', 'Az.Network')
