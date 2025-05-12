@@ -1,3 +1,4 @@
+function Get-FabricCopyJob {
 <#
 .SYNOPSIS
     Retrieves CopyJob details from a specified Microsoft Fabric workspace.
@@ -24,12 +25,11 @@
     This example retrieves the CopyJob details for the CopyJob named "My CopyJob" in the workspace with ID "workspace-12345".
 
 .NOTES
-    - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-    - Calls `Test-TokenExpired` to ensure token validity before making the API request.
+    Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
+    Calls `Test-TokenExpired` to ensure token validity before making the API request.
 
     Author: Tiago Balabuch
 #>
-function FabricCopyJob {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
@@ -57,16 +57,16 @@ function FabricCopyJob {
         Write-Message -Message "Validating token..." -Level Debug
         Test-TokenExpired
         Write-Message -Message "Token validation completed." -Level Debug
-        
+
 
         # Construct the API endpoint URL
         $apiEndpointURI = "{0}/workspaces/{1}/copyJobs" -f $FabricConfig.BaseUrl, $WorkspaceId
-         
+
         # Invoke the Fabric API to retrieve capacity details
         $copyJobs =  Invoke-FabricAPIRequest `
         -BaseURI $apiEndpointURI `
         -Headers $FabricConfig.FabricHeaders `
-        -Method Get 
+        -Method Get
 
         #  Filter results based on provided parameters
         $response = if ($CopyJobId) {
@@ -95,6 +95,6 @@ function FabricCopyJob {
         # Step 10: Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to retrieve CopyJob. Error: $errorDetails" -Level Error
-    } 
- 
+    }
+
 }
