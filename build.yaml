@@ -9,8 +9,7 @@
 BuiltModuleSubdirectory: module
 CopyPaths:
   - en-US
-#  - DSCResources
-  # - Modules
+
 Encoding: UTF8
 # Can be used to manually specify module's semantic version if the preferred method of
 # using GitVersion is not available, and it is not possible to set the session environment
@@ -34,7 +33,7 @@ NestedModule:
 #    OutputDirectory: ///Modules/HelperSubmodule
 #    VersionedOutputDirectory: false
 #    AddToManifest: false
-#    SemVer: 
+#    SemVer:
 #    # suffix:
 #    # prefix:
 
@@ -153,9 +152,3 @@ TaskHeader: |
   Write-Build DarkGray "  $Path"
   Write-Build DarkGray "  $($Task.InvocationInfo.ScriptName):$($Task.InvocationInfo.ScriptLineNumber)"
   ""
-
-
-
-
-
-
