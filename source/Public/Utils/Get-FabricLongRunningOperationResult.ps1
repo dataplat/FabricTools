@@ -1,9 +1,10 @@
+function Get-FabricLongRunningOperationResult {
 <#
 .SYNOPSIS
 Retrieves the result of a completed long-running operation from the Microsoft Fabric API.
 
 .DESCRIPTION
-The Get-FabricLongRunningOperationResult function queries the Microsoft Fabric API to fetch the result 
+The Get-FabricLongRunningOperationResult function queries the Microsoft Fabric API to fetch the result
 of a specific long-running operation. This is typically used after confirming the operation has completed successfully.
 
 .PARAMETER operationId
@@ -18,11 +19,9 @@ This command fetches the result of the operation with the specified operationId.
 - Ensure the Fabric API headers (e.g., authorization tokens) are defined in $FabricConfig.FabricHeaders.
 - This function does not handle polling. Ensure the operation is in a terminal state before calling this function.
 
-.AUTHOR
-Tiago Balabuch
-
+    AUTHOR
+    Tiago Balabuch
 #>
-function Get-FabricLongRunningOperationResult {
     param (
         [Parameter(Mandatory = $true)]
         [string]$operationId
@@ -42,7 +41,7 @@ function Get-FabricLongRunningOperationResult {
         -SkipHttpErrorCheck `
         -ResponseHeadersVariable "responseHeader" `
         -StatusCodeVariable "statusCode"
-        
+
 
         # Step 3: Return the result
         Write-Message -Message "Result response code: $statusCode" -Level Debug
@@ -56,7 +55,7 @@ function Get-FabricLongRunningOperationResult {
             Write-Message "Error Code: $($response.errorCode)" -Level Debug
         }
 
-        return $response 
+        return $response
     }
     catch {
         # Step 3: Capture and log error details

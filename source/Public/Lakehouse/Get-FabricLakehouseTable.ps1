@@ -1,6 +1,19 @@
-
-
 function Get-FabricLakehouseTable {
+<#
+.SYNOPSIS
+Retrieves tables from a specified Lakehouse in a Fabric workspace.
+
+.DESCRIPTION
+This function retrieves tables from a specified Lakehouse in a Fabric workspace. It handles pagination using a continuation token to ensure all data is retrieved.
+.PARAMETER WorkspaceId
+The ID of the workspace containing the Lakehouse.
+.PARAMETER LakehouseId
+The ID of the Lakehouse from which to retrieve tables.
+.EXAMPLE
+Get-FabricLakehouseTable -WorkspaceId "your-workspace-id" -LakehouseId "your-lakehouse-id"
+This example retrieves all tables from the specified Lakehouse in the specified workspace.
+
+#>
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
@@ -11,7 +24,7 @@ function Get-FabricLakehouseTable {
         [ValidateNotNullOrEmpty()]
         [string]$LakehouseId
     )
-    
+
     try {
         # Step 1: Ensure token validity
         Write-Message -Message "Validating token..." -Level Debug
@@ -24,19 +37,19 @@ function Get-FabricLakehouseTable {
         $continuationToken = $null
         $tables = @()
         $maxResults = 100
-        
+
         if (-not ([AppDomain]::CurrentDomain.GetAssemblies() | Where-Object { $_.GetName().Name -eq "System.Web" })) {
             Add-Type -AssemblyName System.Web
         }
 
         $baseApiEndpointUrl = "{0}/workspaces/{1}/lakehouses/{2}/tables?maxResults={3}" -f $FabricConfig.BaseUrl, $WorkspaceId, $LakehouseId, $maxResults
-       
+
         # Step 3:  Loop to retrieve data with continuation token
         Write-Message -Message "Loop started to get continuation token" -Level Debug
         do {
             # Step 4: Construct the API URL
             $apiEndpointUrl = $baseApiEndpointUrl
- 
+
             if ($null -ne $continuationToken) {
                 # URL-encode the continuation token
                 $encodedToken = [System.Web.HttpUtility]::UrlEncode($continuationToken)
@@ -62,12 +75,12 @@ function Get-FabricLakehouseTable {
                 Write-Message "Error Code: $($response.errorCode)" -Level Error
                 return $null
             }
-                    
+
             # Step 7: Add data to the list
             if ($null -ne $response) {
                 Write-Message -Message "Adding data to the list" -Level Debug
                 $tables += $response.data
-        
+
                 # Update the continuation token if present
                 if ($response.PSObject.Properties.Match("continuationToken")) {
                     Write-Message -Message "Updating the continuation token" -Level Debug
@@ -99,6 +112,6 @@ function Get-FabricLakehouseTable {
         # Step 10: Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to retrieve Lakehouse. Error: $errorDetails" -Level Error
-    } 
- 
+    }
+
 }

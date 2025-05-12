@@ -1,3 +1,4 @@
+function Get-FabricItem {
 <#
 .SYNOPSIS
 Retrieves fabric items from a workspace.
@@ -21,18 +22,15 @@ This function was originally written by Rui Romano.
 https://github.com/RuiRomano/fabricps-pbip
 
 #>
-
-
-Function Get-FabricItem {
   [CmdletBinding()]
   param
   (
     [Parameter(Mandatory = $true, ParameterSetName = 'WorkspaceId')]
     [string]$workspaceId,
-  
+
     [Parameter(Mandatory = $true, ParameterSetName = 'WorkspaceObject', ValueFromPipeline = $true )]
     $Workspace,
-  
+
     [Parameter(Mandatory = $false)]
     [Alias("itemType")]
     [string]$type,

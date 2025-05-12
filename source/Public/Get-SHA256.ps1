@@ -1,3 +1,5 @@
+
+function Get-Sha256 ($string) {
 <#
 .SYNOPSIS
 Calculates the SHA256 hash of a string.
@@ -18,7 +20,6 @@ The function creates a new SHA256CryptoServiceProvider object, converts the stri
 #>
 
 # This function calculates the SHA256 hash of a string.
-function Get-Sha256 ($string) {
     # Create a new SHA256CryptoServiceProvider object.
     $sha256 = New-Object System.Security.Cryptography.SHA256CryptoServiceProvider
 

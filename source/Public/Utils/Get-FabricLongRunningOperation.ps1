@@ -1,9 +1,10 @@
+function Get-FabricLongRunningOperation {
 <#
 .SYNOPSIS
 Monitors the status of a long-running operation in Microsoft Fabric.
 
 .DESCRIPTION
-The Get-FabricLongRunningOperation function queries the Microsoft Fabric API to check the status of a 
+The Get-FabricLongRunningOperation function queries the Microsoft Fabric API to check the status of a
 long-running operation. It periodically polls the operation until it reaches a terminal state (Succeeded or Failed).
 
 .PARAMETER operationId
@@ -20,15 +21,13 @@ This command polls the status of the operation with the given operationId every 
 .NOTES
 - Requires the `$FabricConfig` global object, including `BaseUrl` and `FabricHeaders`.
 
-.AUTHOR
-Tiago Balabuch
-
+    AUTHOR
+    Tiago Balabuch
 #>
-function Get-FabricLongRunningOperation { 
     param (
         [Parameter(Mandatory = $false)]
         [string]$operationId,
-       
+
         [Parameter(Mandatory = $false)]
         [string]$location,
 
@@ -45,7 +44,7 @@ function Get-FabricLongRunningOperation {
         $apiEndpointUrl = "https://api.fabric.microsoft.com/v1/operations/{0}" -f $operationId
     }
     Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
-    
+
     try {
         do {
 
@@ -73,7 +72,7 @@ function Get-FabricLongRunningOperation {
             # Log status for debugging
             Write-Message -Message "Operation Status: $($operation.status)" -Level Debug
 
-  
+
         } while ($operation.status -notin @("Succeeded", "Completed", "Failed"))
 
         # Step 5: Return the operation result

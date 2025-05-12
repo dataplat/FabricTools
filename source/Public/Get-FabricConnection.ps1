@@ -1,3 +1,4 @@
+function Get-FabricConnection {
 <#
 .SYNOPSIS
 Retrieves Fabric connections.
@@ -22,9 +23,6 @@ This example retrieves specific connection from Fabric with ID "12345".
 https://learn.microsoft.com/en-us/rest/api/fabric/core/connections/get-connection?tabs=HTTP
 https://learn.microsoft.com/en-us/rest/api/fabric/core/connections/list-connections?tabs=HTTP
 #>
-
-
-Function Get-FabricConnection {
   [CmdletBinding()]
   param
   (
@@ -43,7 +41,7 @@ Function Get-FabricConnection {
     else {
       $result = Invoke-FabricAPIRequest -Uri "/connections" -Method GET
     }
-    
+
     return $result.value
   }
 }

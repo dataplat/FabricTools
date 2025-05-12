@@ -1,4 +1,18 @@
 function Get-FabricMirroredDatabaseStatus {
+<#
+.SYNOPSIS
+Retrieves the status of a mirrored database in a specified workspace.
+.DESCRIPTION
+Retrieves the status of a mirrored database in a specified workspace. The function validates the authentication token, constructs the API endpoint URL, and makes a POST request to retrieve the mirroring status.
+It handles errors and logs messages at various levels (Debug, Error).
+.PARAMETER WorkspaceId
+The ID of the workspace containing the mirrored database.
+.PARAMETER MirroredDatabaseId
+the ID of the mirrored database whose status is to be retrieved.
+.EXAMPLE
+Get-FabricMirroredDatabaseStatus -WorkspaceId "your-workspace-id" -MirroredDatabaseId "your-mirrored-database-id"
+This example retrieves the status of a mirrored database with the specified ID in the specified workspace.
+#>
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
@@ -15,10 +29,10 @@ function Get-FabricMirroredDatabaseStatus {
         Write-Message -Message "Validating token..." -Level Debug
         Test-TokenExpired
         Write-Message -Message "Token validation completed." -Level Debug
- 
+
         $apiEndpointUrl = "{0}/workspaces/{1}/mirroredDatabases/{2}/getMirroringStatus" -f $FabricConfig.BaseUrl, $WorkspaceId, $MirroredDatabaseId
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
-         
+
         # Step 6: Make the API request
         $response = Invoke-RestMethod `
             -Headers $FabricConfig.FabricHeaders `
@@ -28,7 +42,7 @@ function Get-FabricMirroredDatabaseStatus {
             -SkipHttpErrorCheck `
             -ResponseHeadersVariable "responseHeader" `
             -StatusCodeVariable "statusCode"
-         
+
         # Step 7: Validate the response code
         if ($statusCode -ne 200) {
             Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
@@ -37,9 +51,9 @@ function Get-FabricMirroredDatabaseStatus {
             Write-Message "Error Code: $($response.errorCode)" -Level Error
             return $null
         }
-         
+
         # Step 9: Handle results
-       
+
         Write-Message -Message "Returning status of MirroredDatabases." -Level Debug
         return $response
     }
@@ -47,6 +61,6 @@ function Get-FabricMirroredDatabaseStatus {
         # Step 10: Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to retrieve MirroredDatabase. Error: $errorDetails" -Level Error
-    } 
- 
+    }
+
 }

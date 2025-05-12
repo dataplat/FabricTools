@@ -1,3 +1,4 @@
+function Get-FabricUsageMetricsQuery {
 <#
 .SYNOPSIS
 Retrieves usage metrics for a specific dataset.
@@ -33,7 +34,6 @@ The function defines the headers and body for a POST request to the PowerBI API 
 #>
 
 # This function retrieves usage metrics for a specific dataset.
-function Get-FabricUsageMetricsQuery {
   # Define aliases for the function for flexibility.
   [Alias("Get-FabUsageMetricsQuery")]
 

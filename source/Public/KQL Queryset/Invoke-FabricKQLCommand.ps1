@@ -1,23 +1,11 @@
 function Invoke-FabricKQLCommand {
-#Requires -Version 7.1
-
 <#
 .SYNOPSIS
     Executes a KQL command in a Kusto Database.
 
 .DESCRIPTION
-    Executes a KQL command in a Kusto Database. The KQL command is executed in the Kusto Database
-    that is specified by the KQLDatabaseName or KQLDatabaseId parameter. The KQL command is executed
-    in the context of the Fabric Real-Time Intelligence session that is established by the
-    Connect-RTISession cmdlet. The cmdlet distinguishes between management commands and query commands.
-    Management commands are executed in the management API, while query commands are executed in the query API.
-    The distinction is made by checking if the KQL command starts with a dot. If it does, it is a management command
-    else it is a query command. If the KQL command is a management command, it is crucial to have the
-    .execute database script <| in the beginning, otherwise the Kusto API will not execute the script. This cmdlet
-    will automatically add the .execute database script <| in the beginning of the KQL command if it is a management command
-    and if it is not already present.
-    If the KQL Command is a query command, the result is returned as an array of PowerShell objects by default. If the
-    parameter -ReturnRawResult is used, the raw result of the KQL query is returned which is a JSON object.
+    Executes a KQL command in a Kusto Database. The KQL command is executed in the Kusto Database that is specified by the KQLDatabaseName or KQLDatabaseId parameter. The KQL command is executed in the context of the Fabric Real-Time Intelligence session that is established by the Connect-RTISession cmdlet. The cmdlet distinguishes between management commands and query commands. Management commands are executed in the management API, while query commands are executed in the query API. The distinction is made by checking if the KQL command starts with a dot. If it does, it is a management command else it is a query command. If the KQL command is a management command, it is crucial to have the execute database script <| in the beginning, otherwise the Kusto API will not execute the script. This cmdlet will automatically add the .execute database script <| in the beginning of the KQL command if it is a management command and if it is not already present. If the KQL Command is a query command, the result is returned as an array of PowerShell objects by default. If the parameter -ReturnRawResult is used, the raw result of the KQL query is returned which is a JSON object.
+
 
 .PARAMETER WorkspaceId
     Id of the Fabric Workspace for which the KQL command should be executed. The value for WorkspaceId is a GUID.
@@ -39,10 +27,7 @@ function Invoke-FabricKQLCommand {
     a PowerShell object.
 
 .EXAMPLE
-    Invoke-FabricKQLCommand `
-        -WorkspaceId '12345678-1234-1234-1234-123456789012' `
-        -KQLDatabaseName 'MyKQLDatabase' `
-        -KQLCommand '.create table MyTable (MyColumn: string)'
+    Invoke-FabricKQLCommand -WorkspaceId '12345678-1234-1234-1234-123456789012' -KQLDatabaseName 'MyKQLDatabase'-KQLCommand '.create table MyTable (MyColumn: string)
 
     This example will create a table named 'MyTable' with a column named 'MyColumn' in
     the KQLDatabase 'MyKQLDatabase'.
@@ -69,11 +54,10 @@ function Invoke-FabricKQLCommand {
     and it will return the result as the raw result of the KQL command, which is a JSON object.
 
 .NOTES
+    Revision History:
 
-    Revsion History:
-
-    - 2024-12-22 - FGE: Added Verbose Output
-    - 2024-12-27 - FGE: Major Update to support KQL Queries and Management Commands
+    2024-12-22 - FGE: Added Verbose Output
+    2024-12-27 - FGE: Major Update to support KQL Queries and Management Commands
 
 #>
 

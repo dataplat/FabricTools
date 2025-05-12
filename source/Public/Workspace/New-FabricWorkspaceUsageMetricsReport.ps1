@@ -1,3 +1,4 @@
+function New-FabricWorkspaceUsageMetricsReport {
 <#
 .SYNOPSIS
 Retrieves the workspace usage metrics dataset ID.
@@ -18,7 +19,7 @@ The function retrieves the PowerBI access token and the Fabric API cluster URI. 
 #>
 
 # This function retrieves the workspace usage metrics dataset ID.
-function New-FabricWorkspaceUsageMetricsReport {
+
     # Define aliases for the function for flexibility.
     [Alias("New-FabWorkspaceUsageMetricsReport")]
     [CmdletBinding(SupportsShouldProcess)]
