@@ -1,4 +1,3 @@
-
 function Resume-FabricCapacity {
 <#
 .SYNOPSIS
