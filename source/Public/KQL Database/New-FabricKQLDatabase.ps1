@@ -1,14 +1,33 @@
+function New-FabricKQLDatabase {
 <#
 .SYNOPSIS
 Creates a new KQLDatabase in a specified Microsoft Fabric workspace.
 
 .DESCRIPTION
-This function sends a POST request to the Microsoft Fabric API to create a new KQLDatabase 
-in the specified workspace. It supports optional parameters for KQLDatabase description 
+This function sends a POST request to the Microsoft Fabric API to create a new KQLDatabase
+in the specified workspace. It supports optional parameters for KQLDatabase description
 and path definitions for the KQLDatabase content.
 
 .PARAMETER WorkspaceId
 The unique identifier of the workspace where the KQLDatabase will be created.
+
+.PARAMETER KQLInvitationToken
+An optional invitation token for the KQLDatabase.
+
+.PARAMETER KQLSourceClusterUri
+An optional source cluster URI for the KQLDatabase.
+
+.PARAMETER KQLDatabasePathSchemaDefinition
+the path to the KQLDatabase schema definition file (e.g., .kql file) to upload.
+
+.PARAMETER KQLSourceDatabaseName
+An optional source database name for the KQLDatabase.
+
+.PARAMETER parentEventhouseId
+The ID of the parent Eventhouse item for the KQLDatabase. This is mandatory for ReadWrite type databases.
+
+.PARAMETER KQLDatabaseType
+The type of KQLDatabase to create. Valid values are "ReadWrite" and "Shortcut".
 
 .PARAMETER KQLDatabaseName
 The name of the KQLDatabase to be created.
@@ -33,11 +52,9 @@ An optional path to the platform-specific definition (e.g., .platform file) to u
     - CreationPayload is evaluate only if Definition file is not provided.
         - invitationToken has priority over all other payload fields.
 
-Author: Tiago Balabuch  
+Author: Tiago Balabuch
 
 #>
-
-function New-FabricKQLDatabase {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
@@ -77,7 +94,7 @@ function New-FabricKQLDatabase {
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
         [string]$KQLDatabasePathDefinition,
-        
+
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
         [string]$KQLDatabasePathPlatformDefinition,
@@ -112,9 +129,9 @@ function New-FabricKQLDatabase {
             $body.definition = @{
                 parts = @()
             }
-  
+
             if (-not [string]::IsNullOrEmpty($KQLDatabaseEncodedContent)) {
-                
+
 
                 # Add new part to the parts array
                 $body.definition.parts += @{
@@ -127,7 +144,7 @@ function New-FabricKQLDatabase {
                 Write-Message -Message "Invalid or empty content in KQLDatabase definition." -Level Error
                 return $null
             }
-   
+
             if ($KQLDatabasePathPlatformDefinition) {
                 $KQLDatabaseEncodedPlatformContent = Convert-ToBase64 -filePath $KQLDatabasePathPlatformDefinition
 
@@ -144,7 +161,7 @@ function New-FabricKQLDatabase {
                     Write-Message -Message "Invalid or empty content in platform definition." -Level Error
                     return $null
                 }
-        
+
             }
             if ($KQLDatabasePathSchemaDefinition) {
                 $KQLDatabaseEncodedSchemaContent = Convert-ToBase64 -filePath $KQLDatabasePathSchemaDefinition
@@ -243,7 +260,7 @@ function New-FabricKQLDatabase {
             }
             202 {
                 Write-Message -Message "KQLDatabase '$KQLDatabaseName' creation accepted. Provisioning in progress!" -Level Info
-               
+
                 [string]$operationId = $responseHeader["x-ms-operation-id"]
                 [string]$location = $responseHeader["Location"]
                 [string]$retryAfter = $responseHeader["Retry-After"]
@@ -252,24 +269,24 @@ function New-FabricKQLDatabase {
                 Write-Message -Message "Location: '$location'" -Level Debug
                 Write-Message -Message "Retry-After: '$retryAfter'" -Level Debug
                 Write-Message -Message "Getting Long Running Operation status" -Level Debug
-               
+
                 $operationStatus = Get-FabricLongRunningOperation -operationId $operationId
                 Write-Message -Message "Long Running Operation status: $operationStatus" -Level Debug
                 # Handle operation result
                 if ($operationStatus.status -eq "Succeeded") {
                     Write-Message -Message "Operation Succeeded" -Level Debug
                     Write-Message -Message "Getting Long Running Operation result" -Level Debug
-                
+
                     $operationResult = Get-FabricLongRunningOperationResult -operationId $operationId
                     Write-Message -Message "Long Running Operation result: $operationResult" -Level Debug
-                
+
                     return $operationResult
                 }
                 else {
                     Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Debug
                     Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Error
                     return $operationStatus
-                } 
+                }
             }
             default {
                 Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error

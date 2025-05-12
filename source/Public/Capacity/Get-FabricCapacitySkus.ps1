@@ -7,6 +7,12 @@ Retrieves the fabric capacity information.
 .DESCRIPTION
 This function makes a GET request to the Fabric API to retrieve the tenant settings.
 
+.PARAMETER subscriptionID
+Specifies the subscription ID for the Azure subscription.
+
+.PARAMETER ResourceGroupName
+Specifies the name of the resource group in which the Fabric capacity is located.
+
 .PARAMETER capacity
 Specifies the capacity to retrieve information for. If not provided, all capacities will be retrieved.
 

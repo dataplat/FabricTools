@@ -1,3 +1,4 @@
+function Update-FabricKQLDashboard {
 <#
 .SYNOPSIS
 Updates the properties of a Fabric KQLDashboard.
@@ -14,6 +15,9 @@ The new name for the KQLDashboard.
 .PARAMETER KQLDashboardDescription
 (Optional) The new description for the KQLDashboard.
 
+.PARAMETER WorkspaceId
+The unique identifier of the workspace where the KQLDashboard exists.
+
 .EXAMPLE
 Update-FabricKQLDashboard -KQLDashboardId "KQLDashboard123" -KQLDashboardName "NewKQLDashboardName"
 
@@ -28,17 +32,15 @@ Updates both the name and description of the KQLDashboard "KQLDashboard123".
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
 - Calls `Test-TokenExpired` to ensure token validity before making the API request.
 
-Author: Tiago Balabuch  
+Author: Tiago Balabuch
 
 #>
-
-function Update-FabricKQLDashboard {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,   
-        
+        [string]$WorkspaceId,
+
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
         [string]$KQLDashboardId,

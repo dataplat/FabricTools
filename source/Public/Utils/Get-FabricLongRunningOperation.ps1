@@ -10,6 +10,9 @@ long-running operation. It periodically polls the operation until it reaches a t
 .PARAMETER operationId
 The unique identifier of the long-running operation to be monitored.
 
+.PARAMETER location
+The URL provided in the Location header of the initial request. This is used to check the status of the operation.
+
 .PARAMETER retryAfter
 The interval (in seconds) to wait between polling the operation status. The default is 5 seconds.
 

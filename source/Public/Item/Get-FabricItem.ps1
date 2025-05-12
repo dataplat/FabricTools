@@ -9,6 +9,12 @@ The Get-FabricItem function retrieves fabric items from a specified workspace. I
 .PARAMETER workspaceId
 The ID of the workspace from which to retrieve the fabric items.
 
+.PARAMETER Workspace
+The workspace object from which to retrieve the fabric items. This parameter can be piped into the function.
+
+.PARAMETER itemID
+The ID of the specific item to retrieve. If not specified, all items will be retrieved.
+
 .PARAMETER type
 (Optional) The type of the fabric items to retrieve. If not specified, all items will be retrieved.
 

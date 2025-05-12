@@ -1,3 +1,4 @@
+function Get-FabricEnvironment {
 <#
 .SYNOPSIS
 Retrieves an environment or a list of environments from a specified workspace in Microsoft Fabric.
@@ -7,6 +8,9 @@ The `Get-FabricEnvironment` function sends a GET request to the Fabric API to re
 
 .PARAMETER WorkspaceId
 (Mandatory) The ID of the workspace to query environments.
+
+.PARAMETER EnvironmentId
+(Optional) The ID of a specific environment to retrieve.
 
 .PARAMETER EnvironmentName
 (Optional) The name of the specific environment to retrieve.
@@ -26,11 +30,10 @@ Retrieves all environments in workspace "12345".
 - Calls `Test-TokenExpired` to ensure token validity before making the API request.
 - Returns the matching environment details or all environments if no filter is provided.
 
-Author: Tiago Balabuch  
+Author: Tiago Balabuch
 
 #>
 
-function Get-FabricEnvironment {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
@@ -68,14 +71,14 @@ function Get-FabricEnvironment {
         }
 
         $baseApiEndpointUrl = "{0}/workspaces/{1}/environments" -f $FabricConfig.BaseUrl, $WorkspaceId
-        
+
         # Step 4:  Loop to retrieve data with continuation token
         Write-Message -Message "Loop started to get continuation token" -Level Debug
 
         do {
             # Step 5: Construct the API URL
             $apiEndpointUrl = $baseApiEndpointUrl
- 
+
             if ($null -ne $continuationToken) {
                 # URL-encode the continuation token
                 $encodedToken = [System.Web.HttpUtility]::UrlEncode($continuationToken)
@@ -101,7 +104,7 @@ function Get-FabricEnvironment {
                 Write-Message "Error Code: $($response.errorCode)" -Level Error
                 return $null
             }
- 
+
             # Step 8: Add data to the list
             if ($null -ne $response) {
                 Write-Message -Message "Adding data to the list" -Level Debug
@@ -124,7 +127,7 @@ function Get-FabricEnvironment {
             }
         } while ($null -ne $continuationToken)
         Write-Message -Message "Loop finished and all data added to the list" -Level Debug
-       
+
         # Step 8: Filter results based on provided parameters
         $environment = if ($EnvironmentId) {
             $environments | Where-Object { $_.Id -eq $EnvironmentId }
@@ -152,6 +155,6 @@ function Get-FabricEnvironment {
         # Step 10: Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to retrieve environment. Error: $errorDetails" -Level Error
-    } 
- 
+    }
+
 }

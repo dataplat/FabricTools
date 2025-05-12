@@ -1,3 +1,4 @@
+function Get-FabricDataPipeline {
 <#
 .SYNOPSIS
     Retrieves data pipelines from a specified Microsoft Fabric workspace.
@@ -9,10 +10,10 @@
 .PARAMETER WorkspaceId
     The unique identifier of the workspace where the Data Pipeline exists. This parameter is mandatory.
 
-.PARAMETER Data PipelineId
+.PARAMETER DataPipelineId
     The unique identifier of the Data Pipeline to retrieve. This parameter is optional.
 
-.PARAMETER Data PipelineName
+.PARAMETER DataPipelineName
     The name of the Data Pipeline to retrieve. This parameter is optional.
 
 .EXAMPLE
@@ -29,7 +30,6 @@
 
     Author: Tiago Balabuch
 #>
-function Get-FabricDataPipeline {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
@@ -60,13 +60,13 @@ function Get-FabricDataPipeline {
 
         # Construct the API endpoint URL
         $apiEndpointURI = "{0}/workspaces/{1}/dataPipelines" -f $FabricConfig.BaseUrl, $WorkspaceId
-        
+
         # Invoke the Fabric API to retrieve capacity details
         $DataPipelines = Invoke-FabricAPIRequest `
             -BaseURI $apiEndpointURI `
             -Headers $FabricConfig.FabricHeaders `
             -Method Get
-       
+
         # Filter results based on provided parameters
         $response = if ($DataPipelineId) {
             $DataPipelines | Where-Object { $_.Id -eq $DataPipelineId }
@@ -94,6 +94,6 @@ function Get-FabricDataPipeline {
         # Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to retrieve DataPipeline. Error: $errorDetails" -Level Error
-    } 
- 
+    }
+
 }

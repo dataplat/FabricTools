@@ -1,3 +1,4 @@
+function Get-FabricKQLQueryset {
 <#
 .SYNOPSIS
 Retrieves an KQLQueryset or a list of KQLQuerysets from a specified workspace in Microsoft Fabric.
@@ -7,6 +8,9 @@ The `Get-FabricKQLQueryset` function sends a GET request to the Fabric API to re
 
 .PARAMETER WorkspaceId
 (Mandatory) The ID of the workspace to query KQLQuerysets.
+
+.PARAMETER KQLQuerysetId
+(Optional) The ID of a specific KQLQueryset to retrieve.
 
 .PARAMETER KQLQuerysetName
 (Optional) The name of the specific KQLQueryset to retrieve.
@@ -25,11 +29,9 @@ Retrieves all KQLQuerysets in workspace "12345".
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
 - Calls `Test-TokenExpired` to ensure token validity before making the API request.
 
-Author: Tiago Balabuch  
+Author: Tiago Balabuch
 
 #>
-
-function Get-FabricKQLQueryset {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
@@ -57,7 +59,7 @@ function Get-FabricKQLQueryset {
         Write-Message -Message "Validating token..." -Level Debug
         Test-TokenExpired
         Write-Message -Message "Token validation completed." -Level Debug
-        
+
         # Step 3: Initialize variables
         $continuationToken = $null
         $KQLQuerysets = @()
@@ -65,7 +67,7 @@ function Get-FabricKQLQueryset {
         if (-not ([AppDomain]::CurrentDomain.GetAssemblies() | Where-Object { $_.GetName().Name -eq "System.Web" })) {
             Add-Type -AssemblyName System.Web
         }
- 
+
         # Step 4: Loop to retrieve all capacities with continuation token
         Write-Message -Message "Loop started to get continuation token" -Level Debug
         $baseApiEndpointUrl = "{0}/workspaces/{1}/kqlQuerysets" -f $FabricConfig.BaseUrl, $WorkspaceId
@@ -79,7 +81,7 @@ function Get-FabricKQLQueryset {
                 $apiEndpointUrl = "{0}?continuationToken={1}" -f $apiEndpointUrl, $encodedToken
             }
             Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
- 
+
             # Step 6: Make the API request
             $response = Invoke-RestMethod `
                 -Headers $FabricConfig.FabricHeaders `
@@ -89,7 +91,7 @@ function Get-FabricKQLQueryset {
                 -SkipHttpErrorCheck `
                 -ResponseHeadersVariable "responseHeader" `
                 -StatusCodeVariable "statusCode"
- 
+
             # Step 7: Validate the response code
             if ($statusCode -ne 200) {
                 Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
@@ -98,12 +100,12 @@ function Get-FabricKQLQueryset {
                 Write-Message "Error Code: $($response.errorCode)" -Level Error
                 return $null
             }
- 
+
             # Step 8: Add data to the list
             if ($null -ne $response) {
                 Write-Message -Message "Adding data to the list" -Level Debug
                 $KQLQuerysets += $response.value
-         
+
                 # Update the continuation token if present
                 if ($response.PSObject.Properties.Match("continuationToken")) {
                     Write-Message -Message "Updating the continuation token" -Level Debug
@@ -121,7 +123,7 @@ function Get-FabricKQLQueryset {
             }
         } while ($null -ne $continuationToken)
         Write-Message -Message "Loop finished and all data added to the list" -Level Debug
-      
+
         # Step 8: Filter results based on provided parameters
         $KQLQueryset = if ($KQLQuerysetId) {
             $KQLQuerysets | Where-Object { $_.Id -eq $KQLQuerysetId }
@@ -149,6 +151,6 @@ function Get-FabricKQLQueryset {
         # Step 10: Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to retrieve KQLQueryset. Error: $errorDetails" -Level Error
-    } 
- 
+    }
+
 }

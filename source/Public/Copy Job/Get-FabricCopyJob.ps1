@@ -13,7 +13,7 @@ function Get-FabricCopyJob {
 .PARAMETER CopyJobId
     The unique identifier of the CopyJob to retrieve. This parameter is optional.
 
-.PARAMETER CopyJobName
+.PARAMETER CopyJob
     The name of the CopyJob to retrieve. This parameter is optional.
 
 .EXAMPLE

@@ -1,3 +1,4 @@
+function Get-FabricMirroredWarehouse {
 <#
 .SYNOPSIS
 Retrieves an MirroredWarehouse or a list of MirroredWarehouses from a specified workspace in Microsoft Fabric.
@@ -7,6 +8,9 @@ The `Get-FabricMirroredWarehouse` function sends a GET request to the Fabric API
 
 .PARAMETER WorkspaceId
 (Mandatory) The ID of the workspace to query MirroredWarehouses.
+
+.PARAMETER MirroredWarehouseId
+(Optional) The ID of a specific MirroredWarehouse to retrieve.
 
 .PARAMETER MirroredWarehouseName
 (Optional) The name of the specific MirroredWarehouse to retrieve.
@@ -25,11 +29,9 @@ Retrieves all MirroredWarehouses in workspace "12345".
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
 - Calls `Test-TokenExpired` to ensure token validity before making the API request.
 
-Author: Tiago Balabuch  
+Author: Tiago Balabuch
 
 #>
-
-function Get-FabricMirroredWarehouse {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
@@ -64,24 +66,24 @@ function Get-FabricMirroredWarehouse {
         if (-not ([AppDomain]::CurrentDomain.GetAssemblies() | Where-Object { $_.GetName().Name -eq "System.Web" })) {
             Add-Type -AssemblyName System.Web
         }
- 
+
         # Step 4: Loop to retrieve all capacities with continuation token
         Write-Message -Message "Loop started to get continuation token" -Level Debug
         $baseApiEndpointUrl = "{0}/workspaces/{1}/MirroredWarehouses" -f $FabricConfig.BaseUrl, $WorkspaceId
-        
+
         # Step 3:  Loop to retrieve data with continuation token
-        
+
         do {
             # Step 5: Construct the API URL
             $apiEndpointUrl = $baseApiEndpointUrl
-        
+
             if ($null -ne $continuationToken) {
                 # URL-encode the continuation token
                 $encodedToken = [System.Web.HttpUtility]::UrlEncode($continuationToken)
                 $apiEndpointUrl = "{0}?continuationToken={1}" -f $apiEndpointUrl, $encodedToken
             }
             Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
-         
+
             # Step 6: Make the API request
             $response = Invoke-RestMethod `
                 -Headers $FabricConfig.FabricHeaders `
@@ -91,7 +93,7 @@ function Get-FabricMirroredWarehouse {
                 -SkipHttpErrorCheck `
                 -ResponseHeadersVariable "responseHeader" `
                 -StatusCodeVariable "statusCode"
-         
+
             # Step 7: Validate the response code
             if ($statusCode -ne 200) {
                 Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
@@ -100,12 +102,12 @@ function Get-FabricMirroredWarehouse {
                 Write-Message "Error Code: $($response.errorCode)" -Level Error
                 return $null
             }
-         
+
             # Step 8: Add data to the list
             if ($null -ne $response) {
                 Write-Message -Message "Adding data to the list" -Level Debug
                 $MirroredWarehouses += $response.value
-                 
+
                 # Update the continuation token if present
                 if ($response.PSObject.Properties.Match("continuationToken")) {
                     Write-Message -Message "Updating the continuation token" -Level Debug
@@ -124,7 +126,7 @@ function Get-FabricMirroredWarehouse {
         } while ($null -ne $continuationToken)
         Write-Message -Message "Loop finished and all data added to the list" -Level Debug
 
-       
+
         # Step 8: Filter results based on provided parameters
         $MirroredWarehouse = if ($MirroredWarehouseId) {
             $MirroredWarehouses | Where-Object { $_.Id -eq $MirroredWarehouseId }
@@ -152,6 +154,6 @@ function Get-FabricMirroredWarehouse {
         # Step 10: Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to retrieve MirroredWarehouse. Error: $errorDetails" -Level Error
-    } 
- 
+    }
+
 }
