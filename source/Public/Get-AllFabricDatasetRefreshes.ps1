@@ -1,12 +1,13 @@
+function Get-FabricDatasetRefreshes {
 <#
 .SYNOPSIS
 Retrieves all refreshes for all datasets in all PowerBI workspaces.
 
 .DESCRIPTION
-The Get-AllFabricDatasetRefreshes function retrieves all refreshes for all datasets in all PowerBI workspaces. It supports multiple aliases for flexibility.
+The Get-FabricDatasetRefreshes function retrieves all refreshes for all datasets in all PowerBI workspaces. It supports multiple aliases for flexibility.
 
 .EXAMPLE
-Get-AllFabricDatasetRefreshes
+Get-FabricDatasetRefreshes
 
 This example retrieves all refreshes for all datasets in all PowerBI workspaces.
 
@@ -15,7 +16,6 @@ The function makes a GET request to the PowerBI API to retrieve the refreshes. I
 #>
 
 # This function retrieves all refreshes for all datasets in all PowerBI workspaces.
-function Get-AllFabricDatasetRefreshes {
     # Define aliases for the function for flexibility.
 
     Confirm-FabricAuthToken | Out-Null
