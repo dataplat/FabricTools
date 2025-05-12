@@ -2,6 +2,9 @@
 <#
     .SYNOPSIS
         Imports items using the Power BI Project format (PBIP) into a Fabric workspace from a specified file system source.
+    .DESCRIPTION
+        The Import-FabricItem function imports items using the Power BI Project format (PBIP) into a Fabric workspace from a specified file system source. It supports multiple aliases for flexibility.
+        The function handles the import of datasets and reports, ensuring that the correct item type is used and that the items are created or updated as necessary.
 
     .PARAMETER fileOverrides
         This parameter let's you override a PBIP file without altering the local file.
@@ -94,7 +97,7 @@ Function Import-FabricItem {
         if ($itemType -ieq "dataset") {
             $itemType = "SemanticModel"
         }
-        
+
 
         $displayName = $itemMetadata.displayName
 
@@ -161,11 +164,11 @@ Function Import-FabricItem {
                     }
                 }
                 else {
-                  
+
                     $fileContent = Get-Content -Path $filePath -AsByteStream -Raw
                 }
             }
-            
+
             $partPath = $filePath.Replace($itemPathAbs, "").TrimStart("\").Replace("\", "/")
             write-host "Processing part: '$partPath'"
             $fileEncodedContent = [Convert]::ToBase64String($fileContent)
