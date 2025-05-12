@@ -1,5 +1,5 @@
 function Get-FabricMirroredWarehouse {
-<#
+    <#
 .SYNOPSIS
 Retrieves an MirroredWarehouse or a list of MirroredWarehouses from a specified workspace in Microsoft Fabric.
 
@@ -31,7 +31,7 @@ Retrieves all MirroredWarehouses in workspace "12345".
 
 Author: Tiago Balabuch
 
-#>
+    #>
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
@@ -113,13 +113,11 @@ Author: Tiago Balabuch
                     Write-Message -Message "Updating the continuation token" -Level Debug
                     $continuationToken = $response.continuationToken
                     Write-Message -Message "Continuation token: $continuationToken" -Level Debug
-                }
-                else {
+                } else {
                     Write-Message -Message "Updating the continuation token to null" -Level Debug
                     $continuationToken = $null
                 }
-            }
-            else {
+            } else {
                 Write-Message -Message "No data received from the API." -Level Warning
                 break
             }
@@ -130,11 +128,9 @@ Author: Tiago Balabuch
         # Step 8: Filter results based on provided parameters
         $MirroredWarehouse = if ($MirroredWarehouseId) {
             $MirroredWarehouses | Where-Object { $_.Id -eq $MirroredWarehouseId }
-        }
-        elseif ($MirroredWarehouseName) {
+        } elseif ($MirroredWarehouseName) {
             $MirroredWarehouses | Where-Object { $_.DisplayName -eq $MirroredWarehouseName }
-        }
-        else {
+        } else {
             # Return all MirroredWarehouses if no filter is provided
             Write-Message -Message "No filter provided. Returning all MirroredWarehouses." -Level Debug
             $MirroredWarehouses
@@ -144,13 +140,11 @@ Author: Tiago Balabuch
         if ($MirroredWarehouse) {
             Write-Message -Message "MirroredWarehouse found matching the specified criteria." -Level Debug
             return $MirroredWarehouse
-        }
-        else {
+        } else {
             Write-Message -Message "No MirroredWarehouse found matching the provided criteria." -Level Warning
             return $null
         }
-    }
-    catch {
+    } catch {
         # Step 10: Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to retrieve MirroredWarehouse. Error: $errorDetails" -Level Error

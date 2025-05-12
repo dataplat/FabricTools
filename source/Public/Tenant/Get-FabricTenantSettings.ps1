@@ -15,7 +15,7 @@ Retrieves the tenant settings from the Fabric API.
 
 #>
 
-function Get-FabricTenantSettings  {
+function Get-FabricTenantSettings {
     [Alias("Get-FabTenantSettings")]
     Param ()
 

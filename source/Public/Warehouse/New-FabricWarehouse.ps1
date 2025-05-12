@@ -3,7 +3,7 @@
     Creates a new warehouse in a specified Microsoft Fabric workspace.
 
 .DESCRIPTION
-    This function sends a POST request to the Microsoft Fabric API to create a new warehouse 
+    This function sends a POST request to the Microsoft Fabric API to create a new warehouse
     in the specified workspace. It supports optional parameters for warehouse description.
 
 .PARAMETER WorkspaceId
@@ -71,11 +71,10 @@ function New-FabricWarehouse {
             -Method Post `
             -Body $bodyJson
 
-        Write-Message -Message "Data Warehouse created successfully!" -Level Info        
+        Write-Message -Message "Data Warehouse created successfully!" -Level Info
         return $response
-     
-    }
-    catch {
+
+    } catch {
         # Step 6: Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to create Warehouse. Error: $errorDetails" -Level Error

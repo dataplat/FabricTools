@@ -1,5 +1,5 @@
 function Get-FabricWorkspaceUsers {
-<#
+    <#
 .SYNOPSIS
 Retrieves the users of a workspace.
 
@@ -24,9 +24,9 @@ This example retrieves the users of a workspace given a workspace object.
 
 .NOTES
 The function defines parameters for the workspace ID and workspace object. If the parameter set name is 'WorkspaceId', it retrieves the workspace object. It then makes a GET request to the PowerBI API to retrieve the users of the workspace and returns the 'value' property of the response, which contains the users.
-#>
+    #>
 
-# This function retrieves the users of a workspace.
+    # This function retrieves the users of a workspace.
     # Define aliases for the function for flexibility.
     [Alias("Get-FabWorkspaceUsers")]
 

@@ -1,5 +1,5 @@
 function Get-FabricCopyJob {
-<#
+    <#
 .SYNOPSIS
     Retrieves CopyJob details from a specified Microsoft Fabric workspace.
 
@@ -29,7 +29,7 @@ function Get-FabricCopyJob {
     Calls `Test-TokenExpired` to ensure token validity before making the API request.
 
     Author: Tiago Balabuch
-#>
+    #>
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
@@ -63,19 +63,17 @@ function Get-FabricCopyJob {
         $apiEndpointURI = "{0}/workspaces/{1}/copyJobs" -f $FabricConfig.BaseUrl, $WorkspaceId
 
         # Invoke the Fabric API to retrieve capacity details
-        $copyJobs =  Invoke-FabricAPIRequest `
-        -BaseURI $apiEndpointURI `
-        -Headers $FabricConfig.FabricHeaders `
-        -Method Get
+        $copyJobs = Invoke-FabricAPIRequest `
+            -BaseURI $apiEndpointURI `
+            -Headers $FabricConfig.FabricHeaders `
+            -Method Get
 
         #  Filter results based on provided parameters
         $response = if ($CopyJobId) {
             $copyJobs | Where-Object { $_.Id -eq $CopyJobId }
-        }
-        elseif ($CopyJobName) {
+        } elseif ($CopyJobName) {
             $copyJobs | Where-Object { $_.DisplayName -eq $CopyJobName }
-        }
-        else {
+        } else {
             # Return all CopyJobs if no filter is provided
             Write-Message -Message "No filter provided. Returning all CopyJobs." -Level Debug
             $copyJobs
@@ -85,13 +83,11 @@ function Get-FabricCopyJob {
         if ($response) {
             Write-Message -Message "CopyJob found matching the specified criteria." -Level Debug
             return $response
-        }
-        else {
+        } else {
             Write-Message -Message "No CopyJob found matching the provided criteria." -Level Warning
             return $null
         }
-    }
-    catch {
+    } catch {
         # Step 10: Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to retrieve CopyJob. Error: $errorDetails" -Level Error

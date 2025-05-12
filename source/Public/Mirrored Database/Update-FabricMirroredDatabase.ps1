@@ -101,8 +101,7 @@ function Update-FabricMirroredDatabase {
         # Step 6: Handle results
         Write-Message -Message "MirroredDatabase '$MirroredDatabaseName' updated successfully!" -Level Info
         return $response
-    }
-    catch {
+    } catch {
         # Step 7: Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to update MirroredDatabase. Error: $errorDetails" -Level Error

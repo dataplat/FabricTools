@@ -1,5 +1,5 @@
 function Get-FabricMirroredDatabaseTableStatus {
-<#
+    <#
 .SYNOPSIS
 Retrieves the status of tables in a mirrored database.
 .DESCRIPTION
@@ -14,7 +14,7 @@ This example retrieves the status of tables in a mirrored database with the spec
 .NOTES
 The function retrieves the PowerBI access token and makes a POST request to the PowerBI API to retrieve the status of tables in the specified mirrored database. It then returns the 'value' property of the response, which contains the table statuses.
 
-#>
+    #>
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
@@ -86,13 +86,11 @@ The function retrieves the PowerBI access token and makes a POST request to the 
                     Write-Message -Message "Updating the continuation token" -Level Debug
                     $continuationToken = $response.continuationToken
                     Write-Message -Message "Continuation token: $continuationToken" -Level Debug
-                }
-                else {
+                } else {
                     Write-Message -Message "Updating the continuation token to null" -Level Debug
                     $continuationToken = $null
                 }
-            }
-            else {
+            } else {
                 Write-Message -Message "No data received from the API." -Level Warning
                 break
             }
@@ -103,8 +101,7 @@ The function retrieves the PowerBI access token and makes a POST request to the 
         # Return all Mirrored Database Table Status
         Write-Message -Message "No filter provided. Returning all MirroredDatabases." -Level Debug
         $MirroredDatabaseTableStatus
-    }
-    catch {
+    } catch {
         # Step 10: Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to retrieve MirroredDatabase. Error: $errorDetails" -Level Error

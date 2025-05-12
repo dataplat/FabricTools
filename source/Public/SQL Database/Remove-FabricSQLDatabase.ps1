@@ -40,7 +40,7 @@ function Remove-FabricSQLDatabase {
         # Step 1: Ensure token validity
         Confirm-FabricAuthToken | Out-Null
         Test-TokenExpired
-  
+
         # Step 2: Construct the API URL
         $apiEndpointUrl = "{0}/workspaces/{1}/sqldatabases/{2}" -f $FabricConfig.BaseUrl, $WorkspaceId, $SQLDatabaseId
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
@@ -62,9 +62,8 @@ function Remove-FabricSQLDatabase {
             return $null
         }
         Write-Message -Message "SQL Database '$SQLDatabaseId' deleted successfully from workspace '$WorkspaceId'." -Level Info
-        
-    }
-    catch {
+
+    } catch {
         # Step 5: Log and handle errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to delete SQL Database '$SQLDatabaseId' from workspace '$WorkspaceId'. Error: $errorDetails" -Level Error

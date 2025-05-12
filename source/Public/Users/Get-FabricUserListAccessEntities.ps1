@@ -40,11 +40,11 @@ function Get-FabricUserListAccessEntities {
     )
 
     try {
-   
+
         Write-Message -Message "Validating token..." -Level Debug
         Test-TokenExpired
         Write-Message -Message "Token validation completed." -Level Debug
-       
+
 
         # Step 4: Loop to retrieve all capacities with continuation token
         $apiEndpointURI = "{0}admin/users/{1}/access" -f $FabricConfig.BaseUrl, $UserId
@@ -58,11 +58,10 @@ function Get-FabricUserListAccessEntities {
             -Method Get
 
         return $response
-    }
-    catch {
+    } catch {
         # Step 10: Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to retrieve Warehouse. Error: $errorDetails" -Level Error
-    } 
- 
+    }
+
 }

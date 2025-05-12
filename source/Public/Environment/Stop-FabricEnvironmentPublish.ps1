@@ -21,10 +21,10 @@ Cancels the publish operation for the specified environment.
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
 - Validates token expiration before making the API request.
 
-Author: Tiago Balabuch  
+Author: Tiago Balabuch
 
 #>
-function Stop-FabricEnvironmentPublish{
+function Stop-FabricEnvironmentPublish {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
@@ -66,9 +66,8 @@ function Stop-FabricEnvironmentPublish{
             return $null
         }
         Write-Message -Message "Publication for environment '$EnvironmentId' has been successfully canceled." -Level Info
-        
-    }
-    catch {
+
+    } catch {
         # Step 5: Log and handle errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to cancel publication for environment '$EnvironmentId' from workspace '$WorkspaceId'. Error: $errorDetails" -Level Error

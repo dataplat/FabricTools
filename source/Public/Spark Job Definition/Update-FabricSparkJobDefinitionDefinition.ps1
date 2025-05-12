@@ -3,7 +3,7 @@
     Updates the definition of an existing SparkJobDefinition in a specified Microsoft Fabric workspace.
 
 .DESCRIPTION
-    This function sends a PATCH request to the Microsoft Fabric API to update the definition of an existing SparkJobDefinition 
+    This function sends a PATCH request to the Microsoft Fabric API to update the definition of an existing SparkJobDefinition
     in the specified workspace. It supports optional parameters for SparkJobDefinition definition and platform-specific definition.
 
 .PARAMETER WorkspaceId
@@ -42,7 +42,7 @@ function Update-FabricSparkJobDefinitionDefinition {
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
         [string]$SparkJobDefinitionPathDefinition,
-        
+
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
         [string]$SparkJobDefinitionPathPlatformDefinition
@@ -57,8 +57,8 @@ function Update-FabricSparkJobDefinitionDefinition {
         $apiEndpointUrl = "{0}/workspaces/{1}/SparkJobDefinitions/{2}/updateDefinition" -f $FabricConfig.BaseUrl, $WorkspaceId, $SparkJobDefinitionId
 
         #if ($UpdateMetadata -eq $true) {
-        if($SparkJobDefinitionPathPlatformDefinition){
-            $apiEndpointUrl = "?updateMetadata=true" -f $apiEndpointUrl 
+        if ($SparkJobDefinitionPathPlatformDefinition) {
+            $apiEndpointUrl = "?updateMetadata=true" -f $apiEndpointUrl
         }
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
@@ -67,12 +67,12 @@ function Update-FabricSparkJobDefinitionDefinition {
             definition = @{
                 format = "SparkJobDefinitionV1"
                 parts  = @()
-            } 
+            }
         }
-      
+
         if ($SparkJobDefinitionPathDefinition) {
             $SparkJobDefinitionEncodedContent = Convert-ToBase64 -filePath $SparkJobDefinitionPathDefinition
-            
+
             if (-not [string]::IsNullOrEmpty($SparkJobDefinitionEncodedContent)) {
                 # Add new part to the parts array
                 $body.definition.parts += @{
@@ -80,8 +80,7 @@ function Update-FabricSparkJobDefinitionDefinition {
                     payload     = $SparkJobDefinitionEncodedContent
                     payloadType = "InlineBase64"
                 }
-            }
-            else {
+            } else {
                 Write-Message -Message "Invalid or empty content in SparkJobDefinition definition." -Level Error
                 return $null
             }
@@ -96,8 +95,7 @@ function Update-FabricSparkJobDefinitionDefinition {
                     payload     = $SparkJobDefinitionEncodedPlatformContent
                     payloadType = "InlineBase64"
                 }
-            }
-            else {
+            } else {
                 Write-Message -Message "Invalid or empty content in platform definition." -Level Error
                 return $null
             }
@@ -116,7 +114,7 @@ function Update-FabricSparkJobDefinitionDefinition {
             -ErrorAction Stop `
             -ResponseHeadersVariable "responseHeader" `
             -StatusCodeVariable "statusCode"
-       
+
         # Step 5: Handle and log the response
         switch ($statusCode) {
             200 {
@@ -125,42 +123,40 @@ function Update-FabricSparkJobDefinitionDefinition {
             }
             202 {
                 Write-Message -Message "Update definition for Spark Job Definition '$SparkJobDefinitionId' accepted. Operation in progress!" -Level Info
-                
+
                 [string]$operationId = $responseHeader["x-ms-operation-id"]
                 [string]$location = $responseHeader["Location"]
-                [string]$retryAfter = $responseHeader["Retry-After"] 
+                [string]$retryAfter = $responseHeader["Retry-After"]
 
                 Write-Message -Message "Operation ID: '$operationId'" -Level Debug
                 Write-Message -Message "Location: '$location'" -Level Debug
                 Write-Message -Message "Retry-After: '$retryAfter'" -Level Debug
                 Write-Message -Message "Getting Long Running Operation status" -Level Debug
-               
+
                 $operationStatus = Get-FabricLongRunningOperation -operationId $operationId -location $location
                 Write-Message -Message "Long Running Operation status: $operationStatus" -Level Debug
                 # Handle operation result
                 if ($operationStatus.status -eq "Succeeded") {
                     Write-Message -Message "Operation Succeeded" -Level Debug
                     Write-Message -Message "Getting Long Running Operation result" -Level Debug
-                
+
                     $operationResult = Get-FabricLongRunningOperationResult -operationId $operationId
                     Write-Message -Message "Long Running Operation status: $operationResult" -Level Debug
-                
+
                     return $operationResult
-                } 
-                else {
+                } else {
                     Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Debug
                     Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Error
                     return $operationStatus
-                } 
-            } 
+                }
+            }
             default {
                 Write-Message -Message "Unexpected response code: $statusCode" -Level Error
                 Write-Message -Message "Error details: $($response.message)" -Level Error
                 throw "API request failed with status code $statusCode."
             }
         }
-    }
-    catch {
+    } catch {
         # Step 6: Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to update Spark Job Definition. Error: $errorDetails" -Level Error

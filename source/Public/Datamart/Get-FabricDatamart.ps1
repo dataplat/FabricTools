@@ -1,5 +1,5 @@
 function Get-FabricDatamart {
-<#
+    <#
 .SYNOPSIS
     Retrieves datamarts from a specified workspace.
 
@@ -25,7 +25,7 @@ function Get-FabricDatamart {
     - Calls `Test-TokenExpired` to ensure token validity before making the API request.
 
     Author: Tiago Balabuch
-#>
+    #>
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
@@ -51,18 +51,16 @@ function Get-FabricDatamart {
         $apiEndpointURI = "{0}/workspaces/{1}/Datamarts" -f $FabricConfig.BaseUrl, $WorkspaceId
 
         $Datamarts = = Invoke-FabricAPIRequest `
-        -BaseURI $apiEndpointURI `
-        -Headers $FabricConfig.FabricHeaders `
-        -Method Get
+            -BaseURI $apiEndpointURI `
+            -Headers $FabricConfig.FabricHeaders `
+            -Method Get
         # Step 9: Filter results based on provided parameters
 
         $response = if ($datamartId) {
             $Datamarts | Where-Object { $_.Id -eq $datamartId }
-        }
-        elseif ($datamartName) {
+        } elseif ($datamartName) {
             $Datamarts | Where-Object { $_.DisplayName -eq $datamartName }
-        }
-        else {
+        } else {
             # No filter, return all datamarts
             Write-Message -Message "No filter specified. Returning all datamarts." -Level Debug
             return $Datamarts
@@ -72,13 +70,11 @@ function Get-FabricDatamart {
         if ($response) {
             Write-Message -Message "Datamart found matching the specified criteria." -Level Debug
             return $response
-        }
-        else {
+        } else {
             Write-Message -Message "No Datamart found matching the specified criteria." -Level Warning
             return $null
         }
-    }
-    catch {
+    } catch {
         # Step 10: Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to retrieve Datamart. Error: $errorDetails" -Level Error

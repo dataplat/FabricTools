@@ -3,7 +3,7 @@
     Creates a new SparkJobDefinition in a specified Microsoft Fabric workspace.
 
 .DESCRIPTION
-    This function sends a POST request to the Microsoft Fabric API to create a new SparkJobDefinition 
+    This function sends a POST request to the Microsoft Fabric API to create a new SparkJobDefinition
     in the specified workspace. It supports optional parameters for SparkJobDefinition description and path definitions.
 
 .PARAMETER WorkspaceId
@@ -50,7 +50,7 @@ function New-FabricSparkJobDefinition {
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
         [string]$SparkJobDefinitionPathDefinition,
-        
+
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
         [string]$SparkJobDefinitionPathPlatformDefinition
@@ -91,8 +91,7 @@ function New-FabricSparkJobDefinition {
                     payload     = $SparkJobDefinitionEncodedContent
                     payloadType = "InlineBase64"
                 }
-            }
-            else {
+            } else {
                 Write-Message -Message "Invalid or empty content in SparkJobDefinition definition." -Level Error
                 return $null
             }
@@ -116,8 +115,7 @@ function New-FabricSparkJobDefinition {
                     payload     = $SparkJobDefinitionEncodedPlatformContent
                     payloadType = "InlineBase64"
                 }
-            }
-            else {
+            } else {
                 Write-Message -Message "Invalid or empty content in platform definition." -Level Error
                 return $null
             }
@@ -138,9 +136,9 @@ function New-FabricSparkJobDefinition {
             -SkipHttpErrorCheck `
             -ResponseHeadersVariable "responseHeader" `
             -StatusCodeVariable "statusCode"
-        
+
         Write-Message -Message "Response Code: $statusCode" -Level Debug
-  
+
         # Step 5: Handle and log the response
         switch ($statusCode) {
             201 {
@@ -149,33 +147,32 @@ function New-FabricSparkJobDefinition {
             }
             202 {
                 Write-Message -Message "Spark Job Definition '$SparkJobDefinitionName' creation accepted. Provisioning in progress!" -Level Info
-                
+
                 [string]$operationId = $responseHeader["x-ms-operation-id"]
                 [string]$location = $responseHeader["Location"]
-                [string]$retryAfter = $responseHeader["Retry-After"] 
+                [string]$retryAfter = $responseHeader["Retry-After"]
 
                 Write-Message -Message "Operation ID: '$operationId'" -Level Debug
                 Write-Message -Message "Location: '$location'" -Level Debug
                 Write-Message -Message "Retry-After: '$retryAfter'" -Level Debug
                 Write-Message -Message "Getting Long Running Operation status" -Level Debug
-               
+
                 $operationStatus = Get-FabricLongRunningOperation -operationId $operationId -location $location
                 Write-Message -Message "Long Running Operation status: $operationStatus" -Level Debug
                 # Handle operation result
                 if ($operationStatus.status -eq "Succeeded") {
                     Write-Message -Message "Operation Succeeded" -Level Debug
                     Write-Message -Message "Getting Long Running Operation result" -Level Debug
-                
+
                     $operationResult = Get-FabricLongRunningOperationResult -operationId $operationId
                     Write-Message -Message "Long Running Operation status: $operationResult" -Level Debug
-                
+
                     return $operationResult
-                } 
-                else {
+                } else {
                     Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Debug
                     Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Error
                     return $operationStatus
-                } 
+                }
             }
             default {
                 Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
@@ -185,8 +182,7 @@ function New-FabricSparkJobDefinition {
                 throw "API request failed with status code $statusCode."
             }
         }
-    }
-    catch {
+    } catch {
         # Step 6: Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to create Spark Job Definition. Error: $errorDetails" -Level Error

@@ -3,7 +3,7 @@
     Updates the definition of an existing Eventhouse in a specified Microsoft Fabric workspace.
 
 .DESCRIPTION
-    This function sends a PATCH request to the Microsoft Fabric API to update the definition of an existing Eventhouse 
+    This function sends a PATCH request to the Microsoft Fabric API to update the definition of an existing Eventhouse
     in the specified workspace. It supports optional parameters for Eventhouse definition and platform-specific definition.
 
 .PARAMETER WorkspaceId
@@ -27,7 +27,7 @@
     - Calls `Test-TokenExpired` to ensure token validity before making the API request.
 
     Author: Tiago Balabuch
-    
+
 #>
 function Update-FabricEventhouseDefinition {
     [CmdletBinding()]
@@ -43,7 +43,7 @@ function Update-FabricEventhouseDefinition {
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
         [string]$EventhousePathDefinition,
-        
+
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
         [string]$EventhousePathPlatformDefinition
@@ -58,21 +58,21 @@ function Update-FabricEventhouseDefinition {
         $apiEndpointUrl = "{0}/workspaces/{1}/eventhouses/{2}/updateDefinition" -f $FabricConfig.BaseUrl, $WorkspaceId, $EventhouseId
 
         #if ($UpdateMetadata -eq $true) {
-        if($EventhousePathPlatformDefinition){
-            $apiEndpointUrl = "?updateMetadata=true" -f $apiEndpointUrl 
+        if ($EventhousePathPlatformDefinition) {
+            $apiEndpointUrl = "?updateMetadata=true" -f $apiEndpointUrl
         }
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
         # Step 3: Construct the request body
         $body = @{
             definition = @{
-                parts  = @()
-            } 
+                parts = @()
+            }
         }
-      
+
         if ($EventhousePathDefinition) {
             $EventhouseEncodedContent = Convert-ToBase64 -filePath $EventhousePathDefinition
-            
+
             if (-not [string]::IsNullOrEmpty($EventhouseEncodedContent)) {
                 # Add new part to the parts array
                 $body.definition.parts += @{
@@ -80,8 +80,7 @@ function Update-FabricEventhouseDefinition {
                     payload     = $EventhouseEncodedContent
                     payloadType = "InlineBase64"
                 }
-            }
-            else {
+            } else {
                 Write-Message -Message "Invalid or empty content in Eventhouse definition." -Level Error
                 return $null
             }
@@ -96,8 +95,7 @@ function Update-FabricEventhouseDefinition {
                     payload     = $EventhouseEncodedPlatformContent
                     payloadType = "InlineBase64"
                 }
-            }
-            else {
+            } else {
                 Write-Message -Message "Invalid or empty content in platform definition." -Level Error
                 return $null
             }
@@ -116,7 +114,7 @@ function Update-FabricEventhouseDefinition {
             -ErrorAction Stop `
             -ResponseHeadersVariable "responseHeader" `
             -StatusCodeVariable "statusCode"
-       
+
         # Step 5: Handle and log the response
         switch ($statusCode) {
             200 {
@@ -125,42 +123,40 @@ function Update-FabricEventhouseDefinition {
             }
             202 {
                 Write-Message -Message "Update definition for Eventhouse '$EventhouseId' accepted. Operation in progress!" -Level Info
-                
+
                 [string]$operationId = $responseHeader["x-ms-operation-id"]
                 [string]$location = $responseHeader["Location"]
-                [string]$retryAfter = $responseHeader["Retry-After"] 
+                [string]$retryAfter = $responseHeader["Retry-After"]
 
                 Write-Message -Message "Operation ID: '$operationId'" -Level Debug
                 Write-Message -Message "Location: '$location'" -Level Debug
                 Write-Message -Message "Retry-After: '$retryAfter'" -Level Debug
                 Write-Message -Message "Getting Long Running Operation status" -Level Debug
-               
+
                 $operationStatus = Get-FabricLongRunningOperation -operationId $operationId -location $location
                 Write-Message -Message "Long Running Operation status: $operationStatus" -Level Debug
                 # Handle operation result
                 if ($operationStatus.status -eq "Succeeded") {
                     Write-Message -Message "Operation Succeeded" -Level Debug
                     Write-Message -Message "Getting Long Running Operation result" -Level Debug
-                
+
                     $operationResult = Get-FabricLongRunningOperationResult -operationId $operationId
                     Write-Message -Message "Long Running Operation status: $operationResult" -Level Debug
-                
+
                     return $operationResult
-                } 
-                else {
+                } else {
                     Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Debug
                     Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Error
                     return $operationStatus
-                }  
-            } 
+                }
+            }
             default {
                 Write-Message -Message "Unexpected response code: $statusCode" -Level Error
                 Write-Message -Message "Error details: $($response.message)" -Level Error
                 throw "API request failed with status code $statusCode."
             }
         }
-    }
-    catch {
+    } catch {
         # Step 6: Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to update Eventhouse. Error: $errorDetails" -Level Error

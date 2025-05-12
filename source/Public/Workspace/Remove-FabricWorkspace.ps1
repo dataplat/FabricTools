@@ -58,8 +58,7 @@ function Remove-FabricWorkspace {
         Write-Message -Message "Workspace '$WorkspaceId' deleted successfully!" -Level Info
         return $null
 
-    }
-    catch {
+    } catch {
         # Step 5: Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to retrieve capacity. Error: $errorDetails" -Level Error

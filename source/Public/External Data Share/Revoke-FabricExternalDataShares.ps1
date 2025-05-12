@@ -1,5 +1,5 @@
 function Revoke-FabricExternalDataShares {
-<#
+    <#
 .SYNOPSIS
     Retrieves External Data Shares details from a specified Microsoft Fabric.
 
@@ -25,7 +25,7 @@ function Revoke-FabricExternalDataShares {
     - Calls `Test-TokenExpired` to ensure token validity before making the API request.
 
     Author: Tiago Balabuch
-#>
+    #>
 
     [CmdletBinding()]
     param (
@@ -40,7 +40,7 @@ function Revoke-FabricExternalDataShares {
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
         [string]$ExternalDataShareId
-     )
+    )
 
     try {
 
@@ -61,8 +61,7 @@ function Revoke-FabricExternalDataShares {
         # Step 4: Return retrieved data
         Write-Message -Message "Successfully revoked external data shares." -Level Info
         return $externalDataShares
-    }
-    catch {
+    } catch {
         # Step 10: Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to retrieve External Data Shares. Error: $errorDetails" -Level Error

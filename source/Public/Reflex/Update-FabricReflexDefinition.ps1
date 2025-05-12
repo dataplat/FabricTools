@@ -3,7 +3,7 @@
     Updates the definition of an existing Reflex in a specified Microsoft Fabric workspace.
 
 .DESCRIPTION
-    This function sends a PATCH request to the Microsoft Fabric API to update the definition of an existing Reflex 
+    This function sends a PATCH request to the Microsoft Fabric API to update the definition of an existing Reflex
     in the specified workspace. It supports optional parameters for Reflex definition and platform-specific definition.
 
 .PARAMETER WorkspaceId
@@ -27,7 +27,7 @@
     - Calls `Test-TokenExpired` to ensure token validity before making the API request.
 
     Author: Tiago Balabuch
-    
+
 #>
 function Update-FabricReflexDefinition {
     [CmdletBinding()]
@@ -43,7 +43,7 @@ function Update-FabricReflexDefinition {
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
         [string]$ReflexPathDefinition,
-        
+
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
         [string]$ReflexPathPlatformDefinition
@@ -58,21 +58,21 @@ function Update-FabricReflexDefinition {
         $apiEndpointUrl = "{0}/workspaces/{1}/reflexes/{2}/updateDefinition" -f $FabricConfig.BaseUrl, $WorkspaceId, $ReflexId
 
         #if ($UpdateMetadata -eq $true) {
-        if($ReflexPathPlatformDefinition){
-            $apiEndpointUrl = "?updateMetadata=true" -f $apiEndpointUrl 
+        if ($ReflexPathPlatformDefinition) {
+            $apiEndpointUrl = "?updateMetadata=true" -f $apiEndpointUrl
         }
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
         # Step 3: Construct the request body
         $body = @{
             definition = @{
-                parts  = @()
-            } 
+                parts = @()
+            }
         }
-      
+
         if ($ReflexPathDefinition) {
             $ReflexEncodedContent = Convert-ToBase64 -filePath $ReflexPathDefinition
-            
+
             if (-not [string]::IsNullOrEmpty($ReflexEncodedContent)) {
                 # Add new part to the parts array
                 $body.definition.parts += @{
@@ -80,8 +80,7 @@ function Update-FabricReflexDefinition {
                     payload     = $ReflexEncodedContent
                     payloadType = "InlineBase64"
                 }
-            }
-            else {
+            } else {
                 Write-Message -Message "Invalid or empty content in Reflex definition." -Level Error
                 return $null
             }
@@ -96,8 +95,7 @@ function Update-FabricReflexDefinition {
                     payload     = $ReflexEncodedPlatformContent
                     payloadType = "InlineBase64"
                 }
-            }
-            else {
+            } else {
                 Write-Message -Message "Invalid or empty content in platform definition." -Level Error
                 return $null
             }
@@ -116,7 +114,7 @@ function Update-FabricReflexDefinition {
             -ErrorAction Stop `
             -ResponseHeadersVariable "responseHeader" `
             -StatusCodeVariable "statusCode"
-       
+
         # Step 5: Handle and log the response
         switch ($statusCode) {
             200 {
@@ -125,42 +123,40 @@ function Update-FabricReflexDefinition {
             }
             202 {
                 Write-Message -Message "Update definition for Reflex '$ReflexId' accepted. Operation in progress!" -Level Info
-                
+
                 [string]$operationId = $responseHeader["x-ms-operation-id"]
                 [string]$location = $responseHeader["Location"]
-                [string]$retryAfter = $responseHeader["Retry-After"] 
+                [string]$retryAfter = $responseHeader["Retry-After"]
 
                 Write-Message -Message "Operation ID: '$operationId'" -Level Debug
                 Write-Message -Message "Location: '$location'" -Level Debug
                 Write-Message -Message "Retry-After: '$retryAfter'" -Level Debug
                 Write-Message -Message "Getting Long Running Operation status" -Level Debug
-               
+
                 $operationStatus = Get-FabricLongRunningOperation -operationId $operationId -location $location
                 Write-Message -Message "Long Running Operation status: $operationStatus" -Level Debug
                 # Handle operation result
                 if ($operationStatus.status -eq "Succeeded") {
                     Write-Message -Message "Operation Succeeded" -Level Debug
                     Write-Message -Message "Getting Long Running Operation result" -Level Debug
-                
+
                     $operationResult = Get-FabricLongRunningOperationResult -operationId $operationId
                     Write-Message -Message "Long Running Operation status: $operationResult" -Level Debug
-                
+
                     return $operationResult
-                } 
-                else {
+                } else {
                     Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Debug
                     Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Error
                     return $operationStatus
-                } 
-            } 
+                }
+            }
             default {
                 Write-Message -Message "Unexpected response code: $statusCode" -Level Error
                 Write-Message -Message "Error details: $($response.message)" -Level Error
                 throw "API request failed with status code $statusCode."
             }
         }
-    }
-    catch {
+    } catch {
         # Step 6: Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to update Reflex. Error: $errorDetails" -Level Error

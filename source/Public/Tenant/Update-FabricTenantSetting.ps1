@@ -63,7 +63,7 @@ function Update-FabricCapacityTenantSettingOverrides {
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
         [bool]$DelegateToWorkspace,
-        
+
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
         [System.Object]$EnabledSecurityGroups,
@@ -151,14 +151,12 @@ function Update-FabricCapacityTenantSettingOverrides {
             -BaseURI $apiEndpointURI `
             -Headers $FabricConfig.FabricHeaders `
             -Method Post `
-            -Body $bodyJson  
+            -Body $bodyJson
 
         Write-Message -Message "Successfully updated tenant setting." -Level Info
         return $response
-    }
-    catch {
+    } catch {
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Error updating tenant settings: $errorDetails" -Level Error
     }
 }
-

@@ -52,7 +52,7 @@ Update-FabricEnvironmentStagingSparkCompute -WorkspaceId "workspace-12345" -Envi
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
 - Calls `Test-TokenExpired` to ensure token validity before making the API request.
 
-Author: Tiago Balabuch  
+Author: Tiago Balabuch
 
 #>
 function Update-FabricEnvironmentStagingSparkCompute {
@@ -61,7 +61,7 @@ function Update-FabricEnvironmentStagingSparkCompute {
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
         [string]$WorkspaceId,
-        
+
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
         [string]$EnvironmentId,
@@ -156,8 +156,8 @@ function Update-FabricEnvironmentStagingSparkCompute {
             -SkipHttpErrorCheck `
             -ResponseHeadersVariable "responseHeader" `
             -StatusCodeVariable "statusCode"
-        
-            # Step 5: Validate the response code
+
+        # Step 5: Validate the response code
         if ($statusCode -ne 200) {
             Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
             Write-Message -Message "Error: $($response.message)" -Level Error
@@ -168,8 +168,7 @@ function Update-FabricEnvironmentStagingSparkCompute {
         # Step 6: Handle results
         Write-Message -Message "Environment staging Spark compute updated successfully!" -Level Info
         return $response
-    }
-    catch {
+    } catch {
         # Step 7: Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to update environment staging Spark compute. Error: $errorDetails" -Level Error

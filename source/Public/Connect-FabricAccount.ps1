@@ -1,7 +1,7 @@
 function Connect-FabricAccount {
-#Requires -Version 7.1
+    #Requires -Version 7.1
 
-<#
+    <#
 .SYNOPSIS
     Connects to the Fabric WebAPI.
 
@@ -26,31 +26,31 @@ function Connect-FabricAccount {
 .LINK
     Connect-AzAccount https://learn.microsoft.com/de-de/powershell/module/az.accounts/connect-azaccount?view=azps-12.4.0
 
-#>
+    #>
 
-[CmdletBinding()]
+    [CmdletBinding()]
     param (
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [string]$TenantId
     )
 
-begin {
-}
+    begin {
+    }
 
-process {
-    Write-Verbose "Connect to Azure Account"
-    Connect-AzAccount -TenantId $TenantId | Out-Null
+    process {
+        Write-Verbose "Connect to Azure Account"
+        Connect-AzAccount -TenantId $TenantId | Out-Null
 
-    Write-Verbose "Get authentication token"
-    $FabricSession.FabricToken = (Get-AzAccessToken -ResourceUrl $FabricSession.BaseApiUrl).Token
-    Write-Verbose "Token: $($FabricSession.FabricToken)"
+        Write-Verbose "Get authentication token"
+        $FabricSession.FabricToken = (Get-AzAccessToken -ResourceUrl $FabricSession.BaseApiUrl).Token
+        Write-Verbose "Token: $($FabricSession.FabricToken)"
 
-    Write-Verbose "Setup headers for API calls"
-    $FabricSession.HeaderParams = @{'Authorization'="Bearer {0}" -f $FabricSession.FabricToken}
-    Write-Verbose "HeaderParams: $($FabricSession.HeaderParams)"
-}
+        Write-Verbose "Setup headers for API calls"
+        $FabricSession.HeaderParams = @{'Authorization' = "Bearer {0}" -f $FabricSession.FabricToken }
+        Write-Verbose "HeaderParams: $($FabricSession.HeaderParams)"
+    }
 
-end {
-}
+    end {
+    }
 
 }

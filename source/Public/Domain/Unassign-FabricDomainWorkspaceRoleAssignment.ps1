@@ -27,7 +27,7 @@ Unassign the `Admins` role to the specified principals in the domain with ID "12
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
 - Calls `Test-TokenExpired` to ensure token validity before making the API request.
 
-Author: Tiago Balabuch  
+Author: Tiago Balabuch
 
 #>
 
@@ -93,9 +93,8 @@ function Unassign-FabricDomainWorkspaceRoleAssignment {
             return $null
         }
         Write-Message -Message "Bulk role unassignment for domain '$DomainId' completed successfully!" -Level Info
-       
-    }
-    catch {
+
+    } catch {
         # Step 7: Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to bulk assign roles in domain '$DomainId'. Error: $errorDetails" -Level Error

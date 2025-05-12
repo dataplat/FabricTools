@@ -17,7 +17,7 @@
     - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
     - Calls `Test-TokenExpired` to ensure token validity before making the API request.
 
-    Author: Tiago Balabuch  
+    Author: Tiago Balabuch
 #>
 
 function Get-FabricDashboard {
@@ -42,13 +42,12 @@ function Get-FabricDashboard {
             -BaseURI $apiEndpointURI `
             -Headers $FabricConfig.FabricHeaders `
             -Method Get
-        
+
         return $Dashboards
 
-    }
-    catch {
+    } catch {
         # Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to retrieve Dashboard. Error: $errorDetails" -Level Error
-    } 
+    }
 }

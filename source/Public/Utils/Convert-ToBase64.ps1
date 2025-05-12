@@ -1,5 +1,5 @@
 function Convert-ToBase64 {
-<#
+    <#
 .SYNOPSIS
     Encodes the content of a file into a Base64-encoded string.
 
@@ -29,7 +29,7 @@ function Convert-ToBase64 {
 
 
     Tiago Balabuch
-#>
+    #>
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
@@ -50,8 +50,7 @@ function Convert-ToBase64 {
         # Step 3: Return the encoded string
         Write-Message -Message "Return the encoded string for the file: $filePath" -Level Debug
         return $base64String
-    }
-    catch {
+    } catch {
         # Step 4: Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "An error occurred while encoding to Base64: $errorDetails" -Level Error

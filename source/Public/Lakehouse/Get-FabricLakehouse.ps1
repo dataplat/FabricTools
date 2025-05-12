@@ -1,5 +1,5 @@
 function Get-FabricLakehouse {
-<#
+    <#
 .SYNOPSIS
 Retrieves an Lakehouse or a list of Lakehouses from a specified workspace in Microsoft Fabric.
 
@@ -31,7 +31,7 @@ Retrieves all Lakehouses in workspace "12345".
 
 Author: Tiago Balabuch
 
-#>
+    #>
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
@@ -111,13 +111,11 @@ Author: Tiago Balabuch
                     Write-Message -Message "Updating the continuation token" -Level Debug
                     $continuationToken = $response.continuationToken
                     Write-Message -Message "Continuation token: $continuationToken" -Level Debug
-                }
-                else {
+                } else {
                     Write-Message -Message "Updating the continuation token to null" -Level Debug
                     $continuationToken = $null
                 }
-            }
-            else {
+            } else {
                 Write-Message -Message "No data received from the API." -Level Warning
                 break
             }
@@ -127,11 +125,9 @@ Author: Tiago Balabuch
         # Step 8: Filter results based on provided parameters
         $lakehouse = if ($LakehouseId) {
             $lakehouses | Where-Object { $_.Id -eq $LakehouseId }
-        }
-        elseif ($LakehouseName) {
+        } elseif ($LakehouseName) {
             $lakehouses | Where-Object { $_.DisplayName -eq $LakehouseName }
-        }
-        else {
+        } else {
             # Return all lakehouses if no filter is provided
             Write-Message -Message "No filter provided. Returning all Lakehouses." -Level Debug
             $lakehouses
@@ -141,13 +137,11 @@ Author: Tiago Balabuch
         if ($Lakehouse) {
             Write-Message -Message "Lakehouse found matching the specified criteria." -Level Debug
             return $Lakehouse
-        }
-        else {
+        } else {
             Write-Message -Message "No Lakehouse found matching the provided criteria." -Level Warning
             return $null
         }
-    }
-    catch {
+    } catch {
         # Step 10: Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to retrieve Lakehouse. Error: $errorDetails" -Level Error

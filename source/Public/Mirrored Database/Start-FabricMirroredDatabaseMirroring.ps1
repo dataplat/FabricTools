@@ -1,5 +1,5 @@
-function Start-FabricMirroredDatabaseMirroring{
-<#
+function Start-FabricMirroredDatabaseMirroring {
+    <#
 .SYNOPSIS
     Starts the mirroring of a specified mirrored database in a given workspace.
 .DESCRIPTION
@@ -17,7 +17,7 @@ function Start-FabricMirroredDatabaseMirroring{
     - Calls `Test-TokenExpired` to ensure token validity before making the API request.
     - This function handles asynchronous operations and retrieves operation results if required.
 
-#>
+    #>
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
@@ -60,8 +60,7 @@ function Start-FabricMirroredDatabaseMirroring{
         # Step 9: Handle results
         Write-Message -Message "Database mirroring started successfully for MirroredDatabaseId: $MirroredDatabaseId" -Level Info
         return
-    }
-    catch {
+    } catch {
         # Step 10: Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to start MirroredDatabase. Error: $errorDetails" -Level Error

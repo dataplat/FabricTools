@@ -39,7 +39,7 @@ function Add-FabricWorkspaceIdentity {
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
         # Step 3: Make the API request
-       $response = Invoke-RestMethod `
+        $response = Invoke-RestMethod `
             -Headers $FabricConfig.FabricHeaders `
             -Uri $apiEndpointUrl `
             -Method Post `
@@ -79,8 +79,7 @@ function Add-FabricWorkspaceIdentity {
                     Write-Message -Message "Long Running Operation status: $operationResult" -Level Debug
 
                     return $operationResult
-                }
-                else {
+                } else {
                     Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Debug
                     Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Error
                     return $operationStatus
@@ -92,8 +91,7 @@ function Add-FabricWorkspaceIdentity {
                 throw "API request failed with status code $statusCode."
             }
         }
-    }
-    catch {
+    } catch {
         # Step 5: Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to provision workspace identity. Error: $errorDetails" -Level Error

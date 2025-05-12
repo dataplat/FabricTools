@@ -95,8 +95,7 @@ function Update-FabricWorkspaceRoleAssignment {
         Write-Message -Message "Role assignment $WorkspaceRoleAssignmentId updated successfully in workspace '$WorkspaceId'." -Level Info
         return $response
 
-    }
-    catch {
+    } catch {
         # Step 7: Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to update role assignment. Error: $errorDetails" -Level Error

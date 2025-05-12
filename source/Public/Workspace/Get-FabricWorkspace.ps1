@@ -26,7 +26,7 @@ Fetches details of the workspace with the name "MyWorkspace".
 - Calls `Test-TokenExpired` to ensure token validity before making the API request.
 - Returns the matching workspace details or all workspaces if no filter is provided.
 
-Author: Tiago Balabuch  
+Author: Tiago Balabuch
 #>
 
 function Get-FabricWorkspace {
@@ -61,7 +61,7 @@ function Get-FabricWorkspace {
         if (-not ([AppDomain]::CurrentDomain.GetAssemblies() | Where-Object { $_.GetName().Name -eq "System.Web" })) {
             Add-Type -AssemblyName System.Web
         }
- 
+
         # Step 4: Loop to retrieve all capacities with continuation token
         Write-Message -Message "Loop started to get continuation token" -Level Debug
         $baseApiEndpointUrl = "{0}/workspaces" -f $FabricConfig.BaseUrl
@@ -75,7 +75,7 @@ function Get-FabricWorkspace {
                 $apiEndpointUrl = "{0}?continuationToken={1}" -f $apiEndpointUrl, $encodedToken
             }
             Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
- 
+
             # Step 6: Make the API request
             $response = Invoke-RestMethod `
                 -Headers $FabricConfig.FabricHeaders `
@@ -85,7 +85,7 @@ function Get-FabricWorkspace {
                 -SkipHttpErrorCheck `
                 -ResponseHeadersVariable "responseHeader" `
                 -StatusCodeVariable "statusCode"
- 
+
             # Step 7: Validate the response code
             if ($statusCode -ne 200) {
                 Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
@@ -94,24 +94,22 @@ function Get-FabricWorkspace {
                 Write-Message "Error Code: $($response.errorCode)" -Level Error
                 return $null
             }
- 
+
             # Step 8: Add data to the list
             if ($null -ne $response) {
                 Write-Message -Message "Adding data to the list" -Level Debug
                 $workspaces += $response.value
-         
+
                 # Update the continuation token if present
                 if ($response.PSObject.Properties.Match("continuationToken")) {
                     Write-Message -Message "Updating the continuation token" -Level Debug
                     $continuationToken = $response.continuationToken
                     Write-Message -Message "Continuation token: $continuationToken" -Level Debug
-                }
-                else {
+                } else {
                     Write-Message -Message "Updating the continuation token to null" -Level Debug
                     $continuationToken = $null
                 }
-            }
-            else {
+            } else {
                 Write-Message -Message "No data received from the API." -Level Warning
                 break
             }
@@ -121,27 +119,23 @@ function Get-FabricWorkspace {
         # Step 8: Filter results based on provided parameters
         $workspace = if ($WorkspaceId) {
             $workspaces | Where-Object { $_.Id -eq $WorkspaceId }
-        }
-        elseif ($WorkspaceName) {
+        } elseif ($WorkspaceName) {
             $workspaces | Where-Object { $_.DisplayName -eq $WorkspaceName }
-        }
-        else {
+        } else {
             # Return all workspaces if no filter is provided
             Write-Message -Message "No filter provided. Returning all workspaces." -Level Debug
             $workspaces
         }
-            
+
         # Step 9: Handle results
         if ($workspace) {
             Write-Message -Message "Workspace found matching the specified criteria." -Level Debug
             return $workspace
-        }
-        else {
+        } else {
             Write-Message -Message "No workspace found matching the provided criteria." -Level Warning
             return $null
         }
-    }
-    catch {
+    } catch {
         # Step 10: Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to retrieve workspace. Error: $errorDetails" -Level Error

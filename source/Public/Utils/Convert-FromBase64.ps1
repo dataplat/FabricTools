@@ -1,5 +1,5 @@
 function Convert-FromBase64 {
-<#
+    <#
 .SYNOPSIS
     Decodes a Base64-encoded string into its original text representation.
 
@@ -26,7 +26,7 @@ function Convert-FromBase64 {
 .NOTES
 This function assumes the Base64 input is a valid UTF-8 encoded string.
 Any decoding errors will throw a descriptive error message.
-#>
+    #>
     param (
         [Parameter(Mandatory = $true)]
         [string]$Base64String
@@ -41,8 +41,7 @@ Any decoding errors will throw a descriptive error message.
 
         # Step 3: Return the decoded string
         return $decodedString
-    }
-    catch {
+    } catch {
         # Step 4: Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "An error occurred while decoding from Base64: $errorDetails" -Level Error

@@ -136,7 +136,7 @@ function Update-FabricSparkSettings {
         # Step 3: Construct the request body
         # Construct the request body with optional properties
 
-        $body = @{}
+        $body = @{ }
 
         if ($PSBoundParameters.ContainsKey('automaticLogEnabled')) {
             $body.automaticLog = @{
@@ -157,12 +157,12 @@ function Update-FabricSparkSettings {
         }
         if ($PSBoundParameters.ContainsKey('defaultPoolName') -or $PSBoundParameters.ContainsKey('defaultPoolType')) {
             if ($PSBoundParameters.ContainsKey('defaultPoolName') -and $PSBoundParameters.ContainsKey('defaultPoolType')) {
-            $body.pool = @{
-                defaultPool = @{
-                name = $defaultPoolName
-                type = $defaultPoolType
+                $body.pool = @{
+                    defaultPool = @{
+                        name = $defaultPoolName
+                        type = $defaultPoolType
+                    }
                 }
-            }
             } else {
                 Write-Message -Message "Both 'defaultPoolName' and 'defaultPoolType' must be provided together." -Level Error
                 throw
@@ -207,8 +207,7 @@ function Update-FabricSparkSettings {
         # Step 6: Handle results
         Write-Message -Message "Spark Custom Pool '$SparkSettingsName' updated successfully!" -Level Info
         return $response
-    }
-    catch {
+    } catch {
         # Step 7: Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to update SparkSettings. Error: $errorDetails" -Level Error

@@ -49,8 +49,7 @@ function Get-FabricCapacities {
             # Get all resources of type "Microsoft.Fabric/capacities" and add them to the results array
             $res += Get-AzResource -ResourceGroupName $r.ResourceGroupName -resourcetype "Microsoft.Fabric/capacities" -ErrorAction SilentlyContinue
         }
-    }
-    else {
+    } else {
         # If no subscription ID is provided, get all subscriptions
         $subscriptions = Get-AzSubscription
 

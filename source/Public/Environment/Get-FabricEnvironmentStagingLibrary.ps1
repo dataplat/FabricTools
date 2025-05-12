@@ -3,7 +3,7 @@
 Retrieves the staging library details for a specific environment in a Microsoft Fabric workspace.
 
 .DESCRIPTION
-The Get-FabricEnvironmentStagingLibrary function interacts with the Microsoft Fabric API to fetch information 
+The Get-FabricEnvironmentStagingLibrary function interacts with the Microsoft Fabric API to fetch information
 about staging libraries associated with a specified environment. It ensures token validity and handles API errors gracefully.
 
 .PARAMETER WorkspaceId
@@ -21,7 +21,7 @@ Retrieves the staging libraries for the specified environment in the given works
 - Requires the `$FabricConfig` global object, including `BaseUrl` and `FabricHeaders`.
 - Uses `Test-TokenExpired` to validate the token before making API calls.
 
-Author: Tiago Balabuch  
+Author: Tiago Balabuch
 #>
 function Get-FabricEnvironmentStagingLibrary {
     [CmdletBinding()]
@@ -55,7 +55,7 @@ function Get-FabricEnvironmentStagingLibrary {
             -SkipHttpErrorCheck `
             -ResponseHeadersVariable "responseHeader" `
             -StatusCodeVariable "statusCode"
-        
+
         # Step 4: Validate the response code
         if ($statusCode -ne 200) {
             Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
@@ -63,14 +63,13 @@ function Get-FabricEnvironmentStagingLibrary {
             Write-Message "Error Code: $($response.errorCode)" -Level Error
             return $null
         }
-                    
+
         # Step 5: Handle results
         return $response.customLibraries
-    }
-    catch {
+    } catch {
         # Step 6: Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to retrieve environment spark compute. Error: $errorDetails" -Level Error
-    } 
- 
+    }
+
 }

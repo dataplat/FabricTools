@@ -3,7 +3,7 @@
     Removes an Report from a specified Microsoft Fabric workspace.
 
 .DESCRIPTION
-    This function sends a DELETE request to the Microsoft Fabric API to remove an Report 
+    This function sends a DELETE request to the Microsoft Fabric API to remove an Report
     from the specified workspace using the provided WorkspaceId and ReportId.
 
 .PARAMETER WorkspaceId
@@ -21,7 +21,7 @@
     - Calls `Test-TokenExpired` to ensure token validity before making the API request.
 
     Author: Tiago Balabuch
-    
+
 #>
 function Remove-FabricReport {
     [CmdletBinding()]
@@ -53,8 +53,8 @@ function Remove-FabricReport {
             -SkipHttpErrorCheck `
             -ResponseHeadersVariable "responseHeader" `
             -StatusCodeVariable "statusCode"
-        
-            # Step 4: Handle response
+
+        # Step 4: Handle response
         if ($statusCode -ne 200) {
             Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
             Write-Message -Message "Error: $($response.message)" -Level Error
@@ -63,9 +63,8 @@ function Remove-FabricReport {
             return $null
         }
 
-        Write-Message -Message "Report '$ReportId' deleted successfully from workspace '$WorkspaceId'." -Level Info  
-    }
-    catch {
+        Write-Message -Message "Report '$ReportId' deleted successfully from workspace '$WorkspaceId'." -Level Info
+    } catch {
         # Step 5: Log and handle errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to delete Report '$ReportId'. Error: $errorDetails" -Level Error

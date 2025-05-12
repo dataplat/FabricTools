@@ -1,5 +1,5 @@
 function New-FabricKQLDatabase {
-<#
+    <#
 .SYNOPSIS
 Creates a new KQLDatabase in a specified Microsoft Fabric workspace.
 
@@ -54,7 +54,7 @@ An optional path to the platform-specific definition (e.g., .platform file) to u
 
 Author: Tiago Balabuch
 
-#>
+    #>
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
@@ -139,8 +139,7 @@ Author: Tiago Balabuch
                     payload     = $KQLDatabaseEncodedContent
                     payloadType = "InlineBase64"
                 }
-            }
-            else {
+            } else {
                 Write-Message -Message "Invalid or empty content in KQLDatabase definition." -Level Error
                 return $null
             }
@@ -156,8 +155,7 @@ Author: Tiago Balabuch
                         payload     = $KQLDatabaseEncodedPlatformContent
                         payloadType = "InlineBase64"
                     }
-                }
-                else {
+                } else {
                     Write-Message -Message "Invalid or empty content in platform definition." -Level Error
                     return $null
                 }
@@ -174,15 +172,13 @@ Author: Tiago Balabuch
                         payload     = $KQLDatabaseEncodedSchemaContent
                         payloadType = "InlineBase64"
                     }
-                }
-                else {
+                } else {
                     Write-Message -Message "Invalid or empty content in schema definition." -Level Error
                     return $null
                 }
             }
 
-        }
-        else {
+        } else {
             if ($KQLDatabaseType -eq "Shortcut") {
                 if (-not $parentEventhouseId) {
                     Write-Message -Message "Error: 'parentEventhouseId' is required for Shortcut type." -Level Error
@@ -281,8 +277,7 @@ Author: Tiago Balabuch
                     Write-Message -Message "Long Running Operation result: $operationResult" -Level Debug
 
                     return $operationResult
-                }
-                else {
+                } else {
                     Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Debug
                     Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Error
                     return $operationStatus
@@ -296,8 +291,7 @@ Author: Tiago Balabuch
                 throw "API request failed with status code $statusCode."
             }
         }
-    }
-    catch {
+    } catch {
         # Step 6: Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to create KQLDatabase. Error: $errorDetails" -Level Error

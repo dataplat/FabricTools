@@ -3,8 +3,8 @@
 Retrieves the list of libraries associated with a specific environment in a Microsoft Fabric workspace.
 
 .DESCRIPTION
-The Get-FabricEnvironmentLibrary function fetches library information for a given workspace and environment 
-using the Microsoft Fabric API. It ensures the authentication token is valid and validates the response 
+The Get-FabricEnvironmentLibrary function fetches library information for a given workspace and environment
+using the Microsoft Fabric API. It ensures the authentication token is valid and validates the response
 to handle errors gracefully.
 
 .PARAMETER WorkspaceId
@@ -22,7 +22,7 @@ Retrieves the libraries associated with the specified environment in the given w
 - Requires the `$FabricConfig` global object, including `BaseUrl` and `FabricHeaders`.
 - Uses `Test-TokenExpired` to validate the token before making API calls.
 
-Author: Tiago Balabuch  
+Author: Tiago Balabuch
 #>
 function Get-FabricEnvironmentLibrary {
     [CmdletBinding()]
@@ -63,14 +63,13 @@ function Get-FabricEnvironmentLibrary {
             Write-Message "Error Code: $($response.errorCode)" -Level Error
             return $null
         }
-                    
+
         # Step 5: Handle results
         return $response
-    }
-    catch {
+    } catch {
         # Step 6: Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to retrieve environment libraries. Error: $errorDetails" -Level Error
-    } 
- 
+    }
+
 }

@@ -1,5 +1,5 @@
 function Get-FabricDataPipeline {
-<#
+    <#
 .SYNOPSIS
     Retrieves data pipelines from a specified Microsoft Fabric workspace.
 
@@ -29,7 +29,7 @@ function Get-FabricDataPipeline {
     - Calls `Test-TokenExpired` to ensure token validity before making the API request.
 
     Author: Tiago Balabuch
-#>
+    #>
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
@@ -70,11 +70,9 @@ function Get-FabricDataPipeline {
         # Filter results based on provided parameters
         $response = if ($DataPipelineId) {
             $DataPipelines | Where-Object { $_.Id -eq $DataPipelineId }
-        }
-        elseif ($DataPipelineName) {
+        } elseif ($DataPipelineName) {
             $DataPipelines | Where-Object { $_.DisplayName -eq $DataPipelineName }
-        }
-        else {
+        } else {
             # Return all DataPipelines if no filter is provided
             Write-Message -Message "No filter provided. Returning all DataPipelines." -Level Debug
             $DataPipelines
@@ -84,13 +82,11 @@ function Get-FabricDataPipeline {
         if ($response) {
             Write-Message -Message "DataPipeline found matching the specified criteria." -Level Debug
             return $response
-        }
-        else {
+        } else {
             Write-Message -Message "No DataPipeline found matching the provided criteria." -Level Warning
             return $null
         }
-    }
-    catch {
+    } catch {
         # Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to retrieve DataPipeline. Error: $errorDetails" -Level Error

@@ -3,7 +3,7 @@
     Removes a warehouse from a specified Microsoft Fabric workspace.
 
 .DESCRIPTION
-    This function sends a DELETE request to the Microsoft Fabric API to remove a warehouse 
+    This function sends a DELETE request to the Microsoft Fabric API to remove a warehouse
     from the specified workspace using the provided WorkspaceId and WarehouseId.
 
 .PARAMETER WorkspaceId
@@ -48,12 +48,11 @@ function Remove-FabricWarehouse {
             -Headers $FabricConfig.FabricHeaders `
             -BaseURI $apiEndpointURI `
             -Method Delete `
-        
+
         Write-Message -Message "Warehouse '$WarehouseId' deleted successfully from workspace '$WorkspaceId'." -Level Info
         return $response
 
-    }
-    catch {
+    } catch {
         # Step 5: Log and handle errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to delete Warehouse '$WarehouseId' from workspace '$WorkspaceId'. Error: $errorDetails" -Level Error

@@ -1,5 +1,5 @@
 function Get-FabricWorkspaceUsageMetricsData {
-<#
+    <#
 .SYNOPSIS
 Retrieves workspace usage metrics data.
 
@@ -19,9 +19,9 @@ This example retrieves the workspace usage metrics for a specific workspace give
 
 .NOTES
 The function retrieves the PowerBI access token and creates a new usage metrics report. It then defines the names of the reports to retrieve, initializes an empty hashtable to store the reports, and for each report name, retrieves the report and adds it to the hashtable. It then returns the hashtable of reports.
-#>
+    #>
 
-# This function retrieves workspace usage metrics.
+    # This function retrieves workspace usage metrics.
     # Define aliases for the function for flexibility.
     [Alias("Get-FabWorkspaceUsageMetricsData")]
 
@@ -40,18 +40,17 @@ The function retrieves the PowerBI access token and creates a new usage metrics 
     $reportnames = @("'Workspace views'", "'Report pages'", "Users", "Reports", "'Report views'", "'Report page views'", "'Report load times'")
 
     # Initialize an empty hashtable to store the reports.
-    $reports = @{}
+    $reports = @{ }
 
     # For each report name, retrieve the report and add it to the hashtable.
     if ($username -eq "") {
         foreach ($reportname in $reportnames) {
-            $report = Get-FabricUsagemetricsQuery -DatasetID $datasetId -groupId $workspaceId -reportname $reportname
+            $report = Get-FabricUsageMetricsQuery -DatasetID $datasetId -groupId $workspaceId -reportname $reportname
             $reports += @{ $reportname.replace("'", "") = $report }
         }
-    }
-    else {
+    } else {
         foreach ($reportname in $reportnames) {
-            $report = Get-FabricUsagemetricsQuery -DatasetID $datasetId -groupId $workspaceId -reportname $reportname -ImpersonatedUser $username
+            $report = Get-FabricUsageMetricsQuery -DatasetID $datasetId -groupId $workspaceId -reportname $reportname -ImpersonatedUser $username
             $reports += @{ $reportname.replace("'", "") = $report }
         }
     }

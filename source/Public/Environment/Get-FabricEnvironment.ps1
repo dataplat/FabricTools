@@ -1,5 +1,5 @@
 function Get-FabricEnvironment {
-<#
+    <#
 .SYNOPSIS
 Retrieves an environment or a list of environments from a specified workspace in Microsoft Fabric.
 
@@ -32,7 +32,7 @@ Retrieves all environments in workspace "12345".
 
 Author: Tiago Balabuch
 
-#>
+    #>
 
     [CmdletBinding()]
     param (
@@ -115,13 +115,11 @@ Author: Tiago Balabuch
                     Write-Message -Message "Updating the continuation token" -Level Debug
                     $continuationToken = $response.continuationToken
                     Write-Message -Message "Continuation token: $continuationToken" -Level Debug
-                }
-                else {
+                } else {
                     Write-Message -Message "Updating the continuation token to null" -Level Debug
                     $continuationToken = $null
                 }
-            }
-            else {
+            } else {
                 Write-Message -Message "No data received from the API." -Level Warning
                 break
             }
@@ -131,11 +129,9 @@ Author: Tiago Balabuch
         # Step 8: Filter results based on provided parameters
         $environment = if ($EnvironmentId) {
             $environments | Where-Object { $_.Id -eq $EnvironmentId }
-        }
-        elseif ($EnvironmentName) {
+        } elseif ($EnvironmentName) {
             $environments | Where-Object { $_.DisplayName -eq $EnvironmentName }
-        }
-        else {
+        } else {
             # Return all workspaces if no filter is provided
             Write-Message -Message "No filter provided. Returning all environments." -Level Debug
             $environments
@@ -145,13 +141,11 @@ Author: Tiago Balabuch
         if ($environment) {
             Write-Message -Message "Environment found in the Workspace '$WorkspaceId'." -Level Debug
             return $environment
-        }
-        else {
+        } else {
             Write-Message -Message "No environment found matching the provided criteria." -Level Warning
             return $null
         }
-    }
-    catch {
+    } catch {
         # Step 10: Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to retrieve environment. Error: $errorDetails" -Level Error

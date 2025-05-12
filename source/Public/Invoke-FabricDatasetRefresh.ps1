@@ -33,8 +33,7 @@ function Invoke-FabricDatasetRefresh {
     if ((Get-FabricDataset -DatasetId $DatasetID).isrefreshable -eq $false) {
         # If the dataset is not refreshable, write an error
         Write-Error "Dataset is not refreshable"
-    }
-    else {
+    } else {
         # If the dataset is refreshable, invoke a PowerBI REST method to refresh the dataset
         # The URL for the request is constructed using the provided workspace ID and dataset ID.
 

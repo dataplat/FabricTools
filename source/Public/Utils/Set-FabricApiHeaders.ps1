@@ -1,5 +1,5 @@
 function Set-FabricApiHeaders {
-<#
+    <#
 .SYNOPSIS
 Sets the Fabric API headers with a valid token for the specified Azure tenant.
 
@@ -36,7 +36,7 @@ Logs in to Azure with the specified tenant ID, retrieves an access token for the
 
      AUTHOR
     Tiago Balabuch
-#>
+    #>
 
     [CmdletBinding()]
     param (
@@ -81,9 +81,9 @@ Logs in to Azure with the specified tenant ID, retrieves an access token for the
             Write-Message -Message "Logging in using the current user" -Level Debug
             Write-Message -Message "Logging in using the current user" -Level Info
             Connect-AzAccount -Tenant $TenantId -ErrorAction Stop | Out-Null
-       }
+        }
 
-       ## Step 4: Retrieve the access token for the Fabric API
+        ## Step 4: Retrieve the access token for the Fabric API
         Write-Message -Message "Retrieve the access token for the Fabric API: $TenantId" -Level Debug
         $fabricToken = Get-AzAccessToken -AsSecureString -ResourceUrl $FabricConfig.ResourceUrl -ErrorAction Stop -WarningAction SilentlyContinue
 
@@ -106,8 +106,7 @@ Logs in to Azure with the specified tenant ID, retrieves an access token for the
         $FabricConfig.TenantIdGlobal = $TenantId
 
         Write-Message -Message "Fabric token successfully configured." -Level Info
-    }
-    catch {
+    } catch {
         # Step 8: Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to set Fabric token: $errorDetails" -Level Error

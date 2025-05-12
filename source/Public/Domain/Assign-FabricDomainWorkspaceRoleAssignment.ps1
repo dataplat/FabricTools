@@ -27,7 +27,7 @@ Assigns the `Admins` role to the specified principals in the domain with ID "123
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
 - Calls `Test-TokenExpired` to ensure token validity before making the API request.
 
-Author: Tiago Balabuch 
+Author: Tiago Balabuch
 #>
 
 function Assign-FabricDomainWorkspaceRoleAssignment {
@@ -91,10 +91,9 @@ function Assign-FabricDomainWorkspaceRoleAssignment {
             Write-Message "Error Code: $($response.errorCode)" -Level Error
             return $null
         }
-        
+
         Write-Message -Message "Bulk role assignment for domain '$DomainId' completed successfully!" -Level Info
-    }
-    catch {
+    } catch {
         # Step 7: Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to bulk assign roles in domain '$DomainId'. Error: $errorDetails" -Level Error

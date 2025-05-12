@@ -49,7 +49,7 @@ function New-FabricCopyJob {
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
         [string]$CopyJobPathDefinition,
-        
+
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
         [string]$CopyJobPathPlatformDefinition
@@ -92,8 +92,7 @@ function New-FabricCopyJob {
                     payload     = $CopyJobEncodedContent
                     payloadType = "InlineBase64"
                 }
-            }
-            else {
+            } else {
                 Write-Message -Message "Invalid or empty content in Copy Job definition." -Level Error
                 return $null
             }
@@ -116,8 +115,7 @@ function New-FabricCopyJob {
                     payload     = $CopyJobEncodedPlatformContent
                     payloadType = "InlineBase64"
                 }
-            }
-            else {
+            } else {
                 Write-Message -Message "Invalid or empty content in platform definition." -Level Error
                 return $null
             }
@@ -133,11 +131,10 @@ function New-FabricCopyJob {
             -Method Post `
             -Body $bodyJson
 
-        Write-Message -Message "Copy Job created successfully!" -Level Info        
+        Write-Message -Message "Copy Job created successfully!" -Level Info
         return $response
-     
-    }
-    catch {
+
+    } catch {
         # Step 7: Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to create Copy Job. Error: $errorDetails" -Level Error

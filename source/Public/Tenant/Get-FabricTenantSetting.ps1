@@ -22,7 +22,7 @@ Returns the tenant setting with the title "SomeSetting".
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
 - Calls `Is-TokenExpired` to ensure token validity before making the API request.
 
-Author: Tiago Balabuch  
+Author: Tiago Balabuch
 
 #>
 
@@ -48,14 +48,13 @@ function Get-FabricTenantSetting {
         $response = Invoke-FabricAPIRequest `
             -BaseURI $apiEndpointURI `
             -Headers $FabricConfig.FabricHeaders `
-            -Method Get 
+            -Method Get
 
         # Step 4: Filter tenant settings based on the provided SettingTitle parameter (if specified)
         $settings = if ($SettingTitle) {
             Write-Message -Message "Filtering tenant settings by title: '$SettingTitle'" -Level Debug
             $response.tenantSettings | Where-Object { $_.title -eq $SettingTitle }
-        }
-        else {
+        } else {
             Write-Message -Message "No filter specified. Retrieving all tenant settings." -Level Debug
             $response.tenantSettings
         }
@@ -64,13 +63,11 @@ function Get-FabricTenantSetting {
         if ($settings) {
             Write-Message -Message "Tenant settings successfully retrieved." -Level Debug
             return $settings
-        }
-        else {
+        } else {
             Write-Message -Message "No tenant settings found matching the specified criteria." -Level Warning
             return $null
         }
-    }
-    catch {
+    } catch {
         # Step 6: Log detailed error information if the API request fails
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Error retrieving tenant settings: $errorDetails" -Level Error

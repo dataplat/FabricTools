@@ -3,7 +3,7 @@
     Creates a new Report in a specified Microsoft Fabric workspace.
 
 .DESCRIPTION
-    This function sends a POST request to the Microsoft Fabric API to create a new Report 
+    This function sends a POST request to the Microsoft Fabric API to create a new Report
     in the specified workspace. It supports optional parameters for Report description and path definitions.
 
 .PARAMETER WorkspaceId
@@ -28,7 +28,7 @@
     - Calls `Test-TokenExpired` to ensure token validity before making the API request.
 
     Author: Tiago Balabuch
-    
+
 #>
 function New-FabricReport {
     [CmdletBinding()]
@@ -49,7 +49,7 @@ function New-FabricReport {
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
         [string]$ReportPathDefinition
-            )
+    )
     try {
         # Step 1: Ensure token validity
         Write-Message -Message "Validating token..." -Level Debug
@@ -71,14 +71,14 @@ function New-FabricReport {
         if ($ReportPathDefinition) {
             if (-not $body.definition) {
                 $body.definition = @{
-                    parts  = @()
+                    parts = @()
                 }
             }
             $jsonObjectParts = Get-FileDefinitionParts -sourceDirectory $ReportPathDefinition
             # Add new part to the parts array
             $body.definition.parts = $jsonObjectParts.parts
         }
-       
+
         # Convert the body to JSON
         $bodyJson = $body | ConvertTo-Json -Depth 10
         Write-Message -Message "Request Body: $bodyJson" -Level Debug
@@ -94,9 +94,9 @@ function New-FabricReport {
             -SkipHttpErrorCheck `
             -ResponseHeadersVariable "responseHeader" `
             -StatusCodeVariable "statusCode"
-        
+
         Write-Message -Message "Response Code: $statusCode" -Level Debug
-  
+
         # Step 5: Handle and log the response
         switch ($statusCode) {
             201 {
@@ -105,33 +105,32 @@ function New-FabricReport {
             }
             202 {
                 Write-Message -Message "Report '$ReportName' creation accepted. Provisioning in progress!" -Level Info
-                
+
                 [string]$operationId = $responseHeader["x-ms-operation-id"]
                 [string]$location = $responseHeader["Location"]
-                [string]$retryAfter = $responseHeader["Retry-After"] 
+                [string]$retryAfter = $responseHeader["Retry-After"]
 
                 Write-Message -Message "Operation ID: '$operationId'" -Level Debug
                 Write-Message -Message "Location: '$location'" -Level Debug
                 Write-Message -Message "Retry-After: '$retryAfter'" -Level Debug
                 Write-Message -Message "Getting Long Running Operation status" -Level Debug
-               
+
                 $operationStatus = Get-FabricLongRunningOperation -operationId $operationId -location $location
                 Write-Message -Message "Long Running Operation status: $operationStatus" -Level Debug
                 # Handle operation result
                 if ($operationStatus.status -eq "Succeeded") {
                     Write-Message -Message "Operation Succeeded" -Level Debug
                     Write-Message -Message "Getting Long Running Operation result" -Level Debug
-                
+
                     $operationResult = Get-FabricLongRunningOperationResult -operationId $operationId
                     Write-Message -Message "Long Running Operation status: $operationResult" -Level Debug
-                
+
                     return $operationResult
-                } 
-                else {
+                } else {
                     Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Debug
                     Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Error
                     return $operationStatus
-                }  
+                }
             }
             default {
                 Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
@@ -141,8 +140,7 @@ function New-FabricReport {
                 throw "API request failed with status code $statusCode."
             }
         }
-    }
-    catch {
+    } catch {
         # Step 6: Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to create Report. Error: $errorDetails" -Level Error

@@ -28,7 +28,7 @@ Fetches the domain with the display name "Finance".
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
 - Calls `Test-TokenExpired` to ensure token validity before making the API request.
 
-Author: Tiago Balabuch  
+Author: Tiago Balabuch
 
 #>
 function Get-FabricDomain {
@@ -59,7 +59,7 @@ function Get-FabricDomain {
         Test-TokenExpired
         Write-Message -Message "Token validation completed." -Level Debug
 
-        # Step 3: Construct the API URL with filtering logic        
+        # Step 3: Construct the API URL with filtering logic
         $apiEndpointUrl = "{0}/admin/domains" -f $FabricConfig.BaseUrl
         if ($NonEmptyDomainsOnly) {
             $apiEndpointUrl = "{0}?nonEmptyOnly=true" -f $apiEndpointUrl
@@ -83,7 +83,7 @@ function Get-FabricDomain {
             Write-Message "Error Code: $($response.errorCode)" -Level Error
             return $null
         }
-                    
+
         # Step 6: Handle empty response
         if (-not $response) {
             Write-Message -Message "No data returned from the API." -Level Warning
@@ -94,11 +94,9 @@ function Get-FabricDomain {
         # Step 7: Filter results based on provided parameters
         $domains = if ($DomainId) {
             $response.domains | Where-Object { $_.Id -eq $DomainId }
-        }
-        elseif ($DomainName) {
+        } elseif ($DomainName) {
             $response.domains | Where-Object { $_.DisplayName -eq $DomainName }
-        }
-        else {
+        } else {
             # Return all domains if no filter is provided
             Write-Message -Message "No filter provided. Returning all domains." -Level Debug
             return $response.domains
@@ -107,13 +105,11 @@ function Get-FabricDomain {
         # Step 8: Handle results
         if ($domains) {
             return $domains
-        }
-        else {
+        } else {
             Write-Message -Message "No domain found matching the provided criteria." -Level Warning
             return $null
         }
-    }
-    catch {
+    } catch {
         # Step 9: Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to retrieve environment. Error: $errorDetails" -Level Error

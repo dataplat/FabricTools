@@ -34,19 +34,17 @@ function Get-FabricWorkspaceTenantSettingOverrides {
         $response = Invoke-FabricAPIRequest `
             -BaseURI $apiEndpointURI `
             -Headers $FabricConfig.FabricHeaders `
-            -Method Get 
+            -Method Get
 
         # Step 4: Check if any workspaces tenant setting overrides were retrieved and handle results accordingly
         if ($response) {
             Write-Message -Message "Successfully retrieved workspaces tenant setting overrides." -Level Debug
             return $response
-        }
-        else {
+        } else {
             Write-Message -Message "No workspaces tenant setting overrides found." -Level Warning
             return $null
         }
-    }
-    catch {
+    } catch {
         # Step 5: Log detailed error information if the API request fails
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Error retrieving workspaces tenant setting overrides: $errorDetails" -Level Error

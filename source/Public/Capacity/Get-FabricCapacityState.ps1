@@ -1,5 +1,5 @@
 function Get-FabricCapacityState {
-<#
+    <#
 .SYNOPSIS
 Retrieves the state of a specific capacity.
 
@@ -22,19 +22,19 @@ This example retrieves the state of a specific capacity given the subscription I
 
 .NOTES
 The function checks if the Azure token is null. If it is, it connects to the Azure account and retrieves the token. It then defines the headers for the GET request and the URL for the GET request. Finally, it makes the GET request and returns the response.
-#>
+    #>
 
-# This function retrieves the state of a specific capacity.
+    # This function retrieves the state of a specific capacity.
     # Define aliases for the function for flexibility.
     [Alias("Get-FabCapacityState")]
 
     # Define mandatory parameters for the subscription ID, resource group, and capacity.
     Param (
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [string]$subscriptionID,
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [string]$resourcegroup,
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [string]$capacity
     )
 

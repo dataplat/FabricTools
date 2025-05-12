@@ -1,5 +1,5 @@
 function Update-FabricKQLDashboard {
-<#
+    <#
 .SYNOPSIS
 Updates the properties of a Fabric KQLDashboard.
 
@@ -34,7 +34,7 @@ Updates both the name and description of the KQLDashboard "KQLDashboard123".
 
 Author: Tiago Balabuch
 
-#>
+    #>
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
@@ -100,8 +100,7 @@ Author: Tiago Balabuch
         # Step 6: Handle results
         Write-Message -Message "KQLDashboard '$KQLDashboardName' updated successfully!" -Level Info
         return $response
-    }
-    catch {
+    } catch {
         # Step 7: Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to update KQLDashboard. Error: $errorDetails" -Level Error

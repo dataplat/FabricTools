@@ -1,5 +1,5 @@
 function New-FabricWorkspace {
-<#
+    <#
 .SYNOPSIS
 Creates a new Fabric workspace with the specified display name.
 
@@ -25,7 +25,7 @@ Creates a workspace named "NewWorkspace".
 - Calls `Test-TokenExpired` to ensure token validity before making the API request.
 
 Author: Tiago Balabuch
-#>
+    #>
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
@@ -104,8 +104,7 @@ Author: Tiago Balabuch
                     Write-Message -Message "Long Running Operation status: $operationResult" -Level Debug
 
                     return $operationResult
-                }
-                else {
+                } else {
                     Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Debug
                     Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Error
                     return $operationStatus
@@ -117,8 +116,7 @@ Author: Tiago Balabuch
                 throw "API request failed with status code $statusCode."
             }
         }
-    }
-    catch {
+    } catch {
         # Step 6: Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to create workspace. Error: $errorDetails" -Level Error

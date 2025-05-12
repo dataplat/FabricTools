@@ -1,6 +1,6 @@
 
-function Get-FabricCapacitySkus  {
-<#
+function Get-FabricCapacitySkus {
+    <#
 .SYNOPSIS
 Retrieves the fabric capacity information.
 
@@ -19,7 +19,7 @@ Specifies the capacity to retrieve information for. If not provided, all capacit
 .EXAMPLE
 Get-FabricCapacitySkus -capacity "exampleCapacity"
 Retrieves the fabric capacity information for the specified capacity.
-#>
+    #>
     # Define aliases for the function for flexibility.
 
     Param(
@@ -27,7 +27,7 @@ Retrieves the fabric capacity information for the specified capacity.
         [string]$subscriptionID,
         [Parameter(Mandatory = $true)]
         [string]$ResourceGroupName,
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [string]$capacity
     )
 

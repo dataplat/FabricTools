@@ -101,8 +101,7 @@ function Update-FabricKQLQueryset {
         # Step 6: Handle results
         Write-Message -Message "KQLQueryset '$KQLQuerysetName' updated successfully!" -Level Info
         return $response
-    }
-    catch {
+    } catch {
         # Step 7: Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to update KQLQueryset. Error: $errorDetails" -Level Error

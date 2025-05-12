@@ -1,5 +1,5 @@
 function Start-FabricLakehouseTableMaintenance {
-<#
+    <#
 .SYNOPSIS
     Initiates a table maintenance job for a specified Lakehouse in a Fabric workspace.
 .DESCRIPTION
@@ -41,7 +41,7 @@ function Start-FabricLakehouseTableMaintenance {
 
 .NOTES
 
-#>
+    #>
 
     [CmdletBinding()]
     param (
@@ -106,7 +106,7 @@ function Start-FabricLakehouseTableMaintenance {
         $body = @{
             executionData = @{
                 tableName        = $TableName
-                optimizeSettings = @{}
+                optimizeSettings = @{ }
             }
         }
         if ($lakehouse.properties.PSObject.Properties['defaultSchema'] -and $SchemaName) {
@@ -117,14 +117,14 @@ function Start-FabricLakehouseTableMaintenance {
             $body.executionData.optimizeSettings.vOrder = $IsVOrder
         }
 
-      if ($ColumnsZOrderBy) {
-        # Ensure $ColumnsZOrderBy is an array
-        if (-not ($ColumnsZOrderBy -is [array])) {
-            $ColumnsZOrderBy = $ColumnsZOrderBy -split ","
+        if ($ColumnsZOrderBy) {
+            # Ensure $ColumnsZOrderBy is an array
+            if (-not ($ColumnsZOrderBy -is [array])) {
+                $ColumnsZOrderBy = $ColumnsZOrderBy -split ","
+            }
+            # Add it to the optimizeSettings in the request body
+            $body.executionData.optimizeSettings.zOrderBy = $ColumnsZOrderBy
         }
-        # Add it to the optimizeSettings in the request body
-        $body.executionData.optimizeSettings.zOrderBy = $ColumnsZOrderBy
-    }
 
 
 
@@ -176,8 +176,7 @@ function Start-FabricLakehouseTableMaintenance {
                     $operationStatus = Get-FabricLongRunningOperation -operationId $operationId -location $location -retryAfter $retryAfter
                     Write-Message -Message "Long Running Operation status: $operationStatus" -Level Debug
                     return $operationStatus
-                }
-                else {
+                } else {
                     Write-Message -Message "The operation is running asynchronously." -Level Info
                     Write-Message -Message "Use the returned details to check the operation status." -Level Info
                     Write-Message -Message "To wait for the operation to complete, set the 'waitForCompletion' parameter to true." -Level Info
@@ -195,8 +194,7 @@ function Start-FabricLakehouseTableMaintenance {
                 throw "API request failed with status code $statusCode."
             }
         }
-    }
-    catch {
+    } catch {
         # Step 6: Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to start table maintenance job. Error: $errorDetails" -Level Error

@@ -52,19 +52,17 @@ function Get-FabricCapacityTenantSettingOverrides {
         $response = Invoke-FabricAPIRequest `
             -BaseURI $apiEndpointURI `
             -Headers $FabricConfig.FabricHeaders `
-            -Method Get 
+            -Method Get
 
         # Step 4: Check if any capacity tenant setting overrides were retrieved and handle results accordingly
         if ($response) {
             Write-Message -Message $message -Level Debug
             return $response
-        }
-        else {
+        } else {
             Write-Message -Message "No capacity tenant setting overrides found." -Level Warning
             return $null
         }
-    }
-    catch {
+    } catch {
         # Step 5: Log detailed error information if the API request fails
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Error retrieving capacity tenant setting overrides: $errorDetails" -Level Error

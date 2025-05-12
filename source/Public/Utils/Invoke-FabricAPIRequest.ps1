@@ -1,6 +1,6 @@
 function Invoke-FabricAPIRequest_duplicate {
 
-<#
+    <#
     .SYNOPSIS
         Sends an HTTP request to a Fabric API endpoint and retrieves the response.
         Takes care of: authentication, 429 throttling, Long-Running-Operation (LRO) response
@@ -46,7 +46,7 @@ function Invoke-FabricAPIRequest_duplicate {
         This function requires the Get-FabricAuthToken function to be defined in the same script or module.
         This function was originally written by Rui Romano.
         https://github.com/RuiRomano/fabricps-pbip
-#>
+    #>
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
@@ -82,8 +82,7 @@ function Invoke-FabricAPIRequest_duplicate {
             if ($BaseURI -like "*`?*") {
                 # URI already has parameters, append with &
                 $apiEndpointURI = "$BaseURI&continuationToken=$encodedToken"
-            }
-            else {
+            } else {
                 # No existing parameters, append with ?
                 $apiEndpointURI = "$BaseURI?continuationToken=$encodedToken"
             }
@@ -115,16 +114,13 @@ function Invoke-FabricAPIRequest_duplicate {
                 if ($response) {
                     if ($response.PSObject.Properties.Name -contains 'value') {
                         $results += $response.value
-                    }
-                    elseif ($response.PSObject.Properties.Name -contains 'accessEntities') {
+                    } elseif ($response.PSObject.Properties.Name -contains 'accessEntities') {
                         $results += $response.accessEntities
-                    }
-                    else {
+                    } else {
                         $results += $response
                     }
                     $continuationToken = $response.PSObject.Properties.Match("continuationToken") ? $response.continuationToken : $null
-                }
-                else {
+                } else {
                     Write-Message -Message "No data in response" -Level Debug
                     $continuationToken = $null
                 }
@@ -153,8 +149,7 @@ function Invoke-FabricAPIRequest_duplicate {
                     $operationResult = Get-FabricLongRunningOperationResult -operationId $operationId
                     Write-Message -Message "Long Running Operation result: $operationResult" -Level Debug
                     return $operationResult
-                }
-                else {
+                } else {
                     Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Error
                     return $operationStatus
                 }

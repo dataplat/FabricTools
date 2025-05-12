@@ -77,7 +77,7 @@ function Update-FabricKQLDatabaseDefinition {
         # Step 2: Construct the API URL
         $apiEndpointUrl = "{0}/workspaces/{1}/kqlDatabases/{2}/updateDefinition" -f $FabricConfig.BaseUrl, $WorkspaceId, $KQLDatabaseId
 
-        if($KQLDatabasePathPlatformDefinition){
+        if ($KQLDatabasePathPlatformDefinition) {
             $apiEndpointUrl = "?updateMetadata=true" -f $apiEndpointUrl
         }
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
@@ -85,7 +85,7 @@ function Update-FabricKQLDatabaseDefinition {
         # Step 3: Construct the request body
         $body = @{
             definition = @{
-                parts  = @()
+                parts = @()
             }
         }
 
@@ -99,8 +99,7 @@ function Update-FabricKQLDatabaseDefinition {
                     payload     = $KQLDatabaseEncodedContent
                     payloadType = "InlineBase64"
                 }
-            }
-            else {
+            } else {
                 Write-Message -Message "Invalid or empty content in KQLDatabase definition." -Level Error
                 return $null
             }
@@ -115,8 +114,7 @@ function Update-FabricKQLDatabaseDefinition {
                     payload     = $KQLDatabaseEncodedPlatformContent
                     payloadType = "InlineBase64"
                 }
-            }
-            else {
+            } else {
                 Write-Message -Message "Invalid or empty content in platform definition." -Level Error
                 return $null
             }
@@ -133,8 +131,7 @@ function Update-FabricKQLDatabaseDefinition {
                     payload     = $KQLDatabaseEncodedSchemaContent
                     payloadType = "InlineBase64"
                 }
-            }
-            else {
+            } else {
                 Write-Message -Message "Invalid or empty content in schema definition." -Level Error
                 return $null
             }
@@ -181,8 +178,7 @@ function Update-FabricKQLDatabaseDefinition {
                     $operationResult = Get-FabricLongRunningOperationResult -operationId $operationId
                     Write-Message -Message "Long Running Operation status: $operationResult" -Level Debug
                     return $operationResult
-                }
-                else {
+                } else {
                     Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Debug
                     Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Error
                     return $operationStatus
@@ -196,8 +192,7 @@ function Update-FabricKQLDatabaseDefinition {
                 throw "API request failed with status code $statusCode."
             }
         }
-    }
-    catch {
+    } catch {
         # Step 6: Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to update KQLDatabase. Error: $errorDetails" -Level Error

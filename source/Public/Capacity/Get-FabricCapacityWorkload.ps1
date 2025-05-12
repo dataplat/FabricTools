@@ -1,4 +1,4 @@
-function Get-FabricCapacityWorkload  {
+function Get-FabricCapacityWorkload {
     <#
 .SYNOPSIS
 Retrieves the workloads for a specific capacity.
@@ -19,15 +19,15 @@ This example retrieves the workloads for a specific capacity given the capacity 
 
 .NOTES
 The function retrieves the PowerBI access token and makes a GET request to the PowerBI API to retrieve the workloads for the specified capacity. It then returns the 'value' property of the response, which contains the workloads.
-#>
+    #>
 
-# This function retrieves the workloads for a specific capacity.
+    # This function retrieves the workloads for a specific capacity.
     # Define aliases for the function for flexibility.
     [Alias("Get-FabCapacityWorkload")]
 
     # Define a mandatory parameter for the capacity ID.
     Param (
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [string]$capacityID
     )
 

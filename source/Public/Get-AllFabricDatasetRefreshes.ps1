@@ -1,5 +1,5 @@
 function Get-FabricDatasetRefreshes {
-<#
+    <#
 .SYNOPSIS
 Retrieves all refreshes for all datasets in all PowerBI workspaces.
 
@@ -13,9 +13,9 @@ This example retrieves all refreshes for all datasets in all PowerBI workspaces.
 
 .NOTES
 The function makes a GET request to the PowerBI API to retrieve the refreshes. It loops through each workspace and each dataset in each workspace. If a dataset is refreshable, it retrieves the refreshes for the dataset and selects the most recent one. It then creates a PSCustomObject with information about the refresh and adds it to an array of refreshes. Finally, it returns the array of refreshes.
-#>
+    #>
 
-# This function retrieves all refreshes for all datasets in all PowerBI workspaces.
+    # This function retrieves all refreshes for all datasets in all PowerBI workspaces.
     # Define aliases for the function for flexibility.
 
     Confirm-FabricAuthToken | Out-Null

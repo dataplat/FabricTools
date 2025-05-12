@@ -31,14 +31,14 @@ function Get-FabricDatasetRefreshes {
 
     # Define a mandatory parameter for the dataset ID.
     Param (
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [string]$DatasetID,
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [string]$workspaceId
     )
 
     # Get the dataset information.
-    $di = get-powerbidataset -id $DatasetID -WorkspaceId $workspaceId
+    $di = Get-PowerBIDataset -id $DatasetID -WorkspaceId $workspaceId
 
     # Check if the dataset is refreshable.
     if ($di.isrefreshable -eq "True") {

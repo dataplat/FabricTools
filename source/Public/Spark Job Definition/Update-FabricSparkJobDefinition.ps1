@@ -3,7 +3,7 @@
     Updates an existing SparkJobDefinition in a specified Microsoft Fabric workspace.
 
 .DESCRIPTION
-    This function sends a PATCH request to the Microsoft Fabric API to update an existing SparkJobDefinition 
+    This function sends a PATCH request to the Microsoft Fabric API to update an existing SparkJobDefinition
     in the specified workspace. It supports optional parameters for SparkJobDefinition description.
 
 .PARAMETER WorkspaceId
@@ -33,8 +33,8 @@ function Update-FabricSparkJobDefinition {
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,   
-        
+        [string]$WorkspaceId,
+
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
         [string]$SparkJobDefinitionId,
@@ -95,8 +95,7 @@ function Update-FabricSparkJobDefinition {
         # Step 6: Handle results
         Write-Message -Message "Spark Job Definition '$SparkJobDefinitionName' updated successfully!" -Level Info
         return $response
-    }
-    catch {
+    } catch {
         # Step 7: Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to update SparkJobDefinition. Error: $errorDetails" -Level Error
