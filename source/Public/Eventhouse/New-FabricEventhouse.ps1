@@ -1,104 +1,194 @@
 function New-FabricEventhouse {
-#Requires -Version 7.1
-
 <#
-.SYNOPSIS
-    Creates a new Fabric Eventhouse
+    .SYNOPSIS
+        Creates a new Eventhouse in a specified Microsoft Fabric workspace.
 
-.DESCRIPTION
-    Creates a new Fabric Eventhouse
+    .DESCRIPTION
+        This function sends a POST request to the Microsoft Fabric API to create a new Eventhouse
+        in the specified workspace. It supports optional parameters for Eventhouse description and path definitions.
 
-.PARAMETER WorkspaceID
-    Id of the Fabric Workspace for which the Eventhouse should be created. The value for WorkspaceID is a GUID.
-    An example of a GUID is '12345678-1234-1234-1234-123456789012'.
+    .PARAMETER WorkspaceId
+        The unique identifier of the workspace where the Eventhouse will be created. This parameter is mandatory.
 
-.PARAMETER EventhouseName
-    The name of the Eventhouse to create.
+    .PARAMETER EventhouseName
+        The name of the Eventhouse to be created. This parameter is mandatory.
 
-.PARAMETER EventhouseDescription
-    The description of the Eventhouse to create.
+    .PARAMETER EventhouseDescription
+        An optional description for the Eventhouse.
 
-.EXAMPLE
-    New-FabricEventhouse `
-        -WorkspaceID '12345678-1234-1234-1234-123456789012' `
-        -EventhouseName 'MyEventhouse' `
-        -EventhouseDescription 'This is my Eventhouse'
+    .PARAMETER EventhousePathDefinition
+        An optional path to the Eventhouse definition file to upload.
 
-    This example will create a new Eventhouse with the name 'MyEventhouse' and the description 'This is my Eventhouse'.
+    .PARAMETER EventhousePathPlatformDefinition
+        An optional path to the platform-specific definition file to upload.
 
-.EXAMPLE
-    New-FabricEventhouse `
-        -WorkspaceID '12345678-1234-1234-1234-123456789012' `
-        -EventhouseName 'MyEventhouse' `
-        -EventhouseDescription 'This is my Eventhouse' `
-        -Verbose
+    .EXAMPLE
+        New-FabricEventhouse -WorkspaceId "workspace-12345" -EventhouseName "New Eventhouse" -EventhouseDescription "Description of the new Eventhouse"
+        This example creates a new Eventhouse named "New Eventhouse" in the workspace with ID "workspace-12345" with the provided description.
 
-    This example will create a new Eventhouse with the name 'MyEventhouse' and the description 'This is my Eventhouse'.
-    It will also give you verbose output which is useful for debugging.
+    .NOTES
+        - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
+        - Calls `Test-TokenExpired` to ensure token validity before making the API request.
 
-.NOTES
-    Revsion History:
+        Author: Tiago Balabuch
 
-    - 2024-11-07 - FGE: Implemented SupportShouldProcess
-    - 2024-11-09 - FGE: Added DisplaName as Alias for EventhouseName
-    - 2024-11-27 - FGE: Added Verbose Output
-
-
-.LINK
-    https://learn.microsoft.com/en-us/rest/api/fabric/eventhouse/items/create-eventhouse?tabs=HTTP
 #>
 
-[CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding()]
     param (
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [string]$WorkspaceId,
 
-        [Parameter(Mandatory=$true)]
-        [string]$WorkspaceID,
-
-        [Parameter(Mandatory=$true)]
-        [Alias("Name", "DisplayName")]
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [ValidatePattern('^[a-zA-Z0-9_ ]*$')]
         [string]$EventhouseName,
 
-        [ValidateLength(0, 256)]
-        [Alias("Description")]
-        [string]$EventhouseDescription
+        [Parameter(Mandatory = $false)]
+        [ValidateNotNullOrEmpty()]
+        [string]$EventhouseDescription,
+
+        [Parameter(Mandatory = $false)]
+        [ValidateNotNullOrEmpty()]
+        [string]$EventhousePathDefinition,
+
+        [Parameter(Mandatory = $false)]
+        [ValidateNotNullOrEmpty()]
+        [string]$EventhousePathPlatformDefinition
     )
+    try {
+        # Step 1: Ensure token validity
+        Write-Message -Message "Validating token..." -Level Debug
+        Test-TokenExpired
+        Write-Message -Message "Token validation completed." -Level Debug
 
-begin {
-    Confirm-FabricAuthToken | Out-Null
+        # Step 2: Construct the API URL
+        $apiEndpointUrl = "{0}/workspaces/{1}/eventhouses" -f $FabricConfig.BaseUrl, $WorkspaceId
+        Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
-    # Create body of request
-    $body = @{
-    'displayName' = $EventhouseName
-    'description' = $EventhouseDescription
-    } | ConvertTo-Json `
-            -Depth 1
+        # Step 3: Construct the request body
+        $body = @{
+            displayName = $EventhouseName
+        }
 
-    # Create Eventhouse API URL
-    $eventhouseApiUrl = "$($FabricSession.BaseApiUrl)/workspaces/$WorkspaceId/eventhouses"
-    }
+        if ($EventhouseDescription) {
+            $body.description = $EventhouseDescription
+        }
+        if ($EventhousePathDefinition) {
+            $eventhouseEncodedContent = Convert-ToBase64 -filePath $EventhousePathDefinition
 
-process {
+            if (-not [string]::IsNullOrEmpty($eventhouseEncodedContent)) {
+                # Initialize definition if it doesn't exist
+                if (-not $body.definition) {
+                    $body.definition = @{
+                        parts  = @()
+                    }
+                }
 
-    Write-Verbose "Calling Eventhouse API"
-    Write-Verbose "----------------------"
-    Write-Verbose "Sending the following values to the Eventhouse API:"
-    Write-Verbose "Headers: $($FabricSession.headerParams | Format-List | Out-String)"
-    Write-Verbose "Method: POST"
-    Write-Verbose "URI: $eventhouseApiUrl"
-    Write-Verbose "Body of request: $body"
-    Write-Verbose "ContentType: application/json"
-    if($PSCmdlet.ShouldProcess($EventhouseName)) {
+                # Add new part to the parts array
+                $body.definition.parts += @{
+                    path        = "EventhouseProperties.json"
+                    payload     = $eventhouseEncodedContent
+                    payloadType = "InlineBase64"
+                }
+            }
+            else {
+                Write-Message -Message "Invalid or empty content in Eventhouse definition." -Level Error
+                return $null
+            }
+        }
+
+        if ($EventhousePathPlatformDefinition) {
+            $eventhouseEncodedPlatformContent = Convert-ToBase64 -filePath $EventhousePathPlatformDefinition
+
+            if (-not [string]::IsNullOrEmpty($eventhouseEncodedPlatformContent)) {
+                # Initialize definition if it doesn't exist
+                if (-not $body.definition) {
+                    $body.definition = @{
+                        parts  = @()
+                    }
+                }
+
+                # Add new part to the parts array
+                $body.definition.parts += @{
+                    path        = ".platform"
+                    payload     = $eventhouseEncodedPlatformContent
+                    payloadType = "InlineBase64"
+                }
+            }
+            else {
+                Write-Message -Message "Invalid or empty content in platform definition." -Level Error
+                return $null
+            }
+        }
+
+        # Convert the body to JSON
+        $bodyJson = $body | ConvertTo-Json -Depth 10
+        Write-Message -Message "Request Body: $bodyJson" -Level Debug
+
+        # Step 4: Make the API request
         $response = Invoke-RestMethod `
-                            -Headers $FabricSession.headerParams `
-                            -Method POST `
-                            -Uri $eventhouseApiUrl `
-                            -Body ($body) `
-                            -ContentType "application/json"
+            -Headers $FabricConfig.FabricHeaders `
+            -Uri $apiEndpointUrl `
+            -Method Post `
+            -Body $bodyJson `
+            -ContentType "application/json" `
+            -ErrorAction Stop `
+            -SkipHttpErrorCheck `
+            -ResponseHeadersVariable "responseHeader" `
+            -StatusCodeVariable "statusCode"
 
-        $response
+        Write-Message -Message "Response Code: $statusCode" -Level Debug
+
+        # Step 5: Handle and log the response
+        switch ($statusCode) {
+            201 {
+                Write-Message -Message "Eventhouse '$EventhouseName' created successfully!" -Level Info
+                return $response
+            }
+            202 {
+                Write-Message -Message "Eventhouse '$EventhouseName' creation accepted. Provisioning in progress!" -Level Info
+
+                [string]$operationId = $responseHeader["x-ms-operation-id"]
+                [string]$location = $responseHeader["Location"]
+                [string]$retryAfter = $responseHeader["Retry-After"]
+
+                Write-Message -Message "Operation ID: '$operationId'" -Level Debug
+                Write-Message -Message "Location: '$location'" -Level Debug
+                Write-Message -Message "Retry-After: '$retryAfter'" -Level Debug
+                Write-Message -Message "Getting Long Running Operation status" -Level Debug
+
+                $operationStatus = Get-FabricLongRunningOperation -operationId $operationId -location $location
+                Write-Message -Message "Long Running Operation status: $operationStatus" -Level Debug
+                # Handle operation result
+                if ($operationStatus.status -eq "Succeeded") {
+                    Write-Message -Message "Operation Succeeded" -Level Debug
+                    Write-Message -Message "Getting Long Running Operation result" -Level Debug
+
+                    $operationResult = Get-FabricLongRunningOperationResult -operationId $operationId
+                    Write-Message -Message "Long Running Operation status: $operationResult" -Level Debug
+
+                    return $operationResult
+                }
+                else {
+                    Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Debug
+                    Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Error
+                    return $operationStatus
+                }
+            }
+            default {
+                Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
+                Write-Message -Message "Error: $($response.message)" -Level Error
+                Write-Message -Message "Error Details: $($response.moreDetails)" -Level Error
+                Write-Message "Error Code: $($response.errorCode)" -Level Error
+                throw "API request failed with status code $statusCode."
+            }
+        }
     }
-}
-
-end {}
-
+    catch {
+        # Step 6: Handle and log errors
+        $errorDetails = $_.Exception.Message
+        Write-Message -Message "Failed to create Eventhouse. Error: $errorDetails" -Level Error
+    }
 }

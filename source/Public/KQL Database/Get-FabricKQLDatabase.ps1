@@ -1,228 +1,153 @@
-function Get-FabricKQLDatabase {
-#Requires -Version 7.1
-
 <#
 .SYNOPSIS
-    Retrieves Fabric KQLDatabases
+Retrieves an KQLDatabase or a list of KQLDatabases from a specified workspace in Microsoft Fabric.
 
 .DESCRIPTION
-    Retrieves Fabric KQLDatabases. Without the KQLDatabaseName or KQLDatabaseID parameter,
-    all KQLDatabases are returned. If you want to retrieve a specific KQLDatabase, you can
-    use the KQLDatabaseName or KQLDatabaseID parameter. These parameters cannot be used together.
+The `Get-FabricKQLDatabase` function sends a GET request to the Fabric API to retrieve KQLDatabase details for a given workspace. It can filter the results by `KQLDatabaseName`.
 
 .PARAMETER WorkspaceId
-    Id of the Fabric Workspace for which the KQLDatabases should be retrieved. The value for WorkspaceId is a GUID.
-    An example of a GUID is '12345678-1234-1234-1234-123456789012'.
+(Mandatory) The ID of the workspace to query KQLDatabases.
 
 .PARAMETER KQLDatabaseName
-    The name of the KQLDatabase to retrieve. This parameter cannot be used together with KQLDatabaseID.
-
-.PARAMETER KQLDatabaseID
-    The Id of the KQLDatabase to retrieve. This parameter cannot be used together with KQLDatabaseName.
-    The value for KQLDatabaseID is a GUID. An example of a GUID is '12345678-1234-1234-1234-123456789012'.
+(Optional) The name of the specific KQLDatabase to retrieve.
 
 .EXAMPLE
-    Get-FabricKQLDatabase `
-        -WorkspaceId '12345678-1234-1234-1234-123456789012' `
-        -KQLDatabaseName 'MyKQLDatabase'
+Get-FabricKQLDatabase -WorkspaceId "12345" -KQLDatabaseName "Development"
 
-    This example will retrieve the KQLDatabase with the name 'MyKQLDatabase'.
+Retrieves the "Development" KQLDatabase from workspace "12345".
 
 .EXAMPLE
-    Get-FabricKQLDatabase
+Get-FabricKQLDatabase -WorkspaceId "12345"
 
-    This example will retrieve all KQLDatabases in the workspace that is specified
-    by the WorkspaceId.
-
-.EXAMPLE
-    Get-FabricKQLDatabase `
-        -WorkspaceId '12345678-1234-1234-1234-123456789012' `
-        -KQLDatabaseId '12345678-1234-1234-1234-123456789012'
-
-    This example will retrieve the KQLDatabase with the ID '12345678-1234-1234-1234-123456789012'.
+Retrieves all KQLDatabases in workspace "12345".
 
 .NOTES
-    TODO: Add functionality to list all KQLDatabases. To do so fetch all workspaces and
-          then all KQLDatabases in each workspace.
+- Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
+- Calls `Test-TokenExpired` to ensure token validity before making the API request.
 
-    Revision History:
-        - 2024-11-09 - FGE: Added DisplaName as Alias for KQLDatabaseName
-        - 2024-12-08 - FGE: Added Verbose Output
+Author: Tiago Balabuch  
 
 #>
-
-
-[CmdletBinding()]
+function Get-FabricKQLDatabase {
+    [CmdletBinding()]
     param (
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
         [string]$WorkspaceId,
 
-        [Alias("Name","DisplayName")]
-        [string]$KQLDatabaseName,
+        [Parameter(Mandatory = $false)]
+        [ValidateNotNullOrEmpty()]
+        [string]$KQLDatabaseId,
 
-        [Alias("Id")]
-        [string]$KQLDatabaseId
+        [Parameter(Mandatory = $false)]
+        [ValidateNotNullOrEmpty()]
+        [ValidatePattern('^[a-zA-Z0-9_ ]*$')]
+        [string]$KQLDatabaseName
     )
 
-begin {
-
-    Confirm-FabricAuthToken | Out-Null
-
-    Write-Verbose "You can either use KQLDatabaseName or KQLDatabaseID not both. If both are used throw error"
-    if ($PSBoundParameters.ContainsKey("KQLDatabaseName") -and $PSBoundParameters.ContainsKey("KQLDatabaseId")) {
-        throw "Parameters KQLDatabaseName and KQLDatabaseId cannot be used together"
-    }
-
-    # Create KQLDatabase API
-    $KQLDatabaseAPI = "$($FabricSession.BaseApiUrl)/workspaces/$WorkspaceId/kqldatabases"
-
-    $KQLDatabaseAPIKQLDatabaseId = "$($FabricSession.BaseApiUrl)/workspaces/$WorkspaceId/kqldatabases/$KQLDatabaseId"
-
-}
-
-process {
-
-    if ($PSBoundParameters.ContainsKey("KQLDatabaseId")) {
-        Write-Verbose "Calling KQLDatabase API with KQLDatabaseId : $KQLDatabaseId"
-        Write-Verbose "-------------------------------------------------------------------------"
-        Write-Verbose "Sending the following values to the KQLDatabase API:"
-        Write-Verbose "Headers: $($FabricSession.headerParams | Format-List | Out-String)"
-        Write-Verbose "Method: GET"
-        Write-Verbose "URI: $KQLDatabaseAPIKQLDatabaseId"
-        Write-Verbose "ContentType: application/json"
-        $response = Invoke-RestMethod `
-                    -Headers $FabricSession.headerParams `
-                    -Method GET `
-                    -Uri $KQLDatabaseAPIKQLDatabaseId `
-                    -ContentType "application/json"
-
-        Write-Verbose "Adding Members to the Output object for convenience"
-        Write-Verbose "Adding Member parentEventhouseItemId with value $($response.properties.parentEventhouseItemId)"
-        Add-Member `
-            -MemberType NoteProperty `
-            -Name 'parentEventhouseItemId' `
-            -Value $response.properties.parentEventhouseItemId `
-            -InputObject $response `
-            -Force
-
-        Write-Verbose "Adding Member queryServiceUri with value $($response.properties.queryServiceUri)"
-        Add-Member `
-            -MemberType NoteProperty `
-            -Name 'queryServiceUri' `
-            -Value $response.properties.queryServiceUri `
-            -InputObject $response `
-            -Force
-
-        Write-Verbose "Adding Member ingestionServiceUri with value $($response.properties.ingestionServiceUri)"
-        Add-Member `
-            -MemberType NoteProperty `
-            -Name 'ingestionServiceUri' `
-            -Value $response.properties.ingestionServiceUri `
-            -InputObject $response `
-            -Force
-
-        Write-Verbose "Adding Member databaseType with value $($response.properties.databaseType)"
-        Add-Member `
-            -MemberType NoteProperty `
-            -Name 'databaseType' `
-            -Value $response.properties.databaseType `
-            -InputObject $response `
-            -Force
-
-        Write-Verbose "Adding Member oneLakeStandardStoragePeriod with value $($response.properties.oneLakeStandardStoragePeriod)"
-        Add-Member `
-            -MemberType NoteProperty `
-            -Name 'oneLakeStandardStoragePeriod' `
-            -Value $response.properties.oneLakeStandardStoragePeriod `
-            -InputObject $response `
-            -Force
-
-        Write-Verbose "Adding Member oneLakeCachingPeriod with value $($response.properties.oneLakeCachingPeriod)"
-        Add-Member `
-            -MemberType NoteProperty `
-            -Name 'oneLakeCachingPeriod' `
-            -Value $response.properties.oneLakeCachingPeriod `
-            -InputObject $response `
-            -Force
-
-        $response
-    }
-    else {
-        Write-Verbose "Calling KQLDatabase API"
-        Write-Verbose "-----------------------"
-        Write-Verbose "Sending the following values to the KQLDatabase API:"
-        Write-Verbose "Headers: $($FabricSession.headerParams | Format-List | Out-String)"
-        Write-Verbose "Method: GET"
-        Write-Verbose "URI: $KQLDatabaseAPI"
-        Write-Verbose "ContentType: application/json"
-        $response = Invoke-RestMethod `
-                    -Headers $FabricSession.headerParams `
-                    -Method GET `
-                    -Uri $KQLDatabaseAPI `
-                    -ContentType "application/json"
-
-        Write-Verbose "Adding Members to the Output object for convenience"
-        foreach ($kqlDatabase in $response.value) {
-            Write-Verbose "Adding Member parentEventhouseItemId with value $($response.properties.parentEventhouseItemId)"
-            Add-Member `
-                -MemberType NoteProperty `
-                -Name 'parentEventhouseItemId' `
-                -Value $response.properties.parentEventhouseItemId `
-                -InputObject $response `
-                -Force
-
-            Write-Verbose "Adding Member queryServiceUri with value $($kqlDatabase.properties.queryServiceUri)"
-            Add-Member `
-                -MemberType NoteProperty `
-                -Name 'queryServiceUri' `
-                -Value $kqlDatabase.properties.queryServiceUri `
-                -InputObject $kqlDatabase `
-                -Force
-
-            Write-Verbose "Adding Member ingestionServiceUri with value $($kqlDatabase.properties.ingestionServiceUri)"
-            Add-Member `
-                -MemberType NoteProperty `
-                -Name 'ingestionServiceUri' `
-                -Value $kqlDatabase.properties.ingestionServiceUri `
-                -InputObject $kqlDatabase `
-                -Force
-            Write-Verbose "Adding Member databaseType with value $($kqlDatabase.properties.databaseType)"
-            Add-Member `
-                -MemberType NoteProperty `
-                -Name 'databaseType' `
-                -Value $kqlDatabase.properties.databaseType `
-                -InputObject $kqlDatabase `
-                -Force
-
-            Write-Verbose "Adding Member oneLakeStandardStoragePeriod with value $($kqlDatabase.properties.oneLakeStandardStoragePeriod)"
-            Add-Member `
-                -MemberType NoteProperty `
-                -Name 'oneLakeStandardStoragePeriod' `
-                -Value $kqlDatabase.properties.oneLakeStandardStoragePeriod `
-                -InputObject $kqlDatabase `
-                -Force
-
-            Write-Verbose "Adding Member oneLakeCachingPeriod with value $($kqlDatabase.properties.oneLakeCachingPeriod)"
-            Add-Member `
-                -MemberType NoteProperty `
-                -Name 'oneLakeCachingPeriod' `
-                -Value $kqlDatabase.properties.oneLakeCachingPeriod `
-                -InputObject $kqlDatabase `
-                -Force
+    try {
+        # Step 1: Handle ambiguous input
+        if ($KQLDatabaseId -and $KQLDatabaseName) {
+            Write-Message -Message "Both 'KQLDatabaseId' and 'KQLDatabaseName' were provided. Please specify only one." -Level Error
+            return $null
         }
 
-        if ($PSBoundParameters.ContainsKey("KQLDatabaseName")) {
-            Write-Verbose "Filtering KQLDatabases by name. Name: $KQLDatabaseName"
-            $response.value | `
-                Where-Object { $_.displayName -eq $KQLDatabaseName }
+        # Step 2: Ensure token validity
+        Write-Message -Message "Validating token..." -Level Debug
+        Test-TokenExpired
+        Write-Message -Message "Token validation completed." -Level Debug
+        # Step 3: Initialize variables
+        $continuationToken = $null
+        $KQLDatabases = @()
+        
+        if (-not ([AppDomain]::CurrentDomain.GetAssemblies() | Where-Object { $_.GetName().Name -eq "System.Web" })) {
+            Add-Type -AssemblyName System.Web
+        }
+ 
+        # Step 4: Loop to retrieve all capacities with continuation token
+        Write-Message -Message "Loop started to get continuation token" -Level Debug
+        $baseApiEndpointUrl = "{0}/workspaces/{1}/kqlDatabases" -f $FabricConfig.BaseUrl, $WorkspaceId
+
+        do {
+            # Step 5: Construct the API URL
+            $apiEndpointUrl = $baseApiEndpointUrl
+        
+            if ($null -ne $continuationToken) {
+                # URL-encode the continuation token
+                $encodedToken = [System.Web.HttpUtility]::UrlEncode($continuationToken)
+                $apiEndpointUrl = "{0}?continuationToken={1}" -f $apiEndpointUrl, $encodedToken
+            }
+            Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
+         
+            # Step 6: Make the API request
+            $response = Invoke-RestMethod `
+                -Headers $FabricConfig.FabricHeaders `
+                -Uri $apiEndpointUrl `
+                -Method Get `
+                -ErrorAction Stop `
+                -SkipHttpErrorCheck `
+                -ResponseHeadersVariable "responseHeader" `
+                -StatusCodeVariable "statusCode"
+         
+            # Step 7: Validate the response code
+            if ($statusCode -ne 200) {
+                Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
+                Write-Message -Message "Error: $($response.message)" -Level Error
+                Write-Message -Message "Error Details: $($response.moreDetails)" -Level Error
+                Write-Message "Error Code: $($response.errorCode)" -Level Error
+                return $null
+            }
+         
+            # Step 8: Add data to the list
+            if ($null -ne $response) {
+                Write-Message -Message "Adding data to the list" -Level Debug
+                $KQLDatabases += $response.value
+                 
+                # Update the continuation token if present
+                if ($response.PSObject.Properties.Match("continuationToken")) {
+                    Write-Message -Message "Updating the continuation token" -Level Debug
+                    $continuationToken = $response.continuationToken
+                    Write-Message -Message "Continuation token: $continuationToken" -Level Debug
+                }
+                else {
+                    Write-Message -Message "Updating the continuation token to null" -Level Debug
+                    $continuationToken = $null
+                }
+            }
+            else {
+                Write-Message -Message "No data received from the API." -Level Warning
+                break
+            }
+        } while ($null -ne $continuationToken)
+        Write-Message -Message "Loop finished and all data added to the list" -Level Debug
+       
+        # Step 8: Filter results based on provided parameters
+        $KQLDatabase = if ($KQLDatabaseId) {
+            $KQLDatabases | Where-Object { $_.Id -eq $KQLDatabaseId }
+        }
+        elseif ($KQLDatabaseName) {
+            $KQLDatabases | Where-Object { $_.DisplayName -eq $KQLDatabaseName }
         }
         else {
-            Write-Verbose "Returning all KQLDatabases"
-            $response.value
+            # Return all KQLDatabases if no filter is provided
+            Write-Message -Message "No filter provided. Returning all KQLDatabases." -Level Debug
+            $KQLDatabases
+        }
+
+        # Step 9: Handle results
+        if ($KQLDatabase) {
+            Write-Message -Message "KQLDatabase found matching the specified criteria." -Level Debug
+            return $KQLDatabase
+        }
+        else {
+            Write-Message -Message "No KQLDatabase found matching the provided criteria." -Level Warning
+            return $null
         }
     }
-}
-
-end {}
-
+    catch {
+        # Step 10: Capture and log error details
+        $errorDetails = $_.Exception.Message
+        Write-Message -Message "Failed to retrieve KQLDatabase. Error: $errorDetails" -Level Error
+    } 
+ 
 }

@@ -1,113 +1,136 @@
-function New-FabricLakehouse {
-#Requires -Version 7.1
-
 <#
 .SYNOPSIS
-    Creates a new Fabric Lakehouse
+Creates a new Lakehouse in a specified Microsoft Fabric workspace.
 
 .DESCRIPTION
-    Creates a new Fabric Lakehouse
+This function sends a POST request to the Microsoft Fabric API to create a new Lakehouse
+in the specified workspace. It supports optional parameters for Lakehouse description
+and path definitions for the Lakehouse content.
 
-.PARAMETER WorkspaceID
-    Id of the Fabric Workspace for which the Lakehouse should be created. The value for WorkspaceID is a GUID.
-    An example of a GUID is '12345678-1234-1234-1234-123456789012'.
+.PARAMETER WorkspaceId
+The unique identifier of the workspace where the Lakehouse will be created.
 
 .PARAMETER LakehouseName
-    The name of the Lakehouse to create.
+The name of the Lakehouse to be created.
 
 .PARAMETER LakehouseDescription
-    The description of the Lakehouse to create.
+An optional description for the Lakehouse.
+
+.PARAMETER LakehouseEnableSchemas
+An optional path to enable schemas in the Lakehouse
 
 .EXAMPLE
-    New-FabricLakehouse `
-        -WorkspaceID '12345678-1234-1234-1234-123456789012' `
-        -LakehouseName 'MyLakehouse' `
-        -LakehouseSchemaEnabled $true `
-        -LakehouseDescription 'This is my Lakehouse'
+ Add-FabricLakehouse -WorkspaceId "workspace-12345" -LakehouseName "New Lakehouse" -LakehouseEnableSchemas $true
 
-    This example will create a new Lakehouse with the name 'MyLakehouse' and the description 'This is my Lakehouse'.
+ .NOTES
+- Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
+- Calls `Test-TokenExpired` to ensure token validity before making the API request.
 
-  .EXAMPLE
-  New-FabricLakehouse `
-      -WorkspaceID '12345678-1234-1234-1234-123456789012' `
-        -LakehouseName 'MyLakehouse' `
-        -LakehouseSchemaEnabled $true `
-        -LakehouseDescription 'This is my Lakehouse'
-        -Verbose
-  
-    This example will create a new Lakehouse with the name 'MyLakehouse' and the description 'This is my Lakehouse'.
-    It will also give you verbose output which is useful for debugging.
+Author: Tiago Balabuch
 
-.NOTES
-
-.LINK
-    https://learn.microsoft.com/en-us/rest/api/fabric/lakehouse/items/create-lakehouse?tabs=HTTP
 #>
 
-[CmdletBinding(SupportsShouldProcess)]
+function New-FabricLakehouse {
+    [CmdletBinding(SupportsShouldProcess)]
     param (
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [string]$WorkspaceId,
 
-        [Parameter(Mandatory=$true)]
-        [string]$WorkspaceID,
-
-        [Parameter(Mandatory=$true)]
-        [Alias("Name", "DisplayName")]
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [ValidatePattern('^[a-zA-Z0-9_]*$')]
         [string]$LakehouseName,
 
-        [Parameter(Mandatory=$true)]
-        [Alias("LakehouseSchemaEnabled")]
-        [bool]$SchemaEnabled,
+        [Parameter(Mandatory = $false)]
+        [ValidateNotNullOrEmpty()]
+        [string]$LakehouseDescription,
 
-        [ValidateLength(0, 256)]
-        [Alias("Description")]
-        [string]$LakehouseDescription
+        [Parameter(Mandatory = $false)]
+        [ValidateNotNullOrEmpty()]
+        [bool]$LakehouseEnableSchemas = $false
     )
 
-begin {
-    Confirm-FabricAuthToken | Out-Null
-    
-    #create payload
-    $body = [ordered]@{
-        'displayName' = $LakehouseName
-        'description' = $LakehouseDescription
-    }
+    try {
+        # Step 1: Ensure token validity
+        Write-Message -Message "Validating token..." -Level Debug
+        Test-TokenExpired
+        Write-Message -Message "Token validation completed." -Level Debug
 
-    #add enableSchema element if $LakehouseSchemaEnabled is true
-    if ($LakehouseSchemaEnabled) {
-        $body['creationPayload'] = @{
-            'enableSchemas' = $LakehouseSchemaEnabled
+        # Step 2: Construct the API URL
+        $apiEndpointUrl = "{0}/workspaces/{1}/lakehouses" -f $FabricConfig.BaseUrl, $WorkspaceId
+        Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
+
+        # Step 3: Construct the request body
+        $body = @{
+            displayName     = $LakehouseName
+            }
+
+        if ($LakehouseDescription) {
+            $body.description = $LakehouseDescription
         }
-    }    
 
-    #format payload
-    $body = $body | ConvertTo-Json -Depth 1 
+        if ($true -eq $LakehouseEnableSchemas) {
+            $body.creationPayload = @{
+                enableSchemas = $LakehouseEnableSchemas
+            }
+        }
+        $bodyJson = $body | ConvertTo-Json -Depth 10
+        Write-Message -Message "Request Body: $bodyJson" -Level Debug
 
-    # Create Eventhouse API URL
-    $lakehouseApiUrl = "$($FabricSession.BaseApiUrl)/workspaces/$WorkspaceId/lakehouses"
-}
-
-process {
-
-    Write-Verbose "Calling Lakehouse API"
-    Write-Verbose "----------------------"
-    Write-Verbose "Sending the following values to the Lakehouse API:"
-    Write-Verbose "Headers: $($FabricSession.headerParams | Format-List | Out-String)"
-    Write-Verbose "Method: POST"
-    Write-Verbose "URI: $lakehouseApiUrl"
-    Write-Verbose "Body of request: $bodyJson"
-    Write-Verbose "ContentType: application/json"
-    if($PSCmdlet.ShouldProcess($LakehouseName)) {
+        # Step 4: Make the API request
         $response = Invoke-RestMethod `
-                            -Headers $FabricSession.headerParams `
-                            -Method POST `
-                            -Uri $lakehouseApiUrl `
-                            -Body ($body) `
-                            -ContentType "application/json"
+            -Headers $FabricConfig.FabricHeaders `
+            -Uri $apiEndpointUrl `
+            -Method Post `
+            -Body $bodyJson `
+            -ContentType "application/json" `
+            -ErrorAction Stop `
+            -SkipHttpErrorCheck `
+            -ResponseHeadersVariable "responseHeader" `
+            -StatusCodeVariable "statusCode"
 
-        $response
+        # Step 5: Handle and log the response
+        switch ($statusCode) {
+            201 {
+                Write-Message -Message "Lakehouse '$LakehouseName' created successfully!" -Level Info
+                return $response
+            }
+            202 {
+                Write-Message -Message "Lakehouse '$LakehouseName' creation accepted. Provisioning in progress!" -Level Info
+
+                [string]$operationId = $responseHeader["x-ms-operation-id"]
+                Write-Message -Message "Operation ID: '$operationId'" -Level Debug
+                Write-Message -Message "Getting Long Running Operation status" -Level Debug
+
+                $operationStatus = Get-FabricLongRunningOperation -operationId $operationId
+                Write-Message -Message "Long Running Operation status: $operationStatus" -Level Debug
+                # Handle operation result
+                if ($operationStatus.status -eq "Succeeded") {
+                    Write-Message -Message "Operation Succeeded" -Level Debug
+                    Write-Message -Message "Getting Long Running Operation result" -Level Debug
+
+                    $operationResult = Get-FabricLongRunningOperationResult -operationId $operationId
+                    Write-Message -Message "Long Running Operation status: $operationResult" -Level Debug
+
+                    return $operationResult
+                }
+                else {
+                    Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Debug
+                    Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Error
+                    return $operationStatus
+                }
+            }
+            default {
+                Write-Message -Message "Unexpected response code: $statusCode" -Level Error
+                Write-Message -Message "Error details: $($response.message)" -Level Error
+                throw "API request failed with status code $statusCode."
+            }
+        }
     }
-}
-
-end {}
-
+    catch {
+        # Step 6: Handle and log errors
+        $errorDetails = $_.Exception.Message
+        Write-Message -Message "Failed to create Lakehouse. Error: $errorDetails" -Level Error
+    }
 }

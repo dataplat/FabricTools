@@ -1,213 +1,186 @@
 function Get-FabricEventhouse {
-#Requires -Version 7.1
-
 <#
-.SYNOPSIS
-    Retrieves Fabric Eventhouses
+    .SYNOPSIS
+        Retrieves Fabric Eventhouses
 
-.DESCRIPTION
-    Retrieves Fabric Eventhouses. Without the EventhouseName or EventhouseID parameter, all Eventhouses are returned.
-    If you want to retrieve a specific Eventhouse, you can use the EventhouseName or EventhouseID parameter. These
-    parameters cannot be used together.
+    .DESCRIPTION
+        Retrieves Fabric Eventhouses. Without the EventhouseName or EventhouseID parameter, all Eventhouses are returned.
+        If you want to retrieve a specific Eventhouse, you can use the EventhouseName or EventhouseID parameter. These
+        parameters cannot be used together.
 
-.PARAMETER WorkspaceId
-    Id of the Fabric Workspace for which the Eventhouses should be retrieved. The value for WorkspaceId is a GUID.
-    An example of a GUID is '12345678-1234-1234-1234-123456789012'.
+    .PARAMETER WorkspaceId
+        Id of the Fabric Workspace for which the Eventhouses should be retrieved. The value for WorkspaceId is a GUID.
+        An example of a GUID is '12345678-1234-1234-1234-123456789012'.
 
-.PARAMETER EventhouseName
-    The name of the Eventhouse to retrieve. This parameter cannot be used together with EventhouseID.
+    .PARAMETER EventhouseName
+        The name of the Eventhouse to retrieve. This parameter cannot be used together with EventhouseID.
 
-.PARAMETER EventhouseId
-    The Id of the Eventhouse to retrieve. This parameter cannot be used together with EventhouseName. The value for WorkspaceId is a GUID.
-    An example of a GUID is '12345678-1234-1234-1234-123456789012'.
-
-.EXAMPLE
-    Get-FabricEventhouse `
-        -WorkspaceId '12345678-1234-1234-1234-123456789012'
-
-    This example will give you all Eventhouses in the Workspace.
-
-.EXAMPLE
-    Get-FabricEventhouse `
-        -WorkspaceId '12345678-1234-1234-1234-123456789012' `
-        -EventhouseName 'MyEventhouse'
-
-    This example will give you all Information about the Eventhouse with the name 'MyEventhouse'.
-
-.EXAMPLE
-    Get-FabricEventhouse `
-        -WorkspaceId '12345678-1234-1234-1234-123456789012' `
-        -EventhouseId '12345678-1234-1234-1234-123456789012'
-
-    This example will give you all Information about the Eventhouse with the Id '12345678-1234-1234-1234-123456789012'.
+    .PARAMETER EventhouseId
+        The Id of the Eventhouse to retrieve. This parameter cannot be used together with EventhouseName. The value for WorkspaceId is a GUID.
+        An example of a GUID is '12345678-1234-1234-1234-123456789012'.
 
     .EXAMPLE
-    Get-FabricEventhouse `
-        -WorkspaceId '12345678-1234-1234-1234-123456789012' `
-        -EventhouseId '12345678-1234-1234-1234-123456789012' `
-        -Verbose
+        Get-FabricEventhouse `
+            -WorkspaceId '12345678-1234-1234-1234-123456789012'
 
-    This example will give you all Information about the Eventhouse with the Id '12345678-1234-1234-1234-123456789012'.
-    It will also give you verbose output which is useful for debugging.
+        This example will give you all Eventhouses in the Workspace.
 
-.LINK
-    https://learn.microsoft.com/en-us/rest/api/fabric/eventhouse/items/list-eventhouses?tabs=HTTP
+    .EXAMPLE
+        Get-FabricEventhouse `
+            -WorkspaceId '12345678-1234-1234-1234-123456789012' `
+            -EventhouseName 'MyEventhouse'
 
-.NOTES
-    TODO: Add functionality to list all Eventhouses in the subscription. To do so fetch all workspaces
-    and then all eventhouses in each workspace.
+        This example will give you all Information about the Eventhouse with the name 'MyEventhouse'.
 
-    Revsion History:
+    .EXAMPLE
+        Get-FabricEventhouse `
+            -WorkspaceId '12345678-1234-1234-1234-123456789012' `
+            -EventhouseId '12345678-1234-1234-1234-123456789012'
 
-    - 2024-11-09 - FGE: Added DisplaName as Alias for EventhouseName
-    - 2024-11-16 - FGE: Added Verbose Output
-    - 2024-11-27 - FGE: Added more Verbose Output
+        This example will give you all Information about the Eventhouse with the Id '12345678-1234-1234-1234-123456789012'.
+
+        .EXAMPLE
+        Get-FabricEventhouse `
+            -WorkspaceId '12345678-1234-1234-1234-123456789012' `
+            -EventhouseId '12345678-1234-1234-1234-123456789012' `
+            -Verbose
+
+        This example will give you all Information about the Eventhouse with the Id '12345678-1234-1234-1234-123456789012'.
+        It will also give you verbose output which is useful for debugging.
+
+    .LINK
+        https://learn.microsoft.com/en-us/rest/api/fabric/eventhouse/items/list-eventhouses?tabs=HTTP
+
+    .NOTES
+        TODO: Add functionality to list all Eventhouses in the subscription. To do so fetch all workspaces
+        and then all eventhouses in each workspace.
+
+        Revsion History:
+
+        - 2024-11-09 - FGE: Added DisplaName as Alias for EventhouseName
+        - 2024-11-16 - FGE: Added Verbose Output
+        - 2024-11-27 - FGE: Added more Verbose Output
 #>
-
-#
-
-[CmdletBinding()]
+    [CmdletBinding()]
     param (
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
         [string]$WorkspaceId,
 
-        [Alias("Name","DisplayName")]
-        [string]$EventhouseName,
+        [Parameter(Mandatory = $false)]
+        [ValidateNotNullOrEmpty()]
+        [string]$EventhouseId,
 
-        [Alias("Id")]
-        [string]$EventhouseId
+        [Parameter(Mandatory = $false)]
+        [ValidateNotNullOrEmpty()]
+        [ValidatePattern('^[a-zA-Z0-9_ ]*$')]
+        [string]$EventhouseName
     )
+    try {
 
-begin {
-
-    Confirm-FabricAuthToken | Out-Null
-
-    # You can either use Name or WorkspaceID
-    Write-Verbose "Checking if EventhouseName and EventhouseID are used together. This is not allowed"
-    if ($PSBoundParameters.ContainsKey("EventhouseName") -and $PSBoundParameters.ContainsKey("EventhouseID")) {
-        throw "Parameters EventhouseName and EventhouseID cannot be used together"
-    }
-
-    # Create Eventhouse API
-    $eventhouseAPI = "$($FabricSession.BaseApiUrl)/workspaces/$WorkspaceId/eventhouses"
-    Write-Verbose "Creating the URL for the Eventhouse API: $eventhouseAPI"
-
-    $eventhouseAPIEventhouseId = "$($FabricSession.BaseApiUrl)/workspaces/$WorkspaceId/eventhouses/$EventhouseId"
-    Write-Verbose "Creating the URL for the Eventhouse API when the Id is used: $eventhouseAPIEventhouseId"
-
-}
-
-process {
-
-    if ($PSBoundParameters.ContainsKey("EventhouseId")) {
-        Write-Verbose "Calling Eventhouse API with EventhouseId"
-        Write-Verbose "----------------------------------------"
-        Write-Verbose "Sending the following values to the Eventhouse API:"
-        Write-Verbose "Headers: $($FabricSession.headerParams | Format-List | Out-String)"
-        Write-Verbose "Method: GET"
-        Write-Verbose "URI: $eventhouseAPIEventhouseId"
-        Write-Verbose "ContentType: application/json"
-        $response = Invoke-RestMethod `
-                        -Headers $FabricSession.headerParams `
-                        -Method GET `
-                        -Uri $eventhouseAPIEventhouseId `
-                        -ContentType "application/json"
-
-        Write-Verbose "Adding the member queryServiceUri: $($response.properties.queryServiceUri)"
-        Add-Member `
-            -MemberType NoteProperty `
-            -Name 'queryServiceUri' `
-            -Value $response.properties.queryServiceUri `
-            -InputObject $response `
-            -Force
-
-        Write-Verbose "Adding the member ingestionServiceUri: $($response.properties.ingestionServiceUri)"
-        Add-Member `
-            -MemberType NoteProperty `
-            -Name 'ingestionServiceUri' `
-            -Value $response.properties.ingestionServiceUri `
-            -InputObject $response `
-            -Force
-
-        Write-Verbose "Adding the member databasesItemIds: $($response.properties.databasesItemIds)"
-        Add-Member `
-            -MemberType NoteProperty `
-            -Name 'databasesItemIds' `
-            -Value $response.properties.databasesItemIds `
-            -InputObject $response `
-            -Force
-
-        Write-Verbose "Adding the member minimumConsumptionUnits: $($response.properties.minimumConsumptionUnits)"
-        Add-Member `
-            -MemberType NoteProperty `
-            -Name 'minimumConsumptionUnits' `
-            -Value $response.properties.minimumConsumptionUnits `
-            -InputObject $response `
-            -Force
-
-        $response
-    }
-    else {
-        Write-Verbose "Calling Eventhouse API without EventhouseId"
-        Write-Verbose "-------------------------------------------"
-        Write-Verbose "Sending the following values to the Eventhouse API:"
-        Write-Verbose "Headers: $($FabricSession.headerParams | Format-List | Out-String)"
-        Write-Verbose "Method: GET"
-        Write-Verbose "URI: $eventhouseAPI"
-        Write-Verbose "ContentType: application/json"
-        $response = Invoke-RestMethod `
-                    -Headers $FabricSession.headerParams `
-                    -Method GET `
-                    -Uri $eventhouseAPI `
-                    -ContentType "application/json"
-
-        foreach ($eventhouse in $response.value) {
-            Write-Verbose "Adding the member queryServiceUri: $($eventhouse.properties.queryServiceUri)"
-            Add-Member `
-                -MemberType NoteProperty `
-                -Name 'queryServiceUri' `
-                -Value $eventhouse.properties.queryServiceUri `
-                -InputObject $eventhouse `
-                -Force
-
-            Write-Verbose "Adding the member ingestionServiceUri: $($eventhouse.properties.ingestionServiceUri)"
-            Add-Member `
-                -MemberType NoteProperty `
-                -Name 'ingestionServiceUri' `
-                -Value $eventhouse.properties.ingestionServiceUri `
-                -InputObject $eventhouse `
-                -Force
-
-            Write-Verbose "Adding the member databasesItemIds: $($eventhouse.properties.databasesItemIds)"
-            Add-Member `
-                -MemberType NoteProperty `
-                -Name 'databasesItemIds' `
-                -Value $eventhouse.properties.databasesItemIds `
-                -InputObject $eventhouse `
-                -Force
-
-            Write-Verbose "Adding the member minimumConsumptionUnits: $($eventhouse.properties.minimumConsumptionUnits)"
-            Add-Member `
-                -MemberType NoteProperty `
-                -Name 'minimumConsumptionUnits' `
-                -Value $eventhouse.properties.minimumConsumptionUnits `
-                -InputObject $eventhouse `
-                -Force
+        # Step 1: Handle ambiguous input
+        if ($EventhouseId -and $EventhouseName) {
+            Write-Message -Message "Both 'EventhouseId' and 'EventhouseName' were provided. Please specify only one." -Level Error
+            return $null
         }
 
-        if ($PSBoundParameters.ContainsKey("EventhouseName")) {
-            Write-Verbose "Filtering the Eventhouse by EventhouseName: $EventhouseName"
-            $response.value | `
-                Where-Object { $_.displayName -eq $EventhouseName }
+        # Step 2: Ensure token validity
+        Write-Message -Message "Validating token..." -Level Debug
+        Test-TokenExpired
+        Write-Message -Message "Token validation completed." -Level Debug
+
+        # Step 3: Initialize variables
+        $continuationToken = $null
+        $eventhouses = @()
+
+        if (-not ([AppDomain]::CurrentDomain.GetAssemblies() | Where-Object { $_.GetName().Name -eq "System.Web" })) {
+            Add-Type -AssemblyName System.Web
+        }
+
+        # Step 4: Loop to retrieve all capacities with continuation token
+        Write-Message -Message "Loop started to get continuation token" -Level Debug
+        $baseApiEndpointUrl = "{0}/workspaces/{1}/eventhouses" -f $FabricConfig.BaseUrl, $WorkspaceId
+        # Step 3:  Loop to retrieve data with continuation token
+        do {
+            # Step 5: Construct the API URL
+            $apiEndpointUrl = $baseApiEndpointUrl
+
+            if ($null -ne $continuationToken) {
+                # URL-encode the continuation token
+                $encodedToken = [System.Web.HttpUtility]::UrlEncode($continuationToken)
+                $apiEndpointUrl = "{0}?continuationToken={1}" -f $apiEndpointUrl, $encodedToken
+            }
+            Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
+
+            # Step 6: Make the API request
+            $response = Invoke-RestMethod `
+                -Headers $FabricConfig.FabricHeaders `
+                -Uri $apiEndpointUrl `
+                -Method Get `
+                -ErrorAction Stop `
+                -SkipHttpErrorCheck `
+                -ResponseHeadersVariable "responseHeader" `
+                -StatusCodeVariable "statusCode"
+
+            # Step 7: Validate the response code
+            if ($statusCode -ne 200) {
+                Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
+                Write-Message -Message "Error: $($response.message)" -Level Error
+                Write-Message -Message "Error Details: $($response.moreDetails)" -Level Error
+                Write-Message "Error Code: $($response.errorCode)" -Level Error
+                return $null
+            }
+
+            # Step 8: Add data to the list
+            if ($null -ne $response) {
+                Write-Message -Message "Adding data to the list" -Level Debug
+                $eventhouses += $response.value
+
+                # Update the continuation token if present
+                if ($response.PSObject.Properties.Match("continuationToken")) {
+                    Write-Message -Message "Updating the continuation token" -Level Debug
+                    $continuationToken = $response.continuationToken
+                    Write-Message -Message "Continuation token: $continuationToken" -Level Debug
+                }
+                else {
+                    Write-Message -Message "Updating the continuation token to null" -Level Debug
+                    $continuationToken = $null
+                }
+            }
+            else {
+                Write-Message -Message "No data received from the API." -Level Warning
+                break
+            }
+        } while ($null -ne $continuationToken)
+        Write-Message -Message "Loop finished and all data added to the list" -Level Debug
+
+        # Step 8: Filter results based on provided parameters
+        $eventhouse = if ($EventhouseId) {
+            $eventhouses | Where-Object { $_.Id -eq $EventhouseId }
+        }
+        elseif ($EventhouseName) {
+            $eventhouses | Where-Object { $_.DisplayName -eq $EventhouseName }
         }
         else {
-            Write-Verbose "Returning all Eventhouses"
-            $response.value
+            # Return all eventhouses if no filter is provided
+            Write-Message -Message "No filter provided. Returning all Eventhouses." -Level Debug
+            $eventhouses
+        }
+
+        # Step 9: Handle results
+        if ($eventhouse) {
+            Write-Message -Message "Eventhouse found in the Workspace '$WorkspaceId'." -Level Debug
+            return $eventhouse
+        }
+        else {
+            Write-Message -Message "No Eventhouse found matching the provided criteria." -Level Warning
+            return $null
         }
     }
-
-}
-
-end {}
+    catch {
+        # Step 10: Capture and log error details
+        $errorDetails = $_.Exception.Message
+        Write-Message -Message "Failed to retrieve Eventhouse. Error: $errorDetails" -Level Error
+    }
 
 }

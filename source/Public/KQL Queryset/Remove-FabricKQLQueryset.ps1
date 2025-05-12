@@ -1,77 +1,73 @@
-function Remove-FabricKQLQueryset {
-#Requires -Version 7.1
-
 <#
 .SYNOPSIS
-    Removes an existing Fabric KQLQueryset.
+Deletes an KQLQueryset from a specified workspace in Microsoft Fabric.
 
 .DESCRIPTION
-    Removes an existing Fabric KQLQueryset. The Eventhouse is identified by the WorkspaceId and KQLQuerysetId.
+The `Remove-FabricKQLQueryset` function sends a DELETE request to the Fabric API to remove a specified KQLQueryset from a given workspace.
 
 .PARAMETER WorkspaceId
-    Id of the Fabric Workspace for which the KQLQueryset should be removed. The value for WorkspaceId is a GUID.
-    An example of a GUID is '12345678-1234-1234-1234-123456789012'. This parameter is mandatory.
+(Mandatory) The ID of the workspace containing the KQLQueryset to delete.
 
 .PARAMETER KQLQuerysetId
-    The Id of the KQLQueryset to remove. The value for KQLQuerysetId is a GUID. An example of a GUID is '12345678-1234-1234-1234-123456789012'.
-    This parameter is mandatory.
+(Mandatory) The ID of the KQLQueryset to be deleted.
 
 .EXAMPLE
-    Remove-FabricKQLQueryset `
-        -WorkspaceId '12345678-1234-1234-1234-123456789012' `
-        -KQLQuerysetId '12345678-1234-1234-1234-123456789012'
+Remove-FabricKQLQueryset -WorkspaceId "12345" -KQLQuerysetId "67890"
+
+Deletes the KQLQueryset with ID "67890" from workspace "12345".
 
 .NOTES
-    TODO: Add functionality to remove KQLQueryset by name.
+- Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
+- Validates token expiration before making the API request.
 
-    Revsion History:
-
-    - 2024-11-07 - FGE: Implemented SupportShouldProcess
-    - 2024-12-22 - FGE: Added Verbose Output
+Author: Tiago Balabuch
 
 #>
 
-
-[CmdletBinding(SupportsShouldProcess)]
+function Remove-FabricKQLQueryset {
+    [CmdletBinding(SupportsShouldProcess)]
     param (
-
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
         [string]$WorkspaceId,
 
-        [Parameter(Mandatory=$true)]
-        [Alias("Id")]
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
         [string]$KQLQuerysetId
-
     )
 
-begin {
-    Confirm-FabricAuthToken | Out-Null
+    try {
+        # Step 1: Ensure token validity
+        Write-Message -Message "Validating token..." -Level Debug
+        Test-TokenExpired
+        Write-Message -Message "Token validation completed." -Level Debug
 
-    # Create KQLQueryset API URL
-    $querysetApiUrl = "$($FabricSession.BaseApiUrl)/workspaces/$WorkspaceId/KQLQuerysets/$KQLQuerysetId"
-}
+        # Step 2: Construct the API URL
+        $apiEndpointUrl = "{0}/workspaces/{1}/kqlQuerysets/{2}" -f $FabricConfig.BaseUrl, $WorkspaceId, $KQLQuerysetId
+        Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
-process {
-
-    # Call KQL Queryset API
-    if($PSCmdlet.ShouldProcess($KQLQuerysetId)) {
-        Write-Verbose "Calling KQLQueryset API"
-        Write-Verbose "-----------------------"
-        Write-Verbose "Sending the following values to the KQLQueryset API:"
-        Write-Verbose "Headers: $($FabricSession.headerParams | Format-List | Out-String)"
-        Write-Verbose "Method: DELETE"
-        Write-Verbose "URI: $querysetApiUrl"
-        Write-Verbose "ContentType: application/json"
+        # Step 3: Make the API request
         $response = Invoke-RestMethod `
-                            -Headers $FabricSession.headerParams `
-                            -Method DELETE `
-                            -Uri $querysetApiUrl `
-                            -ContentType "application/json"
+            -Headers $FabricConfig.FabricHeaders `
+            -Uri $apiEndpointUrl `
+            -Method Delete `
+            -ErrorAction Stop `
+            -SkipHttpErrorCheck `
+            -StatusCodeVariable "statusCode"
 
-        $response
+        # Step 4: Validate the response code
+        if ($statusCode -ne 200) {
+            Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
+            Write-Message -Message "Error: $($response.message)" -Level Error
+            Write-Message "Error Code: $($response.errorCode)" -Level Error
+            return $null
+        }
+        Write-Message -Message "KQLQueryset '$KQLQuerysetId' deleted successfully from workspace '$WorkspaceId'." -Level Info
+
     }
-}
-
-end {}
-
+    catch {
+        # Step 5: Log and handle errors
+        $errorDetails = $_.Exception.Message
+        Write-Message -Message "Failed to delete KQLQueryset '$KQLQuerysetId' from workspace '$WorkspaceId'. Error: $errorDetails" -Level Error
+    }
 }

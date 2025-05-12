@@ -12,7 +12,7 @@
    An optional filter to select items to remove. If provided, only items whose DisplayName matches the filter are removed.
 
 .PARAMETER ItemID
-   The ID of a specific item to remove. If provided, this item is removed regardless of the filter.
+   The ID of a specific item to remove. If provided, this item is removed regardless of the filter
 
 .EXAMPLE
    Remove-FabricItems -WorkspaceID "12345678-90ab-cdef-1234-567890abcdef" -Filter "*test*"

@@ -1,4 +1,3 @@
-
 function Revoke-FabricExternalDataShares {
 <#
 .SYNOPSIS
@@ -16,7 +15,8 @@ function Revoke-FabricExternalDataShares {
 
 .PARAMETER ExternalDataShareId
     The unique identifier of the External Data Share to be retrieved.
-.EXAMPLE
+
+    .EXAMPLE
      Get-FabricExternalDataShares
     This example retrieves the External Data Shares details
 
@@ -26,6 +26,7 @@ function Revoke-FabricExternalDataShares {
 
     Author: Tiago Balabuch
 #>
+
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]

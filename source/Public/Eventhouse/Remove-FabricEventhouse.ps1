@@ -1,39 +1,25 @@
 function Remove-FabricEventhouse {
-#Requires -Version 7.1
-
 <#
 .SYNOPSIS
-    Removes an existing Fabric Eventhouse
+    Removes an Eventhouse from a specified Microsoft Fabric workspace.
 
 .DESCRIPTION
-    Removes an existing Fabric Eventhouse
+    This function sends a DELETE request to the Microsoft Fabric API to remove an Eventhouse
+    from the specified workspace using the provided WorkspaceId and EventhouseId.
 
 .PARAMETER WorkspaceId
-    Id of the Fabric Workspace for which the Eventhouse should be deleted. The value for WorkspaceId is a GUID.
-    An example of a GUID is '12345678-1234-1234-1234-123456789012'.
+    The unique identifier of the workspace from which the Eventhouse will be removed.
 
 .PARAMETER EventhouseId
-    The Id of the Eventhouse to delete. The value for EventhouseId is a GUID.
-    An example of a GUID is '12345678-1234-1234-1234-123456789012'. EventhouseId and EventhouseName cannot be used together.
+    The unique identifier of the Eventhouse to be removed.
 
 .PARAMETER EventhouseName
     The name of the Eventhouse to delete. EventhouseId and EventhouseName cannot be used together.
 
 .EXAMPLE
-    Remove-FabricEventhouse `
-        -WorkspaceId '12345678-1234-1234-1234-123456789012' `
-        -EventhouseId '12345678-1234-1234-1234-123456789012'
+     Remove-FabricEventhouse -WorkspaceId "workspace-12345" -EventhouseId "eventhouse-67890"
+    This example removes the Eventhouse with ID "eventhouse-67890" from the workspace with ID "workspace-12345".
 
-    This example will delete the Eventhouse with the Id '12345678-1234-1234-1234-123456789012' from
-    the Workspace with the Id '12345678-1234-1234-1234-123456789012'.
-
-.EXAMPLE
-    Remove-FabricEventhouse `
-        -WorkspaceId '12345678-1234-1234-1234-123456789012' `
-        -EventhouseName 'MyEventhouse'
-
-    This example will delete the Eventhouse with the name 'MyEventhouse' from the Workspace with the
-    Id '12345678-1234-1234-1234-123456789012'.
 .NOTES
     Revsion History:
 
@@ -43,64 +29,58 @@ function Remove-FabricEventhouse {
 
 .LINK
     https://learn.microsoft.com/en-us/rest/api/fabric/eventhouse/items/delete-eventhouse?tabs=HTTP
+
+    - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
+    - Calls `Test-TokenExpired` to ensure token validity before making the API request.
+
+    Author: Tiago Balabuch
+
 #>
 
-[CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding()]
     param (
-
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
         [string]$WorkspaceId,
 
-        [Alias("Id")]
-        [string]$EventhouseId,
-
-        [Alias("Name", "DisplayName")]
-        [string]$EventhouseName
-
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [string]$EventhouseId
     )
+    try {
+        # Step 1: Ensure token validity
+        Write-Message -Message "Validating token..." -Level Debug
+        Test-TokenExpired
+        Write-Message -Message "Token validation completed." -Level Debug
 
-begin {
-    Confirm-FabricAuthToken | Out-Null
+        # Step 2: Construct the API URL
+        $apiEndpointUrl = "{0}/workspaces/{1}/eventhouses/{2}" -f $FabricConfig.BaseUrl, $WorkspaceId, $EventhouseId
+        Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
-    Write-Verbose "Check if EventhouseName and EventhouseID are used together. This is not allowed"
-    if ($PSBoundParameters.ContainsKey("EventhouseName") -and $PSBoundParameters.ContainsKey("EventhouseID")) {
-        throw "Parameters EventhouseName and EventhouseID cannot be used together"
-    }
-
-    if ($PSBoundParameters.ContainsKey("EventhouseName")) {
-        Write-Verbose "Eventhouse Name $EventhouseName is used. Get Eventhouse ID from Eventhouse Name"
-        $eh = Get-FabricEventhouse `
-                    -WorkspaceId $WorkspaceId `
-                    -EventhouseName $EventhouseName
-
-        $EventhouseId = $eh.id
-        Write-Verbose "Eventhouse ID is $EventhouseId"
-    }
-
-    # Create Eventhouse API URL
-    $eventhouseApiUrl = "$($FabricSession.BaseApiUrl)/workspaces/$WorkspaceId/eventhouses/$EventhouseId"
-}
-
-process {
-
-    Write-Verbose "Calling Eventhouse API with EventhouseId"
-    Write-Verbose "----------------------------------------"
-    Write-Verbose "Sending the following values to the Eventhouse API:"
-    Write-Verbose "Headers: $($FabricSession.headerParams | Format-List | Out-String)"
-    Write-Verbose "Method: DELETE"
-    Write-Verbose "URI: $eventhouseApiUrl"
-    Write-Verbose "ContentType: application/json"
-    if($PSCmdlet.ShouldProcess($EventhouseName)) {
+        # Step 3: Make the API request
         $response = Invoke-RestMethod `
-                            -Headers $FabricSession.headerParams `
-                            -Method DELETE `
-                            -Uri $eventhouseApiUrl `
-                            -ContentType "application/json"
+            -Headers $FabricConfig.FabricHeaders `
+            -Uri $apiEndpointUrl `
+            -Method Delete `
+            -ErrorAction Stop `
+            -SkipHttpErrorCheck `
+            -ResponseHeadersVariable "responseHeader" `
+            -StatusCodeVariable "statusCode"
 
-        $response
+            # Step 4: Handle response
+        if ($statusCode -ne 200) {
+            Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
+            Write-Message -Message "Error: $($response.message)" -Level Error
+            Write-Message -Message "Error Details: $($response.moreDetails)" -Level Error
+            Write-Message "Error Code: $($response.errorCode)" -Level Error
+            return $null
+        }
+
+        Write-Message -Message "Eventhouse '$EventhouseId' deleted successfully from workspace '$WorkspaceId'." -Level Info
     }
-}
-
-end {}
-
+    catch {
+        # Step 5: Log and handle errors
+        $errorDetails = $_.Exception.Message
+        Write-Message -Message "Failed to delete Eventhouse '$EventhouseId'. Error: $errorDetails" -Level Error
+    }
 }

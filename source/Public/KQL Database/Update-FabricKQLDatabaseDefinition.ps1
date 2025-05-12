@@ -46,7 +46,7 @@ Author: Tiago Balabuch
 #>
 
 function Update-FabricKQLDatabaseDefinition {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
