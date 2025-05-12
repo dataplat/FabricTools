@@ -1,4 +1,5 @@
-<#
+function Get-FabricCapacityWorkload  {
+    <#
 .SYNOPSIS
 Retrieves the workloads for a specific capacity.
 
@@ -21,7 +22,6 @@ The function retrieves the PowerBI access token and makes a GET request to the P
 #>
 
 # This function retrieves the workloads for a specific capacity.
-function Get-FabricCapacityWorkload  {
     # Define aliases for the function for flexibility.
     [Alias("Get-FabCapacityWorkload")]
 

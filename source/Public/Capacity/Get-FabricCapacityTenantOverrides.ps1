@@ -1,3 +1,4 @@
+function Get-FabricCapacityTenantOverrides  {
 <#
 .SYNOPSIS
 Retrieves the tenant overrides for all capacities.
@@ -18,7 +19,6 @@ The function retrieves the PowerBI access token and makes a GET request to the F
 #>
 
 # This function retrieves the tenant overrides for all capacities.
-function Get-FabricCapacityTenantOverrides  {
     # Define aliases for the function for flexibility.
     [Alias("Get-FabCapacityTenantOverrides")]
 

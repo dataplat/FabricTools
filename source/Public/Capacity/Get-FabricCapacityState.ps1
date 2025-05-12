@@ -1,3 +1,4 @@
+function Get-FabricCapacityState {
 <#
 .SYNOPSIS
 Retrieves the state of a specific capacity.
@@ -24,7 +25,6 @@ The function checks if the Azure token is null. If it is, it connects to the Azu
 #>
 
 # This function retrieves the state of a specific capacity.
-function Get-FabricCapacityState {
     # Define aliases for the function for flexibility.
     [Alias("Get-FabCapacityState")]
 

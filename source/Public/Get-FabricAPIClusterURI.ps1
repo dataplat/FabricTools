@@ -1,24 +1,22 @@
+function Get-FabricAPIclusterURI  {
 <#
 .SYNOPSIS
-Retrieves the cluster URI for the tenant.
+    Retrieves the cluster URI for the tenant.
 
 .DESCRIPTION
-The Get-FabricAPIclusterURI function retrieves the cluster URI for the tenant. It supports multiple aliases for flexibility.
+    The Get-FabricAPIclusterURI function retrieves the cluster URI for the tenant. It supports multiple aliases for flexibility.
 
 .EXAMPLE
-Get-FabricAPIclusterURI
+    Get-FabricAPIclusterURI
 
-This example retrieves the cluster URI for the tenant.
+    This example retrieves the cluster URI for the tenant.
 
 .NOTES
-The function retrieves the PowerBI access token and makes a GET request to the PowerBI API to retrieve the datasets. It then extracts the '@odata.context' property from the response, splits it on the '/' character, and selects the third element. This element is used to construct the cluster URI, which is then returned by the function.
+    The function retrieves the PowerBI access token and makes a GET request to the PowerBI API to retrieve the datasets. It then extracts the '@odata.context' property from the response, splits it on the '/' character, and selects the third element. This element is used to construct the cluster URI, which is then returned by the function.
 
 #>
 
 #This function retrieves the cluster URI for the tenant.
-
-
-function Get-FabricAPIclusterURI  {
     # Define aliases for the function for flexibility.
     [Alias("Get-FabAPIClusterURI")]
     Param (

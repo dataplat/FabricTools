@@ -1,3 +1,5 @@
+
+function Get-FabricCapacitySkus  {
 <#
 .SYNOPSIS
 Retrieves the fabric capacity information.
@@ -11,10 +13,7 @@ Specifies the capacity to retrieve information for. If not provided, all capacit
 .EXAMPLE
 Get-FabricCapacitySkus -capacity "exampleCapacity"
 Retrieves the fabric capacity information for the specified capacity.
-
 #>
-
-function Get-FabricCapacitySkus  {
     # Define aliases for the function for flexibility.
 
     Param(

@@ -1,3 +1,4 @@
+function Get-FabricCapacityRefreshables  {
 <#
 .SYNOPSIS
 Retrieves the top refreshable capacities for the tenant.
@@ -18,7 +19,6 @@ The function retrieves the PowerBI access token and makes a GET request to the P
 #>
 
 # This function retrieves the top refreshable capacities for the tenant.
-function Get-FabricCapacityRefreshables  {
     # Define aliases for the function for flexibility.
     [Alias("Get-FabCapacityRefreshables")]
 
