@@ -2,14 +2,14 @@ function Write-Log {
     param (
       [Parameter(Mandatory = $true)]
       [string]$Message,
-  
+
       [Parameter(Mandatory = $false)]
       [string]$Level = 'INFO',
-  
+
       [Parameter(Mandatory = $false)]
       [bool]$Stop = $true
     )
-  
+
     $color = switch ($Level) {
       'INFO' { 'Green' }
       'WARN' { 'Yellow' }
@@ -17,7 +17,7 @@ function Write-Log {
       'DEBUG' { 'DarkMagenta' }
       default { 'Green' }
     }
-  
+
     $prefix = switch ($Level) {
       'INFO' { '*' }
       'WARN' { '!' }
@@ -25,20 +25,20 @@ function Write-Log {
       'DEBUG' { 'D' }
       default { '*' }
     }
-  
+
     Write-Host -ForegroundColor $color "[$prefix] $Message"
-  
+
     if ($Stop -and $Level -eq 'ERROR') {
       exit 1
     }
   }
-  
+
   function Install-ModuleIfNotInstalled {
     param (
       [Parameter(Mandatory = $true)]
       [string]$ModuleName
     )
-  
+
     if (-not (Get-Module -Name $ModuleName -ListAvailable)) {
       try {
         Write-Log -Message "Installing module: $ModuleName" -Level 'DEBUG'
@@ -50,13 +50,13 @@ function Write-Log {
       }
     }
   }
-  
+
   function Import-ModuleIfNotImported {
     param (
       [Parameter(Mandatory = $true)]
       [string]$ModuleName
     )
-  
+
     if (-not (Get-Module -Name $ModuleName)) {
       try {
         Write-Log -Message "Importing module: $ModuleName" -Level 'DEBUG'
@@ -68,25 +68,25 @@ function Write-Log {
       }
     }
   }
-  
+
   function Invoke-FabricRest {
     param (
       [Parameter(Mandatory = $false)]
       [string]$Method = 'GET',
-  
+
       [Parameter(Mandatory = $true)]
       [string]$Endpoint,
-  
+
       [Parameter(Mandatory = $false)]
       [object]$Payload,
-  
+
       [Parameter(Mandatory = $false)]
       [int]$RetryCount = 3,
-  
+
       [Parameter(Mandatory = $false)]
       [int]$RetryDelaySeconds = 30
     )
-  
+
     try {
       # Retrieve the Fabric access token
       try {
@@ -95,13 +95,13 @@ function Write-Log {
       catch {
         Write-Log -Message "Failed to retrieve access token." -Level 'ERROR'
       }
-  
+
       $uri = "https://api.fabric.microsoft.com/v1/$Endpoint"
       $attempt = 0
       $response = $null
       $responseHeaders = $null
       $statusCode = $null
-  
+
       while ($attempt -lt $RetryCount) {
         try {
           if ($Payload) {
@@ -111,23 +111,23 @@ function Write-Log {
           else {
             $response = Invoke-RestMethod -Authentication Bearer -Token $secureAccessToken -Uri $uri -Method $Method -ResponseHeadersVariable responseHeaders -StatusCodeVariable statusCode
           }
-  
+
           break
         }
         catch {
           $statusCode = $_.Exception.Response.StatusCode.value__
-  
+
           if ($statusCode -eq 429) {
             $retryAfter = $_.Exception.Response.Headers.RetryAfter.Delta.TotalSeconds
-  
+
             $retryDelaySeconds = $RetryDelaySeconds
             if ($retryAfter) {
               $retryDelaySeconds = $retryAfter
             }
-  
+
             Write-Log -Message "Throttled. Waiting for $retryDelaySeconds seconds before retrying..." -Level 'DEBUG'
             Start-Sleep -Seconds $retryDelaySeconds
-  
+
             $attempt++
           }
           else {
@@ -135,23 +135,23 @@ function Write-Log {
           }
         }
       }
-  
+
       if ($attempt -ge $RetryCount) {
         Write-Log -Message "Maximum retry attempts reached. Request failed." -Level 'ERROR'
       }
-  
+
       if ($statusCode -eq 200 -or $statusCode -eq 201) {
         return [PSCustomObject]@{
           Response = $response
           Headers  = $responseHeaders
         }
       }
-  
+
       if ($statusCode -eq 202 -and $responseHeaders.Location -and $responseHeaders['x-ms-operation-id']) {
         $operationId = [string]$responseHeaders['x-ms-operation-id']
         Write-Log -Message "Long Running Operation initiated. Operation ID: $operationId" -Level 'DEBUG'
         $result = Get-LroResult -OperationId $operationId
-  
+
         return [PSCustomObject]@{
           Response = $result.Response
           Headers  = $result.Headers
@@ -162,50 +162,50 @@ function Write-Log {
       Write-Log -Message $_.Exception.Message -Level 'ERROR'
     }
   }
-  
+
   function Get-LroResult {
     param (
       [Parameter(Mandatory = $true)]
       [string]$OperationId
     )
-  
+
     $operationStatus = $null
     while ($operationStatus -ne 'Succeeded') {
       $result = Invoke-FabricRest -Method 'GET' -Endpoint "operations/$OperationId"
-  
+
       $operationStatus = $result.Response.status
-  
+
       if ($operationStatus -eq 'Failed') {
         Write-Log -Message "Operation failed. Status: $operationStatus" -Level 'ERROR'
       }
-  
+
       if ($operationStatus -ne "Succeeded") {
         $retryAfter = [int]$result.Headers['Retry-After'][0]
         Start-Sleep -Seconds $retryAfter
       }
     }
-  
+
     return Invoke-FabricRest -Method 'GET' -Endpoint "operations/$OperationId/result"
   }
-  
+
   function Set-FabricItem {
     param (
       [Parameter(Mandatory = $true)]
       [string]$DisplayName,
-  
+
       [Parameter(Mandatory = $true)]
       [string]$WorkspaceId,
-  
+
       [Parameter(Mandatory = $true)]
       [string]$Type,
-  
+
       [Parameter(Mandatory = $false)]
       [object]$CreationPayload,
-  
+
       [Parameter(Mandatory = $false)]
       [object]$Definition
     )
-  
+
     switch ($Type) {
       'DataPipeline' {
         $itemEndpoint = 'dataPipelines'
@@ -268,16 +268,16 @@ function Write-Log {
         $itemEndpoint = 'items'
       }
     }
-  
+
     If ($CreationPayload -and $Definition) {
       Write-Log -Message 'Only one of CreationPayload or Definition is allowed at time.' -Level 'ERROR'
     }
-  
+
     $definitionRequired = @('Report', 'SemanticModel', 'MirroredDatabase')
     if ($Type -in $definitionRequired -and !$Definition) {
       Write-Log -Message "Definition is required for Type: $Type" -Level 'ERROR'
     }
-  
+
     $results = Invoke-FabricRest -Method 'GET' -Endpoint "workspaces/$WorkspaceId/$itemEndpoint"
     $result = $results.Response.value | Where-Object { $_.displayName -eq $DisplayName }
     if (!$result) {
@@ -286,60 +286,60 @@ function Write-Log {
         displayName = $DisplayName
         description = $DisplayName
       }
-  
+
       if ($itemEndpoint -eq 'items') {
         $payload['type'] = $Type
       }
-  
+
       if ($CreationPayload) {
         $payload['creationPayload'] = $CreationPayload
       }
-  
+
       if ($Definition) {
         $payload['definition'] = $Definition
       }
-  
+
       $result = (Invoke-FabricRest -Method 'POST' -Endpoint "workspaces/$WorkspaceId/$itemEndpoint" -Payload $payload).Response
     }
-  
+
     Write-Log -Message "${Type} - Name: $($result.displayName) / ID: $($result.id)"
-  
+
     return $result
   }
-  
+
   function Get-DefinitionPartBase64 {
     param (
       [Parameter(Mandatory = $true)]
       [string]$Path,
-  
+
       [Parameter(Mandatory = $false)]
       [object]$Values
     )
-  
+
     if (-not (Test-Path -Path $Path)) {
       Write-Log -Message "File not found: $Path" -Level 'ERROR'
     }
-  
+
     $content = (Get-Content -Path $Path -Raw).Trim().ToString()
-  
+
     if ($Values) {
       foreach ($value in $Values) {
         $content = $content.Replace($value.key, $value.value)
       }
     }
-  
+
     return [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($content))
   }
-  
+
   function Set-FabricDomain {
     param (
       [Parameter(Mandatory = $true)]
       [string]$DisplayName,
-  
+
       [Parameter(Mandatory = $false)]
       [string]$ParentDomainId
     )
-  
+
     $results = Invoke-FabricRest -Method 'GET' -Endpoint "admin/domains"
     $result = $results.Response.domains | Where-Object { $_.displayName -eq $DisplayName }
     if (!$result) {
@@ -348,77 +348,77 @@ function Write-Log {
         displayName = $DisplayName
         description = $DisplayName
       }
-  
+
       if ($ParentDomainId) {
         $payload['parentDomainId'] = $ParentDomainId
       }
-  
+
       $result = (Invoke-FabricRest -Method 'POST' -Endpoint "admin/domains" -Payload $payload).Response
     }
-  
+
     if ($ParentDomainId) {
       Write-Log -Message "Child Domain - Name: $($result.displayName) / ID: $($result.id)"
     }
     else {
       Write-Log -Message "Parent Domain - Name: $($result.displayName) / ID: $($result.id)"
     }
-  
+
     return $result
   }
-  
+
   function Get-BaseName {
     param (
       [Parameter(Mandatory = $false)]
       [int]$Length = 10
     )
-  
+
     $base = $Env:FABRIC_TESTACC_WELLKNOWN_NAME_BASE
-  
+
     if (!$base) {
       $base = -join ((65..90) + (97..122) | Get-Random -Count $Length | ForEach-Object { [char]$_ })
     }
-  
+
     return $base
   }
-  
+
   function Get-DisplayName {
     param (
       [Parameter(Mandatory = $true)]
       [string]$Base,
-  
+
       [Parameter(Mandatory = $false)]
       [string]$Prefix = $Env:FABRIC_TESTACC_WELLKNOWN_NAME_PREFIX,
-  
+
       [Parameter(Mandatory = $false)]
       [string]$Suffix = $Env:FABRIC_TESTACC_WELLKNOWN_NAME_SUFFIX,
-  
+
       [Parameter(Mandatory = $false)]
       [string]$Separator = '_'
     )
-  
+
     $result = $Base
-  
+
     # add prefix and suffix
     if ($Prefix) {
       $result = "${Prefix}${Separator}${result}"
     }
-  
+
     if ($Suffix) {
       $result = "${result}${Separator}${Suffix}"
     }
-  
+
     return $result
   }
-  
+
   function Set-FabricWorkspace {
     param (
       [Parameter(Mandatory = $true)]
       [string]$DisplayName,
-  
+
       [Parameter(Mandatory = $true)]
       [string]$CapacityId
     )
-  
+
     $workspaces = Invoke-FabricRest -Method 'GET' -Endpoint 'workspaces'
     $workspace = $workspaces.Response.value | Where-Object { $_.displayName -eq $DisplayName }
     if (!$workspace) {
@@ -430,19 +430,19 @@ function Write-Log {
       }
       $workspace = (Invoke-FabricRest -Method 'POST' -Endpoint 'workspaces' -Payload $payload).Response
     }
-  
+
     return $workspace
   }
-  
+
   function Set-FabricWorkspaceCapacity {
     param (
       [Parameter(Mandatory = $true)]
       [string]$WorkspaceId,
-  
+
       [Parameter(Mandatory = $true)]
       [string]$CapacityId
     )
-  
+
     $workspace = Invoke-FabricRest -Method 'GET' -Endpoint "workspaces/$WorkspaceId"
     if ($workspace.Response.capacityId -ne $CapacityId) {
       Write-Log -Message "Assigning Workspace to Capacity ID: $CapacityId" -Level 'WARN'
@@ -452,19 +452,19 @@ function Write-Log {
       _ = (Invoke-FabricRest -Method 'POST' -Endpoint "workspaces/$WorkspaceId/assignToCapacity" -Payload $payload).Response
       $workspace.Response.capacityId = $CapacityId
     }
-  
+
     return $workspace.Response
   }
-  
+
   function Set-FabricWorkspaceRoleAssignment {
     param (
       [Parameter(Mandatory = $true)]
       [string]$WorkspaceId,
-  
+
       [Parameter(Mandatory = $true)]
       [object]$SPN
     )
-  
+
     $results = Invoke-FabricRest -Method 'GET' -Endpoint "workspaces/$WorkspaceId/roleAssignments"
     $result = $results.Response.value | Where-Object { $_.id -eq $SPN.Id }
     if (!$result) {
@@ -479,41 +479,41 @@ function Write-Log {
       $result = (Invoke-FabricRest -Method 'POST' -Endpoint "workspaces/$WorkspaceId/roleAssignments" -Payload $payload).Response
     }
   }
-  
+
   function Set-FabricGatewayVirtualNetwork {
     [CmdletBinding()]
     param(
       [Parameter(Mandatory = $true)]
       [string]$DisplayName,
-  
+
       [Parameter(Mandatory = $true)]
       [string]$CapacityId,
-  
+
       # Inactivity time (in minutes) before the gateway goes to auto-sleep.
       # Allowed values: 30, 60, 90, 120, 150, 240, 360, 480, 720, 1440.
       [Parameter(Mandatory = $true)]
       [ValidateSet(30, 60, 90, 120, 150, 240, 360, 480, 720, 1440)]
       [int]$InactivityMinutesBeforeSleep,
-  
+
       # Number of member gateways (between 1 and 7).
       [Parameter(Mandatory = $true)]
       [ValidateRange(1, 7)]
       [int]$NumberOfMemberGateways,
-  
+
       # Azure virtual network details:
       [Parameter(Mandatory = $true)]
       [string]$SubscriptionId,
-  
+
       [Parameter(Mandatory = $true)]
       [string]$ResourceGroupName,
-  
+
       [Parameter(Mandatory = $true)]
       [string]$VirtualNetworkName,
-  
+
       [Parameter(Mandatory = $true)]
       [string]$SubnetName
     )
-  
+
     # Attempt to check for an existing gateway with the same display name.
     $existingGateways = Invoke-FabricRest -Method 'GET' -Endpoint "gateways"
     $result = $existingGateways.Response.value | Where-Object { $_.displayName -eq $DisplayName }
@@ -533,38 +533,38 @@ function Write-Log {
           subnetName         = $SubnetName
         }
       }
-  
+
       Write-Log -Message "Creating Virtual Network Gateway: $DisplayName" -Level 'WARN'
       $newGateway = Invoke-FabricRest -Method 'POST' -Endpoint "gateways" -Payload $payload
       $result = $newGateway.Response
     }
-  
+
     Write-Log -Message "Gateway Virtual Network - Name: $($result.displayName) / ID: $($result.id)"
     return $result
   }
-  
-  
+
+
   function Set-AzureVirtualNetwork {
     param(
       [Parameter(Mandatory = $true)]
       [string]$ResourceGroupName,
-  
+
       [Parameter(Mandatory = $true)]
       [string]$VNetName,
-  
+
       [Parameter(Mandatory = $true)]
       [string]$Location,
-  
+
       [Parameter(Mandatory = $true)]
       [string[]]$AddressPrefixes,
-  
+
       [Parameter(Mandatory = $true)]
       [string]$SubnetName,
-  
+
       [Parameter(Mandatory = $true)]
       [string[]]$SubnetAddressPrefixes
     )
-  
+
     # Attempt to get the existing Virtual Network
     try {
       $vnet = Get-AzVirtualNetwork -Name $VNetName -ResourceGroupName $ResourceGroupName -ErrorAction Stop
@@ -575,24 +575,24 @@ function Write-Log {
       $subnetConfig = New-AzVirtualNetworkSubnetConfig `
         -Name $SubnetName `
         -AddressPrefix $SubnetAddressPrefixes `
-  
+
       $subnetConfig = Add-AzDelegation `
         -Name 'PowerPlatformVnetAccess' `
         -ServiceName 'Microsoft.PowerPlatform/vnetaccesslinks' `
         -Subnet $subnetConfig
-  
+
       $vnet = New-AzVirtualNetwork `
         -Name $VNetName `
         -ResourceGroupName $ResourceGroupName `
         -Location $Location `
         -AddressPrefix $AddressPrefixes `
         -Subnet $subnetConfig
-  
+
       # Commit creation
       $vnet = $vnet | Set-AzVirtualNetwork
       Write-Log -Message "Created VNet: $VNetName" -Level 'INFO'
     }
-  
+
     # If the VNet already exists, check for the subnet
     $subnet = $vnet.Subnets | Where-Object { $_.Name -eq $SubnetName }
     if (-not $subnet) {
@@ -601,12 +601,12 @@ function Write-Log {
       $subnetConfig = New-AzVirtualNetworkSubnetConfig `
         -Name $SubnetName `
         -AddressPrefix $SubnetAddressPrefixes `
-  
+
       $subnetConfig = Add-AzDelegation `
         -Name 'PowerPlatformVnetAccess' `
         -ServiceName 'Microsoft.PowerPlatform/vnetaccesslinks' `
         -Subnet $subnetConfig
-  
+
       $vnet = $vnet | Set-AzVirtualNetwork
     }
     else {
@@ -614,51 +614,53 @@ function Write-Log {
       $existingDelegation = $subnet.Delegations | Where-Object { $_.ServiceName -eq 'Microsoft.PowerPlatform/vnetaccesslinks' }
       if (-not $existingDelegation) {
         Write-Log -Message "Subnet '$SubnetName' found but missing delegation to 'Microsoft.PowerPlatform/vnetaccesslinks'. Adding Microsoft.PowerPlatform/vnetaccesslinks delegation..." -Level 'WARN'
-  
+
         $subnetConfig = Add-AzDelegation `
           -Name 'PowerPlatformVnetAccess' `
           -ServiceName 'Microsoft.PowerPlatform/vnetaccesslinks' `
           -Subnet $subnet
-  
+
         $vnet = $vnet | Set-AzVirtualNetwork
         Write-Log -Message "Added missing delegation to subnet '$SubnetName'." -Level 'INFO'
       }
     }
     Write-Log -Message "Az Virtual Network - Name: $($vnet.Name)"
-  
+
     $userPrincipalName = $azContext.Account.Id
     $principal = Get-AzADUser -UserPrincipalName $userPrincipalName
-  
+
     $existingAssignment = Get-AzRoleAssignment -Scope $vnet.Id -ObjectId $principal.Id -ErrorAction SilentlyContinue | Where-Object {
       $_.RoleDefinitionName -eq "Network Contributor"
     }
-  
+
     Write-Log "Assigning Network Contributor role to the principal on the virtual network $($VNetName)"
     if (!$existingAssignment) {
       New-AzRoleAssignment -ObjectId $principal.Id -RoleDefinitionName "Network Contributor" -Scope $vnet.Id
     }
-  
+
     return $vnet
   }
-  
+
+  function Invoke-DontRunThisCode {
+
   # Define an array of modules to install
   $modules = @('Az.Accounts', 'Az.Resources', 'Az.Fabric', 'pwsh-dotenv', 'ADOPS', 'Az.Network')
-  
+
   # Loop through each module and install if not installed
   foreach ($module in $modules) {
     Install-ModuleIfNotInstalled -ModuleName $module
     Import-ModuleIfNotImported -ModuleName $module
   }
-  
+
   # Import the .env file into the environment variables
   if (Test-Path -Path './wellknown.env') {
     Import-Dotenv -Path ./wellknown.env -AllowClobber
   }
-  
-  if (!$Env:FABRIC_TESTACC_WELLKNOWN_ENTRA_TENANT_ID -or !$Env:FABRIC_TESTACC_WELLKNOWN_AZURE_SUBSCRIPTION_ID -or !$Env:FABRIC_TESTACC_WELLKNOWN_FABRIC_CAPACITY_NAME -or !$Env:FABRIC_TESTACC_WELLKNOWN_AZDO_ORGANIZATION_NAME -or !$Env:FABRIC_TESTACC_WELLKNOWN_NAME_PREFIX -or !$Env:FABRIC_TESTACC_WELLKNOWN_AZURE_RESOURCE_GROUP_NAME -or !$Env:FABRIC_TESTACC_WELLKNOWN_AZURE_LOCATION) {
-    Write-Log -Message 'FABRIC_TESTACC_WELLKNOWN_ENTRA_TENANT_ID, FABRIC_TESTACC_WELLKNOWN_AZURE_SUBSCRIPTION_ID, FABRIC_TESTACC_WELLKNOWN_FABRIC_CAPACITY_NAME, FABRIC_TESTACC_WELLKNOWN_AZDO_ORGANIZATION_NAME and FABRIC_TESTACC_WELLKNOWN_NAME_PREFIX and FABRIC_TESTACC_WELLKNOWN_AZURE_RESOURCE_GROUP_NAME and FABRIC_TESTACC_WELLKNOWN_AZURE_LOCATION are required environment variables.' -Level 'ERROR'
-  }
-  
+
+  # if (!$Env:FABRIC_TESTACC_WELLKNOWN_ENTRA_TENANT_ID -or # !$Env:FABRIC_TESTACC_WELLKNOWN_AZURE_SUBSCRIPTION_ID -or # !$Env:FABRIC_TESTACC_WELLKNOWN_FABRIC_CAPACITY_NAME -or # !$Env:FABRIC_TESTACC_WELLKNOWN_AZDO_ORGANIZATION_NAME -or # !$Env:FABRIC_TESTACC_WELLKNOWN_NAME_PREFIX -or # !$Env:FABRIC_TESTACC_WELLKNOWN_AZURE_RESOURCE_GROUP_NAME -or # !$Env:FABRIC_TESTACC_WELLKNOWN_AZURE_LOCATION) {
+  #   Write-Log -Message 'FABRIC_TESTACC_WELLKNOWN_ENTRA_TENANT_ID, # FABRIC_TESTACC_WELLKNOWN_AZURE_SUBSCRIPTION_ID, FABRIC_TESTACC_WELLKNOWN_FABRIC_CAPACITY_NAME, # FABRIC_TESTACC_WELLKNOWN_AZDO_ORGANIZATION_NAME and FABRIC_TESTACC_WELLKNOWN_NAME_PREFIX and # FABRIC_TESTACC_WELLKNOWN_AZURE_RESOURCE_GROUP_NAME and FABRIC_TESTACC_WELLKNOWN_AZURE_LOCATION # are required environment variables.' -Level 'ERROR'
+  # }
+
   # Check if already logged in to Azure, if not then login
   $azContext = Get-AzContext
   if (!$azContext -or $azContext.Tenant.Id -ne $Env:FABRIC_TESTACC_WELLKNOWN_ENTRA_TENANT_ID -or $azContext.Subscription.Id -ne $Env:FABRIC_TESTACC_WELLKNOWN_AZURE_SUBSCRIPTION_ID) {
@@ -668,20 +670,20 @@ function Write-Log {
     # Disconnect-AzAccount
   }
   # $currentUser = Get-AzADUser -SignedIn
-  
+
   # Logged in to Azure DevOps
   Write-Log -Message 'Logging in to Azure DevOps.' -Level 'DEBUG'
   $secureAccessToken = (Get-AzAccessToken -WarningAction SilentlyContinue -AsSecureString -ResourceUrl '499b84ac-1321-427f-aa17-267ca6975798').Token
   $unsecureAccessToken = $secureAccessToken | ConvertFrom-SecureString -AsPlainText
   $azdoContext = Connect-ADOPS -TenantId $azContext.Tenant.Id -Organization $Env:FABRIC_TESTACC_WELLKNOWN_AZDO_ORGANIZATION_NAME -OAuthToken $unsecureAccessToken
-  
+
   $SPN = $null
   if ($Env:FABRIC_TESTACC_WELLKNOWN_SPN_NAME) {
     $SPN = Get-AzADServicePrincipal -DisplayName $Env:FABRIC_TESTACC_WELLKNOWN_SPN_NAME
   }
-  
+
   $wellKnown = @{}
-  
+
   # Get Fabric Capacity ID
   $capacities = Invoke-FabricRest -Method 'GET' -Endpoint 'capacities'
   $capacity = $capacities.Response.value | Where-Object { $_.displayName -eq $Env:FABRIC_TESTACC_WELLKNOWN_FABRIC_CAPACITY_NAME }
@@ -694,7 +696,7 @@ function Write-Log {
     displayName = $capacity.displayName
     sku         = $capacity.sku
   }
-  
+
   $itemNaming = @{
     'Dashboard'             = 'dash'
     'Datamart'              = 'dm'
@@ -732,10 +734,10 @@ function Write-Log {
     'VirtualNetworkSubnet'  = 'subnet'
     'GatewayVirtualNetwork' = 'gvnet'
   }
-  
+
   $baseName = Get-BaseName
   $Env:FABRIC_TESTACC_WELLKNOWN_NAME_BASE = $baseName
-  
+
   # Save env vars wellknown.env file
   $envVarNames = @(
     'FABRIC_TESTACC_WELLKNOWN_ENTRA_TENANT_ID',
@@ -749,7 +751,7 @@ function Write-Log {
     'FABRIC_TESTACC_WELLKNOWN_NAME_BASE',
     'FABRIC_TESTACC_WELLKNOWN_SPN_NAME'
   )
-  
+
   $envVars = $envVarNames | ForEach-Object {
     $envVarName = $_
     if (Test-Path "Env:${envVarName}") {
@@ -757,55 +759,55 @@ function Write-Log {
       "$envVarName=`"$value`""
     }
   }
-  
+
   $envVars -join "`n" | Set-Content -Path './wellknown.env' -Force -NoNewline -Encoding utf8
-  
+
   $displayName = Get-DisplayName -Base $baseName
-  
+
   # Create WorkspaceRS if not exists
   $displayNameTemp = "${displayName}_$($itemNaming['WorkspaceRS'])"
   $workspace = Set-FabricWorkspace -DisplayName $displayNameTemp -CapacityId $capacity.id
-  
+
   # Assign WorkspaceDS to Capacity if not already assigned or assigned to a different capacity
   $workspace = Set-FabricWorkspaceCapacity -WorkspaceId $workspace.id -CapacityId $capacity.id
-  
+
   Write-Log -Message "WorkspaceRS - Name: $($workspace.displayName) / ID: $($workspace.id)"
   $wellKnown['WorkspaceRS'] = @{
     id          = $workspace.id
     displayName = $workspace.displayName
     description = $workspace.description
   }
-  
+
   # Assign SPN to WorkspaceRS if not already assigned
   if ($SPN) {
     Set-FabricWorkspaceRoleAssignment -WorkspaceId $workspace.id -SPN $SPN
   }
-  
+
   # Create WorkspaceDS if not exists
   $displayNameTemp = "${displayName}_$($itemNaming['WorkspaceDS'])"
   $workspace = Set-FabricWorkspace -DisplayName $displayNameTemp -CapacityId $capacity.id
-  
+
   # Assign WorkspaceDS to Capacity if not already assigned or assigned to a different capacity
   $workspace = Set-FabricWorkspaceCapacity -WorkspaceId $workspace.id -CapacityId $capacity.id
-  
+
   Write-Log -Message "WorkspaceDS - Name: $($workspace.displayName) / ID: $($workspace.id)"
   $wellKnown['WorkspaceDS'] = @{
     id          = $workspace.id
     displayName = $workspace.displayName
     description = $workspace.description
   }
-  
+
   # Assign SPN to WorkspaceRS if not already assigned
   if ($SPN) {
     Set-FabricWorkspaceRoleAssignment -WorkspaceId $workspace.id -SPN $SPN
   }
-  
+
   # Define an array of item types to create
   $itemTypes = @('DataPipeline', 'Environment', 'Eventhouse', 'Eventstream', 'GraphQLApi', 'KQLDashboard', 'KQLQueryset', 'Lakehouse', 'MLExperiment', 'MLModel', 'Notebook', 'Reflex', 'SparkJobDefinition', 'SQLDatabase', 'Warehouse')
-  
+
   # Loop through each item type and create if not exists
   foreach ($itemType in $itemTypes) {
-  
+
     $displayNameTemp = "${displayName}_$($itemNaming[$itemType])"
     $item = Set-FabricItem -DisplayName $displayNameTemp -WorkspaceId $workspace.id -Type $itemType
     $wellKnown[$itemType] = @{
@@ -814,7 +816,7 @@ function Write-Log {
       description = $item.description
     }
   }
-  
+
   # Create KQLDatabase if not exists
   $displayNameTemp = "${displayName}_$($itemNaming['KQLDatabase'])"
   $creationPayload = @{
@@ -827,7 +829,7 @@ function Write-Log {
     displayName = $kqlDatabase.displayName
     description = $kqlDatabase.description
   }
-  
+
   # Create MirroredDatabase if not exists
   $displayNameTemp = "${displayName}_$($itemNaming['MirroredDatabase'])"
   $definition = @{
@@ -845,7 +847,7 @@ function Write-Log {
     displayName = $mirroredDatabase.displayName
     description = $mirroredDatabase.description
   }
-  
+
   # Create SemanticModel if not exists
   $displayNameTemp = "${displayName}_$($itemNaming['SemanticModel'])"
   $definition = @{
@@ -868,7 +870,7 @@ function Write-Log {
     displayName = $semanticModel.displayName
     description = $semanticModel.description
   }
-  
+
   # Create Report if not exists
   $displayNameTemp = "${displayName}_$($itemNaming['Report'])"
   $definition = @{
@@ -901,7 +903,7 @@ function Write-Log {
     displayName = $report.displayName
     description = $report.description
   }
-  
+
   # Create Parent Domain if not exists
   $displayNameTemp = "${displayName}_$($itemNaming['DomainParent'])"
   $parentDomain = Set-FabricDomain -DisplayName $displayNameTemp
@@ -910,7 +912,7 @@ function Write-Log {
     displayName = $parentDomain.displayName
     description = $parentDomain.description
   }
-  
+
   # Create Child Domain if not exists
   $displayNameTemp = "${displayName}_$($itemNaming['DomainChild'])"
   $childDomain = Set-FabricDomain -DisplayName $displayNameTemp -ParentDomainId $parentDomain.id
@@ -919,7 +921,7 @@ function Write-Log {
     displayName = $childDomain.displayName
     description = $childDomain.description
   }
-  
+
   $results = Invoke-FabricRest -Method 'GET' -Endpoint "workspaces/$($workspace.id)/lakehouses/$($wellKnown['Lakehouse']['id'])/tables"
   $result = $results.Response.data | Where-Object { $_.name -eq 'publicholidays' }
   if (!$result) {
@@ -927,7 +929,7 @@ function Write-Log {
     Write-Log -Message "Lakehouse: https://app.fabric.microsoft.com/groups/$($workspace.id)/lakehouses/$($wellKnown['Lakehouse']['id'])" -Level 'WARN'
   }
   $wellKnown['Lakehouse']['tableName'] = 'publicholidays'
-  
+
   $displayNameTemp = "${displayName}_$($itemNaming['Dashboard'])"
   $results = Invoke-FabricRest -Method 'GET' -Endpoint "workspaces/$($workspace.id)/dashboards"
   $result = $results.Response.value | Where-Object { $_.displayName -eq $displayNameTemp }
@@ -940,7 +942,7 @@ function Write-Log {
     displayName = if ($result) { $result.displayName } else { $displayNameTemp }
     description = if ($result) { $result.description } else { '' }
   }
-  
+
   $displayNameTemp = "${displayName}_$($itemNaming['Datamart'])"
   $results = Invoke-FabricRest -Method 'GET' -Endpoint "workspaces/$($workspace.id)/datamarts"
   $result = $results.Response.value | Where-Object { $_.displayName -eq $displayNameTemp }
@@ -953,7 +955,7 @@ function Write-Log {
     displayName = if ($result) { $result.displayName } else { $displayNameTemp }
     description = if ($result) { $result.description } else { '' }
   }
-  
+
   # Create SP if not exists
   $displayNameTemp = "${displayName}_$($itemNaming['EntraServicePrincipal'])"
   $entraSp = Get-AzADServicePrincipal -DisplayName $displayNameTemp
@@ -969,7 +971,7 @@ function Write-Log {
     name  = $entraSp.DisplayName
     appId = $entraSp.AppId
   }
-  
+
   # Create Group if not exists
   $displayNameTemp = "${displayName}_$($itemNaming['EntraGroup'])"
   $entraGroup = Get-AzADGroup -DisplayName $displayNameTemp
@@ -984,7 +986,7 @@ function Write-Log {
     id   = $entraGroup.Id
     name = $entraGroup.DisplayName
   }
-  
+
   # Create AzDO Project if not exists
   $displayNameTemp = "${displayName}_$($itemNaming['AzDOProject'])"
   $azdoProject = Get-ADOPSProject -Name $displayNameTemp
@@ -993,7 +995,7 @@ function Write-Log {
     $azdoProject = New-ADOPSProject -Name $displayNameTemp -Visibility Private -Wait
   }
   Write-Log -Message "AzDO Project - Name: $($azdoProject.name) / ID: $($azdoProject.id)"
-  
+
   # Create AzDO Repository if not exists
   $azdoRepo = Get-ADOPSRepository -Project $azdoProject.name -Repository 'test'
   if (!$azdoRepo) {
@@ -1009,7 +1011,7 @@ function Write-Log {
     repositoryId     = $azdoRepo.id
     repositoryName   = $azdoRepo.name
   }
-  
+
   if ($SPN) {
     $body = @{
       originId = $SPN.Id
@@ -1018,17 +1020,17 @@ function Write-Log {
     $azdoSPN = Invoke-ADOPSRestMethod -Uri "https://vssps.dev.azure.com/$($azdoContext.Organization)/_apis/graph/serviceprincipals?api-version=7.2-preview.1" -Method Post -Body $bodyJson
     $result = Set-ADOPSGitPermission -ProjectId $azdoProject.id -RepositoryId $azdoRepo.id -Descriptor $azdoSPN.descriptor -Allow 'GenericContribute', 'PullRequestContribute', 'CreateBranch', 'CreateTag', 'GenericRead'
   }
-  
+
   # Register the Microsoft.PowerPlatform resource provider
   Write-Log -Message "Registering Microsoft.PowerPlatform resource provider" -Level 'WARN'
   Register-AzResourceProvider -ProviderNamespace "Microsoft.PowerPlatform"
-  
+
   # Create Azure Virtual Network 1 if not exists
   $vnetName = "${displayName}_$($itemNaming['VirtualNetwork01'])"
   $addrRange = "10.10.0.0/16"
   $subName = "${displayName}_$($itemNaming['VirtualNetworkSubnet'])"
   $subRange = "10.10.1.0/24"
-  
+
   $vnet = Set-AzureVirtualNetwork `
     -ResourceGroupName $Env:FABRIC_TESTACC_WELLKNOWN_AZURE_RESOURCE_GROUP_NAME `
     -VNetName $vnetName `
@@ -1036,21 +1038,21 @@ function Write-Log {
     -AddressPrefixes $addrRange `
     -SubnetName $subName `
     -SubnetAddressPrefixes $subRange
-  
+
   $wellKnown['VirtualNetwork01'] = @{
     name              = $vnet.Name
     resourceGroupName = $Env:FABRIC_TESTACC_WELLKNOWN_AZURE_RESOURCE_GROUP_NAME
     subnetName        = $subName
     subscriptionId    = $Env:FABRIC_TESTACC_WELLKNOWN_AZURE_SUBSCRIPTION_ID
   }
-  
-  
+
+
   # Create Azure Virtual Network 2 if not exists
   $vnetName = "${displayName}_$($itemNaming['VirtualNetwork02'])"
   $addrRange = "10.10.0.0/16"
   $subName = "${displayName}_$($itemNaming['VirtualNetworkSubnet'])"
   $subRange = "10.10.1.0/24"
-  
+
   $vnet = Set-AzureVirtualNetwork `
     -ResourceGroupName $Env:FABRIC_TESTACC_WELLKNOWN_AZURE_RESOURCE_GROUP_NAME `
     -VNetName $vnetName `
@@ -1058,19 +1060,19 @@ function Write-Log {
     -AddressPrefixes $addrRange `
     -SubnetName $subName `
     -SubnetAddressPrefixes $subRange
-  
+
   $wellKnown['VirtualNetwork02'] = @{
     name              = $vnet.Name
     resourceGroupName = $Env:FABRIC_TESTACC_WELLKNOWN_AZURE_RESOURCE_GROUP_NAME
     subnetName        = $subName
     subscriptionId    = $Env:FABRIC_TESTACC_WELLKNOWN_AZURE_SUBSCRIPTION_ID
   }
-  
+
   # Create Fabric Gateway Virtual Network if not exists
   $displayNameTemp = "${displayName}_$($itemNaming['GatewayVirtualNetwork'])"
   $inactivityMinutesBeforeSleep = 30
   $numberOfMemberGateways = 1
-  
+
   $gateway = Set-FabricGatewayVirtualNetwork `
     -DisplayName $displayNameTemp `
     -CapacityId $capacity.id `
@@ -1080,14 +1082,15 @@ function Write-Log {
     -ResourceGroupName $Env:FABRIC_TESTACC_WELLKNOWN_AZURE_RESOURCE_GROUP_NAME `
     -VirtualNetworkName $wellKnown['VirtualNetwork01'].name `
     -SubnetName $wellKnown['VirtualNetwork01'].subnetName
-  
+
   $wellKnown['GatewayVirtualNetwork'] = @{
     id          = $gateway.id
     displayName = $gateway.displayName
     type        = $gateway.type
   }
-  
+
   # Save wellknown.json file
   $wellKnownJson = $wellKnown | ConvertTo-Json
   $wellKnownJson
   $wellKnownJson | Set-Content -Path './internal/testhelp/fixtures/.wellknown.json' -Force -NoNewline -Encoding utf8
+}
