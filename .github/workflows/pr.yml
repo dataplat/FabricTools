@@ -3,6 +3,7 @@ on:
     branches:
     - main
     - sampler # temporary branch for testing
+    - testBranch # temporary branch for testing
     - develop
     paths-ignore:
     - CHANGELOG.md
