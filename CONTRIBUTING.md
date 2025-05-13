@@ -34,7 +34,7 @@ Find-Module Microsoft.PowerShell.PSResourceGet
 Install-Module Microsoft.PowerShell.PSResourceGet -Force
 ```
 
-1. Develop your updates in the source repository
+1. Develop your updates in the source directory
 
 You should also resolve all dependencies before you start developing. This will ensure that you have all the required modules installed and loaded into your session.
 ```PowerShell
@@ -60,7 +60,7 @@ Add this to your VS Code settings to enable it:
             "file": ".github/copilot-commit-message-instructions.md"
         }
     ],
-    ```
+```
 
 
 3. Build the module. From the root of the repository run the following command:
