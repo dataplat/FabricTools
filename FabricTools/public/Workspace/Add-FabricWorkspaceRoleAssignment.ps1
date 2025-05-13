@@ -1,94 +1,112 @@
-function Add-FabricWorkspaceRoleAssignment {
-#Requires -Version 7.1
-
 <#
 .SYNOPSIS
-    Adds a role assignment to a user in a workspace.
+Assigns a role to a principal for a specified Fabric workspace.
 
 .DESCRIPTION
-    Adds a role assignment to a user in a workspace. The User is identified by the principalId and the role is
-    identified by the Role parameter. The Workspace is identified by the WorkspaceId.
+The `Add-FabricWorkspaceRoleAssignments` function assigns a role (e.g., Admin, Contributor, Member, Viewer) to a principal (e.g., User, Group, ServicePrincipal) in a Fabric workspace by making a POST request to the API.
 
 .PARAMETER WorkspaceId
-    Id of the Fabric Workspace for which the role assignment should be added. The value for WorkspaceId is a GUID.
-    An example of a GUID is '12345678-1234-1234-1234-123456789012'. This parameter is mandatory.
+The unique identifier of the workspace.
 
 .PARAMETER PrincipalId
-    Id of the principal for which the role assignment should be added. The value for PrincipalId is a GUID.
-    An example of a GUID is '12345678-1234-1234-1234-123456789012'. This parameter is mandatory. At the
-    moment only principal type 'User' is supported.
+The unique identifier of the principal (User, Group, etc.) to assign the role.
 
-.PARAMETER Role
-    The role to assign to the principal. The value for Role is a string. An example of a string is 'Admin'.
-    The values that can be used are 'Admin', 'Contributor', 'Member' and 'Viewer'.
+.PARAMETER PrincipalType
+The type of the principal. Allowed values: Group, ServicePrincipal, ServicePrincipalProfile, User.
 
+.PARAMETER WorkspaceRole
+The role to assign to the principal. Allowed values: Admin, Contributor, Member, Viewer.
 
 .EXAMPLE
-    Add-RtiWorkspaceRoleAssignment `
-        -WorkspaceId '12345678-1234-1234-1234-123456789012' `
-        -PrincipalId '12345678-1234-1234-1234-123456789012' `
-        -Role 'Admin'
+Add-FabricWorkspaceRoleAssignment -WorkspaceId "workspace123" -PrincipalId "principal123" -PrincipalType "User" -WorkspaceRole "Admin"
 
-.LINK
-    https://learn.microsoft.com/en-us/rest/api/fabric/core/workspaces/add-workspace-role-assignment?tabs=HTTP
-
+Assigns the Admin role to the user with ID "principal123" in the workspace "workspace123".
 
 .NOTES
-    TODO: Add functionallity to add role assignments to groups.
-    TODO: Add functionallity to add a user by SPN.
+- Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
+- Calls `Test-TokenExpired` to ensure token validity before making the API request.
+
+Author: Tiago Balabuch  
 #>
 
-[CmdletBinding(SupportsShouldProcess)]
+function Add-FabricWorkspaceRoleAssignment {
+    [CmdletBinding()]
     param (
-
-        [Alias("Id")]
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
         [string]$WorkspaceId,
 
-        [Parameter(Mandatory=$true)]
-        [string]$principalId,
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [string]$PrincipalId,
 
-        [ValidateSet("Admin", "Contributor", "Member" , "Viewer")]
-        [Parameter(Mandatory=$true)]
-        [string]$Role
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [ValidateSet('Group', 'ServicePrincipal', 'ServicePrincipalProfile', 'User')]
+        [string]$PrincipalType,
+
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [ValidateSet('Admin', 'Contributor', 'Member', 'Viewer')]
+        [string]$WorkspaceRole
     )
 
-begin {
+    try {
+        # Step 1: Ensure token validity
+        Write-Message -Message "Validating token..." -Level Debug
+        Test-TokenExpired
+        Write-Message -Message "Token validation completed." -Level Debug
 
-    # Check if session is established - if not throw error
-    if ($null -eq $FabricSession.headerParams) {
-        throw "No session established to Fabric Real-Time Intelligence. Please run Connect-FabricAccount"
-    }
+        # Step 2: Construct the API URL
+        $apiEndpointUrl = "{0}/workspaces/{1}/roleAssignments" -f $FabricConfig.BaseUrl, $WorkspaceId
+        Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
-    # Create body of request
-    $body = @{
-        'principal' =  @{
-            'id' = $principalId
-            'type' =  "User"
+        # Step 3: Construct the request body
+        $body = @{
+            principal = @{
+                id   = $PrincipalId
+                type = $PrincipalType
+            }
+            role      = $WorkspaceRole
         }
-        'role' =  $Role
-    } | ConvertTo-Json `
-            -Depth 1
 
-    # Create Workspace API URL
-    $workspaceApiUrl = "$($FabricSession.BaseApiUrl)/admin/workspaces/$WorkspaceId/roleassignments"
-}
+        # Convert the body to JSON
+        $bodyJson = $body | ConvertTo-Json -Depth 4
+        Write-Message -Message "Request Body: $bodyJson" -Level Debug
 
-process {
-
-    if($PSCmdlet.ShouldProcess($WorkspaceName)) {
-        # Call Workspace API
+        # Step 4: Make the API request
         $response = Invoke-RestMethod `
-                            -Headers $FabricSession.headerParams `
-                            -Method POST `
-                            -Uri $WorkspaceApiUrl `
-                            -Body ($body) `
-                            -ContentType "application/json"
+            -Headers $FabricConfig.FabricHeaders `
+            -Uri $apiEndpointUrl `
+            -Method Post `
+            -Body $bodyJson `
+            -ContentType "application/json" `
+            -ErrorAction Stop `
+            -SkipHttpErrorCheck `
+            -ResponseHeadersVariable "responseHeader" `
+            -StatusCodeVariable "statusCode"
 
-        $response
+        # Step 5: Validate the response code
+        if ($statusCode -ne 201) {
+            Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
+            Write-Message -Message "Error: $($response.message)" -Level Error
+            Write-Message "Error Code: $($response.errorCode)" -Level Error
+            return $null
+        }
+                
+        # Step 6: Handle empty response
+        if (-not $response) {
+            Write-Message -Message "No data returned from the API." -Level Warning
+            return $null
+        }
+
+        Write-Message -Message "Role '$WorkspaceRole' assigned to principal '$PrincipalId' successfully in workspace '$WorkspaceId'." -Level Info
+        return $response
+        
     }
-}
-
-end {}
-
+    catch {
+        # Step 7: Handle and log errors
+        $errorDetails = $_.Exception.Message
+        Write-Message -Message "Failed to assign role. Error: $errorDetails" -Level Error
+    }
 }

@@ -1,39 +1,92 @@
+
 <#
 .SYNOPSIS
-Retrieves the fabric capacity information.
+    Retrieves capacity details from a specified Microsoft Fabric workspace.
 
 .DESCRIPTION
-This function makes a GET request to the Fabric API to retrieve the tenant settings.
+    This function retrieves capacity details from a specified workspace using either the provided capacityId or capacityName.
+    It handles token validation, constructs the API URL, makes the API request, and processes the response.
 
-.PARAMETER capacity
-Specifies the capacity to retrieve information for. If not provided, all capacities will be retrieved.
+.PARAMETER capacityId
+    The unique identifier of the capacity to retrieve. This parameter is optional.
+
+.PARAMETER capacityName
+    The name of the capacity to retrieve. This parameter is optional.
 
 .EXAMPLE
-Get-FabricCapacity -capacity "exampleCapacity"
-Retrieves the fabric capacity information for the specified capacity.
+     Get-FabricCapacity -capacityId "capacity-12345"
+    This example retrieves the capacity details for the capacity with ID "capacity-12345".
 
-Get-FabricCapacity
-Retrieves the fabric capacity information for all capacities.
+.EXAMPLE
+     Get-FabricCapacity -capacityName "MyCapacity"
+    This example retrieves the capacity details for the capacity named "MyCapacity".
 
+.NOTES
+    - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
+    - Calls `Test-TokenExpired` to ensure token validity before making the API request.
+
+    Author: Tiago Balabuch
 #>
+function Get-FabricCapacity {
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory = $false)]
+        [ValidateNotNullOrEmpty()]
+        [string]$capacityId,
 
-function Get-FabricCapacity  {
-    # Define aliases for the function for flexibility.
-    [Alias("Get-FabCapacity")]
-
-    Param(
-        [Parameter(Mandatory=$false)]
-        [string]$capacity
+        [Parameter(Mandatory = $false)]
+        [ValidateNotNullOrEmpty()]
+        [string]$capacityName
     )
+    try {
+        # Handle ambiguous input
+        if ($capacityId -and $capacityName) {
+            Write-Message -Message "Both 'capacityId' and 'capacityName' were provided. Please specify only one." -Level Error
+            return $null
+        }
 
-    Confirm-FabricAuthToken | Out-Null
+        # Ensure token validity
+        Write-Message -Message "Validating token..." -Level Debug
+        Test-TokenExpired
+        Write-Message -Message "Token validation completed." -Level Debug
+ 
+        # Construct the API endpoint URL
+        $apiEndpointURI = "{0}/capacities" -f $FabricConfig.BaseUrl
+        
+        # Invoke the Fabric API to retrieve capacity details
+        $capacities = Invoke-FabricAPIRequest `
+            -BaseURI $apiEndpointURI `
+            -Headers $FabricConfig.FabricHeaders `
+            -Method Get
 
-    if ($capacity) {
-        $result = Invoke-FabricAPIRequest -uri "capacities/$capacity" -Method GET
-    } else {
-        $result = Invoke-FabricAPIRequest -uri "capacities" -Method GET
+ 
+        # Filter results based on provided parameters
+        $response = if ($capacityId) {
+            $capacities | Where-Object { $_.Id -eq $capacityId }
+        }
+        elseif ($capacityName) {
+            $capacities | Where-Object { $_.DisplayName -eq $capacityName }
+        }
+        else {
+            # No filter, return all capacities
+            Write-Message -Message "No filter specified. Returning all capacities." -Level Debug
+            return $capacities
+        }
+ 
+        # Handle results
+        if ($response) {
+            Write-Message -Message "Capacity found matching the specified criteria." -Level Debug
+            return $response
+        }
+        else {
+            Write-Message -Message "No capacity found matching the specified criteria." -Level Warning
+            return $null
+        }
     }
-
-    return $result.value
-
-}
+    catch {
+        # Capture and log error details
+        $errorDetails = $_.Exception.Message
+        Write-Message -Message "Failed to retrieve capacity. Error: $errorDetails" -Level Error
+        return $null
+    }
+} 
