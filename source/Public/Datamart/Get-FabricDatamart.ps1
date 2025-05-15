@@ -17,7 +17,7 @@ function Get-FabricDatamart {
     The name of the specific datamart to retrieve. This parameter is optional.
 
 .EXAMPLE
-     Get-FabricDatamart -WorkspaceId "12345"
+    Get-FabricDatamart -WorkspaceId "12345"
     This example retrieves all datamarts from the workspace with ID "12345".
 
 .NOTES
