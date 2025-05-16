@@ -7,6 +7,7 @@ param(
         "PrincipalId"
         "PrincipalType"
         "WorkspaceRole"
+        "Jess'sMissingParam"
     )
 )
 
