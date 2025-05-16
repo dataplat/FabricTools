@@ -28,8 +28,9 @@
 
     Author: Tiago Balabuch
 #>
-function Update-FabricDataPipeline {
-    [CmdletBinding()]
+function Update-FabricDataPipeline
+{
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
@@ -49,7 +50,8 @@ function Update-FabricDataPipeline {
         [string]$DataPipelineDescription
     )
 
-    try {
+    try
+    {
         # Ensure token validity
         Write-Message -Message "Validating token..." -Level Debug
         Test-TokenExpired
@@ -64,7 +66,8 @@ function Update-FabricDataPipeline {
             displayName = $DataPipelineName
         }
 
-        if ($DataPipelineDescription) {
+        if ($DataPipelineDescription)
+        {
             $body.description = $DataPipelineDescription
         }
 
@@ -72,16 +75,22 @@ function Update-FabricDataPipeline {
         $bodyJson = $body | ConvertTo-Json
         Write-Message -Message "Request Body: $bodyJson" -Level Debug
 
-        # Make the API request
-        $response = Invoke-FabricAPIRequest `
-            -Headers $FabricConfig.FabricHeaders `
-            -BaseURI $apiEndpointURI `
-            -Method Patch `
-            -Body $bodyJson
+        if ($PSCmdlet.ShouldProcess($apiEndpointURI, "Update DataPipeline"))
+        {
+
+            # Make the API request
+            $response = Invoke-FabricAPIRequest `
+                -Headers $FabricConfig.FabricHeaders `
+                -BaseURI $apiEndpointURI `
+                -method Patch `
+                -body $bodyJson
+        }
 
         Write-Message -Message "DataPipeline '$DataPipelineName' updated successfully!" -Level Info
         return $response
-    } catch {
+    }
+    catch
+    {
         # Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to update DataPipeline. Error: $errorDetails" -Level Error

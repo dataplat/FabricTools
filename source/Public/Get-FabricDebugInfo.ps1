@@ -24,6 +24,7 @@ function Get-FabricDebugInfo {
     #>
 
     [CmdletBinding()]
+    [OutputType([System.Collections.Hashtable])]
     param (
 
     )

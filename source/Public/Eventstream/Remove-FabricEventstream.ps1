@@ -1,4 +1,5 @@
-function Remove-FabricEventstream {
+function Remove-FabricEventstream
+{
     <#
 .SYNOPSIS
 Deletes an Eventstream from a specified workspace in Microsoft Fabric.
@@ -29,9 +30,7 @@ Deletes the Eventstream with ID "67890" from workspace "12345".
 Author: Tiago Balabuch
 
     #>
-
-    #TODO SupportsShouldProcess
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
@@ -43,7 +42,8 @@ Author: Tiago Balabuch
         #TODO Add EventstreamName parameter to validate the name of the Eventstream to delete.
     )
 
-    try {
+    try
+    {
         # Step 1: Ensure token validity
         Write-Message -Message "Validating token..." -Level Debug
         Test-TokenExpired
@@ -53,17 +53,21 @@ Author: Tiago Balabuch
         $apiEndpointUrl = "{0}/workspaces/{1}/eventstreams/{2}" -f $FabricConfig.BaseUrl, $WorkspaceId, $EventstreamId
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
-        # Step 3: Make the API request
-        $response = Invoke-RestMethod `
-            -Headers $FabricConfig.FabricHeaders `
-            -Uri $apiEndpointUrl `
-            -Method Delete `
-            -ErrorAction Stop `
-            -SkipHttpErrorCheck `
-            -StatusCodeVariable "statusCode"
+        if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Remove Eventstream"))
+        {
+            # Step 3: Make the API request
+            $response = Invoke-RestMethod `
+                -Headers $FabricConfig.FabricHeaders `
+                -Uri $apiEndpointUrl `
+                -Method Delete `
+                -ErrorAction Stop `
+                -SkipHttpErrorCheck `
+                -StatusCodeVariable "statusCode"
+        }
 
         # Step 4: Validate the response code
-        if ($statusCode -ne 200) {
+        if ($statusCode -ne 200)
+        {
             Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
             Write-Message -Message "Error: $($response.message)" -Level Error
             Write-Message "Error Code: $($response.errorCode)" -Level Error
@@ -71,7 +75,9 @@ Author: Tiago Balabuch
         }
         Write-Message -Message "Eventstream '$EventstreamId' deleted successfully from workspace '$WorkspaceId'." -Level Info
 
-    } catch {
+    }
+    catch
+    {
         # Step 5: Log and handle errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to delete Eventstream '$EventstreamId' from workspace '$WorkspaceId'. Error: $errorDetails" -Level Error

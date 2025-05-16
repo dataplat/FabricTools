@@ -38,7 +38,7 @@ Author: Tiago Balabuch
 #>
 
 function Update-FabricCopyJobDefinition {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
@@ -112,12 +112,14 @@ function Update-FabricCopyJobDefinition {
         $bodyJson = $body | ConvertTo-Json -Depth 10
         Write-Message -Message "Request Body: $bodyJson" -Level Debug
 
-        # Step 4: Make the API request
-        $response = Invoke-FabricAPIRequest `
-            -BaseURI $apiEndpointURI `
-            -Headers $FabricConfig.FabricHeaders `
-            -Method Post `
-            -Body $bodyJson
+        if($PSCmdlet.ShouldProcess($apiEndpointUrl, "Update Copy Job Definition")) {
+            # Step 4: Make the API request
+            $response = Invoke-FabricAPIRequest `
+                -BaseURI $apiEndpointUrl `
+                -Headers $FabricConfig.FabricHeaders `
+                -Method Post `
+                -Body $bodyJson
+        }
 
         Write-Message -Message "Copy Job updated successfully!" -Level Info
         return $response

@@ -21,15 +21,17 @@ Author: Tiago Balabuch
 
 #>
 
-function Remove-FabricDomain {
-    [CmdletBinding()]
+function Remove-FabricDomain
+{
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
         [string]$DomainId
     )
 
-    try {
+    try
+    {
         # Step 1: Ensure token validity
         Write-Message -Message "Validating token..." -Level Debug
         Test-TokenExpired
@@ -38,19 +40,22 @@ function Remove-FabricDomain {
         # Step 2: Construct the API URL
         $apiEndpointUrl = "{0}/admin/domains/{1}" -f $FabricConfig.BaseUrl, $DomainId
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
-
-        # Step 3: Make the API request
-        $response = Invoke-RestMethod `
-            -Headers $FabricConfig.FabricHeaders `
-            -Uri $apiEndpointUrl `
-            -Method Delete `
-            -ErrorAction Stop `
-            -SkipHttpErrorCheck `
-            -ResponseHeadersVariable "responseHeader" `
-            -StatusCodeVariable "statusCode"
+        if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Remove Domain"))
+        {
+            # Step 3: Make the API request
+            $response = Invoke-RestMethod `
+                -Headers $FabricConfig.FabricHeaders `
+                -Uri $apiEndpointUrl `
+                -Method Delete `
+                -ErrorAction Stop `
+                -SkipHttpErrorCheck `
+                -ResponseHeadersVariable "responseHeader" `
+                -StatusCodeVariable "statusCode"
+        }
 
         # Step 4: Validate the response code
-        if ($statusCode -ne 200) {
+        if ($statusCode -ne 200)
+        {
             Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
             Write-Message -Message "Error: $($response.message)" -Level Error
             Write-Message "Error Code: $($response.errorCode)" -Level Error
@@ -59,7 +64,9 @@ function Remove-FabricDomain {
 
         Write-Message -Message "Domain '$DomainId' deleted successfully!" -Level Info
 
-    } catch {
+    }
+    catch
+    {
         # Step 5: Log and handle errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to delete domain '$DomainId'. Error: $errorDetails" -Level Error

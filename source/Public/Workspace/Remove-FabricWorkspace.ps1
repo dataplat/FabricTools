@@ -27,7 +27,8 @@ function Remove-FabricWorkspace {
         [string]$WorkspaceId
     )
 
-    try {
+    try
+    {
         # Step 1: Ensure token validity
         Write-Message -Message "Validating token..." -Level Debug
         Test-TokenExpired
@@ -37,18 +38,22 @@ function Remove-FabricWorkspace {
         $apiEndpointUrl = "{0}/workspaces/{1}" -f $FabricConfig.BaseUrl, $WorkspaceId
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
-        # Step 3: Make the API request
-        $response = Invoke-RestMethod `
-            -Headers $FabricConfig.FabricHeaders `
-            -Uri $apiEndpointUrl `
-            -Method Delete `
-            -ErrorAction Stop `
-            -SkipHttpErrorCheck `
-            -ResponseHeadersVariable "responseHeader" `
-            -StatusCodeVariable "statusCode"
+        if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Delete Workspace"))
+        {
+            # Step 3: Make the API request
+            $response = Invoke-RestMethod `
+                -Headers $FabricConfig.FabricHeaders `
+                -Uri $apiEndpointUrl `
+                -Method Delete `
+                -ErrorAction Stop `
+                -SkipHttpErrorCheck `
+                -ResponseHeadersVariable "responseHeader" `
+                -StatusCodeVariable "statusCode"
+        }
 
         # Step 4: Validate the response code
-        if ($statusCode -ne 200) {
+        if ($statusCode -ne 200)
+        {
             Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
             Write-Message -Message "Error: $($response.message)" -Level Error
             Write-Message "Error Code: $($response.errorCode)" -Level Error
@@ -58,7 +63,9 @@ function Remove-FabricWorkspace {
         Write-Message -Message "Workspace '$WorkspaceId' deleted successfully!" -Level Info
         return $null
 
-    } catch {
+    }
+    catch
+    {
         # Step 5: Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to retrieve capacity. Error: $errorDetails" -Level Error

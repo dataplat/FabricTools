@@ -16,6 +16,7 @@ The function retrieves the PowerBI access token and makes a POST request to the 
 
     #>
     [CmdletBinding()]
+    [OutputType([System.Object[]])]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]

@@ -26,8 +26,9 @@
     Author: Tiago Balabuch
 
 #>
-function Update-FabricSemanticModelDefinition {
-    [CmdletBinding()]
+function Update-FabricSemanticModelDefinition
+{
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
@@ -41,7 +42,8 @@ function Update-FabricSemanticModelDefinition {
         [ValidateNotNullOrEmpty()]
         [string]$SemanticModelPathDefinition
     )
-    try {
+    try
+    {
         # Step 1: Ensure token validity
         Write-Message -Message "Validating token..." -Level Debug
         Test-TokenExpired
@@ -61,14 +63,17 @@ function Update-FabricSemanticModelDefinition {
         # Add new part to the parts array
         $body.definition.parts = $jsonObjectParts.parts
         # Check if any path is .platform
-        foreach ($part in $jsonObjectParts.parts) {
-            if ($part.path -eq ".platform") {
+        foreach ($part in $jsonObjectParts.parts)
+        {
+            if ($part.path -eq ".platform")
+            {
                 $hasPlatformFile = $true
                 Write-Message -Message "Platform File: $hasPlatformFile" -Level Debug
             }
         }
 
-        if ($hasPlatformFile -eq $true) {
+        if ($hasPlatformFile -eq $true)
+        {
             $apiEndpointUrl = "?updateMetadata=true" -f $apiEndpointUrl
         }
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
@@ -77,24 +82,30 @@ function Update-FabricSemanticModelDefinition {
         $bodyJson = $body | ConvertTo-Json -Depth 10
         Write-Message -Message "Request Body: $bodyJson" -Level Debug
 
-        # Step 4: Make the API request
-        $response = Invoke-RestMethod `
-            -Headers $FabricConfig.FabricHeaders `
-            -Uri $apiEndpointUrl `
-            -Method Post `
-            -Body $bodyJson `
-            -ContentType "application/json" `
-            -ErrorAction Stop `
-            -ResponseHeadersVariable "responseHeader" `
-            -StatusCodeVariable "statusCode"
+        if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Update SemanticModel Definition"))
+        {
+            # Step 4: Make the API request
+            $response = Invoke-RestMethod `
+                -Headers $FabricConfig.FabricHeaders `
+                -Uri $apiEndpointUrl `
+                -Method Post `
+                -Body $bodyJson `
+                -ContentType "application/json" `
+                -ErrorAction Stop `
+                -ResponseHeadersVariable "responseHeader" `
+                -StatusCodeVariable "statusCode"
+        }
 
         # Step 5: Handle and log the response
-        switch ($statusCode) {
-            200 {
+        switch ($statusCode)
+        {
+            200
+            {
                 Write-Message -Message "Update definition for SemanticModel '$SemanticModelId' created successfully!" -Level Info
                 return $response
             }
-            202 {
+            202
+            {
                 Write-Message -Message "Update definition for SemanticModel '$SemanticModelId' accepted. Operation in progress!" -Level Info
 
                 [string]$operationId = $responseHeader["x-ms-operation-id"]
@@ -109,23 +120,29 @@ function Update-FabricSemanticModelDefinition {
                 $operationStatus = Get-FabricLongRunningOperation -operationId $operationId -location $location
                 Write-Message -Message "Long Running Operation status: $operationStatus" -Level Debug
                 # Handle operation result
-                if ($operationStatus.status -eq "Succeeded") {
+                if ($operationStatus.status -eq "Succeeded")
+                {
                     Write-Message -Message "Operation Succeeded" -Level Debug
                     Write-Message -Message "Update definition operation for Semantic Model '$SemanticModelId' succeeded!" -Level Info
                     return $operationStatus
-                } else {
+                }
+                else
+                {
                     Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Debug
                     Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Error
                     return $operationStatus
                 }
             }
-            default {
+            default
+            {
                 Write-Message -Message "Unexpected response code: $statusCode" -Level Error
                 Write-Message -Message "Error details: $($response.message)" -Level Error
                 throw "API request failed with status code $statusCode."
             }
         }
-    } catch {
+    }
+    catch
+    {
         # Step 6: Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to update SemanticModel. Error: $errorDetails" -Level Error

@@ -22,8 +22,9 @@
 
     Author: Tiago Balabuch
 #>
-function Remove-FabricWarehouse {
-    [CmdletBinding()]
+function Remove-FabricWarehouse
+{
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
@@ -33,7 +34,8 @@ function Remove-FabricWarehouse {
         [ValidateNotNullOrEmpty()]
         [string]$WarehouseId
     )
-    try {
+    try
+    {
         # Step 1: Ensure token validity
         Write-Message -Message "Validating token..." -Level Debug
         Test-TokenExpired
@@ -43,16 +45,22 @@ function Remove-FabricWarehouse {
         $apiEndpointURI = "{0}/workspaces/{1}/warehouses/{2}" -f $FabricConfig.BaseUrl, $WorkspaceId, $WarehouseId
         Write-Message -Message "API Endpoint: $apiEndpointURI" -Level Debug
 
-        # Step 3: Make the API request
-        $response = Invoke-FabricAPIRequest `
-            -Headers $FabricConfig.FabricHeaders `
-            -BaseURI $apiEndpointURI `
-            -Method Delete `
+        if ($PSCmdlet.ShouldProcess($apiEndpointURI, "Delete Warehouse"))
+        {
+            # Step 3: Make the API request
+            $response = Invoke-FabricAPIRequest `
+                -Headers $FabricConfig.FabricHeaders `
+                -BaseURI $apiEndpointURI `
+                -method Delete `
+
+        }
 
         Write-Message -Message "Warehouse '$WarehouseId' deleted successfully from workspace '$WorkspaceId'." -Level Info
         return $response
 
-    } catch {
+    }
+    catch
+    {
         # Step 5: Log and handle errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to delete Warehouse '$WarehouseId' from workspace '$WorkspaceId'. Error: $errorDetails" -Level Error

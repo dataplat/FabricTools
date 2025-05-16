@@ -28,8 +28,9 @@ Author: Kamil Nowinski
 
 #>
 
-function New-FabricSQLDatabase {
-    [CmdletBinding()]
+function New-FabricSQLDatabase
+{
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
@@ -45,7 +46,8 @@ function New-FabricSQLDatabase {
         [string]$Description
     )
 
-    try {
+    try
+    {
         # Step 1: Ensure token validity
         Test-TokenExpired
 
@@ -58,29 +60,35 @@ function New-FabricSQLDatabase {
             displayName = $Name
         }
 
-        if ($Description) {
+        if ($Description)
+        {
             $body.description = $Description
         }
 
         $bodyJson = $body | ConvertTo-Json -Depth 10
         Write-Message -Message "Request Body: $bodyJson" -Level Debug
 
-        # Step 4: Make the API request
-        $response = Invoke-RestMethod `
-            -Headers $FabricConfig.FabricHeaders `
-            -Uri $apiEndpointUrl `
-            -Method Post `
-            -Body $bodyJson `
-            -ContentType "application/json" `
-            -ErrorAction Stop `
-            -SkipHttpErrorCheck `
-            -ResponseHeadersVariable "responseHeader" `
-            -StatusCodeVariable "statusCode"
+        if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Create SQL Database"))
+        {
 
+            # Step 4: Make the API request
+            $response = Invoke-RestMethod `
+                -Headers $FabricConfig.FabricHeaders `
+                -Uri $apiEndpointUrl `
+                -Method Post `
+                -Body $bodyJson `
+                -ContentType "application/json" `
+                -ErrorAction Stop `
+                -SkipHttpErrorCheck `
+                -ResponseHeadersVariable "responseHeader" `
+                -StatusCodeVariable "statusCode"
+        }
         # Step 5: Handle and log the response
         Write-Message "RESPONSE: $response" -Level Debug
         Test-FabricApiResponse -response $response -responseHeader $responseHeader -statusCode $statusCode -Name $Name -TypeName 'SQL Database'
-    } catch {
+    }
+    catch
+    {
         # Step 6: Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to create SQL Database. Error: $errorDetails" -Level Error

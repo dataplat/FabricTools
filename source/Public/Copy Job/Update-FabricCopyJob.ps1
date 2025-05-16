@@ -28,8 +28,9 @@
 
     Author: Tiago Balabuch
 #>
-function Update-FabricCopyJob {
-    [CmdletBinding()]
+function Update-FabricCopyJob
+{
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
@@ -49,7 +50,8 @@ function Update-FabricCopyJob {
         [string]$CopyJobDescription
     )
 
-    try {
+    try
+    {
         # Ensure token validity
         Write-Message -Message "Validating token..." -Level Debug
         Test-TokenExpired
@@ -64,7 +66,8 @@ function Update-FabricCopyJob {
             displayName = $CopyJobName
         }
 
-        if ($CopyJobDescription) {
+        if ($CopyJobDescription)
+        {
             $body.description = $CopyJobDescription
         }
 
@@ -72,16 +75,21 @@ function Update-FabricCopyJob {
         $bodyJson = $body | ConvertTo-Json
         Write-Message -Message "Request Body: $bodyJson" -Level Debug
 
-        # Make the API request
-        $response = Invoke-FabricAPIRequest `
-            -Headers $FabricConfig.FabricHeaders `
-            -BaseURI $apiEndpointURI `
-            -Method Patch `
-            -Body $bodyJson
+        if ($PSCmdlet.ShouldProcess($apiEndpointURI, "Update Copy Job"))
+        {
+            # Step 4: Make the API request
+            $response = Invoke-FabricAPIRequest `
+                -Headers $FabricConfig.FabricHeaders `
+                -BaseURI $apiEndpointURI `
+                -method Patch `
+                -body $bodyJson
+        }
 
         Write-Message -Message "Copy Job '$CopyJobName' updated successfully!" -Level Info
         return $response
-    } catch {
+    }
+    catch
+    {
         # Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to update Copy Job. Error: $errorDetails" -Level Error

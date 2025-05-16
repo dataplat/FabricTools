@@ -24,8 +24,9 @@ Author: Tiago Balabuch
 
 #>
 
-function Remove-FabricNotebook {
-    [CmdletBinding()]
+function Remove-FabricNotebook
+{
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
@@ -36,7 +37,8 @@ function Remove-FabricNotebook {
         [string]$NotebookId
     )
 
-    try {
+    try
+    {
         # Step 1: Ensure token validity
         Write-Message -Message "Validating token..." -Level Debug
         Test-TokenExpired
@@ -45,18 +47,21 @@ function Remove-FabricNotebook {
         # Step 2: Construct the API URL
         $apiEndpointUrl = "{0}/workspaces/{1}/notebooks/{2}" -f $FabricConfig.BaseUrl, $WorkspaceId, $NotebookId
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
-
-        # Step 3: Make the API request
-        $response = Invoke-RestMethod `
-            -Headers $FabricConfig.FabricHeaders `
-            -Uri $apiEndpointUrl `
-            -Method Delete `
-            -ErrorAction Stop `
-            -SkipHttpErrorCheck `
-            -StatusCodeVariable "statusCode"
+        if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Remove Notebook"))
+        {
+            # Step 3: Make the API request
+            $response = Invoke-RestMethod `
+                -Headers $FabricConfig.FabricHeaders `
+                -Uri $apiEndpointUrl `
+                -Method Delete `
+                -ErrorAction Stop `
+                -SkipHttpErrorCheck `
+                -StatusCodeVariable "statusCode"
+        }
 
         # Step 4: Validate the response code
-        if ($statusCode -ne 200) {
+        if ($statusCode -ne 200)
+        {
             Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
             Write-Message -Message "Error: $($response.message)" -Level Error
             Write-Message "Error Code: $($response.errorCode)" -Level Error
@@ -64,7 +69,9 @@ function Remove-FabricNotebook {
         }
         Write-Message -Message "Notebook '$NotebookId' deleted successfully from workspace '$WorkspaceId'." -Level Info
 
-    } catch {
+    }
+    catch
+    {
         # Step 5: Log and handle errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to delete notebook '$NotebookId' from workspace '$WorkspaceId'. Error: $errorDetails" -Level Error

@@ -28,8 +28,9 @@
 
     Author: Tiago Balabuch
 #>
-function Update-FabricSparkJobDefinitionDefinition {
-    [CmdletBinding()]
+function Update-FabricSparkJobDefinitionDefinition
+{
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
@@ -47,7 +48,8 @@ function Update-FabricSparkJobDefinitionDefinition {
         [ValidateNotNullOrEmpty()]
         [string]$SparkJobDefinitionPathPlatformDefinition
     )
-    try {
+    try
+    {
         # Step 1: Ensure token validity
         Write-Message -Message "Validating token..." -Level Debug
         Test-TokenExpired
@@ -57,7 +59,8 @@ function Update-FabricSparkJobDefinitionDefinition {
         $apiEndpointUrl = "{0}/workspaces/{1}/SparkJobDefinitions/{2}/updateDefinition" -f $FabricConfig.BaseUrl, $WorkspaceId, $SparkJobDefinitionId
 
         #if ($UpdateMetadata -eq $true) {
-        if ($SparkJobDefinitionPathPlatformDefinition) {
+        if ($SparkJobDefinitionPathPlatformDefinition)
+        {
             $apiEndpointUrl = "?updateMetadata=true" -f $apiEndpointUrl
         }
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
@@ -70,32 +73,40 @@ function Update-FabricSparkJobDefinitionDefinition {
             }
         }
 
-        if ($SparkJobDefinitionPathDefinition) {
+        if ($SparkJobDefinitionPathDefinition)
+        {
             $SparkJobDefinitionEncodedContent = Convert-ToBase64 -filePath $SparkJobDefinitionPathDefinition
 
-            if (-not [string]::IsNullOrEmpty($SparkJobDefinitionEncodedContent)) {
+            if (-not [string]::IsNullOrEmpty($SparkJobDefinitionEncodedContent))
+            {
                 # Add new part to the parts array
                 $body.definition.parts += @{
                     path        = "SparkJobDefinitionV1.json"
                     payload     = $SparkJobDefinitionEncodedContent
                     payloadType = "InlineBase64"
                 }
-            } else {
+            }
+            else
+            {
                 Write-Message -Message "Invalid or empty content in SparkJobDefinition definition." -Level Error
                 return $null
             }
         }
 
-        if ($SparkJobDefinitionPathPlatformDefinition) {
+        if ($SparkJobDefinitionPathPlatformDefinition)
+        {
             $SparkJobDefinitionEncodedPlatformContent = Convert-ToBase64 -filePath $SparkJobDefinitionPathPlatformDefinition
-            if (-not [string]::IsNullOrEmpty($SparkJobDefinitionEncodedPlatformContent)) {
+            if (-not [string]::IsNullOrEmpty($SparkJobDefinitionEncodedPlatformContent))
+            {
                 # Add new part to the parts array
                 $body.definition.parts += @{
                     path        = ".platform"
                     payload     = $SparkJobDefinitionEncodedPlatformContent
                     payloadType = "InlineBase64"
                 }
-            } else {
+            }
+            else
+            {
                 Write-Message -Message "Invalid or empty content in platform definition." -Level Error
                 return $null
             }
@@ -104,24 +115,31 @@ function Update-FabricSparkJobDefinitionDefinition {
         $bodyJson = $body | ConvertTo-Json -Depth 10
         Write-Message -Message "Request Body: $bodyJson" -Level Debug
 
-        # Step 4: Make the API request
-        $response = Invoke-RestMethod `
-            -Headers $FabricConfig.FabricHeaders `
-            -Uri $apiEndpointUrl `
-            -Method Post `
-            -Body $bodyJson `
-            -ContentType "application/json" `
-            -ErrorAction Stop `
-            -ResponseHeadersVariable "responseHeader" `
-            -StatusCodeVariable "statusCode"
+        if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Update Spark Job Definition"))
+        {
+
+            # Step 4: Make the API request
+            $response = Invoke-RestMethod `
+                -Headers $FabricConfig.FabricHeaders `
+                -Uri $apiEndpointUrl `
+                -Method Post `
+                -Body $bodyJson `
+                -ContentType "application/json" `
+                -ErrorAction Stop `
+                -ResponseHeadersVariable "responseHeader" `
+                -StatusCodeVariable "statusCode"
+        }
 
         # Step 5: Handle and log the response
-        switch ($statusCode) {
-            200 {
+        switch ($statusCode)
+        {
+            200
+            {
                 Write-Message -Message "Update definition for Spark Job Definition '$SparkJobDefinitionId' created successfully!" -Level Info
                 return $response
             }
-            202 {
+            202
+            {
                 Write-Message -Message "Update definition for Spark Job Definition '$SparkJobDefinitionId' accepted. Operation in progress!" -Level Info
 
                 [string]$operationId = $responseHeader["x-ms-operation-id"]
@@ -136,7 +154,8 @@ function Update-FabricSparkJobDefinitionDefinition {
                 $operationStatus = Get-FabricLongRunningOperation -operationId $operationId -location $location
                 Write-Message -Message "Long Running Operation status: $operationStatus" -Level Debug
                 # Handle operation result
-                if ($operationStatus.status -eq "Succeeded") {
+                if ($operationStatus.status -eq "Succeeded")
+                {
                     Write-Message -Message "Operation Succeeded" -Level Debug
                     Write-Message -Message "Getting Long Running Operation result" -Level Debug
 
@@ -144,19 +163,24 @@ function Update-FabricSparkJobDefinitionDefinition {
                     Write-Message -Message "Long Running Operation status: $operationResult" -Level Debug
 
                     return $operationResult
-                } else {
+                }
+                else
+                {
                     Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Debug
                     Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Error
                     return $operationStatus
                 }
             }
-            default {
+            default
+            {
                 Write-Message -Message "Unexpected response code: $statusCode" -Level Error
                 Write-Message -Message "Error details: $($response.message)" -Level Error
                 throw "API request failed with status code $statusCode."
             }
         }
-    } catch {
+    }
+    catch
+    {
         # Step 6: Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to update Spark Job Definition. Error: $errorDetails" -Level Error

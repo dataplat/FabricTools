@@ -29,8 +29,9 @@
     Author: Tiago Balabuch
 
 #>
-function Update-FabricEventhouse {
-    [CmdletBinding()]
+function Update-FabricEventhouse
+{
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
@@ -49,7 +50,8 @@ function Update-FabricEventhouse {
         [ValidateNotNullOrEmpty()]
         [string]$EventhouseDescription
     )
-    try {
+    try
+    {
         # Step 1: Ensure token validity
         Write-Message -Message "Validating token..." -Level Debug
         Test-TokenExpired
@@ -64,7 +66,8 @@ function Update-FabricEventhouse {
             displayName = $EventhouseName
         }
 
-        if ($EventhouseDescription) {
+        if ($EventhouseDescription)
+        {
             $body.description = $EventhouseDescription
         }
 
@@ -72,20 +75,24 @@ function Update-FabricEventhouse {
         $bodyJson = $body | ConvertTo-Json
         Write-Message -Message "Request Body: $bodyJson" -Level Debug
 
-        # Step 4: Make the API request
-        $response = Invoke-RestMethod `
-            -Headers $FabricConfig.FabricHeaders `
-            -Uri $apiEndpointUrl `
-            -Method Patch `
-            -Body $bodyJson `
-            -ContentType "application/json" `
-            -ErrorAction Stop `
-            -SkipHttpErrorCheck `
-            -ResponseHeadersVariable "responseHeader" `
-            -StatusCodeVariable "statusCode"
+        if ($PSCmdlet.ShouldProcess("Eventhouse", "Update"))
+        {
+            # Step 4: Make the API request
+            $response = Invoke-RestMethod `
+                -Headers $FabricConfig.FabricHeaders `
+                -Uri $apiEndpointUrl `
+                -Method Patch `
+                -Body $bodyJson `
+                -ContentType "application/json" `
+                -ErrorAction Stop `
+                -SkipHttpErrorCheck `
+                -ResponseHeadersVariable "responseHeader" `
+                -StatusCodeVariable "statusCode"
+        }
 
         # Step 5: Validate the response code
-        if ($statusCode -ne 200) {
+        if ($statusCode -ne 200)
+        {
             Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
             Write-Message -Message "Error: $($response.message)" -Level Error
             Write-Message -Message "Error Details: $($response.moreDetails)" -Level Error
@@ -96,7 +103,9 @@ function Update-FabricEventhouse {
         # Step 6: Handle results
         Write-Message -Message "Eventhouse '$EventhouseName' updated successfully!" -Level Info
         return $response
-    } catch {
+    }
+    catch
+    {
         # Step 7: Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to update Eventhouse. Error: $errorDetails" -Level Error
