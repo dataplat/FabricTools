@@ -61,7 +61,7 @@ body:
   - type: textarea
     id: targetNodeOS
     attributes:
-      label: Operating system the target node is running
+      label: Operating system you are running FabricTools on
       description: |
         Please provide as much as possible about the node running FabricTools. _Will be automatically formatted as plain text._
 
@@ -100,4 +100,3 @@ body:
       render: text
     validations:
       required: true
-

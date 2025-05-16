@@ -1,20 +1,20 @@
-name: New resource proposal
-description: If you have a new resource proposal that you think should be added to this resource module.
-title: "NewResourceName: New resource proposal"
+name: New function proposal
+description: If you have a new function proposal that you think should be added to this module.
+title: "NewFunctionName: New resource proposal"
 labels: []
 assignees: []
 body:
   - type: markdown
     attributes:
       value: |
-        Please replace `NewResourceName` in the issue title (above) with your proposed resource name.
+        Please replace `NewFunctionName` in the issue title (above) with your proposed function name.
 
-        Thank you for contributing and making this resource module better!
+        Thank you for contributing and making FabricTools better!
   - type: textarea
     id: description
     attributes:
-      label: Resource proposal
-      description: Provide information how this resource will/should work and how it will help users.
+      label: Function proposal
+      description: Provide information how this function will/should work and how it will help users.
     validations:
       required: true
   - type: textarea
@@ -22,11 +22,15 @@ body:
     attributes:
       label: Proposed properties
       description: |
-        List all the proposed properties that the resource should have (key, required, write, and/or read). For each property provide a detailed description, the data type, if a default value should be used, and if the property is limited to a set of values.
+        List all the proposed properties and parameters that the function should have.
       value: |
-        Property | Type qualifier | Data type | Description | Default value | Allowed values
-        --- | --- | --- | --- | --- | ---
-        PropertyName | Key | String | Detailed description | None | None
+        Parameter | Description | Data type | Default value | Allowed values
+        --- | --- | --- | --- | ---
+        ParameterName | Detailed description | String | None | Any
+
+        Property | Description
+        --- | ---
+        PropertyName | Detailed description
     validations:
       required: true
   - type: textarea
@@ -34,6 +38,6 @@ body:
     attributes:
       label: Special considerations or limitations
       description: |
-        Provide any considerations or limitations you can think of that a contributor should take in account when coding the proposed resource, and or what limitations a user will encounter or should consider when using the proposed resource.
+        Provide any considerations or limitations you can think of that a contributor should take in account when coding the proposed function, and or what limitations a user will encounter or should consider when using the proposed function.
     validations:
       required: true
