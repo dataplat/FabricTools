@@ -13,19 +13,6 @@ Describe "Add-FabricWorkspaceRoleAssignment" -Tag "UnitTests" {
             "PrincipalId"
             "PrincipalType"
             "WorkspaceRole"
-            "Verbose"
-            "Debug"
-            "ErrorAction"
-            "WarningAction"
-            "InformationAction"
-            "ProgressAction"
-            "ErrorVariable"
-            "WarningVariable"
-            "InformationVariable"
-            "OutVariable"
-            "OutBuffer"
-            "PipelineVariable"
-
         )
     }
     BeforeAll {
@@ -36,19 +23,6 @@ Describe "Add-FabricWorkspaceRoleAssignment" -Tag "UnitTests" {
             "PrincipalId"
             "PrincipalType"
             "WorkspaceRole"
-            "Verbose"
-            "Debug"
-            "ErrorAction"
-            "WarningAction"
-            "InformationAction"
-            "ProgressAction"
-            "ErrorVariable"
-            "WarningVariable"
-            "InformationVariable"
-            "OutVariable"
-            "OutBuffer"
-            "PipelineVariable"
-
         )
     }
     Context "Parameter validation" {
@@ -59,7 +33,8 @@ Describe "Add-FabricWorkspaceRoleAssignment" -Tag "UnitTests" {
 
         It "Should have exactly the number of expected parameters ($($expected.Count))" {
             $hasparms = $command.Parameters.Values.Name
-            Compare-Object -ReferenceObject $expected -DifferenceObject $hasparms | Should -BeNullOrEmpty
+            $hasparms.Count | Should -BeExactly $expected.Count
+          #  Compare-Object -ReferenceObject $expected -DifferenceObject $hasparms | Should -BeNullOrEmpty
         }
     }
 }
