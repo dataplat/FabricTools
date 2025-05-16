@@ -28,16 +28,16 @@ param(
     )
 )
 
-Describe "Import-FabricLakehouseTableData" -Tag "UnitTests" {
+Describe "Write-FabricLakehouseTableData" -Tag "UnitTests" {
 
     BeforeDiscovery {
-        $command = Get-Command -Name Import-FabricLakehouseTableData
+        $command = Get-Command -Name Write-FabricLakehouseTableData
         $expected = $expectedParams
     }
 
     Context "Parameter validation" {
         BeforeAll {
-            $command = Get-Command -Name Import-FabricLakehouseTableData
+            $command = Get-Command -Name Write-FabricLakehouseTableData
             $expected = $expectedParams
         }
 
