@@ -19,6 +19,8 @@ function Get-FabricAPIclusterURI {
     #This function retrieves the cluster URI for the tenant.
     # Define aliases for the function for flexibility.
     [Alias("Get-FabAPIClusterURI")]
+    [CmdletBinding()]
+    [OutputType([string])]
     Param (
     )
 

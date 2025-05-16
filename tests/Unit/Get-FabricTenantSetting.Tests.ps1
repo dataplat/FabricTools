@@ -3,19 +3,19 @@ param(
     $ModuleName = "FabricTools",
     $expectedParams = @(
         "SettingTitle"
-                "Verbose"
-                "Debug"
-                "ErrorAction"
-                "WarningAction"
-                "InformationAction"
-                "ProgressAction"
-                "ErrorVariable"
-                "WarningVariable"
-                "InformationVariable"
-                "OutVariable"
-                "OutBuffer"
-                "PipelineVariable"
-                
+        "Verbose"
+        "Debug"
+        "ErrorAction"
+        "WarningAction"
+        "InformationAction"
+        "ProgressAction"
+        "ErrorVariable"
+        "WarningVariable"
+        "InformationVariable"
+        "OutVariable"
+        "OutBuffer"
+        "PipelineVariable"
+
     )
 )
 
@@ -43,4 +43,3 @@ Describe "Get-FabricTenantSetting" -Tag "UnitTests" {
         }
     }
 }
-

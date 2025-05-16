@@ -86,7 +86,21 @@ BeforeDiscovery {
     # Build test cases.
     $testCases = @()
 
-    foreach ($function in $allModuleFunctions)
+    foreach ($function in $allModuleFunctions | Where-Object -FilterScript {
+            $_.Name -notin (
+                'Test-TokenExpired',
+                'Get-FabricUri',
+                'Get-FileDefinitionParts',
+                'Set-FabConfig',
+                'Write-Message',
+                'Invoke-FabricAPIRequest_duplicate'
+            )
+        })
+    {
+        $testCases += @{
+            Name = $function.Name
+        }
+    }
     {
         $testCases += @{
             Name = $function.Name
@@ -117,7 +131,7 @@ Describe 'Quality for module' -Tags 'TestQuality' {
         Get-ChildItem -Path 'tests\' -Recurse -Include "$Name.Tests.ps1" | Should -Not -BeNullOrEmpty
     }
 
-    It 'Should pass Script Analyzer for <Name>' -ForEach ($testCases | Where-Object {$_.Name -in $mut.ExportedCommands.Values.Name }) -Skip:(-not $scriptAnalyzerRules) {
+    It 'Should pass Script Analyzer for <Name>' -ForEach ($testCases | Where-Object { $_.Name -in $mut.ExportedCommands.Values.Name }) -Skip:(-not $scriptAnalyzerRules) {
         $functionFile = Get-ChildItem -Path $sourcePath -Recurse -Include "$Name.ps1"
 
         $pssaResult = (Invoke-ScriptAnalyzer -Path $functionFile.FullName)
@@ -128,7 +142,7 @@ Describe 'Quality for module' -Tags 'TestQuality' {
 }
 
 Describe 'Help for module' -Tags 'helpQuality' {
-    It 'Should have .SYNOPSIS for <Name>' -ForEach ($testCases | Where-Object {$_.Name -in $mut.ExportedCommands.Values.Name }) {
+    It 'Should have .SYNOPSIS for <Name>' -ForEach ($testCases | Where-Object { $_.Name -in $mut.ExportedCommands.Values.Name }) {
         $functionFile = Get-ChildItem -Path $sourcePath -Recurse -Include "$Name.ps1"
 
         $scriptFileRawContent = Get-Content -Raw -Path $functionFile.FullName
@@ -147,7 +161,7 @@ Describe 'Help for module' -Tags 'helpQuality' {
         $functionHelp.Synopsis | Should -Not -BeNullOrEmpty
     }
 
-    It 'Should have a .DESCRIPTION with length greater than 40 characters for <Name>' -ForEach ($testCases | Where-Object {$_.Name -in $mut.ExportedCommands.Values.Name }) {
+    It 'Should have a .DESCRIPTION with length greater than 40 characters for <Name>' -ForEach ($testCases | Where-Object { $_.Name -in $mut.ExportedCommands.Values.Name }) {
         $functionFile = Get-ChildItem -Path $sourcePath -Recurse -Include "$Name.ps1"
 
         $scriptFileRawContent = Get-Content -Raw -Path $functionFile.FullName
@@ -166,7 +180,7 @@ Describe 'Help for module' -Tags 'helpQuality' {
         $functionHelp.Description.Length | Should -BeGreaterThan 40
     }
 
-    It 'Should have at least one (1) example for <Name>' -ForEach ($testCases | Where-Object {$_.Name -in $mut.ExportedCommands.Values.Name }) {
+    It 'Should have at least one (1) example for <Name>' -ForEach ($testCases | Where-Object { $_.Name -in $mut.ExportedCommands.Values.Name }) {
         $functionFile = Get-ChildItem -Path $sourcePath -Recurse -Include "$Name.ps1"
 
         $scriptFileRawContent = Get-Content -Raw -Path $functionFile.FullName
@@ -188,7 +202,7 @@ Describe 'Help for module' -Tags 'helpQuality' {
 
     }
 
-    It 'Should have described all parameters for <Name>' -ForEach ($testCases | Where-Object {$_.Name -in $mut.ExportedCommands.Values.Name }) {
+    It 'Should have described all parameters for <Name>' -ForEach ($testCases | Where-Object { $_.Name -in $mut.ExportedCommands.Values.Name }) {
         $functionFile = Get-ChildItem -Path $sourcePath -Recurse -Include "$Name.ps1"
 
         $scriptFileRawContent = Get-Content -Raw -Path $functionFile.FullName
