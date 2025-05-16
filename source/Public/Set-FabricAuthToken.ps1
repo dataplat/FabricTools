@@ -1,5 +1,6 @@
-function Set-FabricAuthToken {
-    <#
+function Set-FabricAuthToken
+{
+   <#
 .SYNOPSIS
    Sets the Fabric authentication token.
 
@@ -42,63 +43,73 @@ function Set-FabricAuthToken {
    This function was originally written by Rui Romano.
    https://github.com/RuiRomano/fabricps-pbip
     #>
+   [OutputType([System.Collections.Hashtable])]
+   [CmdletBinding(SupportsShouldProcess)]
+   param
+   (
+      [string]       $servicePrincipalId
+      , [string]       $servicePrincipalSecret
+      , [PSCredential] $credential
+      , [string]       $tenantId
+      , [switch]       $reset
+      , [string]       $apiUrl
+   )
 
-    [CmdletBinding(SupportsShouldProcess)]
-    param
-    (
-        [string]       $servicePrincipalId
-        , [string]       $servicePrincipalSecret
-        , [PSCredential] $credential
-        , [string]       $tenantId
-        , [switch]       $reset
-        , [string]       $apiUrl
-    )
 
-    if (!$reset) {
-        $azContext = Get-AzContext
-    }
+   if (!$reset)
+   {
+      $azContext = Get-AzContext
+   }
 
-    if ($apiUrl) {
-        $FabricSession.BaseApiUrl = $apiUrl
-    }
+   if ($apiUrl)
+   {
+      $FabricSession.BaseApiUrl = $apiUrl
+   }
 
-    if (!$azContext) {
-        Write-Output "Getting authentication token"
-        if ($servicePrincipalId) {
-            $credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $servicePrincipalId, ($servicePrincipalSecret | ConvertTo-SecureString -AsPlainText -Force)
+   if (!$azContext)
+   {
+      Write-Output "Getting authentication token"
+      if ($servicePrincipalId)
+      {
+         $credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $servicePrincipalId, ($servicePrincipalSecret | ConvertTo-SecureString -AsPlainText -Force)
 
-            Connect-AzAccount -ServicePrincipal -TenantId $tenantId -Credential $credential | Out-Null
+         Connect-AzAccount -ServicePrincipal -TenantId $tenantId -Credential $credential | Out-Null
 
-            Set-AzContext -Tenant $tenantId | Out-Null
-        } elseif ($null -ne $credential) {
-            Connect-AzAccount -Credential $credential -Tenant $tenantId | Out-Null
-        } else {
-            Connect-AzAccount | Out-Null
-        }
-        $azContext = Get-AzContext
-    }
-    if ($PSCmdlet.ShouldProcess("Setting Fabric authentication token for $($azContext.Account)")) {
-        Write-Output "Connnected: $($azContext.Account)"
-        Write-Output "Fabric ResourceUrl: $($FabricSession.ResourceUrl)"
+         Set-AzContext -Tenant $tenantId | Out-Null
+      }
+      elseif ($null -ne $credential)
+      {
+         Connect-AzAccount -Credential $credential -Tenant $tenantId | Out-Null
+      }
+      else
+      {
+         Connect-AzAccount | Out-Null
+      }
+      $azContext = Get-AzContext
+   }
+   if ($PSCmdlet.ShouldProcess("Setting Fabric authentication token for $($azContext.Account)"))
+   {
+      Write-Output "Connnected: $($azContext.Account)"
+      Write-Output "Fabric ResourceUrl: $($FabricSession.ResourceUrl)"
 
-        $FabricSession.AccessToken = (Get-AzAccessToken -AsSecureString -ResourceUrl $FabricSession.ResourceUrl)
-        $ssPtr = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($FabricSession.AccessToken.Token)
-        $FabricSession.FabricToken = ([System.Runtime.InteropServices.Marshal]::PtrToStringBSTR($ssPtr))
-        Write-Verbose "Setup headers for API calls"
-        $FabricSession.HeaderParams = @{ Authorization = $FabricSession.AccessToken.Type + ' ' + $FabricSession.FabricToken }
+      $FabricSession.AccessToken = (Get-AzAccessToken -AsSecureString -ResourceUrl $FabricSession.ResourceUrl)
+      $ssPtr = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($FabricSession.AccessToken.Token)
+      $FabricSession.FabricToken = ([System.Runtime.InteropServices.Marshal]::PtrToStringBSTR($ssPtr))
+      Write-Verbose "Setup headers for API calls"
+      $FabricSession.HeaderParams = @{ Authorization = $FabricSession.AccessToken.Type + ' ' + $FabricSession.FabricToken }
 
-        Write-Output "Azure BaseApiUrl: $($FabricSession.ResourceUrl)"
-        $script:AzureSession.AccessToken = (Get-AzAccessToken -AsSecureString -ResourceUrl $AzureSession.BaseApiUrl)
-        $ssPtr = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($AzureSession.AccessToken.Token)
-        $script:AzureSession.Token = ([System.Runtime.InteropServices.Marshal]::PtrToStringBSTR($ssPtr))
-        $AzureSession.HeaderParams = @{ Authorization = $AzureSession.AccessToken.Type + ' ' + $AzureSession.Token }
+      Write-Output "Azure BaseApiUrl: $($FabricSession.ResourceUrl)"
+      $script:AzureSession.AccessToken = (Get-AzAccessToken -AsSecureString -ResourceUrl $AzureSession.BaseApiUrl)
+      $ssPtr = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($AzureSession.AccessToken.Token)
+      $script:AzureSession.Token = ([System.Runtime.InteropServices.Marshal]::PtrToStringBSTR($ssPtr))
+      $AzureSession.HeaderParams = @{ Authorization = $AzureSession.AccessToken.Type + ' ' + $AzureSession.Token }
 
-        # Copy session values to exposed $FabricConfig
-        $FabricConfig.TenantIdGlobal = $FabricSession.AccessToken.TenantId
-        $FabricConfig.TokenExpiresOn = $FabricSession.AccessToken.ExpiresOn
-        $FabricConfig.FabricHeaders = $FabricSession.HeaderParams
+      # Copy session values to exposed $FabricConfig
+      $FabricConfig.TenantIdGlobal = $FabricSession.AccessToken.TenantId
+      $FabricConfig.TokenExpiresOn = $FabricSession.AccessToken.ExpiresOn
+      $FabricConfig.FabricHeaders = $FabricSession.HeaderParams
 
-        return $($FabricSession.FabricToken)
+      return $($FabricSession.FabricToken)
 
-    }
+   }
 }

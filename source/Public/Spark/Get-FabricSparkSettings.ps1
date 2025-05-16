@@ -22,6 +22,7 @@
 #>
 function Get-FabricSparkSettings {
     [CmdletBinding()]
+    [OutputType([System.Object[]])]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]

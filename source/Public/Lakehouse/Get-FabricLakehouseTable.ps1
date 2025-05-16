@@ -15,6 +15,7 @@ This example retrieves all tables from the specified Lakehouse in the specified 
 
     #>
     [CmdletBinding()]
+    [OutputType([System.Object[]])]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]

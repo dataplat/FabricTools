@@ -30,6 +30,7 @@ Author: Tiago Balabuch
 
 function Get-FabricWorkspaceRoleAssignment {
     [CmdletBinding()]
+    [OutputType([System.Object[]])]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
