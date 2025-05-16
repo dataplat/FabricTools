@@ -1,14 +1,25 @@
 #Requires -Module @{ ModuleName="Pester"; ModuleVersion="5.0"}
 param(
     $ModuleName = "FabricTools",
-    $PSDefaultParameterValues = ($TestConfig = Get-TestConfig).Defaults
+        $CommonParameters = @(
+        "Verbose"
+        "Debug"
+        "ErrorAction"
+        "WarningAction"
+        "InformationAction"
+        "ErrorVariable"
+        "WarningVariable"
+        "InformationVariable"
+        "OutVariable"
+        "OutBuffer"
+    )
 )
 
 Describe "Update-FabricCapacityTenantSettingOverrides" -Tag "UnitTests" {
     Context "Parameter validation" {
         BeforeAll {
             $command = Get-Command Update-FabricCapacityTenantSettingOverrides
-            $expected = $TestConfig.CommonParameters
+            $expected = $CommonParameters
             $expected += @(
                 "TenantSettingName"
                 "EnableTenantSetting"
@@ -30,7 +41,7 @@ Describe "Update-FabricCapacityTenantSettingOverrides" -Tag "UnitTests" {
                 "OutVariable"
                 "OutBuffer"
                 "PipelineVariable"
-                
+
             )
         }
 
@@ -44,4 +55,3 @@ Describe "Update-FabricCapacityTenantSettingOverrides" -Tag "UnitTests" {
         }
     }
 }
-

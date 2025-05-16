@@ -1,14 +1,25 @@
 #Requires -Module @{ ModuleName="Pester"; ModuleVersion="5.0"}
 param(
     $ModuleName = "FabricTools",
-    $PSDefaultParameterValues = ($TestConfig = Get-TestConfig).Defaults
+        $CommonParameters = @(
+        "Verbose"
+        "Debug"
+        "ErrorAction"
+        "WarningAction"
+        "InformationAction"
+        "ErrorVariable"
+        "WarningVariable"
+        "InformationVariable"
+        "OutVariable"
+        "OutBuffer"
+    )
 )
 
 Describe "New-FabricSQLDatabase" -Tag "UnitTests" {
     Context "Parameter validation" {
         BeforeAll {
             $command = Get-Command New-FabricSQLDatabase
-            $expected = $TestConfig.CommonParameters
+            $expected = $CommonParameters
             $expected += @(
                 "WorkspaceId"
                 "Name"
@@ -25,7 +36,7 @@ Describe "New-FabricSQLDatabase" -Tag "UnitTests" {
                 "OutVariable"
                 "OutBuffer"
                 "PipelineVariable"
-                
+
             )
         }
 
@@ -39,4 +50,3 @@ Describe "New-FabricSQLDatabase" -Tag "UnitTests" {
         }
     }
 }
-

@@ -1,14 +1,25 @@
 #Requires -Module @{ ModuleName="Pester"; ModuleVersion="5.0"}
 param(
     $ModuleName = "FabricTools",
-    $PSDefaultParameterValues = ($TestConfig = Get-TestConfig).Defaults
+        $CommonParameters = @(
+        "Verbose"
+        "Debug"
+        "ErrorAction"
+        "WarningAction"
+        "InformationAction"
+        "ErrorVariable"
+        "WarningVariable"
+        "InformationVariable"
+        "OutVariable"
+        "OutBuffer"
+    )
 )
 
 Describe "Get-FabricDatasetRefreshes" -Tag "UnitTests" {
     Context "Parameter validation" {
         BeforeAll {
             $command = Get-Command Get-FabricDatasetRefreshes
-            $expected = $TestConfig.CommonParameters
+            $expected = $CommonParameters
             $expected += @(
                 "DatasetID"
                 "workspaceId"
@@ -24,7 +35,7 @@ Describe "Get-FabricDatasetRefreshes" -Tag "UnitTests" {
                 "OutVariable"
                 "OutBuffer"
                 "PipelineVariable"
-                
+
             )
         }
 
@@ -38,4 +49,3 @@ Describe "Get-FabricDatasetRefreshes" -Tag "UnitTests" {
         }
     }
 }
-

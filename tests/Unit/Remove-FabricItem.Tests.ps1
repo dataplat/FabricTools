@@ -1,14 +1,25 @@
 #Requires -Module @{ ModuleName="Pester"; ModuleVersion="5.0"}
 param(
     $ModuleName = "FabricTools",
-    $PSDefaultParameterValues = ($TestConfig = Get-TestConfig).Defaults
+        $CommonParameters = @(
+        "Verbose"
+        "Debug"
+        "ErrorAction"
+        "WarningAction"
+        "InformationAction"
+        "ErrorVariable"
+        "WarningVariable"
+        "InformationVariable"
+        "OutVariable"
+        "OutBuffer"
+    )
 )
 
 Describe "Remove-FabricItem" -Tag "UnitTests" {
     Context "Parameter validation" {
         BeforeAll {
             $command = Get-Command Remove-FabricItem
-            $expected = $TestConfig.CommonParameters
+            $expected = $CommonParameters
             $expected += @(
                 "workspaceId"
                 "filter"
@@ -27,7 +38,7 @@ Describe "Remove-FabricItem" -Tag "UnitTests" {
                 "PipelineVariable"
                 "WhatIf"
                 "Confirm"
-                
+
             )
         }
 
@@ -41,4 +52,3 @@ Describe "Remove-FabricItem" -Tag "UnitTests" {
         }
     }
 }
-

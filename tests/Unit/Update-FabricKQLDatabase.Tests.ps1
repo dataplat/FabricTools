@@ -1,14 +1,25 @@
 #Requires -Module @{ ModuleName="Pester"; ModuleVersion="5.0"}
 param(
     $ModuleName = "FabricTools",
-    $PSDefaultParameterValues = ($TestConfig = Get-TestConfig).Defaults
+        $CommonParameters = @(
+        "Verbose"
+        "Debug"
+        "ErrorAction"
+        "WarningAction"
+        "InformationAction"
+        "ErrorVariable"
+        "WarningVariable"
+        "InformationVariable"
+        "OutVariable"
+        "OutBuffer"
+    )
 )
 
 Describe "Update-FabricKQLDatabase" -Tag "UnitTests" {
     Context "Parameter validation" {
         BeforeAll {
             $command = Get-Command Update-FabricKQLDatabase
-            $expected = $TestConfig.CommonParameters
+            $expected = $CommonParameters
             $expected += @(
                 "WorkspaceId"
                 "KQLDatabaseId"
@@ -28,7 +39,7 @@ Describe "Update-FabricKQLDatabase" -Tag "UnitTests" {
                 "PipelineVariable"
                 "WhatIf"
                 "Confirm"
-                
+
             )
         }
 
@@ -42,4 +53,3 @@ Describe "Update-FabricKQLDatabase" -Tag "UnitTests" {
         }
     }
 }
-

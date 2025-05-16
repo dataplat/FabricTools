@@ -1,14 +1,25 @@
 #Requires -Module @{ ModuleName="Pester"; ModuleVersion="5.0"}
 param(
     $ModuleName = "FabricTools",
-    $PSDefaultParameterValues = ($TestConfig = Get-TestConfig).Defaults
+        $CommonParameters = @(
+        "Verbose"
+        "Debug"
+        "ErrorAction"
+        "WarningAction"
+        "InformationAction"
+        "ErrorVariable"
+        "WarningVariable"
+        "InformationVariable"
+        "OutVariable"
+        "OutBuffer"
+    )
 )
 
 Describe "Unassign-FabricWorkspaceCapacity" -Tag "UnitTests" {
     Context "Parameter validation" {
         BeforeAll {
             $command = Get-Command Unassign-FabricWorkspaceCapacity
-            $expected = $TestConfig.CommonParameters
+            $expected = $CommonParameters
             $expected += @(
                 "WorkspaceId"
                 "Verbose"
@@ -25,7 +36,7 @@ Describe "Unassign-FabricWorkspaceCapacity" -Tag "UnitTests" {
                 "PipelineVariable"
                 "WhatIf"
                 "Confirm"
-                
+
             )
         }
 
@@ -39,4 +50,3 @@ Describe "Unassign-FabricWorkspaceCapacity" -Tag "UnitTests" {
         }
     }
 }
-

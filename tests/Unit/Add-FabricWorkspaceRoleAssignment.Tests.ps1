@@ -1,7 +1,18 @@
 #Requires -Module @{ ModuleName="Pester"; ModuleVersion="5.0"}
 param(
     $ModuleName = "FabricTools",
-    $PSDefaultParameterValues = ($TestConfig = Get-TestConfig).Defaults,
+    $CommonParameters = @(
+        "Verbose"
+        "Debug"
+        "ErrorAction"
+        "WarningAction"
+        "InformationAction"
+        "ErrorVariable"
+        "WarningVariable"
+        "InformationVariable"
+        "OutVariable"
+        "OutBuffer"
+    ),
     $expectedParams = @(
         "WorkspaceId"
         "PrincipalId"
@@ -15,14 +26,14 @@ Describe "Add-FabricWorkspaceRoleAssignment" -Tag "UnitTests" {
 
     BeforeDiscovery {
         $command = Get-Command -Name Add-FabricWorkspaceRoleAssignment
-        $expected = $TestConfig.CommonParameters
+        $expected = $CommonParameters
         $expected += $expectedParams
     }
 
     Context "Parameter validation" {
         BeforeAll {
             $command = Get-Command -Name Add-FabricWorkspaceRoleAssignment
-            $expected = $TestConfig.CommonParameters
+            $expected = $CommonParameters
             $expected += $expectedParams
         }
 
