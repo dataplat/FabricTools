@@ -1,14 +1,15 @@
 #Requires -Module @{ ModuleName="Pester"; ModuleVersion="5.0"}
 param(
     $ModuleName = "FabricTools",
-    $PSDefaultParameterValues = ($TestConfig = Get-TestConfig).Defaults
+    $PSDefaultParameterValues = ($TestConfig = Get-TestConfig).Defaults,
+    $expectedParams = @(
+        "WorkspaceId"
+        "PrincipalId"
+        "PrincipalType"
+        "WorkspaceRole"
+    )
 )
-$expectedParams = @(
-    "WorkspaceId"
-    "PrincipalId"
-    "PrincipalType"
-    "WorkspaceRole"
-)
+
 Describe "Add-FabricWorkspaceRoleAssignment" -Tag "UnitTests" {
 
     BeforeDiscovery {
@@ -28,10 +29,10 @@ Describe "Add-FabricWorkspaceRoleAssignment" -Tag "UnitTests" {
             $command | Should -HaveParameter $PSItem
         }
 
-        It "Should have exactly the number of expected parameters <_>" -ForEach $expected.Count {
+        It "Should have exactly the number of expected parameters $($expected.Count)" {
             $hasparms = $command.Parameters.Values.Name
             #$hasparms.Count | Should -BeExactly $expected.Count
-            Compare-Object -ReferenceObject $_ -DifferenceObject $hasparms | Should -BeNullOrEmpty
+            Compare-Object -ReferenceObject $expected -DifferenceObject $hasparms | Should -BeNullOrEmpty
         }
     }
 }
