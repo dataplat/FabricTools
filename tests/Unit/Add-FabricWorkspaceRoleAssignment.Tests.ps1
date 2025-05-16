@@ -5,30 +5,53 @@ param(
 )
 
 Describe "Add-FabricWorkspaceRoleAssignment" -Tag "UnitTests" {
+
+    BeforeDiscovery {
+        $expected = $TestConfig.CommonParameters
+        $expected += @(
+            "WorkspaceId"
+            "PrincipalId"
+            "PrincipalType"
+            "WorkspaceRole"
+            "Verbose"
+            "Debug"
+            "ErrorAction"
+            "WarningAction"
+            "InformationAction"
+            "ProgressAction"
+            "ErrorVariable"
+            "WarningVariable"
+            "InformationVariable"
+            "OutVariable"
+            "OutBuffer"
+            "PipelineVariable"
+
+        )
+    }
+    BeforeAll {
+        $command = Get-Command -Name Add-FabricWorkspaceRoleAssignment
+               $expected = $TestConfig.CommonParameters
+        $expected += @(
+            "WorkspaceId"
+            "PrincipalId"
+            "PrincipalType"
+            "WorkspaceRole"
+            "Verbose"
+            "Debug"
+            "ErrorAction"
+            "WarningAction"
+            "InformationAction"
+            "ProgressAction"
+            "ErrorVariable"
+            "WarningVariable"
+            "InformationVariable"
+            "OutVariable"
+            "OutBuffer"
+            "PipelineVariable"
+
+        )
+    }
     Context "Parameter validation" {
-        BeforeAll {
-            $command = Get-Command Add-FabricWorkspaceRoleAssignment
-            $expected = $TestConfig.CommonParameters
-            $expected += @(
-                "WorkspaceId"
-                "PrincipalId"
-                "PrincipalType"
-                "WorkspaceRole"
-                "Verbose"
-                "Debug"
-                "ErrorAction"
-                "WarningAction"
-                "InformationAction"
-                "ProgressAction"
-                "ErrorVariable"
-                "WarningVariable"
-                "InformationVariable"
-                "OutVariable"
-                "OutBuffer"
-                "PipelineVariable"
-                
-            )
-        }
 
         It "Has parameter: <_>" -ForEach $expected {
             $command | Should -HaveParameter $PSItem
@@ -40,4 +63,3 @@ Describe "Add-FabricWorkspaceRoleAssignment" -Tag "UnitTests" {
         }
     }
 }
-
