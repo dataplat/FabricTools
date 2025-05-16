@@ -2,8 +2,7 @@
 
 ## Welcome
 
-Before we go any further, thanks for being here. Thanks for using the module and especially thanks
-for being here and looking into how you can help!
+Before we go any further, thanks for being here. Thanks for using the module and especially thanks for being here and looking into how you can help!
 
 ## Important resources
 
@@ -115,9 +114,7 @@ include extensions and vscode settings we use to keep things neat
 
 ## Code of Conduct
 
-TODO: maybe beef this out - stolen from data sat repo for now.
-
-We expect and demand that you follow some basic rules. Nothing dramatic here. There will be a proper code of conduct for the websites added soon, but in this repository
+This project follows a Code of Conduct to ensure a welcoming, respectful, and inclusive environment for all contributors, regardless of background or identity. Contributors are expected to use inclusive language, respect differing viewpoints, and respond to feedback constructively. Unacceptable behaviors, such as harassment, discrimination, or publishing others' private information, will not be tolerated. Project maintainers are responsible for enforcing these standards fairly and may remove or ban individuals who violate them. This Code applies in all project spaces and in any public context where someone represents the project. Reports of misconduct will be handled confidentially and seriously. You can read the full code of conduct [here](https://github.com/dataplat/FabricTools/blob/sampler/CODE_OF_CONDUCT.md).
 
 | :heavy_exclamation_mark: **Important** |
 | :------------------------------------- |
