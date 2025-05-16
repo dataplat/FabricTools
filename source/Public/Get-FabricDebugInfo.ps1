@@ -1,5 +1,4 @@
 function Get-FabricDebugInfo {
-    #Requires -Version 7.1
 
     <#
 .SYNOPSIS

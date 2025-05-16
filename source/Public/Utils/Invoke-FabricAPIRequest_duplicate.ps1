@@ -119,7 +119,10 @@ function Invoke-FabricAPIRequest_duplicate {
                     } else {
                         $results += $response
                     }
-                    $continuationToken = $response.PSObject.Properties.Match("continuationToken") ? $response.continuationToken : $null
+                    $continuationToken = $null
+                    if ($response.PSObject.Properties.Match("continuationToken")) {
+                        $continuationToken = $response.continuationToken
+                    }
                 } else {
                     Write-Message -Message "No data in response" -Level Debug
                     $continuationToken = $null
