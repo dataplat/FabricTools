@@ -44,6 +44,7 @@ function Set-FabricAuthToken
    https://github.com/RuiRomano/fabricps-pbip
     #>
    [OutputType([System.Collections.Hashtable])]
+   [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingConvertToSecureStringWithPlainText", "", Justification = "To pass current unit tests")]
    [CmdletBinding(SupportsShouldProcess)]
    param
    (
