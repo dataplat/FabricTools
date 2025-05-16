@@ -11,7 +11,7 @@ for being here and looking into how you can help!
 - bugs TODO: link to issues issue template
 - communicate via issues, PRs, and discussions as well as the project
 
-### Develop & Build
+## Develop & Build
 
 We are using the [Sampler](https://github.com/gaelcolas/Sampler) Powershell Module to structure our module. This makes it easier to develop and test the module locally.
 
@@ -53,15 +53,15 @@ The workflow for using this and developing the code is shown below.
 
 4. Use GitHub CoPilot to write your commit messages by clicking on the sparkles in the commit message box. This will generate a commit message based on the changes you made. You can then edit the message to make it more descriptive if you want. This uses the prompt in the `.github\copilot-commit-message-instructions.md` file.
 
-Add this to your VS Code settings to enable it:
+   Add this to your VS Code settings to enable it:
 
-```json
-"github.copilot.chat.commitMessageGeneration.instructions": [
-        {
-            "file": ".github/copilot-commit-message-instructions.md"
-        }
-],
-```
+   ```json
+   "github.copilot.chat.commitMessageGeneration.instructions": [
+           {
+               "file": ".github/copilot-commit-message-instructions.md"
+           }
+   ],
+   ```
 
 5. Build the module. From the root of the repository run the following command:
 
@@ -71,15 +71,13 @@ Add this to your VS Code settings to enable it:
 
    This will build the module and create a new folder in the root of the repository called `output`. It will also load the new module into your current session.
 
-6. AFTER building, you can then run the Pester tests to ensure that everything is working as expected. The tests are located in the `tests` folder and can be run using the following command:
+6. **AFTER** building, you can then run the Pester tests to ensure that everything is working as expected. The tests are located in the `tests` folder and can be run using the following command:
 
    ```PowerShell
    Invoke-Pester ./tests/
    ```
 
-   This will run all the tests in the `tests` folder and output the results to the console.
-
-   You can also run specific tags such as `FunctionalQuality`, `TestQuality`, `HelpQuality`.
+   This will run all the tests in the `tests` folder and output the results to the console. You can also run specific tags such as `FunctionalQuality`, `TestQuality`, `HelpQuality`.
 
 7. You can also simulate the deployment testing by running the following command:
 
@@ -89,7 +87,7 @@ Add this to your VS Code settings to enable it:
 
 8. Once you are happy with your code, push your branch to GitHub and create a PR against the repo.
 
-# Thanks!
+## Thanks!
 
 We will review your PR and get back to you as soon as we can. We are all volunteers and do this in our spare time, so please be patient with us. We will try to get back to you within a week, but it may take longer if we are busy.
 
@@ -100,12 +98,12 @@ If you have any questions or need help, please feel free to reach out to us on t
 TODO:
 Pull Request protocol etc. You might also include what response they'll get back from the team on submission, or any caveats about the speed of response.
 
-## How to report a bug:
+## How to report a bug
 
 TODO:
 Bugs are problems in code, in the functionality of an application or in its UI design; you can submit them through "bug trackers" and most projects invite you to do so, so that they may "debug" with more efficiency and the input of a contributor. Take a look at Atom's example for how to teach people to report bugs to your project.
 
-## Templates:
+## Templates
 
 TODO:
 in this section of your file, you might also want to link to a bug report "template" like this one here which contributors can copy and add context to; this will keep your bugs tidy and relevant.
@@ -121,6 +119,8 @@ TODO: maybe beef this out - stolen from data sat repo for now.
 
 We expect and demand that you follow some basic rules. Nothing dramatic here. There will be a proper code of conduct for the websites added soon, but in this repository
 
-BE EXCELLENT TO EACH OTHER
+| :heavy_exclamation_mark: **Important** |
+| :------------------------------------- |
+| **BE EXCELLENT TO EACH OTHER**         |
 
 Do I need to say more? If your behaviour or communication does not fit into this statement, we do not wish for you to help us.
