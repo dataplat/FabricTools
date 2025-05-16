@@ -40,7 +40,7 @@ Author: Tiago Balabuch
 #>
 
 function Update-FabricKQLQuerysetDefinition {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
@@ -115,6 +115,7 @@ function Update-FabricKQLQuerysetDefinition {
         $bodyJson = $body | ConvertTo-Json -Depth 10
         Write-Message -Message "Request Body: $bodyJson" -Level Debug
 
+        if ($PSCmdlet.ShouldProcess($KQLQuerysetId, "Update KQLQueryset")) {
         # Step 4: Make the API request
         $response = Invoke-RestMethod `
             -Headers $FabricConfig.FabricHeaders `
@@ -125,6 +126,7 @@ function Update-FabricKQLQuerysetDefinition {
             -ErrorAction Stop `
             -ResponseHeadersVariable "responseHeader" `
             -StatusCodeVariable "statusCode"
+    }
 
         # Step 5: Handle and log the response
         switch ($statusCode) {

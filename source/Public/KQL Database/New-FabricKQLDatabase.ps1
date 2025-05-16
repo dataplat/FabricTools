@@ -1,4 +1,5 @@
-function New-FabricKQLDatabase {
+function New-FabricKQLDatabase
+{
     <#
 .SYNOPSIS
 Creates a new KQLDatabase in a specified Microsoft Fabric workspace.
@@ -55,7 +56,7 @@ An optional path to the platform-specific definition (e.g., .platform file) to u
 Author: Tiago Balabuch
 
     #>
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
@@ -104,7 +105,8 @@ Author: Tiago Balabuch
         [string]$KQLDatabasePathSchemaDefinition
     )
 
-    try {
+    try
+    {
         # Step 1: Ensure token validity
         Write-Message -Message "Validating token..." -Level Debug
         Test-TokenExpired
@@ -119,18 +121,21 @@ Author: Tiago Balabuch
             displayName = $KQLDatabaseName
         }
 
-        if ($KQLDatabaseDescription) {
+        if ($KQLDatabaseDescription)
+        {
             $body.description = $KQLDatabaseDescription
         }
 
-        if ($KQLDatabasePathDefinition) {
+        if ($KQLDatabasePathDefinition)
+        {
             $KQLDatabaseEncodedContent = Convert-ToBase64 -filePath $KQLDatabasePathDefinition
 
             $body.definition = @{
                 parts = @()
             }
 
-            if (-not [string]::IsNullOrEmpty($KQLDatabaseEncodedContent)) {
+            if (-not [string]::IsNullOrEmpty($KQLDatabaseEncodedContent))
+            {
 
 
                 # Add new part to the parts array
@@ -139,15 +144,19 @@ Author: Tiago Balabuch
                     payload     = $KQLDatabaseEncodedContent
                     payloadType = "InlineBase64"
                 }
-            } else {
+            }
+            else
+            {
                 Write-Message -Message "Invalid or empty content in KQLDatabase definition." -Level Error
                 return $null
             }
 
-            if ($KQLDatabasePathPlatformDefinition) {
+            if ($KQLDatabasePathPlatformDefinition)
+            {
                 $KQLDatabaseEncodedPlatformContent = Convert-ToBase64 -filePath $KQLDatabasePathPlatformDefinition
 
-                if (-not [string]::IsNullOrEmpty($KQLDatabaseEncodedPlatformContent)) {
+                if (-not [string]::IsNullOrEmpty($KQLDatabaseEncodedPlatformContent))
+                {
 
                     # Add new part to the parts array
                     $body.definition.parts += @{
@@ -155,16 +164,20 @@ Author: Tiago Balabuch
                         payload     = $KQLDatabaseEncodedPlatformContent
                         payloadType = "InlineBase64"
                     }
-                } else {
+                }
+                else
+                {
                     Write-Message -Message "Invalid or empty content in platform definition." -Level Error
                     return $null
                 }
 
             }
-            if ($KQLDatabasePathSchemaDefinition) {
+            if ($KQLDatabasePathSchemaDefinition)
+            {
                 $KQLDatabaseEncodedSchemaContent = Convert-ToBase64 -filePath $KQLDatabasePathSchemaDefinition
 
-                if (-not [string]::IsNullOrEmpty($KQLDatabaseEncodedSchemaContent)) {
+                if (-not [string]::IsNullOrEmpty($KQLDatabaseEncodedSchemaContent))
+                {
 
                     # Add new part to the parts array
                     $body.definition.parts += @{
@@ -172,42 +185,54 @@ Author: Tiago Balabuch
                         payload     = $KQLDatabaseEncodedSchemaContent
                         payloadType = "InlineBase64"
                     }
-                } else {
+                }
+                else
+                {
                     Write-Message -Message "Invalid or empty content in schema definition." -Level Error
                     return $null
                 }
             }
 
-        } else {
-            if ($KQLDatabaseType -eq "Shortcut") {
-                if (-not $parentEventhouseId) {
+        }
+        else
+        {
+            if ($KQLDatabaseType -eq "Shortcut")
+            {
+                if (-not $parentEventhouseId)
+                {
                     Write-Message -Message "Error: 'parentEventhouseId' is required for Shortcut type." -Level Error
                     return $null
                 }
-                if (-not ($KQLInvitationToken -or $KQLSourceClusterUri -or $KQLSourceDatabaseName)) {
+                if (-not ($KQLInvitationToken -or $KQLSourceClusterUri -or $KQLSourceDatabaseName))
+                {
                     Write-Message -Message "Error: Provide either 'KQLInvitationToken', 'KQLSourceClusterUri', or 'KQLSourceDatabaseName'." -Level Error
                     return $null
                 }
-                if ($KQLInvitationToken) {
+                if ($KQLInvitationToken)
+                {
                     Write-Message -Message "Info: 'KQLInvitationToken' is provided." -Level Warning
 
-                    if ($KQLSourceClusterUri) {
+                    if ($KQLSourceClusterUri)
+                    {
                         Write-Message -Message "Warning: 'KQLSourceClusterUri' is ignored when 'KQLInvitationToken' is provided." -Level Warning
                         #$KQLSourceClusterUri = $null
                     }
-                    if ($KQLSourceDatabaseName) {
+                    if ($KQLSourceDatabaseName)
+                    {
                         Write-Message -Message "Warning: 'KQLSourceDatabaseName' is ignored when 'KQLInvitationToken' is provided." -Level Warning
                         #$KQLSourceDatabaseName = $null
                     }
                 }
-                if ($KQLSourceClusterUri -and -not $KQLSourceDatabaseName) {
+                if ($KQLSourceClusterUri -and -not $KQLSourceDatabaseName)
+                {
                     Write-Message -Message "Error: 'KQLSourceDatabaseName' is required when 'KQLSourceClusterUri' is provided." -Level Error
                     return $null
                 }
             }
 
             # Validate ReadWrite type database
-            if ($KQLDatabaseType -eq "ReadWrite" -and -not $parentEventhouseId) {
+            if ($KQLDatabaseType -eq "ReadWrite" -and -not $parentEventhouseId)
+            {
                 Write-Message -Message "Error: 'parentEventhouseId' is required for ReadWrite type." -Level Error
                 return $null
             }
@@ -217,15 +242,19 @@ Author: Tiago Balabuch
                 parentEventhouseItemId = $parentEventhouseId
             }
 
-            if ($KQLDatabaseType -eq "Shortcut") {
-                if ($KQLInvitationToken) {
+            if ($KQLDatabaseType -eq "Shortcut")
+            {
+                if ($KQLInvitationToken)
+                {
 
                     $body.creationPayload.invitationToken = $KQLInvitationToken
                 }
-                if ($KQLSourceClusterUri -and -not $KQLInvitationToken) {
+                if ($KQLSourceClusterUri -and -not $KQLInvitationToken)
+                {
                     $body.creationPayload.sourceClusterUri = $KQLSourceClusterUri
                 }
-                if ($KQLSourceDatabaseName -and -not $KQLInvitationToken) {
+                if ($KQLSourceDatabaseName -and -not $KQLInvitationToken)
+                {
                     $body.creationPayload.sourceDatabaseName = $KQLSourceDatabaseName
                 }
             }
@@ -235,26 +264,31 @@ Author: Tiago Balabuch
 
         $bodyJson = $body | ConvertTo-Json -Depth 10
         Write-Message -Message "Request Body: $bodyJson" -Level Debug
-
-        # Step 4: Make the API request
-        $response = Invoke-RestMethod `
-            -Headers $FabricConfig.FabricHeaders `
-            -Uri $apiEndpointUrl `
-            -Method Post `
-            -Body $bodyJson `
-            -ContentType "application/json" `
-            -ErrorAction Stop `
-            -SkipHttpErrorCheck `
-            -ResponseHeadersVariable "responseHeader" `
-            -StatusCodeVariable "statusCode"
+        if ($PSCmdlet.ShouldProcess($KQLDatabaseName, "Create KQLDatabase"))
+        {
+            # Step 4: Make the API request
+            $response = Invoke-RestMethod `
+                -Headers $FabricConfig.FabricHeaders `
+                -Uri $apiEndpointUrl `
+                -Method Post `
+                -Body $bodyJson `
+                -ContentType "application/json" `
+                -ErrorAction Stop `
+                -SkipHttpErrorCheck `
+                -ResponseHeadersVariable "responseHeader" `
+                -StatusCodeVariable "statusCode"
+        }
 
         # Step 5: Handle and log the response
-        switch ($statusCode) {
-            201 {
+        switch ($statusCode)
+        {
+            201
+            {
                 Write-Message -Message "KQLDatabase '$KQLDatabaseName' created successfully!" -Level Info
                 return $response
             }
-            202 {
+            202
+            {
                 Write-Message -Message "KQLDatabase '$KQLDatabaseName' creation accepted. Provisioning in progress!" -Level Info
 
                 [string]$operationId = $responseHeader["x-ms-operation-id"]
@@ -269,7 +303,8 @@ Author: Tiago Balabuch
                 $operationStatus = Get-FabricLongRunningOperation -operationId $operationId
                 Write-Message -Message "Long Running Operation status: $operationStatus" -Level Debug
                 # Handle operation result
-                if ($operationStatus.status -eq "Succeeded") {
+                if ($operationStatus.status -eq "Succeeded")
+                {
                     Write-Message -Message "Operation Succeeded" -Level Debug
                     Write-Message -Message "Getting Long Running Operation result" -Level Debug
 
@@ -277,13 +312,16 @@ Author: Tiago Balabuch
                     Write-Message -Message "Long Running Operation result: $operationResult" -Level Debug
 
                     return $operationResult
-                } else {
+                }
+                else
+                {
                     Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Debug
                     Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Error
                     return $operationStatus
                 }
             }
-            default {
+            default
+            {
                 Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
                 Write-Message -Message "Error: $($response.message)" -Level Error
                 Write-Message -Message "Error Details: $($response.moreDetails)" -Level Error
@@ -291,7 +329,9 @@ Author: Tiago Balabuch
                 throw "API request failed with status code $statusCode."
             }
         }
-    } catch {
+    }
+    catch
+    {
         # Step 6: Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to create KQLDatabase. Error: $errorDetails" -Level Error

@@ -23,7 +23,7 @@
     Author: Tiago Balabuch
 #>
 function Remove-FabricCopyJob {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
@@ -43,12 +43,14 @@ function Remove-FabricCopyJob {
         $apiEndpointURI = "{0}/workspaces/{1}/copyJobs/{2}" -f $FabricConfig.BaseUrl, $WorkspaceId, $CopyJobId
         Write-Message -Message "API Endpoint: $apiEndpointURI" -Level Debug
 
+        if($PSCmdlet.ShouldProcess($apiEndpointURI, "Delete Copy Job")) {
+
         # Make the API request
         $response = Invoke-FabricAPIRequest `
             -Headers $FabricConfig.FabricHeaders `
             -BaseURI $apiEndpointURI `
             -Method Delete
-
+        }
         Write-Message -Message "Copy Job '$CopyJobId' deleted successfully from workspace '$WorkspaceId'." -Level Info
         return $response
 

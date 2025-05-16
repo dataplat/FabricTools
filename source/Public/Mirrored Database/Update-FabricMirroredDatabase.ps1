@@ -35,8 +35,9 @@ Author: Tiago Balabuch
 
 #>
 
-function Update-FabricMirroredDatabase {
-    [CmdletBinding()]
+function Update-FabricMirroredDatabase
+{
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
@@ -56,7 +57,8 @@ function Update-FabricMirroredDatabase {
         [string]$MirroredDatabaseDescription
     )
 
-    try {
+    try
+    {
         # Step 1: Ensure token validity
         Write-Message -Message "Validating token..." -Level Debug
         Test-TokenExpired
@@ -71,27 +73,31 @@ function Update-FabricMirroredDatabase {
             displayName = $MirroredDatabaseName
         }
 
-        if ($MirroredDatabaseDescription) {
+        if ($MirroredDatabaseDescription)
+        {
             $body.description = $MirroredDatabaseDescription
         }
 
         # Convert the body to JSON
         $bodyJson = $body | ConvertTo-Json
         Write-Message -Message "Request Body: $bodyJson" -Level Debug
-
-        # Step 4: Make the API request
-        $response = Invoke-RestMethod `
-            -Headers $FabricConfig.FabricHeaders `
-            -Uri $apiEndpointUrl `
-            -Method Patch `
-            -Body $bodyJson `
-            -ContentType "application/json" `
-            -ErrorAction Stop `
-            -SkipHttpErrorCheck `
-            -StatusCodeVariable "statusCode"
+        if ($PSCmdlet.ShouldProcess($MirroredDatabaseId, "Update MirroredDatabase"))
+        {
+            # Step 4: Make the API request
+            $response = Invoke-RestMethod `
+                -Headers $FabricConfig.FabricHeaders `
+                -Uri $apiEndpointUrl `
+                -Method Patch `
+                -Body $bodyJson `
+                -ContentType "application/json" `
+                -ErrorAction Stop `
+                -SkipHttpErrorCheck `
+                -StatusCodeVariable "statusCode"
+        }
 
         # Step 5: Validate the response code
-        if ($statusCode -ne 200) {
+        if ($statusCode -ne 200)
+        {
             Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
             Write-Message -Message "Error: $($response.message)" -Level Error
             Write-Message "Error Code: $($response.errorCode)" -Level Error
@@ -101,7 +107,9 @@ function Update-FabricMirroredDatabase {
         # Step 6: Handle results
         Write-Message -Message "MirroredDatabase '$MirroredDatabaseName' updated successfully!" -Level Info
         return $response
-    } catch {
+    }
+    catch
+    {
         # Step 7: Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to update MirroredDatabase. Error: $errorDetails" -Level Error

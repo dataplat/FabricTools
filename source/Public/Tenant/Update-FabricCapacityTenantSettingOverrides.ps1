@@ -41,8 +41,9 @@ Author: Tiago Balabuch
 
 #>
 
-function Update-FabricCapacityTenantSettingOverrides {
-    [CmdletBinding()]
+function Update-FabricCapacityTenantSettingOverrides
+{
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
@@ -69,24 +70,31 @@ function Update-FabricCapacityTenantSettingOverrides {
         [System.Object]$ExcludedSecurityGroups
     )
 
-    try {
+    try
+    {
         # Validate authentication token
         Write-Message -Message "Validating authentication token..." -Level Debug
         Test-TokenExpired
         Write-Message -Message "Authentication token is valid." -Level Debug
 
         # Validate Security Groups if provided
-        if ($EnabledSecurityGroups) {
-            foreach ($enabledGroup in $EnabledSecurityGroups) {
-                if (-not ($enabledGroup.PSObject.Properties.Name -contains 'graphId' -and $enabledGroup.PSObject.Properties.Name -contains 'name')) {
+        if ($EnabledSecurityGroups)
+        {
+            foreach ($enabledGroup in $EnabledSecurityGroups)
+            {
+                if (-not ($enabledGroup.PSObject.Properties.Name -contains 'graphId' -and $enabledGroup.PSObject.Properties.Name -contains 'name'))
+                {
                     throw "Each enabled security group must contain 'graphId' and 'name' properties."
                 }
             }
         }
 
-        if ($ExcludedSecurityGroups) {
-            foreach ($excludedGroup in $ExcludedSecurityGroups) {
-                if (-not ($excludedGroup.PSObject.Properties.Name -contains 'graphId' -and $excludedGroup.PSObject.Properties.Name -contains 'name')) {
+        if ($ExcludedSecurityGroups)
+        {
+            foreach ($excludedGroup in $ExcludedSecurityGroups)
+            {
+                if (-not ($excludedGroup.PSObject.Properties.Name -contains 'graphId' -and $excludedGroup.PSObject.Properties.Name -contains 'name'))
+                {
                     throw "Each excluded security group must contain 'graphId' and 'name' properties."
                 }
             }
@@ -102,32 +110,38 @@ function Update-FabricCapacityTenantSettingOverrides {
             SettingTitle        = $SettingTitle
         }
 
-        if ($DelegateToWorkspace) {
+        if ($DelegateToWorkspace)
+        {
             $body.delegateToWorkspace = $DelegateToWorkspace
         }
 
-        if ($EnabledSecurityGroups) {
+        if ($EnabledSecurityGroups)
+        {
             $body.enabledSecurityGroups = $EnabledSecurityGroups
         }
 
-        if ($ExcludedSecurityGroups) {
+        if ($ExcludedSecurityGroups)
+        {
             $body.excludedSecurityGroups = $ExcludedSecurityGroups
         }
 
         # Convert body to JSON
         $bodyJson = $body | ConvertTo-Json -Depth 4
         Write-Message -Message "Request Body: $bodyJson" -Level Debug
-
-        # Invoke Fabric API request
-        $response = Invoke-FabricAPIRequest `
-            -BaseURI $apiEndpointURI `
-            -Headers $FabricConfig.FabricHeaders `
-            -Method Post `
-            -Body $bodyJson
+        if ($PSCmdlet.ShouldProcess($apiEndpointURI, "Update Tenant Setting Overrides")){
+            # Invoke Fabric API request
+            $response = Invoke-FabricAPIRequest `
+                -BaseURI $apiEndpointURI `
+                -Headers $FabricConfig.FabricHeaders `
+                -method Post `
+                -body $bodyJson
+        }
 
         Write-Message -Message "Successfully updated capacity tenant setting overrides for CapacityId: $CapacityId and SettingTitle: $SettingTitle." -Level Info
         return $response
-    } catch {
+    }
+    catch
+    {
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Error updating tenant settings: $errorDetails" -Level Error
     }

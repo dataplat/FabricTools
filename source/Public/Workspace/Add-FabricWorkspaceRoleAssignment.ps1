@@ -31,6 +31,7 @@ Author: Tiago Balabuch
 
 function Add-FabricWorkspaceRoleAssignment {
     [CmdletBinding()]
+    [OutputType([System.Collections.Hashtable])]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]

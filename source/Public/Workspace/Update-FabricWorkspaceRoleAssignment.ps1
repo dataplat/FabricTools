@@ -30,7 +30,8 @@ Updates the role assignment to "Admin" for the specified workspace and role assi
 Author: Tiago Balabuch
 #>
 
-function Update-FabricWorkspaceRoleAssignment {
+function Update-FabricWorkspaceRoleAssignment
+{
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]
@@ -47,7 +48,8 @@ function Update-FabricWorkspaceRoleAssignment {
         [string]$WorkspaceRole
     )
 
-    try {
+    try
+    {
         # Step 1: Ensure token validity
         Write-Message -Message "Validating token..." -Level Debug
         Test-TokenExpired
@@ -66,20 +68,23 @@ function Update-FabricWorkspaceRoleAssignment {
         $bodyJson = $body | ConvertTo-Json -Depth 4 -Compress
         Write-Message -Message "Request Body: $bodyJson" -Level Debug
 
-        # Step 4: Make the API request
-        $response = Invoke-RestMethod `
-            -Headers $FabricConfig.FabricHeaders `
-            -Uri $apiEndpointUrl `
-            -Method Patch `
-            -Body $bodyJson `
-            -ContentType "application/json" `
-            -ErrorAction Stop `
-            -SkipHttpErrorCheck `
-            -ResponseHeadersVariable "responseHeader" `
-            -StatusCodeVariable "statusCode"
-
+        if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Update Role Assignment"))
+        {
+            # Step 4: Make the API request
+            $response = Invoke-RestMethod `
+                -Headers $FabricConfig.FabricHeaders `
+                -Uri $apiEndpointUrl `
+                -Method Patch `
+                -Body $bodyJson `
+                -ContentType "application/json" `
+                -ErrorAction Stop `
+                -SkipHttpErrorCheck `
+                -ResponseHeadersVariable "responseHeader" `
+                -StatusCodeVariable "statusCode"
+        }
         # Step 5: Validate the response code
-        if ($statusCode -ne 200) {
+        if ($statusCode -ne 200)
+        {
             Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
             Write-Message -Message "Error: $($response.message)" -Level Error
             Write-Message "Error Code: $($response.errorCode)" -Level Error
@@ -87,7 +92,8 @@ function Update-FabricWorkspaceRoleAssignment {
         }
 
         # Step 6: Handle empty response
-        if (-not $response) {
+        if (-not $response)
+        {
             Write-Message -Message "No data returned from the API." -Level Warning
             return $null
         }
@@ -95,7 +101,9 @@ function Update-FabricWorkspaceRoleAssignment {
         Write-Message -Message "Role assignment $WorkspaceRoleAssignmentId updated successfully in workspace '$WorkspaceId'." -Level Info
         return $response
 
-    } catch {
+    }
+    catch
+    {
         # Step 7: Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to update role assignment. Error: $errorDetails" -Level Error

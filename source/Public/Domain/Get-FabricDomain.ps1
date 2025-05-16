@@ -33,6 +33,7 @@ Author: Tiago Balabuch
 #>
 function Get-FabricDomain {
     [CmdletBinding()]
+    [OutputType([System.Object[]])]
     param (
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]

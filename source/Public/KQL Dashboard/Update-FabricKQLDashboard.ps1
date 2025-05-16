@@ -1,4 +1,5 @@
-function Update-FabricKQLDashboard {
+function Update-FabricKQLDashboard
+{
     <#
 .SYNOPSIS
 Updates the properties of a Fabric KQLDashboard.
@@ -35,7 +36,7 @@ Updates both the name and description of the KQLDashboard "KQLDashboard123".
 Author: Tiago Balabuch
 
     #>
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
@@ -55,7 +56,8 @@ Author: Tiago Balabuch
         [string]$KQLDashboardDescription
     )
 
-    try {
+    try
+    {
         # Step 1: Ensure token validity
         Write-Message -Message "Validating token..." -Level Debug
         Test-TokenExpired
@@ -70,7 +72,8 @@ Author: Tiago Balabuch
             displayName = $KQLDashboardName
         }
 
-        if ($KQLDashboardDescription) {
+        if ($KQLDashboardDescription)
+        {
             $body.description = $KQLDashboardDescription
         }
 
@@ -78,19 +81,23 @@ Author: Tiago Balabuch
         $bodyJson = $body | ConvertTo-Json
         Write-Message -Message "Request Body: $bodyJson" -Level Debug
 
-        # Step 4: Make the API request
-        $response = Invoke-RestMethod `
-            -Headers $FabricConfig.FabricHeaders `
-            -Uri $apiEndpointUrl `
-            -Method Patch `
-            -Body $bodyJson `
-            -ContentType "application/json" `
-            -ErrorAction Stop `
-            -SkipHttpErrorCheck `
-            -StatusCodeVariable "statusCode"
+        if ($PSCmdlet.ShouldProcess($KQLDashboardId, "Update KQLDashboard"))
+        {
+            # Step 4: Make the API request
+            $response = Invoke-RestMethod `
+                -Headers $FabricConfig.FabricHeaders `
+                -Uri $apiEndpointUrl `
+                -Method Patch `
+                -Body $bodyJson `
+                -ContentType "application/json" `
+                -ErrorAction Stop `
+                -SkipHttpErrorCheck `
+                -StatusCodeVariable "statusCode"
+        }
 
         # Step 5: Validate the response code
-        if ($statusCode -ne 200) {
+        if ($statusCode -ne 200)
+        {
             Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
             Write-Message -Message "Error: $($response.message)" -Level Error
             Write-Message "Error Code: $($response.errorCode)" -Level Error
@@ -100,7 +107,9 @@ Author: Tiago Balabuch
         # Step 6: Handle results
         Write-Message -Message "KQLDashboard '$KQLDashboardName' updated successfully!" -Level Info
         return $response
-    } catch {
+    }
+    catch
+    {
         # Step 7: Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to update KQLDashboard. Error: $errorDetails" -Level Error

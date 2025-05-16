@@ -29,8 +29,9 @@
     Author: Tiago Balabuch
 
 #>
-function Update-FabricWarehouse {
-    [CmdletBinding()]
+function Update-FabricWarehouse
+{
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
@@ -50,7 +51,8 @@ function Update-FabricWarehouse {
         [string]$WarehouseDescription
     )
 
-    try {
+    try
+    {
         # Step 1: Ensure token validity
         Write-Message -Message "Validating token..." -Level Debug
         Test-TokenExpired
@@ -65,7 +67,8 @@ function Update-FabricWarehouse {
             displayName = $WarehouseName
         }
 
-        if ($WarehouseDescription) {
+        if ($WarehouseDescription)
+        {
             $body.description = $WarehouseDescription
         }
 
@@ -73,16 +76,22 @@ function Update-FabricWarehouse {
         $bodyJson = $body | ConvertTo-Json
         Write-Message -Message "Request Body: $bodyJson" -Level Debug
 
-        $response = Invoke-FabricAPIRequest `
-            -Headers $FabricConfig.FabricHeaders `
-            -BaseURI $apiEndpointURI `
-            -Method Patch `
-            -Body $bodyJson
+        if ($PSCmdlet.ShouldProcess($apiEndpointURI, "Update Warehouse"))
+        {
+
+            $response = Invoke-FabricAPIRequest `
+                -Headers $FabricConfig.FabricHeaders `
+                -BaseURI $apiEndpointURI `
+                -method Patch `
+                -body $bodyJson
+        }
 
         # Step 6: Handle results
         Write-Message -Message "Warehouse '$WarehouseName' updated successfully!" -Level Info
         return $response
-    } catch {
+    }
+    catch
+    {
         # Step 7: Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to update Warehouse. Error: $errorDetails" -Level Error

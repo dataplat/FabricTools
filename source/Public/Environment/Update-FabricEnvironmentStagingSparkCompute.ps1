@@ -55,8 +55,9 @@ Update-FabricEnvironmentStagingSparkCompute -WorkspaceId "workspace-12345" -Envi
 Author: Tiago Balabuch
 
 #>
-function Update-FabricEnvironmentStagingSparkCompute {
-    [CmdletBinding()]
+function Update-FabricEnvironmentStagingSparkCompute
+{
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
@@ -112,7 +113,8 @@ function Update-FabricEnvironmentStagingSparkCompute {
         [System.Object]$SparkProperties
     )
 
-    try {
+    try
+    {
         # Step 1: Ensure token validity
         Write-Message -Message "Validating token..." -Level Debug
         Test-TokenExpired
@@ -145,6 +147,20 @@ function Update-FabricEnvironmentStagingSparkCompute {
         $bodyJson = $body | ConvertTo-Json -Depth 4
         Write-Message -Message "Request Body: $bodyJson" -Level Debug
 
+        if ($PSCmdlet.ShouldProcess($EnvironmentId, "Update Environment Staging Spark Compute"))
+        {
+            # Step 4: Make the API request
+            $response = Invoke-RestMethod `
+                -Headers $FabricConfig.FabricHeaders `
+                -Uri $apiEndpointUrl `
+                -Method Patch `
+                -Body $bodyJson `
+                -ContentType "application/json" `
+                -ErrorAction Stop `
+                -SkipHttpErrorCheck `
+                -ResponseHeadersVariable "responseHeader" `
+                -StatusCodeVariable "statusCode"
+        }
         # Step 4: Make the API request
         $response = Invoke-RestMethod `
             -Headers $FabricConfig.FabricHeaders `
@@ -158,7 +174,8 @@ function Update-FabricEnvironmentStagingSparkCompute {
             -StatusCodeVariable "statusCode"
 
         # Step 5: Validate the response code
-        if ($statusCode -ne 200) {
+        if ($statusCode -ne 200)
+        {
             Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
             Write-Message -Message "Error: $($response.message)" -Level Error
             Write-Message "Error Code: $($response.errorCode)" -Level Error
@@ -168,7 +185,9 @@ function Update-FabricEnvironmentStagingSparkCompute {
         # Step 6: Handle results
         Write-Message -Message "Environment staging Spark compute updated successfully!" -Level Info
         return $response
-    } catch {
+    }
+    catch
+    {
         # Step 7: Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to update environment staging Spark compute. Error: $errorDetails" -Level Error

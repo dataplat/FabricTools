@@ -35,8 +35,9 @@ Author: Tiago Balabuch
 
 #>
 
-function Update-FabricKQLQueryset {
-    [CmdletBinding()]
+function Update-FabricKQLQueryset
+{
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
@@ -56,7 +57,8 @@ function Update-FabricKQLQueryset {
         [string]$KQLQuerysetDescription
     )
 
-    try {
+    try
+    {
         # Step 1: Ensure token validity
         Write-Message -Message "Validating token..." -Level Debug
         Test-TokenExpired
@@ -71,27 +73,31 @@ function Update-FabricKQLQueryset {
             displayName = $KQLQuerysetName
         }
 
-        if ($KQLQuerysetDescription) {
+        if ($KQLQuerysetDescription)
+        {
             $body.description = $KQLQuerysetDescription
         }
 
         # Convert the body to JSON
         $bodyJson = $body | ConvertTo-Json
         Write-Message -Message "Request Body: $bodyJson" -Level Debug
-
-        # Step 4: Make the API request
-        $response = Invoke-RestMethod `
-            -Headers $FabricConfig.FabricHeaders `
-            -Uri $apiEndpointUrl `
-            -Method Patch `
-            -Body $bodyJson `
-            -ContentType "application/json" `
-            -ErrorAction Stop `
-            -SkipHttpErrorCheck `
-            -StatusCodeVariable "statusCode"
+        if ($PSCmdlet.ShouldProcess($KQLQuerysetId, "Update KQLQueryset"))
+        {
+            # Step 4: Make the API request
+            $response = Invoke-RestMethod `
+                -Headers $FabricConfig.FabricHeaders `
+                -Uri $apiEndpointUrl `
+                -Method Patch `
+                -Body $bodyJson `
+                -ContentType "application/json" `
+                -ErrorAction Stop `
+                -SkipHttpErrorCheck `
+                -StatusCodeVariable "statusCode"
+        }
 
         # Step 5: Validate the response code
-        if ($statusCode -ne 200) {
+        if ($statusCode -ne 200)
+        {
             Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
             Write-Message -Message "Error: $($response.message)" -Level Error
             Write-Message "Error Code: $($response.errorCode)" -Level Error
@@ -101,7 +107,9 @@ function Update-FabricKQLQueryset {
         # Step 6: Handle results
         Write-Message -Message "KQLQueryset '$KQLQuerysetName' updated successfully!" -Level Info
         return $response
-    } catch {
+    }
+    catch
+    {
         # Step 7: Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to update KQLQueryset. Error: $errorDetails" -Level Error
