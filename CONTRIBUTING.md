@@ -1,45 +1,123 @@
-# Code of Conduct
+# Contributing
 
-## Our Pledge
+## Welcome
 
-In the interest of fostering an open and welcoming environment, we as contributors and maintainers pledge to make participation in our project and our community a harassment-free experience for everyone, regardless of age, body size, disability, ethnicity, sex characteristics, gender identity and expression, level of experience, education, socio-economic status, nationality, personal appearance, race, religion, or sexual identity and orientation.
+Before we go any further, thanks for being here. Thanks for using the module and especially thanks for being here and looking into how you can help!
 
-## Our Standards
+## Important resources
 
-Examples of behavior that contributes to creating a positive environment include:
+- docs TODO: link to docs
+- bugs TODO: link to issues issue template
+- communicate via issues, PRs, and discussions as well as the project
 
-- Using welcoming and inclusive language
-- Being respectful of differing viewpoints and experiences
-- Gracefully accepting constructive criticism
-- Focusing on what is best for the community
-- Showing empathy towards other community members
+## Develop & Build
 
-Examples of unacceptable behavior by participants include:
+We are using the [Sampler](https://github.com/gaelcolas/Sampler) Powershell Module to structure our module. This makes it easier to develop and test the module locally.
 
-- The use of sexualized language or imagery and unwelcome sexual attention or advances
-- Trolling, insulting/derogatory comments, and personal or political attacks
-- Public or private harassment
-- Publishing others' private information, such as a physical or electronic address, without explicit permission
-- Other conduct which could reasonably be considered inappropriate in a professional setting
+The workflow for using this and developing the code is shown below.
 
-## Our Responsibilities
+1. Download or clone the repo locally and create a new branch to develop on
 
-Project maintainers are responsible for clarifying the standards of acceptable behavior and are expected to take appropriate and fair corrective action in response to any instances of unacceptable behavior.
+   ```PowerShell
+   git checkout -b newStuff # give it a proper name!
+   ```
 
-Project maintainers have the right and responsibility to remove, edit, or reject comments, commits, code, wiki edits, issues, and other contributions that are not aligned to this Code of Conduct, or to ban temporarily or permanently any contributor for other behaviors that they deem inappropriate, threatening, offensive, or harmful.
+2. Make sure you have the latest Microsoft.PowerShell.PSResourceGet module
 
-## Scope
+   ```PowerShell
+   -- Find the latest version on the gallery
+   Find-Module Microsoft.PowerShell.PSResourceGet
 
-This Code of Conduct applies both within project spaces and in public spaces when an individual is representing the project or its community. Examples of representing a project or community include using an official project e-mail address, posting via an official social media account, or acting as an appointed representative at an online or offline event. Representation of a project may be further defined and clarified by project maintainers.
+   -- Install side-by-side
+   Install-Module Microsoft.PowerShell.PSResourceGet -Force
+   ```
 
-## Enforcement
+3. Develop your updates in the source directory
 
-Instances of abusive, harassing, or otherwise unacceptable behavior may be reported by contacting the project team. All complaints will be reviewed and investigated and will result in a response that is deemed necessary and appropriate to the circumstances. The project team is obligated to maintain confidentiality with regard to the reporter of an incident. Further details of specific enforcement policies may be posted separately.
+   You should also resolve all dependencies before you start developing. This will ensure that you have all the required modules installed and loaded into your session.
 
-Project maintainers who do not follow or enforce the Code of Conduct in good faith may face temporary or permanent repercussions as determined by other members of the project's leadership.
+   ```PowerShell
+   .\build.ps1 -ResolveDependency -Tasks noop -UsePSResourceGet
+   ```
 
-## Attribution
+   | :heavy_exclamation_mark: **Important**        |
+   | :-------------------------------------------- |
+   | **YOU MUST DEVELOP IN THE SOURCE DIRECTORY.** |
 
-This Code of Conduct is adapted from the [Contributor Covenant](https://www.contributor-covenant.org), version 1.4, available at [https://www.contributor-covenant.org/version/1/4/code-of-conduct.html](https://www.contributor-covenant.org/version/1/4/code-of-conduct.html)
+   This is important because the build process will create a new folder in the root of the repository called `output` and this is where the module will be built and loaded from.
 
-For answers to common questions about this code of conduct, see [https://www.contributor-covenant.org/faq](https://www.contributor-covenant.org/faq)
+   If you change the code in the output folder and then build the module again, it will overwrite the changes you made.
+
+   Ask Rob how he knows this!
+
+4. Use GitHub CoPilot to write your commit messages by clicking on the sparkles in the commit message box. This will generate a commit message based on the changes you made. You can then edit the message to make it more descriptive if you want. This uses the prompt in the `.github\copilot-commit-message-instructions.md` file.
+
+   Add this to your VS Code settings to enable it:
+
+   ```json
+   "github.copilot.chat.commitMessageGeneration.instructions": [
+           {
+               "file": ".github/copilot-commit-message-instructions.md"
+           }
+   ],
+   ```
+
+5. Build the module. From the root of the repository run the following command:
+
+   ```PowerShell
+   ./build.ps1 -Tasks build
+   ```
+
+   This will build the module and create a new folder in the root of the repository called `output`. It will also load the new module into your current session.
+
+6. **AFTER** building, you can then run the Pester tests to ensure that everything is working as expected. The tests are located in the `tests` folder and can be run using the following command:
+
+   ```PowerShell
+   Invoke-Pester ./tests/
+   ```
+
+   This will run all the tests in the `tests` folder and output the results to the console. You can also run specific tags such as `FunctionalQuality`, `TestQuality`, `HelpQuality`.
+
+7. You can also simulate the deployment testing by running the following command:
+
+   ```PowerShell
+   ./build.ps1 -Tasks build,test
+   ```
+
+8. Once you are happy with your code, push your branch to GitHub and create a PR against the repo.
+
+## Thanks!
+
+We will review your PR and get back to you as soon as we can. We are all volunteers and do this in our spare time, so please be patient with us. We will try to get back to you within a week, but it may take longer if we are busy.
+
+If you have any questions or need help, please feel free to reach out to us on the [GitHub Discussions](https://github.com/dataplat/FabricTools/discussions)
+
+## How to submit changes
+
+TODO:
+Pull Request protocol etc. You might also include what response they'll get back from the team on submission, or any caveats about the speed of response.
+
+## How to report a bug
+
+TODO:
+Bugs are problems in code, in the functionality of an application or in its UI design; you can submit them through "bug trackers" and most projects invite you to do so, so that they may "debug" with more efficiency and the input of a contributor. Take a look at Atom's example for how to teach people to report bugs to your project.
+
+## Templates
+
+TODO:
+in this section of your file, you might also want to link to a bug report "template" like this one here which contributors can copy and add context to; this will keep your bugs tidy and relevant.
+
+## Style Guide
+
+TODO:
+include extensions and vscode settings we use to keep things neat
+
+## Code of Conduct
+
+This project follows a Code of Conduct to ensure a welcoming, respectful, and inclusive environment for all contributors, regardless of background or identity. Contributors are expected to use inclusive language, respect differing viewpoints, and respond to feedback constructively. Unacceptable behaviors, such as harassment, discrimination, or publishing others' private information, will not be tolerated. Project maintainers are responsible for enforcing these standards fairly and may remove or ban individuals who violate them. This Code applies in all project spaces and in any public context where someone represents the project. Reports of misconduct will be handled confidentially and seriously. You can read the full code of conduct [here](https://github.com/dataplat/FabricTools/blob/sampler/CODE_OF_CONDUCT.md).
+
+| :heavy_exclamation_mark: **Important** |
+| :------------------------------------- |
+| **BE EXCELLENT TO EACH OTHER**         |
+
+Do I need to say more? If your behaviour or communication does not fit into this statement, we do not wish for you to help us.

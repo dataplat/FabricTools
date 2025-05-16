@@ -1,11 +1,15 @@
-**/TEST-Results.xml
+output/
 
-# User-specific files
+**.bak
+*.local.*
+!**/README.md
+.kitchen/
+
+*.nupkg
 *.suo
 *.user
 *.userosscache
 *.sln.docstates
-~*.*
 
 # Build results
 Output/
@@ -20,4 +24,11 @@ TestResult.xml
 
 # Visual Studio code coverage results
 *.coverage
-*.coveragexml
+.vs
+.psproj
+.sln
+markdownissues.txt
+node_modules
+package-lock.json
+
+# just a comment

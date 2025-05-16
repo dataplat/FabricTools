@@ -79,14 +79,14 @@ Set-FabricAuthToken -reset
 
 The entire history of changes to this module can be find here: [Release Notes](ReleaseNotes.md)
 
+## Code of Conduct
+This project and everyone participating in it is governed by the [Code of Conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to the project team.
 
 ## Contributing
 
 Contributions to FabricTools are welcome.  
 
-> Note: In this early stage of development, we are working hard to build strong foundations for this module and further contribution guidance to ensure the quality of this code. **Therefore, please get in touch with us before you commit any code and create a PR.**
-
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on how to develop, test and the process for submitting pull requests to us.
 
 ## Authors
 
