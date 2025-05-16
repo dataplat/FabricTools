@@ -1,4 +1,4 @@
-function Load-FabricLakehouseTable {
+function Write-FabricLakehouseTableData {
     <#
 .SYNOPSIS
 Loads data into a specified table in a Lakehouse within a Fabric workspace.
@@ -25,13 +25,14 @@ The mode for loading data (append or overwrite).
 .PARAMETER Recursive
 Indicates whether to load data recursively from subfolders (default is false).
 .EXAMPLE
-Load-FabricLakehouseTable -WorkspaceId "your-workspace-id" -LakehouseId "your-lakehouse-id" -TableName "your-table-name" -PathType "File" -RelativePath "path/to/your/file.csv" -FileFormat "CSV" -CsvDelimiter "," -CsvHeader $true -Mode "append" -Recursive $false
+Import-FabricLakehouseTableData -WorkspaceId "your-workspace-id" -LakehouseId "your-lakehouse-id" -TableName "your-table-name" -PathType "File" -RelativePath "path/to/your/file.csv" -FileFormat "CSV" -CsvDelimiter "," -CsvHeader $true -Mode "append" -Recursive $false
 This example loads data from a CSV file into the specified table in the Lakehouse.
 .EXAMPLE
-Load-FabricLakehouseTable -WorkspaceId "your-workspace-id" -LakehouseId "your-lakehouse-id" -TableName "your-table-name" -PathType "Folder" -RelativePath "path/to/your/folder" -FileFormat "Parquet" -Mode "overwrite" -Recursive $true
+Import-FabricLakehouseTableData -WorkspaceId "your-workspace-id" -LakehouseId "your-lakehouse-id" -TableName "your-table-name" -PathType "Folder" -RelativePath "path/to/your/folder" -FileFormat "Parquet" -Mode "overwrite" -Recursive $true
 This example loads data from a folder into the specified table in the Lakehouse, overwriting any existing data.
     #>
     [CmdletBinding()]
+    [Alias("Import-FabricLakehouseTableData")]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]

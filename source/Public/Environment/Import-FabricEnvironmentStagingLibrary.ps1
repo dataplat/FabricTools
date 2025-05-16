@@ -1,30 +1,31 @@
 <#
 .SYNOPSIS
-Assigns a Fabric workspace to a specified capacity.
+Uploads a library to the staging environment in a Microsoft Fabric workspace.
 
 .DESCRIPTION
-The `Assign-FabricWorkspaceCapacity` function sends a POST request to assign a workspace to a specific capacity.
+This function sends a POST request to the Microsoft Fabric API to upload a library to the specified
+environment staging area for the given workspace.
 
 .PARAMETER WorkspaceId
-The unique identifier of the workspace to be assigned.
+The unique identifier of the workspace where the environment exists.
 
-.PARAMETER CapacityId
-The unique identifier of the capacity to which the workspace should be assigned.
+.PARAMETER EnvironmentId
+The unique identifier of the environment where the library will be uploaded.
 
 .EXAMPLE
-Assign-FabricWorkspaceCapacity -WorkspaceId "workspace123" -CapacityId "capacity456"
-
-Assigns the workspace with ID "workspace123" to the capacity "capacity456".
+Import-FabricEnvironmentStagingLibrary -WorkspaceId "workspace-12345" -EnvironmentId "env-67890"
 
 .NOTES
+- This is not working code. It is a placeholder for future development. Fabric documentation is missing some important details on how to upload libraries.
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
 - Calls `Test-TokenExpired` to ensure token validity before making the API request.
 
 Author: Tiago Balabuch
-#>
 
-function Assign-FabricWorkspaceCapacity {
+#>
+function Import-FabricEnvironmentStagingLibrary {
     [CmdletBinding()]
+    [Alias("Upload-FabricEnvironmentStagingLibrary")]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
@@ -32,7 +33,7 @@ function Assign-FabricWorkspaceCapacity {
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$CapacityId
+        [string]$EnvironmentId
     )
 
     try {
@@ -42,17 +43,10 @@ function Assign-FabricWorkspaceCapacity {
         Write-Message -Message "Token validation completed." -Level Debug
 
         # Step 2: Construct the API URL
-        $apiEndpointUrl = "{0}/workspaces/{1}/assignToCapacity" -f $FabricConfig.BaseUrl, $WorkspaceId
+        $apiEndpointUrl = "{0}/workspaces/{1}/environments/{2}/staging/libraries" -f $FabricConfig.BaseUrl, $WorkspaceId, $EnvironmentId
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
         # Step 3: Construct the request body
-        $body = @{
-            capacityId = $CapacityId
-        }
-
-        # Convert the body to JSON
-        $bodyJson = $body | ConvertTo-Json -Depth 4
-        Write-Message -Message "Request Body: $bodyJson" -Level Debug
 
         # Step 4: Make the API request
         $response = Invoke-RestMethod `
@@ -67,16 +61,19 @@ function Assign-FabricWorkspaceCapacity {
             -StatusCodeVariable "statusCode"
 
         # Step 5: Validate the response code
-        if ($statusCode -ne 202) {
+        if ($statusCode -ne 200) {
             Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
             Write-Message -Message "Error: $($response.message)" -Level Error
             Write-Message "Error Code: $($response.errorCode)" -Level Error
             return $null
         }
-        Write-Message -Message "Successfully assigned workspace with ID '$WorkspaceId' to capacity with ID '$CapacityId'." -Level Info
+
+        # Step 6: Handle results
+        Write-Message -Message "Environment staging library uploaded successfully!" -Level Info
+        return $response
     } catch {
-        # Step 6: Capture and log error details
+        # Step 7: Handle and log errors
         $errorDetails = $_.Exception.Message
-        Write-Message -Message "Failed to assign workspace with ID '$WorkspaceId' to capacity with ID '$CapacityId'. Error: $errorDetails" -Level Error
+        Write-Message -Message "Failed to upload environment staging library. Error: $errorDetails" -Level Error
     }
 }

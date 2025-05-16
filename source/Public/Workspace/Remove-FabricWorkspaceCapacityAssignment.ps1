@@ -3,13 +3,13 @@
 Unassigns a Fabric workspace from its capacity.
 
 .DESCRIPTION
-The `Unassign-FabricWorkspaceCapacity` function sends a POST request to unassign a workspace from its assigned capacity.
+The `Remove-FabricWorkspaceCapacityAssignment` function sends a POST request to unassign a workspace from its assigned capacity.
 
 .PARAMETER WorkspaceId
 The unique identifier of the workspace to be unassigned from its capacity.
 
 .EXAMPLE
-Unassign-FabricWorkspaceCapacity -WorkspaceId "workspace123"
+Remove-FabricWorkspaceCapacityAssignment -WorkspaceId "workspace123"
 
 Unassigns the workspace with ID "workspace123" from its capacity.
 
@@ -20,8 +20,9 @@ Unassigns the workspace with ID "workspace123" from its capacity.
 Author: Tiago Balabuch
 #>
 
-function Unassign-FabricWorkspaceCapacity {
+function Remove-FabricWorkspaceCapacityAssignment {
     [CmdletBinding(SupportsShouldProcess)]
+    [Alias("Unassign-FabricWorkspaceCapacity")]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]

@@ -1,38 +1,39 @@
 <#
 .SYNOPSIS
-Uploads a library to the staging environment in a Microsoft Fabric workspace.
+Assigns workspaces to a specified domain in Microsoft Fabric by their IDs.
 
 .DESCRIPTION
-This function sends a POST request to the Microsoft Fabric API to upload a library to the specified
-environment staging area for the given workspace.
+The `Add-FabricDomainWorkspaceAssignmentById` function sends a request to assign multiple workspaces to a specified domain using the provided domain ID and an array of workspace IDs.
 
-.PARAMETER WorkspaceId
-The unique identifier of the workspace where the environment exists.
+.PARAMETER DomainId
+The ID of the domain to which workspaces will be assigned. This parameter is mandatory.
 
-.PARAMETER EnvironmentId
-The unique identifier of the environment where the library will be uploaded.
+.PARAMETER WorkspaceIds
+An array of workspace IDs to be assigned to the domain. This parameter is mandatory.
 
 .EXAMPLE
-Upload-FabricEnvironmentStagingLibrary -WorkspaceId "workspace-12345" -EnvironmentId "env-67890"
+Add-FabricDomainWorkspaceAssignmentById -DomainId "12345" -WorkspaceIds @("ws1", "ws2", "ws3")
+
+Assigns the workspaces with IDs "ws1", "ws2", and "ws3" to the domain with ID "12345".
 
 .NOTES
-- This is not working code. It is a placeholder for future development. Fabric documentation is missing some important details on how to upload libraries.
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
 - Calls `Test-TokenExpired` to ensure token validity before making the API request.
 
 Author: Tiago Balabuch
-
 #>
-function Upload-FabricEnvironmentStagingLibrary {
+
+function Add-FabricDomainWorkspaceAssignmentById {
     [CmdletBinding()]
+    [Alias("Assign-FabricDomainWorkspaceById")]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [string]$DomainId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$EnvironmentId
+        [array]$WorkspaceIds
     )
 
     try {
@@ -42,10 +43,17 @@ function Upload-FabricEnvironmentStagingLibrary {
         Write-Message -Message "Token validation completed." -Level Debug
 
         # Step 2: Construct the API URL
-        $apiEndpointUrl = "{0}/workspaces/{1}/environments/{2}/staging/libraries" -f $FabricConfig.BaseUrl, $WorkspaceId, $EnvironmentId
+        $apiEndpointUrl = "{0}/admin/domains/{1}/assignWorkspaces" -f $FabricConfig.BaseUrl, $DomainId
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
         # Step 3: Construct the request body
+        $body = @{
+            workspacesIds = $WorkspaceIds
+        }
+
+        # Convert the body to JSON
+        $bodyJson = $body | ConvertTo-Json -Depth 2
+        Write-Message -Message "Request Body: $bodyJson" -Level Debug
 
         # Step 4: Make the API request
         $response = Invoke-RestMethod `
@@ -66,13 +74,10 @@ function Upload-FabricEnvironmentStagingLibrary {
             Write-Message "Error Code: $($response.errorCode)" -Level Error
             return $null
         }
-
-        # Step 6: Handle results
-        Write-Message -Message "Environment staging library uploaded successfully!" -Level Info
-        return $response
+        Write-Message -Message "Successfully assigned workspaces to the domain with ID '$DomainId'." -Level Info
     } catch {
-        # Step 7: Handle and log errors
+        # Step 6: Capture and log error details
         $errorDetails = $_.Exception.Message
-        Write-Message -Message "Failed to upload environment staging library. Error: $errorDetails" -Level Error
+        Write-Message -Message "Failed to assign workspaces to the domain with ID '$DomainId'. Error: $errorDetails" -Level Error
     }
 }

@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-Bulk unUnassign roles to principals for workspaces in a Fabric domain.
+Bulk assigns roles to principals for workspaces in a Fabric domain.
 
 .DESCRIPTION
 The `AssignFabricDomainWorkspaceRoleAssignment` function performs bulk role assignments for principals in a specific Fabric domain. It sends a POST request to the relevant API endpoint.
@@ -21,18 +21,18 @@ An array of principals to assign roles to. Each principal must include:
 .EXAMPLE
 AssignFabricDomainWorkspaceRoleAssignment -DomainId "12345" -DomainRole "Admins" -PrincipalIds @(@{id="user1"; type="User"}, @{id="group1"; type="Group"})
 
-Unassign the `Admins` role to the specified principals in the domain with ID "12345".
+Assigns the `Admins` role to the specified principals in the domain with ID "12345".
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
 - Calls `Test-TokenExpired` to ensure token validity before making the API request.
 
 Author: Tiago Balabuch
-
 #>
 
-function Unassign-FabricDomainWorkspaceRoleAssignment {
+function Add-FabricDomainWorkspaceRoleAssignment {
     [CmdletBinding()]
+    [Alias("Assign-FabricDomainWorkspaceRoleAssignment")]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
@@ -62,7 +62,7 @@ function Unassign-FabricDomainWorkspaceRoleAssignment {
         Write-Message -Message "Token validation completed." -Level Debug
 
         # Step 3: Construct the API URL
-        $apiEndpointUrl = "{0}/admin/domains/{1}/roleAssignments/bulkUnassign" -f $FabricConfig.BaseUrl, $DomainId
+        $apiEndpointUrl = "{0}/admin/domains/{1}/roleAssignments/bulkAssign" -f $FabricConfig.BaseUrl, $DomainId
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
         # Step 4: Construct the request body
@@ -92,8 +92,8 @@ function Unassign-FabricDomainWorkspaceRoleAssignment {
             Write-Message "Error Code: $($response.errorCode)" -Level Error
             return $null
         }
-        Write-Message -Message "Bulk role unassignment for domain '$DomainId' completed successfully!" -Level Info
 
+        Write-Message -Message "Bulk role assignment for domain '$DomainId' completed successfully!" -Level Info
     } catch {
         # Step 7: Handle and log errors
         $errorDetails = $_.Exception.Message

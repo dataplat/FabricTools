@@ -3,15 +3,7 @@ param(
     $ModuleName = "FabricTools",
     $expectedParams = @(
         "WorkspaceId"
-                "LakehouseId"
-                "TableName"
-                "PathType"
-                "RelativePath"
-                "FileFormat"
-                "CsvDelimiter"
-                "CsvHeader"
-                "Mode"
-                "Recursive"
+                "CapacityId"
                 "Verbose"
                 "Debug"
                 "ErrorAction"
@@ -24,20 +16,20 @@ param(
                 "OutVariable"
                 "OutBuffer"
                 "PipelineVariable"
-                
+
     )
 )
 
-Describe "Load-FabricLakehouseTable" -Tag "UnitTests" {
+Describe "Add-FabricWorkspaceCapacityAssignment" -Tag "UnitTests" {
 
     BeforeDiscovery {
-        $command = Get-Command -Name Load-FabricLakehouseTable
+        $command = Get-Command -Name Add-FabricWorkspaceCapacityAssignment
         $expected = $expectedParams
     }
 
     Context "Parameter validation" {
         BeforeAll {
-            $command = Get-Command -Name Load-FabricLakehouseTable
+            $command = Get-Command -Name Add-FabricWorkspaceCapacityAssignment
             $expected = $expectedParams
         }
 
@@ -52,4 +44,3 @@ Describe "Load-FabricLakehouseTable" -Tag "UnitTests" {
         }
     }
 }
-

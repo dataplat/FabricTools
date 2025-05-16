@@ -1,20 +1,20 @@
 <#
 .SYNOPSIS
-Assigns workspaces to a specified domain in Microsoft Fabric by their IDs.
+Assigns a Fabric workspace to a specified capacity.
 
 .DESCRIPTION
-The `Assign-FabricDomainWorkspaceById` function sends a request to assign multiple workspaces to a specified domain using the provided domain ID and an array of workspace IDs.
+The `Add-FabricWorkspaceCapacityAssignment` function sends a POST request to assign a workspace to a specific capacity.
 
-.PARAMETER DomainId
-The ID of the domain to which workspaces will be assigned. This parameter is mandatory.
+.PARAMETER WorkspaceId
+The unique identifier of the workspace to be assigned.
 
-.PARAMETER WorkspaceIds
-An array of workspace IDs to be assigned to the domain. This parameter is mandatory.
+.PARAMETER CapacityId
+The unique identifier of the capacity to which the workspace should be assigned.
 
 .EXAMPLE
-Assign-FabricDomainWorkspaceById -DomainId "12345" -WorkspaceIds @("ws1", "ws2", "ws3")
+Add-FabricWorkspaceCapacityAssignment -WorkspaceId "workspace123" -CapacityId "capacity456"
 
-Assigns the workspaces with IDs "ws1", "ws2", and "ws3" to the domain with ID "12345".
+Assigns the workspace with ID "workspace123" to the capacity "capacity456".
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
@@ -23,16 +23,17 @@ Assigns the workspaces with IDs "ws1", "ws2", and "ws3" to the domain with ID "1
 Author: Tiago Balabuch
 #>
 
-function Assign-FabricDomainWorkspaceById {
+function Add-FabricWorkspaceCapacityAssignment {
     [CmdletBinding()]
+    [Alias("Assign-FabricWorkspaceCapacity")]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$DomainId,
+        [string]$WorkspaceId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [array]$WorkspaceIds
+        [string]$CapacityId
     )
 
     try {
@@ -42,16 +43,16 @@ function Assign-FabricDomainWorkspaceById {
         Write-Message -Message "Token validation completed." -Level Debug
 
         # Step 2: Construct the API URL
-        $apiEndpointUrl = "{0}/admin/domains/{1}/assignWorkspaces" -f $FabricConfig.BaseUrl, $DomainId
+        $apiEndpointUrl = "{0}/workspaces/{1}/assignToCapacity" -f $FabricConfig.BaseUrl, $WorkspaceId
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
         # Step 3: Construct the request body
         $body = @{
-            workspacesIds = $WorkspaceIds
+            capacityId = $CapacityId
         }
 
         # Convert the body to JSON
-        $bodyJson = $body | ConvertTo-Json -Depth 2
+        $bodyJson = $body | ConvertTo-Json -Depth 4
         Write-Message -Message "Request Body: $bodyJson" -Level Debug
 
         # Step 4: Make the API request
@@ -67,16 +68,16 @@ function Assign-FabricDomainWorkspaceById {
             -StatusCodeVariable "statusCode"
 
         # Step 5: Validate the response code
-        if ($statusCode -ne 200) {
+        if ($statusCode -ne 202) {
             Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
             Write-Message -Message "Error: $($response.message)" -Level Error
             Write-Message "Error Code: $($response.errorCode)" -Level Error
             return $null
         }
-        Write-Message -Message "Successfully assigned workspaces to the domain with ID '$DomainId'." -Level Info
+        Write-Message -Message "Successfully assigned workspace with ID '$WorkspaceId' to capacity with ID '$CapacityId'." -Level Info
     } catch {
         # Step 6: Capture and log error details
         $errorDetails = $_.Exception.Message
-        Write-Message -Message "Failed to assign workspaces to the domain with ID '$DomainId'. Error: $errorDetails" -Level Error
+        Write-Message -Message "Failed to assign workspace with ID '$WorkspaceId' to capacity with ID '$CapacityId'. Error: $errorDetails" -Level Error
     }
 }

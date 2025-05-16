@@ -3,7 +3,7 @@ param(
     $ModuleName = "FabricTools",
     $expectedParams = @(
         "DomainId"
-                "WorkspaceIds"
+                "CapacitiesIds"
                 "Verbose"
                 "Debug"
                 "ErrorAction"
@@ -16,20 +16,20 @@ param(
                 "OutVariable"
                 "OutBuffer"
                 "PipelineVariable"
-                
+
     )
 )
 
-Describe "Unassign-FabricDomainWorkspace" -Tag "UnitTests" {
+Describe "Add-FabricDomainWorkspaceAssignmentByCapacity" -Tag "UnitTests" {
 
     BeforeDiscovery {
-        $command = Get-Command -Name Unassign-FabricDomainWorkspace
+        $command = Get-Command -Name Add-FabricDomainWorkspaceAssignmentByCapacity
         $expected = $expectedParams
     }
 
     Context "Parameter validation" {
         BeforeAll {
-            $command = Get-Command -Name Unassign-FabricDomainWorkspace
+            $command = Get-Command -Name Add-FabricDomainWorkspaceAssignmentByCapacity
             $expected = $expectedParams
         }
 
@@ -44,4 +44,3 @@ Describe "Unassign-FabricDomainWorkspace" -Tag "UnitTests" {
         }
     }
 }
-
