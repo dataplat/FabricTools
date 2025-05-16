@@ -1,4 +1,5 @@
-function Set-FabricApiHeaders {
+function Set-FabricApiHeaders
+{
     <#
 .SYNOPSIS
 Sets the Fabric API headers with a valid token for the specified Azure tenant.
@@ -38,7 +39,7 @@ Logs in to Azure with the specified tenant ID, retrieves an access token for the
     Tiago Balabuch
     #>
 
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
@@ -51,23 +52,27 @@ Logs in to Azure with the specified tenant ID, retrieves an access token for the
         [System.Security.SecureString]$AppSecret
     )
 
-    try {
+    try
+    {
         # Step 1: Connect to the Azure account
         Write-Message -Message "Logging in to Azure tenant: $TenantId" -Level Info
 
         # Step 2: Performing validation checks on the parameters passed to a function or script.
         # Checks if 'AppId' is provided without 'AppSecret' and vice versa.
-        if ($PSBoundParameters.ContainsKey('AppId') -and -not $PSBoundParameters.ContainsKey('AppSecret')) {
+        if ($PSBoundParameters.ContainsKey('AppId') -and -not $PSBoundParameters.ContainsKey('AppSecret'))
+        {
             Write-Message -Message "AppSecret is required when using AppId: $AppId" -Level Error
             throw "AppSecret is required when using AppId."
         }
-        if ($PSBoundParameters.ContainsKey('AppSecret') -and -not $PSBoundParameters.ContainsKey('AppId')) {
+        if ($PSBoundParameters.ContainsKey('AppSecret') -and -not $PSBoundParameters.ContainsKey('AppId'))
+        {
             Write-Message -Message "AppId is required when using AppSecret." -Level Error
             throw "AppId is required when using AppId."
         }
         # Step 3: Connect to the Azure account
         # Using AppId and AppSecret
-        if ($PSBoundParameters.ContainsKey('AppId') -and $PSBoundParameters.ContainsKey('AppSecret')) {
+        if ($PSBoundParameters.ContainsKey('AppId') -and $PSBoundParameters.ContainsKey('AppSecret'))
+        {
 
             Write-Message -Message "Logging in using the AppId: $AppId" -Level Debug
             Write-Message -Message "Logging in using the AppId: $AppId" -Level Info
@@ -76,7 +81,8 @@ Logs in to Azure with the specified tenant ID, retrieves an access token for the
 
         }
         # Using the current user
-        else {
+        else
+        {
 
             Write-Message -Message "Logging in using the current user" -Level Debug
             Write-Message -Message "Logging in using the current user" -Level Info
@@ -92,21 +98,26 @@ Logs in to Azure with the specified tenant ID, retrieves an access token for the
         $plainToken = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto(
             [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($fabricToken.Token)
         )
-
-        ## Step 6: Set the headers in the global configuration
-        Write-Message -Message "Set the headers in the global configuration" -Level Debug
-        $FabricConfig.FabricHeaders = @{
-            'Content-Type'  = 'application/json'
-            'Authorization' = "Bearer $plainToken"
+        if ($PSCmdlet.ShouldProcess("Set the headers in the global configuration $($TenantId)"))
+        {
+            ## Step 6: Set the headers in the global configuration
+            $FabricConfig.FabricHeaders = @{
+                'Content-Type'  = 'application/json'
+                'Authorization' = "Bearer $plainToken"
+            }
         }
-
         ## Step 7: Update token metadata in the global configuration
         Write-Message -Message "Update token metadata in the global configuration" -Level Debug
-        $FabricConfig.TokenExpiresOn = $fabricToken.ExpiresOn
-        $FabricConfig.TenantIdGlobal = $TenantId
+        if ($PSCmdlet.ShouldProcess("Update token metadata in the global configuration"))
+        {
 
+            $FabricConfig.TokenExpiresOn = $fabricToken.ExpiresOn
+            $FabricConfig.TenantIdGlobal = $TenantId
+        }
         Write-Message -Message "Fabric token successfully configured." -Level Info
-    } catch {
+    }
+    catch
+    {
         # Step 8: Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to set Fabric token: $errorDetails" -Level Error

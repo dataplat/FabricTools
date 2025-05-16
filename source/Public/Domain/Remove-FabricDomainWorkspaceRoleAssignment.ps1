@@ -32,7 +32,7 @@ Author: Tiago Balabuch
 #>
 
 function Remove-FabricDomainWorkspaceRoleAssignment {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     [Alias("Unassign-FabricDomainWorkspaceRoleAssignment")]
     param (
         [Parameter(Mandatory = $true)]
@@ -74,6 +74,7 @@ function Remove-FabricDomainWorkspaceRoleAssignment {
         $bodyJson = $body | ConvertTo-Json -Depth 2
         Write-Message -Message "Request Body: $bodyJson" -Level Debug
 
+        if($PSCmdlet.ShouldProcess($DomainId, "Unassign Roles")) {
         # Step 5: Make the API request
         $response = Invoke-RestMethod `
             -Headers $FabricConfig.FabricHeaders `
@@ -85,6 +86,7 @@ function Remove-FabricDomainWorkspaceRoleAssignment {
             -SkipHttpErrorCheck `
             -ResponseHeadersVariable "responseHeader" `
             -StatusCodeVariable "statusCode"
+    }
 
         # Step 6: Validate the response code
         if ($statusCode -ne 200) {

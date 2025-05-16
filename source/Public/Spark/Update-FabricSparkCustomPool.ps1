@@ -50,8 +50,9 @@
     Author: Tiago Balabuch
 
 #>
-function Update-FabricSparkCustomPool {
-    [CmdletBinding()]
+function Update-FabricSparkCustomPool
+{
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
@@ -101,7 +102,8 @@ function Update-FabricSparkCustomPool {
         [int]$DynamicExecutorAllocationMaxExecutors
     )
 
-    try {
+    try
+    {
         # Step 1: Ensure token validity
         Write-Message -Message "Validating token..." -Level Debug
         Test-TokenExpired
@@ -132,19 +134,24 @@ function Update-FabricSparkCustomPool {
         $bodyJson = $body | ConvertTo-Json
         Write-Message -Message "Request Body: $bodyJson" -Level Debug
 
-        # Step 4: Make the API request
-        $response = Invoke-RestMethod `
-            -Headers $FabricConfig.FabricHeaders `
-            -Uri $apiEndpointUrl `
-            -Method Patch `
-            -Body $bodyJson `
-            -ContentType "application/json" `
-            -ErrorAction Stop `
-            -SkipHttpErrorCheck `
-            -StatusCodeVariable "statusCode"
+        if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Update SparkCustomPool"))
+        {
+
+            # Step 4: Make the API request
+            $response = Invoke-RestMethod `
+                -Headers $FabricConfig.FabricHeaders `
+                -Uri $apiEndpointUrl `
+                -Method Patch `
+                -Body $bodyJson `
+                -ContentType "application/json" `
+                -ErrorAction Stop `
+                -SkipHttpErrorCheck `
+                -StatusCodeVariable "statusCode"
+        }
 
         # Step 5: Validate the response code
-        if ($statusCode -ne 200) {
+        if ($statusCode -ne 200)
+        {
             Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
             Write-Message -Message "Error: $($response.message)" -Level Error
             Write-Message -Message "Error Details: $($response.moreDetails)" -Level Error
@@ -155,7 +162,9 @@ function Update-FabricSparkCustomPool {
         # Step 6: Handle results
         Write-Message -Message "Spark Custom Pool '$SparkCustomPoolName' updated successfully!" -Level Info
         return $response
-    } catch {
+    }
+    catch
+    {
         # Step 7: Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to update SparkCustomPool. Error: $errorDetails" -Level Error

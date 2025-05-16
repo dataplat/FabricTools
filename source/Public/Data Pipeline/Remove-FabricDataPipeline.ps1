@@ -23,8 +23,9 @@
     Author: Tiago Balabuch
 #>
 
-function Remove-FabricDataPipeline {
-    [CmdletBinding()]
+function Remove-FabricDataPipeline
+{
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
@@ -34,7 +35,8 @@ function Remove-FabricDataPipeline {
         [ValidateNotNullOrEmpty()]
         [string]$DataPipelineId
     )
-    try {
+    try
+    {
         # Ensure token validity
         Write-Message -Message "Validating token..." -Level Debug
         Test-TokenExpired
@@ -44,14 +46,20 @@ function Remove-FabricDataPipeline {
         $apiEndpointURI = "{0}/workspaces/{1}/dataPipelines/{2}" -f $FabricConfig.BaseUrl, $WorkspaceId, $DataPipelineId
         Write-Message -Message "API Endpoint: $apiEndpointURI" -Level Debug
 
-        # Make the API request
-        $response = Invoke-FabricAPIRequest `
-            -Headers $FabricConfig.FabricHeaders `
-            -BaseURI $apiEndpointURI `
-            -Method Delete
+        if ($PSCmdlet.ShouldProcess($apiEndpointURI, "Delete DataPipeline"))
+        {
+
+            # Make the API request
+            $response = Invoke-FabricAPIRequest `
+                -Headers $FabricConfig.FabricHeaders `
+                -BaseURI $apiEndpointURI `
+                -method Delete
+        }
         Write-Message -Message "DataPipeline '$DataPipelineId' deleted successfully from workspace '$WorkspaceId'." -Level Info
         return $response
-    } catch {
+    }
+    catch
+    {
         # Log and handle errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to delete DataPipeline '$DataPipelineId' from workspace '$WorkspaceId'. Error: $errorDetails" -Level Error

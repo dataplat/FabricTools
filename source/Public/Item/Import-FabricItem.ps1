@@ -37,7 +37,7 @@ Function Import-FabricItem {
     .PARAMETER fileOverrides
         This parameter let's you override a PBIP file without altering the local file.
     #>
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param
     (
         [string]    $path = '.\pbipOutput'
@@ -166,7 +166,7 @@ Function Import-FabricItem {
             }
 
             $partPath = $filePath.Replace($itemPathAbs, "").TrimStart("\").Replace("\", "/")
-            Write-Host "Processing part: '$partPath'"
+            Write-Output "Processing part: '$partPath'"
             $fileEncodedContent = [Convert]::ToBase64String($fileContent)
 
             Write-Output @{
@@ -205,7 +205,9 @@ Function Import-FabricItem {
                 }
             } | ConvertTo-Json -Depth 3
 
-            $createItemResult = Invoke-FabricAPIRequest -uri "workspaces/$workspaceId/items"  -method Post -body $itemRequest
+            if($PSCmdlet.ShouldProcess($itemPath, "Create Item")) {
+                        $createItemResult = Invoke-FabricAPIRequest -uri "workspaces/$workspaceId/items"  -method Post -body $itemRequest
+            }
 
             $itemId = $createItemResult.id
 
@@ -220,7 +222,10 @@ Function Import-FabricItem {
                     Parts = $parts
                 }
             } | ConvertTo-Json -Depth 3
+            if($PSCmdlet.ShouldProcess($itemPath, "Update Item")) {
+
             Invoke-FabricAPIRequest -Uri "workspaces/$workspaceId/items/$itemId/updateDefinition" -Method Post -Body $itemRequest
+            }
 
             Write-Output "Updated new item with ID '$itemId' $([datetime]::Now.ToString("s"))" -ForegroundColor Green
 

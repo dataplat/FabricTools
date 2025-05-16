@@ -24,8 +24,9 @@ Author: Tiago Balabuch
 
 #>
 
-function Remove-FabricKQLDashboard {
-    [CmdletBinding()]
+function Remove-FabricKQLDashboard
+{
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
@@ -36,7 +37,8 @@ function Remove-FabricKQLDashboard {
         [string]$KQLDashboardId
     )
 
-    try {
+    try
+    {
         # Step 1: Ensure token validity
         Write-Message -Message "Validating token..." -Level Debug
         Test-TokenExpired
@@ -46,17 +48,21 @@ function Remove-FabricKQLDashboard {
         $apiEndpointUrl = "{0}/workspaces/{1}/kqlDashboards/{2}" -f $FabricConfig.BaseUrl, $WorkspaceId, $KQLDashboardId
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
-        # Step 3: Make the API request
-        $response = Invoke-RestMethod `
-            -Headers $FabricConfig.FabricHeaders `
-            -Uri $apiEndpointUrl `
-            -Method Delete `
-            -ErrorAction Stop `
-            -SkipHttpErrorCheck `
-            -StatusCodeVariable "statusCode"
+        if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Remove KQLDashboard"))
+        {
+            # Step 3: Make the API request
+            $response = Invoke-RestMethod `
+                -Headers $FabricConfig.FabricHeaders `
+                -Uri $apiEndpointUrl `
+                -Method Delete `
+                -ErrorAction Stop `
+                -SkipHttpErrorCheck `
+                -StatusCodeVariable "statusCode"
+        }
 
         # Step 4: Validate the response code
-        if ($statusCode -ne 200) {
+        if ($statusCode -ne 200)
+        {
             Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
             Write-Message -Message "Error: $($response.message)" -Level Error
             Write-Message "Error Code: $($response.errorCode)" -Level Error
@@ -64,7 +70,9 @@ function Remove-FabricKQLDashboard {
         }
         Write-Message -Message "KQLDashboard '$KQLDashboardId' deleted successfully from workspace '$WorkspaceId'." -Level Info
 
-    } catch {
+    }
+    catch
+    {
         # Step 5: Log and handle errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to delete KQLDashboard '$KQLDashboardId' from workspace '$WorkspaceId'. Error: $errorDetails" -Level Error

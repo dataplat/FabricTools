@@ -29,8 +29,9 @@
     Author: Tiago Balabuch
 
 #>
-function Update-FabricSemanticModel {
-    [CmdletBinding()]
+function Update-FabricSemanticModel
+{
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
@@ -49,7 +50,8 @@ function Update-FabricSemanticModel {
         [ValidateNotNullOrEmpty()]
         [string]$SemanticModelDescription
     )
-    try {
+    try
+    {
         # Step 1: Ensure token validity
         Write-Message -Message "Validating token..." -Level Debug
         Test-TokenExpired
@@ -64,7 +66,8 @@ function Update-FabricSemanticModel {
             displayName = $SemanticModelName
         }
 
-        if ($SemanticModelDescription) {
+        if ($SemanticModelDescription)
+        {
             $body.description = $SemanticModelDescription
         }
 
@@ -72,20 +75,24 @@ function Update-FabricSemanticModel {
         $bodyJson = $body | ConvertTo-Json
         Write-Message -Message "Request Body: $bodyJson" -Level Debug
 
-        # Step 4: Make the API request
-        $response = Invoke-RestMethod `
-            -Headers $FabricConfig.FabricHeaders `
-            -Uri $apiEndpointUrl `
-            -Method Patch `
-            -Body $bodyJson `
-            -ContentType "application/json" `
-            -ErrorAction Stop `
-            -SkipHttpErrorCheck `
-            -ResponseHeadersVariable "responseHeader" `
-            -StatusCodeVariable "statusCode"
+        if ($PSCmdlet.ShouldProcess("Update SemanticModel", "Updating the SemanticModel with ID '$SemanticModelId' in workspace '$WorkspaceId'."))
+        {
+            # Step 4: Make the API request
+            $response = Invoke-RestMethod `
+                -Headers $FabricConfig.FabricHeaders `
+                -Uri $apiEndpointUrl `
+                -Method Patch `
+                -Body $bodyJson `
+                -ContentType "application/json" `
+                -ErrorAction Stop `
+                -SkipHttpErrorCheck `
+                -ResponseHeadersVariable "responseHeader" `
+                -StatusCodeVariable "statusCode"
+        }
 
         # Step 5: Validate the response code
-        if ($statusCode -ne 200) {
+        if ($statusCode -ne 200)
+        {
             Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
             Write-Message -Message "Error: $($response.message)" -Level Error
             Write-Message -Message "Error Details: $($response.moreDetails)" -Level Error
@@ -96,7 +103,9 @@ function Update-FabricSemanticModel {
         # Step 6: Handle results
         Write-Message -Message "SemanticModel '$SemanticModelName' updated successfully!" -Level Info
         return $response
-    } catch {
+    }
+    catch
+    {
         # Step 7: Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to update SemanticModel. Error: $errorDetails" -Level Error

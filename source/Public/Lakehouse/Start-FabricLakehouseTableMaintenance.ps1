@@ -1,4 +1,5 @@
-function Start-FabricLakehouseTableMaintenance {
+function Start-FabricLakehouseTableMaintenance
+{
     <#
 .SYNOPSIS
     Initiates a table maintenance job for a specified Lakehouse in a Fabric workspace.
@@ -43,7 +44,7 @@ function Start-FabricLakehouseTableMaintenance {
 
     #>
 
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
@@ -85,7 +86,8 @@ function Start-FabricLakehouseTableMaintenance {
 
     )
 
-    try {
+    try
+    {
         # Step 1: Ensure token validity
         Write-Message -Message "Validating token..." -Level Debug
         Test-TokenExpired
@@ -93,7 +95,8 @@ function Start-FabricLakehouseTableMaintenance {
 
 
         $lakehouse = Get-FabricLakehouse -WorkspaceId $WorkspaceId -LakehouseId $LakehouseId
-        if ($lakehouse.properties.PSObject.Properties['defaultSchema'] -and -not $SchemaName) {
+        if ($lakehouse.properties.PSObject.Properties['defaultSchema'] -and -not $SchemaName)
+        {
             Write-Error "The Lakehouse '$lakehouse.displayName' has schema enabled, but no schema name was provided. Please specify the 'SchemaName' parameter to proceed."
             return
         }
@@ -109,17 +112,21 @@ function Start-FabricLakehouseTableMaintenance {
                 optimizeSettings = @{ }
             }
         }
-        if ($lakehouse.properties.PSObject.Properties['defaultSchema'] -and $SchemaName) {
+        if ($lakehouse.properties.PSObject.Properties['defaultSchema'] -and $SchemaName)
+        {
             $body.executionData.schemaName = $SchemaName
         }
 
-        if ($IsVOrder) {
+        if ($IsVOrder)
+        {
             $body.executionData.optimizeSettings.vOrder = $IsVOrder
         }
 
-        if ($ColumnsZOrderBy) {
+        if ($ColumnsZOrderBy)
+        {
             # Ensure $ColumnsZOrderBy is an array
-            if (-not ($ColumnsZOrderBy -is [array])) {
+            if (-not ($ColumnsZOrderBy -is [array]))
+            {
                 $ColumnsZOrderBy = $ColumnsZOrderBy -split ","
             }
             # Add it to the optimizeSettings in the request body
@@ -128,9 +135,11 @@ function Start-FabricLakehouseTableMaintenance {
 
 
 
-        if ($retentionPeriod) {
+        if ($retentionPeriod)
+        {
 
-            if (-not $body.executionData.PSObject.Properties['vacuumSettings']) {
+            if (-not $body.executionData.PSObject.Properties['vacuumSettings'])
+            {
                 $body.executionData.vacuumSettings = @{
                     retentionPeriod = @()
                 }
@@ -141,27 +150,32 @@ function Start-FabricLakehouseTableMaintenance {
 
         $bodyJson = $body | ConvertTo-Json -Depth 10
         Write-Message -Message "Request Body: $bodyJson" -Level Debug
-
-        # Step 4: Make the API request
-        $response = Invoke-RestMethod `
-            -Headers $FabricConfig.FabricHeaders `
-            -Uri $apiEndpointUrl `
-            -Method Post `
-            -Body $bodyJson `
-            -ContentType "application/json" `
-            -ErrorAction Stop `
-            -SkipHttpErrorCheck `
-            -ResponseHeadersVariable "responseHeader" `
-            -StatusCodeVariable "statusCode"
+        if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Start Table Maintenance Job"))
+        {
+            # Step 4: Make the API request
+            $response = Invoke-RestMethod `
+                -Headers $FabricConfig.FabricHeaders `
+                -Uri $apiEndpointUrl `
+                -Method Post `
+                -Body $bodyJson `
+                -ContentType "application/json" `
+                -ErrorAction Stop `
+                -SkipHttpErrorCheck `
+                -ResponseHeadersVariable "responseHeader" `
+                -StatusCodeVariable "statusCode"
+        }
 
         Write-Message -Message "Response Code: $statusCode" -Level Debug
         # Step 5: Handle and log the response
-        switch ($statusCode) {
-            201 {
+        switch ($statusCode)
+        {
+            201
+            {
                 Write-Message -Message "Table maintenance job successfully initiated for Lakehouse '$lakehouse.displayName'." -Level Info
                 return $response
             }
-            202 {
+            202
+            {
                 Write-Message -Message "Table maintenance job accepted and is now running in the background. Job execution is in progress." -Level Info
                 [string]$operationId = $responseHeader["x-ms-operation-id"]
                 [string]$location = $responseHeader["Location"]
@@ -171,12 +185,15 @@ function Start-FabricLakehouseTableMaintenance {
                 Write-Message -Message "Location: '$location'" -Level Debug
                 Write-Message -Message "Retry-After: '$retryAfter'" -Level Debug
 
-                if ($waitForCompletion -eq $true) {
+                if ($waitForCompletion -eq $true)
+                {
                     Write-Message -Message "Getting Long Running Operation status" -Level Debug
                     $operationStatus = Get-FabricLongRunningOperation -operationId $operationId -location $location -retryAfter $retryAfter
                     Write-Message -Message "Long Running Operation status: $operationStatus" -Level Debug
                     return $operationStatus
-                } else {
+                }
+                else
+                {
                     Write-Message -Message "The operation is running asynchronously." -Level Info
                     Write-Message -Message "Use the returned details to check the operation status." -Level Info
                     Write-Message -Message "To wait for the operation to complete, set the 'waitForCompletion' parameter to true." -Level Info
@@ -188,13 +205,16 @@ function Start-FabricLakehouseTableMaintenance {
                     return $operationDetails
                 }
             }
-            default {
+            default
+            {
                 Write-Message -Message "Unexpected response code: $statusCode" -Level Error
                 Write-Message -Message "Error details: $($response.message)" -Level Error
                 throw "API request failed with status code $statusCode."
             }
         }
-    } catch {
+    }
+    catch
+    {
         # Step 6: Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to start table maintenance job. Error: $errorDetails" -Level Error

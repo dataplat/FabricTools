@@ -25,8 +25,9 @@
 
     Author: Tiago Balabuch
 #>
-function New-FabricWarehouse {
-    [CmdletBinding()]
+function New-FabricWarehouse
+{
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
@@ -42,7 +43,8 @@ function New-FabricWarehouse {
         [string]$WarehouseDescription
     )
 
-    try {
+    try
+    {
         # Step 1: Ensure token validity
         Write-Message -Message "Validating token..." -Level Debug
         Test-TokenExpired
@@ -57,24 +59,30 @@ function New-FabricWarehouse {
             displayName = $WarehouseName
         }
 
-        if ($WarehouseDescription) {
+        if ($WarehouseDescription)
+        {
             $body.description = $WarehouseDescription
         }
 
         $bodyJson = $body | ConvertTo-Json -Depth 10
         Write-Message -Message "Request Body: $bodyJson" -Level Debug
 
-        # Step 4: Make the API request
-        $response = Invoke-FabricAPIRequest `
-            -BaseURI $apiEndpointURI `
-            -Headers $FabricConfig.FabricHeaders `
-            -Method Post `
-            -Body $bodyJson
+        if ($PSCmdlet.ShouldProcess($apiEndpointURI, "Create Warehouse"))
+        {
+            # Step 4: Make the API request
+            $response = Invoke-FabricAPIRequest `
+                -BaseURI $apiEndpointURI `
+                -Headers $FabricConfig.FabricHeaders `
+                -method Post `
+                -body $bodyJson
+        }
 
         Write-Message -Message "Data Warehouse created successfully!" -Level Info
         return $response
 
-    } catch {
+    }
+    catch
+    {
         # Step 6: Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to create Warehouse. Error: $errorDetails" -Level Error

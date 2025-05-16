@@ -41,8 +41,9 @@ Author: Tiago Balabuch
 
 #>
 
-function Update-FabricCapacityTenantSettingOverrides {
-    [CmdletBinding()]
+function Update-FabricCapacityTenantSettingOverrides
+{
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
@@ -77,33 +78,43 @@ function Update-FabricCapacityTenantSettingOverrides {
         [System.Object]$Properties
     )
 
-    try {
+    try
+    {
         # Validate authentication token
         Write-Message -Message "Validating authentication token..." -Level Debug
         Test-TokenExpired
         Write-Message -Message "Authentication token is valid." -Level Debug
 
         # Validate Security Groups if provided
-        if ($EnabledSecurityGroups) {
-            foreach ($enabledGroup in $EnabledSecurityGroups) {
-                if (-not ($enabledGroup.PSObject.Properties.Name -contains 'graphId' -and $enabledGroup.PSObject.Properties.Name -contains 'name')) {
+        if ($EnabledSecurityGroups)
+        {
+            foreach ($enabledGroup in $EnabledSecurityGroups)
+            {
+                if (-not ($enabledGroup.PSObject.Properties.Name -contains 'graphId' -and $enabledGroup.PSObject.Properties.Name -contains 'name'))
+                {
                     throw "Each enabled security group must contain 'graphId' and 'name' properties."
                 }
             }
         }
 
-        if ($ExcludedSecurityGroups) {
-            foreach ($excludedGroup in $ExcludedSecurityGroups) {
-                if (-not ($excludedGroup.PSObject.Properties.Name -contains 'graphId' -and $excludedGroup.PSObject.Properties.Name -contains 'name')) {
+        if ($ExcludedSecurityGroups)
+        {
+            foreach ($excludedGroup in $ExcludedSecurityGroups)
+            {
+                if (-not ($excludedGroup.PSObject.Properties.Name -contains 'graphId' -and $excludedGroup.PSObject.Properties.Name -contains 'name'))
+                {
                     throw "Each excluded security group must contain 'graphId' and 'name' properties."
                 }
             }
         }
 
         # Validate Security Groups if provided
-        if ($Properties) {
-            foreach ($property in $Properties) {
-                if (-not ($property.PSObject.Properties.Name -contains 'name' -and $property.PSObject.Properties.Name -contains 'type' -and $property.PSObject.Properties.Name -contains 'value')) {
+        if ($Properties)
+        {
+            foreach ($property in $Properties)
+            {
+                if (-not ($property.PSObject.Properties.Name -contains 'name' -and $property.PSObject.Properties.Name -contains 'type' -and $property.PSObject.Properties.Name -contains 'value'))
+                {
                     throw "Each property object must include 'name', 'type', and 'value' properties to be valid."
                 }
             }
@@ -118,27 +129,33 @@ function Update-FabricCapacityTenantSettingOverrides {
             EnableTenantSetting = $EnableTenantSetting
         }
 
-        if ($DelegateToCapacity) {
+        if ($DelegateToCapacity)
+        {
             $body.delegateToCapacity = $DelegateToCapacity
         }
 
-        if ($DelegateToDomain) {
+        if ($DelegateToDomain)
+        {
             $body.delegateToDomain = $DelegateToDomain
         }
 
-        if ($DelegateToWorkspace) {
+        if ($DelegateToWorkspace)
+        {
             $body.delegateToWorkspace = $DelegateToWorkspace
         }
 
-        if ($EnabledSecurityGroups) {
+        if ($EnabledSecurityGroups)
+        {
             $body.enabledSecurityGroups = $EnabledSecurityGroups
         }
 
-        if ($ExcludedSecurityGroups) {
+        if ($ExcludedSecurityGroups)
+        {
             $body.excludedSecurityGroups = $ExcludedSecurityGroups
         }
 
-        if ($Properties) {
+        if ($Properties)
+        {
             $body.properties = $Properties
         }
 
@@ -146,16 +163,22 @@ function Update-FabricCapacityTenantSettingOverrides {
         $bodyJson = $body | ConvertTo-Json -Depth 5
         Write-Message -Message "Request Body: $bodyJson" -Level Debug
 
-        # Invoke Fabric API request
-        $response = Invoke-FabricAPIRequest `
-            -BaseURI $apiEndpointURI `
-            -Headers $FabricConfig.FabricHeaders `
-            -Method Post `
-            -Body $bodyJson
+        if ($PSCmdlet.ShouldProcess($apiEndpointURI, "Update Tenant Setting"))
+        {
+
+            # Invoke Fabric API request
+            $response = Invoke-FabricAPIRequest `
+                -BaseURI $apiEndpointURI `
+                -Headers $FabricConfig.FabricHeaders `
+                -method Post `
+                -body $bodyJson
+        }
 
         Write-Message -Message "Successfully updated tenant setting." -Level Info
         return $response
-    } catch {
+    }
+    catch
+    {
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Error updating tenant settings: $errorDetails" -Level Error
     }

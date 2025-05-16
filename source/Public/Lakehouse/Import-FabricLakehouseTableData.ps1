@@ -1,4 +1,5 @@
-function Write-FabricLakehouseTableData {
+function Write-FabricLakehouseTableData
+{
     <#
 .SYNOPSIS
 Loads data into a specified table in a Lakehouse within a Fabric workspace.
@@ -31,7 +32,7 @@ This example loads data from a CSV file into the specified table in the Lakehous
 Import-FabricLakehouseTableData -WorkspaceId "your-workspace-id" -LakehouseId "your-lakehouse-id" -TableName "your-table-name" -PathType "Folder" -RelativePath "path/to/your/folder" -FileFormat "Parquet" -Mode "overwrite" -Recursive $true
 This example loads data from a folder into the specified table in the Lakehouse, overwriting any existing data.
     #>
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     [Alias("Import-FabricLakehouseTableData")]
     param (
         [Parameter(Mandatory = $true)]
@@ -79,7 +80,8 @@ This example loads data from a folder into the specified table in the Lakehouse,
         [bool]$Recursive = $false
     )
 
-    try {
+    try
+    {
         # Step 1: Ensure token validity
         Write-Message -Message "Validating token..." -Level Debug
         Test-TokenExpired
@@ -100,7 +102,8 @@ This example loads data from a folder into the specified table in the Lakehouse,
             }
         }
 
-        if ($FileFormat -eq "CSV") {
+        if ($FileFormat -eq "CSV")
+        {
             $body.formatOptions.delimiter = $CsvDelimiter
             $body.formatOptions.hasHeader = $CsvHeader
         }
@@ -109,20 +112,24 @@ This example loads data from a folder into the specified table in the Lakehouse,
         $bodyJson = $body | ConvertTo-Json
         Write-Message -Message "Request Body: $bodyJson" -Level Debug
 
-        # Step 4: Make the API request
-        $response = Invoke-RestMethod `
-            -Headers $FabricConfig.FabricHeaders `
-            -Uri $apiEndpointUrl `
-            -Method Post `
-            -Body $bodyJson `
-            -ContentType "application/json" `
-            -ErrorAction Stop `
-            -SkipHttpErrorCheck `
-            -ResponseHeadersVariable "responseHeader" `
-            -StatusCodeVariable "statusCode"
+        if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Load Lakehouse Table Data"))
+        {
+            # Step 4: Make the API request
+            $response = Invoke-RestMethod `
+                -Headers $FabricConfig.FabricHeaders `
+                -Uri $apiEndpointUrl `
+                -Method Post `
+                -Body $bodyJson `
+                -ContentType "application/json" `
+                -ErrorAction Stop `
+                -SkipHttpErrorCheck `
+                -ResponseHeadersVariable "responseHeader" `
+                -StatusCodeVariable "statusCode"
+        }
 
         # Step 5: Validate the response code
-        if ($statusCode -ne 202) {
+        if ($statusCode -ne 202)
+        {
             Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
             Write-Message -Message "Error: $($response.message)" -Level Error
             Write-Message -Message "Error Details: $($response.moreDetails)" -Level Error
@@ -131,8 +138,10 @@ This example loads data from a folder into the specified table in the Lakehouse,
         }
 
         # Step 5: Handle and log the response
-        switch ($statusCode) {
-            202 {
+        switch ($statusCode)
+        {
+            202
+            {
                 Write-Message -Message "Load table '$TableName' request accepted. Load table operation in progress!" -Level Info
 
                 [string]$operationId = $responseHeader["x-ms-operation-id"]
@@ -142,17 +151,21 @@ This example loads data from a folder into the specified table in the Lakehouse,
                 $operationStatus = Get-FabricLongRunningOperation -operationId $operationId
                 Write-Message -Message "Long Running Operation status: $operationStatus" -Level Debug
                 # Handle operation result
-                if ($operationStatus.status -eq "Succeeded") {
+                if ($operationStatus.status -eq "Succeeded")
+                {
                     Write-Message -Message "Operation Succeeded" -Level Debug
                     Write-Message -Message "Load table '$TableName' operation complete successfully!" -Level Info
                     return $operationStatus
-                } else {
+                }
+                else
+                {
                     Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Debug
                     Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Error
                     return $operationStatus
                 }
             }
-            default {
+            default
+            {
                 Write-Message -Message "Unexpected response code: $statusCode" -Level Error
                 Write-Message -Message "Error: $($response.message)" -Level Error
                 Write-Message -Message "Error Details: $($response.moreDetails)" -Level Error
@@ -162,7 +175,9 @@ This example loads data from a folder into the specified table in the Lakehouse,
 
         # Step 6: Handle results
 
-    } catch {
+    }
+    catch
+    {
         # Step 7: Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to update Lakehouse. Error: $errorDetails" -Level Error
