@@ -3,23 +3,24 @@ param(
     $ModuleName = "FabricTools",
     $expectedParams = @(
         "WorkspaceId"
-                "ReflexName"
-                "ReflexDescription"
-                "ReflexPathDefinition"
-                "ReflexPathPlatformDefinition"
-                "Verbose"
-                "Debug"
-                "ErrorAction"
-                "WarningAction"
-                "InformationAction"
-                "ProgressAction"
-                "ErrorVariable"
-                "WarningVariable"
-                "InformationVariable"
-                "OutVariable"
-                "OutBuffer"
-                "PipelineVariable"
-                
+        "ReflexName"
+        "ReflexDescription"
+        "ReflexPathDefinition"
+        "ReflexPathPlatformDefinition"
+        "Verbose"
+        "Debug"
+        "ErrorAction"
+        "WarningAction"
+        "InformationAction"
+        "ProgressAction"
+        "ErrorVariable"
+        "WarningVariable"
+        "InformationVariable"
+        "OutVariable"
+        "OutBuffer"
+        "PipelineVariable"
+        "Confirm"
+        "WhatIf"
     )
 )
 
@@ -47,4 +48,3 @@ Describe "New-FabricReflex" -Tag "UnitTests" {
         }
     }
 }
-

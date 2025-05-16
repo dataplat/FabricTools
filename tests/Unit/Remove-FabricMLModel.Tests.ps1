@@ -3,20 +3,21 @@ param(
     $ModuleName = "FabricTools",
     $expectedParams = @(
         "WorkspaceId"
-                "MLModelId"
-                "Verbose"
-                "Debug"
-                "ErrorAction"
-                "WarningAction"
-                "InformationAction"
-                "ProgressAction"
-                "ErrorVariable"
-                "WarningVariable"
-                "InformationVariable"
-                "OutVariable"
-                "OutBuffer"
-                "PipelineVariable"
-                
+        "MLModelId"
+        "Verbose"
+        "Debug"
+        "ErrorAction"
+        "WarningAction"
+        "InformationAction"
+        "ProgressAction"
+        "ErrorVariable"
+        "WarningVariable"
+        "InformationVariable"
+        "OutVariable"
+        "OutBuffer"
+        "PipelineVariable"
+        "WhatIf"
+        "Confirm"
     )
 )
 
@@ -44,4 +45,3 @@ Describe "Remove-FabricMLModel" -Tag "UnitTests" {
         }
     }
 }
-

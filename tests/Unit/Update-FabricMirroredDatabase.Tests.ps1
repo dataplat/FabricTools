@@ -3,22 +3,23 @@ param(
     $ModuleName = "FabricTools",
     $expectedParams = @(
         "WorkspaceId"
-                "MirroredDatabaseId"
-                "MirroredDatabaseName"
-                "MirroredDatabaseDescription"
-                "Verbose"
-                "Debug"
-                "ErrorAction"
-                "WarningAction"
-                "InformationAction"
-                "ProgressAction"
-                "ErrorVariable"
-                "WarningVariable"
-                "InformationVariable"
-                "OutVariable"
-                "OutBuffer"
-                "PipelineVariable"
-                
+        "MirroredDatabaseId"
+        "MirroredDatabaseName"
+        "MirroredDatabaseDescription"
+        "Verbose"
+        "Debug"
+        "ErrorAction"
+        "WarningAction"
+        "InformationAction"
+        "ProgressAction"
+        "ErrorVariable"
+        "WarningVariable"
+        "InformationVariable"
+        "OutVariable"
+        "OutBuffer"
+        "PipelineVariable"
+        "WhatIf"
+        "Confirm"
     )
 )
 
@@ -46,4 +47,3 @@ Describe "Update-FabricMirroredDatabase" -Tag "UnitTests" {
         }
     }
 }
-

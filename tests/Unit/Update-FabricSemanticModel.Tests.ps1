@@ -3,22 +3,23 @@ param(
     $ModuleName = "FabricTools",
     $expectedParams = @(
         "WorkspaceId"
-                "SemanticModelId"
-                "SemanticModelName"
-                "SemanticModelDescription"
-                "Verbose"
-                "Debug"
-                "ErrorAction"
-                "WarningAction"
-                "InformationAction"
-                "ProgressAction"
-                "ErrorVariable"
-                "WarningVariable"
-                "InformationVariable"
-                "OutVariable"
-                "OutBuffer"
-                "PipelineVariable"
-                
+        "SemanticModelId"
+        "SemanticModelName"
+        "SemanticModelDescription"
+        "Verbose"
+        "Debug"
+        "ErrorAction"
+        "WarningAction"
+        "InformationAction"
+        "ProgressAction"
+        "ErrorVariable"
+        "WarningVariable"
+        "InformationVariable"
+        "OutVariable"
+        "OutBuffer"
+        "PipelineVariable"
+        "WhatIf"
+        "Confirm"
     )
 )
 
@@ -46,4 +47,3 @@ Describe "Update-FabricSemanticModel" -Tag "UnitTests" {
         }
     }
 }
-

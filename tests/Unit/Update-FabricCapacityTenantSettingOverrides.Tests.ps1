@@ -3,26 +3,27 @@ param(
     $ModuleName = "FabricTools",
     $expectedParams = @(
         "TenantSettingName"
-                "EnableTenantSetting"
-                "DelegateToCapacity"
-                "DelegateToDomain"
-                "DelegateToWorkspace"
-                "EnabledSecurityGroups"
-                "ExcludedSecurityGroups"
-                "Properties"
-                "Verbose"
-                "Debug"
-                "ErrorAction"
-                "WarningAction"
-                "InformationAction"
-                "ProgressAction"
-                "ErrorVariable"
-                "WarningVariable"
-                "InformationVariable"
-                "OutVariable"
-                "OutBuffer"
-                "PipelineVariable"
-                
+        "EnableTenantSetting"
+        "DelegateToCapacity"
+        "DelegateToDomain"
+        "DelegateToWorkspace"
+        "EnabledSecurityGroups"
+        "ExcludedSecurityGroups"
+        "Properties"
+        "Verbose"
+        "Debug"
+        "ErrorAction"
+        "WarningAction"
+        "InformationAction"
+        "ProgressAction"
+        "ErrorVariable"
+        "WarningVariable"
+        "InformationVariable"
+        "OutVariable"
+        "OutBuffer"
+        "PipelineVariable"
+        "WhatIf"
+        "Confirm"
     )
 )
 
@@ -50,4 +51,3 @@ Describe "Update-FabricCapacityTenantSettingOverrides" -Tag "UnitTests" {
         }
     }
 }
-

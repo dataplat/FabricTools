@@ -3,27 +3,28 @@ param(
     $ModuleName = "FabricTools",
     $expectedParams = @(
         "WorkspaceId"
-                "LakehouseId"
-                "JobType"
-                "SchemaName"
-                "TableName"
-                "IsVOrder"
-                "ColumnsZOrderBy"
-                "retentionPeriod"
-                "waitForCompletion"
-                "Verbose"
-                "Debug"
-                "ErrorAction"
-                "WarningAction"
-                "InformationAction"
-                "ProgressAction"
-                "ErrorVariable"
-                "WarningVariable"
-                "InformationVariable"
-                "OutVariable"
-                "OutBuffer"
-                "PipelineVariable"
-                
+        "LakehouseId"
+        "JobType"
+        "SchemaName"
+        "TableName"
+        "IsVOrder"
+        "ColumnsZOrderBy"
+        "retentionPeriod"
+        "waitForCompletion"
+        "Verbose"
+        "Debug"
+        "ErrorAction"
+        "WarningAction"
+        "InformationAction"
+        "ProgressAction"
+        "ErrorVariable"
+        "WarningVariable"
+        "InformationVariable"
+        "OutVariable"
+        "OutBuffer"
+        "PipelineVariable"
+        "WhatIf"
+        "Confirm"
     )
 )
 
@@ -51,4 +52,3 @@ Describe "Start-FabricLakehouseTableMaintenance" -Tag "UnitTests" {
         }
     }
 }
-

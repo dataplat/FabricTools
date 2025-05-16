@@ -3,22 +3,23 @@ param(
     $ModuleName = "FabricTools",
     $expectedParams = @(
         "WorkspaceId"
-                "SparkJobDefinitionId"
-                "SparkJobDefinitionPathDefinition"
-                "SparkJobDefinitionPathPlatformDefinition"
-                "Verbose"
-                "Debug"
-                "ErrorAction"
-                "WarningAction"
-                "InformationAction"
-                "ProgressAction"
-                "ErrorVariable"
-                "WarningVariable"
-                "InformationVariable"
-                "OutVariable"
-                "OutBuffer"
-                "PipelineVariable"
-                
+        "SparkJobDefinitionId"
+        "SparkJobDefinitionPathDefinition"
+        "SparkJobDefinitionPathPlatformDefinition"
+        "Verbose"
+        "Debug"
+        "ErrorAction"
+        "WarningAction"
+        "InformationAction"
+        "ProgressAction"
+        "ErrorVariable"
+        "WarningVariable"
+        "InformationVariable"
+        "OutVariable"
+        "OutBuffer"
+        "PipelineVariable"
+        "WhatIf"
+        "Confirm"
     )
 )
 
@@ -46,4 +47,3 @@ Describe "Update-FabricSparkJobDefinitionDefinition" -Tag "UnitTests" {
         }
     }
 }
-

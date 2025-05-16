@@ -3,19 +3,20 @@ param(
     $ModuleName = "FabricTools",
     $expectedParams = @(
         "DomainId"
-                "Verbose"
-                "Debug"
-                "ErrorAction"
-                "WarningAction"
-                "InformationAction"
-                "ProgressAction"
-                "ErrorVariable"
-                "WarningVariable"
-                "InformationVariable"
-                "OutVariable"
-                "OutBuffer"
-                "PipelineVariable"
-                
+        "Verbose"
+        "Debug"
+        "ErrorAction"
+        "WarningAction"
+        "InformationAction"
+        "ProgressAction"
+        "ErrorVariable"
+        "WarningVariable"
+        "InformationVariable"
+        "OutVariable"
+        "OutBuffer"
+        "PipelineVariable"
+        "Confirm"
+        "WhatIf"
     )
 )
 
@@ -43,4 +44,3 @@ Describe "Remove-FabricDomain" -Tag "UnitTests" {
         }
     }
 }
-

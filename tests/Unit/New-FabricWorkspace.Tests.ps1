@@ -3,21 +3,22 @@ param(
     $ModuleName = "FabricTools",
     $expectedParams = @(
         "WorkspaceName"
-                "WorkspaceDescription"
-                "CapacityId"
-                "Verbose"
-                "Debug"
-                "ErrorAction"
-                "WarningAction"
-                "InformationAction"
-                "ProgressAction"
-                "ErrorVariable"
-                "WarningVariable"
-                "InformationVariable"
-                "OutVariable"
-                "OutBuffer"
-                "PipelineVariable"
-                
+        "WorkspaceDescription"
+        "CapacityId"
+        "Verbose"
+        "Debug"
+        "ErrorAction"
+        "WarningAction"
+        "InformationAction"
+        "ProgressAction"
+        "ErrorVariable"
+        "WarningVariable"
+        "InformationVariable"
+        "OutVariable"
+        "OutBuffer"
+        "PipelineVariable"
+        "Confirm"
+        "WhatIf"
     )
 )
 
@@ -45,4 +46,3 @@ Describe "New-FabricWorkspace" -Tag "UnitTests" {
         }
     }
 }
-

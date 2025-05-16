@@ -3,23 +3,24 @@ param(
     $ModuleName = "FabricTools",
     $expectedParams = @(
         "WorkspaceId"
-                "EventhouseName"
-                "EventhouseDescription"
-                "EventhousePathDefinition"
-                "EventhousePathPlatformDefinition"
-                "Verbose"
-                "Debug"
-                "ErrorAction"
-                "WarningAction"
-                "InformationAction"
-                "ProgressAction"
-                "ErrorVariable"
-                "WarningVariable"
-                "InformationVariable"
-                "OutVariable"
-                "OutBuffer"
-                "PipelineVariable"
-                
+        "EventhouseName"
+        "EventhouseDescription"
+        "EventhousePathDefinition"
+        "EventhousePathPlatformDefinition"
+        "Verbose"
+        "Debug"
+        "ErrorAction"
+        "WarningAction"
+        "InformationAction"
+        "ProgressAction"
+        "ErrorVariable"
+        "WarningVariable"
+        "InformationVariable"
+        "OutVariable"
+        "OutBuffer"
+        "PipelineVariable"
+        "Confirm"
+        "WhatIf"
     )
 )
 
@@ -47,4 +48,3 @@ Describe "New-FabricEventhouse" -Tag "UnitTests" {
         }
     }
 }
-

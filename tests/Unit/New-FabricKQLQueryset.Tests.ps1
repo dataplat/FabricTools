@@ -3,23 +3,24 @@ param(
     $ModuleName = "FabricTools",
     $expectedParams = @(
         "WorkspaceId"
-                "KQLQuerysetName"
-                "KQLQuerysetDescription"
-                "KQLQuerysetPathDefinition"
-                "KQLQuerysetPathPlatformDefinition"
-                "Verbose"
-                "Debug"
-                "ErrorAction"
-                "WarningAction"
-                "InformationAction"
-                "ProgressAction"
-                "ErrorVariable"
-                "WarningVariable"
-                "InformationVariable"
-                "OutVariable"
-                "OutBuffer"
-                "PipelineVariable"
-                
+        "KQLQuerysetName"
+        "KQLQuerysetDescription"
+        "KQLQuerysetPathDefinition"
+        "KQLQuerysetPathPlatformDefinition"
+        "Verbose"
+        "Debug"
+        "ErrorAction"
+        "WarningAction"
+        "InformationAction"
+        "ProgressAction"
+        "ErrorVariable"
+        "WarningVariable"
+        "InformationVariable"
+        "OutVariable"
+        "OutBuffer"
+        "PipelineVariable"
+        "Confirm"
+        "WhatIf"
     )
 )
 
@@ -47,4 +48,3 @@ Describe "New-FabricKQLQueryset" -Tag "UnitTests" {
         }
     }
 }
-

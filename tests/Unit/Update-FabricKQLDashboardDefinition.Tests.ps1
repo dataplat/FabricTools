@@ -18,7 +18,9 @@ param(
                 "OutVariable"
                 "OutBuffer"
                 "PipelineVariable"
-                
+                "Confirm"
+                "WhatIf"
+
     )
 )
 
@@ -46,4 +48,3 @@ Describe "Update-FabricKQLDashboardDefinition" -Tag "UnitTests" {
         }
     }
 }
-

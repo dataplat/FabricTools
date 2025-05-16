@@ -3,23 +3,24 @@ param(
     $ModuleName = "FabricTools",
     $expectedParams = @(
         "WorkspaceId"
-                "KQLDashboardName"
-                "KQLDashboardDescription"
-                "KQLDashboardPathDefinition"
-                "KQLDashboardPathPlatformDefinition"
-                "Verbose"
-                "Debug"
-                "ErrorAction"
-                "WarningAction"
-                "InformationAction"
-                "ProgressAction"
-                "ErrorVariable"
-                "WarningVariable"
-                "InformationVariable"
-                "OutVariable"
-                "OutBuffer"
-                "PipelineVariable"
-                
+        "KQLDashboardName"
+        "KQLDashboardDescription"
+        "KQLDashboardPathDefinition"
+        "KQLDashboardPathPlatformDefinition"
+        "Verbose"
+        "Debug"
+        "ErrorAction"
+        "WarningAction"
+        "InformationAction"
+        "ProgressAction"
+        "ErrorVariable"
+        "WarningVariable"
+        "InformationVariable"
+        "OutVariable"
+        "OutBuffer"
+        "PipelineVariable"
+        "Confirm"
+        "WhatIf"
     )
 )
 
@@ -47,4 +48,3 @@ Describe "New-FabricKQLDashboard" -Tag "UnitTests" {
         }
     }
 }
-

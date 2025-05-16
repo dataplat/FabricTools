@@ -3,31 +3,32 @@ param(
     $ModuleName = "FabricTools",
     $expectedParams = @(
         "WorkspaceId"
-                "EnvironmentId"
-                "InstancePoolName"
-                "InstancePoolType"
-                "DriverCores"
-                "DriverMemory"
-                "ExecutorCores"
-                "ExecutorMemory"
-                "DynamicExecutorAllocationEnabled"
-                "DynamicExecutorAllocationMinExecutors"
-                "DynamicExecutorAllocationMaxExecutors"
-                "RuntimeVersion"
-                "SparkProperties"
-                "Verbose"
-                "Debug"
-                "ErrorAction"
-                "WarningAction"
-                "InformationAction"
-                "ProgressAction"
-                "ErrorVariable"
-                "WarningVariable"
-                "InformationVariable"
-                "OutVariable"
-                "OutBuffer"
-                "PipelineVariable"
-                
+        "EnvironmentId"
+        "InstancePoolName"
+        "InstancePoolType"
+        "DriverCores"
+        "DriverMemory"
+        "ExecutorCores"
+        "ExecutorMemory"
+        "DynamicExecutorAllocationEnabled"
+        "DynamicExecutorAllocationMinExecutors"
+        "DynamicExecutorAllocationMaxExecutors"
+        "RuntimeVersion"
+        "SparkProperties"
+        "Verbose"
+        "Debug"
+        "ErrorAction"
+        "WarningAction"
+        "InformationAction"
+        "ProgressAction"
+        "ErrorVariable"
+        "WarningVariable"
+        "InformationVariable"
+        "OutVariable"
+        "OutBuffer"
+        "PipelineVariable"
+        "WhatIf"
+        "Confirm"
     )
 )
 
@@ -55,4 +56,3 @@ Describe "Update-FabricEnvironmentStagingSparkCompute" -Tag "UnitTests" {
         }
     }
 }
-

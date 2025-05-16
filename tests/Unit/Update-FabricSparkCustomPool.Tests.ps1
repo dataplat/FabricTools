@@ -3,29 +3,30 @@ param(
     $ModuleName = "FabricTools",
     $expectedParams = @(
         "WorkspaceId"
-                "SparkCustomPoolId"
-                "InstancePoolName"
-                "NodeFamily"
-                "NodeSize"
-                "AutoScaleEnabled"
-                "AutoScaleMinNodeCount"
-                "AutoScaleMaxNodeCount"
-                "DynamicExecutorAllocationEnabled"
-                "DynamicExecutorAllocationMinExecutors"
-                "DynamicExecutorAllocationMaxExecutors"
-                "Verbose"
-                "Debug"
-                "ErrorAction"
-                "WarningAction"
-                "InformationAction"
-                "ProgressAction"
-                "ErrorVariable"
-                "WarningVariable"
-                "InformationVariable"
-                "OutVariable"
-                "OutBuffer"
-                "PipelineVariable"
-                
+        "SparkCustomPoolId"
+        "InstancePoolName"
+        "NodeFamily"
+        "NodeSize"
+        "AutoScaleEnabled"
+        "AutoScaleMinNodeCount"
+        "AutoScaleMaxNodeCount"
+        "DynamicExecutorAllocationEnabled"
+        "DynamicExecutorAllocationMinExecutors"
+        "DynamicExecutorAllocationMaxExecutors"
+        "Verbose"
+        "Debug"
+        "ErrorAction"
+        "WarningAction"
+        "InformationAction"
+        "ProgressAction"
+        "ErrorVariable"
+        "WarningVariable"
+        "InformationVariable"
+        "OutVariable"
+        "OutBuffer"
+        "PipelineVariable"
+        "WhatIf"
+        "Confirm"
     )
 )
 
@@ -53,4 +54,3 @@ Describe "Update-FabricSparkCustomPool" -Tag "UnitTests" {
         }
     }
 }
-

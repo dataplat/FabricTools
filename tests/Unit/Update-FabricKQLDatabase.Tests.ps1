@@ -3,24 +3,24 @@ param(
     $ModuleName = "FabricTools",
     $expectedParams = @(
         "WorkspaceId"
-                "KQLDatabaseId"
-                "KQLDatabaseName"
-                "KQLDatabaseDescription"
-                "Verbose"
-                "Debug"
-                "ErrorAction"
-                "WarningAction"
-                "InformationAction"
-                "ProgressAction"
-                "ErrorVariable"
-                "WarningVariable"
-                "InformationVariable"
-                "OutVariable"
-                "OutBuffer"
-                "PipelineVariable"
-                "WhatIf"
-                "Confirm"
-                
+        "KQLDatabaseId"
+        "KQLDatabaseName"
+        "KQLDatabaseDescription"
+        "Verbose"
+        "Debug"
+        "ErrorAction"
+        "WarningAction"
+        "InformationAction"
+        "ProgressAction"
+        "ErrorVariable"
+        "WarningVariable"
+        "InformationVariable"
+        "OutVariable"
+        "OutBuffer"
+        "PipelineVariable"
+        "WhatIf"
+        "Confirm"
+
     )
 )
 
@@ -48,4 +48,3 @@ Describe "Update-FabricKQLDatabase" -Tag "UnitTests" {
         }
     }
 }
-

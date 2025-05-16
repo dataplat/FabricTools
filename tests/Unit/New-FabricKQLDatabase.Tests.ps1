@@ -3,29 +3,30 @@ param(
     $ModuleName = "FabricTools",
     $expectedParams = @(
         "WorkspaceId"
-                "KQLDatabaseName"
-                "KQLDatabaseDescription"
-                "parentEventhouseId"
-                "KQLDatabaseType"
-                "KQLInvitationToken"
-                "KQLSourceClusterUri"
-                "KQLSourceDatabaseName"
-                "KQLDatabasePathDefinition"
-                "KQLDatabasePathPlatformDefinition"
-                "KQLDatabasePathSchemaDefinition"
-                "Verbose"
-                "Debug"
-                "ErrorAction"
-                "WarningAction"
-                "InformationAction"
-                "ProgressAction"
-                "ErrorVariable"
-                "WarningVariable"
-                "InformationVariable"
-                "OutVariable"
-                "OutBuffer"
-                "PipelineVariable"
-                
+        "KQLDatabaseName"
+        "KQLDatabaseDescription"
+        "parentEventhouseId"
+        "KQLDatabaseType"
+        "KQLInvitationToken"
+        "KQLSourceClusterUri"
+        "KQLSourceDatabaseName"
+        "KQLDatabasePathDefinition"
+        "KQLDatabasePathPlatformDefinition"
+        "KQLDatabasePathSchemaDefinition"
+        "Verbose"
+        "Debug"
+        "ErrorAction"
+        "WarningAction"
+        "InformationAction"
+        "ProgressAction"
+        "ErrorVariable"
+        "WarningVariable"
+        "InformationVariable"
+        "OutVariable"
+        "OutBuffer"
+        "PipelineVariable"
+        "Confirm"
+        "WhatIf"
     )
 )
 
@@ -53,4 +54,3 @@ Describe "New-FabricKQLDatabase" -Tag "UnitTests" {
         }
     }
 }
-

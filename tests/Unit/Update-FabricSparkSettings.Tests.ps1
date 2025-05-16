@@ -3,28 +3,29 @@ param(
     $ModuleName = "FabricTools",
     $expectedParams = @(
         "WorkspaceId"
-                "automaticLogEnabled"
-                "notebookInteractiveRunEnabled"
-                "customizeComputeEnabled"
-                "defaultPoolName"
-                "defaultPoolType"
-                "starterPoolMaxNode"
-                "starterPoolMaxExecutors"
-                "EnvironmentName"
-                "EnvironmentRuntimeVersion"
-                "Verbose"
-                "Debug"
-                "ErrorAction"
-                "WarningAction"
-                "InformationAction"
-                "ProgressAction"
-                "ErrorVariable"
-                "WarningVariable"
-                "InformationVariable"
-                "OutVariable"
-                "OutBuffer"
-                "PipelineVariable"
-                
+        "automaticLogEnabled"
+        "notebookInteractiveRunEnabled"
+        "customizeComputeEnabled"
+        "defaultPoolName"
+        "defaultPoolType"
+        "starterPoolMaxNode"
+        "starterPoolMaxExecutors"
+        "EnvironmentName"
+        "EnvironmentRuntimeVersion"
+        "Verbose"
+        "Debug"
+        "ErrorAction"
+        "WarningAction"
+        "InformationAction"
+        "ProgressAction"
+        "ErrorVariable"
+        "WarningVariable"
+        "InformationVariable"
+        "OutVariable"
+        "OutBuffer"
+        "PipelineVariable"
+        "WhatIf"
+        "Confirm"
     )
 )
 
@@ -52,4 +53,3 @@ Describe "Update-FabricSparkSettings" -Tag "UnitTests" {
         }
     }
 }
-

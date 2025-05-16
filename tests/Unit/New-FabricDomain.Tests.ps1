@@ -3,21 +3,23 @@ param(
     $ModuleName = "FabricTools",
     $expectedParams = @(
         "DomainName"
-                "DomainDescription"
-                "ParentDomainId"
-                "Verbose"
-                "Debug"
-                "ErrorAction"
-                "WarningAction"
-                "InformationAction"
-                "ProgressAction"
-                "ErrorVariable"
-                "WarningVariable"
-                "InformationVariable"
-                "OutVariable"
-                "OutBuffer"
-                "PipelineVariable"
-                
+        "DomainDescription"
+        "ParentDomainId"
+        "Verbose"
+        "Debug"
+        "ErrorAction"
+        "WarningAction"
+        "InformationAction"
+        "ProgressAction"
+        "ErrorVariable"
+        "WarningVariable"
+        "InformationVariable"
+        "OutVariable"
+        "OutBuffer"
+        "PipelineVariable"
+        "WhatIf"
+        "Confirm"
+
     )
 )
 
@@ -45,4 +47,3 @@ Describe "New-FabricDomain" -Tag "UnitTests" {
         }
     }
 }
-
