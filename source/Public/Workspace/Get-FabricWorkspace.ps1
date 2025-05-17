@@ -38,7 +38,7 @@ function Get-FabricWorkspace {
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [ValidatePattern('^[a-zA-Z0-9_- ]*$')]
+        [ValidatePattern('^[a-zA-Z0-9_\- ]*$')]
         [string]$WorkspaceName
     )
 
