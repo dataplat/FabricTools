@@ -14,11 +14,11 @@
     The name of the capacity to retrieve. This parameter is optional.
 
 .EXAMPLE
-     Get-FabricCapacity -capacityId "capacity-12345"
+    Get-FabricCapacity -capacityId "capacity-12345"
     This example retrieves the capacity details for the capacity with ID "capacity-12345".
 
 .EXAMPLE
-     Get-FabricCapacity -capacityName "MyCapacity"
+    Get-FabricCapacity -capacityName "MyCapacity"
     This example retrieves the capacity details for the capacity named "MyCapacity".
 
 .NOTES
@@ -51,14 +51,14 @@ function Get-FabricCapacity {
         Write-Message -Message "Token validation completed." -Level Debug
 
         # Construct the API endpoint URL
-        $apiEndpointURI = "{0}/capacities" -f $FabricConfig.BaseUrl
+        $apiEndpointURI = "/capacities"
 
         # Invoke the Fabric API to retrieve capacity details
-        $capacities = Invoke-FabricAPIRequest `
-            -BaseURI $apiEndpointURI `
-            -Headers $FabricConfig.FabricHeaders `
-            -Method Get
-
+        $apiParams = @{
+            Uri    = $apiEndpointURI
+            Method = 'Get'
+        }
+        $capacities = (Invoke-FabricAPIRequest @apiParams).Value
 
         # Filter results based on provided parameters
         $response = if ($capacityId) {
