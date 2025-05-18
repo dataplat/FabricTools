@@ -60,13 +60,14 @@ function Get-FabricCopyJob {
 
 
         # Construct the API endpoint URL
-        $apiEndpointURI = "{0}/workspaces/{1}/copyJobs" -f $FabricConfig.BaseUrl, $WorkspaceId
+        $apiEndpointURI = "/workspaces/{0}/copyJobs" -f $WorkspaceId
 
         # Invoke the Fabric API to retrieve capacity details
-        $copyJobs = Invoke-FabricAPIRequest `
-            -BaseURI $apiEndpointURI `
-            -Headers $FabricConfig.FabricHeaders `
-            -Method Get
+        $apiParams = @{
+            Uri    = $apiEndpointURI
+            Method = 'Get'
+        }
+        $copyJobs = Invoke-FabricAPIRequest @apiParams
 
         #  Filter results based on provided parameters
         $response = if ($CopyJobId) {
