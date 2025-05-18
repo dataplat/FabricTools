@@ -62,7 +62,7 @@ function New-FabricCopyJob {
         Write-Message -Message "Token validation completed." -Level Debug
 
         # Step 2: Construct the API URL
-        $apiEndpointURI = "{0}/workspaces/{1}/warehouses" -f $FabricConfig.BaseUrl, $WorkspaceId
+        $apiEndpointURI = "/workspaces/{0}/copyJobs" -f $WorkspaceId
         Write-Message -Message "API Endpoint: $apiEndpointURI" -Level Debug
 
         # Step 3: Construct the request body
@@ -127,15 +127,16 @@ function New-FabricCopyJob {
         if($PSCmdlet.ShouldProcess($apiEndpointURI, "Create Copy Job")) {
 
         # Step 6: Make the API request
-        $response = Invoke-FabricAPIRequest `
-            -BaseURI $apiEndpointURI `
-            -Headers $FabricConfig.FabricHeaders `
-            -Method Post `
-            -Body $bodyJson
+        $apiParams = @{
+            Uri    = $apiEndpointURI
+            Method = 'Post'
+            Body   = $bodyJson
         }
+        $response = Invoke-FabricAPIRequest @apiParams
+    }
 
-        Write-Message -Message "Copy Job created successfully!" -Level Info
-        return $response
+    Write-Message -Message "Copy Job created successfully!" -Level Info
+    return $response
 
     } catch {
         # Step 7: Handle and log errors
