@@ -49,13 +49,27 @@ Function Invoke-FabricAPIRequest {
     #>
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory = $false)] [string] $authToken,
-        [Parameter(Mandatory = $true)] [string] $uri,
-        [Parameter(Mandatory = $false)] [ValidateSet('Get', 'Post', 'Delete', 'Put', 'Patch')] [string] $method = "Get",
-        [Parameter(Mandatory = $false)] $body,
-        [Parameter(Mandatory = $false)] [string] $contentType = "application/json; charset=utf-8",
-        [Parameter(Mandatory = $false)] [int] $timeoutSec = 240,
-        [Parameter(Mandatory = $false)] [int] $retryCount = 0
+        [Parameter(Mandatory = $false)]
+        [string] $authToken,
+
+        [Parameter(Mandatory = $true)]
+        [string] $uri,
+
+        [Parameter(Mandatory = $false)]
+        [ValidateSet('Get', 'Post', 'Delete', 'Put', 'Patch')]
+        [string] $method = "Get",
+
+        [Parameter(Mandatory = $false)]
+        $body,
+
+        [Parameter(Mandatory = $false)]
+        [string] $contentType = "application/json; charset=utf-8",
+
+        [Parameter(Mandatory = $false)]
+        [int] $timeoutSec = 240,
+
+        [Parameter(Mandatory = $false)]
+        [int] $retryCount = 0
     )
 
     Confirm-FabricAuthToken | Out-Null
@@ -65,7 +79,7 @@ Function Invoke-FabricAPIRequest {
 
         $requestUrl = "$($FabricSession.BaseApiUrl)/$uri"
         Write-Verbose "Calling $requestUrl"
-        $response = Invoke-WebRequest -Headers $fabricHeaders -Method $method -Uri $requestUrl -Body $body -TimeoutSec $timeoutSec
+        $response = Invoke-WebRequest -Headers $fabricHeaders -ContentType $contentType -Method $method -Uri $requestUrl -Body $body -TimeoutSec $timeoutSec
 
         if ($response.StatusCode -eq 202) {
             if ($uri -match "jobType=Pipeline") {
