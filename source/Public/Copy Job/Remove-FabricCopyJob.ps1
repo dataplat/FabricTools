@@ -23,7 +23,7 @@
     Author: Tiago Balabuch
 #>
 function Remove-FabricCopyJob {
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
