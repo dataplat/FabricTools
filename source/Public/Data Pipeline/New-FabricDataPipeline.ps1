@@ -17,7 +17,7 @@
     An optional description for the DataPipeline.
 
 .EXAMPLE
-     New-FabricDataPipeline -WorkspaceId "workspace-12345" -DataPipelineName "New DataPipeline"
+    New-FabricDataPipeline -WorkspaceId "workspace-12345" -DataPipelineName "New DataPipeline"
     This example creates a new DataPipeline named "New DataPipeline" in the workspace with ID "workspace-12345" and uploads the definition file from the specified path.
 
 .NOTES
@@ -53,7 +53,7 @@ function New-FabricDataPipeline
         Write-Message -Message "Token validation completed." -Level Debug
 
         # Step 2: Construct the API URL
-        $apiEndpointURI = "{0}/workspaces/{1}/dataPipelines" -f $FabricConfig.BaseUrl, $WorkspaceId
+        $apiEndpointURI = ("/workspaces/{0}/dataPipelines" -f $WorkspaceId)
         Write-Message -Message "API Endpoint: $apiEndpointURI" -Level Debug
 
         # Step 3: Construct the request body
@@ -67,16 +67,18 @@ function New-FabricDataPipeline
         }
 
         $bodyJson = $body | ConvertTo-Json -Depth 10
+
         Write-Message -Message "Request Body: $bodyJson" -Level Debug
 
         if ($PSCmdlet.ShouldProcess($apiEndpointURI, "Create DataPipeline"))
         {
             # Step 4: Make the API request
-            $response = Invoke-FabricAPIRequest `
-                -BaseURI $apiEndpointURI `
-                -Headers $FabricConfig.FabricHeaders `
-                -method Post `
-                -body $bodyJson
+            $apiParams = @{
+                Uri    = $apiEndpointURI
+                method = 'Post'
+                body   = $bodyJson
+            }
+            $response = Invoke-FabricAPIRequest @apiParams
         }
         Write-Message -Message "Data Pipeline created successfully!" -Level Info
         return $response
