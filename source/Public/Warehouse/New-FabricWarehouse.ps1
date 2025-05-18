@@ -51,7 +51,7 @@ function New-FabricWarehouse
         Write-Message -Message "Token validation completed." -Level Debug
 
         # Step 2: Construct the API URL
-        $apiEndpointURI = "{0}/workspaces/{1}/warehouses" -f $FabricConfig.BaseUrl, $WorkspaceId
+        $apiEndpointURI = "/workspaces/{0}/warehouses" -f $WorkspaceId
         Write-Message -Message "API Endpoint: $apiEndpointURI" -Level Debug
 
         # Step 3: Construct the request body
@@ -70,11 +70,12 @@ function New-FabricWarehouse
         if ($PSCmdlet.ShouldProcess($apiEndpointURI, "Create Warehouse"))
         {
             # Step 4: Make the API request
-            $response = Invoke-FabricAPIRequest `
-                -BaseURI $apiEndpointURI `
-                -Headers $FabricConfig.FabricHeaders `
-                -method Post `
-                -body $bodyJson
+            $apiParams = @{
+                Uri    = $apiEndpointURI
+                Method = 'Post'
+                Body   = $bodyJson
+            }
+            $response = Invoke-FabricAPIRequest @apiParams
         }
 
         Write-Message -Message "Data Warehouse created successfully!" -Level Info
