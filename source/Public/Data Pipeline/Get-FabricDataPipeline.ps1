@@ -17,11 +17,11 @@ function Get-FabricDataPipeline {
     The name of the Data Pipeline to retrieve. This parameter is optional.
 
 .EXAMPLE
-     Get-FabricData Pipeline -WorkspaceId "workspace-12345" -Data PipelineId "Data Pipeline-67890"
+    Get-FabricData Pipeline -WorkspaceId "workspace-12345" -Data PipelineId "Data Pipeline-67890"
     This example retrieves the Data Pipeline details for the Data Pipeline with ID "Data Pipeline-67890" in the workspace with ID "workspace-12345".
 
 .EXAMPLE
-     Get-FabricData Pipeline -WorkspaceId "workspace-12345" -Data PipelineName "My Data Pipeline"
+    Get-FabricData Pipeline -WorkspaceId "workspace-12345" -Data PipelineName "My Data Pipeline"
     This example retrieves the Data Pipeline details for the Data Pipeline named "My Data Pipeline" in the workspace with ID "workspace-12345".
 
 .NOTES
@@ -59,13 +59,10 @@ function Get-FabricDataPipeline {
         Write-Message -Message "Token validation completed." -Level Debug
 
         # Construct the API endpoint URL
-        $apiEndpointURI = "{0}/workspaces/{1}/dataPipelines" -f $FabricConfig.BaseUrl, $WorkspaceId
+        $apiEndpointURI = ("/workspaces/{0}/dataPipelines" -f $WorkspaceId)
 
         # Invoke the Fabric API to retrieve capacity details
-        $DataPipelines = Invoke-FabricAPIRequest `
-            -BaseURI $apiEndpointURI `
-            -Headers $FabricConfig.FabricHeaders `
-            -Method Get
+        $DataPipelines = (Invoke-FabricAPIRequest -uri $apiEndpointURI -Method Get).Value
 
         # Filter results based on provided parameters
         $response = if ($DataPipelineId) {
