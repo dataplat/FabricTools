@@ -1,10 +1,9 @@
-output/
-
 **.bak
 *.local.*
 !**/README.md
 .kitchen/
 
+~*.*
 *.nupkg
 *.suo
 *.user
@@ -12,7 +11,7 @@ output/
 *.sln.docstates
 
 # Build results
-Output/
+[Oo]utput/
 
 # MSTest test Results
 [Tt]est[Rr]esult*/

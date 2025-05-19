@@ -1,5 +1,4 @@
 function Connect-FabricAccount {
-    #Requires -Version 7.1
 
     <#
 .SYNOPSIS
