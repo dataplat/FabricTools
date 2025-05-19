@@ -59,7 +59,7 @@ function Get-FabricDataPipeline {
         Write-Message -Message "Token validation completed." -Level Debug
 
         # Construct the API endpoint URL
-        $apiEndpointURI = ("/workspaces/{0}/dataPipelines" -f $WorkspaceId)
+        $apiEndpointURI = ("workspaces/{0}/dataPipelines" -f $WorkspaceId)
 
         # Invoke the Fabric API to retrieve data pipeline details
         $DataPipelines = (Invoke-FabricAPIRequest -uri $apiEndpointURI -Method Get).Value
