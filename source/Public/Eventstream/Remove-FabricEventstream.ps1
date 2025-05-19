@@ -30,7 +30,7 @@ Deletes the Eventstream with ID "67890" from workspace "12345".
 Author: Tiago Balabuch
 
     #>
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]

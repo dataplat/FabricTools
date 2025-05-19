@@ -26,7 +26,7 @@ Author: Tiago Balabuch
 
 function Remove-FabricEnvironment
 {
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]

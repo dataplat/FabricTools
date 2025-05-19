@@ -32,7 +32,7 @@ Author: Tiago Balabuch
 #>
 
 function Remove-FabricDomainWorkspaceRoleAssignment {
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     [Alias("Unassign-FabricDomainWorkspaceRoleAssignment")]
     param (
         [Parameter(Mandatory = $true)]

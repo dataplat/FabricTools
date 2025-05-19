@@ -31,7 +31,7 @@
 #>
 
 Function Remove-FabricItem {
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param
     (
         [Parameter(Mandatory = $true)]

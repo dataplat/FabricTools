@@ -26,7 +26,7 @@ Author: Kamil Nowinski
 
 function Remove-FabricSQLDatabase
 {
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]

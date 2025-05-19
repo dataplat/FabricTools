@@ -23,7 +23,7 @@ Removes the tenant setting override named "ExampleSetting" from the capacity wit
 Author: Tiago Balabuch
 #>
 function Revoke-FabricCapacityTenantSettingOverrides {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]

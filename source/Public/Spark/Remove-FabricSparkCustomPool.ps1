@@ -25,7 +25,7 @@
 #>
 function Remove-FabricSparkCustomPool
 {
-    [CmdletBinding(supportsShouldProcess)]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]

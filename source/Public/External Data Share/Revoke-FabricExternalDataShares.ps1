@@ -27,7 +27,7 @@ function Revoke-FabricExternalDataShares {
     Author: Tiago Balabuch
     #>
 
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
