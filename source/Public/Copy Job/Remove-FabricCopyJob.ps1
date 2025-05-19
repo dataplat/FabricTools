@@ -40,7 +40,7 @@ function Remove-FabricCopyJob {
         Write-Message -Message "Token validation completed." -Level Debug
 
         # Construct the API endpoint URI
-        $apiEndpointURI = "/workspaces/{0}/copyJobs/{1}" -f $WorkspaceId, $CopyJobId
+        $apiEndpointURI = "workspaces/{0}/copyJobs/{1}" -f $WorkspaceId, $CopyJobId
         Write-Message -Message "API Endpoint: $apiEndpointURI" -Level Debug
 
         if($PSCmdlet.ShouldProcess($apiEndpointURI, "Delete Copy Job")) {

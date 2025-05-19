@@ -48,7 +48,7 @@ function Get-FabricDatamart {
         Write-Message -Message "Token validation completed." -Level Debug
         # Step 3: Initialize variables
 
-        $apiEndpointURI = "/workspaces/{0}/Datamarts" -f $WorkspaceId
+        $apiEndpointURI = "workspaces/{0}/Datamarts" -f $WorkspaceId
 
         $apiParams = @{
             Uri    = $apiEndpointURI

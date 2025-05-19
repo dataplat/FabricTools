@@ -60,7 +60,7 @@ function Get-FabricCopyJob {
 
 
         # Construct the API endpoint URL
-        $apiEndpointURI = "/workspaces/{0}/copyJobs" -f $WorkspaceId
+        $apiEndpointURI = "workspaces/{0}/copyJobs" -f $WorkspaceId
 
         # Invoke the Fabric API to retrieve capacity details
         $apiParams = @{

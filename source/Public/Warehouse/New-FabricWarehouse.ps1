@@ -51,7 +51,7 @@ function New-FabricWarehouse
         Write-Message -Message "Token validation completed." -Level Debug
 
         # Step 2: Construct the API URL
-        $apiEndpointURI = "/workspaces/{0}/warehouses" -f $WorkspaceId
+        $apiEndpointURI = "workspaces/{0}/warehouses" -f $WorkspaceId
         Write-Message -Message "API Endpoint: $apiEndpointURI" -Level Debug
 
         # Step 3: Construct the request body

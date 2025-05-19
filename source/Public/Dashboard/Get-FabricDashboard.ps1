@@ -35,7 +35,7 @@ function Get-FabricDashboard {
         Write-Message -Message "Token validation completed." -Level Debug
 
         # Construct the API endpoint URL
-        $apiEndpointURI = "/workspaces/{0}/dashboards" -f $WorkspaceId
+        $apiEndpointURI = "workspaces/{0}/dashboards" -f $WorkspaceId
 
         # Invoke the Fabric API to retrieve capacity details
         $apiParams = @{

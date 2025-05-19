@@ -61,7 +61,7 @@ function Get-FabricWarehouse {
 
 
         # Step 4: Loop to retrieve all capacities with continuation token
-        $apiEndpointURI = "/workspaces/{0}/warehouses" -f $WorkspaceId
+        $apiEndpointURI = "workspaces/{0}/warehouses" -f $WorkspaceId
 
         $apiParams = @{
             Uri    = $apiEndpointURI

@@ -51,7 +51,7 @@ function Get-FabricCapacity {
         Write-Message -Message "Token validation completed." -Level Debug
 
         # Construct the API endpoint URL
-        $apiEndpointURI = "/capacities"
+        $apiEndpointURI = "capacities"
 
         # Invoke the Fabric API to retrieve capacity details
         $apiParams = @{
