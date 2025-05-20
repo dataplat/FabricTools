@@ -23,7 +23,7 @@
     Author: Tiago Balabuch
 #>
 function Remove-FabricCopyJob {
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
@@ -40,22 +40,23 @@ function Remove-FabricCopyJob {
         Write-Message -Message "Token validation completed." -Level Debug
 
         # Construct the API endpoint URI
-        $apiEndpointURI = "{0}/workspaces/{1}/copyJobs/{2}" -f $FabricConfig.BaseUrl, $WorkspaceId, $CopyJobId
+        $apiEndpointURI = "workspaces/{0}/copyJobs/{1}" -f $WorkspaceId, $CopyJobId
         Write-Message -Message "API Endpoint: $apiEndpointURI" -Level Debug
 
         if($PSCmdlet.ShouldProcess($apiEndpointURI, "Delete Copy Job")) {
 
         # Make the API request
-        $response = Invoke-FabricAPIRequest `
-            -Headers $FabricConfig.FabricHeaders `
-            -BaseURI $apiEndpointURI `
-            -Method Delete
+        $apiParams = @{
+            Uri = $apiEndpointURI
+            Method = 'DELETE'
         }
-        Write-Message -Message "Copy Job '$CopyJobId' deleted successfully from workspace '$WorkspaceId'." -Level Info
-        return $response
+        $response = Invoke-FabricAPIRequest @apiParams
+    }
+    Write-Message -Message "Copy Job '$CopyJobId' deleted successfully from workspace '$WorkspaceId'." -Level Info
+    return $response
 
-    } catch {
-        # Log and handle errors
+} catch {
+    # Log and handle errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to delete Copy Job '$CopyJobId' from workspace '$WorkspaceId'. Error: $errorDetails" -Level Error
     }

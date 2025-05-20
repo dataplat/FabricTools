@@ -50,7 +50,7 @@ function Get-FabricCopyJobDefinition {
         Write-Message -Message "Authentication token is valid." -Level Debug
 
         # Step 2: Construct the API endpoint URL for retrieving the Copy Job definition.
-        $apiEndpointUrl = "{0}/workspaces/{1}/copyJobs/{2}/getDefinition" -f $FabricConfig.BaseUrl, $WorkspaceId, $CopyJobId
+        $apiEndpointUrl = "workspaces/{0}/copyJobs/{1}/getDefinition" -f $WorkspaceId, $CopyJobId
 
         # Step 3: Append the format query parameter if specified by the user.
         if ($CopyJobFormat) {
@@ -59,10 +59,11 @@ function Get-FabricCopyJobDefinition {
         Write-Message -Message "Constructed API Endpoint URL: $apiEndpointUrl" -Level Debug
 
         # Step 4: Execute the API request to retrieve the Copy Job definition.
-        $response = Invoke-FabricAPIRequest `
-            -BaseURI $apiEndpointUrl `
-            -Headers $FabricConfig.FabricHeaders `
-            -Method Post
+        $apiParams = @{
+            Uri     = $apiEndpointUrl
+            Method  = 'POST'
+        }
+        $response = Invoke-FabricAPIRequest @apiParams
 
         # Step 5: Return the API response containing the Copy Job definition.
         return $response

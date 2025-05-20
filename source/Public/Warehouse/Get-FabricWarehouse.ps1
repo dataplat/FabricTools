@@ -61,13 +61,13 @@ function Get-FabricWarehouse {
 
 
         # Step 4: Loop to retrieve all capacities with continuation token
-        $apiEndpointURI = "{0}/workspaces/{1}/warehouses" -f $FabricConfig.BaseUrl, $WorkspaceId
+        $apiEndpointURI = "workspaces/{0}/warehouses" -f $WorkspaceId
 
-        $Warehouses = Invoke-FabricAPIRequest `
-            -BaseURI $apiEndpointURI `
-            -Headers $FabricConfig.FabricHeaders `
-            -Method Get `
-            -Body $null
+        $apiParams = @{
+            Uri    = $apiEndpointURI
+            Method = 'Get'
+        }
+        $Warehouses = (Invoke-FabricAPIRequest @apiParams).Value
 
         # Step 8: Filter results based on provided parameters
         $Warehouse = if ($WarehouseId) {

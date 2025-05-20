@@ -1,20 +1,20 @@
 <#
 .SYNOPSIS
-   Check whether the Fabric API authentication token is set and not expired and reset it if necessary.
+    Check whether the Fabric API authentication token is set and not expired and reset it if necessary.
 
 .DESCRIPTION
-   The Confirm-FabricAuthToken function retrieves the Fabric API authentication token. If the token is not already set, it calls the Set-FabricAuthToken function to set it. It then outputs the token.
+    The Confirm-FabricAuthToken function retrieves the Fabric API authentication token. If the token is not already set, it calls the Set-FabricAuthToken function to set it. It then outputs the token.
 
 .EXAMPLE
-   Confirm-FabricAuthToken
+    Confirm-FabricAuthToken
 
-   This command retrieves the Fabric API authentication token.
+    This command retrieves the Fabric API authentication token.
 
 .INPUTS
-   None. You cannot pipe inputs to this function.
+    None. You cannot pipe inputs to this function.
 
 .OUTPUTS
-   Returns object as Get-FabricDebugInfo function
+    Returns object as Get-FabricDebugInfo function
 
 .NOTES
 
