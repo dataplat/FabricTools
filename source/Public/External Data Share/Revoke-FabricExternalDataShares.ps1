@@ -53,10 +53,13 @@ function Revoke-FabricExternalDataShares {
         Write-Message -Message "Constructing API endpoint URI..." -Level Debug
         $apiEndpointURI = "{0}/admin/workspaces/{1}/items/{2}/externalDataShares/{3}/revoke" -f $FabricConfig.BaseUrl, $WorkspaceId, $ItemId, $ExternalDataShareId
 
+        if ($PSCmdlet.ShouldProcess("$ExternalDataShareId", "revoke")) {
+
         $externalDataShares = Invoke-FabricAPIRequest `
             -BaseURI $apiEndpointURI `
             -Headers $FabricConfig.FabricHeaders `
             -Method Post
+        }
 
         # Step 4: Return retrieved data
         Write-Message -Message "Successfully revoked external data shares." -Level Info

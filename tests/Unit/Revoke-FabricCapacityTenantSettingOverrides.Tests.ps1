@@ -3,20 +3,21 @@ param(
     $ModuleName = "FabricTools",
     $expectedParams = @(
         "capacityId"
-                "tenantSettingName"
-                "Verbose"
-                "Debug"
-                "ErrorAction"
-                "WarningAction"
-                "InformationAction"
-                "ProgressAction"
-                "ErrorVariable"
-                "WarningVariable"
-                "InformationVariable"
-                "OutVariable"
-                "OutBuffer"
-                "PipelineVariable"
-                
+        "tenantSettingName"
+        "Verbose"
+        "Debug"
+        "ErrorAction"
+        "WarningAction"
+        "InformationAction"
+        "ProgressAction"
+        "ErrorVariable"
+        "WarningVariable"
+        "InformationVariable"
+        "OutVariable"
+        "OutBuffer"
+        "PipelineVariable"
+        "Confirm"
+        "WhatIf"
     )
 )
 
@@ -44,4 +45,3 @@ Describe "Revoke-FabricCapacityTenantSettingOverrides" -Tag "UnitTests" {
         }
     }
 }
-

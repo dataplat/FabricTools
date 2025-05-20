@@ -3,21 +3,22 @@ param(
     $ModuleName = "FabricTools",
     $expectedParams = @(
         "WorkspaceId"
-                "ItemId"
-                "ExternalDataShareId"
-                "Verbose"
-                "Debug"
-                "ErrorAction"
-                "WarningAction"
-                "InformationAction"
-                "ProgressAction"
-                "ErrorVariable"
-                "WarningVariable"
-                "InformationVariable"
-                "OutVariable"
-                "OutBuffer"
-                "PipelineVariable"
-                
+        "ItemId"
+        "ExternalDataShareId"
+        "Verbose"
+        "Debug"
+        "ErrorAction"
+        "WarningAction"
+        "InformationAction"
+        "ProgressAction"
+        "ErrorVariable"
+        "WarningVariable"
+        "InformationVariable"
+        "OutVariable"
+        "OutBuffer"
+        "PipelineVariable"
+        "Confirm"
+        "WhatIf"
     )
 )
 
@@ -45,4 +46,3 @@ Describe "Revoke-FabricExternalDataShares" -Tag "UnitTests" {
         }
     }
 }
-
