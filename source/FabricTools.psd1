@@ -12,28 +12,28 @@
 RootModule = 'FabricTools.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.0.1'
+ModuleVersion = '0.21.0'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
 
 # ID used to uniquely identify this module
-GUID = '0ba3e49a-b47e-4beb-8434-5a34ad41ae72'
+GUID              = 'f2a0f9e6-fab6-41fc-9e1c-0c94ff38f794'
 
 # Author of this module
-Author = 'mrrob'
+Author            = 'The FabricTools Team'
 
 # Company or vendor of this module
-CompanyName = 'mrrob'
+CompanyName       = 'fabrictools.io'
 
 # Copyright statement for this module
-Copyright = '(c) mrrob. All rights reserved.'
+Copyright         = 'Copyright (c) 2025 by FabricTools, licensed under MIT'
 
 # Description of the functionality provided by this module
 Description = 'A module to be able to do more with Microsoft Fabric.'
 
 # Minimum version of the PowerShell engine required by this module
-PowerShellVersion = '5.0'
+PowerShellVersion = '5.1'
 
 # Name of the PowerShell host required by this module
 # PowerShellHostName = ''
@@ -123,21 +123,9 @@ PrivateData = @{
 } # End of PrivateData hashtable
 
 # HelpInfo URI of this module
-# HelpInfoURI = ''
+HelpInfoURI = 'https://www.github.com/dataplat/FabricTools'
 
 # Default prefix for commands exported from this module. Override the default prefix using Import-Module -Prefix.
 # DefaultCommandPrefix = ''
 
 }
-
-
-
-
-
-
-
-
-
-
-
-

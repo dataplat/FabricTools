@@ -51,9 +51,7 @@ function Add-FabricDomainWorkspaceAssignmentByPrincipal {
         }
 
         # Step 2: Ensure token validity
-        Write-Message -Message "Validating token..." -Level Debug
         Test-TokenExpired
-        Write-Message -Message "Token validation completed." -Level Debug
 
         # Step 3: Construct the API URL
         $apiEndpointUrl = "{0}/admin/domains/{1}/assignWorkspacesByPrincipals" -f $FabricConfig.BaseUrl, $DomainId

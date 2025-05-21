@@ -54,9 +54,7 @@ function Get-FabricDataPipeline {
         }
 
         # Ensure token validity
-        Write-Message -Message "Validating token..." -Level Debug
         Test-TokenExpired
-        Write-Message -Message "Token validation completed." -Level Debug
 
         # Construct the API endpoint URL
         $apiEndpointURI = ("workspaces/{0}/dataPipelines" -f $WorkspaceId)

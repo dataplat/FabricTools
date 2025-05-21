@@ -48,9 +48,7 @@ function Remove-FabricDomainWorkspaceAssignment
     try
     {
         # Step 1: Ensure token validity
-        Write-Message -Message "Validating token..." -Level Debug
         Test-TokenExpired
-        Write-Message -Message "Token validation completed." -Level Debug
 
         # Step 2: Construct the API URL
         # Determine the API endpoint URL based on the presence of WorkspaceIds

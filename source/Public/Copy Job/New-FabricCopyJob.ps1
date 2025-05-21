@@ -57,9 +57,7 @@ function New-FabricCopyJob {
 
     try {
         # Step 1: Ensure token validity
-        Write-Message -Message "Validating token..." -Level Debug
         Test-TokenExpired
-        Write-Message -Message "Token validation completed." -Level Debug
 
         # Step 2: Construct the API URL
         $apiEndpointURI = "workspaces/{0}/copyJobs" -f $WorkspaceId

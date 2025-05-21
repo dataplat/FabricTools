@@ -23,9 +23,7 @@ function Get-FabricExternalDataShares {
     try {
 
         # Validate authentication token before proceeding
-        Write-Message -Message "Validating token..." -Level Debug
         Test-TokenExpired
-        Write-Message -Message "Token validation completed." -Level Debug
 
         # Construct the API endpoint URI for retrieving external data shares
         Write-Message -Message "Constructing API endpoint URI..." -Level Debug

@@ -28,9 +28,7 @@ This example retrieves all tables from the specified Lakehouse in the specified 
 
     try {
         # Step 1: Ensure token validity
-        Write-Message -Message "Validating token..." -Level Debug
         Test-TokenExpired
-        Write-Message -Message "Token validation completed." -Level Debug
 
 
 

@@ -35,9 +35,7 @@ function Remove-FabricCopyJob {
     )
     try {
         # Ensure token validity
-        Write-Message -Message "Validating token..." -Level Debug
         Test-TokenExpired
-        Write-Message -Message "Token validation completed." -Level Debug
 
         # Construct the API endpoint URI
         $apiEndpointURI = "workspaces/{0}/copyJobs/{1}" -f $WorkspaceId, $CopyJobId
