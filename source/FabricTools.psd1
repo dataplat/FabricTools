@@ -27,7 +27,7 @@ Author            = 'The FabricTools Team'
  CompanyName       = 'fabrictools.io'
 
 # Copyright statement for this module
-Copyright         = 'Copyright (c) 2025 by FabricTools, licensed under MIT'
+Copyright         = 'Copyright (c) 2025 by FabricTools Team'
 
 # Description of the functionality provided by this module
 Description       = 'A module to be able to do more with Microsoft Fabric.
