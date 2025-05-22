@@ -18,6 +18,9 @@ env:
   buildFolderName: output
   buildArtifactName: output
   testResultFolderName: testResults
+
+name: Deploy Preview Module
+# This workflow is triggered on push to the develop branch and deploys the module to the PowerShell Gallery as a preview version.
 jobs:
   Build_Stage_Package_Module:
     name: Package Module
