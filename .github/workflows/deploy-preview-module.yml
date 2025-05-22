@@ -8,9 +8,9 @@ on:
     - .github/**
     - images/**
     - tests/**
-    - **.md
-    - **.ps1
-    - **.yml
+    - '**.md'
+    - '**.ps1'
+    - '**.yml'
     tags:
     - '**'
     - '!*preview*'
