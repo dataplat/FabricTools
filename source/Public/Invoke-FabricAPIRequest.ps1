@@ -26,9 +26,6 @@ Function Invoke-FabricAPIRequest {
     .PARAMETER timeoutSec
         The timeout duration for the request in seconds. The default value is 240 seconds.
 
-    .PARAMETER outFile
-        The file path to save the response content to, if applicable.
-
     .PARAMETER retryCount
         The number of times to retry the request in case of a 429 (Too Many Requests) error. The default value is 0.
 
@@ -49,79 +46,81 @@ Function Invoke-FabricAPIRequest {
     #>
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory = $false)]
-        [string] $authToken,
-
-        [Parameter(Mandatory = $true)]
-        [string] $uri,
-
-        [Parameter(Mandatory = $false)]
-        [ValidateSet('Get', 'Post', 'Delete', 'Put', 'Patch')]
-        [string] $method = "Get",
-
-        [Parameter(Mandatory = $false)]
-        $body,
-
-        [Parameter(Mandatory = $false)]
-        [string] $contentType = "application/json; charset=utf-8",
-
-        [Parameter(Mandatory = $false)]
-        [int] $timeoutSec = 240,
-
-        [Parameter(Mandatory = $false)]
-        [int] $retryCount = 0
+        [Parameter(Mandatory = $false)] [string] $authToken,
+        [Parameter(Mandatory = $true)] [string] $uri,
+        [Parameter(Mandatory = $false)] [ValidateSet('Get', 'Post', 'Delete', 'Put', 'Patch')] [string] $method = "Get",
+        [Parameter(Mandatory = $false)] $body,
+        [Parameter(Mandatory = $false)] [string] $contentType = "application/json; charset=utf-8",
+        [Parameter(Mandatory = $false)] [int] $timeoutSec = 240,
+        [Parameter(Mandatory = $false)] [int] $retryCount = 0
     )
 
-    Confirm-FabricAuthToken | Out-Null
+    Test-TokenExpired
     $fabricHeaders = $FabricSession.HeaderParams
 
     try {
-
-        $requestUrl = "$($FabricSession.BaseApiUrl)/$uri"
-        Write-Verbose "Calling $requestUrl"
-        $response = Invoke-WebRequest -Headers $fabricHeaders -ContentType $contentType -Method $method -Uri $requestUrl -Body $body -TimeoutSec $timeoutSec
-
+        $requestUrl = "$($script:apiUrl)/$uri"
+        Write-Log "Calling $requestUrl"
+        # If need to use -OutFile beware of the following breaking change: https://github.com/PowerShell/PowerShell/issues/20744
+        # TODO: use -SkipHttpErrorCheck to read the entire error response, need to find a solution to handle 429 errors: https://stackoverflow.com/questions/75629606/powershell-webrequest-handle-response-code-and-exit
+        $response = Invoke-WebRequest -Headers $fabricHeaders -Method $method -Uri $requestUrl -Body $body  -TimeoutSec $timeoutSec
+        $requestId = [string]$response.Headers.requestId
+        Write-Log "RAID: $requestId"
+        $lroFailOrNoResultFlag = $false
         if ($response.StatusCode -eq 202) {
-            if ($uri -match "jobType=Pipeline") {
-                Write-Output "Waiting for pipeline to complete. Please check the status in the Power BI Service."
-            } else {
-                do {
-                    $asyncUrl = [string]$response.Headers.Location
+            do {
+                $asyncUrl = [string]$response.Headers.Location
+                Write-Log "LRO - Waiting for request to complete in service."
+                Start-Sleep -Seconds 5
+                $response = Invoke-WebRequest -Headers $fabricHeaders -Method Get -Uri $asyncUrl
+                $lroStatusContent = $response.Content | ConvertFrom-Json
+            }
+            while ($lroStatusContent.status -ine "succeeded" -and $lroStatusContent.status -ine "failed")
 
-                    Write-Output "Waiting for request to complete. Sleeping..."
-                    Start-Sleep -Seconds 5
-                    $response2 = Invoke-WebRequest -Headers $fabricHeaders -Method Get -Uri $asyncUrl
-                    $lroStatusContent = $response2.Content | ConvertFrom-Json
+            if ($lroStatusContent.status -ieq "succeeded") {
+                # Only calls /result if there is a location header, otherwise  'OperationHasNoResult' error is thrown
+                $resultUrl = [string]$response.Headers.Location
+                if ($resultUrl) {
+                    $response = Invoke-WebRequest -Headers $fabricHeaders -Method Get -Uri $resultUrl
                 }
-                while ($lroStatusContent.status -ine "succeeded" -and $lroStatusContent.status -ine "failed")
-
-                try {
-                    $response = Invoke-WebRequest -Headers $fabricHeaders -Method Get -Uri "$asyncUrl/result"
-                } catch {
-                    Write-Output "No result URL"
+                else {
+                    $lroFailOrNoResultFlag = $true
+                }
+            }
+            else {
+                $lroFailOrNoResultFlag = $true
+                if ($lroStatusContent.error) {
+                    throw "LRO API Error: '$($lroStatusContent.error.errorCode)' - $($lroStatusContent.error.message)"
                 }
             }
         }
+
+        Write-Log "Request completed."
 
         #if ($response.StatusCode -in @(200,201) -and $response.Content)
-        if ($response.Content) {
-            $contentBytes = $response.RawContentStream.ToArray()
+        if (!$lroFailOrNoResultFlag -and $response.Content) {
 
+            $contentBytes = $response.RawContentStream.ToArray()
+            # Test for BOM
             if ($contentBytes[0] -eq 0xef -and $contentBytes[1] -eq 0xbb -and $contentBytes[2] -eq 0xbf) {
                 $contentText = [System.Text.Encoding]::UTF8.GetString($contentBytes[3..$contentBytes.Length])
-            } else {
+            }
+            else {
                 $contentText = $response.Content
             }
+
             $jsonResult = $contentText | ConvertFrom-Json
+            if ($jsonResult.value) {
+                $jsonResult = $jsonResult.value
+            }
             Write-Output $jsonResult -NoEnumerate
-        } else {
-            Write-Output $response -NoEnumerate
         }
-    } catch {
+    }
+    catch {
         $ex = $_.Exception
         $message = $null
 
-        if ($null -ne $ex.Response) {
+        if ($ex.Response -ne $null) {
 
             $responseStatusCode = [int]$ex.Response.StatusCode
 
@@ -129,45 +128,45 @@ Function Invoke-FabricAPIRequest {
                 if ($ex.Response.Headers.RetryAfter) {
                     $retryAfterSeconds = $ex.Response.Headers.RetryAfter.Delta.TotalSeconds + 5
                 }
-
                 if (!$retryAfterSeconds) {
                     $retryAfterSeconds = 60
                 }
-
-                Write-Output "Exceeded the amount of calls (TooManyRequests - 429), sleeping for $retryAfterSeconds seconds."
-
+                Write-Log "Exceeded the amount of calls (TooManyRequests - 429), sleeping for $retryAfterSeconds seconds."
                 Start-Sleep -Seconds $retryAfterSeconds
-
                 $maxRetries = 3
 
                 if ($retryCount -le $maxRetries) {
                     Invoke-FabricAPIRequest -authToken $authToken -uri $uri -method $method -body $body -contentType $contentType -timeoutSec $timeoutSec -retryCount ($retryCount + 1)
-                } else {
+                }
+                else {
                     throw "Exceeded the amount of retries ($maxRetries) after 429 error."
                 }
-
-            } else {
-                $apiErrorObj = $ex.Response.Headers | Where-Object { $_.key -ieq "x-ms-public-api-error-code" } | Select-Object -First 1
+            }
+            else {
+                $apiErrorObj = $ex.Response.Headers | ? { $_.key -ieq "x-ms-public-api-error-code" } | Select -First 1
 
                 if ($apiErrorObj) {
                     $apiError = $apiErrorObj.Value[0]
-                }
 
-                if ($apiError -ieq "ItemHasProtectedLabel") {
-                    Write-Warning "Item has a protected label."
-                } else {
-                    throw
-                }
+                    if ($apiError -ieq "ItemHasProtectedLabel") {
+                        Write-Warning "Item has a protected label."
+                    }
+                    else {
+                        $message = "$($ex.Message); API error code: '$apiError'"
 
-                # TODO: Investigate why response.Content is empty but powershell can read it on throw
-                #$errorContent = $ex.Response.Content.ReadAsStringAsync().Result;
-                #$message = "$($ex.Message) - StatusCode: '$($ex.Response.StatusCode)'; Content: '$errorContent'"
+                        throw $message
+                    }
+                }
             }
-        } else {
+        }
+        else {
             $message = "$($ex.Message)"
         }
+
         if ($message) {
             throw $message
         }
+
     }
+
 }

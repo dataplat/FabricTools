@@ -130,7 +130,7 @@ function New-FabricCopyJob {
             Method = 'Post'
             Body   = $bodyJson
         }
-        $response = Invoke-FabricAPIRequest @apiParams
+        $response = Invoke-FabricRestMethod @apiParams
     }
 
     Write-Message -Message "Copy Job created successfully!" -Level Info

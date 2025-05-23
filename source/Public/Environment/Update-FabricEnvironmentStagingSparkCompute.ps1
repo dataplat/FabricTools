@@ -148,28 +148,11 @@ function Update-FabricEnvironmentStagingSparkCompute
         if ($PSCmdlet.ShouldProcess($EnvironmentId, "Update Environment Staging Spark Compute"))
         {
             # Step 4: Make the API request
-            $response = Invoke-RestMethod `
-                -Headers $FabricConfig.FabricHeaders `
+            $response = Invoke-FabricRestMethod `
                 -Uri $apiEndpointUrl `
                 -Method Patch `
-                -Body $bodyJson `
-                -ContentType "application/json" `
-                -ErrorAction Stop `
-                -SkipHttpErrorCheck `
-                -ResponseHeadersVariable "responseHeader" `
-                -StatusCodeVariable "statusCode"
+                -Body $bodyJson
         }
-        # Step 4: Make the API request
-        $response = Invoke-RestMethod `
-            -Headers $FabricConfig.FabricHeaders `
-            -Uri $apiEndpointUrl `
-            -Method Patch `
-            -Body $bodyJson `
-            -ContentType "application/json" `
-            -ErrorAction Stop `
-            -SkipHttpErrorCheck `
-            -ResponseHeadersVariable "responseHeader" `
-            -StatusCodeVariable "statusCode"
 
         # Step 5: Validate the response code
         if ($statusCode -ne 200)

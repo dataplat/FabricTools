@@ -111,14 +111,9 @@ function Get-FabricEventhouse {
             Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
             # Step 6: Make the API request
-            $response = Invoke-RestMethod `
-                -Headers $FabricConfig.FabricHeaders `
+            $response = Invoke-FabricRestMethod `
                 -Uri $apiEndpointUrl `
-                -Method Get `
-                -ErrorAction Stop `
-                -SkipHttpErrorCheck `
-                -ResponseHeadersVariable "responseHeader" `
-                -StatusCodeVariable "statusCode"
+                -Method Get
 
             # Step 7: Validate the response code
             if ($statusCode -ne 200) {

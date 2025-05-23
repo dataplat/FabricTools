@@ -27,7 +27,7 @@ function Invoke-FabricDatasetRefresh {
         [string]$DatasetID
     )
 
-    Confirm-FabricAuthToken | Out-Null
+    Test-TokenExpired
 
     # Check if the dataset is refreshable
     if ((Get-FabricDataset -DatasetId $DatasetID).isrefreshable -eq $false) {

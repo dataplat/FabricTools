@@ -65,7 +65,7 @@ function Get-FabricWarehouse {
             Uri    = $apiEndpointURI
             Method = 'Get'
         }
-        $Warehouses = (Invoke-FabricAPIRequest @apiParams).Value
+        $Warehouses = (Invoke-FabricRestMethod @apiParams).Value
 
         # Step 8: Filter results based on provided parameters
         $Warehouse = if ($WarehouseId) {

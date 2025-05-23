@@ -65,7 +65,7 @@ function Get-FabricCopyJob {
             Uri    = $apiEndpointURI
             Method = 'Get'
         }
-        $copyJobs = Invoke-FabricAPIRequest @apiParams
+        $copyJobs = Invoke-FabricRestMethod @apiParams
 
         #  Filter results based on provided parameters
         $response = if ($CopyJobId) {

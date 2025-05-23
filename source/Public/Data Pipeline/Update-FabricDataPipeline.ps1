@@ -77,8 +77,7 @@ function Update-FabricDataPipeline
         {
 
             # Make the API request
-            $response = Invoke-FabricAPIRequest `
-                -Headers $FabricConfig.FabricHeaders `
+            $response = Invoke-FabricRestMethod `
                 -BaseURI $apiEndpointURI `
                 -method Patch `
                 -body $bodyJson

@@ -156,15 +156,10 @@ function Update-FabricKQLDatabaseDefinition
         if ($PSCmdlet.ShouldProcess($KQLDatabaseId, "Update KQLDatabase"))
         {
             # Step 4: Make the API request
-            $response = Invoke-RestMethod `
-                -Headers $FabricConfig.FabricHeaders `
+            $response = Invoke-FabricRestMethod `
                 -Uri $apiEndpointUrl `
                 -Method Post `
-                -Body $bodyJson `
-                -ContentType "application/json" `
-                -ErrorAction Stop `
-                -ResponseHeadersVariable "responseHeader" `
-                -StatusCodeVariable "statusCode"
+                -Body $bodyJson
         }
 
         # Step 5: Handle and log the response

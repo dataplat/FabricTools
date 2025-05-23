@@ -52,7 +52,7 @@ function Get-FabricDatamart {
             Uri    = $apiEndpointURI
             method = 'Get'
         }
-        $Datamarts = Invoke-FabricAPIRequest @apiParams
+        $Datamarts = Invoke-FabricRestMethod @apiParams
 
         # Step 9: Filter results based on provided parameters
 

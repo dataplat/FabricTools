@@ -38,14 +38,9 @@ function Get-FabricDomainWorkspace {
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
         # Step 3: Make the API request
-        $response = Invoke-RestMethod `
-            -Headers $FabricConfig.FabricHeaders `
+        $response = Invoke-FabricRestMethod `
             -Uri $apiEndpointUrl `
-            -Method Get `
-            -ErrorAction Stop `
-            -SkipHttpErrorCheck `
-            -ResponseHeadersVariable "responseHeader" `
-            -StatusCodeVariable "statusCode"
+            -Method Get
 
         # Step 4: Validate the response code
         if ($statusCode -ne 200) {

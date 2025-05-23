@@ -40,7 +40,7 @@ function Get-FabricDashboard {
             Uri    = $apiEndpointURI
             Method = 'Get'
         }
-        $Dashboards = Invoke-FabricAPIRequest @apiParams
+        $Dashboards = Invoke-FabricRestMethod @apiParams
 
         return $Dashboards
 

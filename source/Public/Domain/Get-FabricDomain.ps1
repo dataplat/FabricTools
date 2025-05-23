@@ -66,14 +66,9 @@ function Get-FabricDomain {
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
         # Step 4: Make the API request
-        $response = Invoke-RestMethod `
-            -Headers $FabricConfig.FabricHeaders `
+        $response = Invoke-FabricRestMethod `
             -Uri $apiEndpointUrl `
-            -Method Get `
-            -ErrorAction Stop `
-            -SkipHttpErrorCheck `
-            -ResponseHeadersVariable "responseHeader" `
-            -StatusCodeVariable "statusCode"
+            -Method 'Get'
 
         # Step 5: Validate the response code
         if ($statusCode -ne 200) {
@@ -83,12 +78,14 @@ function Get-FabricDomain {
             return $null
         }
 
+        Write-Message "Step 6:"
+
         # Step 6: Handle empty response
         if (-not $response) {
             Write-Message -Message "No data returned from the API." -Level Warning
             return $null
         }
-
+        Write-Message "Step 7:"
 
         # Step 7: Filter results based on provided parameters
         $domains = if ($DomainId) {

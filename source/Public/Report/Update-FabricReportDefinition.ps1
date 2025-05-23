@@ -95,15 +95,10 @@ function Update-FabricReportDefinition
         if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Update Report Definition"))
         {
             # Step 4: Make the API request
-            $response = Invoke-RestMethod `
-                -Headers $FabricConfig.FabricHeaders `
+            $response = Invoke-FabricRestMethod `
                 -Uri $apiEndpointUrl `
                 -Method Post `
-                -Body $bodyJson `
-                -ContentType "application/json" `
-                -ErrorAction Stop `
-                -ResponseHeadersVariable "responseHeader" `
-                -StatusCodeVariable "statusCode"
+                -Body $bodyJson
         }
 
         # Step 5: Handle and log the response

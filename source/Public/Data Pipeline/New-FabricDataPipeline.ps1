@@ -76,7 +76,7 @@ function New-FabricDataPipeline
                 method = 'Post'
                 body   = $bodyJson
             }
-            $response = Invoke-FabricAPIRequest @apiParams
+            $response = Invoke-FabricRestMethod @apiParams
         }
         Write-Message -Message "Data Pipeline created successfully!" -Level Info
         return $response

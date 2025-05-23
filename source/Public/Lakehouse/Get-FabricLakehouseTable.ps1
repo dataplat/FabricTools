@@ -57,13 +57,9 @@ This example retrieves all tables from the specified Lakehouse in the specified 
             Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
             # Step 5: Make the API request
-            $response = Invoke-RestMethod `
-                -Headers $FabricConfig.FabricHeaders `
+            $response = Invoke-FabricRestMethod `
                 -Uri $apiEndpointUrl `
-                -Method Get `
-                -ErrorAction Stop `
-                -SkipHttpErrorCheck `
-                -StatusCodeVariable "statusCode"
+                -Method Get
 
             Write-Message -Message "API response code: $statusCode" -Level Debug
             # Step 6: Validate the response code

@@ -88,16 +88,10 @@ function New-FabricReport
 
         if ($PSCmdlet.ShouldProcess($ReportName, "Create Report")){
             # Step 4: Make the API request
-            $response = Invoke-RestMethod `
-                -Headers $FabricConfig.FabricHeaders `
+            $response = Invoke-FabricRestMethod `
                 -Uri $apiEndpointUrl `
                 -Method Post `
-                -Body $bodyJson `
-                -ContentType "application/json" `
-                -ErrorAction Stop `
-                -SkipHttpErrorCheck `
-                -ResponseHeadersVariable "responseHeader" `
-                -StatusCodeVariable "statusCode"
+                -Body $bodyJson
         }
 
         Write-Message -Message "Response Code: $statusCode" -Level Debug

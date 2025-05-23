@@ -41,15 +41,9 @@ function Remove-FabricWorkspaceCapacityAssignment
         if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Unassign Workspace from Capacity"))
         {
             # Step 3: Make the API request
-            $response = Invoke-RestMethod `
-                -Headers $FabricConfig.FabricHeaders `
+            $response = Invoke-FabricRestMethod `
                 -Uri $apiEndpointUrl `
-                -Method Post `
-                -ContentType "application/json" `
-                -ErrorAction Stop `
-                -SkipHttpErrorCheck `
-                -ResponseHeadersVariable "responseHeader" `
-                -StatusCodeVariable "statusCode"
+                -Method Post
         }
         # Step 4: Validate the response code
         if ($statusCode -ne 202)

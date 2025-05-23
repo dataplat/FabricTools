@@ -40,7 +40,7 @@ The function defines parameters for the workspace ID and workspace object. If th
     )
 
     begin {
-        Confirm-FabricAuthToken | Out-Null
+        Test-TokenExpired
     }
 
     process {
@@ -51,7 +51,7 @@ The function defines parameters for the workspace ID and workspace object. If th
 
         # Make a GET request to the PowerBI API to retrieve the users of the workspace.
         # The function returns the 'value' property of the response, which contains the users.
-        return (Invoke-PowerBIRestMethod -Method get -Url ("groups/$($workspace.Id)/users") | ConvertFrom-Json).value
+        return (Invoke-FabricRestMethod -Method get -uri ("groups/$($workspace.Id)/users") | ConvertFrom-Json).value
     }
 
 }

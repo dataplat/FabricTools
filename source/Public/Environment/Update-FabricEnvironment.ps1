@@ -83,16 +83,10 @@ function Update-FabricEnvironment
         if ($PSCmdlet.ShouldProcess($EnvironmentId, "Update Environment"))
         {
             # Step 4: Make the API request
-            $response = Invoke-RestMethod `
-                -Headers $FabricConfig.FabricHeaders `
+            $response = Invoke-FabricRestMethod `
                 -Uri $apiEndpointUrl `
                 -Method Patch `
-                -Body $bodyJson `
-                -ContentType "application/json" `
-                -ErrorAction Stop `
-                -SkipHttpErrorCheck `
-                -ResponseHeadersVariable "responseHeader" `
-                -StatusCodeVariable "statusCode"
+                -Body $bodyJson
         }
 
         # Step 5: Validate the response code

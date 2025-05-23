@@ -41,14 +41,9 @@ function Remove-FabricDomain
         if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Remove Domain"))
         {
             # Step 3: Make the API request
-            $response = Invoke-RestMethod `
-                -Headers $FabricConfig.FabricHeaders `
+            $response = Invoke-FabricRestMethod `
                 -Uri $apiEndpointUrl `
-                -Method Delete `
-                -ErrorAction Stop `
-                -SkipHttpErrorCheck `
-                -ResponseHeadersVariable "responseHeader" `
-                -StatusCodeVariable "statusCode"
+                -Method Delete
         }
 
         # Step 4: Validate the response code

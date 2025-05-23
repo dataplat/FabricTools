@@ -81,9 +81,7 @@ function Update-FabricCapacityTenantSettingOverrides
     try
     {
         # Validate authentication token
-        Write-Message -Message "Validating authentication token..." -Level Debug
         Test-TokenExpired
-        Write-Message -Message "Authentication token is valid." -Level Debug
 
         # Validate Security Groups if provided
         if ($EnabledSecurityGroups)
@@ -167,9 +165,8 @@ function Update-FabricCapacityTenantSettingOverrides
         {
 
             # Invoke Fabric API request
-            $response = Invoke-FabricAPIRequest `
+            $response = Invoke-FabricRestMethod `
                 -BaseURI $apiEndpointURI `
-                -Headers $FabricConfig.FabricHeaders `
                 -method Post `
                 -body $bodyJson
         }

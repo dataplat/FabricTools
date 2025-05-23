@@ -59,13 +59,9 @@ function Get-FabricReflexDefinition {
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
         # Step 4: Make the API request
-        $response = Invoke-RestMethod `
-            -Headers $FabricConfig.FabricHeaders `
+        $response = Invoke-FabricRestMethod `
             -Uri $apiEndpointUrl `
-            -Method Post `
-            -ErrorAction Stop `
-            -ResponseHeadersVariable "responseHeader" `
-            -StatusCodeVariable "statusCode"
+            -Method Post
 
         # Step 5: Validate the response code and handle the response
         switch ($statusCode) {

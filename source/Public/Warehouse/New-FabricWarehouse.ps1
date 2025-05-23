@@ -73,7 +73,7 @@ function New-FabricWarehouse
                 Method = 'Post'
                 Body   = $bodyJson
             }
-            $response = Invoke-FabricAPIRequest @apiParams
+            $response = Invoke-FabricRestMethod @apiParams
         }
 
         Write-Message -Message "Data Warehouse created successfully!" -Level Info

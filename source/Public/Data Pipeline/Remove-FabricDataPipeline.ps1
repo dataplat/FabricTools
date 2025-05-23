@@ -48,8 +48,7 @@ function Remove-FabricDataPipeline
         {
 
             # Make the API request
-            $response = Invoke-FabricAPIRequest `
-                -Headers $FabricConfig.FabricHeaders `
+            $response = Invoke-FabricRestMethod `
                 -BaseURI $apiEndpointURI `
                 -method Delete
         }

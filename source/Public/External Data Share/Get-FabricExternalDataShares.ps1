@@ -30,9 +30,8 @@ function Get-FabricExternalDataShares {
         $apiEndpointURI = "{0}/admin/items/externalDataShares" -f $FabricConfig.BaseUrl, $WorkspaceId
 
         # Invoke the API request to retrieve external data shares
-        $externalDataShares = Invoke-FabricAPIRequest `
+        $externalDataShares = Invoke-FabricRestMethod `
             -BaseURI $apiEndpointURI `
-            -Headers $FabricConfig.FabricHeaders `
             -Method Get
 
         # Return the retrieved external data shares

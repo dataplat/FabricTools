@@ -37,15 +37,9 @@ function Add-FabricWorkspaceIdentity {
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
         # Step 3: Make the API request
-        $response = Invoke-RestMethod `
-            -Headers $FabricConfig.FabricHeaders `
+        $response = Invoke-FabricRestMethod `
             -Uri $apiEndpointUrl `
-            -Method Post `
-            -ContentType "application/json" `
-            -ErrorAction Stop `
-            -SkipHttpErrorCheck `
-            -ResponseHeadersVariable "responseHeader" `
-            -StatusCodeVariable "statusCode"
+            -Method Post
 
         # Step 4: Handle and log the response
         switch ($statusCode) {

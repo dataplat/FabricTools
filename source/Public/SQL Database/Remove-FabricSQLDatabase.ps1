@@ -40,7 +40,6 @@ function Remove-FabricSQLDatabase
     try
     {
         # Step 1: Ensure token validity
-        Confirm-FabricAuthToken | Out-Null
         Test-TokenExpired
 
         # Step 2: Construct the API URL
@@ -51,13 +50,9 @@ function Remove-FabricSQLDatabase
         {
 
             # Step 3: Make the API request
-            $response = Invoke-RestMethod `
-                -Headers $FabricConfig.FabricHeaders `
+            $response = Invoke-FabricRestMethod `
                 -Uri $apiEndpointUrl `
-                -Method Delete `
-                -ErrorAction Stop `
-                -SkipHttpErrorCheck `
-                -StatusCodeVariable "statusCode"
+                -Method Delete
         }
 
         # Step 4: Validate the response code

@@ -42,14 +42,14 @@ Function Remove-FabricItem {
         [string]$itemID
     )
 
-    Confirm-FabricAuthToken | Out-Null
+    Test-TokenExpired
 
     # Invoke the Fabric API to get the items in the workspace
     if ($PSCmdlet.ShouldProcess("Remove items from workspace $workspaceId")) {
         if ($itemID) {
-            Invoke-FabricAPIRequest -Uri "workspaces/$($workspaceID)/items/$($itemID)" -Method Delete
+            Invoke-FabricRestMethod -Uri "workspaces/$($workspaceID)/items/$($itemID)" -Method Delete
         } else {
-            $items = Invoke-FabricAPIRequest -Uri "workspaces/$workspaceId/items" -Method Get
+            $items = Invoke-FabricRestMethod -Uri "workspaces/$workspaceId/items" -Method Get
 
             # Display the count of existing items
             Write-Output "Existing items: $($items.Count)"
@@ -63,7 +63,7 @@ Function Remove-FabricItem {
             # For each item
             foreach ($item in $items) {
                 # Remove the item
-                Invoke-FabricAPIRequest -Uri "workspaces/$workspaceId/items/$($item.ID)" -Method Delete
+                Invoke-FabricRestMethod -Uri "workspaces/$workspaceId/items/$($item.ID)" -Method Delete
             }
         }
     }

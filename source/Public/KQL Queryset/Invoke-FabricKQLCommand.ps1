@@ -79,7 +79,7 @@ function Invoke-FabricKQLCommand {
 
     begin {
 
-        Confirm-FabricAuthToken | Out-Null
+        Test-TokenExpired
 
         Write-Verbose "Check if KQLDatabaseName and KQLDatabaseId are used together"
         if ($PSBoundParameters.ContainsKey("KQLDatabaseName") -and $PSBoundParameters.ContainsKey("KQLDatabaseId")) {

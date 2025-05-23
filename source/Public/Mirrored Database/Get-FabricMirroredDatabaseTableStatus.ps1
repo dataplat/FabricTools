@@ -57,14 +57,9 @@ The function retrieves the PowerBI access token and makes a POST request to the 
             Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
             # Step 6: Make the API request
-            $response = Invoke-RestMethod `
-                -Headers $FabricConfig.FabricHeaders `
+            $response = Invoke-FabricRestMethod `
                 -Uri $apiEndpointUrl `
-                -Method Post `
-                -ErrorAction Stop `
-                -SkipHttpErrorCheck `
-                -ResponseHeadersVariable "responseHeader" `
-                -StatusCodeVariable "statusCode"
+                -Method Post
 
             # Step 7: Validate the response code
             if ($statusCode -ne 200) {

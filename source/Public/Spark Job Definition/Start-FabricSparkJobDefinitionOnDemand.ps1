@@ -59,15 +59,9 @@ function Start-FabricSparkJobDefinitionOnDemand
 
         if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Start Spark Job Definition on demand")){
                 # Step 4: Make the API request
-                $response = Invoke-RestMethod `
-                    -Headers $FabricConfig.FabricHeaders `
+                $response = Invoke-FabricRestMethod `
                     -Uri $apiEndpointUrl `
-                    -Method Post `
-                    -ContentType "application/json" `
-                    -ErrorAction Stop `
-                    -SkipHttpErrorCheck `
-                    -ResponseHeadersVariable "responseHeader" `
-                    -StatusCodeVariable "statusCode"
+                    -Method Post
             }
             Write-Message -Message "Response Code: $statusCode" -Level Debug
             # Step 5: Handle and log the response

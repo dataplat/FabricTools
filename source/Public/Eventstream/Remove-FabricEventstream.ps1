@@ -54,13 +54,9 @@ Author: Tiago Balabuch
         if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Remove Eventstream"))
         {
             # Step 3: Make the API request
-            $response = Invoke-RestMethod `
-                -Headers $FabricConfig.FabricHeaders `
+            $response = Invoke-FabricRestMethod `
                 -Uri $apiEndpointUrl `
-                -Method Delete `
-                -ErrorAction Stop `
-                -SkipHttpErrorCheck `
-                -StatusCodeVariable "statusCode"
+                -Method Delete
         }
 
         # Step 4: Validate the response code

@@ -77,8 +77,7 @@ function Update-FabricWarehouse
         if ($PSCmdlet.ShouldProcess($apiEndpointURI, "Update Warehouse"))
         {
 
-            $response = Invoke-FabricAPIRequest `
-                -Headers $FabricConfig.FabricHeaders `
+            $response = Invoke-FabricRestMethod `
                 -BaseURI $apiEndpointURI `
                 -method Patch `
                 -body $bodyJson

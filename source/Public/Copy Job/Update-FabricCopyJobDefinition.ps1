@@ -112,9 +112,8 @@ function Update-FabricCopyJobDefinition {
 
         if($PSCmdlet.ShouldProcess($apiEndpointUrl, "Update Copy Job Definition")) {
             # Step 4: Make the API request
-            $response = Invoke-FabricAPIRequest `
+            $response = Invoke-FabricRestMethod `
                 -BaseURI $apiEndpointUrl `
-                -Headers $FabricConfig.FabricHeaders `
                 -Method Post `
                 -Body $bodyJson
         }

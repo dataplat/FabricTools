@@ -53,9 +53,8 @@ function Revoke-FabricExternalDataShares {
 
         if ($PSCmdlet.ShouldProcess("$ExternalDataShareId", "revoke")) {
 
-        $externalDataShares = Invoke-FabricAPIRequest `
+        $externalDataShares = Invoke-FabricRestMethod `
             -BaseURI $apiEndpointURI `
-            -Headers $FabricConfig.FabricHeaders `
             -Method Post
         }
 

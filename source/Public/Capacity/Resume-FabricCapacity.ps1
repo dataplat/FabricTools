@@ -40,7 +40,7 @@ The function defines parameters for the subscription ID, resource group, and cap
         [string]$capacity
     )
 
-    Confirm-FabricAuthToken | Out-Null
+    Test-TokenExpired
 
     # Define the URI for the request.
     $resumeCapacity = "$($AzureSession.BaseApiUrl)/subscriptions/$subscriptionID/resourceGroups/$resourcegroup/providers/Microsoft.Fabric/capacities/$capacity/resume?api-version=2022-07-01-preview"

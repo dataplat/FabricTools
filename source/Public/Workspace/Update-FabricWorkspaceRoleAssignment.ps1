@@ -69,16 +69,10 @@ function Update-FabricWorkspaceRoleAssignment
         if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Update Role Assignment"))
         {
             # Step 4: Make the API request
-            $response = Invoke-RestMethod `
-                -Headers $FabricConfig.FabricHeaders `
+            $response = Invoke-FabricRestMethod `
                 -Uri $apiEndpointUrl `
                 -Method Patch `
-                -Body $bodyJson `
-                -ContentType "application/json" `
-                -ErrorAction Stop `
-                -SkipHttpErrorCheck `
-                -ResponseHeadersVariable "responseHeader" `
-                -StatusCodeVariable "statusCode"
+                -Body $bodyJson
         }
         # Step 5: Validate the response code
         if ($statusCode -ne 200)

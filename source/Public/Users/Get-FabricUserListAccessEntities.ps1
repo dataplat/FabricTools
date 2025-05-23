@@ -50,9 +50,8 @@ function Get-FabricUserListAccessEntities {
             $apiEndpointURI += "?type=$Type"
         }
 
-        $response = Invoke-FabricAPIRequest `
+        $response = Invoke-FabricRestMethod `
             -BaseURI $apiEndpointURI `
-            -Headers $FabricConfig.FabricHeaders `
             -Method Get
 
         return $response
