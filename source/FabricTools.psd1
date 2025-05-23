@@ -12,7 +12,7 @@
 RootModule = 'FabricTools.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.21.0'
+ModuleVersion = '0.0.1'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -23,14 +23,17 @@ GUID              = 'f2a0f9e6-fab6-41fc-9e1c-0c94ff38f794'
 # Author of this module
 Author            = 'The FabricTools Team'
 
-# Company or vendor of this module
-CompanyName       = 'fabrictools.io'
+ CompanyName       = 'fabrictools.io'
 
 # Copyright statement for this module
-Copyright         = 'Copyright (c) 2025 by FabricTools, licensed under MIT'
+Copyright         = 'Copyright (c) 2025 by FabricTools Team'
 
 # Description of the functionality provided by this module
-Description = 'A module to be able to do more with Microsoft Fabric.'
+Description       = 'A module to be able to do more with Microsoft Fabric.
+    It lets you pause and resume Fabric capacities.
+    Adds functionallity previously only available with the REST API as PowerShell functions.
+    There are also functions to make it easier to monitor usage metrics and refreshes.
+    It also adds Fabric-friendly aliases for PowerBI functions to make it easier to use the module.'
 
 # Minimum version of the PowerShell engine required by this module
 PowerShellVersion = '5.1'
@@ -51,7 +54,11 @@ PowerShellVersion = '5.1'
 # ProcessorArchitecture = ''
 
 # Modules that must be imported into the global environment prior to importing this module
-RequiredModules = @()
+RequiredModules = @(
+    @{ ModuleName = 'Az.Accounts' ; ModuleVersion = '4.2.0' },
+    @{ ModuleName = 'MicrosoftPowerBIMgmt.Profile' ; ModuleVersion = '1.2.1111' },
+    @{ ModuleName = 'Az.Resources' ; ModuleVersion = '6.15.1' }
+)
 
 # Assemblies that must be loaded prior to importing this module
 # RequiredAssemblies = @()

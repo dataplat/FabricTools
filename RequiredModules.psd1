@@ -21,7 +21,7 @@
     'Sampler.GitHubTasks'       = 'latest'
     MarkdownLinkCheck           = 'latest'
     PSFramework                = 'latest'
-    'Az.Accounts'           = 'latest'
-    'Az.Resources'          = 'latest'
-    'MicrosoftPowerBIMgmt' = 'latest'
+    'Az.Accounts'           = '4.2.0'
+    'Az.Resources'          = '6.15.1'
+    'MicrosoftPowerBIMgmt' = '1.2.1111'
 }
