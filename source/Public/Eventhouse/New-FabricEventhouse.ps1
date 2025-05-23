@@ -152,17 +152,6 @@ function New-FabricEventhouse
                 -ResponseHeadersVariable "responseHeader" `
                 -StatusCodeVariable "statusCode"
         }
-        # Step 4: Make the API request
-        $response = Invoke-RestMethod `
-            -Headers $FabricConfig.FabricHeaders `
-            -Uri $apiEndpointUrl `
-            -Method Post `
-            -Body $bodyJson `
-            -ContentType "application/json" `
-            -ErrorAction Stop `
-            -SkipHttpErrorCheck `
-            -ResponseHeadersVariable "responseHeader" `
-            -StatusCodeVariable "statusCode"
 
         Write-Message -Message "Response Code: $statusCode" -Level Debug
 
