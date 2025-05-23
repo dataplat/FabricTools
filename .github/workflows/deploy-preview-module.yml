@@ -1,19 +1,18 @@
 on:
   push:
     branches:
-    - develop
+      - develop
     paths-ignore:
-    - CHANGELOG.md
-    - .vscode/**
-    - .github/**
-    - images/**
-    - tests/**
-    - '**.md'
-    - '**.ps1'
-    - '**.yml'
+      - CHANGELOG.md
+      - .vscode/**
+      - .github/**
+      - images/**
+      - tests/**
+      - '**.md'
+      - '**.yml'
     tags:
-    - '**'
-    - '!*preview*'
+      - '**'
+      - '!*preview*'
 env:
   buildFolderName: output
   buildArtifactName: output
