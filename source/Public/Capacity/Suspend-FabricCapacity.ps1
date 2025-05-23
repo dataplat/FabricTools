@@ -39,7 +39,7 @@ The function defines parameters for the subscription ID, resource group, and cap
         [string]$capacity
     )
 
-    Confirm-FabricAuthToken | Out-Null
+    Test-TokenExpired
 
     # Define the URI for the request.
     $suspendCapacity = "$($AzureSession.BaseApiUrl)/subscriptions/$subscriptionID/resourceGroups/$resourcegroup/providers/Microsoft.Fabric/capacities/$capacity/suspend?api-version=2023-11-01"

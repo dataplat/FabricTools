@@ -38,9 +38,7 @@ function Remove-FabricMLModel
     try
     {
         # Step 1: Ensure token validity
-        Write-Message -Message "Validating token..." -Level Debug
         Test-TokenExpired
-        Write-Message -Message "Token validation completed." -Level Debug
 
         # Step 2: Construct the API URL
         $apiEndpointUrl = "{0}/workspaces/{1}/mlModels/{2}" -f $FabricConfig.BaseUrl, $WorkspaceId, $MLModelId
@@ -48,13 +46,9 @@ function Remove-FabricMLModel
         if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Remove ML Model"))
         {
             # Step 3: Make the API request
-            $response = Invoke-RestMethod `
-                -Headers $FabricConfig.FabricHeaders `
+            $response = Invoke-FabricRestMethod `
                 -Uri $apiEndpointUrl `
-                -Method Delete `
-                -ErrorAction Stop `
-                -SkipHttpErrorCheck `
-                -StatusCodeVariable "statusCode"
+                -Method Delete
         }
         # Step 4: Validate the response code
         if ($statusCode -ne 200)

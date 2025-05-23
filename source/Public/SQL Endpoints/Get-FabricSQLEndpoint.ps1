@@ -54,9 +54,7 @@ function Get-FabricSQLEndpoint {
         }
 
         # Step 2: Ensure token validity
-        Write-Message -Message "Validating token..." -Level Debug
         Test-TokenExpired
-        Write-Message -Message "Token validation completed." -Level Debug
         # Step 3: Initialize variables
         $continuationToken = $null
         $SQLEndpoints = @()
@@ -82,14 +80,9 @@ function Get-FabricSQLEndpoint {
             Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
             # Step 6: Make the API request
-            $response = Invoke-RestMethod `
-                -Headers $FabricConfig.FabricHeaders `
+            $response = Invoke-FabricRestMethod `
                 -Uri $apiEndpointUrl `
-                -Method Get `
-                -ErrorAction Stop `
-                -SkipHttpErrorCheck `
-                -ResponseHeadersVariable "responseHeader" `
-                -StatusCodeVariable "statusCode"
+                -Method Get
 
             # Step 7: Validate the response code
             if ($statusCode -ne 200) {

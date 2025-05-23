@@ -35,9 +35,7 @@ function Revoke-FabricCapacityTenantSettingOverrides {
     )
     try {
         # Step 1: Validate authentication token before making API requests
-        Write-Message -Message "Validating authentication token..." -Level Debug
         Test-TokenExpired
-        Write-Message -Message "Authentication token is valid." -Level Debug
 
         # Step 2: Construct the API endpoint URL for retrieving capacity tenant setting overrides
         $apiEndpointURI = "{0}/admin/capacities/{1}/delegatedTenantSettingOverrides/{2}" -f $FabricConfig.BaseUrl, $capacityId, $tenantSettingName
@@ -45,9 +43,8 @@ function Revoke-FabricCapacityTenantSettingOverrides {
 
         if ($PSCmdlet.ShouldProcess("$tenantSettingName" , "Revoke")) {
         # Step 3: Invoke the Fabric API to retrieve capacity tenant setting overrides
-        $response = Invoke-FabricAPIRequest `
+        $response = Invoke-FabricRestMethod `
             -BaseURI $apiEndpointURI `
-            -Headers $FabricConfig.FabricHeaders `
             -Method Delete
         }
         Write-Message -Message "Successfully removed the tenant setting override '$tenantSettingName' from the capacity with ID '$capacityId'." -Level Info

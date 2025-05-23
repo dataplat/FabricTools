@@ -34,7 +34,7 @@ function Get-FabricCapacities {
     # Initialize an array to store the results
     $res = @()
 
-    Get-FabricAuthToken | Out-Null
+    Test-TokenExpired
 
     # If a subscription ID is provided
     if ($subscriptionID) {

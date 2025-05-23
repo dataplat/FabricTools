@@ -45,7 +45,7 @@ Function Export-FabricItem {
     if (![string]::IsNullOrEmpty($itemID)) {
         # Invoke the Fabric API to get the specific item in the workspace
 
-        $item = Invoke-FabricAPIRequest -Uri "workspaces/$workspaceId/items/$itemID/getDefinition" -Method POST
+        $item = Invoke-FabricRestMethod -Uri "workspaces/$workspaceId/items/$itemID/getDefinition" -Method POST
         # If a filter is provided
 
 
@@ -65,7 +65,7 @@ Function Export-FabricItem {
         # Display a message indicating the items were exported
         Write-Output "Items exported to $path"
     } else {
-        $items = Invoke-FabricAPIRequest -Uri "workspaces/$workspaceId/items" -Method Get
+        $items = Invoke-FabricRestMethod -Uri "workspaces/$workspaceId/items" -Method Get
 
         if ($filter) {
             $items = $items.value | Where-Object $filter
@@ -84,7 +84,7 @@ Function Export-FabricItem {
             if ($itemType -in @("report", "semanticmodel", "notebook", "SparkJobDefinitionV1", "DataPipeline")) {
                 Write-Output "Getting definition of: $itemId / $itemName / $itemType"
 
-                $response = Invoke-FabricAPIRequest -Uri "workspaces/$workspaceId/items/$itemId/getDefinition" -Method Post
+                $response = Invoke-FabricRestMethod -Uri "workspaces/$workspaceId/items/$itemId/getDefinition" -Method Post
 
                 $partCount = $response.definition.parts.Count
 

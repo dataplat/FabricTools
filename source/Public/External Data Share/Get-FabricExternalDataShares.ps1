@@ -23,18 +23,15 @@ function Get-FabricExternalDataShares {
     try {
 
         # Validate authentication token before proceeding
-        Write-Message -Message "Validating token..." -Level Debug
         Test-TokenExpired
-        Write-Message -Message "Token validation completed." -Level Debug
 
         # Construct the API endpoint URI for retrieving external data shares
         Write-Message -Message "Constructing API endpoint URI..." -Level Debug
         $apiEndpointURI = "{0}/admin/items/externalDataShares" -f $FabricConfig.BaseUrl, $WorkspaceId
 
         # Invoke the API request to retrieve external data shares
-        $externalDataShares = Invoke-FabricAPIRequest `
+        $externalDataShares = Invoke-FabricRestMethod `
             -BaseURI $apiEndpointURI `
-            -Headers $FabricConfig.FabricHeaders `
             -Method Get
 
         # Return the retrieved external data shares

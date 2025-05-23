@@ -58,7 +58,7 @@ function Get-FabricSQLDatabase {
         [string]$SQLDatabaseId
     )
 
-    Confirm-FabricAuthToken | Out-Null
+    Test-TokenExpired
 
     Write-Verbose "You can either use SQLDatabaseName or SQLDatabaseID not both. If both are used throw error"
     if ($PSBoundParameters.ContainsKey("SQLDatabaseName") -and $PSBoundParameters.ContainsKey("SQLDatabaseId")) {

@@ -33,14 +33,9 @@ This command fetches the result of the operation with the specified operationId.
 
     try {
         # Step 2: Make the API request
-        $response = Invoke-RestMethod `
-            -Headers $FabricConfig.FabricHeaders `
+        $response = Invoke-FabricRestMethod `
             -Uri $apiEndpointUrl `
-            -Method Get `
-            -ErrorAction Stop `
-            -SkipHttpErrorCheck `
-            -ResponseHeadersVariable "responseHeader" `
-            -StatusCodeVariable "statusCode"
+            -Method Get
 
 
         # Step 3: Return the result
