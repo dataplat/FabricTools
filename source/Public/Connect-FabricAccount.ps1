@@ -12,25 +12,49 @@ function Connect-FabricAccount {
     The TenantId of the Azure Active Directory tenant you want to connect to
     and in which your Fabric Capacity is.
 
+.PARAMETER ServicePrincipalId
+    The Client ID (AppId) of the service principal used for authentication.
+
+.PARAMETER ServicePrincipalSecret
+    The **secure string** representing the service principal secret. Use Read-Host -AsSecureString or other secure entry.
+
+.PARAMETER Credential
+    A PSCredential object representing a user credential (username and secure password).
+
 .EXAMPLE
     Connect-FabricAccount `
-        -TenantID '12345678-1234-1234-1234-123456789012'
+        -TenantId '12345678-1234-1234-1234-123456789012'
+
+.EXAMPLE
+    $secret = Read-Host -AsSecureString
+    Connect-FabricAccount -TenantId 'xxx' -ServicePrincipalId 'appId' -ServicePrincipalSecret $secret
+
 
 .NOTES
 
     Revsion History:
 
     - 2024-12-22 - FGE: Added Verbose Output
+    - 2025-05-26 - Jojobit: Added Service Principal support, with secure string handling and parameter descriptions, as supported by the original FabTools module
 
 .LINK
     Connect-AzAccount https://learn.microsoft.com/de-de/powershell/module/az.accounts/connect-azaccount?view=azps-12.4.0
 
     #>
 
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
-        [Parameter(Mandatory = $true)]
-        [string]$TenantId
+        [Parameter(Mandatory = $false, HelpMessage = "Azure AD Tenant ID.")]
+        [string]$tenantId,
+
+        [Parameter(Mandatory = $false, HelpMessage = "AppId of the service principal.")]
+        [string]$servicePrincipalId,
+
+        [Parameter(Mandatory = $false, HelpMessage = "Secure secret of the service principal.")]
+        [SecureString]$servicePrincipalSecret,
+
+        [Parameter(Mandatory = $false, HelpMessage = "User credential.")]
+        [PSCredential]$credential
     )
 
     begin {
@@ -38,7 +62,23 @@ function Connect-FabricAccount {
 
     process {
         Write-Verbose "Connect to Azure Account"
-        Connect-AzAccount -TenantId $TenantId | Out-Null
+
+        if ($servicePrincipalId) {
+            $credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $servicePrincipalId, $servicePrincipalSecret
+            Connect-AzAccount -ServicePrincipal -TenantId $tenantId -Credential $credential | Out-Null
+            #Set-AzContext -Tenant $tenantId | Out-Null
+        }
+        elseif ($null -ne $credential) {
+            Connect-AzAccount -Credential $credential -Tenant $tenantId | Out-Null
+        }
+        else {
+            Connect-AzAccount | Out-Null
+        }
+
+        $azContext = Get-AzContext
+         if ($PSCmdlet.ShouldProcess("Setting Fabric authentication token for $($azContext.Account)")) {
+        Write-output "Connected: $($azContext.Account)"
+        }
 
         Write-Verbose "Get authentication token"
         $FabricSession.FabricToken = (Get-AzAccessToken -ResourceUrl $FabricSession.ResourceUrl).Token
