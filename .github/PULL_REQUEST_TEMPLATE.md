@@ -23,6 +23,8 @@
 
     After the description, please concisely list the changes as per keepachangelog.com
     This **should** duplicate what you've updated in the changelog file.
+    
+    for example:
 
 ### Added
 - for new features [closes #15]
@@ -51,13 +53,9 @@
 
 - [ ] The PR represents a single logical change. i.e. Cosmetic updates should go in different PRs.
 - [ ] Added an entry under the Unreleased section of in the CHANGELOG.md as per [format](https://keepachangelog.com/en/1.0.0/).
-- [ ] Local clean build passes without issue or fail tests (`build.ps1 -ResolveDependency`).
-- [ ] Resource documentation added/updated in README.md.
-- [ ] Resource parameter descriptions added/updated in README.md, schema.mof
-      and comment-based help.
+- [ ] Local clean build passes without issue or fail tests (`build.ps1 -ResolveDependency -Tasks build, test`).
 - [ ] Comment-based help added/updated.
-- [ ] Localization strings added/updated in all localization files as appropriate.
 - [ ] Examples appropriately added/updated.
-- [ ] Unit tests added/updated. See [DSC Resource Testing Guidelines](https://github.com/PowerShell/DscResources/blob/master/TestsGuidelines.md).
-- [ ] Integration tests added/updated (where possible). See [DSC Resource Testing Guidelines](https://github.com/PowerShell/DscResources/blob/master/TestsGuidelines.md).
-- [ ] New/changed code adheres to [DSC Resource Style Guidelines](https://github.com/PowerShell/DscResources/blob/master/StyleGuidelines.md) and [Best Practices](https://github.com/PowerShell/DscResources/blob/master/BestPractices.md).
+- [ ] Unit tests added/updated..
+- [ ] Integration tests added/updated (where possible).
+- [ ] Documentation added/updated (where applicable).
