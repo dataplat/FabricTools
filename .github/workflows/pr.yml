@@ -2,10 +2,10 @@ on:
   pull_request:
     branches:
     - main
-    - sampler # temporary branch for testing
     - develop
     paths-ignore:
     - CHANGELOG.md
+name: Build and Test Module for Pull Request
 env:
   buildFolderName: output
   buildArtifactName: output
