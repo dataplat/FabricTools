@@ -43,7 +43,6 @@ function New-FabricNotebook
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [ValidatePattern('^[a-zA-Z0-9_ ]*$')]
         [string]$NotebookName,
 
         [Parameter(Mandatory = $false)]

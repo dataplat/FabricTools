@@ -45,7 +45,6 @@ This example loads data from a folder into the specified table in the Lakehouse,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [ValidatePattern('^[a-zA-Z0-9_]*$')]
         [string]$TableName,
 
         [Parameter(Mandatory = $true)]

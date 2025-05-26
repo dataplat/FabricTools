@@ -40,7 +40,6 @@ function New-FabricLakehouse
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [ValidatePattern('^[a-zA-Z0-9_]*$')]
         [string]$LakehouseName,
 
         [Parameter(Mandatory = $false)]

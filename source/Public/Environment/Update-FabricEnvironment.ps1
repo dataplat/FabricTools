@@ -49,7 +49,6 @@ function Update-FabricEnvironment
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [ValidatePattern('^[a-zA-Z0-9_ ]*$')]
         [string]$EnvironmentName,
 
         [Parameter(Mandatory = $false)]
