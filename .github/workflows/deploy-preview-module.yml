@@ -81,6 +81,7 @@ jobs:
       run: ./build.ps1 -tasks publish
       env:
         GitHubToken: ${{ secrets.GITHUBTOKEN }}
+        GitHubToken: ${{ secrets.GITHUBTOKEN }}
         GalleryApiToken: ${{ secrets.GalleryApiToken }}
         ReleaseBranch: develop
         MainGitBranch: develop

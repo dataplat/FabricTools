@@ -83,7 +83,6 @@ The workflow for using this and developing the code is shown below.
    ```PowerShell
    ./build.ps1 -Tasks build,test
    ```
-
 8. Once you are ready to submit your changes for review please ensure that you update the `CHANGELOG.md` file with a summary of your changes. This is important as it helps us keep track of what has changed in the module and makes it easier for users to see what has been added or changed.
 
    You can use the [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) format for this.

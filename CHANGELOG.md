@@ -56,24 +56,7 @@ For a full list of changes and details, please see the commit history.
 
 ### Added
 
-- For new features.
-
-### Changed
-
-- For changes in existing functionality.
-
-### Deprecated
-
-- For soon-to-be removed features.
-
-### Removed
-
-- For now removed features.
-
-### Fixed
-
-- For any bug fix.
-
 ### Security
 
 - In case of vulnerabilities.
+
