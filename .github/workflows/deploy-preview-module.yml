@@ -19,6 +19,15 @@ env:
   testResultFolderName: testResults
 
 name: Deploy Preview Module
+permissions:
+  contents: write  # to create a release
+  id-token: write # to use the GitHub OIDC token for authentication
+  packages: write # to publish the module to the PowerShell Gallery
+  pull-requests: write # to create a pull request for the changelog
+  issues: write # to create an issue for the changelog
+  actions: write # to allow the workflow to run actions
+  checks: write # to allow the workflow to create checks
+  statuses: write # to allow the workflow to create statuses
 
 # This workflow is triggered on push to the develop branch and deploys the module to the PowerShell Gallery as a preview version.
 jobs:
