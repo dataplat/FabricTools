@@ -73,7 +73,6 @@ function Get-FabricEventhouse {
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [ValidatePattern('^[a-zA-Z0-9_ ]*$')]
         [string]$EventhouseName
     )
     try {

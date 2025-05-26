@@ -38,7 +38,6 @@ function New-FabricSQLDatabase
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [ValidatePattern('^[a-zA-Z0-9_]*$')]
         [string]$Name,
 
         [Parameter(Mandatory = $false)]

@@ -42,7 +42,6 @@ function Update-FabricCopyJob
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [ValidatePattern('^[a-zA-Z0-9_ ]*$')]
         [string]$CopyJobName,
 
         [Parameter(Mandatory = $false)]

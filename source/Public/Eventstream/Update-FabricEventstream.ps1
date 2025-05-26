@@ -49,7 +49,6 @@ function Update-FabricEventstream
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [ValidatePattern('^[a-zA-Z0-9_ ]*$')]
         [string]$EventstreamName,
 
         [Parameter(Mandatory = $false)]

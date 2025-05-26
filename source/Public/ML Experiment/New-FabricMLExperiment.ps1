@@ -36,7 +36,6 @@ function New-FabricMLExperiment
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [ValidatePattern('^[a-zA-Z0-9_]*$')]
         [string]$MLExperimentName,
 
         [Parameter(Mandatory = $false)]

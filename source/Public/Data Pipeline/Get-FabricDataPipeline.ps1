@@ -42,7 +42,6 @@ function Get-FabricDataPipeline {
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [ValidatePattern('^[a-zA-Z0-9_ ]*$')]
         [string]$DataPipelineName
     )
 

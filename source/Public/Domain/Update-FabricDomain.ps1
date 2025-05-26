@@ -40,7 +40,6 @@ function Update-FabricDomain
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [ValidatePattern('^[a-zA-Z0-9_ ]*$')]
         [string]$DomainName,
 
         [Parameter(Mandatory = $false)]
