@@ -83,8 +83,23 @@ The workflow for using this and developing the code is shown below.
    ```PowerShell
    ./build.ps1 -Tasks build,test
    ```
+8. Once you are ready to submit your changes for review please ensure that you update the `CHANGELOG.md` file with a summary of your changes. This is important as it helps us keep track of what has changed in the module and makes it easier for users to see what has been added or changed.
 
-8. Once you are happy with your code, push your branch to GitHub and create a PR against the repo.
+   You can use the [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) format for this.
+   
+   Please add your changes under the `Unreleased` section and then create a new section for the next release. PLease use human readable titles for the changes, such as `Added`, `Changed`, `Fixed`, `Deprecated`, `Removed`, and `Security`.
+   For example:
+
+   ```markdown
+   ## [Unreleased]
+   ### Added
+   - Added new function to manage Fabric workspaces.
+   ### Changed
+   - Updated documentation for `Get-FabricAPIClusterURI`.
+   ### Fixed
+   - Fixed issue with `New-FabricDataPipeline` not working correctly.
+   ```
+9. Once you are happy with your code and you have updated the changelog, push your branch to GitHub and create a PR against the repo.
 
 ## Thanks!
 

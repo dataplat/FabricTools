@@ -64,7 +64,7 @@ function Get-FabricCapacities {
             # For each resource group, get all resources of type "Microsoft.Fabric/capacities"
             foreach ($r in $rgs) {
                 # Get all resources of type "Microsoft.Fabric/capacities" and add them to the results array
-                $res += Get-AzResource -ResourceGroupName $r.ResourceGroupName -resourcetype "Microsoft.Fabric/capacities" -ErrorAction SilentlyContinue
+                $res += Get-AzResource -ResourceGroupName $r.ResourceGroupName -ResourceType "Microsoft.Fabric/capacities" -ErrorAction SilentlyContinue
             }
         }
     }
@@ -72,3 +72,4 @@ function Get-FabricCapacities {
     # Return the results
     return $res
 }
+

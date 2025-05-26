@@ -31,7 +31,6 @@ Author: Tiago Balabuch
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [ValidatePattern('^[a-zA-Z0-9_\- ]*$')]
         [string]$WorkspaceName,
 
         [Parameter(Mandatory = $false)]
