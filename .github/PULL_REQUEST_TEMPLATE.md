@@ -23,7 +23,7 @@
 
     After the description, please concisely list the changes as per keepachangelog.com
     This **should** duplicate what you've updated in the changelog file.
-    
+
     for example:
 
 ### Added
@@ -59,3 +59,5 @@
 - [ ] Unit tests added/updated..
 - [ ] Integration tests added/updated (where possible).
 - [ ] Documentation added/updated (where applicable).
+ed code adheres to [DSC Resource Style Guidelines](https://github.com/PowerShell/DscResources/blob/master/StyleGuidelines.md) and [Best Practices](https://github.com/PowerShell/DscResources/blob/master/BestPractices.md).
+
