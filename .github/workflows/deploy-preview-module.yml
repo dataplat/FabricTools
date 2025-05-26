@@ -19,6 +19,13 @@ env:
   testResultFolderName: testResults
 
 name: Deploy Preview Module
+permissions:
+  contents: write
+  pull-requests: write
+  actions: write
+  checks: write
+  deployments: write
+
 # This workflow is triggered on push to the develop branch and deploys the module to the PowerShell Gallery as a preview version.
 jobs:
   Build_Stage_Package_Module:
@@ -70,7 +77,7 @@ jobs:
       shell: pwsh
       run: ./build.ps1 -tasks publish
       env:
-        GitHubToken: ${{ secrets.GitHubToken }}
+        GitHubToken: ${{ secrets.GITHUB_TOKEN }}
         GalleryApiToken: ${{ secrets.GalleryApiToken }}
         ReleaseBranch: develop
         MainGitBranch: develop
