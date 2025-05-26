@@ -27,7 +27,6 @@ permissions:
   checks: write # to allow the workflow to create checks
   statuses: write # to allow the workflow to create statuses
 
-
 name: Deploy  Module
 # This workflow is triggered on push to the main branch and deploys the module to the PowerShell Gallery and creates a GitHub Release.
 jobs:
