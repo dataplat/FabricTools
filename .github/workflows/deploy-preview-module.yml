@@ -72,3 +72,5 @@ jobs:
       env:
         GitHubToken: ${{ secrets.GitHubToken }}
         GalleryApiToken: ${{ secrets.GalleryApiToken }}
+        ReleaseBranch: develop
+        MainGitBranch: develop
