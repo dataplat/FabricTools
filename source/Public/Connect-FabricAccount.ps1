@@ -65,7 +65,7 @@ function Connect-FabricAccount {
 
         if ($servicePrincipalId) {
             $credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $servicePrincipalId, $servicePrincipalSecret
-            Connect-AzAccount -ServicePrincipal -TenantId $tenantId -Credential $credential | Out-Null
+            $null = Connect-AzAccount -ServicePrincipal -TenantId $tenantId -Credential $credential
             #Set-AzContext -Tenant $tenantId | Out-Null
         }
         elseif ($null -ne $credential) {
