@@ -69,7 +69,7 @@ function Connect-FabricAccount {
             #Set-AzContext -Tenant $tenantId | Out-Null
         }
         elseif ($null -ne $credential) {
-            Connect-AzAccount -Credential $credential -Tenant $tenantId | Out-Null
+            $null = Connect-AzAccount -Credential $credential -Tenant $tenantId
         }
         else {
             $null = Connect-AzAccount
