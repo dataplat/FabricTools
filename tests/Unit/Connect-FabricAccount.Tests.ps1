@@ -3,6 +3,9 @@ param(
     $ModuleName = "FabricTools",
     $expectedParams = @(
         "TenantId"
+        "ServicePrincipalId"
+        "ServicePrincipalSecret"
+        "Credential"
                 "Verbose"
                 "Debug"
                 "ErrorAction"
@@ -15,7 +18,9 @@ param(
                 "OutVariable"
                 "OutBuffer"
                 "PipelineVariable"
-                
+                "WhatIf"
+                "Confirm"
+
     )
 )
 
@@ -43,4 +48,3 @@ Describe "Connect-FabricAccount" -Tag "UnitTests" {
         }
     }
 }
-
