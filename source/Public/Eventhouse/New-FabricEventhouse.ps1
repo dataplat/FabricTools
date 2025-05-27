@@ -43,7 +43,6 @@ function New-FabricEventhouse
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [ValidatePattern('^[a-zA-Z0-9_ ]*$')]
         [string]$EventhouseName,
 
         [Parameter(Mandatory = $false)]

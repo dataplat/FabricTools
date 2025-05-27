@@ -36,7 +36,6 @@ function New-FabricMLModel
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [ValidatePattern('^[a-zA-Z0-9_]*$')]
         [string]$MLModelName,
 
         [Parameter(Mandatory = $false)]

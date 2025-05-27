@@ -43,7 +43,6 @@ function Get-FabricSemanticModel {
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [ValidatePattern('^[a-zA-Z0-9_ ]*$')]
         [string]$SemanticModelName
     )
     try {

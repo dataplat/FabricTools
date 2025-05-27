@@ -69,7 +69,6 @@ function Update-FabricEnvironmentStagingSparkCompute
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [ValidatePattern('^[a-zA-Z0-9_ ]*$')]
         [string]$InstancePoolName,
 
         [Parameter(Mandatory = $true)]

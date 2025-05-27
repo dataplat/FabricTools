@@ -58,7 +58,6 @@ function New-FabricSparkCustomPool
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [ValidatePattern('^[a-zA-Z0-9_ ]*$')]
         [string]$SparkCustomPoolName,
 
         [Parameter(Mandatory = $true)]
