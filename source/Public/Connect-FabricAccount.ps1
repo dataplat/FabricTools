@@ -22,9 +22,18 @@ function Connect-FabricAccount {
 .EXAMPLE
     Connect-FabricAccount -TenantId '12345678-1234-1234-1234-123456789012'
 
+    Connects to the stated Tenant with exisitng credentials
+
 .EXAMPLE
-    $secret = Read-Host -AsSecureString
+    $credential = Get-Credential
+    Connect-FabricAccount -TenantId 'xxx' -credential $credential
+
+    Prompts for Service Principal id and secret and connects as that Service Principal
+
+.EXAMPLE
     Connect-FabricAccount -TenantId 'xxx' -ServicePrincipalId 'appId' -ServicePrincipalSecret $secret
+
+    Connects as Service Principal using id and secret
 
 .NOTES
 
