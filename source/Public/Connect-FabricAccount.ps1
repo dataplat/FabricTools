@@ -76,8 +76,8 @@ function Connect-FabricAccount {
         }
 
         $azContext = Get-AzContext
-         if ($PSCmdlet.ShouldProcess("Setting Fabric authentication token for $($azContext.Account)")) {
-        Write-output "Connected: $($azContext.Account)"
+        if ($PSCmdlet.ShouldProcess("Setting Fabric authentication token for $($azContext.Account)")) {
+            Write-output "Connected: $($azContext.Account)"
         }
 
         Write-Verbose "Get authentication token"
