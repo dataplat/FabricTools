@@ -77,18 +77,18 @@ function Connect-FabricAccount {
         else {
             $null = Connect-AzAccount
         }
-        
+
         $azContext = Get-AzContext
 
         Write-Verbose "Connected: $($azContext.Account)"
-        
+
         if ($PSCmdlet.ShouldProcess("Setting Fabric authentication token for $($azContext.Account)")) {
-            
+
             Write-Verbose "Get authentication token"
             $FabricSession.FabricToken = (Get-AzAccessToken -ResourceUrl $FabricSession.ResourceUrl).Token
             Write-Verbose "Token: $($FabricSession.FabricToken)"
             }
-            
+
          if ($PSCmdlet.ShouldProcess("Setting Fabric headers for $($azContext.Account)")) {
             Write-Verbose "Setup headers for API calls"
             $FabricSession.HeaderParams = @{'Authorization' = "Bearer {0}" -f $FabricSession.FabricToken }
