@@ -5,30 +5,26 @@ function Connect-FabricAccount {
     Connects to the Fabric WebAPI.
 
 .DESCRIPTION
-    Connects to the Fabric WebAPI by using the cmdlet Connect-AzAccount.
-    This function retrieves the authentication token for the Fabric API and sets up the headers for API calls.
+    Connects to the Fabric WebAPI by using the cmdlet Connect-AzAccount. This function retrieves the authentication token for the Fabric API and sets up the headers for API calls.
 
 .PARAMETER TenantId
-    The TenantId of the Azure Active Directory tenant you want to connect to
-    and in which your Fabric Capacity is.
+    The TenantId of the Azure Active Directory tenant you want to connect to and in which your Fabric Capacity is.
 
 .PARAMETER ServicePrincipalId
     The Client ID (AppId) of the service principal used for authentication.
 
 .PARAMETER ServicePrincipalSecret
-    The **secure string** representing the service principal secret. Use Read-Host -AsSecureString or other secure entry.
+    The **secure string** representing the service principal secret.
 
 .PARAMETER Credential
     A PSCredential object representing a user credential (username and secure password).
 
 .EXAMPLE
-    Connect-FabricAccount `
-        -TenantId '12345678-1234-1234-1234-123456789012'
+    Connect-FabricAccount -TenantId '12345678-1234-1234-1234-123456789012'
 
 .EXAMPLE
     $secret = Read-Host -AsSecureString
     Connect-FabricAccount -TenantId 'xxx' -ServicePrincipalId 'appId' -ServicePrincipalSecret $secret
-
 
 .NOTES
 
@@ -39,7 +35,6 @@ function Connect-FabricAccount {
 
 .LINK
     Connect-AzAccount https://learn.microsoft.com/de-de/powershell/module/az.accounts/connect-azaccount?view=azps-12.4.0
-
     #>
 
     [CmdletBinding(SupportsShouldProcess)]
@@ -66,7 +61,6 @@ function Connect-FabricAccount {
         if ($servicePrincipalId) {
             $credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $servicePrincipalId, $servicePrincipalSecret
             $null = Connect-AzAccount -ServicePrincipal -TenantId $tenantId -Credential $credential
-            #Set-AzContext -Tenant $tenantId | Out-Null
         }
         elseif ($null -ne $credential) {
             $null = Connect-AzAccount -Credential $credential -Tenant $tenantId
@@ -88,8 +82,6 @@ function Connect-FabricAccount {
         $FabricSession.HeaderParams = @{'Authorization' = "Bearer {0}" -f $FabricSession.FabricToken }
         Write-Verbose "HeaderParams: $($FabricSession.HeaderParams)"
     }
-
     end {
     }
-
 }
