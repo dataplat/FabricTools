@@ -52,9 +52,7 @@ function Update-FabricEventhouseDefinition
     try
     {
         # Step 1: Ensure token validity
-        Write-Message -Message "Validating token..." -Level Debug
         Test-TokenExpired
-        Write-Message -Message "Token validation completed." -Level Debug
 
         # Step 2: Construct the API URL
         $apiEndpointUrl = "{0}/workspaces/{1}/eventhouses/{2}/updateDefinition" -f $FabricConfig.BaseUrl, $WorkspaceId, $EventhouseId
@@ -117,15 +115,10 @@ function Update-FabricEventhouseDefinition
         if ($PSCmdlet.ShouldProcess("Eventhouse", "Update"))
         {
             # Step 4: Make the API request
-            $response = Invoke-RestMethod `
-                -Headers $FabricConfig.FabricHeaders `
+            $response = Invoke-FabricRestMethod `
                 -Uri $apiEndpointUrl `
                 -Method Post `
-                -Body $bodyJson `
-                -ContentType "application/json" `
-                -ErrorAction Stop `
-                -ResponseHeadersVariable "responseHeader" `
-                -StatusCodeVariable "statusCode"
+                -Body $bodyJson
         }
 
         # Step 5: Handle and log the response

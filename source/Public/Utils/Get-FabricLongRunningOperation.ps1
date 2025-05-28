@@ -58,13 +58,9 @@ This command polls the status of the operation with the given operationId every 
             }
 
             # Step 3: Make the API request
-            $response = Invoke-RestMethod `
-                -Headers $FabricConfig.FabricHeaders `
+            $response = Invoke-FabricRestMethod `
                 -Uri $apiEndpointUrl `
-                -Method Get `
-                -ErrorAction Stop `
-                -ResponseHeadersVariable responseHeader `
-                -StatusCodeVariable statusCode
+                -Method Get
 
             # Step 3: Parse the response
             $jsonOperation = $response | ConvertTo-Json

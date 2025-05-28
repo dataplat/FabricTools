@@ -52,9 +52,7 @@ function Update-FabricDataPipeline
     try
     {
         # Ensure token validity
-        Write-Message -Message "Validating token..." -Level Debug
         Test-TokenExpired
-        Write-Message -Message "Token validation completed." -Level Debug
 
         # Construct the API URL
         $apiEndpointURI = "{0}/workspaces/{1}/dataPipelines/{2}" -f $FabricConfig.BaseUrl, $WorkspaceId, $DataPipelineId
@@ -78,8 +76,7 @@ function Update-FabricDataPipeline
         {
 
             # Make the API request
-            $response = Invoke-FabricAPIRequest `
-                -Headers $FabricConfig.FabricHeaders `
+            $response = Invoke-FabricRestMethod `
                 -BaseURI $apiEndpointURI `
                 -method Patch `
                 -body $bodyJson

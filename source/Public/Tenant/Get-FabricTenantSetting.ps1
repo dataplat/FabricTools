@@ -45,9 +45,8 @@ function Get-FabricTenantSetting {
         Write-Message -Message "Constructed API Endpoint: $apiEndpointURI" -Level Debug
 
         # Step 3: Invoke the Fabric API to retrieve tenant settings
-        $response = Invoke-FabricAPIRequest `
+        $response = Invoke-FabricRestMethod `
             -BaseURI $apiEndpointURI `
-            -Headers $FabricConfig.FabricHeaders `
             -Method Get
 
         # Step 4: Filter tenant settings based on the provided SettingTitle parameter (if specified)

@@ -52,9 +52,7 @@ function Update-FabricCopyJob
     try
     {
         # Ensure token validity
-        Write-Message -Message "Validating token..." -Level Debug
         Test-TokenExpired
-        Write-Message -Message "Token validation completed." -Level Debug
 
         # Construct the API endpoint URI
         $apiEndpointURI = "{0}/workspaces/{1}/copyJobs/{2}" -f $FabricConfig.BaseUrl, $WorkspaceId, $CopyJobId
@@ -77,8 +75,7 @@ function Update-FabricCopyJob
         if ($PSCmdlet.ShouldProcess($apiEndpointURI, "Update Copy Job"))
         {
             # Step 4: Make the API request
-            $response = Invoke-FabricAPIRequest `
-                -Headers $FabricConfig.FabricHeaders `
+            $response = Invoke-FabricRestMethod `
                 -BaseURI $apiEndpointURI `
                 -method Patch `
                 -body $bodyJson

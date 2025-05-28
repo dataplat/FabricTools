@@ -24,7 +24,7 @@
         This example imports PBIP files from the 'C:\PBIPFiles' folder into the Fabric workspace with ID '12345'. It only searches for PBIP files in the 'C:\PBIPFiles\Reports' folder.
 
     .NOTES
-        This function requires the Invoke-FabricAPIRequest function to be available in the current session.
+        This function requires the Invoke-FabricRestMethod function to be available in the current session.
         This function was originally written by Rui Romano.
         https://github.com/RuiRomano/fabricps-pbip
 #>
@@ -48,7 +48,7 @@ Function Import-FabricItem {
 
     # Search for folders with .pbir and .pbidataset in it
 
-    Confirm-FabricAuthToken | Out-Null
+    Test-TokenExpired
 
     $itemsFolders = Get-ChildItem  -Path $path -recurse -include *.pbir, *.pbidataset
 
@@ -58,7 +58,7 @@ Function Import-FabricItem {
 
     # Get existing items of the workspace
 
-    $items = Invoke-FabricAPIRequest -Uri "workspaces/$workspaceId/items" -Method Get
+    $items = Invoke-FabricRestMethod -Uri "workspaces/$workspaceId/items" -Method Get
 
     Write-Output "Existing items: $($items.Count)"
 
@@ -206,7 +206,7 @@ Function Import-FabricItem {
             } | ConvertTo-Json -Depth 3
 
             if($PSCmdlet.ShouldProcess($itemPath, "Create Item")) {
-                        $createItemResult = Invoke-FabricAPIRequest -uri "workspaces/$workspaceId/items"  -method Post -body $itemRequest
+                        $createItemResult = Invoke-FabricRestMethod -uri "workspaces/$workspaceId/items"  -method Post -body $itemRequest
             }
 
             $itemId = $createItemResult.id
@@ -224,7 +224,7 @@ Function Import-FabricItem {
             } | ConvertTo-Json -Depth 3
             if($PSCmdlet.ShouldProcess($itemPath, "Update Item")) {
 
-            Invoke-FabricAPIRequest -Uri "workspaces/$workspaceId/items/$itemId/updateDefinition" -Method Post -Body $itemRequest
+            Invoke-FabricRestMethod -Uri "workspaces/$workspaceId/items/$itemId/updateDefinition" -Method Post -Body $itemRequest
             }
 
             Write-Output "Updated new item with ID '$itemId' $([datetime]::Now.ToString("s"))" -ForegroundColor Green

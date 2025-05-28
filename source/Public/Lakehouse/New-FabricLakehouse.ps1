@@ -54,9 +54,7 @@ function New-FabricLakehouse
     try
     {
         # Step 1: Ensure token validity
-        Write-Message -Message "Validating token..." -Level Debug
         Test-TokenExpired
-        Write-Message -Message "Token validation completed." -Level Debug
 
         # Step 2: Construct the API URL
         $apiEndpointUrl = "{0}/workspaces/{1}/lakehouses" -f $FabricConfig.BaseUrl, $WorkspaceId
@@ -83,16 +81,10 @@ function New-FabricLakehouse
         if ($PSCmdlet.ShouldProcess($LakehouseName, "Create Lakehouse"))
         {
             # Step 4: Make the API request
-            $response = Invoke-RestMethod `
-                -Headers $FabricConfig.FabricHeaders `
+            $response = Invoke-FabricRestMethod `
                 -Uri $apiEndpointUrl `
                 -Method Post `
-                -Body $bodyJson `
-                -ContentType "application/json" `
-                -ErrorAction Stop `
-                -SkipHttpErrorCheck `
-                -ResponseHeadersVariable "responseHeader" `
-                -StatusCodeVariable "statusCode"
+                -Body $bodyJson
         }
         # Step 5: Handle and log the response
         switch ($statusCode)

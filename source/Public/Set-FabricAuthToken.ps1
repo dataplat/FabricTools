@@ -102,7 +102,7 @@ function Set-FabricAuthToken {
       # Copy session values to exposed $FabricConfig
       $FabricConfig.TenantIdGlobal = $FabricSession.AccessToken.TenantId
       $FabricConfig.TokenExpiresOn = $FabricSession.AccessToken.ExpiresOn
-      $FabricConfig.FabricHeaders = $FabricSession.HeaderParams
+      $FabricConfig.FabricHeaders = $FabricSession.HeaderParams    # Remove this;
 
       return $($FabricSession.FabricToken)
 
