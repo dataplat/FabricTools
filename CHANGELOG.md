@@ -32,6 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed ResourceUrl for token retrieval in `Connect-FabricAccount`.
 - Fixed bugs in `New-FabricEventhouse` and improved ShouldProcess logic.
 - Fixed parameter naming and example formatting in several functions.
+- Fixed issue with call to `Invoke-FabricAPIRequest` from `Remove-FabricWarehouse`.
 
 ### Deprecated
 
@@ -59,4 +60,3 @@ For a full list of changes and details, please see the commit history.
 ### Security
 
 - In case of vulnerabilities.
-
