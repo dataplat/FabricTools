@@ -59,5 +59,4 @@
 - [ ] Unit tests added/updated..
 - [ ] Integration tests added/updated (where possible).
 - [ ] Documentation added/updated (where applicable).
-ed code adheres to [DSC Resource Style Guidelines](https://github.com/PowerShell/DscResources/blob/master/StyleGuidelines.md) and [Best Practices](https://github.com/PowerShell/DscResources/blob/master/BestPractices.md).
-
+- [ ] Code follows the [contribution guidelines](../CONTRIBUTING.md).
