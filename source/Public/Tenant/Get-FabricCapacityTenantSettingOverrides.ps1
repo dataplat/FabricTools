@@ -38,17 +38,17 @@ function Get-FabricCapacityTenantSettingOverrides {
 
         # Step 2: Construct the API endpoint URL for retrieving capacity tenant setting overrides
         if ($capacityId) {
-            $apiEndpointURI = "{0}/admin/capacities/{1}/delegatedTenantSettingOverrides" -f $FabricConfig.BaseUrl, $capacityId
+            $apiEndpointURI = "admin/capacities/{0}/delegatedTenantSettingOverrides" -f $capacityId
             $message = "Successfully retrieved tenant setting overrides for capacity ID: $capacityId."
         } else {
-            $apiEndpointURI = "{0}/admin/capacities/delegatedTenantSettingOverrides" -f $FabricConfig.BaseUrl
+            $apiEndpointURI = "admin/capacities/delegatedTenantSettingOverrides" -f $FabricConfig.BaseUrl
             $message = "Successfully retrieved capacity tenant setting overrides."
         }
         Write-Message -Message "Constructed API Endpoint: $apiEndpointURI" -Level Debug
 
         # Step 3: Invoke the Fabric API to retrieve capacity tenant setting overrides
         $response = Invoke-FabricRestMethod `
-            -BaseURI $apiEndpointURI `
+            -Uri $apiEndpointURI `
             -Method Get
 
         # Step 4: Check if any capacity tenant setting overrides were retrieved and handle results accordingly

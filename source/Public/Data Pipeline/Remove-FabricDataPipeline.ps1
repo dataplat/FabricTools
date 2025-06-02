@@ -41,16 +41,15 @@ function Remove-FabricDataPipeline
         Test-TokenExpired
 
         #  Construct the API URI
-        $apiEndpointURI = "{0}/workspaces/{1}/dataPipelines/{2}" -f $FabricConfig.BaseUrl, $WorkspaceId, $DataPipelineId
+        $apiEndpointURI = "workspaces/{0}/dataPipelines/{1}" -f $WorkspaceId, $DataPipelineId
         Write-Message -Message "API Endpoint: $apiEndpointURI" -Level Debug
 
         if ($PSCmdlet.ShouldProcess($apiEndpointURI, "Delete DataPipeline"))
         {
-
             # Make the API request
             $response = Invoke-FabricRestMethod `
-                -BaseURI $apiEndpointURI `
-                -method Delete
+                -Uri $apiEndpointURI `
+                -Method Delete
         }
         Write-Message -Message "DataPipeline '$DataPipelineId' deleted successfully from workspace '$WorkspaceId'." -Level Info
         return $response

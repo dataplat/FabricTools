@@ -55,7 +55,7 @@ function Update-FabricDataPipeline
         Test-TokenExpired
 
         # Construct the API URL
-        $apiEndpointURI = "{0}/workspaces/{1}/dataPipelines/{2}" -f $FabricConfig.BaseUrl, $WorkspaceId, $DataPipelineId
+        $apiEndpointURI = "workspaces/{0}/dataPipelines/{1}" -f $WorkspaceId, $DataPipelineId
         Write-Message -Message "API Endpoint: $apiEndpointURI" -Level Debug
 
         # Construct the request body
@@ -74,12 +74,11 @@ function Update-FabricDataPipeline
 
         if ($PSCmdlet.ShouldProcess($apiEndpointURI, "Update DataPipeline"))
         {
-
             # Make the API request
             $response = Invoke-FabricRestMethod `
-                -BaseURI $apiEndpointURI `
-                -method Patch `
-                -body $bodyJson
+                -Uri $apiEndpointURI `
+                -Method Patch `
+                -Body $bodyJson
         }
 
         Write-Message -Message "DataPipeline '$DataPipelineName' updated successfully!" -Level Info

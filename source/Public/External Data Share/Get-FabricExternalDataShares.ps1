@@ -31,7 +31,7 @@ function Get-FabricExternalDataShares {
 
         # Invoke the API request to retrieve external data shares
         $externalDataShares = Invoke-FabricRestMethod `
-            -BaseURI $apiEndpointURI `
+            -Uri $apiEndpointURI `
             -Method Get
 
         # Return the retrieved external data shares

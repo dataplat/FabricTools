@@ -40,16 +40,14 @@ function Remove-FabricWarehouse
         Test-TokenExpired
 
         # Step 2: Construct the API URL
-        $apiEndpointURI = "{0}/workspaces/{1}/warehouses/{2}" -f $FabricConfig.BaseUrl, $WorkspaceId, $WarehouseId
-        Write-Message -Message "API Endpoint: $apiEndpointURI" -Level Debug
+        $apiEndpointURI = "workspaces/{0}/warehouses/{1}" -f $WorkspaceId, $WarehouseId
 
         if ($PSCmdlet.ShouldProcess($apiEndpointURI, "Delete Warehouse"))
         {
             # Step 3: Make the API request
             $response = Invoke-FabricRestMethod `
-                -BaseURI $apiEndpointURI `
+                -Uri $apiEndpointURI `
                 -method Delete `
-
         }
 
         Write-Message -Message "Warehouse '$WarehouseId' deleted successfully from workspace '$WorkspaceId'." -Level Info

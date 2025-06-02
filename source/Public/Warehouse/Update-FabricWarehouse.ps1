@@ -56,8 +56,7 @@ function Update-FabricWarehouse
         Test-TokenExpired
 
         # Step 2: Construct the API URL
-        $apiEndpointURI = "{0}/workspaces/{1}/warehouses/{2}" -f $FabricConfig.BaseUrl, $WorkspaceId, $WarehouseId
-        Write-Message -Message "API Endpoint: $apiEndpointURI" -Level Debug
+        $apiEndpointURI = "workspaces/{0}/warehouses/{1}" -f $WorkspaceId, $WarehouseId
 
         # Step 3: Construct the request body
         $body = @{
@@ -75,9 +74,8 @@ function Update-FabricWarehouse
 
         if ($PSCmdlet.ShouldProcess($apiEndpointURI, "Update Warehouse"))
         {
-
             $response = Invoke-FabricRestMethod `
-                -BaseURI $apiEndpointURI `
+                -Uri $apiEndpointURI `
                 -method Patch `
                 -body $bodyJson
         }

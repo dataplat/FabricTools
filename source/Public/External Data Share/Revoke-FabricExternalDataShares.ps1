@@ -49,12 +49,12 @@ function Revoke-FabricExternalDataShares {
 
         # Step 4: Loop to retrieve all capacities with continuation token
         Write-Message -Message "Constructing API endpoint URI..." -Level Debug
-        $apiEndpointURI = "{0}/admin/workspaces/{1}/items/{2}/externalDataShares/{3}/revoke" -f $FabricConfig.BaseUrl, $WorkspaceId, $ItemId, $ExternalDataShareId
+        $apiEndpointURI = "admin/workspaces/{0}/items/{1}/externalDataShares/{2}/revoke" -f $WorkspaceId, $ItemId, $ExternalDataShareId
 
         if ($PSCmdlet.ShouldProcess("$ExternalDataShareId", "revoke")) {
 
         $externalDataShares = Invoke-FabricRestMethod `
-            -BaseURI $apiEndpointURI `
+            -Uri $apiEndpointURI `
             -Method Post
         }
 

@@ -43,15 +43,14 @@ function Get-FabricUserListAccessEntities {
 
         Test-TokenExpired
 
-
         # Step 4: Loop to retrieve all capacities with continuation token
-        $apiEndpointURI = "{0}admin/users/{1}/access" -f $FabricConfig.BaseUrl, $UserId
+        $apiEndpointURI = "admin/users/{0}/access" -f $UserId
         if ($Type) {
             $apiEndpointURI += "?type=$Type"
         }
 
         $response = Invoke-FabricRestMethod `
-            -BaseURI $apiEndpointURI `
+            -Uri $apiEndpointURI `
             -Method Get
 
         return $response

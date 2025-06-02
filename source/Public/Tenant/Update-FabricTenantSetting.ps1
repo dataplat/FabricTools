@@ -119,7 +119,7 @@ function Update-FabricCapacityTenantSettingOverrides
         }
 
         # Construct API endpoint URL
-        $apiEndpointURI = "{0}/admin/tenantsettings/{1}/update" -f $FabricConfig.BaseUrl, $TenantSettingName
+        $apiEndpointURI = "admin/tenantsettings/{0}/update" -f $TenantSettingName
         Write-Message -Message "Constructed API Endpoint: $apiEndpointURI" -Level Debug
 
         # Construct request body
@@ -166,7 +166,7 @@ function Update-FabricCapacityTenantSettingOverrides
 
             # Invoke Fabric API request
             $response = Invoke-FabricRestMethod `
-                -BaseURI $apiEndpointURI `
+                -Uri $apiEndpointURI `
                 -method Post `
                 -body $bodyJson
         }

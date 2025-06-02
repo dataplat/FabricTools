@@ -25,12 +25,11 @@ function Get-FabricWorkspaceTenantSettingOverrides {
         Test-TokenExpired
 
         # Step 2: Construct the API endpoint URL for retrieving workspaces tenant setting overrides
-        $apiEndpointURI = "{0}/admin/workspaces/delegatedTenantSettingOverrides" -f $FabricConfig.BaseUrl
-        Write-Message -Message "Constructed API Endpoint: $apiEndpointURI" -Level Debug
+        $apiEndpointURI = "admin/workspaces/delegatedTenantSettingOverrides"
 
         # Step 3: Invoke the Fabric API to retrieve workspaces tenant setting overrides
         $response = Invoke-FabricRestMethod `
-            -BaseURI $apiEndpointURI `
+            -Uri $apiEndpointURI `
             -Method Get
 
         # Step 4: Check if any workspaces tenant setting overrides were retrieved and handle results accordingly

@@ -99,8 +99,7 @@ function Update-FabricCapacityTenantSettingOverrides
         }
 
         # Construct API endpoint URL
-        $apiEndpointURI = "{0}/admin/capacities/{1}/delegatedTenantSettingOverrides" -f $FabricConfig.BaseUrl, $CapacityId
-        Write-Message -Message "Constructed API Endpoint: $apiEndpointURI" -Level Debug
+        $apiEndpointURI = "admin/capacities/{0}/delegatedTenantSettingOverrides" -f $CapacityId
 
         # Construct request body
         $body = @{
@@ -129,7 +128,7 @@ function Update-FabricCapacityTenantSettingOverrides
         if ($PSCmdlet.ShouldProcess($apiEndpointURI, "Update Tenant Setting Overrides")){
             # Invoke Fabric API request
             $response = Invoke-FabricRestMethod `
-                -BaseURI $apiEndpointURI `
+                -Uri $apiEndpointURI `
                 -method Post `
                 -body $bodyJson
         }

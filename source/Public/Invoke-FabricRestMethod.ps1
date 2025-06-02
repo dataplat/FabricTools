@@ -35,27 +35,27 @@ Author: Kamil Nowinski
     [CmdletBinding()]
     param(
         [Parameter(Mandatory = $true)]
-        [string] $uri,
+        [string] $Uri,
 
         [Parameter(Mandatory = $false)]
         [ValidateSet('GET', 'POST', 'DELETE', 'PUT', 'PATCH')]
         [string] $Method = "GET",
 
         [Parameter(Mandatory = $false)]
-        $body
+        $Body
     )
 
     Test-TokenExpired
 
-    if ($uri -notmatch '^https?://.*') {
-        $uri = "{0}/{1}" -f $FabricConfig.BaseUrl, $uri
+    if ($Uri -notmatch '^https?://.*') {
+        $Uri = "{0}/{1}" -f $FabricConfig.BaseUrl, $Uri
     }
 
-    Write-Message -Message "API Endpoint: $uri" -Level Verbose
+    Write-Message -Message "Fabric API Endpoint: $Uri" -Level Verbose
 
     $response = Invoke-RestMethod  `
         -Headers $FabricSession.HeaderParams `
-        -Uri $uri `
+        -Uri $Uri `
         -Method $Method `
         -ContentType "application/json" `
         -ErrorAction 'Stop' `

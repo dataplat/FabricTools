@@ -55,7 +55,7 @@ function Update-FabricCopyJob
         Test-TokenExpired
 
         # Construct the API endpoint URI
-        $apiEndpointURI = "{0}/workspaces/{1}/copyJobs/{2}" -f $FabricConfig.BaseUrl, $WorkspaceId, $CopyJobId
+        $apiEndpointURI = "workspaces/{0}/copyJobs/{1}" -f $WorkspaceId, $CopyJobId
         Write-Message -Message "API Endpoint: $apiEndpointURI" -Level Debug
 
         # Construct the request body
@@ -76,7 +76,7 @@ function Update-FabricCopyJob
         {
             # Step 4: Make the API request
             $response = Invoke-FabricRestMethod `
-                -BaseURI $apiEndpointURI `
+                -Uri $apiEndpointURI `
                 -method Patch `
                 -body $bodyJson
         }
