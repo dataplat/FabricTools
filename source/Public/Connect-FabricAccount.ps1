@@ -65,36 +65,49 @@ function Connect-FabricAccount {
     }
 
     process {
-        Write-Verbose "Connect to Azure Account"
-
         if ($servicePrincipalId) {
+            Write-Message "Connecting to Azure Account using provided servicePrincipalId..." -Level Verbose
             $credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $servicePrincipalId, $servicePrincipalSecret
             $null = Connect-AzAccount -ServicePrincipal -TenantId $tenantId -Credential $credential
         }
         elseif ($null -ne $credential) {
+            Write-Message "Connecting to Azure Account using provided credential..." -Level Verbose
             $null = Connect-AzAccount -Credential $credential -Tenant $tenantId
         }
         else {
+            Write-Message "Connecting to Azure Account using current context..." -Level Verbose
             $null = Connect-AzAccount
         }
 
         $azContext = Get-AzContext
 
-        Write-Verbose "Connected: $($azContext.Account)"
+        Write-Message "Connected: $($azContext.Account)" -Level Verbose
 
-        if ($PSCmdlet.ShouldProcess("Setting Fabric authentication token for $($azContext.Account)")) {
+        if ($PSCmdlet.ShouldProcess("Setting Fabric authentication token and headers for $($azContext.Account)")) {
+            Write-Message "Get authentication token from $($FabricSession.ResourceUrl)" -Level Verbose
+            $FabricSession.AccessToken = (Get-AzAccessToken -ResourceUrl $FabricSession.ResourceUrl)
+            $ssPtr = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($FabricSession.AccessToken.Token)
+            $Token = ([System.Runtime.InteropServices.Marshal]::PtrToStringBSTR($ssPtr))
+            Write-Message "Setup headers for Fabric API calls" -Level Debug
+            $FabricSession.HeaderParams = @{'Authorization' = "Bearer {0}" -f $Token }
 
-            Write-Verbose "Get authentication token"
-            $FabricSession.FabricToken = (Get-AzAccessToken -ResourceUrl $FabricSession.ResourceUrl).Token
-            Write-Verbose "Token: $($FabricSession.FabricToken)"
-            }
-
-         if ($PSCmdlet.ShouldProcess("Setting Fabric headers for $($azContext.Account)")) {
-            Write-Verbose "Setup headers for API calls"
-            $FabricSession.HeaderParams = @{'Authorization' = "Bearer {0}" -f $FabricSession.FabricToken }
-            Write-Verbose "HeaderParams: $($FabricSession.HeaderParams)"
+            # Copy session values to exposed $FabricConfig
+            $FabricConfig.TenantIdGlobal = $FabricSession.AccessToken.TenantId
+            $FabricConfig.TokenExpiresOn = $FabricSession.AccessToken.ExpiresOn
+            $FabricConfig.FabricHeaders = $FabricSession.HeaderParams    # Remove this;
         }
+
+        if ($PSCmdlet.ShouldProcess("Setting Azure authentication token and headers for $($azContext.Account)")) {
+            Write-Message "Get authentication token from $($AzureSession.BaseApiUrl)" -Level Verbose
+            $AzureSession.AccessToken = (Get-AzAccessToken -ResourceUrl $AzureSession.BaseApiUrl)
+            $ssPtr = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($AzureSession.AccessToken.Token)
+            $Token = ([System.Runtime.InteropServices.Marshal]::PtrToStringBSTR($ssPtr))
+            Write-Message "Setup headers for Azure API calls" -Level Debug
+            $AzureSession.HeaderParams = @{'Authorization' = "Bearer {0}" -f $Token }
+        }
+
     }
     end {
+        # return $($FabricSession.FabricToken)
     }
 }

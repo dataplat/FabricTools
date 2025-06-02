@@ -24,23 +24,20 @@ function Confirm-FabricAuthToken {
     [CmdletBinding()]
     param  (   )
 
-    Write-Verbose "Check if session is established and token not expired."
+    Write-Message "Check if session is established and token not expired." -Level Verbose
 
     # Check if the Fabric token is already set
-    if (!$FabricSession.FabricToken -or !$AzureSession.AccessToken) {
+    if (!$FabricSession.AccessToken -or !$AzureSession.AccessToken) {
         Write-Output "Confirm-FabricAuthToken::Set-FabricAuthToken"
         Set-FabricAuthToken | Out-Null
     }
 
     $now = (Get-Date)
-    $s = Get-FabricDebugInfo
     if ($FabricSession.AccessToken.ExpiresOn -lt $now ) {
-        Write-Output "Confirm-FabricAuthToken::Set-FabricAuthToken#1"
         Set-FabricAuthToken -reset | Out-Null
     }
 
-    if ($s.AzureSession.AccessToken.ExpiresOn -lt $now ) {
-        Write-Output "Confirm-FabricAuthToken::Set-FabricAuthToken#2"
+    if ($AzureSession.AccessToken.ExpiresOn -lt $now ) {
         Set-FabricAuthToken -reset | Out-Null
     }
 
