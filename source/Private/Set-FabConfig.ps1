@@ -30,6 +30,6 @@ $FabricConfig = @{
     BaseUrl        = "https://api.fabric.microsoft.com/v1"
     ResourceUrl    = "https://api.fabric.microsoft.com"
     FabricHeaders  = @{}
-    TenantIdGlobal = ""
+    TenantId = ""
     TokenExpiresOn = ""
 }

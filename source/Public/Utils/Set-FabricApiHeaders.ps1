@@ -112,7 +112,7 @@ Logs in to Azure with the specified tenant ID, retrieves an access token for the
         {
 
             $FabricConfig.TokenExpiresOn = $fabricToken.ExpiresOn
-            $FabricConfig.TenantIdGlobal = $TenantId
+            $FabricConfig.TenantId = $TenantId
         }
         Write-Message -Message "Fabric token successfully configured." -Level Info
     }

@@ -92,7 +92,7 @@ function Connect-FabricAccount {
             $FabricSession.HeaderParams = @{'Authorization' = "Bearer {0}" -f $Token }
 
             # Copy session values to exposed $FabricConfig
-            $FabricConfig.TenantIdGlobal = $FabricSession.AccessToken.TenantId
+            $FabricConfig.TenantId = $FabricSession.AccessToken.TenantId
             $FabricConfig.TokenExpiresOn = $FabricSession.AccessToken.ExpiresOn
             $FabricConfig.FabricHeaders = $FabricSession.HeaderParams    # Remove this;
         }
