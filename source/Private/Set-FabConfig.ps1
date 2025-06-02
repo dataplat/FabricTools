@@ -4,7 +4,6 @@
 $script:FabricSession = [ordered]@{
     BaseApiUrl   = 'https://api.fabric.microsoft.com/v1'
     ResourceUrl  = 'https://api.fabric.microsoft.com'
-    FabricToken  = $null
     HeaderParams = $null
     ContentType  = @{'Content-Type' = "application/json" }
     KustoURL     = "https://api.kusto.windows.net"
@@ -14,7 +13,6 @@ $script:FabricSession = [ordered]@{
 $script:AzureSession = [ordered]@{
     BaseApiUrl   = "https://management.azure.com"
     AccessToken  = $null
-    Token        = $null
     HeaderParams = $null
 }
 
