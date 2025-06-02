@@ -43,7 +43,6 @@ function Update-FabricWarehouse
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [ValidatePattern('^[a-zA-Z0-9_ ]*$')]
         [string]$WarehouseName,
 
         [Parameter(Mandatory = $false)]

@@ -43,7 +43,6 @@ function Get-FabricSparkJobDefinition {
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [ValidatePattern('^[a-zA-Z0-9_ ]*$')]
         [string]$SparkJobDefinitionName
     )
     try {

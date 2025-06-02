@@ -77,8 +77,9 @@ BuildWorkflow:
   publish:
     - Publish_Release_To_GitHub # Runs first, if token is expired it will fail early
     # - Publish_GitHub_Wiki_Content
-
     - publish_module_to_gallery
+    # - Create_Changelog_Branch
+
 
 ####################################################
 #       PESTER  Configuration                      #
@@ -120,16 +121,6 @@ Pester:
   #CodeCoverageFilePattern: JaCoCo_Merge.xml # the pattern used to search all pipeline test job artifacts
   #CodeCoverageMergedOutputFile: JaCoCo_coverage.xml # the file that is created for the merged code coverage
 
-DscTest:
-  ExcludeTag:
-    - "Common Tests - New Error-Level Script Analyzer Rules"
-  Tag:
-  ExcludeSourceFile:
-    - output
-  ExcludeModuleFile:
-    - Modules/DscResource.Common
-  #  - Templates
-
 # Import ModuleBuilder tasks from a specific PowerShell module using the build
 # task's alias. Wildcard * can be used to specify all tasks that has a similar
 # prefix and or suffix. The module contain the task must be added as a required
@@ -152,3 +143,18 @@ TaskHeader: |
   Write-Build DarkGray "  $Path"
   Write-Build DarkGray "  $($Task.InvocationInfo.ScriptName):$($Task.InvocationInfo.ScriptLineNumber)"
   ""
+####################################################
+#             Changelog Configuration              #
+####################################################
+ChangelogConfig:
+  FilesToAdd:
+    - 'CHANGELOG.md'
+  UpdateChangelogOnPrerelease: false
+
+####################################################
+#                Git Configuration                 #
+####################################################
+GitConfig:
+  UserName: Automation Bot
+  UserEmail: automation_bot@fabrictools.io
+

@@ -42,7 +42,6 @@ function Update-FabricDataPipeline
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [ValidatePattern('^[a-zA-Z0-9_ ]*$')]
         [string]$DataPipelineName,
 
         [Parameter(Mandatory = $false)]

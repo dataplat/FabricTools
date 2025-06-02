@@ -43,7 +43,6 @@ function Get-FabricPaginatedReport {
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [ValidatePattern('^[a-zA-Z0-9_ ]*$')]
         [string]$PaginatedReportName
     )
 

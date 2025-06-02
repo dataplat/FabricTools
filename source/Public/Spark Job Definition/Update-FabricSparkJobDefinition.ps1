@@ -42,7 +42,6 @@ function Update-FabricSparkJobDefinition
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [ValidatePattern('^[a-zA-Z0-9_ ]*$')]
         [string]$SparkJobDefinitionName,
 
         [Parameter(Mandatory = $false)]

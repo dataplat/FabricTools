@@ -43,7 +43,6 @@ function Update-FabricReflex
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [ValidatePattern('^[a-zA-Z0-9_ ]*$')]
         [string]$ReflexName,
 
         [Parameter(Mandatory = $false)]

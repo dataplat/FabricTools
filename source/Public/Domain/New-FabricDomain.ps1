@@ -33,7 +33,6 @@ function New-FabricDomain
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [ValidatePattern('^[a-zA-Z0-9_ ]*$')]
         [string]$DomainName,
 
         [Parameter(Mandatory = $false)]

@@ -43,7 +43,6 @@ function New-FabricKQLDashboard
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [ValidatePattern('^[a-zA-Z0-9_ ]*$')]
         [string]$KQLDashboardName,
 
         [Parameter(Mandatory = $false)]

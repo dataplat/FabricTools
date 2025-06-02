@@ -42,7 +42,6 @@ function New-FabricKQLQueryset {
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [ValidatePattern('^[a-zA-Z0-9_ ]*$')]
         [string]$KQLQuerysetName,
 
         [Parameter(Mandatory = $false)]

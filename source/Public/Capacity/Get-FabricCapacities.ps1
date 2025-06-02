@@ -72,3 +72,4 @@ function Get-FabricCapacities {
     # Return the results
     return $res
 }
+

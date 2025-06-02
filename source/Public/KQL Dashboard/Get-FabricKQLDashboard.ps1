@@ -46,7 +46,6 @@ function Get-FabricKQLDashboard {
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [ValidatePattern('^[a-zA-Z0-9_ ]*$')]
         [string]$KQLDashboardName
     )
 
