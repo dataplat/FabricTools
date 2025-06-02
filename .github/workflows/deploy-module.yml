@@ -10,9 +10,6 @@ on:
       - tests/**
       - '**.md'
       - '**.yml'
-    tags:
-      - '**'
-      - '!*preview*'
 env:
   buildFolderName: output
   buildArtifactName: output
