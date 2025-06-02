@@ -123,7 +123,7 @@ Function Invoke-FabricRestMethodExtended {
         $ex = $_.Exception
         $message = $null
 
-        if ($ex.Response -ne $null) {
+        if ($null -ne $ex.Response) {
 
             $responseStatusCode = [int]$ex.Response.StatusCode
 
@@ -146,7 +146,7 @@ Function Invoke-FabricRestMethodExtended {
                 }
             }
             else {
-                $apiErrorObj = $ex.Response.Headers | ? { $_.key -ieq "x-ms-public-api-error-code" } | Select -First 1
+                $apiErrorObj = $ex.Response.Headers | Where-Object { $_.key -ieq "x-ms-public-api-error-code" } | Select-Object -First 1
 
                 if ($apiErrorObj) {
                     $apiError = $apiErrorObj.Value[0]
