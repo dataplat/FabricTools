@@ -22,7 +22,7 @@ $script:PowerBI = [ordered]@{
 
 $FabricTools = @{
     FeatureFlags = @{
-        AutoRenewExpiredToken = $true
+        EnableTokenRefresh = $true
     }
 }
 
