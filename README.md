@@ -66,12 +66,12 @@ Refer to the individual function documentation for detailed usage instructions.
 
 Every now and again the authentication token might time out. Run this to get a new one:
 ```powershell
-Set-FabricAuthToken
+Update-FabricToken
 ```
 
 If you want to change user context run this:
 ```powershell
-Set-FabricAuthToken -reset
+Connect-FabricAccount
 ```
 
 

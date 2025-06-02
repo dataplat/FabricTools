@@ -28,7 +28,7 @@ function Test-TokenExpired {
 
     Confirm-FabricAuthToken | Out-Null
 
-    Write-Message -Message "Validating token..." -Level Debug
+    Write-Message -Message "Validating token..." -Level Verbose
 
     try {
         # Ensure required properties have valid values
@@ -62,5 +62,5 @@ function Test-TokenExpired {
         Write-Message -Message "An unexpected error occurred: $_" -Level Error
         throw $_
     }
-    Write-Message -Message "Token validation completed." -Level Debug
+    Write-Message -Message "Token validation completed." -Level Verbose
 }
