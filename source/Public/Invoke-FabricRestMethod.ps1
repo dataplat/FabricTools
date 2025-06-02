@@ -53,10 +53,11 @@ Author: Kamil Nowinski
 
     Write-Message -Message "Fabric API Endpoint: $Uri" -Level Verbose
 
-    $response = Invoke-RestMethod  `
+    $response = Invoke-RestMethod `
         -Headers $FabricSession.HeaderParams `
         -Uri $Uri `
         -Method $Method `
+        -Body $Body `
         -ContentType "application/json" `
         -ErrorAction 'Stop' `
         -SkipHttpErrorCheck `
