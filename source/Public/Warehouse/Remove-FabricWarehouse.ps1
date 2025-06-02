@@ -52,7 +52,7 @@ function Remove-FabricWarehouse
                 Uri    = $apiEndpointURI
                 Method = 'Delete'
             }
-            $response = Invoke-FabricAPIRequest @apiParams
+            $null = Invoke-FabricAPIRequest @apiParams
         }
 
         Write-Message -Message "Warehouse '$WarehouseId' deleted successfully from workspace '$WorkspaceId'." -Level Info
