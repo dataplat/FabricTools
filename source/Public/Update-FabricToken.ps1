@@ -17,9 +17,10 @@ Executes internal Test-TokenExpired function to validate the token.
 
 #>
 function Update-FabricToken {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param ()
 
-    Test-TokenExpired
-
+    if ($PSCmdlet.ShouldProcess("Testing Token Expiration")) {
+        Test-TokenExpired
+    }
 }
