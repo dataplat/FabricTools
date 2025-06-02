@@ -50,7 +50,6 @@ Author: Kamil Nowinski
     if ($Uri -notmatch '^https?://.*') {
         $Uri = "{0}/{1}" -f $FabricConfig.BaseUrl, $Uri
     }
-
     Write-Message -Message "Fabric API Endpoint: $Uri" -Level Verbose
 
     $response = Invoke-RestMethod `
