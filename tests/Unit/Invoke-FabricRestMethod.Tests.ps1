@@ -5,6 +5,7 @@ param(
         "Uri"
         "Method"
         "Body"
+        "TestTokenExpired"
         "Verbose"
         "Debug"
         "ErrorAction"
