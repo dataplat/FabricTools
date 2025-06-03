@@ -27,7 +27,7 @@
 
 .NOTES
    This function was written by Rui Romano.
-   https://github.com/RuiRomano/fabricps-pbip
+   https://github.com/microsoft/Analysis-Services/tree/master/pbidevmode/fabricps-pbip
 #>
 
 Function Remove-FabricItem {

@@ -26,7 +26,7 @@
     .NOTES
         This function requires the Invoke-FabricRestMethod function to be available in the current session.
         This function was originally written by Rui Romano.
-        https://github.com/RuiRomano/fabricps-pbip
+        https://github.com/microsoft/Analysis-Services/tree/master/pbidevmode/fabricps-pbip
 #>
 
 Function Import-FabricItem {

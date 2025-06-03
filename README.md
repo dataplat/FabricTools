@@ -107,5 +107,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Acknowledgments
 
 - GitHub Copilot and ChatGPT for helping with the documentation
-- [**Rui Romano**](https://github.com/RuiRomano) - His work on a [Fabric PowerShell module](https://github.com/RuiRomano/fabricps-pbip) has been included into this module with his permission. Thanks, Rui!
-- [**tiagobalabuch**](https://github.com/tiagobalabuch) and his phenomenal huge work that make this module more robust and very well organised.
+- [**Rui Romano**](https://github.com/RuiRomano) - His work on a [Fabric PowerShell module](https://github.com/microsoft/Analysis-Services/tree/master/pbidevmode/fabricps-pbip) has been included into this module with his permission. Thanks, Rui!
+- [**Tiago Balabuch**](https://github.com/tiagobalabuch) and his phenomenal huge work that make this module more robust and very well organised.

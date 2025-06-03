@@ -25,7 +25,7 @@ This example retrieves all fabric items of type "file" from the workspace with I
 
 .NOTES
 This function was originally written by Rui Romano.
-https://github.com/RuiRomano/fabricps-pbip
+https://github.com/microsoft/Analysis-Services/tree/master/pbidevmode/fabricps-pbip
 
     #>
     [CmdletBinding()]

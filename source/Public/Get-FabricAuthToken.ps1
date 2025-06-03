@@ -19,7 +19,7 @@
 
 .NOTES
    This function was originally written by Rui Romano.
-   https://github.com/RuiRomano/fabricps-pbip
+   https://github.com/microsoft/Analysis-Services/tree/master/pbidevmode/fabricps-pbip
 #>
 
 function Get-FabricAuthToken {

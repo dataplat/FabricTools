@@ -29,7 +29,7 @@ This example exports the item with the specified ID from the Fabric workspace wi
 
 .NOTES
 This function is based on the Export-FabricItems function written by Rui Romano.
-https://github.com/RuiRomano/fabricps-pbip
+https://github.com/microsoft/Analysis-Services/tree/master/pbidevmode/fabricps-pbip
 
 #>
 Function Export-FabricItem {
