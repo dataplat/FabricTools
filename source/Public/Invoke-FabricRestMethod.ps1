@@ -14,7 +14,7 @@ Function Invoke-FabricRestMethod {
     The HTTP method to be used for the request. Valid values are 'GET', 'POST', 'DELETE', 'PUT', and 'PATCH'. The default value is 'GET'.
 
 .PARAMETER Body
-    The body of the request, if applicable.
+    The body of the request, if applicable. This can be a hashtable or a string. If a hashtable is provided, it will be converted to JSON format.
 
 .PARAMETER TestTokenExpired
     A switch parameter to test if the Fabric token is expired before making the request. If the token is expired, it will attempt to refresh it.
@@ -58,6 +58,15 @@ Author: Kamil Nowinski
         $Uri = "{0}/{1}" -f $FabricConfig.BaseUrl, $Uri
     }
     Write-Message -Message "Fabric API Endpoint: $Uri" -Level Verbose
+
+    if ($Body -is [hashtable]) {
+        $Body = $Body | ConvertTo-Json -Depth 10
+        Write-Message -Message "Request Body: $Body" -Level Debug
+    } elseif ($Body -is [string]) {
+        Write-Message -Message "Request Body: $Body" -Level Debug
+    } else {
+        Write-Message -Message "No request body provided." -Level Debug
+    }
 
     $response = Invoke-RestMethod `
         -Headers $FabricSession.HeaderParams `

@@ -54,12 +54,12 @@ The function makes a POST request to the PowerBI API to Set the workspace to the
             $workspaceid = $workspace.id
         }
 
+        Test-TokenExpired
+
         # The body of the request is created. It contains the capacity ID.
         $body = @{
             capacityId = $CapacityId
         }
-
-        Test-TokenExpired
 
         # The workspace is Seted to the capacity by making a POST request to the PowerBI API.
         # The function returns the value property of the response.
