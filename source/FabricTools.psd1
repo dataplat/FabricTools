@@ -55,7 +55,7 @@ PowerShellVersion = '5.1'
 
 # Modules that must be imported into the global environment prior to importing this module
 RequiredModules = @(
-    @{ ModuleName = 'Az.Accounts' ; ModuleVersion = '4.2.0' },
+    @{ ModuleName = 'Az.Accounts' ; ModuleVersion = '5.0.0' },
     @{ ModuleName = 'MicrosoftPowerBIMgmt.Profile' ; ModuleVersion = '1.2.1111' },
     @{ ModuleName = 'Az.Resources' ; ModuleVersion = '6.15.1' }
 )
@@ -136,4 +136,3 @@ HelpInfoURI = 'https://www.github.com/dataplat/FabricTools'
 # DefaultCommandPrefix = ''
 
 }
-
