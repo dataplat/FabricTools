@@ -89,10 +89,14 @@ Contributions to FabricTools are welcome.
 Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on how to develop, test and the process for submitting pull requests to us.
 
 ## Authors
+_(in alphabetical order)_
 
+- **Tiago Balabuch** - *Huge contribution (90% functions)* - [tiagobalabuch](https://github.com/tiagobalabuch)
 - **Ioana Bouariu** - *Initial work* - [Jojobit](https://github.com/Jojobit)
 - **Frank Geisler** - *Author of RTI functions* - [Frank Geisler](https://github.com/Frank-Geisler)
 - **Kamil Nowinski** - *Refactoring, unification, further commands* - [NowinskiK](https://github.com/NowinskiK)
+- **Jess Pomfret** - *Automation, great experience with PowerShell* - [jpomfret](https://github.com/jpomfret)
+- **Rob Sewell** - *Automation/DevOps, Governance and experience brought from dbatools* - [SQLDBAWithABeard](https://github.com/SQLDBAWithABeard)
 
 See also the list of [contributors](https://github.com/dataplat/FabricTools/contributors) who participated in this project.
 
@@ -104,3 +108,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - GitHub Copilot and ChatGPT for helping with the documentation
 - [**Rui Romano**](https://github.com/RuiRomano) - His work on a [Fabric PowerShell module](https://github.com/RuiRomano/fabricps-pbip) has been included into this module with his permission. Thanks, Rui!
+- [**tiagobalabuch**](https://github.com/tiagobalabuch) and his phenomenal huge work that make this module more robust and very well organised.
