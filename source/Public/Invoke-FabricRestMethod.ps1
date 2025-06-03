@@ -16,6 +16,9 @@ Function Invoke-FabricRestMethod {
 .PARAMETER Body
     The body of the request, if applicable.
 
+.PARAMETER TestTokenExpired
+    A switch parameter to test if the Fabric token is expired before making the request. If the token is expired, it will attempt to refresh it.
+
 .EXAMPLE
     Invoke-FabricRestMethod -uri "/api/resource" -method "GET"
 
@@ -42,10 +45,14 @@ Author: Kamil Nowinski
         [string] $Method = "GET",
 
         [Parameter(Mandatory = $false)]
-        $Body
+        $Body,
+
+        [switch] $TestTokenExpired
     )
 
-    Test-TokenExpired
+    if ($TestTokenExpired) {
+        Test-TokenExpired
+    }
 
     if ($Uri -notmatch '^https?://.*') {
         $Uri = "{0}/{1}" -f $FabricConfig.BaseUrl, $Uri
