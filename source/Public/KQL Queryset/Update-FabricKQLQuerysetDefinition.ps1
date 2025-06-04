@@ -18,7 +18,6 @@ The KQLQueryset content can be provided as file paths, and metadata updates can 
 .PARAMETER KQLQuerysetPathPlatformDefinition
 (Optional) The file path to the KQLQueryset's platform-specific definition file. The content will be encoded as Base64 and sent in the request.
 
-
 .EXAMPLE
 Update-FabricKQLQuerysetDefinition -WorkspaceId "12345" -KQLQuerysetId "67890" -KQLQuerysetPathDefinition "C:\KQLQuerysets\KQLQueryset.ipynb"
 

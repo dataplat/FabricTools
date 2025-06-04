@@ -5,10 +5,13 @@ Retrieves tables from a specified Lakehouse in a Fabric workspace.
 
 .DESCRIPTION
 This function retrieves tables from a specified Lakehouse in a Fabric workspace. It handles pagination using a continuation token to ensure all data is retrieved.
+
 .PARAMETER WorkspaceId
 The ID of the workspace containing the Lakehouse.
+
 .PARAMETER LakehouseId
 The ID of the Lakehouse from which to retrieve tables.
+
 .EXAMPLE
 Get-FabricLakehouseTable -WorkspaceId "your-workspace-id" -LakehouseId "your-lakehouse-id"
 This example retrieves all tables from the specified Lakehouse in the specified workspace.

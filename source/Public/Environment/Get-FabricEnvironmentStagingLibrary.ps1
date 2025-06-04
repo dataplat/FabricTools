@@ -13,7 +13,7 @@ The unique identifier of the workspace containing the target environment.
 The unique identifier of the environment for which staging library details are being retrieved.
 
 .EXAMPLE
- Get-FabricEnvironmentStagingLibrary -WorkspaceId "workspace-12345" -EnvironmentId "environment-67890"
+Get-FabricEnvironmentStagingLibrary -WorkspaceId "workspace-12345" -EnvironmentId "environment-67890"
 
 Retrieves the staging libraries for the specified environment in the given workspace.
 

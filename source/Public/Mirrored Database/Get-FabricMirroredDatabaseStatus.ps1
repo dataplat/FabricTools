@@ -1,17 +1,22 @@
 function Get-FabricMirroredDatabaseStatus {
     <#
-.SYNOPSIS
-Retrieves the status of a mirrored database in a specified workspace.
-.DESCRIPTION
-Retrieves the status of a mirrored database in a specified workspace. The function validates the authentication token, constructs the API endpoint URL, and makes a POST request to retrieve the mirroring status.
-It handles errors and logs messages at various levels (Debug, Error).
-.PARAMETER WorkspaceId
-The ID of the workspace containing the mirrored database.
-.PARAMETER MirroredDatabaseId
-the ID of the mirrored database whose status is to be retrieved.
-.EXAMPLE
-Get-FabricMirroredDatabaseStatus -WorkspaceId "your-workspace-id" -MirroredDatabaseId "your-mirrored-database-id"
-This example retrieves the status of a mirrored database with the specified ID in the specified workspace.
+
+    .SYNOPSIS
+    Retrieves the status of a mirrored database in a specified workspace.
+
+    .DESCRIPTION
+    Retrieves the status of a mirrored database in a specified workspace. The function validates the authentication token, constructs the API endpoint URL, and makes a POST request to retrieve the mirroring status.
+    It handles errors and logs messages at various levels (Debug, Error).
+
+    .PARAMETER WorkspaceId
+    The ID of the workspace containing the mirrored database.
+
+    .PARAMETER MirroredDatabaseId
+    the ID of the mirrored database whose status is to be retrieved.
+
+    .EXAMPLE
+    Get-FabricMirroredDatabaseStatus -WorkspaceId "your-workspace-id" -MirroredDatabaseId "your-mirrored-database-id"
+    This example retrieves the status of a mirrored database with the specified ID in the specified workspace.
     #>
     [CmdletBinding()]
     param (

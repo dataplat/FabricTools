@@ -31,40 +31,40 @@
 #>
 
 Function Remove-FabricItem {
-    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
-    param
-    (
-        [Parameter(Mandatory = $true)]
-        [string]$workspaceId,
-        [Parameter(Mandatory = $false)]
-        [string]$filter,
-        [Parameter(Mandatory = $false)]
-        [string]$itemID
-    )
+   [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
+   param
+   (
+      [Parameter(Mandatory = $true)]
+      [string]$workspaceId,
+      [Parameter(Mandatory = $false)]
+      [string]$filter,
+      [Parameter(Mandatory = $false)]
+      [string]$itemID
+   )
 
-    Test-TokenExpired
+   Test-TokenExpired
 
-    # Invoke the Fabric API to get the items in the workspace
-    if ($PSCmdlet.ShouldProcess("Remove items from workspace $workspaceId")) {
-        if ($itemID) {
+   # Invoke the Fabric API to get the items in the workspace
+   if ($PSCmdlet.ShouldProcess("Remove items from workspace $workspaceId")) {
+      if ($itemID) {
             Invoke-FabricRestMethod -Uri "workspaces/$($workspaceID)/items/$($itemID)" -Method Delete
-        } else {
-            $items = Invoke-FabricRestMethod -Uri "workspaces/$workspaceId/items" -Method Get
+      } else {
+         $items = Invoke-FabricRestMethod -Uri "workspaces/$workspaceId/items" -Method Get
 
-            # Display the count of existing items
-            Write-Output "Existing items: $($items.Count)"
+         # Display the count of existing items
+         Write-Output "Existing items: $($items.Count)"
 
-            # If a filter is provided
-            if ($filter) {
-                # Filter the items whose DisplayName matches the filter
-                $items = $items | Where-Object { $_.DisplayName -like $filter }
-            }
+         # If a filter is provided
+         if ($filter) {
+            # Filter the items whose DisplayName matches the filter
+            $items = $items | Where-Object { $_.DisplayName -like $filter }
+         }
 
-            # For each item
-            foreach ($item in $items) {
-                # Remove the item
-                Invoke-FabricRestMethod -Uri "workspaces/$workspaceId/items/$($item.ID)" -Method Delete
-            }
-        }
-    }
+         # For each item
+         foreach ($item in $items) {
+            # Remove the item
+            Invoke-FabricRestMethod -Uri "workspaces/$workspaceId/items/$($item.ID)" -Method Delete
+         }
+      }
+   }
 }

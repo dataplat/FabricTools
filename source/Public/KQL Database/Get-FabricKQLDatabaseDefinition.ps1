@@ -17,7 +17,6 @@ Handles both synchronous and asynchronous operations, with detailed logging and 
 .PARAMETER KQLDatabaseFormat
 Specifies the format of the KQLDatabase definition. Currently, only 'ipynb' is supported.
 
-
 .EXAMPLE
 Get-FabricKQLDatabaseDefinition -WorkspaceId "12345" -KQLDatabaseId "67890"
 
