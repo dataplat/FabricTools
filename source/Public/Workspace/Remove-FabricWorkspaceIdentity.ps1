@@ -22,7 +22,7 @@ Author: Tiago Balabuch
 
 function Remove-FabricWorkspaceIdentity
 {
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]

@@ -20,7 +20,7 @@ Deletes the workspace with the ID "workspace123".
 Author: Tiago Balabuch
 #>
 function Remove-FabricWorkspace {
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
