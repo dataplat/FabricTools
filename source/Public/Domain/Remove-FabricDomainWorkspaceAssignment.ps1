@@ -33,7 +33,7 @@ Author: Tiago Balabuch
 #>
 function Remove-FabricDomainWorkspaceAssignment
 {
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     [Alias("Unassign-FabricDomainWorkspace")]
     param (
         [Parameter(Mandatory = $true)]

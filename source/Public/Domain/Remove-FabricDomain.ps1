@@ -23,7 +23,7 @@ Author: Tiago Balabuch
 
 function Remove-FabricDomain
 {
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding(SupportsShouldProcess,ConfirmImpact = 'High')]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
