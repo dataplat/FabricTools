@@ -23,7 +23,7 @@ GUID              = 'f2a0f9e6-fab6-41fc-9e1c-0c94ff38f794'
 # Author of this module
 Author            = 'The FabricTools Team'
 
- CompanyName       = 'fabrictools.io'
+CompanyName       = 'fabrictools.io'
 
 # Copyright statement for this module
 Copyright         = 'Copyright (c) 2025 by FabricTools Team'
