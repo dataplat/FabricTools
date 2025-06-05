@@ -78,14 +78,11 @@ function Get-FabricDomain {
             return $null
         }
 
-        Write-Message "Step 6:"
-
         # Step 6: Handle empty response
         if (-not $response) {
             Write-Message -Message "No data returned from the API." -Level Warning
             return $null
         }
-        Write-Message "Step 7:"
 
         # Step 7: Filter results based on provided parameters
         $domains = if ($DomainId) {
