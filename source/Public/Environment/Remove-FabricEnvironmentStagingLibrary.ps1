@@ -29,7 +29,7 @@ Deletes the specified library from the staging environment in the specified work
 Author: Tiago Balabuch
 
     #>
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]

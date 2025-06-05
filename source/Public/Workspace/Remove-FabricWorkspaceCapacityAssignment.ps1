@@ -22,7 +22,7 @@ Author: Tiago Balabuch
 
 function Remove-FabricWorkspaceCapacityAssignment
 {
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     [Alias("Unassign-FabricWorkspaceCapacity")]
     param (
         [Parameter(Mandatory = $true)]

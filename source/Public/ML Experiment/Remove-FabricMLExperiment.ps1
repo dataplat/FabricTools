@@ -13,7 +13,7 @@
     The unique identifier of the MLExperiment to be removed.
 
 .EXAMPLE
-     Remove-FabricMLExperiment -WorkspaceId "workspace-12345" -MLExperimentId "experiment-67890"
+    Remove-FabricMLExperiment -WorkspaceId "workspace-12345" -MLExperimentId "experiment-67890"
     This example removes the MLExperiment with ID "experiment-67890" from the workspace with ID "workspace-12345".
 
 .NOTES
@@ -25,7 +25,7 @@
 #>
 function Remove-FabricMLExperiment
 {
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = "High")]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]

@@ -13,6 +13,7 @@ Retrieves an Eventstream or a list of Eventstreams from a specified workspace in
 
 .PARAMETER EventstreamName
 (Optional) The name of the specific Eventstream to retrieve.
+
 .PARAMETER EventstreamId
     The Id of the Eventstream to retrieve. This parameter cannot be used together with EventstreamName. The value for EventstreamId is a GUID.
     An example of a GUID is '12345678-1234-1234-1234-123456789012'.

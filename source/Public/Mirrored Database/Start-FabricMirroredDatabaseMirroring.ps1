@@ -1,19 +1,25 @@
 function Start-FabricMirroredDatabaseMirroring
 {
     <#
-.SYNOPSIS
+
+    .SYNOPSIS
     Starts the mirroring of a specified mirrored database in a given workspace.
-.DESCRIPTION
+
+    .DESCRIPTION
     This function sends a POST request to the Microsoft Fabric API to start the mirroring of a specified mirrored database.
     It requires the workspace ID and the mirrored database ID as parameters.
-.PARAMETER WorkspaceId
+
+    .PARAMETER WorkspaceId
     The unique identifier of the workspace where the mirrored database resides. This parameter is mandatory.
-.PARAMETER MirroredDatabaseId
+
+    .PARAMETER MirroredDatabaseId
     The unique identifier of the mirrored database to be started. This parameter is mandatory.
-.EXAMPLE
+
+    .EXAMPLE
     Start-FabricMirroredDatabaseMirroring -WorkspaceId "12345" -MirroredDatabaseId "67890"
     Starts the mirroring of the mirrored database with ID `67890` in the workspace `12345`.
-.NOTES
+
+    .NOTES
     - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
     - Calls `Test-TokenExpired` to ensure token validity before making the API request.
     - This function handles asynchronous operations and retrieves operation results if required.

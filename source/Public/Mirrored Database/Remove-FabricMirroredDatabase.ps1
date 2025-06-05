@@ -25,7 +25,7 @@ Author: Tiago Balabuch
 
 function Remove-FabricMirroredDatabase
 {
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]

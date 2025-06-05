@@ -10,7 +10,7 @@
     The ID of the workspace from which to retrieve dashboards. This parameter is mandatory.
 
 .EXAMPLE
-     Get-FabricDashboard -WorkspaceId "12345"
+    Get-FabricDashboard -WorkspaceId "12345"
     This example retrieves all dashboards from the workspace with ID "12345".
 
 .NOTES

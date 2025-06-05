@@ -17,7 +17,7 @@ function Revoke-FabricExternalDataShares {
     The unique identifier of the External Data Share to be retrieved.
 
     .EXAMPLE
-     Get-FabricExternalDataShares
+    Get-FabricExternalDataShares
     This example retrieves the External Data Shares details
 
 .NOTES

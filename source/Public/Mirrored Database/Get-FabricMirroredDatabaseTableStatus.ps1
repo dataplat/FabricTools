@@ -1,18 +1,24 @@
 function Get-FabricMirroredDatabaseTableStatus {
     <#
-.SYNOPSIS
-Retrieves the status of tables in a mirrored database.
-.DESCRIPTION
-Retrieves the status of tables in a mirrored database. The function validates the authentication token, constructs the API endpoint URL, and makes a POST request to retrieve the mirroring status of tables. It handles errors and logs messages at various levels (Debug, Error).
-.PARAMETER WorkspaceId
-The ID of the workspace containing the mirrored database.
-.PARAMETER MirroredDatabaseId
-The ID of the mirrored database whose table status is to be retrieved.
-.EXAMPLE
-Get-FabricMirroredDatabaseTableStatus -WorkspaceId "your-workspace-id" -MirroredDatabaseId "your-mirrored-database-id"
-This example retrieves the status of tables in a mirrored database with the specified ID in the specified workspace.
-.NOTES
-The function retrieves the PowerBI access token and makes a POST request to the PowerBI API to retrieve the status of tables in the specified mirrored database. It then returns the 'value' property of the response, which contains the table statuses.
+
+    .SYNOPSIS
+    Retrieves the status of tables in a mirrored database.
+
+    .DESCRIPTION
+    Retrieves the status of tables in a mirrored database. The function validates the authentication token, constructs the API endpoint URL, and makes a POST request to retrieve the mirroring status of tables. It handles errors and logs messages at various levels (Debug, Error).
+
+    .PARAMETER WorkspaceId
+    The ID of the workspace containing the mirrored database.
+
+    .PARAMETER MirroredDatabaseId
+    The ID of the mirrored database whose table status is to be retrieved.
+
+    .EXAMPLE
+    Get-FabricMirroredDatabaseTableStatus -WorkspaceId "your-workspace-id" -MirroredDatabaseId "your-mirrored-database-id"
+    This example retrieves the status of tables in a mirrored database with the specified ID in the specified workspace.
+
+    .NOTES
+    The function retrieves the PowerBI access token and makes a POST request to the PowerBI API to retrieve the status of tables in the specified mirrored database. It then returns the 'value' property of the response, which contains the table statuses.
 
     #>
     [CmdletBinding()]
