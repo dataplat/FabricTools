@@ -30,9 +30,9 @@ Function Invoke-FabricRestMethod {
     This example sends a POST request to the "/api/resource" endpoint of the Fabric API with a request body.
 
 .NOTES
-- Requires `$FabricConfig` global configuration, including `BaseUrl`.
+    - Requires `$FabricConfig` global configuration, including `BaseUrl`.
 
-Author: Kamil Nowinski
+    Author: Kamil Nowinski
 #>
 
     [CmdletBinding()]
