@@ -43,7 +43,7 @@ This command polls the status of the operation with the given operationId every 
         # Use the Location header to define the operationUrl
         $apiEndpointUrl = $location
     } else {
-        $apiEndpointUrl = "https://api.fabric.microsoft.com/v1/operations/{0}" -f $operationId
+        $apiEndpointUrl = "{1}/operations/{1}" -f $FabricConfig.BaseUrl, $operationId
     }
     Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 

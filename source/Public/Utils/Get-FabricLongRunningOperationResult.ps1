@@ -28,7 +28,7 @@ This command fetches the result of the operation with the specified operationId.
     )
 
     # Step 1: Construct the API URL
-    $apiEndpointUrl = "https://api.fabric.microsoft.com/v1/operations/{0}/result" -f $operationId
+    $apiEndpointUrl = "{0}/operations/{1}/result" -f $FabricConfig.BaseUrl, $operationId
     Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
     try {
