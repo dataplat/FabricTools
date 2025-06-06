@@ -6,6 +6,7 @@ param(
         "Method"
         "Body"
         "TestTokenExpired"
+        "PowerBIApi"
         "Verbose"
         "Debug"
         "ErrorAction"
