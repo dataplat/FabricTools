@@ -44,14 +44,14 @@ The function defines parameters for the workspace ID and workspace object. If th
     }
 
     process {
-        # If the parameter set name is 'WorkspaceId', retrieve the workspace object.
-        if ($PSCmdlet.ParameterSetName -eq 'WorkspaceId') {
-            $workspace = Get-PowerBIWorkspace -Id $WorkspaceId
+        # If the parameter set name is 'WorkspaceObject', retrieve the workspace object.
+        if ($PSCmdlet.ParameterSetName -eq 'WorkspaceObject') {
+            $WorkspaceId = $Workspace.id
         }
 
         # Make a GET request to the PowerBI API to retrieve the users of the workspace.
         # The function returns the 'value' property of the response, which contains the users.
-        return (Invoke-FabricRestMethod -Method get -uri ("groups/$($workspace.Id)/users") | ConvertFrom-Json).value
+        return (Invoke-FabricRestMethod -Method get -PowerBIApi -uri ("groups/$WorkspaceId/users")).value
     }
 
 }

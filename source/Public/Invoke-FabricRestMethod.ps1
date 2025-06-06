@@ -19,6 +19,9 @@ Function Invoke-FabricRestMethod {
 .PARAMETER TestTokenExpired
     A switch parameter to test if the Fabric token is expired before making the request. If the token is expired, it will attempt to refresh it.
 
+.PARAMETER PowerBIApi
+    A switch parameter to indicate that the request should be sent to the Power BI API instead of the Fabric API.
+
 .EXAMPLE
     Invoke-FabricRestMethod -uri "/api/resource" -method "GET"
 
@@ -47,17 +50,27 @@ Function Invoke-FabricRestMethod {
         [Parameter(Mandatory = $false)]
         $Body,
 
-        [switch] $TestTokenExpired
+        [switch] $TestTokenExpired,
+
+        [switch] $PowerBIApi
     )
 
     if ($TestTokenExpired) {
         Test-TokenExpired
     }
 
-    if ($Uri -notmatch '^https?://.*') {
-        $Uri = "{0}/{1}" -f $FabricConfig.BaseUrl, $Uri
+    $baseUrl = $FabricConfig.BaseUrl
+    if ($PowerBIApi) {
+        $baseUrl = $PowerBI.BaseApiUrl
     }
-    Write-Message -Message "Fabric API Endpoint: $Uri" -Level Verbose
+
+    if ($Uri -notmatch '^https?://.*') {
+        $Uri = "{0}/{1}" -f $baseUrl, $Uri
+        if ($PowerBIApi) {
+            Write-Message -Message "PowerBIApi param is ignored when full Uri is provided." -Level Warning
+        }
+    }
+    Write-Message -Message "Target API Endpoint: $Uri" -Level Verbose
 
     if ($Body -is [hashtable]) {
         $Body = $Body | ConvertTo-Json -Depth 10
