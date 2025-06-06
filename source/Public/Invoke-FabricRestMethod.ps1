@@ -66,9 +66,8 @@ Function Invoke-FabricRestMethod {
 
     if ($Uri -notmatch '^https?://.*') {
         $Uri = "{0}/{1}" -f $baseUrl, $Uri
-        if ($PowerBIApi) {
-            Write-Message -Message "PowerBIApi param is ignored when full Uri is provided." -Level Warning
-        }
+    } elseif ($PowerBIApi) {
+        Write-Message -Message "PowerBIApi param is ignored when full Uri is provided." -Level Warning
     }
     Write-Message -Message "Target API Endpoint: $Uri" -Level Verbose
 
