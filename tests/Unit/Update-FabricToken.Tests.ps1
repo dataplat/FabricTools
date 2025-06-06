@@ -2,39 +2,33 @@
 param(
     $ModuleName = "FabricTools",
     $expectedParams = @(
-        "authToken"
-                "uri"
-                "method"
-                "body"
-                "contentType"
-                "timeoutSec"
-                "retryCount"
-                "Verbose"
-                "Debug"
-                "ErrorAction"
-                "WarningAction"
-                "InformationAction"
-                "ProgressAction"
-                "ErrorVariable"
-                "WarningVariable"
-                "InformationVariable"
-                "OutVariable"
-                "OutBuffer"
-                "PipelineVariable"
-                
+        "Verbose"
+        "Debug"
+        "ErrorAction"
+        "WarningAction"
+        "InformationAction"
+        "ProgressAction"
+        "ErrorVariable"
+        "WarningVariable"
+        "InformationVariable"
+        "OutVariable"
+        "OutBuffer"
+        "PipelineVariable"
+        "WhatIf"
+        "Confirm"
     )
 )
 
-Describe "Invoke-FabricAPIRequest" -Tag "UnitTests" {
+Describe "Update-FabricToken" -Tag "UnitTests" {
 
     BeforeDiscovery {
-        $command = Get-Command -Name Invoke-FabricAPIRequest
+        $command = Get-Command -Name Update-FabricToken
         $expected = $expectedParams
     }
 
     Context "Parameter validation" {
         BeforeAll {
-            $command = Get-Command -Name Invoke-FabricAPIRequest
+            $command = Get-Command -Name Update-FabricToken
             $expected = $expectedParams
         }
 
@@ -49,4 +43,3 @@ Describe "Invoke-FabricAPIRequest" -Tag "UnitTests" {
         }
     }
 }
-

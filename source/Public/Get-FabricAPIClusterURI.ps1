@@ -24,7 +24,7 @@ function Get-FabricAPIclusterURI {
     Param (
     )
 
-    Confirm-FabricAuthToken | Out-Null
+    Test-TokenExpired
 
     # Make a GET request to the PowerBI API to retrieve the datasets.
     $reply = Invoke-RestMethod -uri "$($PowerBI.BaseApiUrl)/datasets" -Headers $FabricSession.HeaderParams -Method GET

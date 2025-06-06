@@ -2,7 +2,7 @@ function Get-FabricDebugInfo {
 
     <#
 .SYNOPSIS
-    Shows internal debug information about the current session.
+    Shows internal debug information about the current Azure & Fabric sessions & Fabric config.
 
 .DESCRIPTION
     Shows internal debug information about the current session. It is useful for troubleshooting purposes.
@@ -16,31 +16,16 @@ function Get-FabricDebugInfo {
 
 .NOTES
 
-    Revsion History:
-
-    - 2024-12-22 - FGE: Added Verbose Output
-
     #>
 
     [CmdletBinding()]
     [OutputType([System.Collections.Hashtable])]
-    param (
+    param (   )
 
-    )
-
-    begin { }
-
-    process {
-        Write-Verbose "Show current session object"
-
-        return @{
-            FabricSession = $script:FabricSession
-            AzureSession  = $script:AzureSession
-            FabricConfig  = $script:FabricConfig
-        }
-
+    return @{
+        FabricSession = $script:FabricSession
+        AzureSession  = $script:AzureSession
+        FabricConfig  = $script:FabricConfig
     }
-
-    end { }
 
 }

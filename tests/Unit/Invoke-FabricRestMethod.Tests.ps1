@@ -2,32 +2,36 @@
 param(
     $ModuleName = "FabricTools",
     $expectedParams = @(
+        "Uri"
+        "Method"
+        "Body"
+        "TestTokenExpired"
+        "PowerBIApi"
         "Verbose"
-                "Debug"
-                "ErrorAction"
-                "WarningAction"
-                "InformationAction"
-                "ProgressAction"
-                "ErrorVariable"
-                "WarningVariable"
-                "InformationVariable"
-                "OutVariable"
-                "OutBuffer"
-                "PipelineVariable"
-                
+        "Debug"
+        "ErrorAction"
+        "WarningAction"
+        "InformationAction"
+        "ProgressAction"
+        "ErrorVariable"
+        "WarningVariable"
+        "InformationVariable"
+        "OutVariable"
+        "OutBuffer"
+        "PipelineVariable"
     )
 )
 
-Describe "Confirm-FabricAuthToken" -Tag "UnitTests" {
+Describe "Invoke-FabricRestMethod" -Tag "UnitTests" {
 
     BeforeDiscovery {
-        $command = Get-Command -Name Confirm-FabricAuthToken
+        $command = Get-Command -Name Invoke-FabricRestMethod
         $expected = $expectedParams
     }
 
     Context "Parameter validation" {
         BeforeAll {
-            $command = Get-Command -Name Confirm-FabricAuthToken
+            $command = Get-Command -Name Invoke-FabricRestMethod
             $expected = $expectedParams
         }
 
@@ -42,4 +46,3 @@ Describe "Confirm-FabricAuthToken" -Tag "UnitTests" {
         }
     }
 }
-

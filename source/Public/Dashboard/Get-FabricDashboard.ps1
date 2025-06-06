@@ -10,7 +10,7 @@
     The ID of the workspace from which to retrieve dashboards. This parameter is mandatory.
 
 .EXAMPLE
-     Get-FabricDashboard -WorkspaceId "12345"
+    Get-FabricDashboard -WorkspaceId "12345"
     This example retrieves all dashboards from the workspace with ID "12345".
 
 .NOTES
@@ -30,9 +30,7 @@ function Get-FabricDashboard {
 
     try {
         # Ensure token validity
-        Write-Message -Message "Validating token..." -Level Debug
         Test-TokenExpired
-        Write-Message -Message "Token validation completed." -Level Debug
 
         # Construct the API endpoint URL
         $apiEndpointURI = "workspaces/{0}/dashboards" -f $WorkspaceId
@@ -42,7 +40,7 @@ function Get-FabricDashboard {
             Uri    = $apiEndpointURI
             Method = 'Get'
         }
-        $Dashboards = Invoke-FabricAPIRequest @apiParams
+        $Dashboards = Invoke-FabricRestMethod @apiParams
 
         return $Dashboards
 

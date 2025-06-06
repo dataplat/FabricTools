@@ -17,7 +17,6 @@ Handles both synchronous and asynchronous operations, with detailed logging and 
 .PARAMETER KQLDatabaseFormat
 Specifies the format of the KQLDatabase definition. Currently, only 'ipynb' is supported.
 
-
 .EXAMPLE
 Get-FabricKQLDatabaseDefinition -WorkspaceId "12345" -KQLDatabaseId "67890"
 
@@ -52,9 +51,7 @@ function Get-FabricKQLDatabaseDefinition {
 
     try {
         # Step 2: Ensure token validity
-        Write-Message -Message "Validating token..." -Level Debug
         Test-TokenExpired
-        Write-Message -Message "Token validation completed." -Level Debug
 
         # Step 3: Construct the API URL
         $apiEndpointUrl = "{0}/workspaces/{1}/KQLDatabases/{2}/getDefinition" -f $FabricConfig.BaseUrl, $WorkspaceId, $KQLDatabaseId
@@ -66,13 +63,9 @@ function Get-FabricKQLDatabaseDefinition {
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
         # Step 4: Make the API request
-        $response = Invoke-RestMethod `
-            -Headers $FabricConfig.FabricHeaders `
+        $response = Invoke-FabricRestMethod `
             -Uri $apiEndpointUrl `
-            -Method Post `
-            -ErrorAction Stop `
-            -ResponseHeadersVariable "responseHeader" `
-            -StatusCodeVariable "statusCode"
+            -Method Post
 
         # Step 5: Validate the response code and handle the response
         switch ($statusCode) {

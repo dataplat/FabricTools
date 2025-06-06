@@ -2,9 +2,10 @@
 param(
     $ModuleName = "FabricTools",
     $expectedParams = @(
-        "TenantId"
-        "AppId"
-        "AppSecret"
+        "Uri"
+        "Method"
+        "Body"
+        "RetryCount"
         "Verbose"
         "Debug"
         "ErrorAction"
@@ -17,21 +18,19 @@ param(
         "OutVariable"
         "OutBuffer"
         "PipelineVariable"
-        "WhatIf"
-        "Confirm"
     )
 )
 
-Describe "Set-FabricApiHeaders" -Tag "UnitTests" {
+Describe "Invoke-FabricRestMethodExtended" -Tag "UnitTests" {
 
     BeforeDiscovery {
-        $command = Get-Command -Name Set-FabricApiHeaders
+        $command = Get-Command -Name Invoke-FabricRestMethodExtended
         $expected = $expectedParams
     }
 
     Context "Parameter validation" {
         BeforeAll {
-            $command = Get-Command -Name Set-FabricApiHeaders
+            $command = Get-Command -Name Invoke-FabricRestMethodExtended
             $expected = $expectedParams
         }
 

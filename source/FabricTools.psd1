@@ -18,13 +18,12 @@ ModuleVersion = '0.0.1'
 # CompatiblePSEditions = @()
 
 # ID used to uniquely identify this module
-GUID = '0ba3e49a-b47e-4beb-8434-5a34ad41ae72'
+GUID              = 'f2a0f9e6-fab6-41fc-9e1c-0c94ff38f794'
 
 # Author of this module
 Author            = 'The FabricTools Team'
 
-# Company or vendor of this module
- CompanyName       = 'fabrictools.io'
+CompanyName       = 'fabrictools.io'
 
 # Copyright statement for this module
 Copyright         = 'Copyright (c) 2025 by FabricTools Team'
@@ -56,7 +55,7 @@ PowerShellVersion = '5.1'
 
 # Modules that must be imported into the global environment prior to importing this module
 RequiredModules = @(
-    @{ ModuleName = 'Az.Accounts' ; ModuleVersion = '4.2.0' },
+    @{ ModuleName = 'Az.Accounts' ; ModuleVersion = '5.0.0' },
     @{ ModuleName = 'MicrosoftPowerBIMgmt.Profile' ; ModuleVersion = '1.2.1111' },
     @{ ModuleName = 'Az.Resources' ; ModuleVersion = '6.15.1' }
 )
@@ -131,10 +130,9 @@ PrivateData = @{
 } # End of PrivateData hashtable
 
 # HelpInfo URI of this module
-# HelpInfoURI = ''
+HelpInfoURI = 'https://www.github.com/dataplat/FabricTools'
 
 # Default prefix for commands exported from this module. Override the default prefix using Import-Module -Prefix.
 # DefaultCommandPrefix = ''
 
 }
-

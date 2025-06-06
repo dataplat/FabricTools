@@ -41,20 +41,16 @@ function Get-FabricUserListAccessEntities {
 
     try {
 
-        Write-Message -Message "Validating token..." -Level Debug
         Test-TokenExpired
-        Write-Message -Message "Token validation completed." -Level Debug
-
 
         # Step 4: Loop to retrieve all capacities with continuation token
-        $apiEndpointURI = "{0}admin/users/{1}/access" -f $FabricConfig.BaseUrl, $UserId
+        $apiEndpointURI = "admin/users/{0}/access" -f $UserId
         if ($Type) {
             $apiEndpointURI += "?type=$Type"
         }
 
-        $response = Invoke-FabricAPIRequest `
-            -BaseURI $apiEndpointURI `
-            -Headers $FabricConfig.FabricHeaders `
+        $response = Invoke-FabricRestMethod `
+            -Uri $apiEndpointURI `
             -Method Get
 
         return $response

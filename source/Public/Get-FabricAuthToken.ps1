@@ -3,7 +3,8 @@
    Retrieves the Fabric API authentication token.
 
 .DESCRIPTION
-   The Get-FabricAuthToken function retrieves the Fabric API authentication token. If the token is not already set, it calls the Set-FabricAuthToken function to set it. It then outputs the token.
+   The Get-FabricAuthToken function retrieves the Fabric API authentication token.
+   If the token is not already set, the function fails.
 
 .EXAMPLE
    Get-FabricAuthToken
@@ -18,22 +19,21 @@
 
 .NOTES
    This function was originally written by Rui Romano.
-   https://github.com/RuiRomano/fabricps-pbip
+   https://github.com/microsoft/Analysis-Services/tree/master/pbidevmode/fabricps-pbip
 #>
 
 function Get-FabricAuthToken {
-    [Alias("Get-FabAuthToken")]
     [CmdletBinding()]
     param
     (
     )
 
-    # Check if the Fabric token is already set
-    if (!$FabricSession.FabricToken) {
-        # If not, set the Fabric token
-        Set-FabricAuthToken
+    if ($FabricSession.AccessToken) {
+       $ssPtr = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($FabricSession.AccessToken.Token)
+       $Token = ([System.Runtime.InteropServices.Marshal]::PtrToStringBSTR($ssPtr))
+       return $Token
+    } else {
+        Write-Message -Message "AccessToken details are missing. Please run 'Connect-FabricAccount' to configure session." -Level Error
     }
 
-    # Output the Fabric token
-    return $FabricSession.FabricToken
 }

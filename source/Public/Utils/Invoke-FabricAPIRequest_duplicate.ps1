@@ -6,7 +6,7 @@ function Invoke-FabricAPIRequest_duplicate {
         Takes care of: authentication, 429 throttling, Long-Running-Operation (LRO) response
 
     .DESCRIPTION
-        The Invoke-FabricAPIRequest function is used to send an HTTP request to a Fabric API endpoint and retrieve the response. It handles various aspects such as authentication, 429 throttling, and Long-Running-Operation (LRO) response.
+        The Invoke-RestMethod function is used to send an HTTP request to a Fabric API endpoint and retrieve the response. It handles various aspects such as authentication, 429 throttling, and Long-Running-Operation (LRO) response.
 
     .PARAMETER authToken
         The authentication token to be used for the request. If not provided, it will be obtained using the Get-FabricAuthToken function.
@@ -33,19 +33,19 @@ function Invoke-FabricAPIRequest_duplicate {
         The number of times to retry the request in case of a 429 (Too Many Requests) error. The default value is 0.
 
     .EXAMPLE
-        Invoke-FabricAPIRequest -uri "/api/resource" -method "Get"
+        Invoke-FabricAPIRequest_duplicate -uri "/api/resource" -method "Get"
 
         This example sends a GET request to the "/api/resource" endpoint of the Fabric API.
 
     .EXAMPLE
-        Invoke-FabricAPIRequest -authToken "abc123" -uri "/api/resource" -method "Post" -body $requestBody
+        Invoke-FabricAPIRequest_duplicate -authToken "abc123" -uri "/api/resource" -method "Post" -body $requestBody
 
         This example sends a POST request to the "/api/resource" endpoint of the Fabric API with a request body.
 
     .NOTES
         This function requires the Get-FabricAuthToken function to be defined in the same script or module.
         This function was originally written by Rui Romano.
-        https://github.com/RuiRomano/fabricps-pbip
+        https://github.com/microsoft/Analysis-Services/tree/master/pbidevmode/fabricps-pbip
     #>
     param (
         [Parameter(Mandatory = $true)]
