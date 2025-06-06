@@ -20,16 +20,13 @@ $script:PowerBI = [ordered]@{
     BaseApiUrl = "https://api.powerbi.com/v1.0/myorg"
 }
 
-$FabricTools = @{
-    FeatureFlags = @{
-        EnableTokenRefresh = $true
-    }
-}
-
 $FabricConfig = @{
     BaseUrl        = "https://api.fabric.microsoft.com/v1"
     ResourceUrl    = "https://api.fabric.microsoft.com"
     FabricHeaders  = @{}
     TenantId = ""
     TokenExpiresOn = ""
+    FeatureFlags = @{
+        EnableTokenRefresh = $true
+    }
 }
