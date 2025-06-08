@@ -48,8 +48,11 @@ function Get-FabricSQLDatabase {
 
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory = $true)]
+        [Parameter(Mandatory = $true, ParameterSetName = 'WorkspaceId')]
         [string]$WorkspaceId,
+
+        [Parameter(Mandatory = $true, ParameterSetName = 'WorkspaceObject', ValueFromPipeline = $true )]
+        $Workspace,
 
         [Alias("Name", "DisplayName")]
         [string]$SQLDatabaseName,
@@ -58,21 +61,40 @@ function Get-FabricSQLDatabase {
         [string]$SQLDatabaseId
     )
 
-    Test-TokenExpired
-
-    Write-Verbose "You can either use SQLDatabaseName or SQLDatabaseID not both. If both are used throw error"
-    if ($PSBoundParameters.ContainsKey("SQLDatabaseName") -and $PSBoundParameters.ContainsKey("SQLDatabaseId")) {
-        throw "Parameters SQLDatabaseName and SQLDatabaseId cannot be used together"
+    begin {
+        Test-TokenExpired
+        if ($PSBoundParameters.ContainsKey("SQLDatabaseName") -and $PSBoundParameters.ContainsKey("SQLDatabaseId")) {
+            throw "Parameters SQLDatabaseName and SQLDatabaseId cannot be used together"
+        }
     }
 
-    # Create SQLDatabase API
-    $uri = "$($FabricSession.BaseApiUrl)/workspaces/$workspaceId/SqlDatabases"
-    if ($SQLDatabaseId) {
-        $uri = "$uri/$SQLDatabaseId"
+    process {
+        if ($PSCmdlet.ParameterSetName -eq 'WorkspaceObject') {
+            $WorkspaceId = $Workspace.id
+        }
+
+        # Create SQLDatabase API
+        $uri = "$($FabricSession.BaseApiUrl)/workspaces/$WorkspaceId/SqlDatabases"
+        if ($SQLDatabaseId) {
+            $uri = "$uri/$SQLDatabaseId"
+        }
+        $response = Invoke-FabricRestMethod -Uri $uri
+        ##$databases.Where({$_.displayName -eq $body.displayName}).id
+
+        # Step: Validate the response code
+        if ($statusCode -ne 200) {
+            Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
+            Write-Message -Message "Error: $($response.message)" -Level Error
+            Write-Message -Message "Error Details: $($response.moreDetails)" -Level Error
+            Write-Message "Error Code: $($response.errorCode)" -Level Error
+            return $null
+        }
+
+        $response = $response.value
+        if ($SQLDatabaseName) {
+            # Filter the SQLDatabase by name
+            $response = $response | Where-Object { $_.displayName -eq $SQLDatabaseName }
+        }
+        return $response
     }
-    $result = Invoke-RestMethod -Headers $FabricSession.HeaderParams -Uri $uri
-    ##$databases.Where({$_.displayName -eq $body.displayName}).id
-
-    return $result.value
-
 }
