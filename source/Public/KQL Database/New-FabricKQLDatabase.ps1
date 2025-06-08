@@ -47,7 +47,7 @@ Add-FabricKQLDatabase -WorkspaceId "workspace-12345" -KQLDatabaseName "New KQLDa
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-- Calls `Test-TokenExpired` to ensure token validity before making the API request.
+- Calls `Confirm-TokenState` to ensure token validity before making the API request.
 - Precedent Request Body
     - Definition file high priority.
     - CreationPayload is evaluate only if Definition file is not provided.
@@ -107,7 +107,7 @@ Author: Tiago Balabuch
     try
     {
         # Step 1: Ensure token validity
-        Test-TokenExpired
+        Confirm-TokenState
 
         # Step 2: Construct the API URL
         $apiEndpointUrl = "{0}/workspaces/{1}/kqlDatabases" -f $FabricConfig.BaseUrl, $WorkspaceId

@@ -28,7 +28,7 @@ The function retrieves the PowerBI access token and makes a GET request to the P
         [string]$capacityID
     )
 
-    Test-TokenExpired
+    Confirm-TokenState
 
     # Make a GET request to the PowerBI API to retrieve the workloads for the specified capacity.
     # The function returns the 'value' property of the response.

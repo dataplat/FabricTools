@@ -38,7 +38,7 @@ The function checks if the Azure token is null. If it is, it connects to the Azu
         [string]$capacity
     )
 
-    Test-TokenExpired
+    Confirm-TokenState
 
     # Define the URL for the GET request.
     $getCapacityState = "$($AzureSession.BaseApiUrl)/subscriptions/$subscriptionID/resourceGroups/$resourcegroup/providers/Microsoft.Fabric/capacities/$capacity/?api-version=2022-07-01-preview"

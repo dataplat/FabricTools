@@ -42,7 +42,7 @@ Function Remove-FabricItem {
       [string]$itemID
    )
 
-   Test-TokenExpired
+   Confirm-TokenState
 
    # Invoke the Fabric API to get the items in the workspace
    if ($PSCmdlet.ShouldProcess("Remove items from workspace $workspaceId")) {

@@ -34,7 +34,7 @@ function Get-FabricCapacities {
     # Initialize an array to store the results
     $res = @()
 
-    Test-TokenExpired
+    Confirm-TokenState
 
     # If a subscription ID is provided
     if ($subscriptionID) {
@@ -72,4 +72,3 @@ function Get-FabricCapacities {
     # Return the results
     return $res
 }
-

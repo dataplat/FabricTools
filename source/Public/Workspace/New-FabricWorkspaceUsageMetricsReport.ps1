@@ -29,7 +29,7 @@ The function retrieves the PowerBI access token and the Fabric API cluster URI. 
         [string]$workspaceId
     )
 
-    Test-TokenExpired
+    Confirm-TokenState
 
     # Retrieve the Fabric API cluster URI.
     $url = Get-FabricAPIclusterURI

@@ -27,7 +27,7 @@ Retrieves all KQLDatabases in workspace "12345".
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-- Calls `Test-TokenExpired` to ensure token validity before making the API request.
+- Calls `Confirm-TokenState` to ensure token validity before making the API request.
 
 Author: Tiago Balabuch
 
@@ -55,7 +55,7 @@ Author: Tiago Balabuch
         }
 
         # Step 2: Ensure token validity
-        Test-TokenExpired
+        Confirm-TokenState
         # Step 3: Initialize variables
         $continuationToken = $null
         $KQLDatabases = @()

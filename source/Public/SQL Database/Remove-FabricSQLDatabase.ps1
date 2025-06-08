@@ -40,7 +40,7 @@ function Remove-FabricSQLDatabase
     try
     {
         # Step 1: Ensure token validity
-        Test-TokenExpired
+        Confirm-TokenState
 
         # Step 2: Construct the API URL
         $apiEndpointUrl = "{0}/workspaces/{1}/sqldatabases/{2}" -f $FabricConfig.BaseUrl, $WorkspaceId, $SQLDatabaseId

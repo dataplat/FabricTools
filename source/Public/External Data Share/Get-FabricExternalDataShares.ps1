@@ -12,7 +12,7 @@
 
 .NOTES
     - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-    - Calls `Test-TokenExpired` to ensure token validity before making the API request.
+    - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 
     Author: Tiago Balabuch
 #>
@@ -23,7 +23,7 @@ function Get-FabricExternalDataShares {
     try {
 
         # Validate authentication token before proceeding
-        Test-TokenExpired
+        Confirm-TokenState
 
         # Construct the API endpoint URI for retrieving external data shares
         Write-Message -Message "Constructing API endpoint URI..." -Level Debug

@@ -22,7 +22,7 @@ The function retrieves the PowerBI access token and makes a GET request to the F
     Param (
     )
 
-    Test-TokenExpired
+    Confirm-TokenState
 
     # Make a GET request to the Fabric API to retrieve the tenant overrides for all capacities.
     # The function returns the response of the GET request.

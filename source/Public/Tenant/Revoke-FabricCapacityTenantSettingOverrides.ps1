@@ -18,7 +18,7 @@ Removes the tenant setting override named "ExampleSetting" from the capacity wit
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-- Calls `Test-TokenExpired` to ensure token validity before making the API request.
+- Calls `Confirm-TokenState` to ensure token validity before making the API request.
 
 Author: Tiago Balabuch
 #>
@@ -35,7 +35,7 @@ function Revoke-FabricCapacityTenantSettingOverrides {
     )
     try {
         # Step 1: Validate authentication token before making API requests
-        Test-TokenExpired
+        Confirm-TokenState
 
         # Step 2: Construct the API endpoint URL for retrieving capacity tenant setting overrides
         $apiEndpointURI = "admin/capacities/{0}/delegatedTenantSettingOverrides/{1}" -f $capacityId, $tenantSettingName

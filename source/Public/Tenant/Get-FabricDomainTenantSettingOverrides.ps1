@@ -12,7 +12,7 @@ Fetches tenant setting overrides for all domains in the Fabric tenant.
 
 .NOTES
 - Requires the `$FabricConfig` global configuration, which must include `BaseUrl` and `FabricHeaders`.
-- Ensures token validity by invoking `Test-TokenExpired` before making the API request.
+- Ensures token validity by invoking `Confirm-TokenState` before making the API request.
 - Logs detailed messages for debugging and error handling.
 
 Author: Tiago Balabuch
@@ -23,7 +23,7 @@ function Get-FabricDomainTenantSettingOverrides {
 
     try {
         # Step 1: Validate authentication token before making API requests
-        Test-TokenExpired
+        Confirm-TokenState
 
         # Step 2: Construct the API endpoint URL for retrieving domain tenant setting overrides
         $apiEndpointURI = "admin/domains/delegatedTenantSettingOverrides"

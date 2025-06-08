@@ -49,7 +49,7 @@ Function Import-FabricItem {
 
     # Search for folders with .pbir and .pbidataset in it
 
-    Test-TokenExpired
+    Confirm-TokenState
 
     $itemsFolders = Get-ChildItem  -Path $path -recurse -include *.pbir, *.pbidataset
 

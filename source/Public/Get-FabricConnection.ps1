@@ -31,7 +31,7 @@ https://learn.microsoft.com/en-us/rest/api/fabric/core/connections/list-connecti
     )
 
     begin {
-        Test-TokenExpired
+        Confirm-TokenState
     }
 
     process {

@@ -27,6 +27,8 @@ This command fetches the result of the operation with the specified operationId.
         [string]$operationId
     )
 
+    Confirm-TokenState
+
     # Step 1: Construct the API URL
     $apiEndpointUrl = "{0}/operations/{1}/result" -f $FabricConfig.BaseUrl, $operationId
     Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug

@@ -84,7 +84,7 @@ function Get-FabricEventhouse {
         }
 
         # Step 2: Ensure token validity
-        Test-TokenExpired
+        Confirm-TokenState
 
         # Step 3: Initialize variables
         $continuationToken = $null

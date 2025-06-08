@@ -46,7 +46,7 @@ https://github.com/microsoft/Analysis-Services/tree/master/pbidevmode/fabricps-p
     )
 
     begin {
-        Test-TokenExpired
+        Confirm-TokenState
     }
 
     process {

@@ -31,7 +31,7 @@ This example retrieves all tables from the specified Lakehouse in the specified 
 
     try {
         # Step 1: Ensure token validity
-        Test-TokenExpired
+        Confirm-TokenState
 
 
 

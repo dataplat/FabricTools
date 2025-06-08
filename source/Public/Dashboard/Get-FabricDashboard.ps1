@@ -15,7 +15,7 @@
 
 .NOTES
     - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-    - Calls `Test-TokenExpired` to ensure token validity before making the API request.
+    - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 
     Author: Tiago Balabuch
 #>
@@ -30,7 +30,7 @@ function Get-FabricDashboard {
 
     try {
         # Ensure token validity
-        Test-TokenExpired
+        Confirm-TokenState
 
         # Construct the API endpoint URL
         $apiEndpointURI = "workspaces/{0}/dashboards" -f $WorkspaceId

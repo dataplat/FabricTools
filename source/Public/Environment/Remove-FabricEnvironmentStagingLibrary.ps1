@@ -47,7 +47,7 @@ Author: Tiago Balabuch
     try
     {
         # Step 1: Ensure token validity
-        Test-TokenExpired
+        Confirm-TokenState
 
 
         # Step 2: Construct the API URL

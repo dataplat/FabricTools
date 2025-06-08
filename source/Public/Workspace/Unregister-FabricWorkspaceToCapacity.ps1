@@ -42,7 +42,7 @@ function Unregister-FabricWorkspaceToCapacity {
     )
 
     begin {
-        Test-TokenExpired
+        Confirm-TokenState
     }
 
     Process {

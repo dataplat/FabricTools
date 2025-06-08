@@ -20,7 +20,7 @@ Returns tenant setting overrides for the capacity with ID "12345".
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-- Calls `Test-TokenExpired` to ensure token validity before making the API request.
+- Calls `Confirm-TokenState` to ensure token validity before making the API request.
 
 Author: Tiago Balabuch
 #>
@@ -34,7 +34,7 @@ function Get-FabricCapacityTenantSettingOverrides {
 
     try {
         # Step 1: Validate authentication token before making API requests
-        Test-TokenExpired
+        Confirm-TokenState
 
         # Step 2: Construct the API endpoint URL for retrieving capacity tenant setting overrides
         if ($capacityId) {

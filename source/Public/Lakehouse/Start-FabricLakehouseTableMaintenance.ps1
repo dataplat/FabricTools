@@ -46,7 +46,7 @@ function Start-FabricLakehouseTableMaintenance
 
     .NOTES
     - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-    - Calls `Test-TokenExpired` to ensure token validity before making the API request.
+    - Calls `Confirm-TokenState` to ensure token validity before making the API request.
     - This function handles asynchronous operations and retrieves operation results if required.
     - The function uses the `Write-Message` function for logging and debugging purposes.
     - The function uses the `Get-FabricLakehouse` function to retrieve Lakehouse details.
@@ -100,7 +100,7 @@ function Start-FabricLakehouseTableMaintenance
     try
     {
         # Step 1: Ensure token validity
-        Test-TokenExpired
+        Confirm-TokenState
 
 
         $lakehouse = Get-FabricLakehouse -WorkspaceId $WorkspaceId -LakehouseId $LakehouseId

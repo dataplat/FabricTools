@@ -38,6 +38,8 @@ This command polls the status of the operation with the given operationId every 
         [int]$retryAfter = 5
     )
 
+    Confirm-TokenState
+
     # Step 1: Construct the API URL
     if ($location) {
         # Use the Location header to define the operationUrl

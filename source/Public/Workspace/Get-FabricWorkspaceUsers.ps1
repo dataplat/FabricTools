@@ -40,7 +40,7 @@ The function defines parameters for the workspace ID and workspace object. If th
     )
 
     begin {
-        Test-TokenExpired
+        Confirm-TokenState
     }
 
     process {

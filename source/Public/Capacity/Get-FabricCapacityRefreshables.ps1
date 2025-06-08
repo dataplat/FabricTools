@@ -28,7 +28,7 @@ The function retrieves the PowerBI access token and makes a GET request to the P
         [string]$top = 5
     )
 
-    Test-TokenExpired
+    Confirm-TokenState
 
     # Make a GET request to the PowerBI API to retrieve the top refreshable capacities.
     # The function returns the 'value' property of the response.

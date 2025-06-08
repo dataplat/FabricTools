@@ -27,7 +27,7 @@ Retrieves all environments in workspace "12345".
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-- Calls `Test-TokenExpired` to ensure token validity before making the API request.
+- Calls `Confirm-TokenState` to ensure token validity before making the API request.
 - Returns the matching environment details or all environments if no filter is provided.
 
 Author: Tiago Balabuch
@@ -57,7 +57,7 @@ Author: Tiago Balabuch
         }
 
         # Step 2: Ensure token validity
-        Test-TokenExpired
+        Confirm-TokenState
 
         # Step 3: Initialize variables
         $continuationToken = $null

@@ -31,7 +31,7 @@ function Get-FabricMirroredDatabaseStatus {
 
     try {
         # Step 2: Ensure token validity
-        Test-TokenExpired
+        Confirm-TokenState
 
         $apiEndpointUrl = "{0}/workspaces/{1}/mirroredDatabases/{2}/getMirroringStatus" -f $FabricConfig.BaseUrl, $WorkspaceId, $MirroredDatabaseId
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug

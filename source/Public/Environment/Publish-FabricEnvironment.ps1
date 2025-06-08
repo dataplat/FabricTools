@@ -20,7 +20,7 @@ Initiates the publishing process for the specified staging environment.
 
 .NOTES
 - Requires the `$FabricConfig` global object, including `BaseUrl` and `FabricHeaders`.
-- Uses `Test-TokenExpired` to validate the token before making API calls.
+- Uses `Confirm-TokenState` to validate the token before making API calls.
 
 Author: Tiago Balabuch
 #>
@@ -39,7 +39,7 @@ function Publish-FabricEnvironment {
 
     try {
         # Step 1: Ensure token validity
-        Test-TokenExpired
+        Confirm-TokenState
 
         # Step 2: Construct the API URL
         $apiEndpointUrl = "{0}/workspaces/{1}/environments/{2}/staging/publish" -f $FabricConfig.BaseUrl, $WorkspaceId, $EnvironmentId

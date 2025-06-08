@@ -34,7 +34,7 @@ function Get-FabricWorkspaceDatasetRefreshes {
         [string]$WorkspaceID
     )
 
-    Test-TokenExpired
+    Confirm-TokenState
 
     # Get the workspace using the workspace ID
     $wsp = Get-FabricWorkspace -workspaceid $WorkspaceID

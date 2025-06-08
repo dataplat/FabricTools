@@ -36,7 +36,7 @@ function Get-FabricMirroredDatabaseTableStatus {
     try {
 
         # Step 2: Ensure token validity
-        Test-TokenExpired
+        Confirm-TokenState
 
         $continuationToken = $null
         $MirroredDatabaseTableStatus = @()

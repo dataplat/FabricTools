@@ -24,7 +24,7 @@
 
 .NOTES
     - Requires the `$FabricConfig` global configuration, which includes `BaseUrl` and `FabricHeaders`.
-    - Ensures token validity by calling `Test-TokenExpired` before making the API request.
+    - Ensures token validity by calling `Confirm-TokenState` before making the API request.
 
     Author: Tiago Balabuch
 #>
@@ -52,7 +52,7 @@ function Update-FabricCopyJob
     try
     {
         # Ensure token validity
-        Test-TokenExpired
+        Confirm-TokenState
 
         # Construct the API endpoint URI
         $apiEndpointURI = "workspaces/{0}/copyJobs/{1}" -f $WorkspaceId, $CopyJobId
