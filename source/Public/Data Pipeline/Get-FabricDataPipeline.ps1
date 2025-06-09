@@ -17,16 +17,16 @@ function Get-FabricDataPipeline {
     The name of the Data Pipeline to retrieve. This parameter is optional.
 
 .EXAMPLE
-    Get-FabricData Pipeline -WorkspaceId "workspace-12345" -Data PipelineId "Data Pipeline-67890"
+    Get-FabricDataPipeline -WorkspaceId "workspace-12345" -Data PipelineId "Data Pipeline-67890"
     This example retrieves the Data Pipeline details for the Data Pipeline with ID "Data Pipeline-67890" in the workspace with ID "workspace-12345".
 
 .EXAMPLE
-    Get-FabricData Pipeline -WorkspaceId "workspace-12345" -Data PipelineName "My Data Pipeline"
+    Get-FabricDataPipeline -WorkspaceId "workspace-12345" -Data PipelineName "My Data Pipeline"
     This example retrieves the Data Pipeline details for the Data Pipeline named "My Data Pipeline" in the workspace with ID "workspace-12345".
 
 .NOTES
     - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-    - Calls `Test-TokenExpired` to ensure token validity before making the API request.
+    - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 
     Author: Tiago Balabuch
     #>
@@ -42,7 +42,6 @@ function Get-FabricDataPipeline {
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [ValidatePattern('^[a-zA-Z0-9_ ]*$')]
         [string]$DataPipelineName
     )
 
@@ -54,15 +53,13 @@ function Get-FabricDataPipeline {
         }
 
         # Ensure token validity
-        Write-Message -Message "Validating token..." -Level Debug
-        Test-TokenExpired
-        Write-Message -Message "Token validation completed." -Level Debug
+        Confirm-TokenState
 
         # Construct the API endpoint URL
         $apiEndpointURI = ("workspaces/{0}/dataPipelines" -f $WorkspaceId)
 
         # Invoke the Fabric API to retrieve data pipeline details
-        $DataPipelines = (Invoke-FabricAPIRequest -uri $apiEndpointURI -Method Get).Value
+        $DataPipelines = (Invoke-FabricRestMethod -uri $apiEndpointURI -Method Get).Value
 
         # Filter results based on provided parameters
         $response = if ($DataPipelineId) {

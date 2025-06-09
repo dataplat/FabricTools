@@ -7,12 +7,12 @@
     It handles token validation, constructs the API URL, makes the API request, and processes the response.
 
 .EXAMPLE
-     Get-FabricExternalDataShares
+    Get-FabricExternalDataShares
     This example retrieves the External Data Shares details
 
 .NOTES
     - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-    - Calls `Test-TokenExpired` to ensure token validity before making the API request.
+    - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 
     Author: Tiago Balabuch
 #>
@@ -23,18 +23,15 @@ function Get-FabricExternalDataShares {
     try {
 
         # Validate authentication token before proceeding
-        Write-Message -Message "Validating token..." -Level Debug
-        Test-TokenExpired
-        Write-Message -Message "Token validation completed." -Level Debug
+        Confirm-TokenState
 
         # Construct the API endpoint URI for retrieving external data shares
         Write-Message -Message "Constructing API endpoint URI..." -Level Debug
         $apiEndpointURI = "{0}/admin/items/externalDataShares" -f $FabricConfig.BaseUrl, $WorkspaceId
 
         # Invoke the API request to retrieve external data shares
-        $externalDataShares = Invoke-FabricAPIRequest `
-            -BaseURI $apiEndpointURI `
-            -Headers $FabricConfig.FabricHeaders `
+        $externalDataShares = Invoke-FabricRestMethod `
+            -Uri $apiEndpointURI `
             -Method Get
 
         # Return the retrieved external data shares

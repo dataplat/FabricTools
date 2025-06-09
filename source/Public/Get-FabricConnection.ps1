@@ -31,14 +31,14 @@ https://learn.microsoft.com/en-us/rest/api/fabric/core/connections/list-connecti
     )
 
     begin {
-        Confirm-FabricAuthToken | Out-Null
+        Confirm-TokenState
     }
 
     process {
         if ($connectionId) {
-            $result = Invoke-FabricAPIRequest -Uri "/connections/$($connectionId)" -Method GET
+            $result = Invoke-FabricRestMethod -Uri "/connections/$($connectionId)" -Method GET
         } else {
-            $result = Invoke-FabricAPIRequest -Uri "/connections" -Method GET
+            $result = Invoke-FabricRestMethod -Uri "/connections" -Method GET
         }
 
         return $result.value

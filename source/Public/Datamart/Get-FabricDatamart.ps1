@@ -22,7 +22,7 @@ function Get-FabricDatamart {
 
 .NOTES
     - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-    - Calls `Test-TokenExpired` to ensure token validity before making the API request.
+    - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 
     Author: Tiago Balabuch
     #>
@@ -43,9 +43,7 @@ function Get-FabricDatamart {
 
     try {
         # Step 2: Ensure token validity
-        Write-Message -Message "Validating token..." -Level Debug
-        Test-TokenExpired
-        Write-Message -Message "Token validation completed." -Level Debug
+        Confirm-TokenState
         # Step 3: Initialize variables
 
         $apiEndpointURI = "workspaces/{0}/Datamarts" -f $WorkspaceId
@@ -54,7 +52,7 @@ function Get-FabricDatamart {
             Uri    = $apiEndpointURI
             method = 'Get'
         }
-        $Datamarts = Invoke-FabricAPIRequest @apiParams
+        $Datamarts = Invoke-FabricRestMethod @apiParams
 
         # Step 9: Filter results based on provided parameters
 

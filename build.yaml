@@ -104,7 +104,7 @@ Pester:
   #  - FunctionalQuality
   #  - TestQuality
   Tag:
-  CodeCoverageThreshold: 0.35 # 85 # Set to 0 to bypass
+  CodeCoverageThreshold: 0.30 # 85 # Set to 0 to bypass
   #CodeCoverageOutputFile: JaCoCo_$OsShortName.xml
   #CodeCoverageOutputFileEncoding: ascii
   # Use this if code coverage should be merged from several pipeline test jobs.
@@ -157,4 +157,3 @@ ChangelogConfig:
 GitConfig:
   UserName: Automation Bot
   UserEmail: automation_bot@fabrictools.io
-

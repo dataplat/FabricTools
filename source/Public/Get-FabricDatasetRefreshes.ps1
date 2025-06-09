@@ -43,12 +43,14 @@ function Get-FabricDatasetRefreshes {
     # Check if the dataset is refreshable.
     if ($di.isrefreshable -eq "True") {
         # Get a list of all the refreshes for the dataset.
-        $results = (Invoke-PowerBIRestMethod -Method get -Url ("datasets/" + $di.id + "/Refreshes") | ConvertFrom-Json)
+        $results = Invoke-FabricRestMethod -Method get -PowerBIApi -uri ("datasets/" + $di.id + "/Refreshes")
 
         # Create a PSCustomObject with the information about the refresh.
         $refresh = [PSCustomObject]@{
             Clock        = Get-Date
+            WorkspaceId  = $workspaceId
             Workspace    = $w.name
+            DatasetId    = $di.Id
             Dataset      = $di.Name
             refreshtype  = $results.value[0].refreshType
             startTime    = $results.value[0].startTime

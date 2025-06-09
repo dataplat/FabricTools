@@ -18,7 +18,6 @@ The KQLQueryset content can be provided as file paths, and metadata updates can 
 .PARAMETER KQLQuerysetPathPlatformDefinition
 (Optional) The file path to the KQLQueryset's platform-specific definition file. The content will be encoded as Base64 and sent in the request.
 
-
 .EXAMPLE
 Update-FabricKQLQuerysetDefinition -WorkspaceId "12345" -KQLQuerysetId "67890" -KQLQuerysetPathDefinition "C:\KQLQuerysets\KQLQueryset.ipynb"
 
@@ -31,7 +30,7 @@ Updates both the content and metadata of the KQLQueryset with ID `67890` in the 
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-- Calls `Test-TokenExpired` to ensure token validity before making the API request.
+- Calls `Confirm-TokenState` to ensure token validity before making the API request.
 - The KQLQueryset content is encoded as Base64 before being sent to the Fabric API.
 - This function handles asynchronous operations and retrieves operation results if required.
 
@@ -61,9 +60,7 @@ function Update-FabricKQLQuerysetDefinition {
 
     try {
         # Step 1: Ensure token validity
-        Write-Message -Message "Validating token..." -Level Debug
-        Test-TokenExpired
-        Write-Message -Message "Token validation completed." -Level Debug
+        Confirm-TokenState
 
         # Step 2: Construct the API URL
         $apiEndpointUrl = "{0}/workspaces/{1}/kqlQuerysets/{2}/updateDefinition" -f $FabricConfig.BaseUrl, $WorkspaceId, $KQLQuerysetId
@@ -117,15 +114,10 @@ function Update-FabricKQLQuerysetDefinition {
 
         if ($PSCmdlet.ShouldProcess($KQLQuerysetId, "Update KQLQueryset")) {
         # Step 4: Make the API request
-        $response = Invoke-RestMethod `
-            -Headers $FabricConfig.FabricHeaders `
+        $response = Invoke-FabricRestMethod `
             -Uri $apiEndpointUrl `
             -Method Post `
-            -Body $bodyJson `
-            -ContentType "application/json" `
-            -ErrorAction Stop `
-            -ResponseHeadersVariable "responseHeader" `
-            -StatusCodeVariable "statusCode"
+            -Body $bodyJson
     }
 
         # Step 5: Handle and log the response

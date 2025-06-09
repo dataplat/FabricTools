@@ -38,12 +38,14 @@ This command polls the status of the operation with the given operationId every 
         [int]$retryAfter = 5
     )
 
+    Confirm-TokenState
+
     # Step 1: Construct the API URL
     if ($location) {
         # Use the Location header to define the operationUrl
         $apiEndpointUrl = $location
     } else {
-        $apiEndpointUrl = "https://api.fabric.microsoft.com/v1/operations/{0}" -f $operationId
+        $apiEndpointUrl = "{1}/operations/{1}" -f $FabricConfig.BaseUrl, $operationId
     }
     Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
@@ -58,13 +60,9 @@ This command polls the status of the operation with the given operationId every 
             }
 
             # Step 3: Make the API request
-            $response = Invoke-RestMethod `
-                -Headers $FabricConfig.FabricHeaders `
+            $response = Invoke-FabricRestMethod `
                 -Uri $apiEndpointUrl `
-                -Method Get `
-                -ErrorAction Stop `
-                -ResponseHeadersVariable responseHeader `
-                -StatusCodeVariable statusCode
+                -Method Get
 
             # Step 3: Parse the response
             $jsonOperation = $response | ConvertTo-Json

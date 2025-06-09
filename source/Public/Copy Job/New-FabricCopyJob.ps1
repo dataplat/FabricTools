@@ -26,7 +26,7 @@
 
 .NOTES
     - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-    - Calls `Test-TokenExpired` to ensure token validity before making the API request.
+    - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 
     Author: Tiago Balabuch
 #>
@@ -39,7 +39,6 @@ function New-FabricCopyJob {
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [ValidatePattern('^[a-zA-Z0-9_ ]*$')]
         [string]$CopyJobName,
 
         [Parameter(Mandatory = $false)]
@@ -57,9 +56,7 @@ function New-FabricCopyJob {
 
     try {
         # Step 1: Ensure token validity
-        Write-Message -Message "Validating token..." -Level Debug
-        Test-TokenExpired
-        Write-Message -Message "Token validation completed." -Level Debug
+        Confirm-TokenState
 
         # Step 2: Construct the API URL
         $apiEndpointURI = "workspaces/{0}/copyJobs" -f $WorkspaceId
@@ -132,7 +129,7 @@ function New-FabricCopyJob {
             Method = 'Post'
             Body   = $bodyJson
         }
-        $response = Invoke-FabricAPIRequest @apiParams
+        $response = Invoke-FabricRestMethod @apiParams
     }
 
     Write-Message -Message "Copy Job created successfully!" -Level Info

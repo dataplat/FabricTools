@@ -17,12 +17,12 @@ function Revoke-FabricExternalDataShares {
     The unique identifier of the External Data Share to be retrieved.
 
     .EXAMPLE
-     Get-FabricExternalDataShares
+    Get-FabricExternalDataShares
     This example retrieves the External Data Shares details
 
 .NOTES
     - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-    - Calls `Test-TokenExpired` to ensure token validity before making the API request.
+    - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 
     Author: Tiago Balabuch
     #>
@@ -45,19 +45,16 @@ function Revoke-FabricExternalDataShares {
     try {
 
         # Step 2: Ensure token validity
-        Write-Message -Message "Validating token..." -Level Debug
-        Test-TokenExpired
-        Write-Message -Message "Token validation completed." -Level Debug
+        Confirm-TokenState
 
         # Step 4: Loop to retrieve all capacities with continuation token
         Write-Message -Message "Constructing API endpoint URI..." -Level Debug
-        $apiEndpointURI = "{0}/admin/workspaces/{1}/items/{2}/externalDataShares/{3}/revoke" -f $FabricConfig.BaseUrl, $WorkspaceId, $ItemId, $ExternalDataShareId
+        $apiEndpointURI = "admin/workspaces/{0}/items/{1}/externalDataShares/{2}/revoke" -f $WorkspaceId, $ItemId, $ExternalDataShareId
 
         if ($PSCmdlet.ShouldProcess("$ExternalDataShareId", "revoke")) {
 
-        $externalDataShares = Invoke-FabricAPIRequest `
-            -BaseURI $apiEndpointURI `
-            -Headers $FabricConfig.FabricHeaders `
+        $externalDataShares = Invoke-FabricRestMethod `
+            -Uri $apiEndpointURI `
             -Method Post
         }
 

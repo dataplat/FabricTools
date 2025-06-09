@@ -19,12 +19,12 @@
     An optional new description for the DataPipeline.
 
 .EXAMPLE
-     Update-FabricDataPipeline -WorkspaceId "workspace-12345" -DataPipelineId "pipeline-67890" -DataPipelineName "Updated DataPipeline" -DataPipelineDescription "Updated description"
+    Update-FabricDataPipeline -WorkspaceId "workspace-12345" -DataPipelineId "pipeline-67890" -DataPipelineName "Updated DataPipeline" -DataPipelineDescription "Updated description"
     This example updates the DataPipeline with ID "pipeline-67890" in the workspace with ID "workspace-12345" with a new name and description.
 
 .NOTES
     - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-    - Calls `Test-TokenExpired` to ensure token validity before making the API request.
+    - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 
     Author: Tiago Balabuch
 #>
@@ -42,7 +42,6 @@ function Update-FabricDataPipeline
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [ValidatePattern('^[a-zA-Z0-9_ ]*$')]
         [string]$DataPipelineName,
 
         [Parameter(Mandatory = $false)]
@@ -53,12 +52,10 @@ function Update-FabricDataPipeline
     try
     {
         # Ensure token validity
-        Write-Message -Message "Validating token..." -Level Debug
-        Test-TokenExpired
-        Write-Message -Message "Token validation completed." -Level Debug
+        Confirm-TokenState
 
         # Construct the API URL
-        $apiEndpointURI = "{0}/workspaces/{1}/dataPipelines/{2}" -f $FabricConfig.BaseUrl, $WorkspaceId, $DataPipelineId
+        $apiEndpointURI = "workspaces/{0}/dataPipelines/{1}" -f $WorkspaceId, $DataPipelineId
         Write-Message -Message "API Endpoint: $apiEndpointURI" -Level Debug
 
         # Construct the request body
@@ -77,13 +74,11 @@ function Update-FabricDataPipeline
 
         if ($PSCmdlet.ShouldProcess($apiEndpointURI, "Update DataPipeline"))
         {
-
             # Make the API request
-            $response = Invoke-FabricAPIRequest `
-                -Headers $FabricConfig.FabricHeaders `
-                -BaseURI $apiEndpointURI `
-                -method Patch `
-                -body $bodyJson
+            $response = Invoke-FabricRestMethod `
+                -Uri $apiEndpointURI `
+                -Method Patch `
+                -Body $bodyJson
         }
 
         Write-Message -Message "DataPipeline '$DataPipelineName' updated successfully!" -Level Info

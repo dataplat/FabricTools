@@ -88,7 +88,7 @@ BeforeDiscovery {
 
     foreach ($function in $allModuleFunctions | Where-Object -FilterScript {
             $_.Name -notin (
-                'Test-TokenExpired',
+                'Confirm-TokenState',
                 'Get-FabricUri',
                 'Get-FileDefinitionParts',
                 'Set-FabConfig',

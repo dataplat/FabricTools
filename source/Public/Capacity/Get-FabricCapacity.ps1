@@ -23,7 +23,7 @@
 
 .NOTES
     - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-    - Calls `Test-TokenExpired` to ensure token validity before making the API request.
+    - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 
     Author: Tiago Balabuch
 #>
@@ -46,9 +46,7 @@ function Get-FabricCapacity {
         }
 
         # Ensure token validity
-        Write-Message -Message "Validating token..." -Level Debug
-        Test-TokenExpired
-        Write-Message -Message "Token validation completed." -Level Debug
+        Confirm-TokenState
 
         # Construct the API endpoint URL
         $apiEndpointURI = "capacities"
@@ -58,7 +56,7 @@ function Get-FabricCapacity {
             Uri    = $apiEndpointURI
             Method = 'Get'
         }
-        $capacities = (Invoke-FabricAPIRequest @apiParams).Value
+        $capacities = (Invoke-FabricRestMethod @apiParams).Value
 
         # Filter results based on provided parameters
         $response = if ($capacityId) {

@@ -1,25 +1,31 @@
 function Stop-FabricMirroredDatabaseMirroring
 {
     <#
-.SYNOPSIS
+
+    .SYNOPSIS
     Stops the mirroring of a specified mirrored database in a given workspace.
-.DESCRIPTION
+
+    .DESCRIPTION
     This function sends a POST request to the Microsoft Fabric API to stop the mirroring of a specified mirrored database.
     It requires the workspace ID and the mirrored database ID as parameters.
 
-.PARAMETER WorkspaceId
+
+    .PARAMETER WorkspaceId
     The unique identifier of the workspace where the mirrored database resides. This parameter is mandatory.
 
-.PARAMETER MirroredDatabaseId
+
+    .PARAMETER MirroredDatabaseId
     The unique identifier of the mirrored database to be stopped. This parameter is mandatory.
 
-.EXAMPLE
+
+    .EXAMPLE
     Stop-FabricMirroredDatabaseMirroring -WorkspaceId "12345" -MirroredDatabaseId "67890"
     Stops the mirroring of the mirrored database with ID `67890` in the workspace `12345`.
 
-.NOTES
+
+    .NOTES
     - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-    - Calls `Test-TokenExpired` to ensure token validity before making the API request.
+    - Calls `Confirm-TokenState` to ensure token validity before making the API request.
     - This function handles asynchronous operations and retrieves operation results if required.
 
     #>
@@ -37,23 +43,16 @@ function Stop-FabricMirroredDatabaseMirroring
     try
     {
         # Step 2: Ensure token validity
-        Write-Message -Message "Validating token..." -Level Debug
-        Test-TokenExpired
-        Write-Message -Message "Token validation completed." -Level Debug
+        Confirm-TokenState
 
         $apiEndpointUrl = "{0}/workspaces/{1}/mirroredDatabases/{2}/stopMirroring" -f $FabricConfig.BaseUrl, $WorkspaceId, $MirroredDatabaseId
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
         if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Stop MirroredDatabase Mirroring"))
         {
             # Step 6: Make the API request
-            $response = Invoke-RestMethod `
-                -Headers $FabricConfig.FabricHeaders `
+            $response = Invoke-FabricRestMethod `
                 -Uri $apiEndpointUrl `
-                -Method Post `
-                -ErrorAction Stop `
-                -SkipHttpErrorCheck `
-                -ResponseHeadersVariable "responseHeader" `
-                -StatusCodeVariable "statusCode"
+                -Method Post
         }
 
         # Step 7: Validate the response code

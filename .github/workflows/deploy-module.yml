@@ -10,9 +10,6 @@ on:
       - tests/**
       - '**.md'
       - '**.yml'
-    tags:
-      - '**'
-      - '!*preview*'
 env:
   buildFolderName: output
   buildArtifactName: output
@@ -89,3 +86,11 @@ jobs:
         GalleryApiToken: ${{ secrets.GalleryApiToken }}
         ReleaseBranch: main
         MainGitBranch: main
+    - name: Merge main -> develop
+    # This step merges the main branch into the develop branch after a successful deployment. This ensures that the develop branch includes the tag for the latest release.
+      uses: devmasx/merge-branch@1.4.0
+      with:
+        type: now
+        from_branch: main
+        target_branch: develop
+        github_token: ${{ secrets.GitHubToken }}

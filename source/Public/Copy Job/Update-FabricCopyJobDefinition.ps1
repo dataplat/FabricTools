@@ -30,7 +30,7 @@ Updates both the content and platform-specific definition of the Copy Job with I
 
 .NOTES
 - Requires the `$FabricConfig` global configuration, which must include `BaseUrl` and `FabricHeaders`.
-- Validates token expiration using `Test-TokenExpired` before making the API request.
+- Validates token expiration using `Confirm-TokenState` before making the API request.
 - Encodes file content as Base64 before sending it to the Fabric API.
 - Logs detailed messages for debugging and error handling.
 
@@ -59,9 +59,7 @@ function Update-FabricCopyJobDefinition {
 
     try {
         # Step 1: Ensure token validity
-        Write-Message -Message "Validating token..." -Level Debug
-        Test-TokenExpired
-        Write-Message -Message "Token validation completed." -Level Debug
+        Confirm-TokenState
 
         # Step 2: Construct the API URL
         $apiEndpointUrl = "{0}/workspaces/{1}/copyJobs/{2}/updateDefinition" -f $FabricConfig.BaseUrl, $WorkspaceId, $CopyJobId
@@ -114,9 +112,8 @@ function Update-FabricCopyJobDefinition {
 
         if($PSCmdlet.ShouldProcess($apiEndpointUrl, "Update Copy Job Definition")) {
             # Step 4: Make the API request
-            $response = Invoke-FabricAPIRequest `
+            $response = Invoke-FabricRestMethod `
                 -BaseURI $apiEndpointUrl `
-                -Headers $FabricConfig.FabricHeaders `
                 -Method Post `
                 -Body $bodyJson
         }

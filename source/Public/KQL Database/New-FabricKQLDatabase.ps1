@@ -43,11 +43,11 @@ An optional path to the KQLDatabase definition file (e.g., .ipynb file) to uploa
 An optional path to the platform-specific definition (e.g., .platform file) to upload.
 
 .EXAMPLE
- Add-FabricKQLDatabase -WorkspaceId "workspace-12345" -KQLDatabaseName "New KQLDatabase" -KQLDatabasePathDefinition "C:\KQLDatabases\example.ipynb"
+Add-FabricKQLDatabase -WorkspaceId "workspace-12345" -KQLDatabaseName "New KQLDatabase" -KQLDatabasePathDefinition "C:\KQLDatabases\example.ipynb"
 
- .NOTES
+.NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-- Calls `Test-TokenExpired` to ensure token validity before making the API request.
+- Calls `Confirm-TokenState` to ensure token validity before making the API request.
 - Precedent Request Body
     - Definition file high priority.
     - CreationPayload is evaluate only if Definition file is not provided.
@@ -64,7 +64,6 @@ Author: Tiago Balabuch
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [ValidatePattern('^[a-zA-Z0-9_ ]*$')]
         [string]$KQLDatabaseName,
 
         [Parameter(Mandatory = $false)]
@@ -108,9 +107,7 @@ Author: Tiago Balabuch
     try
     {
         # Step 1: Ensure token validity
-        Write-Message -Message "Validating token..." -Level Debug
-        Test-TokenExpired
-        Write-Message -Message "Token validation completed." -Level Debug
+        Confirm-TokenState
 
         # Step 2: Construct the API URL
         $apiEndpointUrl = "{0}/workspaces/{1}/kqlDatabases" -f $FabricConfig.BaseUrl, $WorkspaceId
@@ -267,16 +264,10 @@ Author: Tiago Balabuch
         if ($PSCmdlet.ShouldProcess($KQLDatabaseName, "Create KQLDatabase"))
         {
             # Step 4: Make the API request
-            $response = Invoke-RestMethod `
-                -Headers $FabricConfig.FabricHeaders `
+            $response = Invoke-FabricRestMethod `
                 -Uri $apiEndpointUrl `
                 -Method Post `
-                -Body $bodyJson `
-                -ContentType "application/json" `
-                -ErrorAction Stop `
-                -SkipHttpErrorCheck `
-                -ResponseHeadersVariable "responseHeader" `
-                -StatusCodeVariable "statusCode"
+                -Body $bodyJson
         }
 
         # Step 5: Handle and log the response

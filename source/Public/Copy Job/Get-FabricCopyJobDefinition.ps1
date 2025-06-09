@@ -22,7 +22,7 @@ Retrieves the definition of the Copy Job with ID `67890` from the workspace with
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-- Calls `Test-TokenExpired` to ensure token validity before making the API request.
+- Calls `Confirm-TokenState` to ensure token validity before making the API request.
 - Handles long-running operations asynchronously.
 - Logs detailed information for debugging purposes.
 
@@ -45,9 +45,7 @@ function Get-FabricCopyJobDefinition {
 
     try {
         # Step 1: Validate authentication token before proceeding.
-        Write-Message -Message "Validating authentication token..." -Level Debug
-        Test-TokenExpired
-        Write-Message -Message "Authentication token is valid." -Level Debug
+        Confirm-TokenState
 
         # Step 2: Construct the API endpoint URL for retrieving the Copy Job definition.
         $apiEndpointUrl = "workspaces/{0}/copyJobs/{1}/getDefinition" -f $WorkspaceId, $CopyJobId
@@ -63,7 +61,7 @@ function Get-FabricCopyJobDefinition {
             Uri     = $apiEndpointUrl
             Method  = 'POST'
         }
-        $response = Invoke-FabricAPIRequest @apiParams
+        $response = Invoke-FabricRestMethod @apiParams
 
         # Step 5: Return the API response containing the Copy Job definition.
         return $response

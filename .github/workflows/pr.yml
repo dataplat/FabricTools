@@ -1,7 +1,6 @@
 on:
   pull_request:
     branches:
-    - main
     - develop
     paths-ignore:
     - CHANGELOG.md
@@ -67,7 +66,7 @@ jobs:
       if: success() || failure()
   Test_Stage_test_windows_core:
     name: Windows (PowerShell)
-    runs-on: windows-2019
+    runs-on: windows-latest
     needs:
     - Build_Stage_Package_Module
     steps:
@@ -94,7 +93,7 @@ jobs:
       if: success() || failure()
   Test_Stage_test_windows_ps:
     name: Windows (Windows PowerShell)
-    runs-on: windows-2019
+    runs-on: windows-latest
     needs:
     - Build_Stage_Package_Module
     steps:

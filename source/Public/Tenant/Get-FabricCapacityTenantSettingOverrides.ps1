@@ -20,7 +20,7 @@ Returns tenant setting overrides for the capacity with ID "12345".
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-- Calls `Test-TokenExpired` to ensure token validity before making the API request.
+- Calls `Confirm-TokenState` to ensure token validity before making the API request.
 
 Author: Tiago Balabuch
 #>
@@ -34,24 +34,21 @@ function Get-FabricCapacityTenantSettingOverrides {
 
     try {
         # Step 1: Validate authentication token before making API requests
-        Write-Message -Message "Validating authentication token..." -Level Debug
-        Test-TokenExpired
-        Write-Message -Message "Authentication token is valid." -Level Debug
+        Confirm-TokenState
 
         # Step 2: Construct the API endpoint URL for retrieving capacity tenant setting overrides
         if ($capacityId) {
-            $apiEndpointURI = "{0}/admin/capacities/{1}/delegatedTenantSettingOverrides" -f $FabricConfig.BaseUrl, $capacityId
+            $apiEndpointURI = "admin/capacities/{0}/delegatedTenantSettingOverrides" -f $capacityId
             $message = "Successfully retrieved tenant setting overrides for capacity ID: $capacityId."
         } else {
-            $apiEndpointURI = "{0}/admin/capacities/delegatedTenantSettingOverrides" -f $FabricConfig.BaseUrl
+            $apiEndpointURI = "admin/capacities/delegatedTenantSettingOverrides" -f $FabricConfig.BaseUrl
             $message = "Successfully retrieved capacity tenant setting overrides."
         }
         Write-Message -Message "Constructed API Endpoint: $apiEndpointURI" -Level Debug
 
         # Step 3: Invoke the Fabric API to retrieve capacity tenant setting overrides
-        $response = Invoke-FabricAPIRequest `
-            -BaseURI $apiEndpointURI `
-            -Headers $FabricConfig.FabricHeaders `
+        $response = Invoke-FabricRestMethod `
+            -Uri $apiEndpointURI `
             -Method Get
 
         # Step 4: Check if any capacity tenant setting overrides were retrieved and handle results accordingly

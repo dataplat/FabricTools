@@ -29,7 +29,7 @@ Updates both the name and description of the Lakehouse "Lakehouse123".
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-- Calls `Test-TokenExpired` to ensure token validity before making the API request.
+- Calls `Confirm-TokenState` to ensure token validity before making the API request.
 
 Author: Tiago Balabuch
 
@@ -49,7 +49,6 @@ function Update-FabricLakehouse
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [ValidatePattern('^[a-zA-Z0-9_]*$')]
         [string]$LakehouseName,
 
         [Parameter(Mandatory = $false)]
@@ -60,9 +59,7 @@ function Update-FabricLakehouse
     try
     {
         # Step 1: Ensure token validity
-        Write-Message -Message "Validating token..." -Level Debug
-        Test-TokenExpired
-        Write-Message -Message "Token validation completed." -Level Debug
+        Confirm-TokenState
 
         # Step 2: Construct the API URL
         $apiEndpointUrl = "{0}/workspaces/{1}/lakehouses/{2}" -f $FabricConfig.BaseUrl, $WorkspaceId, $LakehouseId
@@ -84,15 +81,10 @@ function Update-FabricLakehouse
         if ($PSCmdlet.ShouldProcess($LakehouseId, "Update Lakehouse"))
         {
             # Step 4: Make the API request
-            $response = Invoke-RestMethod `
-                -Headers $FabricConfig.FabricHeaders `
+            $response = Invoke-FabricRestMethod `
                 -Uri $apiEndpointUrl `
                 -Method Patch `
-                -Body $bodyJson `
-                -ContentType "application/json" `
-                -ErrorAction Stop `
-                -SkipHttpErrorCheck `
-                -StatusCodeVariable "statusCode"
+                -Body $bodyJson
         }
 
         # Step 5: Validate the response code
