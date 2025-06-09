@@ -51,9 +51,7 @@ function Start-FabricSparkJobDefinitionOnDemand
     try
     {
         # Step 1: Ensure token validity
-        Write-Message -Message "Validating token..." -Level Debug
-        Test-TokenExpired
-        Write-Message -Message "Token validation completed." -Level Debug
+        Confirm-TokenState
 
         # Step 2: Construct the API URL
         $apiEndpointUrl = "{0}/workspaces/{1}/SparkJobDefinitions/{2}/jobs/instances?jobType={3}" -f $FabricConfig.BaseUrl, $WorkspaceId , $SparkJobDefinitionId, $JobType
@@ -61,15 +59,9 @@ function Start-FabricSparkJobDefinitionOnDemand
 
         if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Start Spark Job Definition on demand")){
                 # Step 4: Make the API request
-                $response = Invoke-RestMethod `
-                    -Headers $FabricConfig.FabricHeaders `
+                $response = Invoke-FabricRestMethod `
                     -Uri $apiEndpointUrl `
-                    -Method Post `
-                    -ContentType "application/json" `
-                    -ErrorAction Stop `
-                    -SkipHttpErrorCheck `
-                    -ResponseHeadersVariable "responseHeader" `
-                    -StatusCodeVariable "statusCode"
+                    -Method Post
             }
             Write-Message -Message "Response Code: $statusCode" -Level Debug
             # Step 5: Handle and log the response

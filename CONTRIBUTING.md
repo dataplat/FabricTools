@@ -32,9 +32,9 @@ The workflow for using this and developing the code is shown below.
    Install-Module Microsoft.PowerShell.PSResourceGet -Force
    ```
 
-3. Develop your updates in the source directory
+3. Start a fresh new PowerShell session to avoid anythjing from your current working sessions to interfere with the module development and building. Develop your updates in the source directory.
 
-   You should also resolve all dependencies before you start developing. This will ensure that you have all the required modules installed and loaded into your session.
+You should also resolve all dependencies before you start developing. This will ensure that you have all the required modules, and only them, installed and loaded into your session.
 
    ```PowerShell
    .\build.ps1 -ResolveDependency -Tasks noop -UsePSResourceGet
@@ -83,7 +83,11 @@ The workflow for using this and developing the code is shown below.
    ```PowerShell
    ./build.ps1 -Tasks build,test
    ```
-8. Once you are ready to submit your changes for review please ensure that you update the `CHANGELOG.md` file with a summary of your changes. This is important as it helps us keep track of what has changed in the module and makes it easier for users to see what has been added or changed.
+   This will run all the tests in the `tests` folder and output the results to the console. If there are any issues with the code, they will be reported here.
+   
+8. It is always a good idea to develop in a brand new clean session and also once you have finished your changes, you should open a new session, build the module and run a few commands to ensure that everything is working as expected. This will help you catch any issues that may have been introduced during development and also make sure that you have not missed any dependancies.
+
+9. Once you are ready to submit your changes for review please ensure that you update the `CHANGELOG.md` file with a summary of your changes. This is important as it helps us keep track of what has changed in the module and makes it easier for users to see what has been added or changed.
 
    You can use the [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) format for this.
    

@@ -25,7 +25,7 @@ Unassigns the specified workspaces from the domain with ID "12345".
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-- Calls `Test-TokenExpired` to ensure token validity before making the API request.
+- Calls `Confirm-TokenState` to ensure token validity before making the API request.
 
 
 Author: Tiago Balabuch
@@ -33,7 +33,7 @@ Author: Tiago Balabuch
 #>
 function Remove-FabricDomainWorkspaceAssignment
 {
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     [Alias("Unassign-FabricDomainWorkspace")]
     param (
         [Parameter(Mandatory = $true)]
@@ -48,9 +48,7 @@ function Remove-FabricDomainWorkspaceAssignment
     try
     {
         # Step 1: Ensure token validity
-        Write-Message -Message "Validating token..." -Level Debug
-        Test-TokenExpired
-        Write-Message -Message "Token validation completed." -Level Debug
+        Confirm-TokenState
 
         # Step 2: Construct the API URL
         # Determine the API endpoint URL based on the presence of WorkspaceIds
@@ -82,16 +80,10 @@ function Remove-FabricDomainWorkspaceAssignment
         if ($PSCmdlet.ShouldProcess($DomainId, "Unassign Workspaces"))
         {
             # Step 4: Make the API request to unassign specific workspaces
-            $response = Invoke-RestMethod `
-                -Headers $FabricConfig.FabricHeaders `
+            $response = Invoke-FabricRestMethod `
                 -Uri $apiEndpointUrl `
                 -Method Post `
-                -Body $bodyJson `
-                -ContentType "application/json" `
-                -ErrorAction Stop `
-                -SkipHttpErrorCheck `
-                -ResponseHeadersVariable "responseHeader" `
-                -StatusCodeVariable "statusCode"
+                -Body $bodyJson
         }
 
         # Step 5: Validate the response code

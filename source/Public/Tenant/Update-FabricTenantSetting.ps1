@@ -35,7 +35,7 @@ Updates the tenant setting "SomeSetting" for the capacity with ID "12345", enabl
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-- Calls `Test-TokenExpired` to ensure token validity before making the API request.
+- Calls `Confirm-TokenState` to ensure token validity before making the API request.
 
 Author: Tiago Balabuch
 
@@ -81,9 +81,7 @@ function Update-FabricCapacityTenantSettingOverrides
     try
     {
         # Validate authentication token
-        Write-Message -Message "Validating authentication token..." -Level Debug
-        Test-TokenExpired
-        Write-Message -Message "Authentication token is valid." -Level Debug
+        Confirm-TokenState
 
         # Validate Security Groups if provided
         if ($EnabledSecurityGroups)
@@ -121,7 +119,7 @@ function Update-FabricCapacityTenantSettingOverrides
         }
 
         # Construct API endpoint URL
-        $apiEndpointURI = "{0}/admin/tenantsettings/{1}/update" -f $FabricConfig.BaseUrl, $TenantSettingName
+        $apiEndpointURI = "admin/tenantsettings/{0}/update" -f $TenantSettingName
         Write-Message -Message "Constructed API Endpoint: $apiEndpointURI" -Level Debug
 
         # Construct request body
@@ -167,9 +165,8 @@ function Update-FabricCapacityTenantSettingOverrides
         {
 
             # Invoke Fabric API request
-            $response = Invoke-FabricAPIRequest `
-                -BaseURI $apiEndpointURI `
-                -Headers $FabricConfig.FabricHeaders `
+            $response = Invoke-FabricRestMethod `
+                -Uri $apiEndpointURI `
                 -method Post `
                 -body $bodyJson
         }

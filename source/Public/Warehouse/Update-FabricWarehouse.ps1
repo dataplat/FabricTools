@@ -24,7 +24,7 @@
 
 .NOTES
     - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-    - Calls `Test-TokenExpired` to ensure token validity before making the API request.
+    - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 
     Author: Tiago Balabuch
 
@@ -53,13 +53,10 @@ function Update-FabricWarehouse
     try
     {
         # Step 1: Ensure token validity
-        Write-Message -Message "Validating token..." -Level Debug
-        Test-TokenExpired
-        Write-Message -Message "Token validation completed." -Level Debug
+        Confirm-TokenState
 
         # Step 2: Construct the API URL
-        $apiEndpointURI = "{0}/workspaces/{1}/warehouses/{2}" -f $FabricConfig.BaseUrl, $WorkspaceId, $WarehouseId
-        Write-Message -Message "API Endpoint: $apiEndpointURI" -Level Debug
+        $apiEndpointURI = "workspaces/{0}/warehouses/{1}" -f $WorkspaceId, $WarehouseId
 
         # Step 3: Construct the request body
         $body = @{
@@ -77,10 +74,8 @@ function Update-FabricWarehouse
 
         if ($PSCmdlet.ShouldProcess($apiEndpointURI, "Update Warehouse"))
         {
-
-            $response = Invoke-FabricAPIRequest `
-                -Headers $FabricConfig.FabricHeaders `
-                -BaseURI $apiEndpointURI `
+            $response = Invoke-FabricRestMethod `
+                -Uri $apiEndpointURI `
                 -method Patch `
                 -body $bodyJson
         }

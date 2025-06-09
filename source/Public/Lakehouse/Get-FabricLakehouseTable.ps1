@@ -5,10 +5,13 @@ Retrieves tables from a specified Lakehouse in a Fabric workspace.
 
 .DESCRIPTION
 This function retrieves tables from a specified Lakehouse in a Fabric workspace. It handles pagination using a continuation token to ensure all data is retrieved.
+
 .PARAMETER WorkspaceId
 The ID of the workspace containing the Lakehouse.
+
 .PARAMETER LakehouseId
 The ID of the Lakehouse from which to retrieve tables.
+
 .EXAMPLE
 Get-FabricLakehouseTable -WorkspaceId "your-workspace-id" -LakehouseId "your-lakehouse-id"
 This example retrieves all tables from the specified Lakehouse in the specified workspace.
@@ -28,9 +31,7 @@ This example retrieves all tables from the specified Lakehouse in the specified 
 
     try {
         # Step 1: Ensure token validity
-        Write-Message -Message "Validating token..." -Level Debug
-        Test-TokenExpired
-        Write-Message -Message "Token validation completed." -Level Debug
+        Confirm-TokenState
 
 
 
@@ -59,13 +60,9 @@ This example retrieves all tables from the specified Lakehouse in the specified 
             Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
             # Step 5: Make the API request
-            $response = Invoke-RestMethod `
-                -Headers $FabricConfig.FabricHeaders `
+            $response = Invoke-FabricRestMethod `
                 -Uri $apiEndpointUrl `
-                -Method Get `
-                -ErrorAction Stop `
-                -SkipHttpErrorCheck `
-                -StatusCodeVariable "statusCode"
+                -Method Get
 
             Write-Message -Message "API response code: $statusCode" -Level Debug
             # Step 6: Validate the response code

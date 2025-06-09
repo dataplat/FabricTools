@@ -27,20 +27,17 @@ This command fetches the result of the operation with the specified operationId.
         [string]$operationId
     )
 
+    Confirm-TokenState
+
     # Step 1: Construct the API URL
-    $apiEndpointUrl = "https://api.fabric.microsoft.com/v1/operations/{0}/result" -f $operationId
+    $apiEndpointUrl = "{0}/operations/{1}/result" -f $FabricConfig.BaseUrl, $operationId
     Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
     try {
         # Step 2: Make the API request
-        $response = Invoke-RestMethod `
-            -Headers $FabricConfig.FabricHeaders `
+        $response = Invoke-FabricRestMethod `
             -Uri $apiEndpointUrl `
-            -Method Get `
-            -ErrorAction Stop `
-            -SkipHttpErrorCheck `
-            -ResponseHeadersVariable "responseHeader" `
-            -StatusCodeVariable "statusCode"
+            -Method Get
 
 
         # Step 3: Return the result

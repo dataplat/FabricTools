@@ -23,7 +23,7 @@ Fetches details of the workspace with the name "MyWorkspace".
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-- Calls `Test-TokenExpired` to ensure token validity before making the API request.
+- Calls `Confirm-TokenState` to ensure token validity before making the API request.
 - Returns the matching workspace details or all workspaces if no filter is provided.
 
 Author: Tiago Balabuch
@@ -49,9 +49,7 @@ function Get-FabricWorkspace {
         }
 
         # Step 2: Ensure token validity
-        Write-Message -Message "Validating token..." -Level Debug
-        Test-TokenExpired
-        Write-Message -Message "Token validation completed." -Level Debug
+        Confirm-TokenState
 
         # Step 3: Initialize variables
         $continuationToken = $null
@@ -76,14 +74,9 @@ function Get-FabricWorkspace {
             Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
             # Step 6: Make the API request
-            $response = Invoke-RestMethod `
-                -Headers $FabricConfig.FabricHeaders `
+            $response = Invoke-FabricRestMethod `
                 -Uri $apiEndpointUrl `
-                -Method Get `
-                -ErrorAction Stop `
-                -SkipHttpErrorCheck `
-                -ResponseHeadersVariable "responseHeader" `
-                -StatusCodeVariable "statusCode"
+                -Method Get
 
             # Step 7: Validate the response code
             if ($statusCode -ne 200) {

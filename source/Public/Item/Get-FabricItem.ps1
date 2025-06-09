@@ -25,7 +25,7 @@ This example retrieves all fabric items of type "file" from the workspace with I
 
 .NOTES
 This function was originally written by Rui Romano.
-https://github.com/RuiRomano/fabricps-pbip
+https://github.com/microsoft/Analysis-Services/tree/master/pbidevmode/fabricps-pbip
 
     #>
     [CmdletBinding()]
@@ -46,7 +46,7 @@ https://github.com/RuiRomano/fabricps-pbip
     )
 
     begin {
-        Confirm-FabricAuthToken | Out-Null
+        Confirm-TokenState
     }
 
     process {
@@ -54,13 +54,13 @@ https://github.com/RuiRomano/fabricps-pbip
             $workspaceID = $Workspace.id
         }
         if ($itemID) {
-            $result = Invoke-FabricAPIRequest -Uri "workspaces/$($workspaceID)/items/$($itemID)" -Method Get
+            $result = Invoke-FabricRestMethod -Uri "workspaces/$($workspaceID)/items/$($itemID)" -Method Get
         } else {
             if ($type) {
-                $result = Invoke-FabricAPIRequest -Uri "workspaces/$($workspaceID)/items?type=$type" -Method Get
+                $result = Invoke-FabricRestMethod -Uri "workspaces/$($workspaceID)/items?type=$type" -Method Get
             } else {
                 # Invoke the Fabric API to get the workspaces
-                $result = Invoke-FabricAPIRequest -Uri "workspaces/$($workspaceID)/items" -Method Get
+                $result = Invoke-FabricRestMethod -Uri "workspaces/$($workspaceID)/items" -Method Get
             }
             # Output the result
             return $result.value

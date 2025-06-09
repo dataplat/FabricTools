@@ -50,7 +50,7 @@ The function defines the headers and body for a POST request to the PowerBI API 
     )
 
     # Confirm the authentication token.
-    Confirm-FabricAuthToken | Out-Null
+    Confirm-TokenState
 
     # Define the body of the POST request.
     if ($ImpersonatedUser -ne "") {

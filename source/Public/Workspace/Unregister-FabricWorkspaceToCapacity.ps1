@@ -42,7 +42,7 @@ function Unregister-FabricWorkspaceToCapacity {
     )
 
     begin {
-        Confirm-FabricAuthToken | Out-Null
+        Confirm-TokenState
     }
 
     Process {
@@ -51,8 +51,7 @@ function Unregister-FabricWorkspaceToCapacity {
         }
 
         if ($PSCmdlet.ShouldProcess("Unassigns workspace $workspaceid from a capacity")) {
-            return Invoke-WebRequest -Headers $FabricSession.HeaderParams -Method POST -Uri "$($FabricSession.BaseApiUrl)/workspaces/$($workspaceID)/unassignFromCapacity"
-            #return (Invoke-FabricAPIRequest -Uri "workspaces/$workspaceid/unassignFromCapacity" -Method POST).value
+            Invoke-FabricRestMethod -Uri "workspaces/$workspaceid/unassignFromCapacity" -Method POST
         }
     }
 }

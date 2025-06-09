@@ -9,11 +9,8 @@ The Get-FabricCapacityWorkload function retrieves the workloads for a specific c
 .PARAMETER capacityID
 The ID of the capacity. This is a mandatory parameter.
 
-.PARAMETER authToken
-The authentication token to access the PowerBI API. If not provided, the function will retrieve the token using the Get-FabricAuthToken function.
-
 .EXAMPLE
-Get-FabricCapacityWorkload -capacityID "your-capacity-id" -authToken "your-auth-token"
+Get-FabricCapacityWorkload -capacityID "your-capacity-id"
 
 This example retrieves the workloads for a specific capacity given the capacity ID and authentication token.
 
@@ -31,7 +28,7 @@ The function retrieves the PowerBI access token and makes a GET request to the P
         [string]$capacityID
     )
 
-    Confirm-FabricAuthToken | Out-Null
+    Confirm-TokenState
 
     # Make a GET request to the PowerBI API to retrieve the workloads for the specified capacity.
     # The function returns the 'value' property of the response.

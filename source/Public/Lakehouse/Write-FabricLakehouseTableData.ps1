@@ -1,37 +1,52 @@
 function Write-FabricLakehouseTableData
 {
     <#
-.SYNOPSIS
-Loads data into a specified table in a Lakehouse within a Fabric workspace.
-.DESCRIPTION
-Loads data into a specified table in a Lakehouse within a Fabric workspace. The function supports loading data from files or folders, with options for file format and CSV settings.
-.PARAMETER WorkspaceId
-The ID of the workspace containing the Lakehouse.
-.PARAMETER LakehouseId
-The ID of the Lakehouse where the table resides.
-.PARAMETER TableName
-The name of the table to load data into.
-.PARAMETER PathType
-The type of path to load data from (File or Folder).
-.PARAMETER RelativePath
-The relative path to the file or folder to load data from.
-.PARAMETER FileFormat
-The format of the file to load data from (CSV or Parquet).
-.PARAMETER CsvDelimiter
-The delimiter used in the CSV file (default is comma).
-.PARAMETER CsvHeader
-Indicates whether the CSV file has a header row (default is false).
-.PARAMETER Mode
-The mode for loading data (append or overwrite).
-.PARAMETER Recursive
-Indicates whether to load data recursively from subfolders (default is false).
-.EXAMPLE
-Import-FabricLakehouseTableData -WorkspaceId "your-workspace-id" -LakehouseId "your-lakehouse-id" -TableName "your-table-name" -PathType "File" -RelativePath "path/to/your/file.csv" -FileFormat "CSV" -CsvDelimiter "," -CsvHeader $true -Mode "append" -Recursive $false
-This example loads data from a CSV file into the specified table in the Lakehouse.
-.EXAMPLE
-Import-FabricLakehouseTableData -WorkspaceId "your-workspace-id" -LakehouseId "your-lakehouse-id" -TableName "your-table-name" -PathType "Folder" -RelativePath "path/to/your/folder" -FileFormat "Parquet" -Mode "overwrite" -Recursive $true
-This example loads data from a folder into the specified table in the Lakehouse, overwriting any existing data.
-    #>
+
+    .SYNOPSIS
+    Loads data into a specified table in a Lakehouse within a Fabric workspace.
+
+    .DESCRIPTION
+    Loads data into a specified table in a Lakehouse within a Fabric workspace. The function supports loading data from files or folders, with options for file format and CSV settings.
+
+    .PARAMETER WorkspaceId
+    The ID of the workspace containing the Lakehouse.
+
+    .PARAMETER LakehouseId
+    The ID of the Lakehouse where the table resides.
+
+    .PARAMETER TableName
+    The name of the table to load data into.
+
+    .PARAMETER PathType
+    The type of path to load data from (File or Folder).
+
+    .PARAMETER RelativePath
+    The relative path to the file or folder to load data from.
+
+    .PARAMETER FileFormat
+    The format of the file to load data from (CSV or Parquet).
+
+    .PARAMETER CsvDelimiter
+    The delimiter used in the CSV file (default is comma).
+
+    .PARAMETER CsvHeader
+    Indicates whether the CSV file has a header row (default is false).
+
+    .PARAMETER Mode
+    The mode for loading data (append or overwrite).
+
+    .PARAMETER Recursive
+    Indicates whether to load data recursively from subfolders (default is false).
+
+    .EXAMPLE
+    Import-FabricLakehouseTableData -WorkspaceId "your-workspace-id" -LakehouseId "your-lakehouse-id" -TableName "your-table-name" -PathType "File" -RelativePath "path/to/your/file.csv" -FileFormat "CSV" -CsvDelimiter "," -CsvHeader $true -Mode "append" -Recursive $false
+    This example loads data from a CSV file into the specified table in the Lakehouse.
+
+    .EXAMPLE
+    Import-FabricLakehouseTableData -WorkspaceId "your-workspace-id" -LakehouseId "your-lakehouse-id" -TableName "your-table-name" -PathType "Folder" -RelativePath "path/to/your/folder" -FileFormat "Parquet" -Mode "overwrite" -Recursive $true
+    This example loads data from a folder into the specified table in the Lakehouse, overwriting any existing data.
+
+#>
     [CmdletBinding(SupportsShouldProcess)]
     [Alias("Import-FabricLakehouseTableData")]
     param (
@@ -82,9 +97,7 @@ This example loads data from a folder into the specified table in the Lakehouse,
     try
     {
         # Step 1: Ensure token validity
-        Write-Message -Message "Validating token..." -Level Debug
-        Test-TokenExpired
-        Write-Message -Message "Token validation completed." -Level Debug
+        Confirm-TokenState
 
         # Step 2: Construct the API URL
         $apiEndpointUrl = "{0}/workspaces/{1}/lakehouses/{2}/tables/{3}/load" -f $FabricConfig.BaseUrl, $WorkspaceId, $LakehouseId, $TableName
@@ -114,16 +127,10 @@ This example loads data from a folder into the specified table in the Lakehouse,
         if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Load Lakehouse Table Data"))
         {
             # Step 4: Make the API request
-            $response = Invoke-RestMethod `
-                -Headers $FabricConfig.FabricHeaders `
+            $response = Invoke-FabricRestMethod `
                 -Uri $apiEndpointUrl `
                 -Method Post `
-                -Body $bodyJson `
-                -ContentType "application/json" `
-                -ErrorAction Stop `
-                -SkipHttpErrorCheck `
-                -ResponseHeadersVariable "responseHeader" `
-                -StatusCodeVariable "statusCode"
+                -Body $bodyJson
         }
 
         # Step 5: Validate the response code
