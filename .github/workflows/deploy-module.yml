@@ -59,7 +59,7 @@ jobs:
     name: Deploy Module
     runs-on: ubuntu-latest
     needs:
-     - Build_Stage_Package_Module
+      - Build_Stage_Package_Module
     if: ${{ success() && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/')) }}
     steps:
     - name: Checkout Code
@@ -86,11 +86,11 @@ jobs:
         GalleryApiToken: ${{ secrets.GalleryApiToken }}
         ReleaseBranch: main
         MainGitBranch: main
-    #- name: Merge main -> develop
+    - name: Merge main -> develop
     # This step merges the main branch into the develop branch after a successful deployment. This ensures that the develop branch includes the tag for the latest release.
-    #  uses: devmasx/merge-branch@1.4.0
-    #  with:
-    #    type: now
-    #    from_branch: main
-    #    target_branch: develop
-    #    github_token: ${{ secrets.GitHubToken }}
+      uses: devmasx/merge-branch@1.4.0
+      with:
+        type: now
+        from_branch: main
+        target_branch: develop
+        github_token: ${{ secrets.REPO_TOKEN }}
