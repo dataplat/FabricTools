@@ -27,6 +27,10 @@ PS> Set-FabricConfig -WorkspaceGUID 'GUID-GUID-GUID-GUID' -DataWarehouseGUID 'GU
 
 Registers the specified Fabric Data Warehouse configuration for use with all functions in the PSFabricTools module - but does not persist the values, only uses them for the current session.
 
+.NOTES
+
+Author: Jess Pomfret
+
 #>
 
 function Set-FabricConfig {

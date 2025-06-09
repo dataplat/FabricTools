@@ -19,7 +19,7 @@
     This command retrieves all resources of type "Microsoft.Fabric/capacities" from all resource groups in all subscriptions.
 
 .NOTES
-    Author : Ioana Bouariu @jojobit  Nov 10, 2023
+    Author: Ioana Bouariu
     Imported into FabricTools April 2025
     Alias: Get-AllFabCapacities
 #>

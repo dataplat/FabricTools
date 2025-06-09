@@ -46,7 +46,12 @@ function Write-FabricLakehouseTableData
     Import-FabricLakehouseTableData -WorkspaceId "your-workspace-id" -LakehouseId "your-lakehouse-id" -TableName "your-table-name" -PathType "Folder" -RelativePath "path/to/your/folder" -FileFormat "Parquet" -Mode "overwrite" -Recursive $true
     This example loads data from a folder into the specified table in the Lakehouse, overwriting any existing data.
 
-#>
+    .NOTES
+
+    Author: Tiago Balabuch
+
+    #>
+
     [CmdletBinding(SupportsShouldProcess)]
     [Alias("Import-FabricLakehouseTableData")]
     param (

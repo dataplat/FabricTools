@@ -28,6 +28,8 @@ function Stop-FabricMirroredDatabaseMirroring
     - Calls `Confirm-TokenState` to ensure token validity before making the API request.
     - This function handles asynchronous operations and retrieves operation results if required.
 
+    Author: Tiago Balabuch
+
     #>
     [CmdletBinding(SupportsShouldProcess)]
     param (

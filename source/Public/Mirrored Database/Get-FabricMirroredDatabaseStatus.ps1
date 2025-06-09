@@ -17,7 +17,13 @@ function Get-FabricMirroredDatabaseStatus {
     .EXAMPLE
     Get-FabricMirroredDatabaseStatus -WorkspaceId "your-workspace-id" -MirroredDatabaseId "your-mirrored-database-id"
     This example retrieves the status of a mirrored database with the specified ID in the specified workspace.
+
+    .NOTES
+
+    Author: Tiago Balabuch
+
     #>
+
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]

@@ -43,6 +43,9 @@ function Get-FabricSQLDatabase {
 .NOTES
     Revision History:
         - 2025-03-06 - KNO: Init version of the function
+
+    Author: Kamil Nowinski
+
     #>
 
 

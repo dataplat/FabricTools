@@ -28,8 +28,11 @@ PS> Remove-FabricRecoveryPoint -CreateTime '2024-07-23T11:20:26Z' -WorkspaceGUID
 Remove a specific restore point from a Fabric Data Warehouse, specifying the workspace and data warehouse GUIDs.
 
 .NOTES
-General notes
+
+Author: Jess Pomfret
+
 #>
+
 function Remove-FabricRecoveryPoint {
     [CmdletBinding(SupportsShouldProcess)]
     param (

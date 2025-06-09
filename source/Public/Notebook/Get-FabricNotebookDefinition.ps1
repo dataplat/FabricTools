@@ -33,7 +33,10 @@ Retrieves the definitions of all notebooks in the workspace with ID `12345` in t
 - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 - Handles long-running operations asynchronously.
 
+Author: Tiago Balabuch
+
 #>
+
 function Get-FabricNotebookDefinition {
     [CmdletBinding()]
     param (

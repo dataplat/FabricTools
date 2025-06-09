@@ -17,7 +17,13 @@ Gets all the configuration values for the PSFabricTools module and outputs them
 PS> Get-FabricConfig -ConfigName BaseUrl
 
 Gets the BaseUrl configuration value for the PSFabricTools module.
+
+.NOTES
+
+Author: Jess Pomfret
+
 #>
+
 
 function Get-FabricConfig {
     param (

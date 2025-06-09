@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Added credits for authors to all functions and Unit tests to verify the existence of such tags #89
+
 ### Changed
 ### Fixed
 ### Deprecated

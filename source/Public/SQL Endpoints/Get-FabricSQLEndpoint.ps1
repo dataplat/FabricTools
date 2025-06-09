@@ -28,6 +28,8 @@ Get-FabricSQLEndpoint -WorkspaceId "workspace123" -SQLEndpointName "MySQLEndpoin
 - The function uses continuation tokens to handle paginated API responses.
 - If no filter parameters are provided, all SQL Endpoints in the specified workspace are returned.
 
+Author: Tiago Balabuch
+
 #>
 function Get-FabricSQLEndpoint {
     [CmdletBinding()]

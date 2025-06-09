@@ -23,6 +23,9 @@ This example suspends a capacity given the subscription ID, resource group, and 
 
 .NOTES
 The function defines parameters for the subscription ID, resource group, and capacity. If the 'azToken' environment variable is null, it connects to the Azure account and sets the 'azToken' environment variable. It then defines the headers for the request, defines the URI for the request, and makes a GET request to the URI.
+
+Author: Ioana Bouariu
+
     #>
 
     # Define aliases for the function for flexibility.

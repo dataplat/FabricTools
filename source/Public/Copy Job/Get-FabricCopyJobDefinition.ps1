@@ -26,6 +26,8 @@ Retrieves the definition of the Copy Job with ID `67890` from the workspace with
 - Handles long-running operations asynchronously.
 - Logs detailed information for debugging purposes.
 
+Author: Tiago Balabuch
+
 #>
 function Get-FabricCopyJobDefinition {
     [CmdletBinding()]

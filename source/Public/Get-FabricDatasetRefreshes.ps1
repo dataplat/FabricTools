@@ -23,7 +23,10 @@
    Object. Get-FabricDatasetRefreshes returns an object that contains the refresh history.
 
 .NOTES
-   Alias: Get-PowerBIDatasetRefreshes, Get-FabricDatasetRefreshes
+   Alias: Get-PowerBIDatasetRefreshes, Get-FabDatasetRefreshes
+
+   Author: Ioana Bouariu
+
 #>
 function Get-FabricDatasetRefreshes {
     # Define aliases for the function for flexibility.

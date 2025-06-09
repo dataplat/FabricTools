@@ -1,4 +1,3 @@
-
 <#
     .SYNOPSIS
         Imports items using the Power BI Project format (PBIP) into a Fabric workspace from a specified file system source.
@@ -26,8 +25,9 @@
 
     .NOTES
         This function requires the Invoke-FabricRestMethod function to be available in the current session.
-        This function was originally written by Rui Romano.
-        https://github.com/microsoft/Analysis-Services/tree/master/pbidevmode/fabricps-pbip
+
+        Author: Rui Romano
+
 #>
 
 Function Import-FabricItem {

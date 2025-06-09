@@ -28,6 +28,8 @@ Retrieves the definitions of all MirroredDatabases in the workspace with ID `123
 - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 - Handles long-running operations asynchronously.
 
+Author: Tiago Balabuch
+
 #>
 function Get-FabricMirroredDatabaseDefinition {
     [CmdletBinding()]

@@ -15,6 +15,9 @@
 
     .NOTES
     Alias: Invoke-FabDatasetRefresh
+
+    Author: Ioana Bouariu
+
 #>
 function Invoke-FabricDatasetRefresh {
     # Define aliases for the function for flexibility.

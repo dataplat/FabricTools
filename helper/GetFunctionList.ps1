@@ -1,10 +1,11 @@
 $path = ".\source\public"
 $op = Get-ChildItem -Path $path -Recurse -Filter *.ps1 | Select-Object -ExpandProperty Name | Sort-Object
-#$op = $op | ForEach-Object { "        ""$_""," }
-$op | Out-File '.\Output\FunctionList-main-public.txt'
+$op | Out-File '.\output\FunctionList-main-public.txt'
 
 # Author Table
 # This script generates a table of PowerShell script authors from the specified directory.
+$path = ".\source\public"
+$op = Get-ChildItem -Path $path -Recurse -Filter *.ps1
 $authorTable = @{}
 $op | ForEach-Object {
     $file = $_.FullName
@@ -18,7 +19,10 @@ $op | ForEach-Object {
         $authorTable[$name] = $null
     }
 }
-$authorTable
+$authorTable | ft -AutoSize
+$authorTable.GetEnumerator() | Where-Object { -not $_.Value } | ft -AutoSize
+
+
 
 ## Not a singular name option for functions (#26)
 Get-Command -Module FabricTools |where Name -like '*s'
