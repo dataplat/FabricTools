@@ -79,14 +79,6 @@ jobs:
       env:
         GitHubToken: ${{ secrets.GitHubToken }}
         GalleryApiToken: ${{ secrets.GalleryApiToken }}
-    - name: Send Changelog PR
-      shell: pwsh
-      run: ./build.ps1 -tasks Create_ChangeLog_GitHub_PR
-      env:
-        GitHubToken: ${{ secrets.GitHubToken }}
-        GalleryApiToken: ${{ secrets.GalleryApiToken }}
-        ReleaseBranch: main
-        MainGitBranch: main
     - name: Set Git config
       run: |
           git config --local user.email "actions@github.com"
@@ -100,3 +92,11 @@ jobs:
         git pull
         git merge --no-ff main -m "Auto-merge main back to dev"
         git push
+    - name: Send Changelog PR
+      shell: pwsh
+      run: ./build.ps1 -tasks Create_ChangeLog_GitHub_PR
+      env:
+        GitHubToken: ${{ secrets.GitHubToken }}
+        GalleryApiToken: ${{ secrets.GalleryApiToken }}
+        ReleaseBranch: main
+        MainGitBranch: main
