@@ -1,6 +1,6 @@
 
 function Get-Sha256 ($string) {
-    <#
+<#
 .SYNOPSIS
 Calculates the SHA256 hash of a string.
 
