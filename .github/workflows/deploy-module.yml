@@ -94,7 +94,8 @@ jobs:
     - name: Merge main -> develop
         # This step merges the main branch into the develop branch after a successful deployment. This ensures that the develop branch includes the tag for the latest release.
       run: |
-        git fetch --unshallow
+        git checkout main
+        git pull
         git checkout develop
         git pull
         git merge --no-ff main -m "Auto-merge main back to dev"
