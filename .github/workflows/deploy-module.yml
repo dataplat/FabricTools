@@ -36,6 +36,7 @@ jobs:
       with:
         ref: ${{ github.head_ref }}   # checkout the correct branch name
         fetch-depth: 0
+        token: ${{ secrets.REPO_TOKEN }}
     - name: Install GitVersion
       uses: gittools/actions/gitversion/setup@v0.9.15
       with:
@@ -86,11 +87,15 @@ jobs:
         GalleryApiToken: ${{ secrets.GalleryApiToken }}
         ReleaseBranch: main
         MainGitBranch: main
+    - name: Set Git config
+      run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "Github Actions"
     - name: Merge main -> develop
-    # This step merges the main branch into the develop branch after a successful deployment. This ensures that the develop branch includes the tag for the latest release.
-      uses: devmasx/merge-branch@1.4.0
-      with:
-        type: now
-        from_branch: main
-        target_branch: develop
-        github_token: ${{ secrets.REPO_TOKEN }}
+        # This step merges the main branch into the develop branch after a successful deployment. This ensures that the develop branch includes the tag for the latest release.
+      run: |
+        git fetch --unshallow
+        git checkout develop
+        git pull
+        git merge --no-ff main -m "Auto-merge main back to dev"
+        git push
