@@ -26,8 +26,9 @@ System.Management.Automation.PSCustomObject
 System.Object
 
 .NOTES
-Author: Your Name
-Date: Today's Date
+
+Author: Ioana Bouariu
+
 #>
 
 function Unregister-FabricWorkspaceToCapacity {
@@ -42,7 +43,7 @@ function Unregister-FabricWorkspaceToCapacity {
     )
 
     begin {
-        Test-TokenExpired
+        Confirm-TokenState
     }
 
     Process {

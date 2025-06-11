@@ -43,6 +43,9 @@ function Get-FabricSQLDatabase {
 .NOTES
     Revision History:
         - 2025-03-06 - KNO: Init version of the function
+
+    Author: Kamil Nowinski
+
     #>
 
 
@@ -62,7 +65,8 @@ function Get-FabricSQLDatabase {
     )
 
     begin {
-        Test-TokenExpired
+        Confirm-TokenState
+
         if ($PSBoundParameters.ContainsKey("SQLDatabaseName") -and $PSBoundParameters.ContainsKey("SQLDatabaseId")) {
             throw "Parameters SQLDatabaseName and SQLDatabaseId cannot be used together"
         }

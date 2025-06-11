@@ -1,5 +1,5 @@
 function Test-FabricApiResponse {
-    <#
+<#
 .SYNOPSIS
 Tests the response from a Fabric API call and handles long-running operations.
 .DESCRIPTION
@@ -29,7 +29,10 @@ Handles the response from a Fabric API call with a 202 status code, indicating t
 - This function is designed to be used within the context of a Fabric API client.
 - It requires the `Write-Message` function to log messages at different levels (Info, Debug, Error).
 - The function handles long-running operations by checking the status of the operation and retrieving the result if it has succeeded.
-    #>
+
+Author: Kamil Nowinski
+
+#>
 
     [CmdletBinding()]
     param (

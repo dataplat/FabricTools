@@ -88,7 +88,7 @@ BeforeDiscovery {
 
     foreach ($function in $allModuleFunctions | Where-Object -FilterScript {
             $_.Name -notin (
-                'Test-TokenExpired',
+                'Confirm-TokenState',
                 'Get-FabricUri',
                 'Get-FileDefinitionParts',
                 'Set-FabConfig',
@@ -224,6 +224,41 @@ Describe 'Help for module' -Tags 'helpQuality' {
         {
             $functionHelp.Parameters.($parameter.ToUpper()) | Should -Not -BeNullOrEmpty -Because ('the parameter {0} must have a description' -f $parameter)
             $functionHelp.Parameters.($parameter.ToUpper()).Length | Should -BeGreaterThan 25 -Because ('the parameter {0} must have descriptive description' -f $parameter)
+        }
+    }
+}
+
+BeforeDiscovery {
+    # Must use the imported module to build test cases.
+    $path = ".\source\public"
+    $allFunctionFiles = Get-ChildItem -Path $path -Recurse -Filter "*.ps1"
+
+    # Build test cases.
+    $testCases = @()
+
+    foreach ($file in $allFunctionFiles)
+    {
+        $testCases += @{
+            FullName = $file.FullName
+            Name     = $file.BaseName
+        }
+    }
+}
+
+Describe 'Author for functions' {
+    It 'Should have an author for <Name>' -ForEach ($testCases) {
+        $scriptFileRawContent = Get-Content -Raw -Path $FullName
+
+        $authorLine = $scriptFileRawContent | Where-Object { $_ -match 'Author:\s*(.+)' } | Select-Object -First 1
+
+        if ($authorLine -match 'Author:\s*(.+)')
+        {
+            $author = $matches[1].Trim()
+            $author | Should -Not -BeNullOrEmpty
+        }
+        else
+        {
+            throw "Author not found in function file: $($functionFile.FullName)"
         }
     }
 }

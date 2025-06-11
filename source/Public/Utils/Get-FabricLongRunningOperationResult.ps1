@@ -19,13 +19,15 @@ This command fetches the result of the operation with the specified operationId.
 - Ensure the Fabric API headers (e.g., authorization tokens) are defined in $FabricConfig.FabricHeaders.
 - This function does not handle polling. Ensure the operation is in a terminal state before calling this function.
 
-    AUTHOR
-    Tiago Balabuch
+Author: Tiago Balabuch
+
     #>
     param (
         [Parameter(Mandatory = $true)]
         [string]$operationId
     )
+
+    Confirm-TokenState
 
     # Step 1: Construct the API URL
     $apiEndpointUrl = "{0}/operations/{1}/result" -f $FabricConfig.BaseUrl, $operationId

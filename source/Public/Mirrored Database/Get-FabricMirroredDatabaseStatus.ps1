@@ -17,7 +17,13 @@ function Get-FabricMirroredDatabaseStatus {
     .EXAMPLE
     Get-FabricMirroredDatabaseStatus -WorkspaceId "your-workspace-id" -MirroredDatabaseId "your-mirrored-database-id"
     This example retrieves the status of a mirrored database with the specified ID in the specified workspace.
+
+    .NOTES
+
+    Author: Tiago Balabuch
+
     #>
+
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
@@ -31,7 +37,7 @@ function Get-FabricMirroredDatabaseStatus {
 
     try {
         # Step 2: Ensure token validity
-        Test-TokenExpired
+        Confirm-TokenState
 
         $apiEndpointUrl = "{0}/workspaces/{1}/mirroredDatabases/{2}/getMirroringStatus" -f $FabricConfig.BaseUrl, $WorkspaceId, $MirroredDatabaseId
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug

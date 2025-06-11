@@ -21,10 +21,13 @@ function Start-FabricMirroredDatabaseMirroring
 
     .NOTES
     - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-    - Calls `Test-TokenExpired` to ensure token validity before making the API request.
+    - Calls `Confirm-TokenState` to ensure token validity before making the API request.
     - This function handles asynchronous operations and retrieves operation results if required.
 
+    Author: Tiago Balabuch
+
     #>
+
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]
@@ -39,7 +42,7 @@ function Start-FabricMirroredDatabaseMirroring
     try
     {
         # Step 2: Ensure token validity
-        Test-TokenExpired
+        Confirm-TokenState
 
         $apiEndpointUrl = "{0}/workspaces/{1}/mirroredDatabases/{2}/startMirroring" -f $FabricConfig.BaseUrl, $WorkspaceId, $MirroredDatabaseId
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug

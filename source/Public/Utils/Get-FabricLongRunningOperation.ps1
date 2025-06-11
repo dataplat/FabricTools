@@ -24,8 +24,8 @@ This command polls the status of the operation with the given operationId every 
 .NOTES
 - Requires the `$FabricConfig` global object, including `BaseUrl` and `FabricHeaders`.
 
-    AUTHOR
-    Tiago Balabuch
+Author: Tiago Balabuch
+
     #>
     param (
         [Parameter(Mandatory = $false)]
@@ -37,6 +37,8 @@ This command polls the status of the operation with the given operationId every 
         [Parameter(Mandatory = $false)]
         [int]$retryAfter = 5
     )
+
+    Confirm-TokenState
 
     # Step 1: Construct the API URL
     if ($location) {

@@ -30,7 +30,12 @@ PS> Restore-FabricRecoveryPoint -CreateTime '2024-07-23T11:20:26Z' -WorkspaceGUI
 
 Restore a Fabric Data Warehouse to a specific restore point, specifying the workspace and data warehouse GUIDs.
 
+.NOTES
+
+Author: Jess Pomfret
+
 #>
+
 function Restore-FabricRecoveryPoint {
     [CmdletBinding(SupportsShouldProcess)]
     param (

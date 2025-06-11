@@ -54,7 +54,7 @@ Function Invoke-FabricRestMethodExtended {
         [int] $RetryCount = 0
     )
 
-    Test-TokenExpired
+    Confirm-TokenState
     if ($Uri -notmatch '^https?://.*') {
         $Uri = "{0}/{1}" -f $FabricConfig.BaseUrl, $Uri
     }

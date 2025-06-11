@@ -55,12 +55,9 @@ function Get-FabricEventhouse {
         TODO: Add functionality to list all Eventhouses in the subscription. To do so fetch all workspaces
         and then all eventhouses in each workspace.
 
-        Revsion History:
+        Author: Tiago Balabuch
 
-        - 2024-11-09 - FGE: Added DisplaName as Alias for EventhouseName
-        - 2024-11-16 - FGE: Added Verbose Output
-        - 2024-11-27 - FGE: Added more Verbose Output
-    #>
+        #>
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
@@ -84,7 +81,7 @@ function Get-FabricEventhouse {
         }
 
         # Step 2: Ensure token validity
-        Test-TokenExpired
+        Confirm-TokenState
 
         # Step 3: Initialize variables
         $continuationToken = $null

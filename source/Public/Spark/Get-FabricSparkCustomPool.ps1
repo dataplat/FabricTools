@@ -30,7 +30,7 @@
 
 .NOTES
     - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-    - Calls `Test-TokenExpired` to ensure token validity before making the API request.
+    - Calls `Confirm-TokenState` to ensure token validity before making the API request.
     - Handles continuation tokens to retrieve all Spark custom pools if there are multiple pages of results.
 
     Author: Tiago Balabuch
@@ -59,7 +59,7 @@ function Get-FabricSparkCustomPool {
         }
 
         # Step 2: Ensure token validity
-        Test-TokenExpired
+        Confirm-TokenState
         # Step 3: Initialize variables
         $continuationToken = $null
         $SparkCustomPools = @()

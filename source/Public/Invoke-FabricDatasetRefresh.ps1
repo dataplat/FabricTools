@@ -15,6 +15,9 @@
 
     .NOTES
     Alias: Invoke-FabDatasetRefresh
+
+    Author: Ioana Bouariu
+
 #>
 function Invoke-FabricDatasetRefresh {
     # Define aliases for the function for flexibility.
@@ -27,7 +30,7 @@ function Invoke-FabricDatasetRefresh {
         [string]$DatasetID
     )
 
-    Test-TokenExpired
+    Confirm-TokenState
 
     # Check if the dataset is refreshable
     if ((Get-FabricDataset -DatasetId $DatasetID).isrefreshable -eq $false) {

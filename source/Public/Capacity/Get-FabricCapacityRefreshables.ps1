@@ -16,9 +16,11 @@ This example retrieves the top 5 refreshable capacities for the tenant.
 
 .NOTES
 The function retrieves the PowerBI access token and makes a GET request to the PowerBI API to retrieve the top refreshable capacities. It then returns the 'value' property of the response, which contains the capacities.
+
+Author: Ioana Bouariu
+
     #>
 
-    # This function retrieves the top refreshable capacities for the tenant.
     # Define aliases for the function for flexibility.
     [Alias("Get-FabCapacityRefreshables")]
 
@@ -28,7 +30,7 @@ The function retrieves the PowerBI access token and makes a GET request to the P
         [string]$top = 5
     )
 
-    Test-TokenExpired
+    Confirm-TokenState
 
     # Make a GET request to the PowerBI API to retrieve the top refreshable capacities.
     # The function returns the 'value' property of the response.

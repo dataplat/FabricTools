@@ -19,9 +19,11 @@ This example retrieves the workspace usage metrics for a specific workspace give
 
 .NOTES
 The function retrieves the PowerBI access token and creates a new usage metrics report. It then defines the names of the reports to retrieve, initializes an empty hashtable to store the reports, and for each report name, retrieves the report and adds it to the hashtable. It then returns the hashtable of reports.
+
+Author: Ioana Bouariu
+
     #>
 
-    # This function retrieves workspace usage metrics.
     # Define aliases for the function for flexibility.
     [Alias("Get-FabWorkspaceUsageMetricsData")]
 

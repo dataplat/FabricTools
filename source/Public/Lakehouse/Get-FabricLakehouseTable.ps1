@@ -16,7 +16,12 @@ The ID of the Lakehouse from which to retrieve tables.
 Get-FabricLakehouseTable -WorkspaceId "your-workspace-id" -LakehouseId "your-lakehouse-id"
 This example retrieves all tables from the specified Lakehouse in the specified workspace.
 
-    #>
+.NOTES
+
+Author: Tiago Balabuch
+
+#>
+
     [CmdletBinding()]
     [OutputType([System.Object[]])]
     param (
@@ -31,7 +36,7 @@ This example retrieves all tables from the specified Lakehouse in the specified 
 
     try {
         # Step 1: Ensure token validity
-        Test-TokenExpired
+        Confirm-TokenState
 
 
 

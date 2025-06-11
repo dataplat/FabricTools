@@ -18,8 +18,9 @@
    String. This function returns the Fabric API authentication token.
 
 .NOTES
-   This function was originally written by Rui Romano.
-   https://github.com/microsoft/Analysis-Services/tree/master/pbidevmode/fabricps-pbip
+
+   Author: Rui Romano
+
 #>
 
 function Get-FabricAuthToken {

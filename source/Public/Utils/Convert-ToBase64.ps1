@@ -27,9 +27,10 @@ function Convert-ToBase64 {
     - Ensure the file exists at the specified path before running this function.
     - Large files may cause memory constraints due to full loading into memory.
 
+Author: Tiago Balabuch
 
-    Tiago Balabuch
     #>
+
     [CmdletBinding()]
     [OutputType([System.String])]
     param (

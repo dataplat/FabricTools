@@ -23,7 +23,7 @@ Fetches the role assignment with the ID "role123" for the workspace "workspace12
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-- Calls `Test-TokenExpired` to ensure token validity before making the API request.
+- Calls `Confirm-TokenState` to ensure token validity before making the API request.
 
 Author: Tiago Balabuch
 #>
@@ -43,7 +43,7 @@ function Get-FabricWorkspaceRoleAssignment {
 
     try {
         # Step 1: Ensure token validity
-        Test-TokenExpired
+        Confirm-TokenState
 
         # Step 3: Initialize variables
         $continuationToken = $null

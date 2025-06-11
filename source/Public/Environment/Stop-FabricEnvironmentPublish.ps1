@@ -40,7 +40,7 @@ function Stop-FabricEnvironmentPublish
     try
     {
         # Step 1: Ensure token validity
-        Test-TokenExpired
+        Confirm-TokenState
 
         # Step 2: Construct the API URL
         $apiEndpointUrl = "{0}/workspaces/{1}/environments/{2}/staging/cancelPublish" -f $FabricConfig.BaseUrl, $WorkspaceId, $EnvironmentId

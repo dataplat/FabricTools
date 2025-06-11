@@ -14,9 +14,10 @@ function Get-FabricAPIclusterURI {
 .NOTES
     The function retrieves the PowerBI access token and makes a GET request to the PowerBI API to retrieve the datasets. It then extracts the '@odata.context' property from the response, splits it on the '/' character, and selects the third element. This element is used to construct the cluster URI, which is then returned by the function.
 
+    Author: Ioana Bouariu
+
     #>
 
-    #This function retrieves the cluster URI for the tenant.
     # Define aliases for the function for flexibility.
     [Alias("Get-FabAPIClusterURI")]
     [CmdletBinding()]
@@ -24,7 +25,7 @@ function Get-FabricAPIclusterURI {
     Param (
     )
 
-    Test-TokenExpired
+    Confirm-TokenState
 
     # Make a GET request to the PowerBI API to retrieve the datasets.
     $reply = Invoke-RestMethod -uri "$($PowerBI.BaseApiUrl)/datasets" -Headers $FabricSession.HeaderParams -Method GET

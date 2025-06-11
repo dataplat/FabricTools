@@ -23,10 +23,15 @@ function Convert-FromBase64 {
 
     Output:
     Some encoded text
+
 .NOTES
 This function assumes the Base64 input is a valid UTF-8 encoded string.
 Any decoding errors will throw a descriptive error message.
-    #>
+
+Author: Tiago Balabuch
+
+#>
+
     param (
         [Parameter(Mandatory = $true)]
         [string]$Base64String

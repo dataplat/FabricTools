@@ -22,6 +22,9 @@ This example retrieves the state of a specific capacity given the subscription I
 
 .NOTES
 The function checks if the Azure token is null. If it is, it connects to the Azure account and retrieves the token. It then defines the headers for the GET request and the URL for the GET request. Finally, it makes the GET request and returns the response.
+
+Author: Ioana Bouariu
+
     #>
 
     # This function retrieves the state of a specific capacity.
@@ -38,7 +41,7 @@ The function checks if the Azure token is null. If it is, it connects to the Azu
         [string]$capacity
     )
 
-    Test-TokenExpired
+    Confirm-TokenState
 
     # Define the URL for the GET request.
     $getCapacityState = "$($AzureSession.BaseApiUrl)/subscriptions/$subscriptionID/resourceGroups/$resourcegroup/providers/Microsoft.Fabric/capacities/$capacity/?api-version=2022-07-01-preview"

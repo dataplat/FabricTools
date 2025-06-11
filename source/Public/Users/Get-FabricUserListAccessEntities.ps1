@@ -22,7 +22,7 @@
 
 .NOTES
     - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-    - Calls `Test-TokenExpired` to ensure token validity before making the API request.
+    - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 
     Author: Tiago Balabuch
 #>
@@ -41,7 +41,7 @@ function Get-FabricUserListAccessEntities {
 
     try {
 
-        Test-TokenExpired
+        Confirm-TokenState
 
         # Step 4: Loop to retrieve all capacities with continuation token
         $apiEndpointURI = "admin/users/{0}/access" -f $UserId

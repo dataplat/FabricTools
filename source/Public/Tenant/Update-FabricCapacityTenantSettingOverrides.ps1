@@ -35,7 +35,7 @@ Updates the tenant setting "SomeSetting" for the capacity with ID "12345", enabl
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-- Calls `Test-TokenExpired` to ensure token validity before making the API request.
+- Calls `Confirm-TokenState` to ensure token validity before making the API request.
 
 Author: Tiago Balabuch
 
@@ -73,7 +73,7 @@ function Update-FabricCapacityTenantSettingOverrides
     try
     {
         # Validate authentication token
-        Test-TokenExpired
+        Confirm-TokenState
 
         # Validate Security Groups if provided
         if ($EnabledSecurityGroups)

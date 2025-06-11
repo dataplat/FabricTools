@@ -19,6 +19,8 @@
     This command retrieves all resources of type "Microsoft.Fabric/capacities" from all resource groups in all subscriptions.
 
 .NOTES
+    Author: Ioana Bouariu
+    Imported into FabricTools April 2025
     Alias: Get-AllFabCapacities
 #>
 function Get-FabricCapacities {
@@ -34,7 +36,7 @@ function Get-FabricCapacities {
     # Initialize an array to store the results
     $res = @()
 
-    Test-TokenExpired
+    Confirm-TokenState
 
     # If a subscription ID is provided
     if ($subscriptionID) {
@@ -72,4 +74,3 @@ function Get-FabricCapacities {
     # Return the results
     return $res
 }
-

@@ -37,7 +37,7 @@ function Get-FabricTenantSetting {
     try {
         # Step 1: Validate authentication token before making API requests
         Write-Message -Message "Validating authentication token..." -Level Debug
-        Test-TokenExpired
+        Confirm-TokenState
         Write-Message -Message "Authentication token is valid." -Level Debug
 
         # Step 2: Construct the API endpoint URL for retrieving tenant settings

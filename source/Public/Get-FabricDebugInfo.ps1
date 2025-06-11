@@ -16,6 +16,8 @@ function Get-FabricDebugInfo {
 
 .NOTES
 
+    Author: Frank Geisler, Kamil Nowinski
+
     #>
 
     [CmdletBinding()]

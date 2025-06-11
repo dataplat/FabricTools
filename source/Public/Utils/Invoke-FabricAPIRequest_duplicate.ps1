@@ -44,8 +44,9 @@ function Invoke-FabricAPIRequest_duplicate {
 
     .NOTES
         This function requires the Get-FabricAuthToken function to be defined in the same script or module.
-        This function was originally written by Rui Romano.
-        https://github.com/microsoft/Analysis-Services/tree/master/pbidevmode/fabricps-pbip
+
+        Author: Rui Romano.
+
     #>
     param (
         [Parameter(Mandatory = $true)]

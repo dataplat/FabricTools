@@ -3,12 +3,12 @@
 Checks if the Fabric token is expired and logs appropriate messages.
 
 .DESCRIPTION
-The `Test-TokenExpired` function checks the expiration status of the Fabric token stored in the `$FabricConfig.TokenExpiresOn` variable.
+The `Confirm-TokenState` function checks the expiration status of the Fabric token stored in the `$FabricConfig.TokenExpiresOn` variable.
 If the token is expired, it logs an error message and provides guidance for refreshing the token.
 Otherwise, it logs that the token is still valid.
 
 .EXAMPLE
-Test-TokenExpired
+Confirm-TokenState
 
 Checks the token expiration status using session's `$FabricConfig` object.
 
@@ -20,7 +20,7 @@ Checks the token expiration status using session's `$FabricConfig` object.
 .AUTHOR
 Tiago Balabuch
 #>
-function Test-TokenExpired {
+function Confirm-TokenState {
     [CmdletBinding()]
     param ()
 

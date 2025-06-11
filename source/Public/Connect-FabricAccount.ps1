@@ -49,6 +49,8 @@ function Connect-FabricAccount {
     - 2025-05-26 - Jojobit: Added Service Principal support, with secure string handling and parameter descriptions, as supported by the original FabTools module
     - 2025-06-02 - KNO: Added Reset switch to force re-authentication and token refresh
 
+    Author: Frank Geisler, Kamil Nowinski
+
 .LINK
     Connect-AzAccount https://learn.microsoft.com/de-de/powershell/module/az.accounts/connect-azaccount?view=azps-12.4.0
     #>

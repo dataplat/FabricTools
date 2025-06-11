@@ -6,6 +6,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Added credits for authors to all functions and Unit tests to verify the existence of such tags #89
+
+### Changed
+### Fixed
+### Deprecated
+### Removed
+### Security
+
+## 0.22.0 - 20250609
+
+### Added
 
 - Introduced new PowerShell functions for managing Fabric workspaces, recovery points, configurations, tenant settings, and workspace identities.
 - Added unit tests for key functions, including `Get-FabricAPIclusterURI` and `Get-FabricCapacityTenantOverrides`.
@@ -43,7 +54,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Removed unnecessary or duplicate functions (e.g., `Get-AllFabricDatasetRefreshes`, `Get-AllFabricCapacities`).
 - Removed obsolete scripts and commented-out configuration paths.
 - Removed `Invoke-FabricAPIRequest` and replaced it by `Invoke-FabricRestMethodExtended`
-- Removed `Confirm-FabricAuthToken` and extended existing `Test-TokenExpired` using `EnableTokenRefresh` Feature Flag
+- Removed `Confirm-FabricAuthToken` 
+- Renamed `Test-TokenExpired` to `Confirm-TokenState` and extended it using `EnableTokenRefresh` Feature Flag
 - Removed `Set-FabricApiHeaders` and merged the entire logic to `Connect-FabricAccount`
 
 ### Security

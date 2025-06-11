@@ -72,7 +72,7 @@
 
 .NOTES
     - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-    - Calls `Test-TokenExpired` to ensure token validity before making the API request.
+    - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 
     Author: Tiago Balabuch
 
@@ -127,7 +127,7 @@ function Update-FabricSparkSettings
     try
     {
         # Step 1: Ensure token validity
-        Test-TokenExpired
+        Confirm-TokenState
 
         # Step 2: Construct the API URL
         $apiEndpointUrl = "{0}/workspaces/{1}/spark/settings" -f $FabricConfig.BaseUrl, $WorkspaceId, $SparkSettingsId

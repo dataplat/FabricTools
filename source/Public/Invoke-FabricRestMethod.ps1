@@ -56,7 +56,7 @@ Function Invoke-FabricRestMethod {
     )
 
     if ($TestTokenExpired) {
-        Test-TokenExpired
+        Confirm-TokenState
     }
 
     $baseUrl = $FabricConfig.BaseUrl
