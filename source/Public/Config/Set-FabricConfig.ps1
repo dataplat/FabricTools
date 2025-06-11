@@ -25,12 +25,11 @@ Registers the specified Fabric Data Warehouse configuration for use with all fun
 .EXAMPLE
 PS> Set-FabricConfig -WorkspaceGUID 'GUID-GUID-GUID-GUID' -DataWarehouseGUID 'GUID-GUID-GUID-GUID' -SkipPersist
 
-Registers the specified Fabric Data Warehouse configuration for use with all functions in the PSFabricTools module - but does not persist the values, only uses them for the current session.
+Registers the specified Fabric Data Warehouse configuration for use with all functions in the PSFabricTools module - but it does not persist the values, only uses them for the current session.
 
 .NOTES
 
 Author: Jess Pomfret
-
 #>
 
 function Set-FabricConfig {
