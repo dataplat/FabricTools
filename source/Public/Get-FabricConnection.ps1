@@ -22,7 +22,11 @@ This example retrieves specific connection from Fabric with ID "12345".
 .NOTES
 https://learn.microsoft.com/en-us/rest/api/fabric/core/connections/get-connection?tabs=HTTP
 https://learn.microsoft.com/en-us/rest/api/fabric/core/connections/list-connections?tabs=HTTP
-    #>
+
+Author: Kamil Nowinski
+
+#>
+
     [CmdletBinding()]
     param
     (

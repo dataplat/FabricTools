@@ -16,9 +16,10 @@ This example retrieves the workspace usage metrics dataset ID for a specific wor
 
 .NOTES
 The function retrieves the PowerBI access token and the Fabric API cluster URI. It then makes a GET request to the Fabric API to retrieve the workspace usage metrics dataset ID, parses the response and replaces certain keys to match the expected format, and returns the 'dbName' property of the first model in the response, which is the dataset ID.
-    #>
 
-    # This function retrieves the workspace usage metrics dataset ID.
+Author: Ioana Bouariu
+
+    #>
 
     # Define aliases for the function for flexibility.
     [Alias("New-FabWorkspaceUsageMetricsReport")]

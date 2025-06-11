@@ -24,8 +24,8 @@ Get-FabricItem -workspaceId "12345" -type "file"
 This example retrieves all fabric items of type "file" from the workspace with ID "12345".
 
 .NOTES
-This function was originally written by Rui Romano.
-https://github.com/microsoft/Analysis-Services/tree/master/pbidevmode/fabricps-pbip
+
+Author: Rui Romano
 
     #>
     [CmdletBinding()]

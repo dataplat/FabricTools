@@ -31,6 +31,8 @@ Retrieves the definitions of all KQLQuerysets in the workspace with ID `12345` i
 - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 - Handles long-running operations asynchronously.
 
+Author: Tiago Balabuch
+
 #>
 function Get-FabricKQLQuerysetDefinition {
     [CmdletBinding()]

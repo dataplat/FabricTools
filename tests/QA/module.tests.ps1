@@ -227,3 +227,38 @@ Describe 'Help for module' -Tags 'helpQuality' {
         }
     }
 }
+
+BeforeDiscovery {
+    # Must use the imported module to build test cases.
+    $path = ".\source\public"
+    $allFunctionFiles = Get-ChildItem -Path $path -Recurse -Filter "*.ps1"
+
+    # Build test cases.
+    $testCases = @()
+
+    foreach ($file in $allFunctionFiles)
+    {
+        $testCases += @{
+            FullName = $file.FullName
+            Name     = $file.BaseName
+        }
+    }
+}
+
+Describe 'Author for functions' {
+    It 'Should have an author for <Name>' -ForEach ($testCases) {
+        $scriptFileRawContent = Get-Content -Raw -Path $FullName
+
+        $authorLine = $scriptFileRawContent | Where-Object { $_ -match 'Author:\s*(.+)' } | Select-Object -First 1
+
+        if ($authorLine -match 'Author:\s*(.+)')
+        {
+            $author = $matches[1].Trim()
+            $author | Should -Not -BeNullOrEmpty
+        }
+        else
+        {
+            throw "Author not found in function file: $($functionFile.FullName)"
+        }
+    }
+}

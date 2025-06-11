@@ -58,6 +58,8 @@ function Invoke-FabricKQLCommand {
     2024-12-22 - FGE: Added Verbose Output
     2024-12-27 - FGE: Major Update to support KQL Queries and Management Commands
 
+    Author: Frank Geisler
+
     #>
 
     [CmdletBinding()]

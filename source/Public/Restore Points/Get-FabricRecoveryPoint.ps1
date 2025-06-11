@@ -31,6 +31,8 @@ Gets all the available recovery points for the specified data warehouse, in the 
 .NOTES
 Based on API calls from this blog post: https://blog.fabric.microsoft.com/en-US/blog/the-art-of-data-warehouse-recovery-within-microsoft-fabric/
 
+Author: Jess Pomfret
+
 #>
 
 function Get-FabricRecoveryPoint {

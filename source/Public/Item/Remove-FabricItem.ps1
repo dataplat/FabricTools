@@ -26,8 +26,10 @@
    None. This function does not return any output.
 
 .NOTES
-   This function was written by Rui Romano.
+
+   Author: Rui Romano
    https://github.com/microsoft/Analysis-Services/tree/master/pbidevmode/fabricps-pbip
+
 #>
 
 Function Remove-FabricItem {

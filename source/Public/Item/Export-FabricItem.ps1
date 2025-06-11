@@ -28,6 +28,9 @@ Export-FabricItem -workspaceId "12345678-1234-1234-1234-1234567890AB" -itemID "9
 This example exports the item with the specified ID from the Fabric workspace with the specified ID to the "C:\ExportedItems" directory.
 
 .NOTES
+
+Author: Rui Romano
+
 This function is based on the Export-FabricItems function written by Rui Romano.
 https://github.com/microsoft/Analysis-Services/tree/master/pbidevmode/fabricps-pbip
 

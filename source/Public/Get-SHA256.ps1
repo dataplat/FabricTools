@@ -1,4 +1,3 @@
-
 function Get-Sha256 ($string) {
 <#
 .SYNOPSIS
@@ -17,6 +16,9 @@ This example calculates the SHA256 hash of a string.
 
 .NOTES
 The function creates a new SHA256CryptoServiceProvider object, converts the string to a byte array using UTF8 encoding, computes the SHA256 hash of the byte array, converts the hash to a string and removes any hyphens, and returns the resulting hash.
+
+Author: Ioana Bouariu
+
 #>
 
     # Create a new SHA256CryptoServiceProvider object.

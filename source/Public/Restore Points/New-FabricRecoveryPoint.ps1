@@ -24,7 +24,13 @@ PS> New-FabricRecoveryPoint -WorkspaceGUID 'GUID-GUID-GUID-GUID' -DataWarehouseG
 
 Create a new recovery point for the specified data warehouse, in the specified workspace.
 
+
+.NOTES
+
+Author: Jess Pomfret
+
 #>
+
 function New-FabricRecoveryPoint {
     [CmdletBinding(SupportsShouldProcess)]
     param (

@@ -31,6 +31,9 @@ This example retrieves the usage metrics for a specific dataset given the datase
 
 .NOTES
 The function defines the headers and body for a POST request to the PowerBI API to retrieve the usage metrics for the specified dataset. It then makes the POST request and returns the response.
+
+Author: Ioana Bouariu
+
     #>
 
     # This function retrieves usage metrics for a specific dataset.

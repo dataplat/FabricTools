@@ -19,8 +19,12 @@ Specifies the capacity to retrieve information for. If not provided, all capacit
 .EXAMPLE
 Get-FabricCapacitySkus -capacity "exampleCapacity"
 Retrieves the fabric capacity information for the specified capacity.
-    #>
-    # Define aliases for the function for flexibility.
+
+.NOTES
+
+Author: Kamil Nowinski
+
+#>
 
     Param(
         [Parameter(Mandatory = $true)]

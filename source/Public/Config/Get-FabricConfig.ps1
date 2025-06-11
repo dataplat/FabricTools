@@ -1,4 +1,5 @@
-<#
+function Get-FabricConfig {
+    <#
 .SYNOPSIS
 Gets the configuration for use with all functions in the PSFabricTools module.
 
@@ -17,9 +18,12 @@ Gets all the configuration values for the PSFabricTools module and outputs them.
 PS> Get-FabricConfig -ConfigName BaseUrl
 
 Gets the BaseUrl configuration value for the PSFabricTools module.
-#>
 
-function Get-FabricConfig {
+.NOTES
+
+    Author: Jess Pomfret
+
+#>
     param (
         [String]$ConfigName
     )

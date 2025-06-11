@@ -20,6 +20,8 @@ function Get-FabricMirroredDatabaseTableStatus {
     .NOTES
     The function retrieves the PowerBI access token and makes a POST request to the PowerBI API to retrieve the status of tables in the specified mirrored database. It then returns the 'value' property of the response, which contains the table statuses.
 
+    Author: Tiago Balabuch
+
     #>
     [CmdletBinding()]
     [OutputType([System.Object[]])]

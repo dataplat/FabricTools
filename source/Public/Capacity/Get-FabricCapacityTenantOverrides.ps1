@@ -13,6 +13,9 @@ This example retrieves the tenant overrides for all capacities.
 
 .NOTES
 The function retrieves the PowerBI access token and makes a GET request to the Fabric API to retrieve the tenant overrides for all capacities. It then returns the response of the GET request.
+
+Author: Ioana Bouariu
+
     #>
 
     # This function retrieves the tenant overrides for all capacities.

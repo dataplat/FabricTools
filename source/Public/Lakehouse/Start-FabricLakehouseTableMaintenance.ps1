@@ -53,6 +53,8 @@ function Start-FabricLakehouseTableMaintenance
     - The function uses the `Get-FabricLongRunningOperation` function to check the status of long-running operations.
     - The function uses the `Invoke-RestMethod` cmdlet to make API requests.
 
+    Author: Tiago Balabuch
+
     #>
 
     [CmdletBinding(SupportsShouldProcess)]

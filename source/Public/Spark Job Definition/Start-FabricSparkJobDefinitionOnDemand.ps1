@@ -25,7 +25,11 @@
 .NOTES
     Ensure that the necessary authentication tokens are valid before running this function.
     The function logs detailed messages for debugging and informational purposes.
+
+Author: Tiago Balabuch
+
 #>
+
 function Start-FabricSparkJobDefinitionOnDemand
 {
     [CmdletBinding(SupportsShouldProcess)]
