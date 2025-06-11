@@ -13,8 +13,12 @@ function Get-FabricSQLDatabase {
     Id of the Fabric Workspace for which the SQLDatabases should be retrieved. The value for WorkspaceId is a GUID.
     An example of a GUID is '12345678-1234-1234-1234-123456789012'.
 
+.PARAMETER Workspace
+    The workspace object. This is a mandatory parameter for the 'WorkspaceObject' parameter set and can be pipelined into the function.
+    The object can be easily retrieved by Get-FabricWorkspace function.
+
 .PARAMETER SQLDatabaseName
-    The name of the KQLDatabase to retrieve. This parameter cannot be used together with SQLDatabaseID.
+    The name of the SQLDatabase to retrieve. This parameter cannot be used together with SQLDatabaseID.
 
 .PARAMETER SQLDatabaseID
     The Id of the SQLDatabase to retrieve. This parameter cannot be used together with SQLDatabaseName.
