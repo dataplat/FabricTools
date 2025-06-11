@@ -28,7 +28,7 @@ function Get-FabricSQLDatabase {
     This example will retrieve the SQLDatabase with the name 'MySQLDatabase'.
 
 .EXAMPLE
-    Get-FabricSQLDatabase
+    Get-FabricSQLDatabase -WorkspaceId '12345678-1234-1234-1234-123456789012'
 
     This example will retrieve all SQLDatabases in the workspace that is specified
     by the WorkspaceId.
@@ -39,6 +39,11 @@ function Get-FabricSQLDatabase {
         -SQLDatabaseId '12345678-1234-1234-1234-123456789012'
 
     This example will retrieve the SQLDatabase with the ID '12345678-1234-1234-1234-123456789012'.
+
+.EXAMPLE
+    Get-FabricWorkspace -WorkspaceName 'MsLearn-dev' | Get-FabricSQLDatabase
+
+    This example will retrieve all SQLDatabases from the workspace with the name 'MsLearn-dev' (using the pipeline).
 
 .NOTES
     Revision History:
