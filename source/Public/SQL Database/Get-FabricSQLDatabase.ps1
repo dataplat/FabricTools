@@ -13,8 +13,12 @@ function Get-FabricSQLDatabase {
     Id of the Fabric Workspace for which the SQLDatabases should be retrieved. The value for WorkspaceId is a GUID.
     An example of a GUID is '12345678-1234-1234-1234-123456789012'.
 
+.PARAMETER Workspace
+    The workspace object. This is a mandatory parameter for the 'WorkspaceObject' parameter set and can be pipelined into the function.
+    The object can be easily retrieved by Get-FabricWorkspace function.
+
 .PARAMETER SQLDatabaseName
-    The name of the KQLDatabase to retrieve. This parameter cannot be used together with SQLDatabaseID.
+    The name of the SQLDatabase to retrieve. This parameter cannot be used together with SQLDatabaseID.
 
 .PARAMETER SQLDatabaseID
     The Id of the SQLDatabase to retrieve. This parameter cannot be used together with SQLDatabaseName.
@@ -28,7 +32,7 @@ function Get-FabricSQLDatabase {
     This example will retrieve the SQLDatabase with the name 'MySQLDatabase'.
 
 .EXAMPLE
-    Get-FabricSQLDatabase
+    Get-FabricSQLDatabase -WorkspaceId '12345678-1234-1234-1234-123456789012'
 
     This example will retrieve all SQLDatabases in the workspace that is specified
     by the WorkspaceId.
@@ -39,6 +43,11 @@ function Get-FabricSQLDatabase {
         -SQLDatabaseId '12345678-1234-1234-1234-123456789012'
 
     This example will retrieve the SQLDatabase with the ID '12345678-1234-1234-1234-123456789012'.
+
+.EXAMPLE
+    Get-FabricWorkspace -WorkspaceName 'MsLearn-dev' | Get-FabricSQLDatabase
+
+    This example will retrieve all SQLDatabases from the workspace with the name 'MsLearn-dev' (using the pipeline).
 
 .NOTES
     Revision History:
@@ -51,8 +60,11 @@ function Get-FabricSQLDatabase {
 
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory = $true)]
+        [Parameter(Mandatory = $true, ParameterSetName = 'WorkspaceId')]
         [string]$WorkspaceId,
+
+        [Parameter(Mandatory = $true, ParameterSetName = 'WorkspaceObject', ValueFromPipeline = $true )]
+        $Workspace,
 
         [Alias("Name", "DisplayName")]
         [string]$SQLDatabaseName,
@@ -61,21 +73,41 @@ function Get-FabricSQLDatabase {
         [string]$SQLDatabaseId
     )
 
-    Confirm-TokenState
+    begin {
+        Confirm-TokenState
 
-    Write-Verbose "You can either use SQLDatabaseName or SQLDatabaseID not both. If both are used throw error"
-    if ($PSBoundParameters.ContainsKey("SQLDatabaseName") -and $PSBoundParameters.ContainsKey("SQLDatabaseId")) {
-        throw "Parameters SQLDatabaseName and SQLDatabaseId cannot be used together"
+        if ($PSBoundParameters.ContainsKey("SQLDatabaseName") -and $PSBoundParameters.ContainsKey("SQLDatabaseId")) {
+            throw "Parameters SQLDatabaseName and SQLDatabaseId cannot be used together"
+        }
     }
 
-    # Create SQLDatabase API
-    $uri = "$($FabricSession.BaseApiUrl)/workspaces/$workspaceId/SqlDatabases"
-    if ($SQLDatabaseId) {
-        $uri = "$uri/$SQLDatabaseId"
+    process {
+        if ($PSCmdlet.ParameterSetName -eq 'WorkspaceObject') {
+            $WorkspaceId = $Workspace.id
+        }
+
+        # Create SQLDatabase API
+        $uri = "$($FabricSession.BaseApiUrl)/workspaces/$WorkspaceId/SqlDatabases"
+        if ($SQLDatabaseId) {
+            $uri = "$uri/$SQLDatabaseId"
+        }
+        $response = Invoke-FabricRestMethod -Uri $uri
+        ##$databases.Where({$_.displayName -eq $body.displayName}).id
+
+        # Step: Validate the response code
+        if ($statusCode -ne 200) {
+            Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
+            Write-Message -Message "Error: $($response.message)" -Level Error
+            Write-Message -Message "Error Details: $($response.moreDetails)" -Level Error
+            Write-Message "Error Code: $($response.errorCode)" -Level Error
+            return $null
+        }
+
+        $response = $response.value
+        if ($SQLDatabaseName) {
+            # Filter the SQLDatabase by name
+            $response = $response | Where-Object { $_.displayName -eq $SQLDatabaseName }
+        }
+        return $response
     }
-    $result = Invoke-RestMethod -Headers $FabricSession.HeaderParams -Uri $uri
-    ##$databases.Where({$_.displayName -eq $body.displayName}).id
-
-    return $result.value
-
 }

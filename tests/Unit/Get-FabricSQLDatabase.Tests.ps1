@@ -3,21 +3,21 @@ param(
     $ModuleName = "FabricTools",
     $expectedParams = @(
         "WorkspaceId"
-                "SQLDatabaseName"
-                "SQLDatabaseId"
-                "Verbose"
-                "Debug"
-                "ErrorAction"
-                "WarningAction"
-                "InformationAction"
-                "ProgressAction"
-                "ErrorVariable"
-                "WarningVariable"
-                "InformationVariable"
-                "OutVariable"
-                "OutBuffer"
-                "PipelineVariable"
-                
+        "Workspace"
+        "SQLDatabaseName"
+        "SQLDatabaseId"
+        "Verbose"
+        "Debug"
+        "ErrorAction"
+        "WarningAction"
+        "InformationAction"
+        "ProgressAction"
+        "ErrorVariable"
+        "WarningVariable"
+        "InformationVariable"
+        "OutVariable"
+        "OutBuffer"
+        "PipelineVariable"
     )
 )
 
@@ -45,4 +45,3 @@ Describe "Get-FabricSQLDatabase" -Tag "UnitTests" {
         }
     }
 }
-
