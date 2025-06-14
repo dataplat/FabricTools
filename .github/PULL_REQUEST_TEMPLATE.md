@@ -5,13 +5,15 @@
     Your contribution to this project is greatly appreciated!
 
     TITLE: Please be descriptive not sensationalist.
-    Prepend the title with the [DscResourceName] if your PR is specific to a DSC resource.
     Also prepend with [BREAKING CHANGE] if relevant.
     i.e. [BREAKING CHANGE][xFile] Add security descriptor property
 
     You may remove this comment block, and the other comment blocks, but please
     keep the headers and the task list.
     Try to keep your PRs atomic: changes grouped in smallest batch affecting a single logical unit.
+    
+    PLEASE DO NOT submit PRs that contain multiple unrelated changes.
+    If you have multiple changes, please submit them in separate PRs.
 -->
 
 ## Pull Request (PR) description
@@ -51,6 +53,7 @@
     For those task that don't apply to you PR, leave those as is.
 -->
 
+- [ ] I have read the [CONTRIBUTING.md](../CONTRIBUTING.md) document and I have followed the style guide and coding standards in the [wiki](https://github.com/dataplat/FabricTools/wiki)
 - [ ] The PR represents a single logical change. i.e. Cosmetic updates should go in different PRs.
 - [ ] Added an entry under the Unreleased section of in the CHANGELOG.md as per [format](https://keepachangelog.com/en/1.0.0/).
 - [ ] Local clean build passes without issue or fail tests (`build.ps1 -ResolveDependency -Tasks build, test`).
@@ -59,4 +62,3 @@
 - [ ] Unit tests added/updated..
 - [ ] Integration tests added/updated (where possible).
 - [ ] Documentation added/updated (where applicable).
-- [ ] Code follows the [contribution guidelines](../CONTRIBUTING.md).
