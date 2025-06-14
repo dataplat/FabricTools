@@ -2,10 +2,10 @@ function Get-FabricSQLDatabase {
 
     <#
 .SYNOPSIS
-    Retrieves Fabric SQL Databases
+    Returns details about Fabric SQL Databases
 
 .DESCRIPTION
-    Retrieves details about the Fabric SQL Databases. Without the SQLDatabaseName or SQLDatabaseID parameter,
+    Returns details about the Fabric SQL Databases. Without the SQLDatabaseName or SQLDatabaseID parameter,
     all SQL Databases are returned. If you want to retrieve a specific SQLDatabase, you can
     use the SQLDatabaseName or SQLDatabaseID parameter. These parameters cannot be used together.
 
@@ -78,20 +78,24 @@ function Get-FabricSQLDatabase {
     )
 
     begin {
+
         Confirm-TokenState
 
-        if ($PSBoundParameters.ContainsKey("SQLDatabaseName") -and $PSBoundParameters.ContainsKey("SQLDatabaseId")) {
-            throw "Parameters SQLDatabaseName and SQLDatabaseId cannot be used together"
-        }
     }
 
     process {
+
+        if ($PSBoundParameters.ContainsKey("SQLDatabaseName") -and $PSBoundParameters.ContainsKey("SQLDatabaseId")) {
+            Write-Warning "The parameters SQLDatabaseName and SQLDatabaseId cannot be used together"
+            return
+        }
+
         if ($PSCmdlet.ParameterSetName -eq 'WorkspaceObject') {
             $WorkspaceId = $Workspace.id
         }
 
         # Create SQLDatabase API
-        $uri = "$($FabricSession.BaseApiUrl)/workspaces/$WorkspaceId/SQL Databases"
+        $uri = "$($FabricSession.BaseApiUrl)/workspaces/$WorkspaceId/SQLDatabases"
         if ($SQLDatabaseId) {
             $uri = "$uri/$SQLDatabaseId"
         }
@@ -112,6 +116,10 @@ function Get-FabricSQLDatabase {
             # Filter the SQLDatabase by name
             $response = $response | Where-Object { $_.displayName -eq $SQLDatabaseName }
         }
-        return $response
+        $return += $response
+    }
+
+    End {
+        $return
     }
 }
