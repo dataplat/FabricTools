@@ -2,10 +2,10 @@ function Get-FabricSQLDatabase {
 
     <#
 .SYNOPSIS
-    Returns details about Fabric SQL Databases
+    Retrieves Fabric SQL Database details.
 
 .DESCRIPTION
-    Returns details about the Fabric SQL Databases. Without the SQLDatabaseName or SQLDatabaseID parameter,
+    Retrieves Fabric SQL Database details. Without the SQLDatabaseName or SQLDatabaseID parameter,
     all SQL Databases are returned. If you want to retrieve a specific SQLDatabase, you can
     use the SQLDatabaseName or SQLDatabaseID parameter. These parameters cannot be used together.
 
@@ -55,7 +55,7 @@ function Get-FabricSQLDatabase {
 .NOTES
     Revision History:
         - 2025-03-06 - KNO: Init version of the function
-        - 2025-06-14 - Update the exampes to remove backticks
+        - 2025-06-14 - Update the examples to remove backticks
 
     Author: Kamil Nowinski
 
@@ -95,7 +95,7 @@ function Get-FabricSQLDatabase {
         }
 
         # Create SQLDatabase API
-        $uri = "$($FabricSession.BaseApiUrl)/workspaces/$WorkspaceId/SQLDatabases"
+        $uri = "$($FabricSession.BaseApiUrl)/workspaces/$WorkspaceId/sqlDatabases"
         if ($SQLDatabaseId) {
             $uri = "$uri/$SQLDatabaseId"
         }
