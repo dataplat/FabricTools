@@ -30,11 +30,11 @@ function Publish-FabricEnvironment {
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$EnvironmentId
+        [guid]$EnvironmentId
     )
 
     try {
@@ -59,7 +59,7 @@ function Publish-FabricEnvironment {
             }
             202 {
                 Write-Message -Message "Publish operation accepted. Publishing in progress!" -Level Info
-                [string]$operationId = $responseHeader["x-ms-operation-id"]
+                [guid]$operationId = $responseHeader["x-ms-operation-id"]
                 Write-Message -Message "Operation ID: '$operationId'" -Level Debug
                 Write-Message -Message "Getting Long Running Operation status" -Level Debug
 

@@ -43,9 +43,9 @@ Author: Ioana Bouariu
     # Define parameters for the dataset ID, group ID, report name, token, and impersonated user.
     param (
         [Parameter(Mandatory = $true)]
-        [string]$DatasetID,
+        [guid]$DatasetID,
         [Parameter(Mandatory = $true)]
-        [string]$groupId,
+        [guid]$groupId,
         [Parameter(Mandatory = $true)]
         $reportname,
         [Parameter(Mandatory = $false)]

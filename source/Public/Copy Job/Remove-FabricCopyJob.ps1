@@ -27,11 +27,11 @@ function Remove-FabricCopyJob {
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$CopyJobId
+        [guid]$CopyJobId
     )
     try {
         # Ensure token validity

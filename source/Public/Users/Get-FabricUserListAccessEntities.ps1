@@ -31,7 +31,7 @@ function Get-FabricUserListAccessEntities {
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$UserId,
+        [guid]$UserId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]

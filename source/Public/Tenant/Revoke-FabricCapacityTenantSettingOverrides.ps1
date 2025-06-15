@@ -27,7 +27,7 @@ function Revoke-FabricCapacityTenantSettingOverrides {
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$capacityId,
+        [guid]$CapacityId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]

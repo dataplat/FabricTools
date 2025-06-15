@@ -42,7 +42,7 @@ Function Import-FabricItem {
     param
     (
         [string]    $path = '.\pbipOutput'
-        , [string]    $workspaceId
+        , [guid]    $workspaceId
         , [string]    $filter = $null
         , [hashtable] $fileOverrides
     )

@@ -36,11 +36,11 @@ Author: Tiago Balabuch
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [string]$NotebookId,
+        [guid]$NotebookId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]

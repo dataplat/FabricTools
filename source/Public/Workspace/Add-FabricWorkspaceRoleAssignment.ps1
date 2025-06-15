@@ -39,7 +39,7 @@ function Add-FabricWorkspaceRoleAssignment {
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$PrincipalId,
+        [guid]$PrincipalId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]

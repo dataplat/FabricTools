@@ -40,11 +40,11 @@ function Get-FabricSparkCustomPool {
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [string]$SparkCustomPoolId,
+        [guid]$SparkCustomPoolId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]

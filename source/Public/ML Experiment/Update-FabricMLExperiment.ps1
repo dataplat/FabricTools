@@ -35,11 +35,11 @@ function Update-FabricMLExperiment
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$MLExperimentId,
+        [guid]$MLExperimentId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
