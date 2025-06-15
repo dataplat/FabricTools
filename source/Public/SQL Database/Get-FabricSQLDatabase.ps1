@@ -125,7 +125,10 @@ function Get-FabricSQLDatabase
             # Filter the SQLDatabase by name
             $response = $response | Where-Object { $_.displayName -eq $SQLDatabaseName }
         }
-        $return += $response
+        if ($response)
+        {
+            $return += $response
+        }
     }
 
     End
