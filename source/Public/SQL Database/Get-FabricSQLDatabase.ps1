@@ -48,9 +48,9 @@ function Get-FabricSQLDatabase {
     Returns the details of the Fabric SQL Database with the ID '12345678-1234-1234-1234-123456789012' from the workspace with the ID '12345678-1234-1234-1234-123456789012'.
 
 .EXAMPLE
-    Get-FabricWorkspace -WorkspaceName 'prod-workspace' | Get-FabricSQLDatabase
+    Get-FabricWorkspace -WorkspaceName 'MsLearn-dev' | Get-FabricSQLDatabase
 
-    Returns the details of the Fabric SQL Databases in the prod-workspace workspace.
+    Returns the details of the Fabric SQL Databases in the MsLearn-dev workspace.
 
 .NOTES
     Revision History:
