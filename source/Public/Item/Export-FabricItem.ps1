@@ -45,7 +45,7 @@ Function Export-FabricItem {
         [scriptblock]$filter = { $_.type -in @("Report", "SemanticModel", "Notebook", "SparkJobDefinitionV1") },
         [guid]$itemID = $null
     )
-    if (!$itemID)) {
+    if (-not $itemID) {
         # Invoke the Fabric API to get the specific item in the workspace
 
         $item = Invoke-FabricRestMethod -Uri "workspaces/$workspaceId/items/$itemID/getDefinition" -Method POST
