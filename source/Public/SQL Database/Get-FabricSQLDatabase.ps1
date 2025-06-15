@@ -1,4 +1,5 @@
-function Get-FabricSQLDatabase {
+function Get-FabricSQLDatabase
+{
 
     <#
 .SYNOPSIS
@@ -77,32 +78,40 @@ function Get-FabricSQLDatabase {
         [string]$SQLDatabaseId
     )
 
-    begin {
+    begin
+    {
 
         Confirm-TokenState
 
-        if ($PSBoundParameters.ContainsKey("SQLDatabaseName") -and $PSBoundParameters.ContainsKey("SQLDatabaseId")) {
+        if ($PSBoundParameters.ContainsKey("SQLDatabaseName") -and $PSBoundParameters.ContainsKey("SQLDatabaseId"))
+        {
             Write-Warning "The parameters SQLDatabaseName and SQLDatabaseId cannot be used together"
             return
         }
 
-        if ($PSCmdlet.ParameterSetName -eq 'WorkspaceObject') {
-            $WorkspaceId = $Workspace.id
-        }
+
     }
 
-    process {
+    process
+    {
+
+        if ($PSCmdlet.ParameterSetName -eq 'WorkspaceObject')
+        {
+            $WorkspaceId = $Workspace.id
+        }
 
         # Create SQLDatabase API
         $uri = "$($FabricSession.BaseApiUrl)/workspaces/$WorkspaceId/sqlDatabases"
-        if ($SQLDatabaseId) {
+        if ($SQLDatabaseId)
+        {
             $uri = "$uri/$SQLDatabaseId"
         }
         $response = Invoke-FabricRestMethod -Uri $uri
         ##$databases.Where({$_.displayName -eq $body.displayName}).id
 
         # Step: Validate the response code
-        if ($statusCode -ne 200) {
+        if ($statusCode -ne 200)
+        {
             Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
             Write-Message -Message "Error: $($response.message)" -Level Error
             Write-Message -Message "Error Details: $($response.moreDetails)" -Level Error
@@ -111,14 +120,16 @@ function Get-FabricSQLDatabase {
         }
 
         $response = $response.value
-        if ($SQLDatabaseName) {
+        if ($SQLDatabaseName)
+        {
             # Filter the SQLDatabase by name
             $response = $response | Where-Object { $_.displayName -eq $SQLDatabaseName }
         }
         $return += $response
     }
 
-    End {
+    End
+    {
         $return
     }
 }
