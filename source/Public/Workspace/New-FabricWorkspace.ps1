@@ -39,7 +39,7 @@ Author: Tiago Balabuch
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [string]$CapacityId
+        [guid]$CapacityId
     )
 
     try

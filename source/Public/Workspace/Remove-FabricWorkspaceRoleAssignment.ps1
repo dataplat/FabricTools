@@ -30,11 +30,11 @@ function Remove-FabricWorkspaceRoleAssignment
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceRoleAssignmentId
+        [guid]$WorkspaceRoleAssignmentId
     )
 
     try

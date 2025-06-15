@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Get-SqlDatabase accepts Workspace as a pipeline, handles errors correctly and can filter by name (#117).
 
+Updated the `WorkspaceId` and `LakehouseId` parameters to the datatype GUID [#125](https://github.com/dataplat/FabricTools/issues/125)
+
 ### Fixed
 ### Deprecated
 ### Removed

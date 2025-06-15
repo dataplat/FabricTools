@@ -36,11 +36,11 @@ function Update-FabricWorkspaceRoleAssignment
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceRoleAssignmentId,
+        [guid]$WorkspaceRoleAssignmentId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
