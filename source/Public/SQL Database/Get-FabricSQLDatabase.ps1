@@ -61,7 +61,7 @@ function Get-FabricSQLDatabase {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true, ParameterSetName = 'WorkspaceId')]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'WorkspaceObject', ValueFromPipeline = $true )]
         $Workspace,
@@ -70,7 +70,7 @@ function Get-FabricSQLDatabase {
         [string]$SQLDatabaseName,
 
         [Alias("Id")]
-        [string]$SQLDatabaseId
+        [guid]$SQLDatabaseId
     )
 
     begin {

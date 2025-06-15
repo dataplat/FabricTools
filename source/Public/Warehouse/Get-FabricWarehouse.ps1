@@ -34,11 +34,11 @@ function Get-FabricWarehouse {
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [string]$WarehouseId,
+        [guid]$WarehouseId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]

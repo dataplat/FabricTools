@@ -42,11 +42,11 @@ function Update-FabricCopyJobDefinition {
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$CopyJobId,
+        [guid]$CopyJobId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]

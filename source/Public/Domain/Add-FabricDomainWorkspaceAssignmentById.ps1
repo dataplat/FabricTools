@@ -29,11 +29,11 @@ function Add-FabricDomainWorkspaceAssignmentById {
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$DomainId,
+        [guid]$DomainId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [array]$WorkspaceIds
+        [guid[]]$WorkspaceIds
     )
 
     try {

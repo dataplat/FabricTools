@@ -228,6 +228,29 @@ Describe 'Help for module' -Tags 'helpQuality' {
     }
 }
 
+Describe "datatypes for functions" -Tag "ParameterTypes" {
+    $tests = $allModuleFunctions | ForEach-Object {
+        [PSCustomObject]@{
+            FunctionName = $_.Name
+            Parameters   = @(
+                $_.Parameters.Values | ForEach-Object {
+                    [PSCustomObject]@{
+                        Name          = $_.Name
+                        ParameterType = $_.ParameterType.FullName
+                    }
+                }
+            )
+        }
+    }
+
+    Context "Checking Parameter Types for Function <_.FunctionName>" -ForEach $tests {
+        It "Should have correct parameter types for parameters that end id <_.Name>" -ForEach ($_.Parameters | Where-Object { $_.Name -like '*id' }) {
+            $_.ParameterType | Should -Be 'System.Guid' -Because "Parameter $_.Name should be of type System.Guid"
+        }
+    }
+}
+
+
 BeforeDiscovery {
     # Must use the imported module to build test cases.
     $path = ".\source\public"

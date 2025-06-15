@@ -41,11 +41,11 @@ function Update-FabricKQLDatabase
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$KQLDatabaseId,
+        [guid]$KQLDatabaseId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]

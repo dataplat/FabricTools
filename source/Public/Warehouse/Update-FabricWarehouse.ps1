@@ -35,11 +35,11 @@ function Update-FabricWarehouse
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WarehouseId,
+        [guid]$WarehouseId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]

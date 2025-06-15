@@ -32,7 +32,7 @@ Author: Rui Romano
     param
     (
         [Parameter(Mandatory = $true, ParameterSetName = 'WorkspaceId')]
-        [string]$workspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'WorkspaceObject', ValueFromPipeline = $true )]
         $Workspace,
@@ -42,7 +42,7 @@ Author: Rui Romano
         [string]$type,
 
         [Parameter(Mandatory = $false)]
-        [string]$itemID
+        [guid]$itemID
     )
 
     begin {

@@ -41,7 +41,7 @@ function New-FabricDomain
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [string]$ParentDomainId
+        [guid]$ParentDomainId
     )
 
     try

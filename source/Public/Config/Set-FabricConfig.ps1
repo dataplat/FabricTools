@@ -35,9 +35,9 @@ Author: Jess Pomfret
 function Set-FabricConfig {
     [CmdletBinding(SupportsShouldProcess)]
     param (
-        [String]$WorkspaceGUID,
+        [guid]$WorkspaceGUID,
 
-        [String]$DataWarehouseGUID,
+        [guid]$DataWarehouseGUID,
 
         $BaseUrl = 'api.powerbi.com',
 

@@ -30,7 +30,7 @@ Author: Ioana Bouariu
     # Define parameters for the workspace ID and username.
     param(
         [Parameter(Mandatory = $true)]
-        [string]$workspaceId,
+        [guid]$WorkspaceId,
         [Parameter(Mandatory = $false)]
         [string]$username = ""
     )

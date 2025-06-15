@@ -34,11 +34,11 @@ function Get-FabricSparkJobDefinitionDefinition {
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [string]$SparkJobDefinitionId,
+        [guid]$SparkJobDefinitionId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]

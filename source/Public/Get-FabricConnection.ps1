@@ -31,7 +31,7 @@ Author: Kamil Nowinski
     param
     (
         [Parameter(Mandatory = $false)]
-        [string]$connectionId
+        [guid]$connectionId
     )
 
     begin {

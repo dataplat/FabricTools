@@ -47,7 +47,7 @@ function Update-FabricCapacityTenantSettingOverrides
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$CapacityId,
+        [guid]$CapacityId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]

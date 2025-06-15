@@ -32,7 +32,7 @@ function Get-FabricCapacity {
     param (
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [string]$capacityId,
+        [guid]$capacityId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]

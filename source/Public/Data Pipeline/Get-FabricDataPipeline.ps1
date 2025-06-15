@@ -34,11 +34,11 @@ function Get-FabricDataPipeline {
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [string]$DataPipelineId,
+        [guid]$DataPipelineId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]

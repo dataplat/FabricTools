@@ -35,11 +35,11 @@ function Get-FabricReportDefinition {
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [string]$ReportId,
+        [guid]$ReportId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]

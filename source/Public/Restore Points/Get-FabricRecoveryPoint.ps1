@@ -37,9 +37,9 @@ Author: Jess Pomfret
 
 function Get-FabricRecoveryPoint {
     param (
-        [String]$WorkspaceGUID,
+        [guid]$WorkspaceGUID,
 
-        [String]$DataWarehouseGUID,
+        [guid]$DataWarehouseGUID,
 
         [String]$BaseUrl = 'api.powerbi.com',
 

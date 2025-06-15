@@ -83,7 +83,7 @@ function Update-FabricSparkSettings
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
 
         [Parameter(Mandatory = $false)]

@@ -38,9 +38,9 @@ function Remove-FabricRecoveryPoint {
     param (
         [string]$CreateTime,
 
-        [String]$WorkspaceGUID,
+        [guid]$WorkspaceGUID,
 
-        [String]$DataWarehouseGUID,
+        [guid]$DataWarehouseGUID,
 
         [String]$BaseUrl = 'api.powerbi.com'
 

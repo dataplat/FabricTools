@@ -30,7 +30,7 @@ function Get-FabricCapacities {
     Param (
         # Optional parameter for subscription ID
         [Parameter(Mandatory = $false)]
-        [string]$subscriptionID
+        [guid]$subscriptionID
     )
 
     # Initialize an array to store the results

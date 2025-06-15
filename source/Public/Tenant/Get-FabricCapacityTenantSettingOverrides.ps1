@@ -29,7 +29,7 @@ function Get-FabricCapacityTenantSettingOverrides {
     param (
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [string]$capacityId
+        [guid]$CapacityId
     )
 
     try {

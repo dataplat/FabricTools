@@ -27,7 +27,7 @@ function Invoke-FabricDatasetRefresh {
     param(
         # Mandatory parameter for the dataset ID
         [Parameter(Mandatory = $true, ParameterSetName = "DatasetId")]
-        [string]$DatasetID
+        [guid]$DatasetID
     )
 
     Confirm-TokenState

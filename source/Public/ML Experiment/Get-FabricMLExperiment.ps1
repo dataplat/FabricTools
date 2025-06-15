@@ -35,11 +35,11 @@ function Get-FabricMLExperiment {
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [string]$MLExperimentId,
+        [guid]$MLExperimentId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]

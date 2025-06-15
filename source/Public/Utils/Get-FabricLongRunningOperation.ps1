@@ -29,7 +29,7 @@ Author: Tiago Balabuch
     #>
     param (
         [Parameter(Mandatory = $false)]
-        [string]$operationId,
+        [guid]$operationId,
 
         [Parameter(Mandatory = $false)]
         [string]$location,

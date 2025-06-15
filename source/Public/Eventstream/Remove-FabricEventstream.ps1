@@ -34,11 +34,11 @@ Author: Tiago Balabuch
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$EventstreamId
+        [guid]$EventstreamId
         #TODO Add EventstreamName parameter to validate the name of the Eventstream to delete.
     )
 

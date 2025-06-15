@@ -38,11 +38,11 @@ function Remove-FabricDomainWorkspaceAssignment
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$DomainId,
+        [guid]$DomainId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [array]$WorkspaceIds
+        [guid[]]$WorkspaceIds
     )
 
     try

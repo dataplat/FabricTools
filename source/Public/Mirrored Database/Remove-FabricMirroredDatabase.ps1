@@ -29,11 +29,11 @@ function Remove-FabricMirroredDatabase
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$MirroredDatabaseId
+        [guid]$MirroredDatabaseId
     )
 
     try

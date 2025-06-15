@@ -25,7 +25,7 @@ function Get-FabricDashboard {
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId
+        [guid]$WorkspaceId
     )
 
     try {

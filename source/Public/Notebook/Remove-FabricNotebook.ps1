@@ -30,11 +30,11 @@ function Remove-FabricNotebook
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$NotebookId
+        [guid]$NotebookId
     )
 
     try

@@ -38,11 +38,11 @@ function Get-FabricKQLDashboard {
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [string]$KQLDashboardId,
+        [guid]$KQLDashboardId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]

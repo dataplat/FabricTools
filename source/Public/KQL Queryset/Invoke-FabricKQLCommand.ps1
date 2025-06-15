@@ -66,11 +66,11 @@ function Invoke-FabricKQLCommand {
     param (
 
         [Parameter(Mandatory = $true)]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [string]$KQLDatabaseName,
 
-        [string]$KQLDatabaseId,
+        [guid]$KQLDatabaseId,
 
         [Parameter(Mandatory = $true)]
         [string]$KQLCommand,

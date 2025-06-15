@@ -39,11 +39,11 @@ function Get-FabricKQLQuerysetDefinition {
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [string]$KQLQuerysetId,
+        [guid]$KQLQuerysetId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]

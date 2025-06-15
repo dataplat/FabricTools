@@ -34,11 +34,11 @@ function Get-FabricUri {
     param (
         $BaseUrl = 'api.powerbi.com',
         [parameter(Mandatory)]
-        [String]$WorkspaceGUID,
+        [guid]$WorkspaceGUID,
         [parameter(Mandatory)]
-        [String]$DataWarehouseGUID,
+        [guid]$DataWarehouseGUID,
 
-        [String]$BatchId
+        [guid]$BatchId
     )
 
     try {

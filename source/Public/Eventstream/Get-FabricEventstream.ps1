@@ -41,11 +41,11 @@ Author: Tiago Balabuch
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [string]$EventstreamId,
+        [guid]$EventstreamId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]

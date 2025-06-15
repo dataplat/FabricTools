@@ -37,7 +37,7 @@ function Get-FabricDomain {
     param (
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [string]$DomainId,
+        [guid]$DomainId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]

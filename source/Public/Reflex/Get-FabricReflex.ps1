@@ -35,11 +35,11 @@ function Get-FabricReflex {
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [string]$ReflexId,
+        [guid]$ReflexId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]

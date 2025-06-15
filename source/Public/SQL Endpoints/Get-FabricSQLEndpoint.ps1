@@ -36,11 +36,11 @@ function Get-FabricSQLEndpoint {
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [string]$SQLEndpointId,
+        [guid]$SQLEndpointId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
