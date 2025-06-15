@@ -96,7 +96,7 @@ Describe "Get-FabricWorkspaceUser" -Tag "UnitTests" {
         }
 
         It "Should return users for multiple workspaces passed to the Workspace parameter" {
-            Get-FabricWorkspaceUser -Workspace (Get-FabricWorkspace) | Should -Not -BeNullOrEmpty
+            {Get-FabricWorkspaceUser -Workspace (Get-FabricWorkspace) }| Should -Not -BeNullOrEmpty
         }
 
         It "Should return users for multiple workspaces passed to the Workspace parameter from the pipeline" {
