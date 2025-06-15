@@ -81,10 +81,6 @@ function Get-FabricSQLDatabase {
 
         Confirm-TokenState
 
-    }
-
-    process {
-
         if ($PSBoundParameters.ContainsKey("SQLDatabaseName") -and $PSBoundParameters.ContainsKey("SQLDatabaseId")) {
             Write-Warning "The parameters SQLDatabaseName and SQLDatabaseId cannot be used together"
             return
@@ -93,6 +89,9 @@ function Get-FabricSQLDatabase {
         if ($PSCmdlet.ParameterSetName -eq 'WorkspaceObject') {
             $WorkspaceId = $Workspace.id
         }
+    }
+
+    process {
 
         # Create SQLDatabase API
         $uri = "$($FabricSession.BaseApiUrl)/workspaces/$WorkspaceId/sqlDatabases"
