@@ -59,7 +59,7 @@ function Publish-FabricEnvironment {
             }
             202 {
                 Write-Message -Message "Publish operation accepted. Publishing in progress!" -Level Info
-                [guid]$operationId = $responseHeader["x-ms-operation-id"]
+                [string]$operationId = $responseHeader["x-ms-operation-id"]
                 Write-Message -Message "Operation ID: '$operationId'" -Level Debug
                 Write-Message -Message "Getting Long Running Operation status" -Level Debug
 
