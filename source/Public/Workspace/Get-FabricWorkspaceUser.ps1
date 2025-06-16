@@ -97,11 +97,6 @@ Author: Ioana Bouariu
     }
     end
     {
-        # We should not be using the return keyword.
-        # This will enable future improvements such as adding additional value to the returned object such as the workspace name and better column headings
-        # It will also allow for future improvements such as filtering the returned object.
-        # Uses the code as defined https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_functions_advanced_methods?view=powershell-7.5&viewFallbackFrom=powershell-7.2#input-processing-methods
-        # Return the users of the workspace.
         $returnValue
     }
 }
