@@ -7,7 +7,7 @@ Before we go any further, thanks for being here. Thanks for using the module and
 ## Important resources
 
 - Documentation such as coding guidelines can be found in the [wiki](https://github.com/dataplat/FabricTools/wiki)
-- bugs can be reported in the [issues](https://github.com/dataplat/FabricTools/issues) via the bug issue template.
+- bugs can be reported as [issues](https://github.com/dataplat/FabricTools/issues) via the bug issue template.
 - feature requests can be submitted in the issues via the feature request issue template.
 - discussions can be started in the [discussions](https://github.com/dataplat/FabricTools/discussions) section of the repository.
 - communicate via issues, PRs, and discussions as well as the project
