@@ -127,7 +127,7 @@ There are a number of templates available in the `.github` folder of the reposit
 
 ## Style Guide
 
-THe Style Guide is a set of rules and guidelines that we follow to ensure that our code is consistent, readable, and maintainable.It is located in the [wiki](https://github.com/dataplat/FabricTools/wiki)
+THe Style Guide is a set of rules and guidelines that we follow to ensure that our code is consistent, readable, and maintainable.It is located in the [wiki](https://github.com/dataplat/FabricTools/wiki).
 
 ## Code of Conduct
 
