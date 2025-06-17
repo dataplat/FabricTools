@@ -6,9 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- added unit tests for `Get-FabricWorkspaceUser` function to ensure it works correctly with multiple workspaces both in the pipeline and passed to a parameter.
+- Added unit tests for Aliases for `Get-FabricWorkspaceUser` function to ensure backward compatibility.
 - Added credits for authors to all functions and Unit tests to verify the existence of such tags #89
 
 ### Changed
+- Updated `Get-FabricWorkspaceUser` to support pipeline input for `WorkspaceId` and `WorkspaceName` parameters.
+- Renamed `Get-FabricWorkspaceUsers` to match the singular form
 - Get-FabricSqlDatabase accepts Workspace as a pipeline, handles errors correctly and can filter by name (#117).
 
 ### Fixed
