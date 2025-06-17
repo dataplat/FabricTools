@@ -38,6 +38,7 @@ Author: Tiago Balabuch
         [int]$retryAfter = 5
     )
 
+    Write-Message -Message "[Get-FabricLongRunningOperation]::Begin" -Level Debug
     Confirm-TokenState
 
     # Step 1: Construct the API URL
@@ -45,37 +46,37 @@ Author: Tiago Balabuch
         # Use the Location header to define the operationUrl
         $apiEndpointUrl = $location
     } else {
-        $apiEndpointUrl = "{1}/operations/{1}" -f $FabricConfig.BaseUrl, $operationId
+        $apiEndpointUrl = "operations/{0}" -f $operationId
     }
-    Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
+    Write-Message -Message "[Get-FabricLongRunningOperation] API Endpoint: $apiEndpointUrl" -Level Debug
 
     try {
         do {
 
             # Step 2: Wait before the next request
             if ($retryAfter) {
+                Write-Message -Message "Waiting $retryAfter seconds..." -Level Verbose
                 Start-Sleep -Seconds $retryAfter
             } else {
+                Write-Message -Message "Waiting 5 seconds..." -Level Verbose
                 Start-Sleep -Seconds 5  # Default retry interval if no Retry-After header
             }
 
             # Step 3: Make the API request
-            $response = Invoke-FabricRestMethod `
-                -Uri $apiEndpointUrl `
-                -Method Get
+            $response = Invoke-FabricRestMethod -Uri $apiEndpointUrl -Method Get
 
-            # Step 3: Parse the response
+            # Step 4: Parse the response
             $jsonOperation = $response | ConvertTo-Json
             $operation = $jsonOperation | ConvertFrom-Json
 
             # Log status for debugging
-            Write-Message -Message "Operation Status: $($operation.status)" -Level Debug
-
+            Write-Message -Message "[Get-FabricLongRunningOperation] Operation Status: $($operation.status)" -Level Verbose
 
         } while ($operation.status -notin @("Succeeded", "Completed", "Failed"))
 
         # Step 5: Return the operation result
         return $operation
+
     } catch {
         # Step 6: Capture and log error details
         $errorDetails = $_.Exception.Message

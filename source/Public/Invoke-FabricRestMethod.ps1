@@ -55,6 +55,8 @@ Function Invoke-FabricRestMethod {
         [switch] $PowerBIApi
     )
 
+    Write-Message -Message "[Invoke-FabricRestMethod]::Begin" -Level Debug
+
     if ($TestTokenExpired) {
         Confirm-TokenState
     }
@@ -73,26 +75,31 @@ Function Invoke-FabricRestMethod {
 
     if ($Body -is [hashtable]) {
         $Body = $Body | ConvertTo-Json -Depth 10
-        Write-Message -Message "Request Body: $Body" -Level Debug
+        Write-Message -Message "[Invoke-FabricRestMethod] Request Body: $Body" -Level Debug
     } elseif ($Body -is [string]) {
-        Write-Message -Message "Request Body: $Body" -Level Debug
+        Write-Message -Message "[Invoke-FabricRestMethod] Request Body: $Body" -Level Debug
     } else {
-        Write-Message -Message "No request body provided." -Level Debug
+        Write-Message -Message "[Invoke-FabricRestMethod] No request body provided." -Level Debug
     }
 
-    $response = Invoke-RestMethod `
-        -Headers $FabricSession.HeaderParams `
-        -Uri $Uri `
-        -Method $Method `
-        -Body $Body `
-        -ContentType "application/json" `
-        -ErrorAction 'Stop' `
-        -SkipHttpErrorCheck `
-        -ResponseHeadersVariable "responseHeader" `
-        -StatusCodeVariable "statusCode"
+    $request = @{
+        Headers = $FabricSession.HeaderParams
+        Uri = $Uri
+        Method = $Method
+        Body = $Body
+        ContentType = "application/json"
+        ErrorAction = 'Stop'
+        SkipHttpErrorCheck = $true
+        ResponseHeadersVariable = "responseHeader"
+        StatusCodeVariable = "statusCode"
+    }
+    $response = Invoke-RestMethod @request
 
+    Write-Message -Message "[Invoke-FabricRestMethod] Result response code: $statusCode" -Level Debug
+    Write-Message -Message "[Invoke-FabricRestMethod] Result return: $response" -Level Debug
     $script:statusCode = $statusCode
     $script:responseHeader = $responseHeader
 
+    Write-Message -Message "[Invoke-FabricRestMethod]::End" -Level Debug
     return $response
 }
