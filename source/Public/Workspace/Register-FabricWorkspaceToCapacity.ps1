@@ -38,7 +38,7 @@ Author: Ioana Bouariu
     param(
         # WorkspaceId is a mandatory parameter. It represents the ID of the workspace to be Seted.
         [Parameter(ParameterSetName = 'WorkspaceId')]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         # Workspace is a mandatory parameter. It represents the workspace object to be Seted.
         # This parameter can be piped into the function.
@@ -47,7 +47,7 @@ Author: Ioana Bouariu
 
         # CapacityId is a mandatory parameter. It represents the ID of the capacity to which the workspace will be Seted.
         [Parameter(Mandatory = $true)]
-        [string]$CapacityId
+        [guid]$CapacityId
     )
     Process {
         # If the parameter set name is 'WorkspaceObject', the workspace ID is extracted from the workspace object.

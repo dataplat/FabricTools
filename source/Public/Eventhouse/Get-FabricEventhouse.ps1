@@ -62,11 +62,11 @@ function Get-FabricEventhouse {
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [string]$EventhouseId,
+        [guid]$EventhouseId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]

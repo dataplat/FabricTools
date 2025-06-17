@@ -32,11 +32,11 @@ function Update-FabricReportDefinition
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$ReportId,
+        [guid]$ReportId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]

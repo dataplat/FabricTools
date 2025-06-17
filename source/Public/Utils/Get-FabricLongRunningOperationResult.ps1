@@ -24,7 +24,7 @@ Author: Tiago Balabuch
     #>
     param (
         [Parameter(Mandatory = $true)]
-        [string]$operationId
+        [guid]$operationId
     )
 
     Confirm-TokenState

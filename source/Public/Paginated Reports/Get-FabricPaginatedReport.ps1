@@ -35,11 +35,11 @@ function Get-FabricPaginatedReport {
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [string]$PaginatedReportId,
+        [guid]$PaginatedReportId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]

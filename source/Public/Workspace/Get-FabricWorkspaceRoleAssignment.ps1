@@ -34,11 +34,11 @@ function Get-FabricWorkspaceRoleAssignment {
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceRoleAssignmentId
+        [guid]$WorkspaceRoleAssignmentId
     )
 
     try {

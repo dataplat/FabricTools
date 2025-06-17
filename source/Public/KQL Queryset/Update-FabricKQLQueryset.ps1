@@ -41,11 +41,11 @@ function Update-FabricKQLQueryset
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$KQLQuerysetId,
+        [guid]$KQLQuerysetId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]

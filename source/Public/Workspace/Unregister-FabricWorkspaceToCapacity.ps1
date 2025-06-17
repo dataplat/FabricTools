@@ -36,7 +36,7 @@ function Unregister-FabricWorkspaceToCapacity {
     [CmdletBinding(SupportsShouldProcess)]
     param(
         [Parameter(Mandatory = $true, ParameterSetName = 'WorkspaceId')]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'WorkspaceObject', ValueFromPipeline = $true)]
         $Workspace

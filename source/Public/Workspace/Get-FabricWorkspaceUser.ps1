@@ -57,7 +57,7 @@ Author: Ioana Bouariu
     # Define parameters for the workspace ID and workspace object.
     param(
         [Parameter(Mandatory = $true, ParameterSetName = 'WorkspaceId')]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'WorkspaceObject', ValueFromPipeline = $true )]
         [object[]]

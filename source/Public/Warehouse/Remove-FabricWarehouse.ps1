@@ -28,11 +28,11 @@ function Remove-FabricWarehouse
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WarehouseId
+        [guid]$WarehouseId
     )
     try
     {

@@ -41,11 +41,11 @@ Function Export-FabricItem {
     param
     (
         [string]$path = '.\pbipOutput',
-        [string]$workspaceId = '',
+        [guid]$WorkspaceId = '',
         [scriptblock]$filter = { $_.type -in @("Report", "SemanticModel", "Notebook", "SparkJobDefinitionV1") },
-        [string]$itemID = ''
+        [guid]$itemID = $null
     )
-    if (![string]::IsNullOrEmpty($itemID)) {
+    if (-not $itemID) {
         # Invoke the Fabric API to get the specific item in the workspace
 
         $item = Invoke-FabricRestMethod -Uri "workspaces/$workspaceId/items/$itemID/getDefinition" -Method POST

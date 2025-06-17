@@ -60,7 +60,7 @@ Author: Tiago Balabuch
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
@@ -72,7 +72,7 @@ Author: Tiago Balabuch
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [string]$parentEventhouseId,
+        [guid]$parentEventhouseId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]

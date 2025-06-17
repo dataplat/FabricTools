@@ -36,11 +36,11 @@ function Start-FabricSparkJobDefinitionOnDemand
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$SparkJobDefinitionId,
+        [guid]$SparkJobDefinitionId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]

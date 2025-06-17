@@ -35,11 +35,11 @@ function Get-FabricMLModel {
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [string]$MLModelId,
+        [guid]$MLModelId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]

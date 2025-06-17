@@ -58,11 +58,11 @@ function Connect-FabricAccount {
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $false, HelpMessage = "Azure AD Tenant ID.")]
-        [string] $TenantId,
+        [guid] $TenantId,
 
         [Parameter(Mandatory = $false, HelpMessage = "AppId of the service principal.")]
         [Alias('AppId')]
-        [string] $ServicePrincipalId,
+        [guid] $ServicePrincipalId,
 
         [Parameter(Mandatory = $false, HelpMessage = "Secure secret of the service principal.")]
         [Alias('AppSecret')]

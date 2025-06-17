@@ -26,7 +26,7 @@ function Get-FabricDomainWorkspace {
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$DomainId
+        [guid]$DomainId
     )
 
     try {

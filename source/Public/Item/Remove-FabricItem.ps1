@@ -37,11 +37,11 @@ Function Remove-FabricItem {
    param
    (
       [Parameter(Mandatory = $true)]
-      [string]$workspaceId,
+      [guid]$WorkspaceId,
       [Parameter(Mandatory = $false)]
       [string]$filter,
       [Parameter(Mandatory = $false)]
-      [string]$itemID
+      [guid]$itemID
    )
 
    Confirm-TokenState

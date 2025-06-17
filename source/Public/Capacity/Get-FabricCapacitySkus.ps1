@@ -28,7 +28,7 @@ Author: Kamil Nowinski
 
     Param(
         [Parameter(Mandatory = $true)]
-        [string]$subscriptionID,
+        [guid]$subscriptionID,
         [Parameter(Mandatory = $true)]
         [string]$ResourceGroupName,
         [Parameter(Mandatory = $true)]
