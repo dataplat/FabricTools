@@ -45,7 +45,6 @@ function New-FabricSQLDatabase
         [ValidateNotNullOrEmpty()]
         [string]$Description,
 
-        [Parameter(Mandatory = $false)]
         [switch]$NoWait = $false
     )
 
