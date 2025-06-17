@@ -29,11 +29,11 @@ function Remove-FabricSQLDatabase
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [Guid]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [Guid]$SQLDatabaseId
+        [guid]$SQLDatabaseId
     )
 
     try

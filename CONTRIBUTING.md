@@ -6,8 +6,10 @@ Before we go any further, thanks for being here. Thanks for using the module and
 
 ## Important resources
 
-- docs TODO: link to docs
-- bugs TODO: link to issues issue template
+- Documentation such as coding guidelines can be found in the [wiki](https://github.com/dataplat/FabricTools/wiki)
+- Bugs can be reported as [issues](https://github.com/dataplat/FabricTools/issues) via the bug issue template.
+- Feature requests can be submitted in the issues via the feature request issue template.
+- Discussions can be started in the [Discussions](https://github.com/dataplat/FabricTools/discussions) section of the repository.
 - communicate via issues, PRs, and discussions as well as the project
 
 ## Develop & Build
@@ -113,23 +115,19 @@ If you have any questions or need help, please feel free to reach out to us on t
 
 ## How to submit changes
 
-TODO:
-Pull Request protocol etc. You might also include what response they'll get back from the team on submission, or any caveats about the speed of response.
+We use a Pull Request (PR) workflow to manage changes to the module. This means that you will need to create a new branch in your fork of the repository, make your changes, and then create a PR against the main repository. You can find full details in the [wiki](https://github.com/dataplat/FabricTools/wiki)
 
 ## How to report a bug
 
-TODO:
-Bugs are problems in code, in the functionality of an application or in its UI design; you can submit them through "bug trackers" and most projects invite you to do so, so that they may "debug" with more efficiency and the input of a contributor. Take a look at Atom's example for how to teach people to report bugs to your project.
+If you find a bug in the module, please report it using the [issue template](https://github.com/dataplat/FabricTools/issues). This will help us track the issue and ensure that it is fixed in a timely manner.
 
 ## Templates
 
-TODO:
-in this section of your file, you might also want to link to a bug report "template" like this one here which contributors can copy and add context to; this will keep your bugs tidy and relevant.
+There are a number of templates available in the `.github` folder of the repository. These include issue templates for bugs, feature requests, and discussions. You can use these templates to help you create a new issue or discussion.
 
 ## Style Guide
 
-TODO:
-include extensions and vscode settings we use to keep things neat
+The Style Guide is a set of rules and guidelines that we follow to ensure that our code is consistent, readable, and maintainable. It is located in the [wiki](https://github.com/dataplat/FabricTools/wiki).
 
 ## Code of Conduct
 

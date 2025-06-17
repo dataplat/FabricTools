@@ -34,11 +34,11 @@ function Get-FabricCopyJob {
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [string]$CopyJobId,
+        [guid]$CopyJobId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]

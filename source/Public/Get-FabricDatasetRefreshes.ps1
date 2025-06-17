@@ -35,9 +35,9 @@ function Get-FabricDatasetRefreshes {
     # Define a mandatory parameter for the dataset ID.
     Param (
         [Parameter(Mandatory = $true)]
-        [string]$DatasetID,
+        [guid]$DatasetID,
         [Parameter(Mandatory = $true)]
-        [string]$workspaceId
+        [guid]$workspaceId
     )
 
     # Get the dataset information.

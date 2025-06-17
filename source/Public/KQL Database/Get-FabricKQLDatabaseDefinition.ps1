@@ -40,11 +40,11 @@ function Get-FabricKQLDatabaseDefinition {
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [string]$KQLDatabaseId,
+        [guid]$KQLDatabaseId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]

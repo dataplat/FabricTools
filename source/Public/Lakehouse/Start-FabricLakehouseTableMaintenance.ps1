@@ -61,11 +61,11 @@ function Start-FabricLakehouseTableMaintenance
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$LakehouseId,
+        [guid]$LakehouseId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]

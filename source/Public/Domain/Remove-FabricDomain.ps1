@@ -27,7 +27,7 @@ function Remove-FabricDomain
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$DomainId
+        [guid]$DomainId
     )
 
     try

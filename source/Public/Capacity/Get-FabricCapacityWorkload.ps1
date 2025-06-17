@@ -28,7 +28,7 @@ Author: Ioana Bouariu
     # Define a mandatory parameter for the capacity ID.
     Param (
         [Parameter(Mandatory = $true)]
-        [string]$capacityID
+        [guid]$CapacityId
     )
 
     Confirm-TokenState

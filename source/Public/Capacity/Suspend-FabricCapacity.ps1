@@ -35,7 +35,7 @@ Author: Ioana Bouariu
     # Define parameters for the subscription ID, resource group, and capacity.
     Param (
         [Parameter(Mandatory = $true)]
-        [string]$subscriptionID,
+        [guid]$subscriptionID,
         [Parameter(Mandatory = $true)]
         [string]$resourcegroup,
         [Parameter(Mandatory = $true)]

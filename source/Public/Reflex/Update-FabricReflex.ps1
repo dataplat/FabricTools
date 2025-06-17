@@ -35,11 +35,11 @@ function Update-FabricReflex
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$ReflexId,
+        [guid]$ReflexId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]

@@ -24,14 +24,14 @@ Author: Tiago Balabuch
     #>
     param (
         [Parameter(Mandatory = $true)]
-        [string]$OperationId
+        [guid]$OperationId
     )
 
     Write-Message -Message "[Get-FabricLongRunningOperationResult]::Begin" -Level Debug
     Confirm-TokenState
 
     # Step 1: Construct the API URL
-    $apiEndpointUrl = "{0}/operations/{1}/result" -f $FabricConfig.BaseUrl, $operationId
+    $apiEndpointUrl = "{0}/operations/{1}/result" -f $FabricConfig.BaseUrl, $OperationId
     Write-Message -Message "[Get-FabricLongRunningOperationResult] API Endpoint: $apiEndpointUrl" -Level Debug
 
     try {

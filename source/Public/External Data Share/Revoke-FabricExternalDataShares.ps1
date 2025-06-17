@@ -31,15 +31,15 @@ function Revoke-FabricExternalDataShares {
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$ItemId,
+        [guid]$ItemId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$ExternalDataShareId
+        [guid]$ExternalDataShareId
     )
 
     try {

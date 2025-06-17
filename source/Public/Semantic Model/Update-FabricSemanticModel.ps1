@@ -35,11 +35,11 @@ function Update-FabricSemanticModel
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$SemanticModelId,
+        [guid]$SemanticModelId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]

@@ -30,11 +30,11 @@ function Get-FabricDatamart {
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [string]$datamartId,
+        [guid]$datamartId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
