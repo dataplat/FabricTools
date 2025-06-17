@@ -53,7 +53,6 @@
     For those task that don't apply to you PR, leave those as is.
 -->
 
-- [ ] I have read the [CONTRIBUTING.md](../CONTRIBUTING.md) document and I have followed the style guide and coding standards in the [wiki](https://github.com/dataplat/FabricTools/wiki)
 - [ ] The PR represents a single logical change. i.e. Cosmetic updates should go in different PRs.
 - [ ] Added an entry under the Unreleased section of in the CHANGELOG.md as per [format](https://keepachangelog.com/en/1.0.0/).
 - [ ] Local clean build passes without issue or fail tests (`build.ps1 -ResolveDependency -Tasks build, test`).
@@ -62,3 +61,4 @@
 - [ ] Unit tests added/updated..
 - [ ] Integration tests added/updated (where possible).
 - [ ] Documentation added/updated (where applicable).
+- [ ] Code follows the [contribution guidelines](https://github.com/dataplat/FabricTools/blob/develop/CONTRIBUTING.md).
