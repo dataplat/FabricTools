@@ -7,19 +7,13 @@ function Test-FabricApiResponse {
 .DESCRIPTION
     Tests the response from a Fabric API call and handles long-running operations. It checks the status code and processes the response accordingly.
 
-.PARAMETER statusCode
-    The HTTP status code returned from the API call.
-
-.PARAMETER response
+.PARAMETER Response
     The response body from the API call.
-
-.PARAMETER responseHeader
-    The response headers from the API call.
 
 .PARAMETER Name
     The name of the resource being operated.
 
-.PARAMETER typeName
+.PARAMETER TypeName
     The type of resource being operated (default: 'Fabric Item').
 
 .PARAMETER NoWait
@@ -47,13 +41,13 @@ function Test-FabricApiResponse {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $false)]
-        $response,
+        $Response,
 
         [Parameter(Mandatory = $false)]
         $Name,
 
         [Parameter(Mandatory = $false)]
-        $typeName = 'Fabric Item',
+        $TypeName = 'Fabric Item',
 
         [Parameter(Mandatory = $false)]
         [switch] $NoWait = $false
@@ -71,16 +65,16 @@ function Test-FabricApiResponse {
         }
         201 {
             switch ($verb) {
-                'New'    { $msg = "$typeName '$Name' created successfully!" }
-                'Update' { $msg = "$typeName '$Name' updated successfully!" }
-                'Remove' { $msg = "$typeName '$Name' deleted successfully!" }
-                default  { $msg = "Received 201 status code for $verb operation on $typeName '$Name'" }
+                'New'    { $msg = "$TypeName '$Name' created successfully!" }
+                'Update' { $msg = "$TypeName '$Name' updated successfully!" }
+                'Remove' { $msg = "$TypeName '$Name' deleted successfully!" }
+                default  { $msg = "Received 201 status code for $verb operation on $TypeName '$Name'" }
             }
             Write-Message -Message $msg -Level Info
-            return $response
+            return $Response
         }
         202 {
-            Write-Message -Message "$verb Request for $typeName '$Name' accepted. Provisioning in progress!" -Level Info
+            Write-Message -Message "$verb Request for $TypeName '$Name' accepted. Provisioning in progress!" -Level Info
             [string]$operationId = $responseHeader["x-ms-operation-id"]
 
             if ($NoWait) {
