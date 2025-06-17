@@ -24,7 +24,7 @@ Author: Tiago Balabuch
     #>
     param (
         [Parameter(Mandatory = $true)]
-        [string]$operationId
+        [string]$OperationId
     )
 
     Write-Message -Message "[Get-FabricLongRunningOperationResult]::Begin" -Level Debug
