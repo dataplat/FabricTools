@@ -104,7 +104,7 @@ function Get-FabricSQLDatabase
         $response = Invoke-FabricRestMethod -Uri $uri
 
         # Step: Validate the response code
-        Test-FabricApiResponse -response $response -Name $SQLDatabaseId -typeName "SQL Database"
+        Test-FabricApiResponse -Response $response -ObjectIdOrName $SQLDatabaseId -TypeName "SQL Database"
 
         $response = $response.value
         if ($SQLDatabaseName)

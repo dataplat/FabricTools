@@ -52,7 +52,7 @@ function Remove-FabricSQLDatabase
         }
 
         # Step 4: Validate the response code
-        Test-FabricApiResponse -response $response -Name $SQLDatabaseId -typeName "SQL Database"
+        Test-FabricApiResponse -Response $response -ObjectIdOrName $SQLDatabaseId -TypeName "SQL Database"
 
         Write-Message -Message "SQL Database '$SQLDatabaseId' deleted successfully!" -Level Info
     }

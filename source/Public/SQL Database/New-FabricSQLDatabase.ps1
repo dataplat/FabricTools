@@ -76,7 +76,8 @@ function New-FabricSQLDatabase
             $response = Invoke-FabricRestMethod -Uri $apiEndpointUrl -Method Post -Body $bodyJson
         }
         # Step 5: Handle and log the response
-        Test-FabricApiResponse -response $response -Name $Name -TypeName 'SQL Database' -NoWait:$NoWait
+        Test-FabricApiResponse -Response $response -ObjectIdOrName $Name -TypeName 'SQL Database' -NoWait:$NoWait
+
         Write-Message -Message "SQL Database '$Name' created successfully!" -Level Info
     }
     catch
