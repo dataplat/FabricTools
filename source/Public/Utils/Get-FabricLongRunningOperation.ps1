@@ -29,7 +29,7 @@ Author: Tiago Balabuch
     #>
     param (
         [Parameter(Mandatory = $false)]
-        [guid]$operationId,
+        [string]$operationId,
 
         [Parameter(Mandatory = $false)]
         [string]$location,
@@ -42,8 +42,8 @@ Author: Tiago Balabuch
     Confirm-TokenState
 
     # Step 1: Construct the API URL
-    if ($location) {
-        # Use the Location header to define the operationUrl
+    if (-not $operationId) {
+        # Use the Location header to define the operationUrl, if OperationId is not provided
         $apiEndpointUrl = $location
     } else {
         $apiEndpointUrl = "operations/{0}" -f $operationId
