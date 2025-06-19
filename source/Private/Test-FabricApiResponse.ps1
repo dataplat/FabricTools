@@ -44,10 +44,10 @@ function Test-FabricApiResponse {
         $Response,
 
         [Parameter(Mandatory = $false)]
-        $Name,
+        [string] $ObjectIdOrName,
 
         [Parameter(Mandatory = $false)]
-        $TypeName = 'Fabric Item',
+        [string] $TypeName = 'Fabric Item',
 
         [Parameter(Mandatory = $false)]
         [switch] $NoWait = $false
@@ -65,16 +65,16 @@ function Test-FabricApiResponse {
         }
         201 {
             switch ($verb) {
-                'New'    { $msg = "$TypeName '$Name' created successfully!" }
-                'Update' { $msg = "$TypeName '$Name' updated successfully!" }
-                'Remove' { $msg = "$TypeName '$Name' deleted successfully!" }
-                default  { $msg = "Received 201 status code for $verb operation on $TypeName '$Name'" }
+                'New'    { $msg = "$TypeName '$ObjectIdOrName' created successfully!" }
+                'Update' { $msg = "$TypeName '$ObjectIdOrName' updated successfully!" }
+                'Remove' { $msg = "$TypeName '$ObjectIdOrName' deleted successfully!" }
+                default  { $msg = "Received $statusCode status code for $verb operation on $TypeName '$ObjectIdOrName'" }
             }
             Write-Message -Message $msg -Level Info
             return $Response
         }
         202 {
-            Write-Message -Message "$verb Request for $TypeName '$Name' accepted. Provisioning in progress!" -Level Info
+            Write-Message -Message "$verb Request for $TypeName '$ObjectIdOrName' accepted. Provisioning in progress!" -Level Info
             [string]$operationId = $responseHeader["x-ms-operation-id"]
 
             if ($NoWait) {
