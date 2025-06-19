@@ -22,31 +22,30 @@ Get-FabricLongRunningOperation -operationId "12345-abcd-67890-efgh" -retryAfter 
 This command polls the status of the operation with the given operationId every 10 seconds until it completes.
 
 .NOTES
-- Requires the `$FabricConfig` global object, including `BaseUrl` and `FabricHeaders`.
 
 Author: Tiago Balabuch
 
     #>
     param (
         [Parameter(Mandatory = $false)]
-        [string]$operationId,
+        [string]$OperationId,
 
         [Parameter(Mandatory = $false)]
-        [string]$location,
+        [string]$Location,
 
         [Parameter(Mandatory = $false)]
-        [int]$retryAfter = 5
+        [int]$RetryAfter = 5
     )
 
     Write-Message -Message "[Get-FabricLongRunningOperation]::Begin" -Level Debug
     Confirm-TokenState
 
     # Step 1: Construct the API URL
-    if (-not $operationId) {
+    if (-not $OperationId) {
         # Use the Location header to define the operationUrl, if OperationId is not provided
-        $apiEndpointUrl = $location
+        $apiEndpointUrl = $Location
     } else {
-        $apiEndpointUrl = "operations/{0}" -f $operationId
+        $apiEndpointUrl = "operations/{0}" -f $OperationId
     }
     Write-Message -Message "[Get-FabricLongRunningOperation] API Endpoint: $apiEndpointUrl" -Level Debug
 
@@ -54,9 +53,9 @@ Author: Tiago Balabuch
         do {
 
             # Step 2: Wait before the next request
-            if ($retryAfter) {
-                Write-Message -Message "Waiting $retryAfter seconds..." -Level Verbose
-                Start-Sleep -Seconds $retryAfter
+            if ($RetryAfter) {
+                Write-Message -Message "Waiting $RetryAfter seconds..." -Level Verbose
+                Start-Sleep -Seconds $RetryAfter
             } else {
                 Write-Message -Message "Waiting 5 seconds..." -Level Verbose
                 Start-Sleep -Seconds 5  # Default retry interval if no Retry-After header
