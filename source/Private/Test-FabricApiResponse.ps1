@@ -10,8 +10,8 @@ function Test-FabricApiResponse {
 .PARAMETER Response
     The response body from the API call.
 
-.PARAMETER Name
-    The name of the resource being operated.
+.PARAMETER ObjectIdOrName
+    The name or ID of the resource being operated.
 
 .PARAMETER TypeName
     The type of resource being operated (default: 'Fabric Item').

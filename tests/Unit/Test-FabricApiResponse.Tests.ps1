@@ -6,7 +6,7 @@ param(
     $ModuleName = "FabricTools",
     $expectedParams = @(
         "Response"
-        "Name"
+        "ObjectIdOrName"
         "TypeName"
         "NoWait"
         "Verbose"
