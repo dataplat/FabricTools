@@ -7,13 +7,13 @@ Monitors the status of a long-running operation in Microsoft Fabric.
 The Get-FabricLongRunningOperation function queries the Microsoft Fabric API to check the status of a
 long-running operation. It periodically polls the operation until it reaches a terminal state (Succeeded or Failed).
 
-.PARAMETER operationId
+.PARAMETER OperationId
 The unique identifier of the long-running operation to be monitored.
 
-.PARAMETER location
+.PARAMETER Location
 The URL provided in the Location header of the initial request. This is used to check the status of the operation.
 
-.PARAMETER retryAfter
+.PARAMETER RetryAfter
 The interval (in seconds) to wait between polling the operation status. The default is 5 seconds.
 
 .EXAMPLE
