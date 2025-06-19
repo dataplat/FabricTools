@@ -77,8 +77,6 @@ function New-FabricSQLDatabase
         }
         # Step 5: Handle and log the response
         Test-FabricApiResponse -Response $response -ObjectIdOrName $Name -TypeName 'SQL Database' -NoWait:$NoWait
-
-        Write-Message -Message "SQL Database '$Name' created successfully!" -Level Info
     }
     catch
     {

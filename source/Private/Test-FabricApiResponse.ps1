@@ -55,23 +55,17 @@ function Test-FabricApiResponse {
 
     $responseHeader = $script:responseHeader
     $statusCode = $script:statusCode
+    $result = $null
 
     $verb = (Get-PSCallStack)[1].Command.Split('-')[0]
     Write-Message -Message "Testing API response for '$verb' operation. StatusCode: $statusCode." -Level Debug
 
     switch ($statusCode) {
         200 {
-            return $null
+            $result = $null
         }
         201 {
-            switch ($verb) {
-                'New'    { $msg = "$TypeName '$ObjectIdOrName' created successfully!" }
-                'Update' { $msg = "$TypeName '$ObjectIdOrName' updated successfully!" }
-                'Remove' { $msg = "$TypeName '$ObjectIdOrName' deleted successfully!" }
-                default  { $msg = "Received $statusCode status code for $verb operation on $TypeName '$ObjectIdOrName'" }
-            }
-            Write-Message -Message $msg -Level Info
-            return $Response
+            $result = $Response
         }
         202 {
             Write-Message -Message "$verb Request for $TypeName '$ObjectIdOrName' accepted. Provisioning in progress!" -Level Info
@@ -114,5 +108,18 @@ function Test-FabricApiResponse {
             throw "API request failed with status code $statusCode."
         }
     }
+
+    switch ($verb) {
+        'New'    { $msg = "$TypeName '$ObjectIdOrName' created successfully!" }
+        'Update' { $msg = "$TypeName '$ObjectIdOrName' updated successfully!" }
+        'Remove' { $msg = "$TypeName '$ObjectIdOrName' deleted successfully!" }
+        'Get'    { $msg = "" }
+        default  { $msg = "Received $statusCode status code for $verb operation on $TypeName '$ObjectIdOrName'." }
+    }
+    if ($msg) {
+        Write-Message -Message $msg -Level Info
+    }
+
+    $result
 
 }
