@@ -55,7 +55,11 @@ Describe "Test-FabricApiResponse - StatusCode Handling" -Tag "UnitTests" {
 
     BeforeAll {
         # Generate a random GUID for x-ms-operation-id
-        $script:responseHeader = @{ "x-ms-operation-id" = [guid]::NewGuid().ToString() }
+        $script:responseHeader = @{
+            "x-ms-operation-id" = [guid]::NewGuid().ToString()
+            "Location" = "https://api.fabric.microsoft.com/v1/operations/$([guid]::NewGuid().ToString())"
+            "Retry-After" = 30
+        }
         $script:response = @{ "foo" = "bar" }
     }
 
@@ -91,10 +95,18 @@ Describe "Test-FabricApiResponse - StatusCode Handling" -Tag "UnitTests" {
         Should -Invoke Get-FabricLongRunningOperationResult -Exactly 1
     }
 
-    It "Returns responseHeader when statusCode is 202 and -NoWait is specified" {
+    It "Returns PSCustomObject with 3 properties when statusCode is 202 and -NoWait is specified" {
         $script:statusCode = 202
         $result = Test-FabricApiResponse -Response $script:response -NoWait
-        $result | Should -Be $script:responseHeader
+
+        $expected = [PSCustomObject]@{
+            Location    = $script:responseHeader.Location
+            RetryAfter  = $script:responseHeader.'Retry-After'
+            OperationId = $script:responseHeader.'x-ms-operation-id'
+        }
+        $result.Location | Should -Be $expected.Location
+        $result.RetryAfter | Should -Be $expected.RetryAfter
+        $result.OperationId | Should -Be $expected.OperationId
     }
 
     It "Throws when statusCode is not 200, 201, or 202" {

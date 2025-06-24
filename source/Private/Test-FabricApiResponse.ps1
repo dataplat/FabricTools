@@ -74,7 +74,11 @@ function Test-FabricApiResponse {
             if ($NoWait) {
                 Write-Message -Message "NoWait parameter is set. Operation ID: $operationId" -Level Info
                 Write-Message -Message "Run to check the progress: Get-FabricLongRunningOperationResult -operationId '$operationId'" -Level Verbose
-                return $responseHeader
+                return [PSCustomObject]@{
+                    Location     = $responseHeader["Location"]
+                    RetryAfter   = $responseHeader["Retry-After"]
+                    OperationId  = $responseHeader["x-ms-operation-id"]
+                }
             }
 
             Write-Message -Message "[Test-FabricApiResponse] Operation ID: '$operationId'" -Level Debug
