@@ -24,28 +24,22 @@ Author: Tiago Balabuch
     #>
     param (
         [Parameter(Mandatory = $true)]
-        [guid]$operationId
+        [guid]$OperationId
     )
 
+    Write-Message -Message "[Get-FabricLongRunningOperationResult]::Begin" -Level Debug
     Confirm-TokenState
 
     # Step 1: Construct the API URL
-    $apiEndpointUrl = "{0}/operations/{1}/result" -f $FabricConfig.BaseUrl, $operationId
-    Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
+    $apiEndpointUrl = "{0}/operations/{1}/result" -f $FabricConfig.BaseUrl, $OperationId
+    Write-Message -Message "[Get-FabricLongRunningOperationResult] API Endpoint: $apiEndpointUrl" -Level Debug
 
     try {
         # Step 2: Make the API request
-        $response = Invoke-FabricRestMethod `
-            -Uri $apiEndpointUrl `
-            -Method Get
+        $response = Invoke-FabricRestMethod -Uri $apiEndpointUrl -Method Get
 
-
-        # Step 3: Return the result
-        Write-Message -Message "Result response code: $statusCode" -Level Debug
-        Write-Message -Message "Result return: $response" -Level Debug
-
-        # Step 4: Validate the response code
-        if ($statusCode -ne 200) {
+        # Step 3: Validate the response code
+        if ($script:statusCode -ne 200) {
             Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Debug
             Write-Message -Message "Error: $($response.message)" -Level Debug
             Write-Message -Message "Error Details: $($response.moreDetails)" -Level Debug
@@ -53,6 +47,7 @@ Author: Tiago Balabuch
         }
 
         return $response
+
     } catch {
         # Step 3: Capture and log error details
         $errorDetails = $_.Exception.Message

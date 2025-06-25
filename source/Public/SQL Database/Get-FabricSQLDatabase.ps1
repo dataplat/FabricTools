@@ -54,10 +54,6 @@ function Get-FabricSQLDatabase
     Returns the details of the Fabric SQL Databases in the MsLearn-dev workspace.
 
 .NOTES
-    Revision History:
-        - 2025-03-06 - KNO: Init version of the function
-        - 2025-06-14 - Update the examples to remove backticks
-
     Author: Kamil Nowinski
 
     #>
@@ -89,7 +85,6 @@ function Get-FabricSQLDatabase
             return
         }
 
-
     }
 
     process
@@ -101,23 +96,15 @@ function Get-FabricSQLDatabase
         }
 
         # Create SQLDatabase API
-        $uri = "$($FabricSession.BaseApiUrl)/workspaces/$WorkspaceId/sqlDatabases"
+        $uri = "workspaces/$WorkspaceId/sqlDatabases"
         if ($SQLDatabaseId)
         {
             $uri = "$uri/$SQLDatabaseId"
         }
         $response = Invoke-FabricRestMethod -Uri $uri
-        ##$databases.Where({$_.displayName -eq $body.displayName}).id
 
         # Step: Validate the response code
-        if ($statusCode -ne 200)
-        {
-            Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
-            Write-Message -Message "Error: $($response.message)" -Level Error
-            Write-Message -Message "Error Details: $($response.moreDetails)" -Level Error
-            Write-Message "Error Code: $($response.errorCode)" -Level Error
-            return $null
-        }
+        Test-FabricApiResponse -Response $response -ObjectIdOrName $SQLDatabaseId -TypeName "SQL Database"
 
         $response = $response.value
         if ($SQLDatabaseName)
