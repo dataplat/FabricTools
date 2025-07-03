@@ -50,19 +50,15 @@ function Get-FabricDeploymentPipelineRoleAssignments {
 
             # Step 4: Make the API request and validate response
             $response = Invoke-FabricRestMethod -Uri $apiEndpointUrl -Method Get
-            if (-not (Test-FabricApiResponse -Response $response)) { return $null }
+            Test-FabricApiResponse -Response $response -ObjectIdOrName $DeploymentPipelineId -TypeName "Deployment Pipeline Role Assignments"
 
-            # Step 5: Process response
+            # Step 5: Process response and update continuation token
             if ($response.value) {
                 $roleAssignments += $response.value
                 Write-Message -Message "Added $($response.value.Count) role assignments to the result set." -Level Debug
             }
+            Get-FabricContinuationToken -Response $response -ContinuationToken ([ref]$continuationToken)
 
-            # Step 6: Update continuation token
-            $continuationToken = $response.continuationToken
-            if ($continuationToken) {
-                Write-Message -Message "Continuation token found. Getting next page of results." -Level Debug
-            }
         } while ($continuationToken)
 
         # Step 7: Return results
