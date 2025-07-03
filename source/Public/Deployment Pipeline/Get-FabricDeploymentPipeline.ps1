@@ -104,7 +104,7 @@ function Get-FabricDeploymentPipeline {
             if ($null -ne $response) {
                 $pipelines += $response.value
             }
-            continuationToken = Get-FabricContinuationToken -Response $response
+            $continuationToken = Get-FabricContinuationToken -Response $response
 
         } while ($null -ne $continuationToken)
 

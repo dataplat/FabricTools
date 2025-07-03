@@ -57,7 +57,7 @@ function Get-FabricDeploymentPipelineRoleAssignments {
                 $roleAssignments += $response.value
                 Write-Message -Message "Added $($response.value.Count) role assignments to the result set." -Level Debug
             }
-            continuationToken = Get-FabricContinuationToken -Response $response
+            $continuationToken = Get-FabricContinuationToken -Response $response
 
         } while ($continuationToken)
 
