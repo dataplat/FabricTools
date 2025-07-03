@@ -48,7 +48,6 @@ Start-FabricDeploymentPipelineStage -DeploymentPipelineId "a5ded933-57b7-41f4-b0
 Deploys specific items from the source stage to the target stage.
 
 .NOTES
-- Requires `$FabricConfig` global configuration, including `FabricHeaders`.
 - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 - Requires Pipeline.Deploy delegated scope.
 - Requires admin deployment pipelines role.

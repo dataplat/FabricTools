@@ -19,7 +19,6 @@ Get-FabricDeploymentPipelineStageItem -DeploymentPipelineId "a5ded933-57b7-41f4-
 Retrieves all items from the specified stage of the deployment pipeline.
 
 .NOTES
-- Requires `$FabricConfig` global configuration, including `FabricHeaders`.
 - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 - Requires Pipeline.Read.All or Pipeline.ReadWrite.All delegated scope.
 - Requires admin deployment pipelines role.

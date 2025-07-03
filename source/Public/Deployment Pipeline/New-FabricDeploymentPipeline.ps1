@@ -42,7 +42,6 @@ New-FabricDeploymentPipeline -DisplayName "My Deployment Pipeline" -Description 
 Creates a new deployment pipeline with three stages: Development, Test, and Production.
 
 .NOTES
-- Requires `$FabricConfig` global configuration, including `FabricHeaders`.
 - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 - Requires Pipeline.ReadWrite.All delegated scope.
 - Service Principals must have permission granted by Fabric administrator.

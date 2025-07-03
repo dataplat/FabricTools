@@ -21,7 +21,6 @@ Add-FabricWorkspaceToStage -DeploymentPipelineId "a5ded933-57b7-41f4-b072-ed4c1f
 Assigns the specified workspace to the deployment pipeline stage.
 
 .NOTES
-- Requires `$FabricConfig` global configuration, including `FabricHeaders`.
 - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 - Requires Pipeline.ReadWrite.All and Workspace.ReadWrite.All delegated scopes.
 - Requires admin deployment pipelines role and admin workspace role.

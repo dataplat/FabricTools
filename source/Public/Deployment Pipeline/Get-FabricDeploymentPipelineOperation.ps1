@@ -18,7 +18,6 @@ Get-FabricDeploymentPipelineOperation -DeploymentPipelineId "a5ded933-57b7-41f4-
 Retrieves details of a specific deployment operation, including its execution plan and status.
 
 .NOTES
-- Requires `$FabricConfig` global configuration, including `FabricHeaders`.
 - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 - Returns detailed operation information including:
   - Operation status and type

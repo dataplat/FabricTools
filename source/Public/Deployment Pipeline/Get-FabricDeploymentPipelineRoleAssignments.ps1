@@ -15,7 +15,6 @@ Get-FabricDeploymentPipelineRoleAssignments -DeploymentPipelineId "8ce96c50-85a0
 Returns all role assignments for the specified deployment pipeline.
 
 .NOTES
-- Requires `$FabricConfig` global configuration, including `FabricHeaders`.
 - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 - Requires Pipeline.Read.All or Pipeline.ReadWrite.All delegated scope.
 - Requires admin deployment pipelines role.

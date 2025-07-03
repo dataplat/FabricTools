@@ -21,7 +21,6 @@ Get-FabricDeploymentPipeline -DeploymentPipelineId "a5ded933-57b7-41f4-b072-ed4c
 Retrieves a specific deployment pipeline with detailed information including its stages.
 
 .NOTES
-- Requires `$FabricConfig` global configuration, including `FabricHeaders`.
 - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 - Returns a collection of deployment pipelines with their IDs, display names, and descriptions.
 - When retrieving a specific pipeline, returns extended information including stages.
