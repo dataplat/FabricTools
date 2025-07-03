@@ -74,7 +74,7 @@ function Get-FabricDeploymentPipelineStageItem {
                 $allItems += $response.value
                 Write-Message -Message "Retrieved $($response.value.Count) items." -Level Debug
             }
-            Get-FabricContinuationToken -Response $response -ContinuationToken ([ref]$continuationToken)
+            continuationToken = Get-FabricContinuationToken -Response $response
         } while ($continuationToken)
 
         # Step 7: Return all items
