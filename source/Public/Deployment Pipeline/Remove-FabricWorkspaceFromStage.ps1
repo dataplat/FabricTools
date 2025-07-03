@@ -1,9 +1,9 @@
 <#
 .SYNOPSIS
-Unassigns a workspace from a deployment pipeline stage.
+Removes a workspace from a deployment pipeline stage.
 
 .DESCRIPTION
-The `Unassign-FabricWorkspaceFromStage` function unassigns the workspace from the specified stage in the specified deployment pipeline.
+The `Remove-FabricWorkspaceFromStage` function removes the workspace from the specified stage in the specified deployment pipeline.
 This operation will fail if there's an active deployment operation.
 
 .PARAMETER DeploymentPipelineId
@@ -13,9 +13,9 @@ Required. The ID of the deployment pipeline.
 Required. The ID of the deployment pipeline stage.
 
 .EXAMPLE
-Unassign-FabricWorkspaceFromStage -DeploymentPipelineId "a5ded933-57b7-41f4-b072-ed4c1f9d5824" -StageId "db1577e0-0132-4d6d-92b9-952c359988f2"
+Remove-FabricWorkspaceFromStage -DeploymentPipelineId "a5ded933-57b7-41f4-b072-ed4c1f9d5824" -StageId "db1577e0-0132-4d6d-92b9-952c359988f2"
 
-Unassigns the workspace from the specified deployment pipeline stage.
+Removes the workspace from the specified deployment pipeline stage.
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `FabricHeaders`.
@@ -28,7 +28,7 @@ Unassigns the workspace from the specified deployment pipeline stage.
 Author: Kamil Nowinski
 #>
 
-function Unassign-FabricWorkspaceFromStage {
+function Remove-FabricWorkspaceFromStage {
     [CmdletBinding()]
     param(
         [Parameter(Mandatory = $true)]

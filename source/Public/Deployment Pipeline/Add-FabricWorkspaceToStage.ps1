@@ -3,7 +3,7 @@
 Assigns a workspace to a deployment pipeline stage.
 
 .DESCRIPTION
-The `Assign-FabricWorkspaceToStage` function assigns the specified workspace to the specified deployment pipeline stage.
+The `Add-FabricWorkspaceToStage` function assigns the specified workspace to the specified deployment pipeline stage.
 This operation will fail if there's an active deployment operation.
 
 .PARAMETER DeploymentPipelineId
@@ -16,7 +16,7 @@ Required. The ID of the deployment pipeline stage.
 Required. The ID of the workspace to assign to the stage.
 
 .EXAMPLE
-Assign-FabricWorkspaceToStage -DeploymentPipelineId "a5ded933-57b7-41f4-b072-ed4c1f9d5824" -StageId "db1577e0-0132-4d6d-92b9-952c359988f2" -WorkspaceId "4de5bcc4-2c88-4efe-b827-4ee7b289b496"
+Add-FabricWorkspaceToStage -DeploymentPipelineId "a5ded933-57b7-41f4-b072-ed4c1f9d5824" -StageId "db1577e0-0132-4d6d-92b9-952c359988f2" -WorkspaceId "4de5bcc4-2c88-4efe-b827-4ee7b289b496"
 
 Assigns the specified workspace to the deployment pipeline stage.
 
@@ -35,7 +35,7 @@ Assigns the specified workspace to the deployment pipeline stage.
 Author: Kamil Nowinski
 #>
 
-function Assign-FabricWorkspaceToStage {
+function Add-FabricWorkspaceToStage {
     [CmdletBinding()]
     param(
         [Parameter(Mandatory = $true)]
