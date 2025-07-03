@@ -3,7 +3,7 @@
 Retrieves the supported items from the workspace assigned to a specific stage of a deployment pipeline.
 
 .DESCRIPTION
-The `Get-FabricDeploymentPipelineStageItems` function returns a list of supported items from the workspace
+The `Get-FabricDeploymentPipelineStageItem` function returns a list of supported items from the workspace
 assigned to the specified stage of a deployment pipeline. The function automatically handles pagination
 and returns all available items.
 
@@ -14,7 +14,7 @@ Required. The ID of the deployment pipeline.
 Required. The ID of the stage to retrieve items from.
 
 .EXAMPLE
-Get-FabricDeploymentPipelineStageItems -DeploymentPipelineId "a5ded933-57b7-41f4-b072-ed4c1f9d5824" -StageId "48d2f500-6375-4f17-9199-2e1d73c18486"
+Get-FabricDeploymentPipelineStageItem -DeploymentPipelineId "a5ded933-57b7-41f4-b072-ed4c1f9d5824" -StageId "48d2f500-6375-4f17-9199-2e1d73c18486"
 
 Retrieves all items from the specified stage of the deployment pipeline.
 
@@ -33,7 +33,7 @@ Retrieves all items from the specified stage of the deployment pipeline.
 Author: Kamil Nowinski
 #>
 
-function Get-FabricDeploymentPipelineStageItems {
+function Get-FabricDeploymentPipelineStageItem {
     [CmdletBinding()]
     param(
         [Parameter(Mandatory = $true)]
