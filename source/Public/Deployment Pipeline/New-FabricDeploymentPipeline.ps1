@@ -98,7 +98,7 @@ function New-FabricDeploymentPipeline {
             -Body $requestBody
 
         # Step 5: Validate response
-        Test-FabricApiResponse -response $response -Name $DisplayName -typeName "deployment pipeline"
+        Test-FabricApiResponse -response $response -ObjectIdOrName $DisplayName -typeName "deployment pipeline"
 
         # Step 6: Handle results
         if ($response) {

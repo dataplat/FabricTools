@@ -50,7 +50,7 @@ function Get-FabricDeploymentPipeline {
             $response = Invoke-FabricRestMethod -Uri $apiEndpointUrl -Method Get
 
             # Validate response
-            Test-FabricApiResponse -response $response -Name $DeploymentPipelineId -typeName "deployment pipeline"
+            Test-FabricApiResponse -response $response -ObjectIdOrName $DeploymentPipelineId -typeName "deployment pipeline"
 
             if ($response) {
                 Write-Message -Message "Successfully retrieved deployment pipeline." -Level Debug

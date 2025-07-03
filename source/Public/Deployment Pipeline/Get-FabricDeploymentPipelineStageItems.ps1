@@ -67,7 +67,7 @@ function Get-FabricDeploymentPipelineStageItems {
             $response = Invoke-FabricRestMethod -Uri $apiEndpointUrl -Method Get
 
             # Step 5: Validate response
-            Test-FabricApiResponse -response $response -Name $StageId -typeName "deployment pipeline stage items"
+            Test-FabricApiResponse -response $response -ObjectIdOrName $StageId -typeName "deployment pipeline stage items"
 
             # Step 6: Process results
             if ($response.value) {

@@ -47,7 +47,7 @@ function Remove-FabricDeploymentPipeline {
         }
 
         # Step 4: Validate response
-        Test-FabricApiResponse -response $response -Name $DeploymentPipelineId -typeName "deployment pipeline"
+        Test-FabricApiResponse -response $response -ObjectIdOrName $DeploymentPipelineId -typeName "deployment pipeline"
 
         # Step 5: Handle results
         Write-Message -Message "Deployment pipeline $DeploymentPipelineId deleted successfully." -Level Info

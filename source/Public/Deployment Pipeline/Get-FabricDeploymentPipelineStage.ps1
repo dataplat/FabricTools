@@ -67,7 +67,7 @@ function Get-FabricDeploymentPipelineStage {
             -Method Get
 
         # Step 4: Validate response
-        Test-FabricApiResponse -response $response -Name $DeploymentPipelineId -typeName "deployment pipeline stage"
+        Test-FabricApiResponse -response $response -ObjectIdOrName $DeploymentPipelineId -typeName "deployment pipeline stage"
 
         # Step 5: Handle results
         if ($response) {
