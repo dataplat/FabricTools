@@ -92,22 +92,20 @@ function New-FabricDeploymentPipeline {
         }
 
         # Step 4: Make the API request
-        $response = Invoke-FabricRestMethod `
-            -Uri "deploymentPipelines" `
-            -Method Post `
-            -Body $requestBody
+        $response = Invoke-FabricRestMethod -Uri "deploymentPipelines" -Method Post -Body $requestBody
 
         # Step 5: Validate response
         Test-FabricApiResponse -response $response -ObjectIdOrName $DisplayName -typeName "deployment pipeline"
 
         # Step 6: Handle results
-        if ($response) {
-            Write-Message -Message "Successfully created deployment pipeline." -Level Debug
-            return $response
-        } else {
-            Write-Message -Message "Failed to create deployment pipeline." -Level Warning
-            return $null
-        }
+        $response
+        # if ($response) {
+        #     Write-Message -Message "Successfully created deployment pipeline." -Level Debug
+        #     return $response
+        # } else {
+        #     Write-Message -Message "Failed to create deployment pipeline." -Level Warning
+        #     return $null
+        # }
     } catch {
         # Step 7: Error handling
         $errorDetails = $_.Exception.Message

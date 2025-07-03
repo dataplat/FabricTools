@@ -113,7 +113,7 @@ function Start-FabricDeploymentPipelineStage {
         Test-FabricApiResponse -Response $response -typeName 'Deploy Pipeline Stage' -ObjectIdOrName $DeploymentPipelineId -NoWait:$NoWait
 
         # Step 5: Return results
-        return $response
+        $response
 
     } catch {
         # Step 6: Error handling

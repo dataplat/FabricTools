@@ -73,26 +73,19 @@ function Get-FabricDeploymentPipelineStageItem {
             if ($response.value) {
                 $allItems += $response.value
                 Write-Message -Message "Retrieved $($response.value.Count) items." -Level Debug
-
-                # Update continuation token for next iteration
-                $continuationToken = $response.continuationToken
-                if ($continuationToken) {
-                    Write-Message -Message "More items available. Continuation token: $continuationToken" -Level Debug
-                }
-            } else {
-                Write-Message -Message "No items found in the response." -Level Warning
-                $continuationToken = $null
             }
+            Get-FabricContinuationToken -Response $response -ContinuationToken ([ref]$continuationToken)
         } while ($continuationToken)
 
         # Step 7: Return all items
-        if ($allItems.Count -gt 0) {
-            Write-Message -Message "Successfully retrieved $($allItems.Count) items in total." -Level Debug
-            return $allItems
-        } else {
-            Write-Message -Message "No items found in the deployment pipeline stage." -Level Warning
-            return $null
-        }
+        $allItems
+        # if ($allItems.Count -gt 0) {
+        #     Write-Message -Message "Successfully retrieved $($allItems.Count) items in total." -Level Debug
+        #     return $allItems
+        # } else {
+        #     Write-Message -Message "No items found in the deployment pipeline stage." -Level Warning
+        #     return $null
+        # }
     } catch {
         # Step 8: Error handling
         $errorDetails = $_.Exception.Message

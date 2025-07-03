@@ -114,15 +114,13 @@ function Test-FabricApiResponse {
     }
 
     switch ($verb) {
-        'New'    { $msg = "$TypeName '$ObjectIdOrName' created successfully!" }
-        'Update' { $msg = "$TypeName '$ObjectIdOrName' updated successfully!" }
-        'Remove' { $msg = "$TypeName '$ObjectIdOrName' deleted successfully!" }
-        'Get'    { $msg = "" }
+        'New'    { $msg = "$TypeName '$ObjectIdOrName' created successfully." }
+        'Update' { $msg = "$TypeName '$ObjectIdOrName' updated successfully." }
+        'Remove' { $msg = "$TypeName '$ObjectIdOrName' deleted successfully." }
+        'Get'    { $msg = "Successfully retrieved $TypeName details." }
         default  { $msg = "Received $statusCode status code for $verb operation on $TypeName '$ObjectIdOrName'." }
     }
-    if ($msg) {
-        Write-Message -Message $msg -Level Info
-    }
+    Write-Message -Message $msg -Level Info
 
     $result
 

@@ -63,7 +63,8 @@ function Get-FabricDeploymentPipelineRoleAssignments {
 
         # Step 7: Return results
         Write-Message -Message "Successfully retrieved $($roleAssignments.Count) role assignments." -Level Debug
-        return $roleAssignments
+        $roleAssignments
+
     } catch {
         # Step 8: Error handling
         $errorDetails = $_.Exception.Message
