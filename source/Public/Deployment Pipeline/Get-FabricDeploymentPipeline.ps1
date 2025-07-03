@@ -35,12 +35,22 @@ function Get-FabricDeploymentPipeline {
     param(
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [Guid]$DeploymentPipelineId
+        [Guid]$DeploymentPipelineId,
+
+        [Parameter(Mandatory = $false)]
+        [Alias("Name", "DisplayName")]
+        [string]$DeploymentPipelineName
     )
 
     try {
         # Step 1: Ensure token validity
         Confirm-TokenState
+
+        if ($PSBoundParameters.ContainsKey("DeploymentPipelineName") -and $PSBoundParameters.ContainsKey("DeploymentPipelineId"))
+        {
+            Write-Warning "The parameters DeploymentPipelineName and DeploymentPipelineId cannot be used together"
+            return
+        }
 
         # If DeploymentPipelineId is provided, get specific pipeline
         if ($DeploymentPipelineId) {
@@ -100,14 +110,23 @@ function Get-FabricDeploymentPipeline {
 
         Write-Message -Message "Loop finished and all data added to the list" -Level Debug
 
-        # Step 7: Handle results
-        if ($pipelines) {
-            Write-Message -Message "Successfully retrieved deployment pipelines." -Level Debug
-            return $pipelines
-        } else {
-            Write-Message -Message "No deployment pipelines found." -Level Warning
-            return $null
+        if ($DeploymentPipelineName)
+        {
+            # Filter the list by name
+            Write-Message -Message "Filtering deployment pipelines by name: $DeploymentPipelineName" -Level Debug
+            $pipelines = $pipelines | Where-Object { $_.displayName -eq $DeploymentPipelineName }
         }
+
+        # Step 7: Handle results
+        $pipelines
+        # if ($pipelines) {
+        #     Write-Message -Message "Successfully retrieved deployment pipelines." -Level Debug
+        #     return $pipelines
+        # } else {
+        #     Write-Message -Message "No deployment pipelines found." -Level Warning
+        #     return $null
+        # }
+
     } catch {
         # Step 8: Error handling
         $errorDetails = $_.Exception.Message
