@@ -1,0 +1,77 @@
+<#
+.SYNOPSIS
+Returns a list of deployment pipeline role assignments.
+
+.DESCRIPTION
+The `Get-FabricDeploymentPipelineRoleAssignments` function retrieves a list of role assignments for a deployment pipeline.
+The function automatically handles pagination and returns all available role assignments.
+
+.PARAMETER DeploymentPipelineId
+Required. The ID of the deployment pipeline to get role assignments for.
+
+.EXAMPLE
+Get-FabricDeploymentPipelineRoleAssignments -DeploymentPipelineId "8ce96c50-85a0-4db3-85c6-7ccc3ed46523"
+
+Returns all role assignments for the specified deployment pipeline.
+
+.NOTES
+- Requires `$FabricConfig` global configuration, including `FabricHeaders`.
+- Calls `Confirm-TokenState` to ensure token validity before making the API request.
+- Requires Pipeline.Read.All or Pipeline.ReadWrite.All delegated scope.
+- Requires admin deployment pipelines role.
+- This API is in preview.
+
+Author: Kamil Nowinski
+#>
+
+function Get-FabricDeploymentPipelineRoleAssignments {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [string]$DeploymentPipelineId
+    )
+
+    try {
+        # Step 1: Ensure token validity
+        Confirm-TokenState
+
+        # Step 2: Initialize variables
+        $continuationToken = $null
+        $roleAssignments = @()
+
+        do {
+            # Step 3: Construct the API URL
+            $apiEndpointUrl = "deploymentPipelines/$DeploymentPipelineId/roleAssignments"
+            if ($continuationToken) {
+                $apiEndpointUrl += "?continuationToken=$continuationToken"
+            }
+            Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
+
+            # Step 4: Make the API request and validate response
+            $response = Invoke-FabricRestMethod -Uri $apiEndpointUrl -Method Get
+            if (-not (Test-FabricApiResponse -Response $response)) { return $null }
+
+            # Step 5: Process response
+            if ($response.value) {
+                $roleAssignments += $response.value
+                Write-Message -Message "Added $($response.value.Count) role assignments to the result set." -Level Debug
+            }
+
+            # Step 6: Update continuation token
+            $continuationToken = $response.continuationToken
+            if ($continuationToken) {
+                Write-Message -Message "Continuation token found. Getting next page of results." -Level Debug
+            }
+        } while ($continuationToken)
+
+        # Step 7: Return results
+        Write-Message -Message "Successfully retrieved $($roleAssignments.Count) role assignments." -Level Debug
+        return $roleAssignments
+    } catch {
+        # Step 8: Error handling
+        $errorDetails = $_.Exception.Message
+        Write-Message -Message "Failed to get deployment pipeline role assignments. Error: $errorDetails" -Level Error
+        return $null
+    }
+}
