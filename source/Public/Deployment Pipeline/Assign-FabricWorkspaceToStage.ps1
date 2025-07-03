@@ -40,15 +40,15 @@ function Assign-FabricWorkspaceToStage {
     param(
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [System.Guid]$DeploymentPipelineId,
+        [Guid]$DeploymentPipelineId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [System.Guid]$StageId,
+        [Guid]$StageId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [System.Guid]$WorkspaceId
+        [Guid]$WorkspaceId
     )
 
     try {

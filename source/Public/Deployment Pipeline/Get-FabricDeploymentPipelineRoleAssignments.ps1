@@ -29,7 +29,7 @@ function Get-FabricDeploymentPipelineRoleAssignments {
     param(
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$DeploymentPipelineId
+        [Guid]$DeploymentPipelineId
     )
 
     try {

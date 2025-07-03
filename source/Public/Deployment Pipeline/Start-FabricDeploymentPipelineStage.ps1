@@ -64,25 +64,25 @@ function Start-FabricDeploymentPipelineStage {
     param(
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [System.Guid]$DeploymentPipelineId,
+        [Guid]$DeploymentPipelineId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [System.Guid]$SourceStageId,
+        [Guid]$SourceStageId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [System.Guid]$TargetStageId,
+        [Guid]$TargetStageId,
 
         [Parameter(Mandatory = $false)]
-        [array]$Items,
+        [Array]$Items,
 
         [Parameter(Mandatory = $false)]
         [ValidateLength(0, 1024)]
-        [string]$Note,
+        [String]$Note,
 
         [Parameter(Mandatory = $false)]
-        [switch]$NoWait
+        [Switch]$NoWait
     )
 
     try {

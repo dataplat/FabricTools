@@ -42,11 +42,11 @@ function Get-FabricDeploymentPipelineStage {
     param(
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$DeploymentPipelineId,
+        [Guid]$DeploymentPipelineId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [string]$StageId
+        [String]$StageId
     )
 
     try {

@@ -37,11 +37,11 @@ function Get-FabricDeploymentPipelineOperation {
     param(
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$DeploymentPipelineId,
+        [Guid]$DeploymentPipelineId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$OperationId
+        [Guid]$OperationId
     )
 
     try {

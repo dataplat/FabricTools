@@ -33,11 +33,11 @@ function Unassign-FabricWorkspaceFromStage {
     param(
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [System.Guid]$DeploymentPipelineId,
+        [Guid]$DeploymentPipelineId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [System.Guid]$StageId
+        [Guid]$StageId
     )
 
     try {

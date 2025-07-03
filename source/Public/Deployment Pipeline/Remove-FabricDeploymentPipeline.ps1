@@ -29,7 +29,7 @@ function Remove-FabricDeploymentPipeline {
     param(
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$DeploymentPipelineId
+        [Guid]$DeploymentPipelineId
     )
 
     try {
