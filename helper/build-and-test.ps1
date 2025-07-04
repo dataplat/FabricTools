@@ -19,7 +19,9 @@ Invoke-ScriptAnalyzer -Path .\source\Public\**
 
 
 $tests = Invoke-Pester .\tests\ -PassThru
-$tests = Invoke-Pester .\tests\ -PassThru
 $tests.Tests | where Result -eq 'Failed' | Measure-Object | Select-Object -ExpandProperty Count
 $tests.Tests | where Result -eq 'Failed' | ft -Property ExpandedName, ErrorRecord
 $tests.Tests | where Result -eq 'Failed' | ft -Property Name, Result, ErrorRecord -AutoSize
+
+$e = $tests.Tests | where Result -eq 'Failed' | Select-Object -First 1
+$e.ErrorRecord

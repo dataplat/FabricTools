@@ -28,7 +28,7 @@ Author: Kamil Nowinski
 #>
 
 function Remove-FabricWorkspaceFromStage {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param(
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]

@@ -10,7 +10,7 @@ It returns the continuation token variable and provides debug logging.
 The API response object that may contain a continuation token.
 
 .EXAMPLE
-Get-FabricContinuationToken -Response $response -ContinuationToken $continuationToken
+Get-FabricContinuationToken -Response $response
 
 Processes the response and returns the continuation token if present.
 

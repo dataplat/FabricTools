@@ -10,6 +10,9 @@ It automatically handles pagination when retrieving all pipelines.
 .PARAMETER DeploymentPipelineId
 Optional. The ID of a specific deployment pipeline to retrieve. If not provided, all pipelines will be retrieved.
 
+.PARAMETER DeploymentPipelineName
+Optional. The display name of a specific deployment pipeline to retrieve. If provided, it will filter the results to match this name.
+
 .EXAMPLE
 Get-FabricDeploymentPipeline
 
