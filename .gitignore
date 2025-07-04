@@ -2,6 +2,7 @@
 *.local.*
 !**/README.md
 .kitchen/
+*.code-workspace
 
 ~*.*
 *.nupkg

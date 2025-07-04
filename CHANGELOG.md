@@ -6,29 +6,44 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- added unit tests for `Get-FabricWorkspaceUser` function to ensure it works correctly with multiple workspaces both in the pipeline and passed to a parameter.
+
+- Added unit tests for `Get-FabricWorkspaceUser` function to ensure it works correctly with multiple workspaces both in the pipeline and passed to a parameter.
 - Added unit tests for Aliases for `Get-FabricWorkspaceUser` function to ensure backward compatibility.
-- Added credits for authors to all functions and Unit tests to verify the existence of such tags #89
+- Added credits for authors to all functions and Unit tests to verify the existence of such tags (#89)
 - Added `NoWait` switch parameter to `New-FabricSQLDatabase` (#123)
+- Added functions related to Deployment Pipelines (#121):  
+  - `Add-FabricWorkspaceToStage`,  
+  - `Get-FabricDeploymentPipeline`,  
+  - `Get-FabricDeploymentPipelineOperation`,  
+  - `Get-FabricDeploymentPipelineRoleAssignments`,  
+  - `Get-FabricDeploymentPipelineStage`,  
+  - `Get-FabricDeploymentPipelineStageItem`,  
+  - `New-FabricDeploymentPipeline`,  
+  - `Remove-FabricDeploymentPipeline`,  
+  - `Remove-FabricWorkspaceFromStage`,  
+  - `Start-FabricDeploymentPipelineStage`
+- Added private function `Get-FabricContinuationToken` to facilitate pagination
 
 ### Changed
+
 - Updated `Get-FabricWorkspaceUser` to support pipeline input for `WorkspaceId` and `WorkspaceName` parameters.
 - Renamed `Get-FabricWorkspaceUsers` to match the singular form
-- Get-FabricSqlDatabase accepts Workspace as a pipeline, handles errors correctly and can filter by name (#117).
+- `Get-FabricSqlDatabase` accepts Workspace as a pipeline, handles errors correctly and can filter by name (#117).
 - Applied splatting for several parameters in `Invoke-FabricRestMethod` and output results in debug mode
 - `Remove-FabricSQLDatabase` uses unified function to handle API results
 
 Updated the `WorkspaceId`, `CapacitiesIds`,`CapacityId`,`CopyJobId`,`datamartId`,`DataPipelineId`,`DataWarehouseGUID`,`DomainId`,`EnvironmentId`,`EventhouseId`,`EventstreamId`,`ExternalDataShareId`,`ItemId`,`KQLDashboardId`,`KQLDatabaseId`,`KQLQuerysetId`,`LakehouseId`,`MirroredDatabaseId`,`MirroredWarehouseId`,`MLExperimentId`,`MLModelId`,`NotebookId`,`operationId`,`PaginatedReportId`,`ParentDomainId`,`parentEventhouseId`,`PrincipalId`,`ReflexId`,`ReportId`,`SemanticModelId`,`SparkCustomPoolId`,`SparkJobDefinitionId`,`SQLDatabaseId`,`SQLEndpointId`,`subscriptionID`,`UserId`,`WarehouseId`,`WorkspaceGUID`,`WorkspaceId`,`WorkspaceIds`,and `WorkspaceRoleAssignmentId` parameters to the datatype GUID [#125](https://github.com/dataplat/FabricTools/issues/125)
 
-
-
 ### Fixed
+
 - Enhanced logic in unified function `Test-FabricApiResponse` to handle API results and moved it to private functions
 - Fixed bug in `Get-FabricLongRunningOperation` - Uri was incorectly created (#131)
 - Fixed bug in `Get-FabricLongRunningOperationResult` - uses correct statusCode (#131)
 
 ### Deprecated
+
 ### Removed
+
 - Removed Revision History from `Get-FabricSQLDatabase`, `Get-FabricSQLDatabase`
 
 ### Security

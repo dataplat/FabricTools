@@ -53,6 +53,8 @@ function Test-FabricApiResponse {
         [switch] $NoWait = $false
     )
 
+    Write-Message -Message "[Test-FabricApiResponse]::Begin" -Level Debug
+
     $responseHeader = $script:responseHeader
     $statusCode = $script:statusCode
     $result = $null
@@ -114,15 +116,14 @@ function Test-FabricApiResponse {
     }
 
     switch ($verb) {
-        'New'    { $msg = "$TypeName '$ObjectIdOrName' created successfully!" }
-        'Update' { $msg = "$TypeName '$ObjectIdOrName' updated successfully!" }
-        'Remove' { $msg = "$TypeName '$ObjectIdOrName' deleted successfully!" }
-        'Get'    { $msg = "" }
-        default  { $msg = "Received $statusCode status code for $verb operation on $TypeName '$ObjectIdOrName'." }
+        'New'    { $msg = "$TypeName '$ObjectIdOrName' created successfully."; $level = 'Info' }
+        'Update' { $msg = "$TypeName '$ObjectIdOrName' updated successfully."; $level = 'Info' }
+        'Remove' { $msg = "$TypeName '$ObjectIdOrName' deleted successfully."; $level = 'Info' }
+        'Get'    { $msg = "Successfully retrieved $TypeName details."; $level = 'Debug' }
+        default  { $msg = "Received $statusCode status code for $verb operation on $TypeName '$ObjectIdOrName'."; $level = 'Info' }
     }
-    if ($msg) {
-        Write-Message -Message $msg -Level Info
-    }
+    Write-Message -Message $msg -Level $level
+    Write-Message -Message "[Test-FabricApiResponse]::End" -Level Debug
 
     $result
 
