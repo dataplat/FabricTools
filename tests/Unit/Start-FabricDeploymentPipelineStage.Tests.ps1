@@ -20,6 +20,8 @@ param(
         "OutVariable"
         "OutBuffer"
         "PipelineVariable"
+        "WhatIf"
+        "Confirm"
     )
 )
 
