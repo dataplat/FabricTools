@@ -39,20 +39,18 @@ function Remove-FabricDeploymentPipeline {
         $apiEndpointUrl = "deploymentPipelines/$DeploymentPipelineId"
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
-        # Step 3: Make the API request
-        if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Delete deployment pipeline"))
+        # Step 3: Make the API request & validate response
+        if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Delete Deployment Pipeline"))
         {
             $response = Invoke-FabricRestMethod -Uri $apiEndpointUrl -Method Delete
+            Test-FabricApiResponse -response $response -ObjectIdOrName $DeploymentPipelineId -typeName "deployment pipeline"
         }
 
-        # Step 4: Validate response
-        Test-FabricApiResponse -response $response -ObjectIdOrName $DeploymentPipelineId -typeName "deployment pipeline"
-
-        # Step 5: Handle results
+        # Step 4: Handle results
         Write-Message -Message "Deployment pipeline $DeploymentPipelineId deleted successfully." -Level Info
 
     } catch {
-        # Step 6: Error handling
+        # Step 5: Error handling
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to delete deployment pipeline. Error: $errorDetails" -Level Error
     }

@@ -48,8 +48,10 @@ function Remove-FabricWorkspaceFromStage {
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
         # Step 3: Make the API request and validate response
-        $response = Invoke-FabricRestMethod -Uri $apiEndpointUrl -Method Post
-        Test-FabricApiResponse -Response $response
+        if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Remove Workspace from Deployment Pipeline Stage")) {
+            $response = Invoke-FabricRestMethod -Uri $apiEndpointUrl -Method Post
+            $response = Test-FabricApiResponse -Response $response
+        }
 
         # Step 4: Return results
         Write-Message -Message "Successfully unassigned workspace from deployment pipeline stage." -Level Info

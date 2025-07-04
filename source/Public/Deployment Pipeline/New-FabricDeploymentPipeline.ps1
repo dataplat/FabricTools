@@ -51,7 +51,7 @@ Author: Kamil Nowinski
 #>
 
 function New-FabricDeploymentPipeline {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param(
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
@@ -90,23 +90,17 @@ function New-FabricDeploymentPipeline {
             $requestBody.description = $Description
         }
 
-        # Step 4: Make the API request
-        $response = Invoke-FabricRestMethod -Uri "deploymentPipelines" -Method Post -Body $requestBody
+        # Step 4: Make the API request and Validate response
+        if ($PSCmdlet.ShouldProcess($requestBody, "Create new Deployment Pipeline")) {
+            $response = Invoke-FabricRestMethod -Uri "deploymentPipelines" -Method Post -Body $requestBody
+            $response = Test-FabricApiResponse -response $response -ObjectIdOrName $DisplayName -typeName "deployment pipeline"
+        }
 
-        # Step 5: Validate response
-        Test-FabricApiResponse -response $response -ObjectIdOrName $DisplayName -typeName "deployment pipeline"
-
-        # Step 6: Handle results
+        # Step 5: Handle results
         $response
-        # if ($response) {
-        #     Write-Message -Message "Successfully created deployment pipeline." -Level Debug
-        #     return $response
-        # } else {
-        #     Write-Message -Message "Failed to create deployment pipeline." -Level Warning
-        #     return $null
-        # }
+
     } catch {
-        # Step 7: Error handling
+        # Step 6: Error handling
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to create deployment pipeline. Error: $errorDetails" -Level Error
         return $null
