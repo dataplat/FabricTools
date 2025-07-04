@@ -35,7 +35,8 @@ Author: Ioana Bouariu
 
     # Make a GET request to the PowerBI API to retrieve the workloads for the specified capacity.
     # The function returns the 'value' property of the response.
-    return (Invoke-RestMethod -uri "$($PowerBI.BaseApiUrl)/capacities/$capacityID/Workloads" -Headers $FabricSession.HeaderParams -Method GET).value
+    $result = Invoke-FabricRestMethod -Method GET -PowerBIApi -Uri "capacities/$capacityID/Workloads"
+    $result.value
 }
 
 

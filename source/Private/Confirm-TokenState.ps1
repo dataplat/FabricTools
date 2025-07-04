@@ -35,15 +35,15 @@ function Confirm-TokenState {
         }
 
         # Convert the TokenExpiresOn value to a DateTime object
-        if ($FabricConfig.TokenExpiresOn.GetType() -eq [datetimeoffset]) {
+        if ($FabricConfig.TokenExpiresOn.GetType() -eq [DateTimeOffset]) {
             $tokenExpiryDate = $FabricConfig.TokenExpiresOn
         } else {
-            $tokenExpiryDate = [datetimeoffset]::Parse($FabricConfig.TokenExpiresOn)
+            $tokenExpiryDate = [DateTimeOffset]::Parse($FabricConfig.TokenExpiresOn)
         }
 
         # Check if the token is expired
-        if ($tokenExpiryDate -le [datetimeoffset]::Now) {
-            if ($FabricConfig.FeatureFlags.EnableTokenRefresh) {
+        if ($tokenExpiryDate -le [DateTimeOffset]::Now) {
+            if (Get-PSFConfigValue -FullName 'FabricTools.FeatureFlags.EnableTokenRefresh') {
                 Write-Message -Message "Token has expired. Attempting to refresh the token..." -Level Warning
                 Connect-FabricAccount -reset
             } else {

@@ -63,7 +63,7 @@ Function Invoke-FabricRestMethod {
 
     $baseUrl = $FabricConfig.BaseUrl
     if ($PowerBIApi) {
-        $baseUrl = $PowerBI.BaseApiUrl
+        $baseUrl = Get-PSFConfigValue -FullName 'FabricTools.PowerBiApi.BaseUrl'
     }
 
     if ($Uri -notmatch '^https?://.*') {
