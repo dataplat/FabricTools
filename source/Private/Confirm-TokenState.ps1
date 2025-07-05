@@ -28,17 +28,20 @@ function Confirm-TokenState {
 
     try {
         # Ensure required properties have valid values
-        if ([string]::IsNullOrWhiteSpace($FabricConfig.TenantId) -or
-            [string]::IsNullOrWhiteSpace($FabricConfig.TokenExpiresOn)) {
+        $tenantId = Get-PSFConfigValue FabricTools.FabricApi.TenantId
+        $tokenExpiresOn = Get-PSFConfigValue FabricTools.FabricSession.TokenExpiresOn
+
+        if ([string]::IsNullOrWhiteSpace($tenantId) -or
+            [string]::IsNullOrWhiteSpace($tokenExpiresOn)) {
             Write-Message -Message "Token details are missing. Please run 'Connect-FabricAccount' to configure the session." -Level Error
             throw "MissingTokenDetailsException: Token details are missing."
         }
 
         # Convert the TokenExpiresOn value to a DateTime object
-        if ($FabricConfig.TokenExpiresOn.GetType() -eq [DateTimeOffset]) {
-            $tokenExpiryDate = $FabricConfig.TokenExpiresOn
+        if ($tokenExpiresOn.GetType() -eq [DateTimeOffset]) {
+            $tokenExpiryDate = $tokenExpiresOn
         } else {
-            $tokenExpiryDate = [DateTimeOffset]::Parse($FabricConfig.TokenExpiresOn)
+            $tokenExpiryDate = [DateTimeOffset]::Parse($tokenExpiresOn)
         }
 
         # Check if the token is expired

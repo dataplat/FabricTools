@@ -4,10 +4,10 @@
 Set-PSFConfig -Name 'FabricTools.FabricApi.BaseApiUrl'         -Value 'https://api.fabric.microsoft.com/v1'
 Set-PSFConfig -Name 'FabricTools.FabricApi.ResourceUrl'        -Value 'https://api.fabric.microsoft.com'
 Set-PSFConfig -Name 'FabricTools.FabricApi.TenantId'
-Set-PSFConfig -Name 'FabricTools.FabricApi.ContentType'        -Value @{'Content-Type' = "application/json" }
+Set-PSFConfig -Name 'FabricTools.FabricApi.ContentType'        -Value 'application/json; charset=utf-8'
 
 Set-PSFConfig -Name 'FabricTools.FabricSession.Headers'        -Value @{}
-Set-PSFConfig -Name 'FabricTools.FabricSession.TokenExpiresOn' -Value $null
+Set-PSFConfig -Name 'FabricTools.FabricSession.TokenExpiresOn' -Value $null -Validation DateTimeOffset
 Set-PSFConfig -Name 'FabricTools.FabricSession.AccessToken'    -Value $null
 
 Set-PSFConfig -Name 'FabricTools.KustoApi.BaseUrl'             -Value 'https://api.kusto.windows.net'
@@ -41,13 +41,13 @@ Set-PSFConfig -Name 'FabricTools.PowerBiApi.BaseUrl'      -Value "https://api.po
 
 $FabricConfig = @{
     BaseUrl        = "https://api.fabric.microsoft.com/v1"
-    ResourceUrl    = "https://api.fabric.microsoft.com"
-    FabricHeaders  = @{}
-    TenantId = ""
-    TokenExpiresOn = ""
-    FeatureFlags = @{
-        EnableTokenRefresh = $true
-    }
+    # ResourceUrl    = "https://api.fabric.microsoft.com"
+    # FabricHeaders  = @{}
+    # TenantId = ""
+    # TokenExpiresOn = ""
+    # FeatureFlags = @{
+    #     EnableTokenRefresh = $true
+    # }
 }
 
 Set-PSFConfig -Name 'FabricTools.FeatureFlags.EnableTokenRefresh' -Value $true -Validation bool

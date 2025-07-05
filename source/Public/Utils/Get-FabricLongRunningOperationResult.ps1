@@ -16,7 +16,6 @@ Get-FabricLongRunningOperationResult -operationId "12345-abcd-67890-efgh"
 This command fetches the result of the operation with the specified operationId.
 
 .NOTES
-- Ensure the Fabric API headers (e.g., authorization tokens) are defined in $FabricConfig.FabricHeaders.
 - This function does not handle polling. Ensure the operation is in a terminal state before calling this function.
 
 Author: Tiago Balabuch

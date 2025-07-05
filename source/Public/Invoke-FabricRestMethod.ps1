@@ -82,12 +82,15 @@ Function Invoke-FabricRestMethod {
         Write-Message -Message "[Invoke-FabricRestMethod] No request body provided." -Level Debug
     }
 
+    $headers = Get-PSFConfigValue -FullName 'FabricTools.FabricSession.Headers'
+    $contentType = Get-PSFConfigValue -FullName 'FabricTools.FabricApi.ContentType'
+
     $request = @{
-        Headers = $FabricSession.HeaderParams
+        Headers = $headers
         Uri = $Uri
         Method = $Method
         Body = $Body
-        ContentType = "application/json"
+        ContentType = $contentType
         ErrorAction = 'Stop'
         SkipHttpErrorCheck = $true
         ResponseHeadersVariable = "responseHeader"
