@@ -36,7 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Enhanced logic in unified function `Test-FabricApiResponse` to handle API results and moved it to private functions
-- Fixed bug in `Get-FabricLongRunningOperation` - Uri was incorectly created (#131)
+- Fixed bug in `Get-FabricLongRunningOperation` - Uri was incorrectly created (#131)
 - Fixed bug in `Get-FabricLongRunningOperationResult` - uses correct statusCode (#131)
 - Fixed misleading message from `Remove-FabricWarehouse` (#145)
 
