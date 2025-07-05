@@ -12,14 +12,14 @@ Set-PSFConfig -Name 'FabricTools.FabricSession.AccessToken'    -Value $null
 
 Set-PSFConfig -Name 'FabricTools.KustoApi.BaseUrl'             -Value 'https://api.kusto.windows.net'
 
-$script:FabricSession = [ordered]@{
-    BaseApiUrl   = 'https://api.fabric.microsoft.com/v1'
-    ResourceUrl  = 'https://api.fabric.microsoft.com'
-    HeaderParams = $null
-    ContentType  = @{'Content-Type' = "application/json" }
-    KustoURL     = "https://api.kusto.windows.net"
-    AccessToken  = $null
-}
+#$script:FabricSession = [ordered]@{
+    #BaseApiUrl   = 'https://api.fabric.microsoft.com/v1'
+    #ResourceUrl  = 'https://api.fabric.microsoft.com'
+    #HeaderParams = $null
+    #ContentType  = @{'Content-Type' = "application/json" }
+    #KustoURL     = "https://api.kusto.windows.net"
+    #AccessToken  = $null
+#}
 
 Set-PSFConfig -Name 'FabricTools.AzureApi.BaseUrl'           -Value "https://management.azure.com"
 

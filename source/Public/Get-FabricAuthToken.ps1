@@ -29,8 +29,9 @@ function Get-FabricAuthToken {
     (
     )
 
-    if ($FabricSession.AccessToken) {
-       $ssPtr = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($FabricSession.AccessToken.Token)
+    $accessToken = Get-PSFConfigValue FabricTools.FabricSession.AccessToken
+    if ($accessToken) {
+       $ssPtr = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($accessToken.Token)
        $Token = ([System.Runtime.InteropServices.Marshal]::PtrToStringBSTR($ssPtr))
        return $Token
     } else {
