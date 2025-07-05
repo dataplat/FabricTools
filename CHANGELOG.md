@@ -31,14 +31,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Get-FabricSqlDatabase` accepts Workspace as a pipeline, handles errors correctly and can filter by name (#117).
 - Applied splatting for several parameters in `Invoke-FabricRestMethod` and output results in debug mode
 - `Remove-FabricSQLDatabase` uses unified function to handle API results
-
-Updated the `WorkspaceId`, `CapacitiesIds`,`CapacityId`,`CopyJobId`,`datamartId`,`DataPipelineId`,`DataWarehouseGUID`,`DomainId`,`EnvironmentId`,`EventhouseId`,`EventstreamId`,`ExternalDataShareId`,`ItemId`,`KQLDashboardId`,`KQLDatabaseId`,`KQLQuerysetId`,`LakehouseId`,`MirroredDatabaseId`,`MirroredWarehouseId`,`MLExperimentId`,`MLModelId`,`NotebookId`,`operationId`,`PaginatedReportId`,`ParentDomainId`,`parentEventhouseId`,`PrincipalId`,`ReflexId`,`ReportId`,`SemanticModelId`,`SparkCustomPoolId`,`SparkJobDefinitionId`,`SQLDatabaseId`,`SQLEndpointId`,`subscriptionID`,`UserId`,`WarehouseId`,`WorkspaceGUID`,`WorkspaceId`,`WorkspaceIds`,and `WorkspaceRoleAssignmentId` parameters to the datatype GUID [#125](https://github.com/dataplat/FabricTools/issues/125)
+- Updated the `WorkspaceId`, `CapacitiesIds`,`CapacityId`,`CopyJobId`,`datamartId`,`DataPipelineId`,`DataWarehouseGUID`,`DomainId`,`EnvironmentId`,`EventhouseId`,`EventstreamId`,`ExternalDataShareId`,`ItemId`,`KQLDashboardId`,`KQLDatabaseId`,`KQLQuerysetId`,`LakehouseId`,`MirroredDatabaseId`,`MirroredWarehouseId`,`MLExperimentId`,`MLModelId`,`NotebookId`,`operationId`,`PaginatedReportId`,`ParentDomainId`,`parentEventhouseId`,`PrincipalId`,`ReflexId`,`ReportId`,`SemanticModelId`,`SparkCustomPoolId`,`SparkJobDefinitionId`,`SQLDatabaseId`,`SQLEndpointId`,`subscriptionID`,`UserId`,`WarehouseId`,`WorkspaceGUID`,`WorkspaceId`,`WorkspaceIds`, and `WorkspaceRoleAssignmentId` parameters to the datatype GUID [#125](https://github.com/dataplat/FabricTools/issues/125)
 
 ### Fixed
 
 - Enhanced logic in unified function `Test-FabricApiResponse` to handle API results and moved it to private functions
 - Fixed bug in `Get-FabricLongRunningOperation` - Uri was incorectly created (#131)
 - Fixed bug in `Get-FabricLongRunningOperationResult` - uses correct statusCode (#131)
+- Fixed misleading message from `Remove-FabricWarehouse` (#145)
 
 ### Deprecated
 
