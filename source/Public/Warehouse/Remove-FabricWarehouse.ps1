@@ -17,7 +17,6 @@
     This example removes the warehouse with ID "warehouse-67890" from the workspace with ID "workspace-12345".
 
 .NOTES
-    - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
     - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 
     Author: Tiago Balabuch
