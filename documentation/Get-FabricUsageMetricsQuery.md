@@ -13,7 +13,7 @@ Retrieves usage metrics for a specific dataset.
 ## SYNTAX
 
 ```
-Get-FabricUsageMetricsQuery [-DatasetID] <Guid> [-groupId] <Guid> [-reportName] <Object>
+Get-FabricUsageMetricsQuery [-DatasetID] <Guid> [-groupId] <Guid> [-reportname] <Object>
  [[-ImpersonatedUser] <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
@@ -95,7 +95,7 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -reportName
+### -reportname
 The name of the report.
 This is a mandatory parameter.
 

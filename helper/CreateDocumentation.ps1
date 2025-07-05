@@ -10,4 +10,6 @@ $mdHelpParams = @{
     Encoding              = [System.Text.Encoding]::UTF8
     ModulePagePath        = ".\documentation\readme.md"
 }
-New-MarkdownHelp @mdHelpParams
+New-MarkdownHelp @mdHelpParams -Force
+
+. .\helper\Update-ReadmeDescriptions.ps1
