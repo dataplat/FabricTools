@@ -10,7 +10,7 @@ The function automatically handles pagination and returns all available role ass
 Required. The ID of the deployment pipeline to get role assignments for.
 
 .EXAMPLE
-Get-FabricDeploymentPipelineRoleAssignments -DeploymentPipelineId "8ce96c50-85a0-4db3-85c6-7ccc3ed46523"
+Get-FabricDeploymentPipelineRoleAssignments -DeploymentPipelineId "GUID-GUID-GUID-GUID"
 
 Returns all role assignments for the specified deployment pipeline.
 

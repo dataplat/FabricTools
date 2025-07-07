@@ -14,7 +14,7 @@ Required. The ID of the deployment pipeline.
 Required. The ID of the stage to retrieve items from.
 
 .EXAMPLE
-Get-FabricDeploymentPipelineStageItem -DeploymentPipelineId "a5ded933-57b7-41f4-b072-ed4c1f9d5824" -StageId "48d2f500-6375-4f17-9199-2e1d73c18486"
+Get-FabricDeploymentPipelineStageItem -DeploymentPipelineId "GUID-GUID-GUID-GUID" -StageId "GUID-GUID-GUID-GUID"
 
 Retrieves all items from the specified stage of the deployment pipeline.
 
