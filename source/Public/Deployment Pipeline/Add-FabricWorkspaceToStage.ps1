@@ -69,7 +69,7 @@ function Add-FabricWorkspaceToStage {
 
         # Step 5: Return results
         Write-Message -Message "Successfully assigned workspace to deployment pipeline stage." -Level Info
-        return $response
+        $response
     } catch {
         # Step 6: Error handling
         $errorDetails = $_.Exception.Message
