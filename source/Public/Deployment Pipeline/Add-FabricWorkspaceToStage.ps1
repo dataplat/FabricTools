@@ -55,7 +55,7 @@ function Add-FabricWorkspaceToStage {
         Confirm-TokenState
 
         # Step 2: Construct the API URL
-        $apiEndpointUrl = "deploymentPipelines/$DeploymentPipelineId/stages/$StageId/assignWorkspace"
+        $apiEndpointUrl = ("deploymentPipelines/{0}/stages/{1}/assignWorkspace" -f $DeploymentPipelineId, $StageId)
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
         # Step 3: Construct the request body
@@ -69,7 +69,7 @@ function Add-FabricWorkspaceToStage {
 
         # Step 5: Return results
         Write-Message -Message "Successfully assigned workspace to deployment pipeline stage." -Level Info
-        return $response
+        $response
     } catch {
         # Step 6: Error handling
         $errorDetails = $_.Exception.Message
