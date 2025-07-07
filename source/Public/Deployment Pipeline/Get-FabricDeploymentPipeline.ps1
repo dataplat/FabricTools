@@ -133,6 +133,5 @@ function Get-FabricDeploymentPipeline {
         # Step 8: Error handling
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to retrieve deployment pipelines. Error: $errorDetails" -Level Error
-        return $null
     }
 }

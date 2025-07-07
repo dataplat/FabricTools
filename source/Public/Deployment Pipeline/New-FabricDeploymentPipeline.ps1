@@ -103,6 +103,5 @@ function New-FabricDeploymentPipeline {
         # Step 6: Error handling
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to create deployment pipeline. Error: $errorDetails" -Level Error
-        return $null
     }
 }

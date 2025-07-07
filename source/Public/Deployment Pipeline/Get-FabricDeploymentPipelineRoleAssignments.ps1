@@ -68,6 +68,5 @@ function Get-FabricDeploymentPipelineRoleAssignments {
         # Step 8: Error handling
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to get deployment pipeline role assignments. Error: $errorDetails" -Level Error
-        return $null
     }
 }

@@ -61,6 +61,5 @@ function Remove-FabricWorkspaceFromStage {
         # Step 5: Error handling
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to unassign workspace from deployment pipeline stage. Error: $errorDetails" -Level Error
-        return $null
     }
 }
