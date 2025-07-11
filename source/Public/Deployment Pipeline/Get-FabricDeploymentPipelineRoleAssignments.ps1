@@ -48,8 +48,14 @@ function Get-FabricDeploymentPipelineRoleAssignments {
             Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
             # Step 4: Make the API request and validate response
-            $response = Invoke-FabricRestMethod -Uri $apiEndpointUrl -Method Get
-            Test-FabricApiResponse -Response $response -ObjectIdOrName $DeploymentPipelineId -TypeName "Deployment Pipeline Role Assignments"
+            $apiParameters = @{
+                Uri = $apiEndpointUrl
+                Method = 'GET'
+                HandleResponse = $true
+                TypeName = "deployment pipeline role assignments"
+                ObjectIdOrName = $DeploymentPipelineId
+            }
+            $response = Invoke-FabricRestMethod @apiParameters
 
             # Step 5: Process response and update continuation token
             if ($response.value) {
@@ -61,7 +67,7 @@ function Get-FabricDeploymentPipelineRoleAssignments {
         } while ($continuationToken)
 
         # Step 7: Return results
-        Write-Message -Message "Successfully retrieved $($roleAssignments.Count) role assignments." -Level Debug
+        Write-Message -Message "??? Successfully retrieved $($roleAssignments.Count) role assignments." -Level Info
         $roleAssignments
 
     } catch {

@@ -10,6 +10,9 @@ function Test-FabricApiResponse {
 .PARAMETER Response
     The response body from the API call.
 
+.PARAMETER Operation
+    The operation being performed by parent function (e.g., 'New', 'Update', 'Remove', 'Get'). It helps in logging appropriate messages.
+
 .PARAMETER ObjectIdOrName
     The name or ID of the resource being operated.
 
@@ -40,8 +43,17 @@ function Test-FabricApiResponse {
 
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory = $false)]
+        [Parameter(Mandatory = $false)]     # Response is $null when Response Code is 202
         $Response,
+
+        [Parameter(Mandatory = $true)]
+        $ResponseHeader,
+
+        [Parameter(Mandatory = $true)]
+        $StatusCode,
+
+        [Parameter(Mandatory = $false)]
+        $Operation,
 
         [Parameter(Mandatory = $false)]
         [string] $ObjectIdOrName,
@@ -50,27 +62,34 @@ function Test-FabricApiResponse {
         [string] $TypeName = 'Fabric Item',
 
         [Parameter(Mandatory = $false)]
-        [switch] $NoWait = $false
+        [string] $SuccessMessage,
+
+        [Parameter(Mandatory = $false)]
+        [switch] $NoWait = $false,
+
+        [Parameter(Mandatory = $false)]
+        [switch] $ExtractValue = $false
     )
 
     Write-Message -Message "[Test-FabricApiResponse]::Begin" -Level Debug
 
-    $responseHeader = $script:responseHeader
-    $statusCode = $script:statusCode
+    #$responseHeader = $script:responseHeader
+    #$statusCode = $script:statusCode
     $result = $null
 
-    $verb = (Get-PSCallStack)[1].Command.Split('-')[0]
-    Write-Message -Message "Testing API response for '$verb' operation. StatusCode: $statusCode." -Level Debug
+    Write-Message -Message "Testing API response for '$Operation' operation. StatusCode: $statusCode." -Level Debug
 
     switch ($statusCode) {
         200 {
-            $result = $null
+            if ($Operation -eq 'Get') {
+                $result = $Response
+            }
         }
         201 {
             $result = $Response
         }
         202 {
-            Write-Message -Message "$verb Request for $TypeName '$ObjectIdOrName' accepted. Provisioning in progress!" -Level Info
+            Write-Message -Message "$Operation Request for $TypeName '$ObjectIdOrName' accepted. Provisioning in progress!" -Level Info
             [string]$operationId = $responseHeader["x-ms-operation-id"]
 
             if ($NoWait) {
@@ -91,14 +110,14 @@ function Test-FabricApiResponse {
             # Handle operation result
             if ($operationStatus.status -eq "Succeeded") {
                 Write-Message -Message "Operation Succeeded" -Level Debug
-                Write-Message -Message "Getting Long Running Operation result" -Level Debug
+                Write-Message -Message "Getting Long Running Operation result" -Level Verbose
 
                 $operationResult = Get-FabricLongRunningOperationResult -operationId $operationId
-                Write-Message -Message "Long Running Operation status: $operationResult" -Level Debug
+                #Write-Message -Message "Long Running Operation status: $operationResult" -Level Debug
 
                 return $operationResult
             } else {
-                Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Debug
+                #Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Debug
                 Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Error
                 return $operationStatus
             }
@@ -115,16 +134,41 @@ function Test-FabricApiResponse {
         }
     }
 
-    switch ($verb) {
+    # if (FeatureFlag.IsEnabled('FabricToolsVerboseLogging')) {    # This is placeholder for verbose logging feature flag being implemented soon
+    $TypeName= $TypeName.Substring(0, 1).ToUpper() + $TypeName.Substring(1)
+
+    if ($SuccessMessage) {
+        $Operation = "Custom"
+    }
+
+    # Try to get Name of Id from the response when new item is created
+    if ($Operation -eq 'New' -and -not $ObjectIdOrName) {
+        $ObjectIdOrName = $Response.DisplayName ? $Response.DisplayName : $Response.id
+    }
+    switch ($Operation) {
         'New'    { $msg = "$TypeName '$ObjectIdOrName' created successfully."; $level = 'Info' }
         'Update' { $msg = "$TypeName '$ObjectIdOrName' updated successfully."; $level = 'Info' }
         'Remove' { $msg = "$TypeName '$ObjectIdOrName' deleted successfully."; $level = 'Info' }
-        'Get'    { $msg = "Successfully retrieved $TypeName details."; $level = 'Debug' }
-        default  { $msg = "Received $statusCode status code for $verb operation on $TypeName '$ObjectIdOrName'."; $level = 'Info' }
+        'Get'    { $msg = "Successfully retrieved $TypeName details.";         $level = 'Debug' }
+        'Custom' { $msg = "$SuccessMessage";                                   $level = 'Info' }
+        default  { $msg = "Received $statusCode status code for $Operation operation on $TypeName '$ObjectIdOrName'."; $level = 'Info' }
     }
     Write-Message -Message $msg -Level $level
+    # }
+
     Write-Message -Message "[Test-FabricApiResponse]::End" -Level Debug
 
-    $result
+    # Return the "value" object if exists, otherwise return the response directly
+    if ($result -and $ExtractValue) {
+        Write-Message -Message "Extracting 'value' property from the response as requested." -Level Debug
+        if (-not $result.value) {
+            Write-Message -Message "No 'value' property found in the response." -Level Warning
+            return $result
+        }
+        $result | ForEach-Object { $result.value }
+    }
+    else {
+        $result
+    }
 
 }

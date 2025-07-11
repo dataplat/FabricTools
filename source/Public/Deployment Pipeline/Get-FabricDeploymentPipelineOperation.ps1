@@ -52,20 +52,16 @@ function Get-FabricDeploymentPipelineOperation {
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
         # Step 3: Make the API request
-        $response = Invoke-FabricRestMethod -Uri $apiEndpointUrl -Method Get
-
-        # Step 4: Validate response
-        Test-FabricApiResponse -response $response -ObjectIdOrName $DeploymentPipelineId -typeName "deployment pipeline operation"
-
-        # Step 5: Handle results
+        $apiParameters = @{
+            Uri = $apiEndpointUrl
+            Method = 'GET'
+            HandleResponse = $true
+            TypeName = "deployment pipeline operation"
+            ObjectIdOrName = $DeploymentPipelineId
+        }
+        $response = Invoke-FabricRestMethod @apiParameters
         $response
-        # if ($response) {
-        #     Write-Message -Message "Successfully retrieved deployment pipeline operation details." -Level Debug
-        #     return $response
-        # } else {
-        #     Write-Message -Message "No deployment pipeline operation found with the specified IDs." -Level Warning
-        #     return $null
-        # }
+
     } catch {
         # Step 6: Error handling
         $errorDetails = $_.Exception.Message

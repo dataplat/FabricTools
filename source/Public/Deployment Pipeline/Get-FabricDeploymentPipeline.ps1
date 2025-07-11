@@ -59,18 +59,19 @@ function Get-FabricDeploymentPipeline {
             Write-Message -Message "Retrieving specific deployment pipeline with ID: $DeploymentPipelineId" -Level Debug
             $apiEndpointUrl = "deploymentPipelines/$DeploymentPipelineId"
 
-            $response = Invoke-FabricRestMethod -Uri $apiEndpointUrl -Method Get
+            $response = Invoke-FabricRestMethod -Uri $apiEndpointUrl -Method Get -HandleResponse -TypeName "deployment pipeline"
+            return $response
 
             # Validate response
-            Test-FabricApiResponse -response $response -ObjectIdOrName $DeploymentPipelineId -typeName "deployment pipeline"
+            #Test-FabricApiResponse -response $response -ObjectIdOrName $DeploymentPipelineId -typeName "deployment pipeline"
 
-            if ($response) {
-                Write-Message -Message "Successfully retrieved deployment pipeline." -Level Debug
-                return $response
-            } else {
-                Write-Message -Message "No deployment pipeline found with the specified ID." -Level Warning
-                return $null
-            }
+            # if ($response) {
+            #     Write-Message -Message "Successfully retrieved deployment pipeline." -Level Debug
+            #     return $response
+            # } else {
+            #     Write-Message -Message "No deployment pipeline found with the specified ID." -Level Warning
+            #     return $null
+            # }
         }
 
         # Step 2: Initialize variables for listing all pipelines
@@ -97,10 +98,13 @@ function Get-FabricDeploymentPipeline {
             Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
             # Step 5: Make the API request
-            $response = Invoke-FabricRestMethod -Uri $apiEndpointUrl -Method Get
-
-            # Validate response
-            Test-FabricApiResponse -response $response -typeName "deployment pipeline"
+            $apiParameters = @{
+                Uri = $apiEndpointUrl
+                Method = 'GET'
+                HandleResponse = $true
+                TypeName = "deployment pipeline"
+            }
+            $response = Invoke-FabricRestMethod @apiParameters
 
             # Step 6: Process response and update continuation token
             if ($null -ne $response) {

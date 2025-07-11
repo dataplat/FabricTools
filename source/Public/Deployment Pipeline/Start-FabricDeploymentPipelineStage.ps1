@@ -114,9 +114,16 @@ function Start-FabricDeploymentPipelineStage {
 
         # Step 4: Make the API request and validate response
         if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Start Deployment Pipeline")) {
-            $response = Invoke-FabricRestMethod -Uri $apiEndpointUrl -Method Post -Body $requestBody
-            #Write-Message -Message "Successfully initiated deployment. Operation ID: $($script:responseHeader['x-ms-operation-id'])" -Level Info
-            $response = Test-FabricApiResponse -Response $response -typeName 'Deploy Pipeline Stage' -ObjectIdOrName $DeploymentPipelineId -NoWait:$NoWait
+            $apiParameters = @{
+                Uri = $apiEndpointUrl
+                Method = 'POST'
+                Body = $requestBody
+                HandleResponse = $true
+                TypeName = "Deploy Pipeline Stage"
+                ObjectIdOrName = $DeploymentPipelineId
+            }
+            $response = Invoke-FabricRestMethod @apiParameters
+            Write-Message -Message "??? Successfully initiated deployment. Operation ID: $($script:responseHeader['x-ms-operation-id'])" -Level Info
         }
 
         # Step 5: Return results

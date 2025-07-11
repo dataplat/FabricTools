@@ -91,9 +91,15 @@ function New-FabricDeploymentPipeline {
         }
 
         # Step 4: Make the API request and Validate response
-        if ($PSCmdlet.ShouldProcess($requestBody, "Create new Deployment Pipeline")) {
-            $response = Invoke-FabricRestMethod -Uri "deploymentPipelines" -Method Post -Body $requestBody
-            $response = Test-FabricApiResponse -response $response -ObjectIdOrName $DisplayName -typeName "deployment pipeline"
+        if ($PSCmdlet.ShouldProcess("Create new Deployment Pipeline")) {
+            $apiParameters = @{
+                Uri = "deploymentPipelines"
+                Method = "Post"
+                Body = $requestBody
+                HandleResponse = $true
+                TypeName = "deployment pipeline"
+            }
+            $response = Invoke-FabricRestMethod @apiParameters
         }
 
         # Step 5: Handle results

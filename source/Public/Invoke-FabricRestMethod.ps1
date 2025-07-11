@@ -22,6 +22,12 @@ Function Invoke-FabricRestMethod {
 .PARAMETER PowerBIApi
     A switch parameter to indicate that the request should be sent to the Power BI API instead of the Fabric API.
 
+.PARAMETER NoWait
+    A switch parameter to indicate that the function should not wait for the response. This is useful for asynchronous operations.
+
+.PARAMETER HandleResponse
+    A switch parameter to indicate that the response should be handled by the Test-FabricApiResponse function.
+
 .EXAMPLE
     Invoke-FabricRestMethod -uri "/api/resource" -method "GET"
 
@@ -50,9 +56,26 @@ Function Invoke-FabricRestMethod {
         [Parameter(Mandatory = $false)]
         $Body,
 
+        [Parameter(Mandatory = $false)]
         [switch] $TestTokenExpired,
 
-        [switch] $PowerBIApi
+        [Parameter(Mandatory = $false)]
+        [switch] $PowerBIApi,
+
+        [Parameter(Mandatory = $false)]
+        [switch] $NoWait = $false,
+
+        [Parameter(Mandatory = $false)]
+        [switch] $HandleResponse,
+
+        [Parameter(Mandatory = $false)]
+        [string] $TypeName = "Fabric Item",
+
+        [Parameter(Mandatory = $false)]
+        [string] $ObjectIdOrName,
+
+        [Parameter(Mandatory = $false)]
+        [string] $SuccessMessage
     )
 
     Write-Message -Message "[Invoke-FabricRestMethod]::Begin" -Level Debug
@@ -96,10 +119,27 @@ Function Invoke-FabricRestMethod {
     $response = Invoke-RestMethod @request
 
     Write-Message -Message "[Invoke-FabricRestMethod] Result response code: $statusCode" -Level Debug
-    Write-Message -Message "[Invoke-FabricRestMethod] Result return: $response" -Level Debug
+    if ($response) {
+        Write-Message -Message "[Invoke-FabricRestMethod] Result return: $response" -Level Debug
+    }
+    # Needed for backward compatibility, example: Get-FabricWorkspace
     $script:statusCode = $statusCode
     $script:responseHeader = $responseHeader
 
+    if ($HandleResponse) {
+        $params = @{
+            Response = $response
+            ResponseHeader = $responseHeader
+            StatusCode = $statusCode
+            Operation = (Get-PSCallStack)[1].Command.Split('-')[0]
+            ObjectIdOrName = $ObjectIdOrName
+            TypeName = $TypeName
+            NoWait = $NoWait
+            SuccessMessage = $SuccessMessage
+        }
+        $response = Test-FabricApiResponse @params
+    }
+
     Write-Message -Message "[Invoke-FabricRestMethod]::End" -Level Debug
-    return $response
+    $response
 }

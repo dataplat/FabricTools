@@ -61,13 +61,15 @@ function Get-FabricDeploymentPipelineStage {
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
         # Step 3: Make the API request
-        $response = Invoke-FabricRestMethod -Uri $apiEndpointUrl -Method Get
-
-        # Step 4: Validate response
-        Test-FabricApiResponse -response $response -ObjectIdOrName $DeploymentPipelineId -typeName "deployment pipeline stage"
-
-        # Step 5: Handle results
-        $response
+        $apiParameters = @{
+            Uri = $apiEndpointUrl
+            Method = 'GET'
+            HandleResponse = $true
+            TypeName = "deployment pipeline stage"
+            ObjectIdOrName = $StageId ? $StageId : $DeploymentPipelineId
+        }
+        $response = Invoke-FabricRestMethod @apiParameters
+        $response.value
 
     } catch {
         # Step 6: Error handling

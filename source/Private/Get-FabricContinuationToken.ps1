@@ -23,7 +23,7 @@ Author: Kamil Nowinski
 function Get-FabricContinuationToken {
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory = $true)]
+        [Parameter(Mandatory = $false)]
         [object]$Response
     )
 

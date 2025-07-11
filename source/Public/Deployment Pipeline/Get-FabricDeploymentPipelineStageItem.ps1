@@ -63,10 +63,14 @@ function Get-FabricDeploymentPipelineStageItem {
             Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
             # Step 4: Make the API request
-            $response = Invoke-FabricRestMethod -Uri $apiEndpointUrl -Method Get
-
-            # Step 5: Validate response
-            Test-FabricApiResponse -response $response -ObjectIdOrName $StageId -typeName "deployment pipeline stage items"
+            $apiParameters = @{
+                Uri = $apiEndpointUrl
+                Method = 'GET'
+                HandleResponse = $true
+                TypeName = "deployment pipeline stage items"
+                ObjectIdOrName = $StageId
+            }
+            $response = Invoke-FabricRestMethod @apiParameters
 
             # Step 6: Process results
             if ($response.value) {
@@ -76,15 +80,8 @@ function Get-FabricDeploymentPipelineStageItem {
             $continuationToken = Get-FabricContinuationToken -Response $response
         } while ($continuationToken)
 
-        # Step 7: Return all items
         $allItems
-        # if ($allItems.Count -gt 0) {
-        #     Write-Message -Message "Successfully retrieved $($allItems.Count) items in total." -Level Debug
-        #     return $allItems
-        # } else {
-        #     Write-Message -Message "No items found in the deployment pipeline stage." -Level Warning
-        #     return $null
-        # }
+
     } catch {
         # Step 8: Error handling
         $errorDetails = $_.Exception.Message
