@@ -121,6 +121,7 @@ function Start-FabricDeploymentPipelineStage {
                 HandleResponse = $true
                 TypeName = "Deploy Pipeline Stage"
                 ObjectIdOrName = $DeploymentPipelineId
+                NoWait = $NoWait
             }
             $response = Invoke-FabricRestMethod @apiParameters
             Write-Message -Message "??? Successfully initiated deployment. Operation ID: $($script:responseHeader['x-ms-operation-id'])" -Level Info
