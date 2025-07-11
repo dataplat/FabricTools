@@ -41,7 +41,7 @@ function Write-Message {
         [string]$Message,
 
         [Parameter()]
-        [ValidateSet("Message","Info", "Error", "Warning","Critical", "Verbose", "Debug", IgnoreCase = $true)]
+        [ValidateSet("Message", "Info", "Error", "Warning", "Critical", "Verbose", "Debug", IgnoreCase = $true)]
         [string]$Level = "Info",
 
         [Parameter()]
@@ -58,14 +58,13 @@ function Write-Message {
 
             # Write log message to console with colors
             switch ($Level) {
-                "Message" { Write-Host $logMessage -ForegroundColor White }
-                "Info" { Write-Host $logMessage -ForegroundColor Green }
-                "Error" { Write-Host $logMessage -ForegroundColor Red }
-                "Warning" { Write-Host $logMessage -ForegroundColor Yellow } 
-                "Critical" { Write-Host $logMessage -ForegroundColor Red }
-                "Verbose" { Write-Verbose $logMessage }
-                "Debug" { Write-Debug $logMessage }
-
+                "Message"  { Write-Host    $logMessage -ForegroundColor White }
+                "Info"     { Write-Host    $logMessage -ForegroundColor Green }
+                "Error"    { Write-Error   $logMessage }
+                "Warning"  { Write-Warning $logMessage }
+                "Critical" { Write-Host    $logMessage -ForegroundColor Red }    # Or maybe Stop-PSFunction here?
+                "Verbose"  { Write-Verbose $logMessage }
+                "Debug"    { Write-Debug   $logMessage }
             }
 
             # Optionally write log message to a file

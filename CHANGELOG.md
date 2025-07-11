@@ -26,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- `Write-Message` uses `Write-Warning` & `Write-Error` accordingly rather than `Write-Host` with colour (#136)
 - Updated `Get-FabricWorkspaceUser` to support pipeline input for `WorkspaceId` and `WorkspaceName` parameters.
 - Renamed `Get-FabricWorkspaceUsers` to match the singular form
 - `Get-FabricSqlDatabase` accepts Workspace as a pipeline, handles errors correctly and can filter by name (#117).
