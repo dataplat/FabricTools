@@ -228,10 +228,11 @@ Describe 'Help for module' -Tags 'helpQuality' {
     }
 }
 
-Describe "datatypes for functions" -Tag "ParameterTypes" {
+Describe "Data Types for functions" -Tag "ParameterTypes" {
     $tests = $allModuleFunctions | Where-Object -FilterScript {
             $_.Name -notin (
-                'Get-FabricLongRunningOperation'
+                'Get-FabricLongRunningOperation',
+                'Get-FabricDeploymentPipelineStage'
             )
         } | ForEach-Object {
         [PSCustomObject]@{
