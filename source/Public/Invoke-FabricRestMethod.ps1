@@ -78,7 +78,7 @@ Function Invoke-FabricRestMethod {
         [string] $SuccessMessage
     )
 
-    Write-Message -Message "[Invoke-FabricRestMethod]::Begin" -Level Debug
+    Write-Message -Message "::Begin" -Level Debug
 
     if ($TestTokenExpired) {
         Confirm-TokenState
@@ -98,11 +98,11 @@ Function Invoke-FabricRestMethod {
 
     if ($Body -is [hashtable]) {
         $Body = $Body | ConvertTo-Json -Depth 10
-        Write-Message -Message "[Invoke-FabricRestMethod] Request Body: $Body" -Level Debug
+        Write-Message -Message "Request Body: $Body" -Level Debug
     } elseif ($Body -is [string]) {
-        Write-Message -Message "[Invoke-FabricRestMethod] Request Body: $Body" -Level Debug
+        Write-Message -Message "Request Body: $Body" -Level Debug
     } else {
-        Write-Message -Message "[Invoke-FabricRestMethod] No request body provided." -Level Debug
+        Write-Message -Message "No request body provided." -Level Debug
     }
 
     $request = @{
@@ -118,9 +118,9 @@ Function Invoke-FabricRestMethod {
     }
     $response = Invoke-RestMethod @request
 
-    Write-Message -Message "[Invoke-FabricRestMethod] Result response code: $statusCode" -Level Debug
+    Write-Message -Message "Result response code: $statusCode" -Level Debug
     if ($response) {
-        Write-Message -Message "[Invoke-FabricRestMethod] Result return: $response" -Level Debug
+        Write-Message -Message "Result return: $response" -Level Debug
     }
     # Needed for backward compatibility, example: Get-FabricWorkspace
     $script:statusCode = $statusCode
@@ -140,6 +140,6 @@ Function Invoke-FabricRestMethod {
         $response = Test-FabricApiResponse @params
     }
 
-    Write-Message -Message "[Invoke-FabricRestMethod]::End" -Level Debug
+    Write-Message -Message "::End" -Level Debug
     $response
 }

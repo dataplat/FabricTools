@@ -71,7 +71,7 @@ function Test-FabricApiResponse {
         [switch] $ExtractValue = $false
     )
 
-    Write-Message -Message "[Test-FabricApiResponse]::Begin" -Level Debug
+    Write-Message -Message "::Begin" -Level Debug
 
     #$responseHeader = $script:responseHeader
     #$statusCode = $script:statusCode
@@ -93,7 +93,7 @@ function Test-FabricApiResponse {
             [string]$operationId = $responseHeader["x-ms-operation-id"]
 
             if ($NoWait) {
-                Write-Message -Message "NoWait parameter is set. Operation ID: $operationId" -Level Info
+                Write-Message -Message "NoWait parameter is set. Operation ID: $operationId" -Level Debug
                 Write-Message -Message "Run to check the progress: Get-FabricLongRunningOperationResult -operationId '$operationId'" -Level Verbose
                 return [PSCustomObject]@{
                     Location     = $responseHeader["Location"]
@@ -102,11 +102,11 @@ function Test-FabricApiResponse {
                 }
             }
 
-            Write-Message -Message "[Test-FabricApiResponse] Operation ID: '$operationId'" -Level Debug
-            Write-Message -Message "[Test-FabricApiResponse] Getting Long Running Operation status" -Level Debug
+            Write-Message -Message "Operation ID: '$operationId'" -Level Debug
+            Write-Message -Message "Getting Long Running Operation status" -Level Debug
 
             $operationStatus = Get-FabricLongRunningOperation -operationId $operationId
-            Write-Message -Message "[Test-FabricApiResponse] Long Running Operation status: $operationStatus" -Level Debug
+            Write-Message -Message "Long Running Operation status: $operationStatus" -Level Debug
             # Handle operation result
             if ($operationStatus.status -eq "Succeeded") {
                 Write-Message -Message "Operation Succeeded" -Level Debug
@@ -156,7 +156,7 @@ function Test-FabricApiResponse {
     Write-Message -Message $msg -Level $level
     # }
 
-    Write-Message -Message "[Test-FabricApiResponse]::End" -Level Debug
+    Write-Message -Message "::End" -Level Debug
 
     # Return the "value" object if exists, otherwise return the response directly
     if ($result -and $ExtractValue) {
