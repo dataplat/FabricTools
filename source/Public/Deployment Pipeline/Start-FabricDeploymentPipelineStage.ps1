@@ -133,6 +133,6 @@ function Start-FabricDeploymentPipelineStage {
     } catch {
         # Step 6: Error handling
         $errorDetails = $_.Exception.Message
-        Write-Message -Message "Failed to initiate deployment. Error: $errorDetails" -Level Error
+        Write-Error -Message "Failed to initiate deployment. Error: $errorDetails"
     }
 }

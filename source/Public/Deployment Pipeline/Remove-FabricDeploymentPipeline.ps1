@@ -58,6 +58,6 @@ function Remove-FabricDeploymentPipeline {
     } catch {
         # Step 5: Error handling
         $errorDetails = $_.Exception.Message
-        Write-Message -Message "Failed to delete deployment pipeline. Error: $errorDetails" -Level Error
+        Write-Error -Message "Failed to delete deployment pipeline. Error: $errorDetails"
     }
 }
