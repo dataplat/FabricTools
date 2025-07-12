@@ -16,12 +16,18 @@
     The name of the ML Model to retrieve. This parameter is optional.
 
 .EXAMPLE
-    Get-FabricMLModel -WorkspaceId "workspace-12345" -MLModelId "model-67890"
     This example retrieves the ML Model details for the model with ID "model-67890" in the workspace with ID "workspace-12345".
 
+    ```powershell
+    Get-FabricMLModel -WorkspaceId "workspace-12345" -MLModelId "model-67890"
+    ```
+
 .EXAMPLE
-    Get-FabricMLModel -WorkspaceId "workspace-12345" -MLModelName "My ML Model"
     This example retrieves the ML Model details for the model named "My ML Model" in the workspace with ID "workspace-12345".
+
+    ```powershell
+    Get-FabricMLModel -WorkspaceId "workspace-12345" -MLModelName "My ML Model"
+    ```
 
 .NOTES
     - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.

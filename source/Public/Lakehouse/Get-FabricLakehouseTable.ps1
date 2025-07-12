@@ -13,8 +13,11 @@ The ID of the workspace containing the Lakehouse.
 The ID of the Lakehouse from which to retrieve tables.
 
 .EXAMPLE
-Get-FabricLakehouseTable -WorkspaceId "your-workspace-id" -LakehouseId "your-lakehouse-id"
-This example retrieves all tables from the specified Lakehouse in the specified workspace.
+    This example retrieves all tables from the specified Lakehouse in the specified workspace.
+
+    ```powershell
+    Get-FabricLakehouseTable -WorkspaceId "your-workspace-id" -LakehouseId "your-lakehouse-id"
+    ```
 
 .NOTES
 

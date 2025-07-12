@@ -18,14 +18,18 @@ The new name for the Notebook.
 (Optional) The new description for the Notebook.
 
 .EXAMPLE
-Update-FabricNotebook -NotebookId "Notebook123" -NotebookName "NewNotebookName"
+    Updates the name of the Notebook with the ID "Notebook123" to "NewNotebookName".
 
-Updates the name of the Notebook with the ID "Notebook123" to "NewNotebookName".
+    ```powershell
+    Update-FabricNotebook -NotebookId "Notebook123" -NotebookName "NewNotebookName"
+    ```
 
 .EXAMPLE
-Update-FabricNotebook -NotebookId "Notebook123" -NotebookName "NewName" -NotebookDescription "Updated description"
+    Updates both the name and description of the Notebook "Notebook123".
 
-Updates both the name and description of the Notebook "Notebook123".
+    ```powershell
+    Update-FabricNotebook -NotebookId "Notebook123" -NotebookName "NewName" -NotebookDescription "Updated description"
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.

@@ -23,7 +23,10 @@ An optional path to the KQLQueryset definition file (e.g., .ipynb file) to uploa
 An optional path to the platform-specific definition (e.g., .platform file) to upload.
 
 .EXAMPLE
-Add-FabricKQLQueryset -WorkspaceId "workspace-12345" -KQLQuerysetName "New KQLQueryset" -KQLQuerysetPathDefinition "C:\KQLQuerysets\example.ipynb"
+    Creates a new KQLQueryset named "New KQLQueryset" in the specified workspace with a path to the definition file.
+    ```powershell
+    New-FabricKQLQueryset -WorkspaceId "workspace-12345" -KQLQuerysetName "New KQLQueryset" -KQLQuerysetPathDefinition "C:\kql\example.ipynb"
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.

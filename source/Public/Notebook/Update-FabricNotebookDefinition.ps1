@@ -19,14 +19,18 @@ The notebook content can be provided as file paths, and metadata updates can opt
 (Optional) The file path to the notebook's platform-specific definition file. The content will be encoded as Base64 and sent in the request.
 
 .EXAMPLE
-Update-FabricNotebookDefinition -WorkspaceId "12345" -NotebookId "67890" -NotebookPathDefinition "C:\Notebooks\Notebook.ipynb"
+    Updates the content of the notebook with ID `67890` in the workspace `12345` using the specified notebook file.
 
-Updates the content of the notebook with ID `67890` in the workspace `12345` using the specified notebook file.
+    ```powershell
+    Update-FabricNotebookDefinition -WorkspaceId "12345" -NotebookId "67890" -NotebookPathDefinition "C:\Notebooks\Notebook.ipynb"
+    ```
 
 .EXAMPLE
-Update-FabricNotebookDefinition -WorkspaceId "12345" -NotebookId "67890" -NotebookPathDefinition "C:\Notebooks\Notebook.ipynb" -NotebookPathPlatformDefinition "C:\Notebooks\.platform"
+    Updates both the content and metadata of the notebook with ID `67890` in the workspace `12345`.
 
-Updates both the content and metadata of the notebook with ID `67890` in the workspace `12345`.
+    ```powershell
+    Update-FabricNotebookDefinition -WorkspaceId "12345" -NotebookId "67890" -NotebookPathDefinition "C:\Notebooks\Notebook.ipynb" -NotebookPathPlatformDefinition "C:\Notebooks\.platform"
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.

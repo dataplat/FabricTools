@@ -12,9 +12,11 @@ The `Remove-FabricLakehouse` function sends a DELETE request to the Fabric API t
 (Mandatory) The ID of the Lakehouse to be deleted.
 
 .EXAMPLE
-Remove-FabricLakehouse -WorkspaceId "12345" -LakehouseId "67890"
+    Deletes the Lakehouse with ID "67890" from workspace "12345".
 
-Deletes the Lakehouse with ID "67890" from workspace "12345".
+    ```powershell
+    Remove-FabricLakehouse -WorkspaceId "12345" -LakehouseId "67890"
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.

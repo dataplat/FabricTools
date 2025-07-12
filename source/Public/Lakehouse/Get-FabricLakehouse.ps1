@@ -16,14 +16,18 @@ The `Get-FabricLakehouse` function sends a GET request to the Fabric API to retr
 (Optional) The name of the specific Lakehouse to retrieve.
 
 .EXAMPLE
-Get-FabricLakehouse -WorkspaceId "12345" -LakehouseName "Development"
+    Retrieves the "Development" Lakehouse from workspace "12345".
 
-Retrieves the "Development" Lakehouse from workspace "12345".
+    ```powershell
+    Get-FabricLakehouse -WorkspaceId "12345" -LakehouseName "Development"
+    ```
 
 .EXAMPLE
-Get-FabricLakehouse -WorkspaceId "12345"
+    Retrieves all Lakehouses in workspace "12345".
 
-Retrieves all Lakehouses in workspace "12345".
+    ```powershell
+    Get-FabricLakehouse -WorkspaceId "12345"
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.

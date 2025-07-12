@@ -20,7 +20,9 @@ An optional description for the Lakehouse.
 An optional path to enable schemas in the Lakehouse
 
 .EXAMPLE
-Add-FabricLakehouse -WorkspaceId "workspace-12345" -LakehouseName "New Lakehouse" -LakehouseEnableSchemas $true
+    ```powershell
+    Add-FabricLakehouse -WorkspaceId "workspace-12345" -LakehouseName "New Lakehouse" -LakehouseEnableSchemas $true
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.

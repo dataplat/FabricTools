@@ -18,14 +18,18 @@ The new name for the KQLQueryset.
 The unique identifier of the workspace where the KQLQueryset exists.
 
 .EXAMPLE
-Update-FabricKQLQueryset -KQLQuerysetId "KQLQueryset123" -KQLQuerysetName "NewKQLQuerysetName"
+    Updates the name of the KQLQueryset with the ID "KQLQueryset123" to "NewKQLQuerysetName".
 
-Updates the name of the KQLQueryset with the ID "KQLQueryset123" to "NewKQLQuerysetName".
+    ```powershell
+    Update-FabricKQLQueryset -KQLQuerysetId "KQLQueryset123" -KQLQuerysetName "NewKQLQuerysetName"
+    ```
 
 .EXAMPLE
-Update-FabricKQLQueryset -KQLQuerysetId "KQLQueryset123" -KQLQuerysetName "NewName" -KQLQuerysetDescription "Updated description"
+    Updates both the name and description of the KQLQueryset "KQLQueryset123".
 
-Updates both the name and description of the KQLQueryset "KQLQueryset123".
+    ```powershell
+    Update-FabricKQLQueryset -KQLQuerysetId "KQLQueryset123" -KQLQuerysetName "NewName" -KQLQuerysetDescription "Updated description"
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.

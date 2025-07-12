@@ -18,14 +18,18 @@ The new name for the MirroredDatabase.
 (Optional) The new description for the MirroredDatabase.
 
 .EXAMPLE
-Update-FabricMirroredDatabase -MirroredDatabaseId "MirroredDatabase123" -MirroredDatabaseName "NewMirroredDatabaseName"
+    Updates the name of the MirroredDatabase with the ID "MirroredDatabase123" to "NewMirroredDatabaseName".
 
-Updates the name of the MirroredDatabase with the ID "MirroredDatabase123" to "NewMirroredDatabaseName".
+    ```powershell
+    Update-FabricMirroredDatabase -MirroredDatabaseId "MirroredDatabase123" -MirroredDatabaseName "NewMirroredDatabaseName"
+    ```
 
 .EXAMPLE
-Update-FabricMirroredDatabase -MirroredDatabaseId "MirroredDatabase123" -MirroredDatabaseName "NewName" -MirroredDatabaseDescription "Updated description"
+    Updates both the name and description of the MirroredDatabase "MirroredDatabase123".
 
-Updates both the name and description of the MirroredDatabase "MirroredDatabase123".
+    ```powershell
+    Update-FabricMirroredDatabase -MirroredDatabaseId "MirroredDatabase123" -MirroredDatabaseName "NewName" -MirroredDatabaseDescription "Updated description"
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.

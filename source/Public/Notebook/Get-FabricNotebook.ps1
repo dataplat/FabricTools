@@ -16,14 +16,18 @@ The `Get-FabricNotebook` function sends a GET request to the Fabric API to retri
 (Optional) The name of the specific Notebook to retrieve.
 
 .EXAMPLE
-Get-FabricNotebook -WorkspaceId "12345" -NotebookName "Development"
+    Retrieves the "Development" Notebook from workspace "12345".
 
-Retrieves the "Development" Notebook from workspace "12345".
+    ```powershell
+    Get-FabricNotebook -WorkspaceId "12345" -NotebookName "Development"
+    ```
 
 .EXAMPLE
-Get-FabricNotebook -WorkspaceId "12345"
+    Retrieves all Notebooks in workspace "12345".
 
-Retrieves all Notebooks in workspace "12345".
+    ```powershell
+    Get-FabricNotebook -WorkspaceId "12345"
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
