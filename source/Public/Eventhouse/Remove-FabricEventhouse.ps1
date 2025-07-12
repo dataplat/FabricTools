@@ -18,8 +18,11 @@ function Remove-FabricEventhouse
     The name of the Eventhouse to delete. EventhouseId and EventhouseName cannot be used together.
 
 .EXAMPLE
-     Remove-FabricEventhouse -WorkspaceId "workspace-12345" -EventhouseId "eventhouse-67890"
     This example removes the Eventhouse with ID "eventhouse-67890" from the workspace with ID "workspace-12345".
+
+    ```powershell
+    Remove-FabricEventhouse -WorkspaceId "workspace-12345" -EventhouseId "eventhouse-67890"
+    ```
 
 .NOTES
     Revsion History:

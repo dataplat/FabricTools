@@ -13,9 +13,11 @@ Required. The ID of the deployment pipeline.
 Required. The ID of the deployment pipeline stage.
 
 .EXAMPLE
-Remove-FabricWorkspaceFromStage -DeploymentPipelineId "GUID-GUID-GUID-GUID" -StageId "GUID-GUID-GUID-GUID"
+    Removes the workspace from the specified deployment pipeline stage.
 
-Removes the workspace from the specified deployment pipeline stage.
+    ```powershell
+    Remove-FabricWorkspaceFromStage -DeploymentPipelineId "GUID-GUID-GUID-GUID" -StageId "GUID-GUID-GUID-GUID"
+    ```
 
 .NOTES
 - Calls `Confirm-TokenState` to ensure token validity before making the API request.

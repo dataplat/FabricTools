@@ -19,27 +19,14 @@ Required. An array of hashtables containing stage configurations. Each stage sho
 - IsPublic (boolean)
 
 .EXAMPLE
-$stages = @(
-    @{
-        DisplayName = "Development"
-        Description = "Development stage description"
-        IsPublic = $false
-    },
-    @{
-        DisplayName = "Test"
-        Description = "Test stage description"
-        IsPublic = $false
-    },
-    @{
-        DisplayName = "Production"
-        Description = "Production stage description"
-        IsPublic = $true
-    }
-)
+    Creates a new deployment pipeline with two stages.
 
-New-FabricDeploymentPipeline -DisplayName "My Deployment Pipeline" -Description "My pipeline description" -Stages $stages
-
-Creates a new deployment pipeline with three stages: Development, Test, and Production.
+    ```powershell
+    New-FabricDeploymentPipeline -DisplayName "My Deployment Pipeline" -Description "This is a test deployment pipeline" -Stages @(
+        @{ DisplayName = "Stage 1"; Description = "First stage"; IsPublic = $true },
+        @{ DisplayName = "Stage 2"; Description = "Second stage"; IsPublic = $false }
+    )
+    ```
 
 .NOTES
 - Calls `Confirm-TokenState` to ensure token validity before making the API request.

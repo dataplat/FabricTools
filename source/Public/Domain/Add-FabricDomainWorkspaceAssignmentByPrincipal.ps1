@@ -12,14 +12,11 @@ The ID of the domain to which workspaces will be assigned. This parameter is man
 An array representing the principals with their `id` and `type` properties. Must contain a `principals` key with an array of objects.
 
 .EXAMPLE
-$PrincipalIds = @(
-    @{id = "813abb4a-414c-4ac0-9c2c-bd17036fd58c";  type = "User"},
-    @{id = "b5b9495c-685a-447a-b4d3-2d8e963e6288"; type = "User"}
-    )
+    @{id = "813abb4a-414c-4ac0-9c2c-bd17036fd58c";  type = "User"}, @{id = "b5b9495c-685a-447a-b4d3-2d8e963e6288"; type = "User"} ) Add-FabricDomainWorkspaceAssignmentByPrincipal -DomainId "12345" -PrincipalIds $principals Assigns the workspaces based on the provided principal IDs and types.
 
-Add-FabricDomainWorkspaceAssignmentByPrincipal -DomainId "12345" -PrincipalIds $principals
-
-Assigns the workspaces based on the provided principal IDs and types.
+    ```powershell
+    $PrincipalIds = @(
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.

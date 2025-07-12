@@ -9,9 +9,11 @@ The `Remove-FabricDomain` function removes a specified domain from Microsoft Fab
 The unique identifier of the domain to be deleted.
 
 .EXAMPLE
-Remove-FabricDomain -DomainId "12345"
+    Deletes the domain with ID "12345".
 
-Deletes the domain with ID "12345".
+    ```powershell
+    Remove-FabricDomain -DomainId "12345"
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.

@@ -17,8 +17,11 @@ function Revoke-FabricExternalDataShares {
     The unique identifier of the External Data Share to be retrieved.
 
     .EXAMPLE
-    Get-FabricExternalDataShares
     This example retrieves the External Data Shares details
+
+    ```powershell
+    Get-FabricExternalDataShares
+    ```
 
 .NOTES
     - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.

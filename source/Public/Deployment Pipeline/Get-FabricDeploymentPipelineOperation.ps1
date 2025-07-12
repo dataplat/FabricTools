@@ -13,9 +13,11 @@ Required. The ID of the deployment pipeline.
 Required. The ID of the operation to retrieve.
 
 .EXAMPLE
-Get-FabricDeploymentPipelineOperation -DeploymentPipelineId "GUID-GUID-GUID-GUID" -OperationId "GUID-GUID-GUID-GUID"
+    Retrieves details of a specific deployment operation, including its execution plan and status.
 
-Retrieves details of a specific deployment operation, including its execution plan and status.
+    ```powershell
+    Get-FabricDeploymentPipelineOperation -DeploymentPipelineId "GUID-GUID-GUID-GUID" -OperationId "GUID-GUID-GUID-GUID"
+    ```
 
 .NOTES
 - Calls `Confirm-TokenState` to ensure token validity before making the API request.

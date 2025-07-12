@@ -14,9 +14,11 @@ Required. The ID of the deployment pipeline.
 Required. The ID of the stage to retrieve items from.
 
 .EXAMPLE
-Get-FabricDeploymentPipelineStageItem -DeploymentPipelineId "GUID-GUID-GUID-GUID" -StageId "GUID-GUID-GUID-GUID"
+    Retrieves all items from the specified stage of the deployment pipeline.
 
-Retrieves all items from the specified stage of the deployment pipeline.
+    ```powershell
+    Get-FabricDeploymentPipelineStageItem -DeploymentPipelineId "GUID-GUID-GUID-GUID" -StageId "GUID-GUID-GUID-GUID"
+    ```
 
 .NOTES
 - Calls `Confirm-TokenState` to ensure token validity before making the API request.

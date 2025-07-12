@@ -18,9 +18,11 @@ The new name for the domain. Must be alphanumeric.
 (Optional) The contributors' scope for the domain. Accepted values: 'AdminsOnly', 'AllTenant', 'SpecificUsersAndGroups'.
 
 .EXAMPLE
-Update-FabricDomain -DomainId "12345" -DomainName "NewDomain" -DomainDescription "Updated description" -DomainContributorsScope "AdminsOnly"
+    Updates the domain with ID "12345" with a new name, description, and contributors' scope.
 
-Updates the domain with ID "12345" with a new name, description, and contributors' scope.
+    ```powershell
+    Update-FabricDomain -DomainId "12345" -DomainName "NewDomain" -DomainDescription "Updated description" -DomainContributorsScope "AdminsOnly"
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.

@@ -19,9 +19,11 @@ An array of principals to assign roles to. Each principal must include:
 - `type`: The type of the principal (e.g., `User`, `Group`).
 
 .EXAMPLE
-AssignFabricDomainWorkspaceRoleAssignment -DomainId "12345" -DomainRole "Admins" -PrincipalIds @(@{id="user1"; type="User"}, @{id="group1"; type="Group"})
+    Assign the `Admins` role to the specified principals in the domain with ID "12345".
 
-Assigns the `Admins` role to the specified principals in the domain with ID "12345".
+    ```powershell
+    Assign-FabricDomainWorkspaceRoleAssignment -DomainId "12345" -DomainRole "Admins" -PrincipalIds @(@{id="user1"; type="User"}, @{id="group1"; type="Group"})
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.

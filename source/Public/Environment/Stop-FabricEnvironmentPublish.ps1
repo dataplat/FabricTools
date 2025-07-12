@@ -13,9 +13,11 @@ The unique identifier of the workspace where the environment exists.
 The unique identifier of the environment for which the publish operation is to be canceled.
 
 .EXAMPLE
-Stop-FabricEnvironmentPublish -WorkspaceId "workspace-12345" -EnvironmentId "environment-67890"
+    Cancels the publish operation for the specified environment.
 
-Cancels the publish operation for the specified environment.
+    ```powershell
+    Stop-FabricEnvironmentPublish -WorkspaceId "workspace-12345" -EnvironmentId "environment-67890"
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.

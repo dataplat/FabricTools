@@ -15,12 +15,11 @@
    The ID of a specific item to remove. If provided, this item is removed regardless of the filter
 
 .EXAMPLE
-   Remove-FabricItems -WorkspaceID "12345678-90ab-cdef-1234-567890abcdef" -Filter "*test*"
+    This command removes all items from the workspace with the specified ID whose DisplayName includes "test". .INPUTS String. You can pipe two strings that contain the workspace ID and filter to Remove-FabricItems.
 
-   This command removes all items from the workspace with the specified ID whose DisplayName includes "test".
-
-.INPUTS
-   String. You can pipe two strings that contain the workspace ID and filter to Remove-FabricItems.
+    ```powershell
+    Remove-FabricItems -WorkspaceID "12345678-90ab-cdef-1234-567890abcdef" -Filter "*test*"
+    ```
 
 .OUTPUTS
    None. This function does not return any output.

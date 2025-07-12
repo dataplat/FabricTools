@@ -19,9 +19,11 @@
         A filter to limit the search for PBIP files to specific folders.
 
     .EXAMPLE
-        Import-FabricItems -path 'C:\PBIPFiles' -workspaceId '12345' -filter 'C:\PBIPFiles\Reports'
+    This example imports PBIP files from the 'C:\PBIPFiles' folder into the Fabric workspace with ID '12345'. It only searches for PBIP files in the 'C:\PBIPFiles\Reports' folder.
 
-        This example imports PBIP files from the 'C:\PBIPFiles' folder into the Fabric workspace with ID '12345'. It only searches for PBIP files in the 'C:\PBIPFiles\Reports' folder.
+    ```powershell
+    Import-FabricItems -path 'C:\PBIPFiles' -workspaceId '12345' -filter 'C:\PBIPFiles\Reports'
+    ```
 
     .NOTES
         This function requires the Invoke-FabricRestMethod function to be available in the current session.

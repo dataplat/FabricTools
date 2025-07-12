@@ -14,9 +14,11 @@ to handle errors gracefully.
 The unique identifier of the environment whose libraries are being queried.
 
 .EXAMPLE
-Get-FabricEnvironmentLibrary -WorkspaceId "workspace-12345" -EnvironmentId "environment-67890"
+    Retrieves the libraries associated with the specified environment in the given workspace.
 
-Retrieves the libraries associated with the specified environment in the given workspace.
+    ```powershell
+    Get-FabricEnvironmentLibrary -WorkspaceId "workspace-12345" -EnvironmentId "environment-67890"
+    ```
 
 .NOTES
 - Requires the `$FabricConfig` global object, including `BaseUrl` and `FabricHeaders`.

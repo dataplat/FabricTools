@@ -15,9 +15,11 @@ The `Add-FabricEnvironment` function creates a new environment within a given wo
 (Optional) A description of the environment.
 
 .EXAMPLE
-Add-FabricEnvironment -WorkspaceId "12345" -EnvironmentName "DevEnv" -EnvironmentDescription "Development Environment"
+    Creates an environment named "DevEnv" in workspace "12345" with the specified description.
 
-Creates an environment named "DevEnv" in workspace "12345" with the specified description.
+    ```powershell
+    Add-FabricEnvironment -WorkspaceId "12345" -EnvironmentName "DevEnv" -EnvironmentDescription "Development Environment"
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.

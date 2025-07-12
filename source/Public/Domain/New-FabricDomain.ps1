@@ -15,9 +15,11 @@ A description of the domain to be created.
 (Optional) The ID of the parent domain, if applicable.
 
 .EXAMPLE
-Add-FabricDomain -DomainName "Finance" -DomainDescription "Finance data domain" -ParentDomainId "12345"
+    Creates a "Finance" domain under the parent domain with ID "12345".
 
-Creates a "Finance" domain under the parent domain with ID "12345".
+    ```powershell
+    Add-FabricDomain -DomainName "Finance" -DomainDescription "Finance data domain" -ParentDomainId "12345"
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.

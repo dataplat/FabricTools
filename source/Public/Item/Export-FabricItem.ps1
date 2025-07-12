@@ -18,14 +18,18 @@ A script block used to filter the items to be exported. Only items that match th
 The ID of the specific item to export. If provided, only that item will be exported.
 
 .EXAMPLE
-Export-FabricItem -workspaceId "12345678-1234-1234-1234-1234567890AB" -path "C:\ExportedItems"
+    This example exports all items from the Fabric workspace with the specified ID to the "C:\ExportedItems" directory.
 
-This example exports all items from the Fabric workspace with the specified ID to the "C:\ExportedItems" directory.
+    ```powershell
+    Export-FabricItem -workspaceId "12345678-1234-1234-1234-1234567890AB" -path "C:\ExportedItems"
+    ```
 
 .EXAMPLE
-Export-FabricItem -workspaceId "12345678-1234-1234-1234-1234567890AB" -itemID "98765432-4321-4321-4321-9876543210BA" -path "C:\ExportedItems"
+    This example exports the item with the specified ID from the Fabric workspace with the specified ID to the "C:\ExportedItems" directory.
 
-This example exports the item with the specified ID from the Fabric workspace with the specified ID to the "C:\ExportedItems" directory.
+    ```powershell
+    Export-FabricItem -workspaceId "12345678-1234-1234-1234-1234567890AB" -itemID "98765432-4321-4321-4321-9876543210BA" -path "C:\ExportedItems"
+    ```
 
 .NOTES
 

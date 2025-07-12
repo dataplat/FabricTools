@@ -19,14 +19,18 @@ Retrieves an Eventstream or a list of Eventstreams from a specified workspace in
     An example of a GUID is '12345678-1234-1234-1234-123456789012'.
 
 .EXAMPLE
-Get-FabricEventstream -WorkspaceId "12345" -EventstreamName "Development"
+    Retrieves the "Development" Eventstream from workspace "12345".
 
-Retrieves the "Development" Eventstream from workspace "12345".
+    ```powershell
+    Get-FabricEventstream -WorkspaceId "12345" -EventstreamName "Development"
+    ```
 
 .EXAMPLE
-Get-FabricEventstream -WorkspaceId "12345"
+    Retrieves all Eventstreams in workspace "12345".
 
-Retrieves all Eventstreams in workspace "12345".
+    ```powershell
+    Get-FabricEventstream -WorkspaceId "12345"
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.

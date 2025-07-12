@@ -7,8 +7,11 @@
     It handles token validation, constructs the API URL, makes the API request, and processes the response.
 
 .EXAMPLE
-    Get-FabricExternalDataShares
     This example retrieves the External Data Shares details
+
+    ```powershell
+    Get-FabricExternalDataShares
+    ```
 
 .NOTES
     - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.

@@ -12,9 +12,11 @@ The unique identifier of the Fabric domain to which the workspaces will be assig
 An array of capacity IDs used to assign workspaces to the domain.
 
 .EXAMPLE
-Add-FabricDomainWorkspaceAssignmentByCapacity -DomainId "12345" -CapacitiesIds @("capacity1", "capacity2")
+    Assigns workspaces to the domain with ID "12345" based on the specified capacities.
 
-Assigns workspaces to the domain with ID "12345" based on the specified capacities.
+    ```powershell
+    Add-FabricDomainWorkspaceAssignmentByCapacity -DomainId "12345" -CapacitiesIds @("capacity1", "capacity2")
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.

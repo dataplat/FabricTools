@@ -16,9 +16,11 @@ Required. The ID of the deployment pipeline stage.
 Required. The ID of the workspace to assign to the stage.
 
 .EXAMPLE
-Add-FabricWorkspaceToStage -DeploymentPipelineId "GUID-GUID-GUID-GUID" -StageId "GUID-GUID-GUID-GUID" -WorkspaceId "GUID-GUID-GUID-GUID"
+    Assigns the specified workspace to the deployment pipeline stage.
 
-Assigns the specified workspace to the deployment pipeline stage.
+    ```powershell
+    Add-FabricWorkspaceToStage -DeploymentPipelineId "GUID-GUID-GUID-GUID" -StageId "GUID-GUID-GUID-GUID" -WorkspaceId "GUID-GUID-GUID-GUID"
+    ```
 
 .NOTES
 - Calls `Confirm-TokenState` to ensure token validity before making the API request.

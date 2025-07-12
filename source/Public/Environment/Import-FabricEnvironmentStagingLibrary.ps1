@@ -13,7 +13,9 @@ The unique identifier of the workspace where the environment exists.
 The unique identifier of the environment where the library will be uploaded.
 
 .EXAMPLE
-Import-FabricEnvironmentStagingLibrary -WorkspaceId "workspace-12345" -EnvironmentId "env-67890"
+    ```powershell
+    Import-FabricEnvironmentStagingLibrary -WorkspaceId "workspace-12345" -EnvironmentId "env-67890"
+    ```
 
 .NOTES
 - This is not working code. It is a placeholder for future development. Fabric documentation is missing some important details on how to upload libraries.

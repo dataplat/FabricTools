@@ -14,14 +14,18 @@ Required. The ID of the deployment pipeline.
 Optional. The ID of the specific stage to retrieve. If not provided, returns all stages in the pipeline.
 
 .EXAMPLE
-Get-FabricDeploymentPipelineStage -DeploymentPipelineId "GUID-GUID-GUID-GUID" -StageId "GUID-GUID-GUID-GUID"
+    Retrieves details of a specific deployment pipeline stage, including its workspace assignment and settings.
 
-Retrieves details of a specific deployment pipeline stage, including its workspace assignment and settings.
+    ```powershell
+    Get-FabricDeploymentPipelineStage -DeploymentPipelineId "GUID-GUID-GUID-GUID" -StageId "GUID-GUID-GUID-GUID"
+    ```
 
 .EXAMPLE
-Get-FabricDeploymentPipelineStage -DeploymentPipelineId "GUID-GUID-GUID-GUID"
+    Retrieves a list of all stages in the specified deployment pipeline.
 
-Retrieves a list of all stages in the specified deployment pipeline.
+    ```powershell
+    Get-FabricDeploymentPipelineStage -DeploymentPipelineId "GUID-GUID-GUID-GUID"
+    ```
 
 .NOTES
 - Calls `Confirm-TokenState` to ensure token validity before making the API request.

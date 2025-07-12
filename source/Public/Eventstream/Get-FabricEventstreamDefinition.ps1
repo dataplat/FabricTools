@@ -17,14 +17,18 @@ Specifies the format of the Eventstream definition. Currently, only 'ipynb' is s
 Default: 'ipynb'.
 
 .EXAMPLE
-Get-FabricEventstreamDefinition -WorkspaceId "12345" -EventstreamId "67890"
+    Retrieves the definition of the Eventstream with ID `67890` from the workspace with ID `12345` in the `ipynb` format.
 
-Retrieves the definition of the Eventstream with ID `67890` from the workspace with ID `12345` in the `ipynb` format.
+    ```powershell
+    Get-FabricEventstreamDefinition -WorkspaceId "12345" -EventstreamId "67890"
+    ```
 
 .EXAMPLE
-Get-FabricEventstreamDefinition -WorkspaceId "12345"
+    Retrieves the definitions of all Eventstreams in the workspace with ID `12345` in the `ipynb` format.
 
-Retrieves the definitions of all Eventstreams in the workspace with ID `12345` in the `ipynb` format.
+    ```powershell
+    Get-FabricEventstreamDefinition -WorkspaceId "12345"
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.

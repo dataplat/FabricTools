@@ -20,33 +20,40 @@ function Get-FabricEventhouse {
         An example of a GUID is '12345678-1234-1234-1234-123456789012'.
 
     .EXAMPLE
-        Get-FabricEventhouse `
-            -WorkspaceId '12345678-1234-1234-1234-123456789012'
+    This example will give you all Eventhouses in the Workspace.
 
-        This example will give you all Eventhouses in the Workspace.
-
-    .EXAMPLE
-        Get-FabricEventhouse `
-            -WorkspaceId '12345678-1234-1234-1234-123456789012' `
-            -EventhouseName 'MyEventhouse'
-
-        This example will give you all Information about the Eventhouse with the name 'MyEventhouse'.
+    ```powershell
+    Get-FabricEventhouse `
+    -WorkspaceId '12345678-1234-1234-1234-123456789012'
+    ```
 
     .EXAMPLE
-        Get-FabricEventhouse `
-            -WorkspaceId '12345678-1234-1234-1234-123456789012' `
-            -EventhouseId '12345678-1234-1234-1234-123456789012'
+    This example will give you all Information about the Eventhouse with the name 'MyEventhouse'.
 
-        This example will give you all Information about the Eventhouse with the Id '12345678-1234-1234-1234-123456789012'.
+    ```powershell
+    Get-FabricEventhouse `
+    -WorkspaceId '12345678-1234-1234-1234-123456789012' `
+    -EventhouseName 'MyEventhouse'
+    ```
+
+    .EXAMPLE
+    This example will give you all Information about the Eventhouse with the Id '12345678-1234-1234-1234-123456789012'.
+
+    ```powershell
+    Get-FabricEventhouse `
+    -WorkspaceId '12345678-1234-1234-1234-123456789012' `
+    -EventhouseId '12345678-1234-1234-1234-123456789012'
+    ```
 
         .EXAMPLE
-        Get-FabricEventhouse `
-            -WorkspaceId '12345678-1234-1234-1234-123456789012' `
-            -EventhouseId '12345678-1234-1234-1234-123456789012' `
-            -Verbose
+    This example will give you all Information about the Eventhouse with the Id '12345678-1234-1234-1234-123456789012'. It will also give you verbose output which is useful for debugging.
 
-        This example will give you all Information about the Eventhouse with the Id '12345678-1234-1234-1234-123456789012'.
-        It will also give you verbose output which is useful for debugging.
+    ```powershell
+    Get-FabricEventhouse `
+    -WorkspaceId '12345678-1234-1234-1234-123456789012' `
+    -EventhouseId '12345678-1234-1234-1234-123456789012' `
+    -Verbose
+    ```
 
     .LINK
         https://learn.microsoft.com/en-us/rest/api/fabric/eventhouse/items/list-eventhouses?tabs=HTTP

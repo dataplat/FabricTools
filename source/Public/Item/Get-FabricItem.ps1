@@ -19,9 +19,11 @@ The ID of the specific item to retrieve. If not specified, all items will be ret
 (Optional) The type of the fabric items to retrieve. If not specified, all items will be retrieved.
 
 .EXAMPLE
-Get-FabricItem -workspaceId "12345" -type "file"
+    This example retrieves all fabric items of type "file" from the workspace with ID "12345".
 
-This example retrieves all fabric items of type "file" from the workspace with ID "12345".
+    ```powershell
+    Get-FabricItem -workspaceId "12345" -type "file"
+    ```
 
 .NOTES
 
