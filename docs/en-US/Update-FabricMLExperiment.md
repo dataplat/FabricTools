@@ -37,8 +37,11 @@ It supports optional parameters for ML Experiment description.
 
 ### EXAMPLE 1
 
-Update-FabricMLExperiment -WorkspaceId "workspace-12345" -MLExperimentId "experiment-67890" -MLExperimentName "Updated ML Experiment" -MLExperimentDescription "Updated description"
 This example updates the ML Experiment with ID "experiment-67890" in the workspace with ID "workspace-12345" with a new name and description.
+
+```powershell
+Update-FabricMLExperiment -WorkspaceId "workspace-12345" -MLExperimentId "experiment-67890" -MLExperimentName "Updated ML Experiment" -MLExperimentDescription "Updated description"
+```
 
 ## PARAMETERS
 

@@ -37,9 +37,11 @@ It supports multiple aliases for flexibility.
 
 ### EXAMPLE 1
 
-New-FabricWorkspaceUsageMetricsReport -workspaceId "your-workspace-id"
-
 This example retrieves the workspace usage metrics dataset ID for a specific workspace given the workspace ID.
+
+```powershell
+New-FabricWorkspaceUsageMetricsReport -workspaceId "your-workspace-id"
+```
 
 ## PARAMETERS
 

@@ -36,18 +36,27 @@ The function supports filtering by SparkCustomPoolId or SparkCustomPoolName, but
 
 ### EXAMPLE 1
 
-Get-FabricSparkCustomPool -WorkspaceId "12345"
 This example retrieves all Spark custom pools from the workspace with ID "12345".
+
+```powershell
+Get-FabricSparkCustomPool -WorkspaceId "12345"
+```
 
 ### EXAMPLE 2
 
-Get-FabricSparkCustomPool -WorkspaceId "12345" -SparkCustomPoolId "pool1"
 This example retrieves the Spark custom pool with ID "pool1" from the workspace with ID "12345".
+
+```powershell
+Get-FabricSparkCustomPool -WorkspaceId "12345" -SparkCustomPoolId "pool1"
+```
 
 ### EXAMPLE 3
 
-Get-FabricSparkCustomPool -WorkspaceId "12345" -SparkCustomPoolName "MyPool"
 This example retrieves the Spark custom pool with name "MyPool" from the workspace with ID "12345".
+
+```powershell
+Get-FabricSparkCustomPool -WorkspaceId "12345" -SparkCustomPoolName "MyPool"
+```
 
 ## PARAMETERS
 

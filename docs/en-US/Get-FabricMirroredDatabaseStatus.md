@@ -36,8 +36,11 @@ It handles errors and logs messages at various levels (Debug, Error).
 
 ### EXAMPLE 1
 
-Get-FabricMirroredDatabaseStatus -WorkspaceId "your-workspace-id" -MirroredDatabaseId "your-mirrored-database-id"
 This example retrieves the status of a mirrored database with the specified ID in the specified workspace.
+
+```powershell
+Get-FabricMirroredDatabaseStatus -WorkspaceId "your-workspace-id" -MirroredDatabaseId "your-mirrored-database-id"
+```
 
 ## PARAMETERS
 

@@ -36,8 +36,11 @@ It supports optional parameters for ML Model description.
 
 ### EXAMPLE 1
 
-New-FabricMLModel -WorkspaceId "workspace-12345" -MLModelName "New ML Model" -MLModelDescription "Description of the new ML Model"
 This example creates a new ML Model named "New ML Model" in the workspace with ID "workspace-12345" with the provided description.
+
+```powershell
+New-FabricMLModel -WorkspaceId "workspace-12345" -MLModelName "New ML Model" -MLModelDescription "Description of the new ML Model"
+```
 
 ## PARAMETERS
 

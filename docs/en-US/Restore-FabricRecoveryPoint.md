@@ -35,15 +35,19 @@ Restore a Fabric data warehouse to a specified restore pont.
 
 ### EXAMPLE 1
 
-Restore-FabricRecoveryPoint -CreateTime '2024-07-23T11:20:26Z'
-
 Restore a Fabric Data Warehouse to a specific restore point that has been set using Set-FabricConfig.
+
+```powershell
+Restore-FabricRecoveryPoint -CreateTime '2024-07-23T11:20:26Z'
+```
 
 ### EXAMPLE 2
 
-Restore-FabricRecoveryPoint -CreateTime '2024-07-23T11:20:26Z' -WorkspaceGUID 'GUID-GUID-GUID-GUID' -DataWarehouseGUID 'GUID-GUID-GUID-GUID'
-
 Restore a Fabric Data Warehouse to a specific restore point, specifying the workspace and data warehouse GUIDs.
+
+```powershell
+Restore-FabricRecoveryPoint -CreateTime '2024-07-23T11:20:26Z' -WorkspaceGUID 'GUID-GUID-GUID-GUID' -DataWarehouseGUID 'GUID-GUID-GUID-GUID'
+```
 
 ## PARAMETERS
 

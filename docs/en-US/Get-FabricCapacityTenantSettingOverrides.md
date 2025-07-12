@@ -35,15 +35,19 @@ Otherwise, it retrieves overrides for all capacities.
 
 ### EXAMPLE 1
 
-Get-FabricCapacityTenantSettingOverrides
-
 Returns all capacities tenant setting overrides.
+
+```powershell
+Get-FabricCapacityTenantSettingOverrides
+```
 
 ### EXAMPLE 2
 
-Get-FabricCapacityTenantSettingOverrides -capacityId "12345"
-
 Returns tenant setting overrides for the capacity with ID "12345".
+
+```powershell
+Get-FabricCapacityTenantSettingOverrides -capacityId "12345"
+```
 
 ## PARAMETERS
 

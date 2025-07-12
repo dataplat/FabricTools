@@ -35,15 +35,19 @@ It can filter the results by `MirroredWarehouseName`.
 
 ### EXAMPLE 1
 
-Get-FabricMirroredWarehouse -WorkspaceId "12345" -MirroredWarehouseName "Development"
-
 Retrieves the "Development" MirroredWarehouse from workspace "12345".
+
+```powershell
+Get-FabricMirroredWarehouse -WorkspaceId "12345" -MirroredWarehouseName "Development"
+```
 
 ### EXAMPLE 2
 
-Get-FabricMirroredWarehouse -WorkspaceId "12345"
-
 Retrieves all MirroredWarehouses in workspace "12345".
+
+```powershell
+Get-FabricMirroredWarehouse -WorkspaceId "12345"
+```
 
 ## PARAMETERS
 

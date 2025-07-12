@@ -36,8 +36,11 @@ It supports optional parameters for ML Experiment description.
 
 ### EXAMPLE 1
 
-New-FabricMLExperiment -WorkspaceId "workspace-12345" -MLExperimentName "New ML Experiment" -MLExperimentDescription "Description of the new ML Experiment"
 This example creates a new ML Experiment named "New ML Experiment" in the workspace with ID "workspace-12345" with the provided description.
+
+```powershell
+New-FabricMLExperiment -WorkspaceId "workspace-12345" -MLExperimentName "New ML Experiment" -MLExperimentDescription "Description of the new ML Experiment"
+```
 
 ## PARAMETERS
 

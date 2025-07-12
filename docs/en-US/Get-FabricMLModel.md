@@ -35,13 +35,19 @@ It handles token validation, constructs the API URL, makes the API request, and 
 
 ### EXAMPLE 1
 
-Get-FabricMLModel -WorkspaceId "workspace-12345" -MLModelId "model-67890"
 This example retrieves the ML Model details for the model with ID "model-67890" in the workspace with ID "workspace-12345".
+
+```powershell
+Get-FabricMLModel -WorkspaceId "workspace-12345" -MLModelId "model-67890"
+```
 
 ### EXAMPLE 2
 
-Get-FabricMLModel -WorkspaceId "workspace-12345" -MLModelName "My ML Model"
 This example retrieves the ML Model details for the model named "My ML Model" in the workspace with ID "workspace-12345".
+
+```powershell
+Get-FabricMLModel -WorkspaceId "workspace-12345" -MLModelName "My ML Model"
+```
 
 ## PARAMETERS
 

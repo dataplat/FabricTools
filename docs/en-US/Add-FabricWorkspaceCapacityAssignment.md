@@ -36,9 +36,11 @@ The `Add-FabricWorkspaceCapacityAssignment` function sends a POST request to ass
 
 ### EXAMPLE 1
 
-Add-FabricWorkspaceCapacityAssignment -WorkspaceId "workspace123" -CapacityId "capacity456"
-
 Assigns the workspace with ID "workspace123" to the capacity "capacity456".
+
+```powershell
+Add-FabricWorkspaceCapacityAssignment -WorkspaceId "workspace123" -CapacityId "capacity456"
+```
 
 ## PARAMETERS
 

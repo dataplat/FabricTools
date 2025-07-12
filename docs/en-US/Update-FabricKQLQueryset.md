@@ -34,15 +34,19 @@ The `Update-FabricKQLQueryset` function updates the name and/or description of a
 
 ### EXAMPLE 1
 
-Update-FabricKQLQueryset -KQLQuerysetId "KQLQueryset123" -KQLQuerysetName "NewKQLQuerysetName"
-
 Updates the name of the KQLQueryset with the ID "KQLQueryset123" to "NewKQLQuerysetName".
+
+```powershell
+Update-FabricKQLQueryset -KQLQuerysetId "KQLQueryset123" -KQLQuerysetName "NewKQLQuerysetName"
+```
 
 ### EXAMPLE 2
 
-Update-FabricKQLQueryset -KQLQuerysetId "KQLQueryset123" -KQLQuerysetName "NewName" -KQLQuerysetDescription "Updated description"
-
 Updates both the name and description of the KQLQueryset "KQLQueryset123".
+
+```powershell
+Update-FabricKQLQueryset -KQLQuerysetId "KQLQueryset123" -KQLQuerysetName "NewName" -KQLQuerysetDescription "Updated description"
+```
 
 ## PARAMETERS
 

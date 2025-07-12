@@ -36,15 +36,19 @@ It handles various aspects such as authentication, 429 throttling, and Long-Runn
 
 ### EXAMPLE 1
 
-Invoke-FabricAPIRequest_duplicate -uri "/api/resource" -method "Get"
+This example sends a GET request to the "/api/resource" endpoint of the Fabric API. ```powershell ```
 
-This example sends a GET request to the "/api/resource" endpoint of the Fabric API.
+```powershell
+Invoke-FabricAPIRequest_duplicate -uri "/api/resource" -method "Get"
+```
 
 ### EXAMPLE 2
 
-Invoke-FabricAPIRequest_duplicate -authToken "abc123" -uri "/api/resource" -method "Post" -body $requestBody
+This example sends a POST request to the "/api/resource" endpoint of the Fabric API with a request body. ```powershell ```
 
-This example sends a POST request to the "/api/resource" endpoint of the Fabric API with a request body.
+```powershell
+Invoke-FabricAPIRequest_duplicate -authToken "abc123" -uri "/api/resource" -method "Post" -body $requestBody
+```
 
 ## PARAMETERS
 

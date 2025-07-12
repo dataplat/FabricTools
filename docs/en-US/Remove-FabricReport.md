@@ -35,8 +35,11 @@ from the specified workspace using the provided WorkspaceId and ReportId.
 
 ### EXAMPLE 1
 
-Remove-FabricReport -WorkspaceId "workspace-12345" -ReportId "Report-67890"
 This example removes the Report with ID "Report-67890" from the workspace with ID "workspace-12345".
+
+```powershell
+Remove-FabricReport -WorkspaceId "workspace-12345" -ReportId "Report-67890"
+```
 
 ## PARAMETERS
 

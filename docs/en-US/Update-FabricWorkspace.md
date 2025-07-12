@@ -34,15 +34,19 @@ The `Update-FabricWorkspace` function updates the name and/or description of a s
 
 ### EXAMPLE 1
 
-Update-FabricWorkspace -WorkspaceId "workspace123" -WorkspaceName "NewWorkspaceName"
-
 Updates the name of the workspace with the ID "workspace123" to "NewWorkspaceName".
+
+```powershell
+Update-FabricWorkspace -WorkspaceId "workspace123" -WorkspaceName "NewWorkspaceName"
+```
 
 ### EXAMPLE 2
 
-Update-FabricWorkspace -WorkspaceId "workspace123" -WorkspaceName "NewName" -WorkspaceDescription "Updated description"
-
 Updates both the name and description of the workspace "workspace123".
+
+```powershell
+Update-FabricWorkspace -WorkspaceId "workspace123" -WorkspaceName "NewName" -WorkspaceDescription "Updated description"
+```
 
 ## PARAMETERS
 

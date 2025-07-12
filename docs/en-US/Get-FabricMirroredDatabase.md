@@ -35,15 +35,19 @@ It can filter the results by `MirroredDatabaseName`.
 
 ### EXAMPLE 1
 
-Get-FabricMirroredDatabase -WorkspaceId "12345" -MirroredDatabaseName "Development"
-
 Retrieves the "Development" MirroredDatabase from workspace "12345".
+
+```powershell
+Get-FabricMirroredDatabase -WorkspaceId "12345" -MirroredDatabaseName "Development"
+```
 
 ### EXAMPLE 2
 
-Get-FabricMirroredDatabase -WorkspaceId "12345"
-
 Retrieves all MirroredDatabases in workspace "12345".
+
+```powershell
+Get-FabricMirroredDatabase -WorkspaceId "12345"
+```
 
 ## PARAMETERS
 

@@ -41,38 +41,45 @@ The Get-FabricWorkspaceUser function retrieves the details of the users of a wor
 
 ### EXAMPLE 1
 
-Get-FabricWorkspaceUser -WorkspaceId '12345678-1234-1234-1234-123456789012
-
 This example retrieves the users of a workspace of the workspace with the ID '12345678-1234-1234-1234-123456789012'.
+
+```powershell
+Get-FabricWorkspaceUser -WorkspaceId '12345678-1234-1234-1234-123456789012
+```
 
 ### EXAMPLE 2
 
-$workspace = Get-FabricWorkspace -WorkspaceName 'prod-workspace'
-$workspace | Get-FabricWorkspaceUser
-
 This example retrieves the users of the prod-workspace workspace by piping the object.
+
+```powershell
+$workspace = Get-FabricWorkspace -WorkspaceName 'prod-workspace'
+
+$workspace | Get-FabricWorkspaceUser
+```
 
 ### EXAMPLE 3
 
-Get-FabricWorkspaceUser -Workspace (Get-FabricWorkspace -WorkspaceName 'prod-workspace')
-
 This example retrieves the users of the prod-workspace workspace by piping the object.
+
+```powershell
+Get-FabricWorkspaceUser -Workspace (Get-FabricWorkspace -WorkspaceName 'prod-workspace')
+```
 
 ### EXAMPLE 4
 
-Get-FabricWorkspace| Get-FabricWorkspaceUser
+This example retrieves the users of all of the workspaces. IMPORTANT: This will not return the workspace name or ID at present.
 
-This example retrieves the users of all of the workspaces.
-IMPORTANT: This will not return the workspace name or ID at present.
+```powershell
+Get-FabricWorkspace| Get-FabricWorkspaceUser
+```
 
 ### EXAMPLE 5
 
-Get-FabricWorkspace| Foreach-Object {
-Get-FabricWorkspaceUser -WorkspaceId $_.Id | Select-Object @{Name='WorkspaceName';Expression={$_.displayName;}}, *
-}
+Get-FabricWorkspaceUser -WorkspaceId $_.Id | Select-Object @{Name='WorkspaceName';Expression={$_.displayName;}}, * } This example retrieves the users of all of the workspaces. It will also add the workspace name to the output.
 
-This example retrieves the users of all of the workspaces.
-It will also add the workspace name to the output.
+```powershell
+Get-FabricWorkspace| Foreach-Object {
+```
 
 ## PARAMETERS
 

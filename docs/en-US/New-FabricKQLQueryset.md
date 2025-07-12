@@ -38,7 +38,10 @@ and path definitions for the KQLQueryset content.
 
 ### EXAMPLE 1
 
-Add-FabricKQLQueryset -WorkspaceId "workspace-12345" -KQLQuerysetName "New KQLQueryset" -KQLQuerysetPathDefinition "C:\KQLQuerysets\example.ipynb"
+Creates a new KQLQueryset named "New KQLQueryset" in the specified workspace with a path to the definition file.
+```powershell
+New-FabricKQLQueryset -WorkspaceId "workspace-12345" -KQLQuerysetName "New KQLQueryset" -KQLQuerysetPathDefinition "C:\kql\example.ipynb"
+```
 
 ## PARAMETERS
 

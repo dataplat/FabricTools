@@ -35,13 +35,19 @@ It handles token validation, constructs the API URL, makes the API request, and 
 
 ### EXAMPLE 1
 
-Get-FabricWarehouse -WorkspaceId "workspace-12345" -WarehouseId "warehouse-67890"
 This example retrieves the warehouse details for the warehouse with ID "warehouse-67890" in the workspace with ID "workspace-12345".
+
+```powershell
+Get-FabricWarehouse -WorkspaceId "workspace-12345" -WarehouseId "warehouse-67890"
+```
 
 ### EXAMPLE 2
 
-Get-FabricWarehouse -WorkspaceId "workspace-12345" -WarehouseName "My Warehouse"
 This example retrieves the warehouse details for the warehouse named "My Warehouse" in the workspace with ID "workspace-12345".
+
+```powershell
+Get-FabricWarehouse -WorkspaceId "workspace-12345" -WarehouseName "My Warehouse"
+```
 
 ## PARAMETERS
 

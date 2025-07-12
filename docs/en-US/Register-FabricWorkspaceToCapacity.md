@@ -44,16 +44,19 @@ It supports multiple aliases for flexibility.
 
 ### EXAMPLE 1
 
-Register-FabricWorkspaceToCapacity -WorkspaceId "Workspace-GUID" -CapacityId "Capacity-GUID"
-
 This example Sets the workspace with ID "Workspace-GUID" to the capacity with ID "Capacity-GUID".
+
+```powershell
+Register-FabricWorkspaceToCapacity -WorkspaceId "Workspace-GUID" -CapacityId "Capacity-GUID"
+```
 
 ### EXAMPLE 2
 
-$workspace | Register-FabricWorkspaceToCapacity -CapacityId "Capacity-GUID"
+This example Sets the workspace object stored in the $workspace variable to the capacity with ID "Capacity-GUID". The workspace object is piped into the function.
 
-This example Sets the workspace object stored in the $workspace variable to the capacity with ID "Capacity-GUID".
-The workspace object is piped into the function.
+```powershell
+$workspace | Register-FabricWorkspaceToCapacity -CapacityId "Capacity-GUID"
+```
 
 ## PARAMETERS
 

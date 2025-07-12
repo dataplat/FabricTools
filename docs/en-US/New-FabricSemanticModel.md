@@ -37,8 +37,11 @@ It supports optional parameters for SemanticModel description and path definitio
 
 ### EXAMPLE 1
 
-New-FabricSemanticModel -WorkspaceId "workspace-12345" -SemanticModelName "New SemanticModel" -SemanticModelDescription "Description of the new SemanticModel"
 This example creates a new SemanticModel named "New SemanticModel" in the workspace with ID "workspace-12345" with the provided description.
+
+```powershell
+New-FabricSemanticModel -WorkspaceId "workspace-12345" -SemanticModelName "New SemanticModel" -SemanticModelDescription "Description of the new SemanticModel"
+```
 
 ## PARAMETERS
 

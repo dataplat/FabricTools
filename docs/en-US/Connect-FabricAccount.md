@@ -36,22 +36,28 @@ This function retrieves the authentication token for the Fabric API and sets up 
 
 ### EXAMPLE 1
 
-Connect-FabricAccount -TenantId '12345678-1234-1234-1234-123456789012'
+Connects to the stated Tenant with existing credentials
 
-Connects to the stated Tenant with exisitng credentials
+```powershell
+Connect-FabricAccount -TenantId '12345678-1234-1234-1234-123456789012'
+```
 
 ### EXAMPLE 2
 
+Prompts for Service Principal id and secret and connects as that Service Principal
+
+```powershell
 $credential = Get-Credential
 Connect-FabricAccount -TenantId 'xxx' -credential $credential
-
-Prompts for Service Principal id and secret and connects as that Service Principal
+```
 
 ### EXAMPLE 3
 
-Connect-FabricAccount -TenantId 'xxx' -ServicePrincipalId 'appId' -ServicePrincipalSecret $secret
-
 Connects as Service Principal using id and secret
+
+```powershell
+Connect-FabricAccount -TenantId 'xxx' -ServicePrincipalId 'appId' -ServicePrincipalSecret $secret
+```
 
 ## PARAMETERS
 

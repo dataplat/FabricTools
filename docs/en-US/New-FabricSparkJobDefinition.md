@@ -37,8 +37,11 @@ It supports optional parameters for SparkJobDefinition description and path defi
 
 ### EXAMPLE 1
 
-New-FabricSparkJobDefinition -WorkspaceId "workspace-12345" -SparkJobDefinitionName "New SparkJobDefinition" -SparkJobDefinitionDescription "Description of the new SparkJobDefinition"
 This example creates a new SparkJobDefinition named "New SparkJobDefinition" in the workspace with ID "workspace-12345" with the provided description.
+
+```powershell
+New-FabricSparkJobDefinition -WorkspaceId "workspace-12345" -SparkJobDefinitionName "New SparkJobDefinition" -SparkJobDefinitionDescription "Description of the new SparkJobDefinition"
+```
 
 ## PARAMETERS
 

@@ -35,8 +35,11 @@ from the specified workspace using the provided WorkspaceId and WarehouseId.
 
 ### EXAMPLE 1
 
-Remove-FabricWarehouse -WorkspaceId "workspace-12345" -WarehouseId "warehouse-67890"
 This example removes the warehouse with ID "warehouse-67890" from the workspace with ID "workspace-12345".
+
+```powershell
+Remove-FabricWarehouse -WorkspaceId "workspace-12345" -WarehouseId "warehouse-67890"
+```
 
 ## PARAMETERS
 

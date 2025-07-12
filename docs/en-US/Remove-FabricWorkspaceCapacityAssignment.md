@@ -36,9 +36,11 @@ The `Remove-FabricWorkspaceCapacityAssignment` function sends a POST request to 
 
 ### EXAMPLE 1
 
-Remove-FabricWorkspaceCapacityAssignment -WorkspaceId "workspace123"
-
 Unassigns the workspace with ID "workspace123" from its capacity.
+
+```powershell
+Remove-FabricWorkspaceCapacityAssignment -WorkspaceId "workspace123"
+```
 
 ## PARAMETERS
 

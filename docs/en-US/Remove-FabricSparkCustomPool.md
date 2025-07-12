@@ -35,8 +35,11 @@ from the specified workspace using the provided WorkspaceId and SparkCustomPoolI
 
 ### EXAMPLE 1
 
-Remove-FabricSparkCustomPool -WorkspaceId "workspace-12345" -SparkCustomPoolId "pool-67890"
 This example removes the Spark custom pool with ID "pool-67890" from the workspace with ID "workspace-12345".
+
+```powershell
+Remove-FabricSparkCustomPool -WorkspaceId "workspace-12345" -SparkCustomPoolId "pool-67890"
+```
 
 ## PARAMETERS
 

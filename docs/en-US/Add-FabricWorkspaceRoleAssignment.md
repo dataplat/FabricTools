@@ -34,9 +34,11 @@ The `Add-FabricWorkspaceRoleAssignments` function assigns a role (e.g., Admin, C
 
 ### EXAMPLE 1
 
-Add-FabricWorkspaceRoleAssignment -WorkspaceId "workspace123" -PrincipalId "principal123" -PrincipalType "User" -WorkspaceRole "Admin"
-
 Assigns the Admin role to the user with ID "principal123" in the workspace "workspace123".
+
+```powershell
+Add-FabricWorkspaceRoleAssignment -WorkspaceId "workspace123" -PrincipalId "principal123" -PrincipalType "User" -WorkspaceRole "Admin"
+```
 
 ## PARAMETERS
 

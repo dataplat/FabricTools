@@ -35,15 +35,19 @@ If `WorkspaceRoleAssignmentId` is provided, it retrieves the specific role assig
 
 ### EXAMPLE 1
 
-Get-FabricWorkspaceRoleAssignments -WorkspaceId "workspace123"
-
 Fetches all role assignments for the workspace with the ID "workspace123".
+
+```powershell
+Get-FabricWorkspaceRoleAssignments -WorkspaceId "workspace123"
+```
 
 ### EXAMPLE 2
 
-Get-FabricWorkspaceRoleAssignments -WorkspaceId "workspace123" -WorkspaceRoleAssignmentId "role123"
-
 Fetches the role assignment with the ID "role123" for the workspace "workspace123".
+
+```powershell
+Get-FabricWorkspaceRoleAssignments -WorkspaceId "workspace123" -WorkspaceRoleAssignmentId "role123"
+```
 
 ## PARAMETERS
 

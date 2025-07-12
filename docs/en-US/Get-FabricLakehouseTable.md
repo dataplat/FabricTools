@@ -34,8 +34,11 @@ It handles pagination using a continuation token to ensure all data is retrieved
 
 ### EXAMPLE 1
 
-Get-FabricLakehouseTable -WorkspaceId "your-workspace-id" -LakehouseId "your-lakehouse-id"
 This example retrieves all tables from the specified Lakehouse in the specified workspace.
+
+```powershell
+Get-FabricLakehouseTable -WorkspaceId "your-workspace-id" -LakehouseId "your-lakehouse-id"
+```
 
 ## PARAMETERS
 

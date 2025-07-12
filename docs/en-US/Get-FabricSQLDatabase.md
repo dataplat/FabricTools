@@ -46,35 +46,36 @@ These parameters cannot be used together.
 
 ### EXAMPLE 1
 
-$FabricSQLDatabaseConfig = @{
-    WorkspaceId = '12345678-1234-1234-1234-123456789012'
-    SQLDatabaseName = 'MySQLDatabase'
-}
-Get-FabricSQLDatabase @FabricSQLDatabaseConfig
+WorkspaceId = '12345678-1234-1234-1234-123456789012' SQLDatabaseName = 'MySQLDatabase' } Get-FabricSQLDatabase @FabricSQLDatabaseConfig Returns the details of the Fabric SQL Database with the name 'MySQLDatabase' in the workspace that is specified by the WorkspaceId.
 
-Returns the details of the Fabric SQL Database with the name 'MySQLDatabase' in the workspace that is specified by the WorkspaceId.
+```powershell
+$FabricSQLDatabaseConfig = @{
+```
 
 ### EXAMPLE 2
 
-Get-FabricSQLDatabase -WorkspaceId '12345678-1234-1234-1234-123456789012'
-
 Returns the details of the Fabric SQL Databases in the workspace that is specified by the WorkspaceId.
+
+```powershell
+Get-FabricSQLDatabase -WorkspaceId '12345678-1234-1234-1234-123456789012'
+```
 
 ### EXAMPLE 3
 
-$FabricSQLDatabaseConfig = @{
-    WorkspaceId = '12345678-1234-1234-1234-123456789012'
-    -SQLDatabaseId = '12345678-1234-1234-1234-123456789012'
-}
-Get-FabricSQLDatabase @FabricSQLDatabaseConfig
+WorkspaceId = '12345678-1234-1234-1234-123456789012' } Get-FabricSQLDatabase @FabricSQLDatabaseConfig Returns the details of the Fabric SQL Database with the ID '12345678-1234-1234-1234-123456789012' from the workspace with the ID '12345678-1234-1234-1234-123456789012'.
 
-Returns the details of the Fabric SQL Database with the ID '12345678-1234-1234-1234-123456789012' from the workspace with the ID '12345678-1234-1234-1234-123456789012'.
+```powershell
+$FabricSQLDatabaseConfig = @{
+-SQLDatabaseId = '12345678-1234-1234-1234-123456789012'
+```
 
 ### EXAMPLE 4
 
-Get-FabricWorkspace -WorkspaceName 'MsLearn-dev' | Get-FabricSQLDatabase
-
 Returns the details of the Fabric SQL Databases in the MsLearn-dev workspace.
+
+```powershell
+Get-FabricWorkspace -WorkspaceName 'MsLearn-dev' | Get-FabricSQLDatabase
+```
 
 ## PARAMETERS
 

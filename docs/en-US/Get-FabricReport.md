@@ -35,13 +35,19 @@ It handles token validation, constructs the API URL, makes the API request, and 
 
 ### EXAMPLE 1
 
-Get-FabricReport -WorkspaceId "workspace-12345" -ReportId "Report-67890"
 This example retrieves the Report details for the Report with ID "Report-67890" in the workspace with ID "workspace-12345".
+
+```powershell
+Get-FabricReport -WorkspaceId "workspace-12345" -ReportId "Report-67890"
+```
 
 ### EXAMPLE 2
 
-Get-FabricReport -WorkspaceId "workspace-12345" -ReportName "My Report"
 This example retrieves the Report details for the Report named "My Report" in the workspace with ID "workspace-12345".
+
+```powershell
+Get-FabricReport -WorkspaceId "workspace-12345" -ReportName "My Report"
+```
 
 ## PARAMETERS
 

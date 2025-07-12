@@ -42,13 +42,19 @@ It can be used to remove a workspace from a capacity, allowing it to be assigned
 
 ### EXAMPLE 1
 
-Unregister-FabricWorkspaceToCapacity -WorkspaceId "12345678"
 Unregisters the workspace with ID "12345678" from the capacity.
+
+```powershell
+Unregister-FabricWorkspaceToCapacity -WorkspaceId "12345678"
+```
 
 ### EXAMPLE 2
 
+Unregisters the workspace objects piped from Get-FabricWorkspace from the capacity. .INPUTS System.Management.Automation.PSCustomObject
+
+```powershell
 Get-FabricWorkspace | Unregister-FabricWorkspaceToCapacity
-Unregisters the workspace objects piped from Get-FabricWorkspace from the capacity.
+```
 
 ## PARAMETERS
 
@@ -149,10 +155,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 [about_CommonParameters](https://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
-
-### System.Management.Automation.PSCustomObject
-
-{{ Fill in the Description }}
 
 ### System.Object
 

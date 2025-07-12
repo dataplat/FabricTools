@@ -35,15 +35,19 @@ It can filter the results by `KQLQuerysetName`.
 
 ### EXAMPLE 1
 
-Get-FabricKQLQueryset -WorkspaceId "12345" -KQLQuerysetName "Development"
-
 Retrieves the "Development" KQLQueryset from workspace "12345".
+
+```powershell
+Get-FabricKQLQueryset -WorkspaceId "12345" -KQLQuerysetName "Development"
+```
 
 ### EXAMPLE 2
 
-Get-FabricKQLQueryset -WorkspaceId "12345"
-
 Retrieves all KQLQuerysets in workspace "12345".
+
+```powershell
+Get-FabricKQLQueryset -WorkspaceId "12345"
+```
 
 ## PARAMETERS
 

@@ -35,9 +35,11 @@ It validates the display name and handles both success and error responses.
 
 ### EXAMPLE 1
 
-Add-FabricWorkspace -WorkspaceName "NewWorkspace"
-
 Creates a workspace named "NewWorkspace".
+
+```powershell
+Add-FabricWorkspace -WorkspaceName "NewWorkspace"
+```
 
 ## PARAMETERS
 

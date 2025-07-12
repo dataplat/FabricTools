@@ -36,9 +36,11 @@ It uses the workspace ID to get the workspace and its datasets, and then retriev
 
 ### EXAMPLE 1
 
-Get-FabricWorkspaceDatasetRefreshes -WorkspaceID "12345678-90ab-cdef-1234-567890abcdef"
+This command retrieves the refresh history of all datasets in the workspace with the specified ID. .INPUTS String. You can pipe a string that contains the workspace ID to Get-FabricWorkspaceDatasetRefreshes.
 
-This command retrieves the refresh history of all datasets in the workspace with the specified ID.
+```powershell
+Get-FabricWorkspaceDatasetRefreshes -WorkspaceID "12345678-90ab-cdef-1234-567890abcdef"
+```
 
 ## PARAMETERS
 
@@ -72,10 +74,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 [about_CommonParameters](https://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
-
-### String. You can pipe a string that contains the workspace ID to Get-FabricWorkspaceDatasetRefreshes.
-
-{{ Fill in the Description }}
 
 ## OUTPUTS
 

@@ -34,9 +34,11 @@ The `Remove-FabricWorkspaceRoleAssignment` function deletes a specific role assi
 
 ### EXAMPLE 1
 
-Remove-FabricWorkspaceRoleAssignment -WorkspaceId "workspace123" -WorkspaceRoleAssignmentId "role123"
-
 Removes the role assignment with the ID "role123" from the workspace "workspace123".
+
+```powershell
+Remove-FabricWorkspaceRoleAssignment -WorkspaceId "workspace123" -WorkspaceRoleAssignmentId "role123"
+```
 
 ## PARAMETERS
 

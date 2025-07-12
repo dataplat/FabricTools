@@ -28,7 +28,7 @@ New-FabricSQLDatabase [-WorkspaceId] <guid> [-Name] <string> [[-Description] <st
 
 ## DESCRIPTION
 
-This function sends a POST request to the Microsoft Fabric API to create a new SQL Database
+The `New-FabricSQLDatabase` function sends a POST request to the Microsoft Fabric API to create a new SQL Database
 in the specified workspace.
 It supports optional parameters for SQL Database description
 and path definitions for the SQL Database content.
@@ -37,7 +37,9 @@ and path definitions for the SQL Database content.
 
 ### EXAMPLE 1
 
+```powershell
 New-FabricSQLDatabase -WorkspaceId "workspace-12345" -Name "NewDatabase"
+```
 
 ## PARAMETERS
 

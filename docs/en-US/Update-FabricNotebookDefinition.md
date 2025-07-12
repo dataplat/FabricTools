@@ -36,15 +36,19 @@ The notebook content can be provided as file paths, and metadata updates can opt
 
 ### EXAMPLE 1
 
-Update-FabricNotebookDefinition -WorkspaceId "12345" -NotebookId "67890" -NotebookPathDefinition "C:\Notebooks\Notebook.ipynb"
-
 Updates the content of the notebook with ID `67890` in the workspace `12345` using the specified notebook file.
+
+```powershell
+Update-FabricNotebookDefinition -WorkspaceId "12345" -NotebookId "67890" -NotebookPathDefinition "C:\Notebooks\Notebook.ipynb"
+```
 
 ### EXAMPLE 2
 
-Update-FabricNotebookDefinition -WorkspaceId "12345" -NotebookId "67890" -NotebookPathDefinition "C:\Notebooks\Notebook.ipynb" -NotebookPathPlatformDefinition "C:\Notebooks\.platform"
-
 Updates both the content and metadata of the notebook with ID `67890` in the workspace `12345`.
+
+```powershell
+Update-FabricNotebookDefinition -WorkspaceId "12345" -NotebookId "67890" -NotebookPathDefinition "C:\Notebooks\Notebook.ipynb" -NotebookPathPlatformDefinition "C:\Notebooks\.platform"
+```
 
 ## PARAMETERS
 

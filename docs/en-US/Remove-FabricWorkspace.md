@@ -34,9 +34,11 @@ It validates the workspace ID and handles both success and error responses.
 
 ### EXAMPLE 1
 
-Remove-FabricWorkspace -WorkspaceId "workspace123"
-
 Deletes the workspace with the ID "workspace123".
+
+```powershell
+Remove-FabricWorkspace -WorkspaceId "workspace123"
+```
 
 ## PARAMETERS
 

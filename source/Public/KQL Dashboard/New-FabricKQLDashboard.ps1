@@ -23,7 +23,18 @@ An optional path to the KQLDashboard definition file (e.g., .ipynb file) to uplo
 An optional path to the platform-specific definition (e.g., .platform file) to upload.
 
 .EXAMPLE
-Add-FabricKQLDashboard -WorkspaceId "workspace-12345" -KQLDashboardName "New KQLDashboard" -KQLDashboardPathDefinition "C:\KQLDashboards\example.ipynb"
+    Creates a new KQLDashboard named "New KQLDashboard" in the workspace with ID "workspace-12345".
+
+    ```powershell
+    New-FabricKQLDashboard -WorkspaceId "workspace-12345" -KQLDashboardName "New KQLDashboard"
+    ```
+
+.EXAMPLE
+    Creates a new KQLDashboard with a definition file and platform definition.
+
+    ```powershell
+    New-FabricKQLDashboard -WorkspaceId "workspace-12345" -KQLDashboardName "New KQLDashboard" -KQLDashboardPathDefinition "C:\KQLDashboards\example.ipynb" -KQLDashboardPathPlatformDefinition "C:\KQLDashboards\platform.json"
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.

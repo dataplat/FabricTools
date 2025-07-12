@@ -35,8 +35,11 @@ from the specified workspace using the provided WorkspaceId and SparkJobDefiniti
 
 ### EXAMPLE 1
 
-Remove-FabricSparkJobDefinition -WorkspaceId "workspace-12345" -SparkJobDefinitionId "SparkJobDefinition-67890"
 This example removes the SparkJobDefinition with ID "SparkJobDefinition-67890" from the workspace with ID "workspace-12345".
+
+```powershell
+Remove-FabricSparkJobDefinition -WorkspaceId "workspace-12345" -SparkJobDefinitionId "SparkJobDefinition-67890"
+```
 
 ## PARAMETERS
 

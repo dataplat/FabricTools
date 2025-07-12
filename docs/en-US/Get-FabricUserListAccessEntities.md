@@ -34,13 +34,19 @@ It supports filtering by entity type and handles token validation, constructs th
 
 ### EXAMPLE 1
 
-Get-FabricUserListAccessEntities -UserId "user-12345"
 This example retrieves all access entities associated with the user having ID "user-12345".
+
+```powershell
+Get-FabricUserListAccessEntities -UserId "user-12345"
+```
 
 ### EXAMPLE 2
 
-Get-FabricUserListAccessEntities -UserId "user-12345" -Type "Dashboard"
 This example retrieves only the 'Dashboard' access entities associated with the user having ID "user-12345".
+
+```powershell
+Get-FabricUserListAccessEntities -UserId "user-12345" -Type "Dashboard"
+```
 
 ## PARAMETERS
 

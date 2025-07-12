@@ -34,9 +34,11 @@ The `Remove-FabricSQLDatabase` function sends a DELETE request to the Fabric API
 
 ### EXAMPLE 1
 
-Remove-FabricSQLDatabas -WorkspaceId "12345" -SQLDatabaseId "67890"
-
 Deletes the SQL Database with ID "67890" from workspace "12345".
+
+```powershell
+Remove-FabricSQLDatabas -WorkspaceId "12345" -SQLDatabaseId "67890"
+```
 
 ## PARAMETERS
 

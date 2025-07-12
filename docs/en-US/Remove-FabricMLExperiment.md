@@ -35,8 +35,11 @@ from the specified workspace using the provided WorkspaceId and MLExperimentId.
 
 ### EXAMPLE 1
 
-Remove-FabricMLExperiment -WorkspaceId "workspace-12345" -MLExperimentId "experiment-67890"
 This example removes the MLExperiment with ID "experiment-67890" from the workspace with ID "workspace-12345".
+
+```powershell
+Remove-FabricMLExperiment -WorkspaceId "workspace-12345" -MLExperimentId "experiment-67890"
+```
 
 ## PARAMETERS
 

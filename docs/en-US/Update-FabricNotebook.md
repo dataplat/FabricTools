@@ -34,15 +34,19 @@ The `Update-FabricNotebook` function updates the name and/or description of a sp
 
 ### EXAMPLE 1
 
-Update-FabricNotebook -NotebookId "Notebook123" -NotebookName "NewNotebookName"
-
 Updates the name of the Notebook with the ID "Notebook123" to "NewNotebookName".
+
+```powershell
+Update-FabricNotebook -NotebookId "Notebook123" -NotebookName "NewNotebookName"
+```
 
 ### EXAMPLE 2
 
-Update-FabricNotebook -NotebookId "Notebook123" -NotebookName "NewName" -NotebookDescription "Updated description"
-
 Updates both the name and description of the Notebook "Notebook123".
+
+```powershell
+Update-FabricNotebook -NotebookId "Notebook123" -NotebookName "NewName" -NotebookDescription "Updated description"
+```
 
 ## PARAMETERS
 

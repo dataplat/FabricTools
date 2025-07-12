@@ -35,15 +35,19 @@ Handles both synchronous and asynchronous operations, with detailed logging and 
 
 ### EXAMPLE 1
 
-Get-FabricMirroredDatabaseDefinition -WorkspaceId "12345" -MirroredDatabaseId "67890"
-
 Retrieves the definition of the MirroredDatabase with ID `67890` from the workspace with ID `12345`.
+
+```powershell
+Get-FabricMirroredDatabaseDefinition -WorkspaceId "12345" -MirroredDatabaseId "67890"
+```
 
 ### EXAMPLE 2
 
-Get-FabricMirroredDatabaseDefinition -WorkspaceId "12345"
-
 Retrieves the definitions of all MirroredDatabases in the workspace with ID `12345`.
+
+```powershell
+Get-FabricMirroredDatabaseDefinition -WorkspaceId "12345"
+```
 
 ## PARAMETERS
 

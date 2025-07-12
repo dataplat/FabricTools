@@ -37,9 +37,11 @@ It supports multiple aliases for flexibility.
 
 ### EXAMPLE 1
 
-Get-FabricWorkspaceUsageMetricsData -workspaceId "your-workspace-id" -username "your-username"
-
 This example retrieves the workspace usage metrics for a specific workspace given the workspace ID and username.
+
+```powershell
+Get-FabricWorkspaceUsageMetricsData -workspaceId "your-workspace-id" -username "your-username"
+```
 
 ## PARAMETERS
 

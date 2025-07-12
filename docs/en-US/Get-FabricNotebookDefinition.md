@@ -36,15 +36,19 @@ Handles both synchronous and asynchronous operations, with detailed logging and 
 
 ### EXAMPLE 1
 
-Get-FabricNotebookDefinition -WorkspaceId "12345" -NotebookId "67890"
-
 Retrieves the definition of the notebook with ID `67890` from the workspace with ID `12345` in the `ipynb` format.
+
+```powershell
+Get-FabricNotebookDefinition -WorkspaceId "12345" -NotebookId "67890"
+```
 
 ### EXAMPLE 2
 
-Get-FabricNotebookDefinition -WorkspaceId "12345"
-
 Retrieves the definitions of all notebooks in the workspace with ID `12345` in the `ipynb` format.
+
+```powershell
+Get-FabricNotebookDefinition -WorkspaceId "12345"
+```
 
 ## PARAMETERS
 

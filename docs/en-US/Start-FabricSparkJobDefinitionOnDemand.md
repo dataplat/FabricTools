@@ -36,7 +36,9 @@ The function can optionally wait for the job to complete based on the 'waitForCo
 
 ### EXAMPLE 1
 
+```powershell
 Start-FabricSparkJobDefinitionOnDemand -WorkspaceId "workspace123" -SparkJobDefinitionId "jobdef456" -waitForCompletion $true
+```
 
 ## PARAMETERS
 

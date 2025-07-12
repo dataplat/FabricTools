@@ -37,8 +37,11 @@ It supports optional parameters for Reflex definition and platform-specific defi
 
 ### EXAMPLE 1
 
-Update-FabricReflexDefinition -WorkspaceId "workspace-12345" -ReflexId "Reflex-67890" -ReflexPathDefinition "C:\Path\To\ReflexDefinition.json"
 This example updates the definition of the Reflex with ID "Reflex-67890" in the workspace with ID "workspace-12345" using the provided definition file.
+
+```powershell
+Update-FabricReflexDefinition -WorkspaceId "workspace-12345" -ReflexId "Reflex-67890" -ReflexPathDefinition "C:\Path\To\ReflexDefinition.json"
+```
 
 ## PARAMETERS
 

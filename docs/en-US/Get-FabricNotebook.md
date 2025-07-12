@@ -35,15 +35,19 @@ It can filter the results by `NotebookName`.
 
 ### EXAMPLE 1
 
-Get-FabricNotebook -WorkspaceId "12345" -NotebookName "Development"
-
 Retrieves the "Development" Notebook from workspace "12345".
+
+```powershell
+Get-FabricNotebook -WorkspaceId "12345" -NotebookName "Development"
+```
 
 ### EXAMPLE 2
 
-Get-FabricNotebook -WorkspaceId "12345"
-
 Retrieves all Notebooks in workspace "12345".
+
+```powershell
+Get-FabricNotebook -WorkspaceId "12345"
+```
 
 ## PARAMETERS
 

@@ -35,8 +35,11 @@ from the specified workspace using the provided WorkspaceId and SemanticModelId.
 
 ### EXAMPLE 1
 
-Remove-FabricSemanticModel -WorkspaceId "workspace-12345" -SemanticModelId "SemanticModel-67890"
 This example removes the SemanticModel with ID "SemanticModel-67890" from the workspace with ID "workspace-12345".
+
+```powershell
+Remove-FabricSemanticModel -WorkspaceId "workspace-12345" -SemanticModelId "SemanticModel-67890"
+```
 
 ## PARAMETERS
 

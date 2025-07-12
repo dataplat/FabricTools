@@ -34,9 +34,11 @@ The `Revoke-FabricCapacityTenantSettingOverrides` function deletes a specific te
 
 ### EXAMPLE 1
 
-Revoke-FabricCapacityTenantSettingOverrides -capacityId "12345" -tenantSettingName "ExampleSetting"
-
 Removes the tenant setting override named "ExampleSetting" from the capacity with ID "12345".
+
+```powershell
+Revoke-FabricCapacityTenantSettingOverrides -capacityId "12345" -tenantSettingName "ExampleSetting"
+```
 
 ## PARAMETERS
 

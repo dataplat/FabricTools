@@ -36,9 +36,11 @@ It periodically polls the operation until it reaches a terminal state (Succeeded
 
 ### EXAMPLE 1
 
-Get-FabricLongRunningOperation -operationId "12345-abcd-67890-efgh" -retryAfter 10
+This command polls the status of the operation with the given operationId every 10 seconds until it completes. ```powershell ```
 
-This command polls the status of the operation with the given operationId every 10 seconds until it completes.
+```powershell
+Get-FabricLongRunningOperation -operationId "12345-abcd-67890-efgh" -retryAfter 10
+```
 
 ## PARAMETERS
 

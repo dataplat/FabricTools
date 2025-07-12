@@ -35,15 +35,19 @@ It can filter the results by `LakehouseName`.
 
 ### EXAMPLE 1
 
-Get-FabricLakehouse -WorkspaceId "12345" -LakehouseName "Development"
-
 Retrieves the "Development" Lakehouse from workspace "12345".
+
+```powershell
+Get-FabricLakehouse -WorkspaceId "12345" -LakehouseName "Development"
+```
 
 ### EXAMPLE 2
 
-Get-FabricLakehouse -WorkspaceId "12345"
-
 Retrieves all Lakehouses in workspace "12345".
+
+```powershell
+Get-FabricLakehouse -WorkspaceId "12345"
+```
 
 ## PARAMETERS
 

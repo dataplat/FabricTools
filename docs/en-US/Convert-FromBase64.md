@@ -36,18 +36,20 @@ to text or other data.
 
 ### EXAMPLE 1
 
-Convert-FromBase64 -Base64String "SGVsbG8sIFdvcmxkIQ=="
+Output: Hello, World!
 
-Output:
-Hello, World!
+```powershell
+Convert-FromBase64 -Base64String "SGVsbG8sIFdvcmxkIQ=="
+```
 
 ### EXAMPLE 2
 
+Output: Some encoded text
+
+```powershell
 $encodedString = "U29tZSBlbmNvZGVkIHRleHQ="
 Convert-FromBase64 -Base64String $encodedString
-
-Output:
-Some encoded text
+```
 
 ## PARAMETERS
 

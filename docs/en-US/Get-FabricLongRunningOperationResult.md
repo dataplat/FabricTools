@@ -35,9 +35,11 @@ This is typically used after confirming the operation has completed successfully
 
 ### EXAMPLE 1
 
-Get-FabricLongRunningOperationResult -operationId "12345-abcd-67890-efgh"
+This command fetches the result of the operation with the specified operationId. ```powershell ```
 
-This command fetches the result of the operation with the specified operationId.
+```powershell
+Get-FabricLongRunningOperationResult -operationId "12345-abcd-67890-efgh"
+```
 
 ## PARAMETERS
 

@@ -35,9 +35,11 @@ Results can be filter by date or type.
 
 ### EXAMPLE 1
 
-Get-FabricRecoveryPoint -WorkspaceGUID 'GUID-GUID-GUID-GUID' -DataWarehouseGUID 'GUID-GUID-GUID-GUID'
-
 Gets all the available recovery points for the specified data warehouse, in the specified workspace.
+
+```powershell
+Get-FabricRecoveryPoint -WorkspaceGUID 'GUID-GUID-GUID-GUID' -DataWarehouseGUID 'GUID-GUID-GUID-GUID'
+```
 
 ## PARAMETERS
 

@@ -34,15 +34,19 @@ It supports filtering by WorkspaceId or WorkspaceName.
 
 ### EXAMPLE 1
 
-Get-FabricWorkspace -WorkspaceId "workspace123"
-
 Fetches details of the workspace with ID "workspace123".
+
+```powershell
+Get-FabricWorkspace -WorkspaceId "workspace123"
+```
 
 ### EXAMPLE 2
 
-Get-FabricWorkspace -WorkspaceName "MyWorkspace"
-
 Fetches details of the workspace with the name "MyWorkspace".
+
+```powershell
+Get-FabricWorkspace -WorkspaceName "MyWorkspace"
+```
 
 ## PARAMETERS
 

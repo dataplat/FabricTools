@@ -34,15 +34,19 @@ The `Update-FabricLakehouse` function updates the name and/or description of a s
 
 ### EXAMPLE 1
 
-Update-FabricLakehouse -LakehouseId "Lakehouse123" -LakehouseName "NewLakehouseName"
-
 Updates the name of the Lakehouse with the ID "Lakehouse123" to "NewLakehouseName".
+
+```powershell
+Update-FabricLakehouse -LakehouseId "Lakehouse123" -LakehouseName "NewLakehouseName"
+```
 
 ### EXAMPLE 2
 
-Update-FabricLakehouse -LakehouseId "Lakehouse123" -LakehouseName "NewName" -LakehouseDescription "Updated description"
-
 Updates both the name and description of the Lakehouse "Lakehouse123".
+
+```powershell
+Update-FabricLakehouse -LakehouseId "Lakehouse123" -LakehouseName "NewName" -LakehouseDescription "Updated description"
+```
 
 ## PARAMETERS
 

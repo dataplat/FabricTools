@@ -38,7 +38,9 @@ and path definitions for the notebook content.
 
 ### EXAMPLE 1
 
+```powershell
 Add-FabricNotebook -WorkspaceId "workspace-12345" -NotebookName "New Notebook" -NotebookPathDefinition "C:\notebooks\example.ipynb"
+```
 
 ## PARAMETERS
 

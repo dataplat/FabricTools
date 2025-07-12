@@ -35,8 +35,11 @@ from the specified workspace using the provided WorkspaceId and ReflexId.
 
 ### EXAMPLE 1
 
-Remove-FabricReflex -WorkspaceId "workspace-12345" -ReflexId "Reflex-67890"
 This example removes the Reflex with ID "Reflex-67890" from the workspace with ID "workspace-12345".
+
+```powershell
+Remove-FabricReflex -WorkspaceId "workspace-12345" -ReflexId "Reflex-67890"
+```
 
 ## PARAMETERS
 

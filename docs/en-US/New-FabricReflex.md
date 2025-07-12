@@ -37,8 +37,11 @@ It supports optional parameters for Reflex description and path definitions.
 
 ### EXAMPLE 1
 
-New-FabricReflex -WorkspaceId "workspace-12345" -ReflexName "New Reflex" -ReflexDescription "Description of the new Reflex"
 This example creates a new Reflex named "New Reflex" in the workspace with ID "workspace-12345" with the provided description.
+
+```powershell
+New-FabricReflex -WorkspaceId "workspace-12345" -ReflexName "New Reflex" -ReflexDescription "Description of the new Reflex"
+```
 
 ## PARAMETERS
 

@@ -38,7 +38,9 @@ and path definitions for the MirroredDatabase content.
 
 ### EXAMPLE 1
 
+```powershell
 Add-FabricMirroredDatabase -WorkspaceId "workspace-12345" -MirroredDatabaseName "New MirroredDatabase" -MirroredDatabasePathDefinition "C:\MirroredDatabases\example.json"
+```
 
 ## PARAMETERS
 

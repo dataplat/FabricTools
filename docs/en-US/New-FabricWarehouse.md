@@ -36,8 +36,11 @@ It supports optional parameters for warehouse description.
 
 ### EXAMPLE 1
 
-New-FabricWarehouse -WorkspaceId "workspace-12345" -WarehouseName "New Warehouse" -WarehouseDescription "Description of the new warehouse"
 This example creates a new warehouse named "New Warehouse" in the workspace with ID "workspace-12345" with the provided description.
+
+```powershell
+New-FabricWarehouse -WorkspaceId "workspace-12345" -WarehouseName "New Warehouse" -WarehouseDescription "Description of the new warehouse"
+```
 
 ## PARAMETERS
 

@@ -34,9 +34,11 @@ The `Remove-FabricMirroredDatabase` function sends a DELETE request to the Fabri
 
 ### EXAMPLE 1
 
-Remove-FabricMirroredDatabase -WorkspaceId "12345" -MirroredDatabaseId "67890"
-
 Deletes the MirroredDatabase with ID "67890" from workspace "12345".
+
+```powershell
+Remove-FabricMirroredDatabase -WorkspaceId "12345" -MirroredDatabaseId "67890"
+```
 
 ## PARAMETERS
 

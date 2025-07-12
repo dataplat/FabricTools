@@ -35,15 +35,19 @@ The `Update-FabricMirroredDatabase` function updates the name and/or description
 
 ### EXAMPLE 1
 
-Update-FabricMirroredDatabase -MirroredDatabaseId "MirroredDatabase123" -MirroredDatabaseName "NewMirroredDatabaseName"
-
 Updates the name of the MirroredDatabase with the ID "MirroredDatabase123" to "NewMirroredDatabaseName".
+
+```powershell
+Update-FabricMirroredDatabase -MirroredDatabaseId "MirroredDatabase123" -MirroredDatabaseName "NewMirroredDatabaseName"
+```
 
 ### EXAMPLE 2
 
-Update-FabricMirroredDatabase -MirroredDatabaseId "MirroredDatabase123" -MirroredDatabaseName "NewName" -MirroredDatabaseDescription "Updated description"
-
 Updates both the name and description of the MirroredDatabase "MirroredDatabase123".
+
+```powershell
+Update-FabricMirroredDatabase -MirroredDatabaseId "MirroredDatabase123" -MirroredDatabaseName "NewName" -MirroredDatabaseDescription "Updated description"
+```
 
 ## PARAMETERS
 

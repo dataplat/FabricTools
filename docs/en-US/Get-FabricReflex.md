@@ -35,13 +35,19 @@ It handles token validation, constructs the API URL, makes the API request, and 
 
 ### EXAMPLE 1
 
-Get-FabricReflex -WorkspaceId "workspace-12345" -ReflexId "Reflex-67890"
 This example retrieves the Reflex details for the Reflex with ID "Reflex-67890" in the workspace with ID "workspace-12345".
+
+```powershell
+Get-FabricReflex -WorkspaceId "workspace-12345" -ReflexId "Reflex-67890"
+```
 
 ### EXAMPLE 2
 
-Get-FabricReflex -WorkspaceId "workspace-12345" -ReflexName "My Reflex"
 This example retrieves the Reflex details for the Reflex named "My Reflex" in the workspace with ID "workspace-12345".
+
+```powershell
+Get-FabricReflex -WorkspaceId "workspace-12345" -ReflexName "My Reflex"
+```
 
 ## PARAMETERS
 

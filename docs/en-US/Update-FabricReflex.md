@@ -36,8 +36,11 @@ It supports optional parameters for Reflex description.
 
 ### EXAMPLE 1
 
-Update-FabricReflex -WorkspaceId "workspace-12345" -ReflexId "Reflex-67890" -ReflexName "Updated Reflex" -ReflexDescription "Updated description"
 This example updates the Reflex with ID "Reflex-67890" in the workspace with ID "workspace-12345" with a new name and description.
+
+```powershell
+Update-FabricReflex -WorkspaceId "workspace-12345" -ReflexId "Reflex-67890" -ReflexName "Updated Reflex" -ReflexDescription "Updated description"
+```
 
 ## PARAMETERS
 

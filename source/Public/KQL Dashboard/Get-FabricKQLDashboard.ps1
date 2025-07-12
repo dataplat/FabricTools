@@ -12,18 +12,18 @@ The `Get-FabricKQLDashboard` function sends a GET request to the Fabric API to r
 (Optional) The name of the specific KQLDashboard to retrieve.
 
 .EXAMPLE
-Get-FabricKQLDashboard -WorkspaceId "12345" -KQLDashboardName "Development"
+    Retrieves the "Development" KQLDashboard from workspace "12345". .PARAMETER KQLDashboardID The Id of the KQLDashboard to retrieve. This parameter cannot be used together with KQLDashboardName. The value for KQLDashboardID is a GUID. An example of a GUID is '12345678-1234-1234-1234-123456789012'.
 
-Retrieves the "Development" KQLDashboard from workspace "12345".
-
-.PARAMETER KQLDashboardID
-    The Id of the KQLDashboard to retrieve. This parameter cannot be used together with KQLDashboardName. The value for KQLDashboardID is a GUID.
-    An example of a GUID is '12345678-1234-1234-1234-123456789012'.
+    ```powershell
+    Get-FabricKQLDashboard -WorkspaceId "12345" -KQLDashboardName "Development"
+    ```
 
 .EXAMPLE
-Get-FabricKQLDashboard -WorkspaceId "12345"
+    Retrieves all KQLDashboards in workspace "12345".
 
-Retrieves all KQLDashboards in workspace "12345".
+    ```powershell
+    Get-FabricKQLDashboard -WorkspaceId "12345"
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.

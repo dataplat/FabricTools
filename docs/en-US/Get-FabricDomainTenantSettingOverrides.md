@@ -34,9 +34,11 @@ The function ensures token validity before making the request and handles the re
 
 ### EXAMPLE 1
 
-Get-FabricDomainTenantSettingOverrides
-
 Fetches tenant setting overrides for all domains in the Fabric tenant.
+
+```powershell
+Get-FabricDomainTenantSettingOverrides
+```
 
 ## PARAMETERS
 

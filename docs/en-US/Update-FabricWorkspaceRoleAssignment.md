@@ -34,9 +34,11 @@ The `Update-FabricWorkspaceRoleAssignment` function updates the role assigned to
 
 ### EXAMPLE 1
 
-Update-FabricWorkspaceRoleAssignment -WorkspaceId "workspace123" -WorkspaceRoleAssignmentId "assignment456" -WorkspaceRole "Admin"
-
 Updates the role assignment to "Admin" for the specified workspace and role assignment.
+
+```powershell
+Update-FabricWorkspaceRoleAssignment -WorkspaceId "workspace123" -WorkspaceRoleAssignmentId "assignment456" -WorkspaceRole "Admin"
+```
 
 ## PARAMETERS
 

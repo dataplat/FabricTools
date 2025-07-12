@@ -34,15 +34,19 @@ Optionally, it filters the results by the `SettingTitle` parameter.
 
 ### EXAMPLE 1
 
-Get-FabricTenantSetting
-
 Returns all tenant settings.
+
+```powershell
+Get-FabricTenantSetting
+```
 
 ### EXAMPLE 2
 
-Get-FabricTenantSetting -SettingTitle "SomeSetting"
-
 Returns the tenant setting with the title "SomeSetting".
+
+```powershell
+Get-FabricTenantSetting -SettingTitle "SomeSetting"
+```
 
 ## PARAMETERS
 

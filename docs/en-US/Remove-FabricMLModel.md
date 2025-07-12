@@ -35,8 +35,11 @@ from the specified workspace using the provided WorkspaceId and MLModelId.
 
 ### EXAMPLE 1
 
-Remove-FabricMLModel -WorkspaceId "workspace-12345" -MLModelId "model-67890"
 This example removes the ML Model with ID "model-67890" from the workspace with ID "workspace-12345".
+
+```powershell
+Remove-FabricMLModel -WorkspaceId "workspace-12345" -MLModelId "model-67890"
+```
 
 ## PARAMETERS
 

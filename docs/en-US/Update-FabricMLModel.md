@@ -36,8 +36,11 @@ It supports optional parameters for ML Model description.
 
 ### EXAMPLE 1
 
-Update-FabricMLModel -WorkspaceId "workspace-12345" -MLModelId "model-67890" -MLModelName "Updated ML Model" -MLModelDescription "Updated description"
 This example updates the ML Model with ID "model-67890" in the workspace with ID "workspace-12345" with a new name and description.
+
+```powershell
+Update-FabricMLModel -WorkspaceId "workspace-12345" -MLModelId "model-67890" -MLModelName "Updated ML Model" -MLModelDescription "Updated description"
+```
 
 ## PARAMETERS
 

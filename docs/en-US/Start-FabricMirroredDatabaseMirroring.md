@@ -35,8 +35,11 @@ It requires the workspace ID and the mirrored database ID as parameters.
 
 ### EXAMPLE 1
 
-Start-FabricMirroredDatabaseMirroring -WorkspaceId "12345" -MirroredDatabaseId "67890"
 Starts the mirroring of the mirrored database with ID `67890` in the workspace `12345`.
+
+```powershell
+Start-FabricMirroredDatabaseMirroring -WorkspaceId "12345" -MirroredDatabaseId "67890"
+```
 
 ## PARAMETERS
 

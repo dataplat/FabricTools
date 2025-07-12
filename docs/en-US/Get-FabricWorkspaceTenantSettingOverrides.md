@@ -34,9 +34,11 @@ The function validates the authentication token before making the request and ha
 
 ### EXAMPLE 1
 
-Get-FabricWorkspaceTenantSettingOverrides
-
 Returns all workspaces tenant setting overrides.
+
+```powershell
+Get-FabricWorkspaceTenantSettingOverrides
+```
 
 ## PARAMETERS
 

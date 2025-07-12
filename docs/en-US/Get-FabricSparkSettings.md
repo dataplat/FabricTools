@@ -34,8 +34,11 @@ It handles token validation, constructs the API URL, makes the API request, and 
 
 ### EXAMPLE 1
 
-Get-FabricSparkSettings -WorkspaceId "workspace-12345"
 This example retrieves the Spark settings for the workspace with ID "workspace-12345".
+
+```powershell
+Get-FabricSparkSettings -WorkspaceId "workspace-12345"
+```
 
 ## PARAMETERS
 

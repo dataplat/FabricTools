@@ -34,9 +34,11 @@ The `Remove-FabricNotebook` function sends a DELETE request to the Fabric API to
 
 ### EXAMPLE 1
 
-Remove-FabricNotebook -WorkspaceId "12345" -NotebookId "67890"
-
 Deletes the Notebook with ID "67890" from workspace "12345".
+
+```powershell
+Remove-FabricNotebook -WorkspaceId "12345" -NotebookId "67890"
+```
 
 ## PARAMETERS
 

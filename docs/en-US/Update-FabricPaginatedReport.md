@@ -37,8 +37,11 @@ It supports optional parameters for paginated report description.
 
 ### EXAMPLE 1
 
-Update-FabricPaginatedReport -WorkspaceId "workspace-12345" -PaginatedReportId "report-67890" -PaginatedReportName "Updated Paginated Report" -PaginatedReportDescription "Updated description"
 This example updates the paginated report with ID "report-67890" in the workspace with ID "workspace-12345" with a new name and description.
+
+```powershell
+Update-FabricPaginatedReport -WorkspaceId "workspace-12345" -PaginatedReportId "report-67890" -PaginatedReportName "Updated Paginated Report" -PaginatedReportDescription "Updated description"
+```
 
 ## PARAMETERS
 

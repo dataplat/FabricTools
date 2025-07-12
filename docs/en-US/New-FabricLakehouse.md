@@ -38,7 +38,9 @@ and path definitions for the Lakehouse content.
 
 ### EXAMPLE 1
 
+```powershell
 Add-FabricLakehouse -WorkspaceId "workspace-12345" -LakehouseName "New Lakehouse" -LakehouseEnableSchemas $true
+```
 
 ## PARAMETERS
 

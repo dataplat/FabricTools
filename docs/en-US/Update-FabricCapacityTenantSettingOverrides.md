@@ -38,15 +38,19 @@ It allows specifying settings such as enabling tenant settings, delegating to a 
 
 ### EXAMPLE 1
 
-Update-FabricCapacityTenantSettingOverrides -CapacityId "12345" -SettingTitle "SomeSetting" -EnableTenantSetting "true"
-
 Updates the tenant setting "SomeSetting" for the capacity with ID "12345" and enables it.
+
+```powershell
+Update-FabricCapacityTenantSettingOverrides -CapacityId "12345" -SettingTitle "SomeSetting" -EnableTenantSetting "true"
+```
 
 ### EXAMPLE 2
 
-Update-FabricCapacityTenantSettingOverrides -CapacityId "12345" -SettingTitle "SomeSetting" -EnableTenantSetting "true" -EnabledSecurityGroups @(@{graphId="1";name="Group1"},@{graphId="2";name="Group2"})
-
 Updates the tenant setting "SomeSetting" for the capacity with ID "12345", enables it, and specifies security groups to include.
+
+```powershell
+Update-FabricCapacityTenantSettingOverrides -CapacityId "12345" -SettingTitle "SomeSetting" -EnableTenantSetting "true" -EnabledSecurityGroups @(@{graphId="1";name="Group1"},@{graphId="2";name="Group2"})
+```
 
 ## PARAMETERS
 

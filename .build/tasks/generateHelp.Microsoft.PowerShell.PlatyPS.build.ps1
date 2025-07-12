@@ -84,10 +84,10 @@ task Generate_help_from_built_module {
     `$env:PSModulePath = '$Env:PSModulePath'
     `$targetModule = Import-Module -Name '$ProjectName' -ErrorAction Stop -Passthru
 
-    `$helpSourceFolder = Join-Path '$HelpSourceFolder' -ChildPath '$HelpCultureInfo'
+    `$helpDestination = Join-Path '$HelpSourceFolder' -ChildPath '$HelpCultureInfo'
 
-    if (!(Test-Path -Path `$helpSourceFolder)) {
-        New-Item -Path `$helpSourceFolder -ItemType Directory -Force -ErrorAction Ignore | Out-Null
+    if (!(Test-Path -Path `$helpDestination)) {
+        New-Item -Path `$helpDestination -ItemType Directory -Force -ErrorAction Ignore | Out-Null
     }
 
     `$docOutputFolder = Join-Path '$DocOutputFolder' -ChildPath '$ProjectName'
@@ -128,7 +128,7 @@ task Generate_help_from_built_module {
 
         `$helpCommand | Export-MarkdownCommandHelp -OutputFolder '$DocOutputFolder' -Force
 
-        Copy-Item -Path `$Output -Destination `$HelpSourceFolder -Force
+        Copy-Item -Path `$Output -Destination `$helpDestination -Force
     }
 "@
     Write-Build -Color DarkGray -Text "$generateHelpCommands"
