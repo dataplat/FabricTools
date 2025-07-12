@@ -76,7 +76,6 @@ function Test-FabricApiResponse {
     #$responseHeader = $script:responseHeader
     #$statusCode = $script:statusCode
     $result = $null
-
     Write-Message -Message "Testing API response for '$Operation' operation. StatusCode: $statusCode." -Level Debug
 
     switch ($statusCode) {
@@ -121,6 +120,15 @@ function Test-FabricApiResponse {
                 Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Error
                 return $operationStatus
             }
+        }
+        429 {
+            Write-Message -Message "API rate limit exceeded. Status Code: $statusCode ($($Response.errorCode))" -Level Warning
+            Write-Message -Message "$($Response.message). Waiting $($responseHeader['Retry-After']) seconds..." -Level Warning
+            $retryAfter = $responseHeader['Retry-After']
+            $retryAfterStr = $retryAfter[0].ToString()
+            $retryAfterInt = [int]$retryAfterStr
+            Start-Sleep -Seconds $retryAfterInt
+            return "Command:Repeat"
         }
         default {
             Write-Message -Message "Test-FabricApiResponse::default" -Level Debug

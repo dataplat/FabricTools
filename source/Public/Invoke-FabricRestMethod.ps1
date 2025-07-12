@@ -105,40 +105,46 @@ Function Invoke-FabricRestMethod {
         Write-Message -Message "No request body provided." -Level Debug
     }
 
-    $request = @{
-        Headers = $FabricSession.HeaderParams
-        Uri = $Uri
-        Method = $Method
-        Body = $Body
-        ContentType = "application/json"
-        ErrorAction = 'Stop'
-        SkipHttpErrorCheck = $true
-        ResponseHeadersVariable = "responseHeader"
-        StatusCodeVariable = "statusCode"
-    }
-    $response = Invoke-RestMethod @request
+    $repeat = $false
+    do {
 
-    Write-Message -Message "Result response code: $statusCode" -Level Debug
-    if ($response) {
-        Write-Message -Message "Result return: $response" -Level Debug
-    }
-    # Needed for backward compatibility, example: Get-FabricWorkspace
-    $script:statusCode = $statusCode
-    $script:responseHeader = $responseHeader
-
-    if ($HandleResponse) {
-        $params = @{
-            Response = $response
-            ResponseHeader = $responseHeader
-            StatusCode = $statusCode
-            Operation = (Get-PSCallStack)[1].Command.Split('-')[0]
-            ObjectIdOrName = $ObjectIdOrName
-            TypeName = $TypeName
-            NoWait = $NoWait
-            SuccessMessage = $SuccessMessage
+        $request = @{
+            Headers = $FabricSession.HeaderParams
+            Uri = $Uri
+            Method = $Method
+            Body = $Body
+            ContentType = "application/json"
+            ErrorAction = 'Stop'
+            SkipHttpErrorCheck = $true
+            ResponseHeadersVariable = "responseHeader"
+            StatusCodeVariable = "statusCode"
         }
-        $response = Test-FabricApiResponse @params
-    }
+        $response = Invoke-RestMethod @request
+
+        Write-Message -Message "Result response code: $statusCode" -Level Debug
+        if ($response) {
+            Write-Message -Message "Result return: $response" -Level Debug
+        }
+        # Needed for backward compatibility, example: Get-FabricWorkspace
+        $script:statusCode = $statusCode
+        $script:responseHeader = $responseHeader
+
+        if ($HandleResponse) {
+            $params = @{
+                Response = $response
+                ResponseHeader = $responseHeader
+                StatusCode = $statusCode
+                Operation = (Get-PSCallStack)[1].Command.Split('-')[0]
+                ObjectIdOrName = $ObjectIdOrName
+                TypeName = $TypeName
+                NoWait = $NoWait
+                SuccessMessage = $SuccessMessage
+            }
+            $response = Test-FabricApiResponse @params
+            $repeat = $response -is [string] -and $response -eq "Command:Repeat"
+        }
+
+    } while ($repeat)
 
     Write-Message -Message "::End" -Level Debug
     $response
