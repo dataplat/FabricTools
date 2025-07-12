@@ -10,14 +10,25 @@ function Test-FabricApiResponse {
 .PARAMETER Response
     The response body from the API call.
 
+.PARAMETER ResponseHeader
+    The response headers from the API call. This is used to retrieve operation IDs and other metadata.
+
+.PARAMETER StatusCode
+    The HTTP status code returned by the API call. This is used to determine how to handle the response.
+
 .PARAMETER Operation
     The operation being performed by parent function (e.g., 'New', 'Update', 'Remove', 'Get'). It helps in logging appropriate messages.
+    This parameter is optional and can be used to customize the logging message based on the operation type.
 
 .PARAMETER ObjectIdOrName
     The name or ID of the resource being operated.
 
 .PARAMETER TypeName
     The type of resource being operated (default: 'Fabric Item').
+
+.PARAMETER SuccessMessage
+    A custom success message to log upon successful completion of the operation. This overrides the default message based on Operation, TypeName, ObjectIdOrName.
+    This parameter is optional and can be used to provide a specific success message for the operation.
 
 .PARAMETER NoWait
     If specified, the function will not wait for the operation to complete and will return immediately.
@@ -36,6 +47,7 @@ function Test-FabricApiResponse {
     - This function is designed to be used within the context of a Fabric API client.
     - It requires the `Write-Message` function to log messages at different levels (Info, Debug, Error).
     - The function handles long-running operations by checking the status of the operation and retrieving the result if it has succeeded.
+    - Supports handling of API rate limiting (HTTP 429) by waiting for the specified retry duration before returning a command to repeat the request.
 
     Author: Kamil Nowinski
 
@@ -65,10 +77,7 @@ function Test-FabricApiResponse {
         [string] $SuccessMessage,
 
         [Parameter(Mandatory = $false)]
-        [switch] $NoWait = $false,
-
-        [Parameter(Mandatory = $false)]
-        [switch] $ExtractValue = $false
+        [switch] $NoWait = $false
     )
 
     Write-Message -Message "::Begin" -Level Debug
@@ -166,17 +175,5 @@ function Test-FabricApiResponse {
 
     Write-Message -Message "::End" -Level Debug
 
-    # Return the "value" object if exists, otherwise return the response directly
-    if ($result -and $ExtractValue) {
-        Write-Message -Message "Extracting 'value' property from the response as requested." -Level Debug
-        if (-not $result.value) {
-            Write-Message -Message "No 'value' property found in the response." -Level Warning
-            return $result
-        }
-        $result | ForEach-Object { $result.value }
-    }
-    else {
-        $result
-    }
-
+    $result
 }

@@ -65,11 +65,13 @@ function Get-FabricDeploymentPipelineStage {
             Uri = $apiEndpointUrl
             Method = 'GET'
             HandleResponse = $true
+            ExtractValue = $true
             TypeName = "deployment pipeline stage"
             ObjectIdOrName = $StageId ? $StageId : $DeploymentPipelineId
         }
         $response = Invoke-FabricRestMethod @apiParameters
-        $response.value
+
+        $response
 
     } catch {
         # Step 6: Error handling

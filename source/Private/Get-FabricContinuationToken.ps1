@@ -30,7 +30,7 @@ function Get-FabricContinuationToken {
     $continuationToken = $null
     if ($null -ne $Response) {
         # Update the continuation token if present
-        if ($Response.PSObject.Properties.Match("continuationToken")) {
+        if ($Response.PSObject.Properties.Match("continuationToken") -and $Response.continuationToken -ne $null) {
             $continuationToken = $Response.continuationToken
             Write-Message -Message "New continuation token: $continuationToken" -Level Debug
         } else {

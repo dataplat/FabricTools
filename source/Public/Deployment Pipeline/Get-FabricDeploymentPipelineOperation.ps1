@@ -49,7 +49,6 @@ function Get-FabricDeploymentPipelineOperation {
 
         # Step 2: Construct the API URL
         $apiEndpointUrl = "deploymentPipelines/$DeploymentPipelineId/operations/$OperationId"
-        Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
         # Step 3: Make the API request
         $apiParameters = @{
@@ -60,6 +59,7 @@ function Get-FabricDeploymentPipelineOperation {
             ObjectIdOrName = $DeploymentPipelineId
         }
         $response = Invoke-FabricRestMethod @apiParameters
+
         $response
 
     } catch {
