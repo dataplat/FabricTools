@@ -3,20 +3,24 @@
     This function retrieves all resources of type "Microsoft.Fabric/capacities" from all resource groups in a given subscription or all subscriptions if no subscription ID is provided.
 
 .DESCRIPTION
-    The Get-AllFabricCapacities function is used to retrieve all resources of type "Microsoft.Fabric/capacities" from all resource groups in a given subscription or all subscriptions if no subscription ID is provided. It uses the Az module to interact with Azure.
+    The Get-FabricCapacities function is used to retrieve all resources of type "Microsoft.Fabric/capacities" from all resource groups in a given subscription or all subscriptions if no subscription ID is provided. It uses the Az module to interact with Azure.
 
 .PARAMETER subscriptionID
     An optional parameter that specifies the subscription ID. If this parameter is not provided, the function will retrieve resources from all subscriptions.
 
 .EXAMPLE
-    Get-AllFabricCapacities -subscriptionID "12345678-1234-1234-1234-123456789012"
-
     This command retrieves all resources of type "Microsoft.Fabric/capacities" from all resource groups in the subscription with the ID "12345678-1234-1234-1234-123456789012".
 
-.EXAMPLE
-    Get-AllFabricCapacities
+    ```powershell
+    Get-FabricCapacitiess -subscriptionID "12345678-1234-1234-1234-123456789012"
+    ```
 
+.EXAMPLE
     This command retrieves all resources of type "Microsoft.Fabric/capacities" from all resource groups in all subscriptions.
+
+    ```powershell
+    Get-FabricCapacities
+    ```
 
 .NOTES
     Author: Ioana Bouariu
