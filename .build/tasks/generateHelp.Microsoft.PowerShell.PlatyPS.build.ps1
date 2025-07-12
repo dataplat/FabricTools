@@ -105,7 +105,7 @@ task Generate_help_from_built_module {
         }
         `$Output = New-MarkdownCommandHelp @newMarkdownCommandHelpParams
 
-        `$helpCommand = Import-MarkdownCommandHelp -Path `$Output -ErrorAction Stop
+        `$helpCommand = Import-MarkdownCommandHelp -Path `$Output -ErrorAction Ignore
 
         # Known issue: https://github.com/PowerShell/platyPS/issues/735
         `$whatIf = `$helpCommand.Parameters | Where-Object -Property Name -EQ 'WhatIf'
