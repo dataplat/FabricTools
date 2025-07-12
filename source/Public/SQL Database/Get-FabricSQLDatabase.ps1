@@ -1,6 +1,3 @@
-function Get-FabricSQLDatabase
-{
-
     <#
 .SYNOPSIS
     Retrieves Fabric SQL Database details.
@@ -26,39 +23,41 @@ function Get-FabricSQLDatabase
     The value for SQLDatabaseID is a GUID. An example of a GUID is '12345678-1234-1234-1234-123456789012'.
 
 .EXAMPLE
-    $FabricSQLDatabaseConfig = @{
-        WorkspaceId = '12345678-1234-1234-1234-123456789012'
-        SQLDatabaseName = 'MySQLDatabase'
-    }
-    Get-FabricSQLDatabase @FabricSQLDatabaseConfig
+    WorkspaceId = '12345678-1234-1234-1234-123456789012' SQLDatabaseName = 'MySQLDatabase' } Get-FabricSQLDatabase @FabricSQLDatabaseConfig Returns the details of the Fabric SQL Database with the name 'MySQLDatabase' in the workspace that is specified by the WorkspaceId.
 
-    Returns the details of the Fabric SQL Database with the name 'MySQLDatabase' in the workspace that is specified by the WorkspaceId.
+    ```powershell
+    $FabricSQLDatabaseConfig = @{
+    ```
 
 .EXAMPLE
-    Get-FabricSQLDatabase -WorkspaceId '12345678-1234-1234-1234-123456789012'
-
     Returns the details of the Fabric SQL Databases in the workspace that is specified by the WorkspaceId.
 
+    ```powershell
+    Get-FabricSQLDatabase -WorkspaceId '12345678-1234-1234-1234-123456789012'
+    ```
+
 .EXAMPLE
+    WorkspaceId = '12345678-1234-1234-1234-123456789012' } Get-FabricSQLDatabase @FabricSQLDatabaseConfig Returns the details of the Fabric SQL Database with the ID '12345678-1234-1234-1234-123456789012' from the workspace with the ID '12345678-1234-1234-1234-123456789012'.
+
+    ```powershell
     $FabricSQLDatabaseConfig = @{
-        WorkspaceId = '12345678-1234-1234-1234-123456789012'
-        -SQLDatabaseId = '12345678-1234-1234-1234-123456789012'
-    }
-    Get-FabricSQLDatabase @FabricSQLDatabaseConfig
-
-    Returns the details of the Fabric SQL Database with the ID '12345678-1234-1234-1234-123456789012' from the workspace with the ID '12345678-1234-1234-1234-123456789012'.
+    -SQLDatabaseId = '12345678-1234-1234-1234-123456789012'
+    ```
 
 .EXAMPLE
-    Get-FabricWorkspace -WorkspaceName 'MsLearn-dev' | Get-FabricSQLDatabase
-
     Returns the details of the Fabric SQL Databases in the MsLearn-dev workspace.
+
+    ```powershell
+    Get-FabricWorkspace -WorkspaceName 'MsLearn-dev' | Get-FabricSQLDatabase
+    ```
 
 .NOTES
     Author: Kamil Nowinski
 
-    #>
+#>
 
-
+function Get-FabricSQLDatabase
+{
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true, ParameterSetName = 'WorkspaceId')]

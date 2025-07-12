@@ -6,9 +6,11 @@ Retrieves tenant setting overrides for a specific domain or all capacities in th
 The `Get-FabricDomainTenantSettingOverrides` function retrieves tenant setting overrides for all domains in the Fabric tenant by making a GET request to the designated API endpoint. The function ensures token validity before making the request and handles the response appropriately.
 
 .EXAMPLE
-Get-FabricDomainTenantSettingOverrides
+    Fetches tenant setting overrides for all domains in the Fabric tenant.
 
-Fetches tenant setting overrides for all domains in the Fabric tenant.
+    ```powershell
+    Get-FabricDomainTenantSettingOverrides
+    ```
 
 .NOTES
 - Requires the `$FabricConfig` global configuration, which must include `BaseUrl` and `FabricHeaders`.

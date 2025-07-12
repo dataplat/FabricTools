@@ -13,12 +13,18 @@
     The type of access entity to filter the results by. This parameter is optional and supports predefined values such as 'CopyJob', 'Dashboard', 'DataPipeline', etc.
 
 .EXAMPLE
-    Get-FabricUserListAccessEntities -UserId "user-12345"
     This example retrieves all access entities associated with the user having ID "user-12345".
 
+    ```powershell
+    Get-FabricUserListAccessEntities -UserId "user-12345"
+    ```
+
 .EXAMPLE
-    Get-FabricUserListAccessEntities -UserId "user-12345" -Type "Dashboard"
     This example retrieves only the 'Dashboard' access entities associated with the user having ID "user-12345".
+
+    ```powershell
+    Get-FabricUserListAccessEntities -UserId "user-12345" -Type "Dashboard"
+    ```
 
 .NOTES
     - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.

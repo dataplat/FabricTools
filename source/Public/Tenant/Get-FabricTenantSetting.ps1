@@ -9,14 +9,18 @@ The `Get-FabricTenantSetting` function retrieves tenant settings for a Fabric en
 (Optional) The title of a specific tenant setting to filter the results.
 
 .EXAMPLE
-Get-FabricTenantSetting
+    Returns all tenant settings.
 
-Returns all tenant settings.
+    ```powershell
+    Get-FabricTenantSetting
+    ```
 
 .EXAMPLE
-Get-FabricTenantSetting -SettingTitle "SomeSetting"
+    Returns the tenant setting with the title "SomeSetting".
 
-Returns the tenant setting with the title "SomeSetting".
+    ```powershell
+    Get-FabricTenantSetting -SettingTitle "SomeSetting"
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.

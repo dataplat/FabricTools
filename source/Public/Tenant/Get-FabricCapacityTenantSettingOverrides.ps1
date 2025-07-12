@@ -9,14 +9,18 @@ The `Get-FabricCapacityTenantSettingOverrides` function retrieves tenant setting
 The ID of the capacity for which tenant setting overrides should be retrieved. If not provided, overrides for all capacities will be retrieved.
 
 .EXAMPLE
-Get-FabricCapacityTenantSettingOverrides
+    Returns all capacities tenant setting overrides.
 
-Returns all capacities tenant setting overrides.
+    ```powershell
+    Get-FabricCapacityTenantSettingOverrides
+    ```
 
 .EXAMPLE
-Get-FabricCapacityTenantSettingOverrides -capacityId "12345"
+    Returns tenant setting overrides for the capacity with ID "12345".
 
-Returns tenant setting overrides for the capacity with ID "12345".
+    ```powershell
+    Get-FabricCapacityTenantSettingOverrides -capacityId "12345"
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
