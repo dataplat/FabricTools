@@ -125,13 +125,6 @@ function Get-FabricDeploymentPipeline {
 
         # Step 7: Handle results
         $pipelines
-        # if ($pipelines) {
-        #     Write-Message -Message "Successfully retrieved deployment pipelines." -Level Debug
-        #     return $pipelines
-        # } else {
-        #     Write-Message -Message "No deployment pipelines found." -Level Warning
-        #     return $null
-        # }
 
     } catch {
         # Step 8: Error handling

@@ -76,7 +76,6 @@ function Add-FabricWorkspaceToStage {
         $response = Invoke-FabricRestMethod @apiParameters
 
         # Step 5: Return results
-        #Write-Message -Message "??? Successfully assigned workspace to deployment pipeline stage." -Level Info
         $response
 
     } catch {

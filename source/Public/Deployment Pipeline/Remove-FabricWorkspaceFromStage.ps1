@@ -61,7 +61,6 @@ function Remove-FabricWorkspaceFromStage {
         }
 
         # Step 4: Return results
-        #Write-Message -Message "??? Successfully unassigned workspace from deployment pipeline stage." -Level Info
         $response
 
     } catch {
