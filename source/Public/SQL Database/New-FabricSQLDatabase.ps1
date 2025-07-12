@@ -73,10 +73,17 @@ function New-FabricSQLDatabase
         # Step 4: Make the API request
         if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Create SQL Database"))
         {
-            $response = Invoke-FabricRestMethod -Uri $apiEndpointUrl -Method Post -Body $bodyJson
+            $apiParams = @{
+                Uri = $apiEndpointUrl
+                Method = 'POST'
+                Body = $bodyJson
+                TypeName = 'SQL Database'
+                NoWait = $NoWait
+                HandleResponse = $true
+            }
+            $response = Invoke-FabricRestMethod @apiParams
+            $response
         }
-        # Step 5: Handle and log the response
-        Test-FabricApiResponse -Response $response -ObjectIdOrName $Name -TypeName 'SQL Database' -NoWait:$NoWait
     }
     catch
     {
