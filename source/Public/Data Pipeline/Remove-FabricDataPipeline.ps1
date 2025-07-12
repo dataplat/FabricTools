@@ -13,8 +13,11 @@
     The unique identifier of the DataPipeline to be removed.
 
 .EXAMPLE
-     Remove-FabricDataPipeline -WorkspaceId "workspace-12345" -DataPipelineId "pipeline-67890"
     This example removes the DataPipeline with ID "pipeline-67890" from the workspace with ID "workspace-12345".
+
+    ```powershell
+    Remove-FabricDataPipeline -WorkspaceId "workspace-12345" -DataPipelineId "pipeline-67890"
+    ```
 
 .NOTES
     - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.

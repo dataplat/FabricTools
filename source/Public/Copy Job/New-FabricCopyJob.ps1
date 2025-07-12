@@ -22,7 +22,11 @@
     Optional file path to the platform definition file.
 
 .EXAMPLE
+    Creates a new copy job named "New Copy Job" in the workspace with ID "workspace-12345".
+
+    ```powershell
     New-FabricCopyJob -WorkspaceId "workspace-12345" -CopyJobName "New Copy Job" -CopyJobDescription "Description of the new copy job"
+    ```
 
 .NOTES
     - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.

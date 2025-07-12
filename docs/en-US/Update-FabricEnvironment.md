@@ -34,15 +34,19 @@ The `Update-FabricEnvironment` function updates the name and/or description of a
 
 ### EXAMPLE 1
 
-Update-FabricEnvironment -EnvironmentId "Environment123" -EnvironmentName "NewEnvironmentName"
-
 Updates the name of the Environment with the ID "Environment123" to "NewEnvironmentName".
+
+```powershell
+Update-FabricEnvironment -EnvironmentId "Environment123" -EnvironmentName "NewEnvironmentName"
+```
 
 ### EXAMPLE 2
 
-Update-FabricEnvironment -EnvironmentId "Environment123" -EnvironmentName "NewName" -EnvironmentDescription "Updated description"
-
 Updates both the name and description of the Environment "Environment123".
+
+```powershell
+Update-FabricEnvironment -EnvironmentId "Environment123" -EnvironmentName "NewName" -EnvironmentDescription "Updated description"
+```
 
 ## PARAMETERS
 

@@ -34,8 +34,11 @@ It handles token validation, constructs the API URL, makes the API request, and 
 
 ### EXAMPLE 1
 
-Get-FabricExternalDataShares
 This example retrieves the External Data Shares details
+
+```powershell
+Get-FabricExternalDataShares
+```
 
 ## PARAMETERS
 

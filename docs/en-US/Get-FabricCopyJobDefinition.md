@@ -35,9 +35,11 @@ It supports both synchronous and asynchronous operations, with detailed logging 
 
 ### EXAMPLE 1
 
-Get-FabricCopyJobDefinition -WorkspaceId "12345" -CopyJobId "67890"
-
 Retrieves the definition of the Copy Job with ID `67890` from the workspace with ID `12345`.
+
+```powershell
+Get-FabricCopyJobDefinition -WorkspaceId "12345" -CopyJobId "67890"
+```
 
 ## PARAMETERS
 

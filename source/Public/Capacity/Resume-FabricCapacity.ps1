@@ -16,9 +16,11 @@ The resource group. This is a mandatory parameter. This is a parameter found in 
 The capacity. This is a mandatory parameter. This is a parameter found in Azure, not Fabric.
 
 .EXAMPLE
-Resume-FabricCapacity -subscriptionID "your-subscription-id" -resourcegroupID "your-resource-group" -capacityID "your-capacity"
+    This example resumes a capacity given the subscription ID, resource group, and capacity.
 
-This example resumes a capacity given the subscription ID, resource group, and capacity.
+    ```powershell
+    Resume-FabricCapacity -subscriptionID "your-subscription-id" -resourcegroupID "your-resource-group" -capacityID "your-capacity"
+    ```
 
 .NOTES
 The function defines parameters for the subscription ID, resource group, and capacity. If the 'azToken' environment variable is null, it connects to the Azure account and sets the 'azToken' environment variable. It then defines the headers for the request, defines the URI for the request, and makes a GET request to the URI.

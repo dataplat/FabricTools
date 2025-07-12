@@ -16,9 +16,11 @@ It supports both synchronous and asynchronous operations, with detailed logging 
 (Optional) Specifies the format of the Copy Job definition. For example, 'json' or 'xml'.
 
 .EXAMPLE
-Get-FabricCopyJobDefinition -WorkspaceId "12345" -CopyJobId "67890"
+    Retrieves the definition of the Copy Job with ID `67890` from the workspace with ID `12345`.
 
-Retrieves the definition of the Copy Job with ID `67890` from the workspace with ID `12345`.
+    ```powershell
+    Get-FabricCopyJobDefinition -WorkspaceId "12345" -CopyJobId "67890"
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.

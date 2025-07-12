@@ -36,9 +36,11 @@ to handle errors gracefully.
 
 ### EXAMPLE 1
 
-Get-FabricEnvironmentLibrary -WorkspaceId "workspace-12345" -EnvironmentId "environment-67890"
-
 Retrieves the libraries associated with the specified environment in the given workspace.
+
+```powershell
+Get-FabricEnvironmentLibrary -WorkspaceId "workspace-12345" -EnvironmentId "environment-67890"
+```
 
 ## PARAMETERS
 

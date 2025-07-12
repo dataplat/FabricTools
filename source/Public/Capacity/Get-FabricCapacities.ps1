@@ -9,14 +9,14 @@
     An optional parameter that specifies the subscription ID. If this parameter is not provided, the function will retrieve resources from all subscriptions.
 
 .EXAMPLE
-    This command retrieves all resources of type "Microsoft.Fabric/capacities" from all resource groups in the subscription with the ID "12345678-1234-1234-1234-123456789012".
+    This command retrieves all resources of type "Microsoft.Fabric/capacities" from all resource groups in the subscription with the ID "12345678-1234-1234-1234-123456789012". ```powershell ```
 
     ```powershell
     Get-FabricCapacitiess -subscriptionID "12345678-1234-1234-1234-123456789012"
     ```
 
 .EXAMPLE
-    This command retrieves all resources of type "Microsoft.Fabric/capacities" from all resource groups in all subscriptions.
+    This command retrieves all resources of type "Microsoft.Fabric/capacities" from all resource groups in all subscriptions. ```powershell ```
 
     ```powershell
     Get-FabricCapacities

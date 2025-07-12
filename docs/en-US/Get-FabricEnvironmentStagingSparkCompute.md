@@ -36,9 +36,11 @@ It ensures token validity and handles API errors gracefully.
 
 ### EXAMPLE 1
 
-Get-FabricEnvironmentStagingSparkCompute -WorkspaceId "workspace-12345" -EnvironmentId "environment-67890"
-
 Retrieves the staging Spark compute configurations for the specified environment in the given workspace.
+
+```powershell
+Get-FabricEnvironmentStagingSparkCompute -WorkspaceId "workspace-12345" -EnvironmentId "environment-67890"
+```
 
 ## PARAMETERS
 

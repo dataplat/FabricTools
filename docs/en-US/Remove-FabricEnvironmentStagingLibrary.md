@@ -35,9 +35,11 @@ It ensures token validity, constructs the appropriate API request, and handles b
 
 ### EXAMPLE 1
 
-Remove-FabricEnvironmentStagingLibrary -WorkspaceId "workspace-12345" -EnvironmentId "environment-67890" -LibraryName "library-to-delete"
-
 Deletes the specified library from the staging environment in the specified workspace.
+
+```powershell
+Remove-FabricEnvironmentStagingLibrary -WorkspaceId "workspace-12345" -EnvironmentId "environment-67890" -LibraryName "library-to-delete"
+```
 
 ## PARAMETERS
 

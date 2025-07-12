@@ -36,9 +36,11 @@ It supports multiple aliases for flexibility.
 
 ### EXAMPLE 1
 
-Get-FabricCapacityTenantOverrides
-
 This example retrieves the tenant overrides for all capacities.
+
+```powershell
+Get-FabricCapacityTenantOverrides
+```
 
 ## PARAMETERS
 

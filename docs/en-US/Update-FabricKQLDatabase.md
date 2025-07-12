@@ -34,15 +34,19 @@ The `Update-FabricKQLDatabase` function updates the name and/or description of a
 
 ### EXAMPLE 1
 
-Update-FabricKQLDatabase -KQLDatabaseId "KQLDatabase123" -KQLDatabaseName "NewKQLDatabaseName"
-
 Updates the name of the KQLDatabase with the ID "KQLDatabase123" to "NewKQLDatabaseName".
+
+```powershell
+Update-FabricKQLDatabase -KQLDatabaseId "KQLDatabase123" -KQLDatabaseName "NewKQLDatabaseName"
+```
 
 ### EXAMPLE 2
 
-Update-FabricKQLDatabase -KQLDatabaseId "KQLDatabase123" -KQLDatabaseName "NewName" -KQLDatabaseDescription "Updated description"
-
 Updates both the name and description of the KQLDatabase "KQLDatabase123".
+
+```powershell
+Update-FabricKQLDatabase -KQLDatabaseId "KQLDatabase123" -KQLDatabaseName "NewName" -KQLDatabaseDescription "Updated description"
+```
 
 ## PARAMETERS
 

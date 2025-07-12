@@ -37,9 +37,11 @@ It supports multiple aliases for flexibility.
 
 ### EXAMPLE 1
 
-Suspend-FabricCapacity -subscriptionID "your-subscription-id" -resourcegroupID "your-resource-group" -capacityID "your-capacity"
-
 This example suspends a capacity given the subscription ID, resource group, and capacity.
+
+```powershell
+Suspend-FabricCapacity -subscriptionID "your-subscription-id" -resourcegroupID "your-resource-group" -capacityID "your-capacity"
+```
 
 ## PARAMETERS
 

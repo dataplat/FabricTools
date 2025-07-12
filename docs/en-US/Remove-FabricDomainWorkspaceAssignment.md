@@ -37,15 +37,19 @@ It makes a POST request to the relevant API endpoint for this operation.
 
 ### EXAMPLE 1
 
-Remove-FabricDomainWorkspaceAssignment -DomainId "12345"
-
 Unassigns all workspaces from the domain with ID "12345".
+
+```powershell
+Remove-FabricDomainWorkspaceAssignment -DomainId "12345"
+```
 
 ### EXAMPLE 2
 
-Remove-FabricDomainWorkspaceAssignment -DomainId "12345" -WorkspaceIds @("workspace1", "workspace2")
-
 Unassigns the specified workspaces from the domain with ID "12345".
+
+```powershell
+Remove-FabricDomainWorkspaceAssignment -DomainId "12345" -WorkspaceIds @("workspace1", "workspace2")
+```
 
 ## PARAMETERS
 

@@ -35,9 +35,11 @@ The environment can optionally include a description.
 
 ### EXAMPLE 1
 
-Add-FabricEnvironment -WorkspaceId "12345" -EnvironmentName "DevEnv" -EnvironmentDescription "Development Environment"
-
 Creates an environment named "DevEnv" in workspace "12345" with the specified description.
+
+```powershell
+Add-FabricEnvironment -WorkspaceId "12345" -EnvironmentName "DevEnv" -EnvironmentDescription "Development Environment"
+```
 
 ## PARAMETERS
 

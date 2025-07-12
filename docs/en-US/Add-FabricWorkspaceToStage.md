@@ -35,9 +35,11 @@ This operation will fail if there's an active deployment operation.
 
 ### EXAMPLE 1
 
-Add-FabricWorkspaceToStage -DeploymentPipelineId "GUID-GUID-GUID-GUID" -StageId "GUID-GUID-GUID-GUID" -WorkspaceId "GUID-GUID-GUID-GUID"
-
 Assigns the specified workspace to the deployment pipeline stage.
+
+```powershell
+Add-FabricWorkspaceToStage -DeploymentPipelineId "GUID-GUID-GUID-GUID" -StageId "GUID-GUID-GUID-GUID" -WorkspaceId "GUID-GUID-GUID-GUID"
+```
 
 ## PARAMETERS
 

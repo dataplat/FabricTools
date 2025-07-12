@@ -38,7 +38,19 @@ and path definitions for the KQLDashboard content.
 
 ### EXAMPLE 1
 
-Add-FabricKQLDashboard -WorkspaceId "workspace-12345" -KQLDashboardName "New KQLDashboard" -KQLDashboardPathDefinition "C:\KQLDashboards\example.ipynb"
+Creates a new KQLDashboard named "New KQLDashboard" in the workspace with ID "workspace-12345".
+
+```powershell
+New-FabricKQLDashboard -WorkspaceId "workspace-12345" -KQLDashboardName "New KQLDashboard"
+```
+
+### EXAMPLE 2
+
+Creates a new KQLDashboard with a definition file and platform definition.
+
+```powershell
+New-FabricKQLDashboard -WorkspaceId "workspace-12345" -KQLDashboardName "New KQLDashboard" -KQLDashboardPathDefinition "C:\KQLDashboards\example.ipynb" -KQLDashboardPathPlatformDefinition "C:\KQLDashboards\platform.json"
+```
 
 ## PARAMETERS
 

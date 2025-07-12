@@ -36,15 +36,19 @@ Handles both synchronous and asynchronous operations, with detailed logging and 
 
 ### EXAMPLE 1
 
-Get-FabricKQLDatabaseDefinition -WorkspaceId "12345" -KQLDatabaseId "67890"
-
 Retrieves the definition of the KQLDatabase with ID `67890` from the workspace with ID `12345` in the `ipynb` format.
+
+```powershell
+Get-FabricKQLDatabaseDefinition -WorkspaceId "12345" -KQLDatabaseId "67890"
+```
 
 ### EXAMPLE 2
 
-Get-FabricKQLDatabaseDefinition -WorkspaceId "12345"
-
 Retrieves the definitions of all KQLDatabases in the workspace with ID `12345` in the `ipynb` format.
+
+```powershell
+Get-FabricKQLDatabaseDefinition -WorkspaceId "12345"
+```
 
 ## PARAMETERS
 

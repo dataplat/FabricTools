@@ -34,8 +34,11 @@ This function makes a GET request to the Fabric API to retrieve the tenant setti
 
 ### EXAMPLE 1
 
-Get-FabricCapacitySkus -capacity "exampleCapacity"
 Retrieves the fabric capacity information for the specified capacity.
+
+```powershell
+Get-FabricCapacitySkus -capacity "exampleCapacity"
+```
 
 ## PARAMETERS
 

@@ -34,15 +34,19 @@ The `Update-FabricEventstream` function updates the name and/or description of a
 
 ### EXAMPLE 1
 
-Update-FabricEventstream -EventstreamId "Eventstream123" -EventstreamName "NewEventstreamName"
-
 Updates the name of the Eventstream with the ID "Eventstream123" to "NewEventstreamName".
+
+```powershell
+Update-FabricEventstream -EventstreamId "Eventstream123" -EventstreamName "NewEventstreamName"
+```
 
 ### EXAMPLE 2
 
-Update-FabricEventstream -EventstreamId "Eventstream123" -EventstreamName "NewName" -EventstreamDescription "Updated description"
-
 Updates both the name and description of the Eventstream "Eventstream123".
+
+```powershell
+Update-FabricEventstream -EventstreamId "Eventstream123" -EventstreamName "NewName" -EventstreamDescription "Updated description"
+```
 
 ## PARAMETERS
 

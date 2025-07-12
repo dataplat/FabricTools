@@ -36,9 +36,11 @@ The `Add-FabricDomainWorkspaceAssignmentByCapacity` function assigns workspaces 
 
 ### EXAMPLE 1
 
-Add-FabricDomainWorkspaceAssignmentByCapacity -DomainId "12345" -CapacitiesIds @("capacity1", "capacity2")
-
 Assigns workspaces to the domain with ID "12345" based on the specified capacities.
+
+```powershell
+Add-FabricDomainWorkspaceAssignmentByCapacity -DomainId "12345" -CapacitiesIds @("capacity1", "capacity2")
+```
 
 ## PARAMETERS
 

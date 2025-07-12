@@ -34,9 +34,11 @@ The `Add-FabricDomain` function creates a new domain in Microsoft Fabric by maki
 
 ### EXAMPLE 1
 
-Add-FabricDomain -DomainName "Finance" -DomainDescription "Finance data domain" -ParentDomainId "12345"
-
 Creates a "Finance" domain under the parent domain with ID "12345".
+
+```powershell
+Add-FabricDomain -DomainName "Finance" -DomainDescription "Finance data domain" -ParentDomainId "12345"
+```
 
 ## PARAMETERS
 

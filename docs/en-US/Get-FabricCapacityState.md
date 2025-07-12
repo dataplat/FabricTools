@@ -37,9 +37,11 @@ It supports multiple aliases for flexibility.
 
 ### EXAMPLE 1
 
-Get-FabricCapacityState -subscriptionID "your-subscription-id" -resourcegroupID "your-resource-group" -capacityID "your-capacity"
-
 This example retrieves the state of a specific capacity given the subscription ID, resource group, and capacity.
+
+```powershell
+Get-FabricCapacityState -subscriptionID "your-subscription-id" -resourcegroupID "your-resource-group" -capacityID "your-capacity"
+```
 
 ## PARAMETERS
 

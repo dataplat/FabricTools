@@ -34,9 +34,11 @@ The `Remove-FabricEnvironment` function sends a DELETE request to the Fabric API
 
 ### EXAMPLE 1
 
-Remove-FabricEnvironment -WorkspaceId "12345" -EnvironmentId "67890"
-
 Deletes the environment with ID "67890" from workspace "12345".
+
+```powershell
+Remove-FabricEnvironment -WorkspaceId "12345" -EnvironmentId "67890"
+```
 
 ## PARAMETERS
 

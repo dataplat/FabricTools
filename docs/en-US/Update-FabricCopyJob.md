@@ -36,8 +36,11 @@ Allows updating the Copy Job's name and optionally its description.
 
 ### EXAMPLE 1
 
-Update-FabricCopyJob -WorkspaceId "workspace-12345" -CopyJobId "copyjob-67890" -CopyJobName "Updated Copy Job" -CopyJobDescription "Updated description"
 Updates the Copy Job with ID "copyjob-67890" in the workspace "workspace-12345" with a new name and description.
+
+```powershell
+Update-FabricCopyJob -WorkspaceId "workspace-12345" -CopyJobId "copyjob-67890" -CopyJobName "Updated Copy Job" -CopyJobDescription "Updated description"
+```
 
 ## PARAMETERS
 

@@ -34,13 +34,19 @@ It handles token validation, constructs the API URL, makes the API request, and 
 
 ### EXAMPLE 1
 
-Get-FabricCapacity -capacityId "capacity-12345"
 This example retrieves the capacity details for the capacity with ID "capacity-12345".
+
+```powershell
+Get-FabricCapacity -capacityId "capacity-12345"
+```
 
 ### EXAMPLE 2
 
-Get-FabricCapacity -capacityName "MyCapacity"
 This example retrieves the capacity details for the capacity named "MyCapacity".
+
+```powershell
+Get-FabricCapacity -capacityName "MyCapacity"
+```
 
 ## PARAMETERS
 

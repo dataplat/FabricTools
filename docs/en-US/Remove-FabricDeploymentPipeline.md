@@ -35,9 +35,11 @@ This operation requires admin deployment pipelines role and will fail if there's
 
 ### EXAMPLE 1
 
-Remove-FabricDeploymentPipeline -DeploymentPipelineId "GUID-GUID-GUID-GUID"
-
 Deletes the specified deployment pipeline.
+
+```powershell
+Remove-FabricDeploymentPipeline -DeploymentPipelineId "GUID-GUID-GUID-GUID"
+```
 
 ## PARAMETERS
 

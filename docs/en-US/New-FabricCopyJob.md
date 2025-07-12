@@ -36,7 +36,11 @@ Supports optional parameters for description and definition files.
 
 ### EXAMPLE 1
 
+Creates a new copy job named "New Copy Job" in the workspace with ID "workspace-12345".
+
+```powershell
 New-FabricCopyJob -WorkspaceId "workspace-12345" -CopyJobName "New Copy Job" -CopyJobDescription "Description of the new copy job"
+```
 
 ## PARAMETERS
 

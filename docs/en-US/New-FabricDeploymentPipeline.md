@@ -35,27 +35,14 @@ Each stage can be configured with a display name, description, and public/privat
 
 ### EXAMPLE 1
 
-$stages = @(
-    @{
-        DisplayName = "Development"
-        Description = "Development stage description"
-        IsPublic = $false
-    },
-    @{
-        DisplayName = "Test"
-        Description = "Test stage description"
-        IsPublic = $false
-    },
-    @{
-        DisplayName = "Production"
-        Description = "Production stage description"
-        IsPublic = $true
-    }
+Creates a new deployment pipeline with two stages.
+
+```powershell
+New-FabricDeploymentPipeline -DisplayName "My Deployment Pipeline" -Description "This is a test deployment pipeline" -Stages @(
+    @{ DisplayName = "Stage 1"; Description = "First stage"; IsPublic = $true },
+    @{ DisplayName = "Stage 2"; Description = "Second stage"; IsPublic = $false }
 )
-
-New-FabricDeploymentPipeline -DisplayName "My Deployment Pipeline" -Description "My pipeline description" -Stages $stages
-
-Creates a new deployment pipeline with three stages: Development, Test, and Production.
+```
 
 ## PARAMETERS
 

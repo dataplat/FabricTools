@@ -19,8 +19,11 @@
     An optional new description for the Copy Job.
 
 .EXAMPLE
-    Update-FabricCopyJob -WorkspaceId "workspace-12345" -CopyJobId "copyjob-67890" -CopyJobName "Updated Copy Job" -CopyJobDescription "Updated description"
     Updates the Copy Job with ID "copyjob-67890" in the workspace "workspace-12345" with a new name and description.
+
+    ```powershell
+    Update-FabricCopyJob -WorkspaceId "workspace-12345" -CopyJobId "copyjob-67890" -CopyJobName "Updated Copy Job" -CopyJobDescription "Updated description"
+    ```
 
 .NOTES
     - Requires the `$FabricConfig` global configuration, which includes `BaseUrl` and `FabricHeaders`.

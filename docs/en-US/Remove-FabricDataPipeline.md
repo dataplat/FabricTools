@@ -35,8 +35,11 @@ from the specified workspace using the provided WorkspaceId and DataPipelineId.
 
 ### EXAMPLE 1
 
-Remove-FabricDataPipeline -WorkspaceId "workspace-12345" -DataPipelineId "pipeline-67890"
 This example removes the DataPipeline with ID "pipeline-67890" from the workspace with ID "workspace-12345".
+
+```powershell
+Remove-FabricDataPipeline -WorkspaceId "workspace-12345" -DataPipelineId "pipeline-67890"
+```
 
 ## PARAMETERS
 

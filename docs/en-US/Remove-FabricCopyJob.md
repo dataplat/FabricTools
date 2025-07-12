@@ -35,8 +35,11 @@ from the specified workspace using the provided WorkspaceId and CopyJobId parame
 
 ### EXAMPLE 1
 
-Remove-FabricCopyJob -WorkspaceId "workspace-12345" -CopyJobId "copyjob-67890"
 Deletes the Copy Job with ID "copyjob-67890" from the workspace with ID "workspace-12345".
+
+```powershell
+Remove-FabricCopyJob -WorkspaceId "workspace-12345" -CopyJobId "copyjob-67890"
+```
 
 ## PARAMETERS
 

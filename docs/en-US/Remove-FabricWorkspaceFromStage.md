@@ -35,9 +35,11 @@ This operation will fail if there's an active deployment operation.
 
 ### EXAMPLE 1
 
-Remove-FabricWorkspaceFromStage -DeploymentPipelineId "GUID-GUID-GUID-GUID" -StageId "GUID-GUID-GUID-GUID"
-
 Removes the workspace from the specified deployment pipeline stage.
+
+```powershell
+Remove-FabricWorkspaceFromStage -DeploymentPipelineId "GUID-GUID-GUID-GUID" -StageId "GUID-GUID-GUID-GUID"
+```
 
 ## PARAMETERS
 

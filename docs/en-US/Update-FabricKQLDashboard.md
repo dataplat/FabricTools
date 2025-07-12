@@ -35,15 +35,19 @@ The `Update-FabricKQLDashboard` function updates the name and/or description of 
 
 ### EXAMPLE 1
 
-Update-FabricKQLDashboard -KQLDashboardId "KQLDashboard123" -KQLDashboardName "NewKQLDashboardName"
-
 Updates the name of the KQLDashboard with the ID "KQLDashboard123" to "NewKQLDashboardName".
+
+```powershell
+Update-FabricKQLDashboard -KQLDashboardId "KQLDashboard123" -KQLDashboardName "NewKQLDashboardName"
+```
 
 ### EXAMPLE 2
 
-Update-FabricKQLDashboard -KQLDashboardId "KQLDashboard123" -KQLDashboardName "NewName" -KQLDashboardDescription "Updated description"
-
 Updates both the name and description of the KQLDashboard "KQLDashboard123".
+
+```powershell
+Update-FabricKQLDashboard -KQLDashboardId "KQLDashboard123" -KQLDashboardName "NewName" -KQLDashboardDescription "Updated description"
+```
 
 ## PARAMETERS
 

@@ -35,13 +35,19 @@ It handles token validation, constructs the API URL, makes the API request, and 
 
 ### EXAMPLE 1
 
-FabricCopyJob -WorkspaceId "workspace-12345" -CopyJobId "CopyJob-67890"
 This example retrieves the CopyJob details for the CopyJob with ID "CopyJob-67890" in the workspace with ID "workspace-12345".
+
+```powershell
+Get-FabricCopyJob -WorkspaceId "workspace-12345" -CopyJobId "CopyJob-67890"
+```
 
 ### EXAMPLE 2
 
-FabricCopyJob -WorkspaceId "workspace-12345" -CopyJob "My CopyJob"
 This example retrieves the CopyJob details for the CopyJob named "My CopyJob" in the workspace with ID "workspace-12345".
+
+```powershell
+Get-FabricCopyJob -WorkspaceId "workspace-12345" -CopyJob "My CopyJob"
+```
 
 ## PARAMETERS
 

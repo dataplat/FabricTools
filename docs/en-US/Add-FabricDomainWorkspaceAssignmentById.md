@@ -36,9 +36,11 @@ The `Add-FabricDomainWorkspaceAssignmentById` function sends a request to assign
 
 ### EXAMPLE 1
 
-Add-FabricDomainWorkspaceAssignmentById -DomainId "12345" -WorkspaceIds @("ws1", "ws2", "ws3")
-
 Assigns the workspaces with IDs "ws1", "ws2", and "ws3" to the domain with ID "12345".
+
+```powershell
+Add-FabricDomainWorkspaceAssignmentById -DomainId "12345" -WorkspaceIds @("ws1", "ws2", "ws3")
+```
 
 ## PARAMETERS
 

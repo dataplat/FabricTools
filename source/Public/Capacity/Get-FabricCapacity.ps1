@@ -14,12 +14,18 @@
     The name of the capacity to retrieve. This parameter is optional.
 
 .EXAMPLE
-    Get-FabricCapacity -capacityId "capacity-12345"
     This example retrieves the capacity details for the capacity with ID "capacity-12345".
 
+    ```powershell
+    Get-FabricCapacity -capacityId "capacity-12345"
+    ```
+
 .EXAMPLE
-    Get-FabricCapacity -capacityName "MyCapacity"
     This example retrieves the capacity details for the capacity named "MyCapacity".
+
+    ```powershell
+    Get-FabricCapacity -capacityName "MyCapacity"
+    ```
 
 .NOTES
     - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.

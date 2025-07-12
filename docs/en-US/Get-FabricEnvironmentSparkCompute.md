@@ -36,9 +36,11 @@ and gracefully handles errors during the API call.
 
 ### EXAMPLE 1
 
-Get-FabricEnvironmentSparkCompute -WorkspaceId "workspace-12345" -EnvironmentId "environment-67890"
-
 Retrieves Spark compute details for the specified environment in the given workspace.
+
+```powershell
+Get-FabricEnvironmentSparkCompute -WorkspaceId "workspace-12345" -EnvironmentId "environment-67890"
+```
 
 ## PARAMETERS
 

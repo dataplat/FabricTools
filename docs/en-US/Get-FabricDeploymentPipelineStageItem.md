@@ -37,9 +37,11 @@ and returns all available items.
 
 ### EXAMPLE 1
 
-Get-FabricDeploymentPipelineStageItem -DeploymentPipelineId "GUID-GUID-GUID-GUID" -StageId "GUID-GUID-GUID-GUID"
-
 Retrieves all items from the specified stage of the deployment pipeline.
+
+```powershell
+Get-FabricDeploymentPipelineStageItem -DeploymentPipelineId "GUID-GUID-GUID-GUID" -StageId "GUID-GUID-GUID-GUID"
+```
 
 ## PARAMETERS
 

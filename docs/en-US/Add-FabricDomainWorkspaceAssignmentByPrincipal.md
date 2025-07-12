@@ -36,14 +36,11 @@ The `Add-FabricDomainWorkspaceAssignmentByPrincipal` function sends a request to
 
 ### EXAMPLE 1
 
+@{id = "813abb4a-414c-4ac0-9c2c-bd17036fd58c";  type = "User"}, @{id = "b5b9495c-685a-447a-b4d3-2d8e963e6288"; type = "User"} ) Add-FabricDomainWorkspaceAssignmentByPrincipal -DomainId "12345" -PrincipalIds $principals Assigns the workspaces based on the provided principal IDs and types.
+
+```powershell
 $PrincipalIds = @(
-    @{id = "813abb4a-414c-4ac0-9c2c-bd17036fd58c";  type = "User"},
-    @{id = "b5b9495c-685a-447a-b4d3-2d8e963e6288"; type = "User"}
-    )
-
-Add-FabricDomainWorkspaceAssignmentByPrincipal -DomainId "12345" -PrincipalIds $principals
-
-Assigns the workspaces based on the provided principal IDs and types.
+```
 
 ## PARAMETERS
 

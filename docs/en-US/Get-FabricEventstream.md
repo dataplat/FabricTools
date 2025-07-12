@@ -38,15 +38,19 @@ parameters cannot be used together.
 
 ### EXAMPLE 1
 
-Get-FabricEventstream -WorkspaceId "12345" -EventstreamName "Development"
-
 Retrieves the "Development" Eventstream from workspace "12345".
+
+```powershell
+Get-FabricEventstream -WorkspaceId "12345" -EventstreamName "Development"
+```
 
 ### EXAMPLE 2
 
-Get-FabricEventstream -WorkspaceId "12345"
-
 Retrieves all Eventstreams in workspace "12345".
+
+```powershell
+Get-FabricEventstream -WorkspaceId "12345"
+```
 
 ## PARAMETERS
 

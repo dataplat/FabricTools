@@ -38,8 +38,11 @@ and path definitions for the Eventstream content.
 
 ### EXAMPLE 1
 
-#TODO Fix example name
-Add-FabricEventstream -WorkspaceId "workspace-12345" -EventstreamName "New Eventstream" -EventstreamPathDefinition "C:\Eventstreams\example.ipynb"
+Creates a new Eventstream named "New Eventstream" in the workspace with ID "workspace-12345".
+
+```powershell
+New-FabricEventstream -WorkspaceId "workspace-12345" -EventstreamName "New Eventstream"
+```
 
 ## PARAMETERS
 

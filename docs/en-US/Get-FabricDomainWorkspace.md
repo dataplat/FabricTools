@@ -33,9 +33,11 @@ The `Get-FabricDomainWorkspace` function fetches the workspaces for the given do
 
 ### EXAMPLE 1
 
-Get-FabricDomainWorkspace -DomainId "12345"
-
 Fetches workspaces for the domain with ID "12345".
+
+```powershell
+Get-FabricDomainWorkspace -DomainId "12345"
+```
 
 ## PARAMETERS
 

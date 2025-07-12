@@ -37,9 +37,11 @@ It sends a POST request to the relevant API endpoint.
 
 ### EXAMPLE 1
 
-AssignFabricDomainWorkspaceRoleAssignment -DomainId "12345" -DomainRole "Admins" -PrincipalIds @(@{id="user1"; type="User"}, @{id="group1"; type="Group"})
+Assign the `Admins` role to the specified principals in the domain with ID "12345".
 
-Assigns the `Admins` role to the specified principals in the domain with ID "12345".
+```powershell
+Assign-FabricDomainWorkspaceRoleAssignment -DomainId "12345" -DomainRole "Admins" -PrincipalIds @(@{id="user1"; type="User"}, @{id="group1"; type="Group"})
+```
 
 ## PARAMETERS
 

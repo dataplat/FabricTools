@@ -35,8 +35,11 @@ It handles token validation, constructs the API URL, makes the API request, and 
 
 ### EXAMPLE 1
 
-Get-FabricDatamart -WorkspaceId "12345"
 This example retrieves all datamarts from the workspace with ID "12345".
+
+```powershell
+Get-FabricDatamart -WorkspaceId "12345"
+```
 
 ## PARAMETERS
 

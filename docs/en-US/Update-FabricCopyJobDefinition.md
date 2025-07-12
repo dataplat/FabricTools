@@ -36,15 +36,19 @@ The Copy Job content and platform-specific definitions can be provided as file p
 
 ### EXAMPLE 1
 
-Update-FabricCopyJobDefinition -WorkspaceId "12345" -CopyJobId "67890" -CopyJobPathDefinition "C:\CopyJobs\CopyJob.ipynb"
-
 Updates the content of the Copy Job with ID `67890` in the workspace `12345` using the specified Copy Job file.
+
+```powershell
+Update-FabricCopyJobDefinition -WorkspaceId "12345" -CopyJobId "67890" -CopyJobPathDefinition "C:\CopyJobs\CopyJob.ipynb"
+```
 
 ### EXAMPLE 2
 
-Update-FabricCopyJobDefinition -WorkspaceId "12345" -CopyJobId "67890" -CopyJobPathDefinition "C:\CopyJobs\CopyJob.ipynb" -CopyJobPathPlatformDefinition "C:\CopyJobs\Platform.json"
-
 Updates both the content and platform-specific definition of the Copy Job with ID `67890` in the workspace `12345`.
+
+```powershell
+Update-FabricCopyJobDefinition -WorkspaceId "12345" -CopyJobId "67890" -CopyJobPathDefinition "C:\CopyJobs\CopyJob.ipynb" -CopyJobPathPlatformDefinition "C:\CopyJobs\Platform.json"
+```
 
 ## PARAMETERS
 

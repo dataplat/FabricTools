@@ -40,9 +40,11 @@ It can retrieve all items or filter them by item type.
 
 ### EXAMPLE 1
 
-Get-FabricItem -workspaceId "12345" -type "file"
-
 This example retrieves all fabric items of type "file" from the workspace with ID "12345".
+
+```powershell
+Get-FabricItem -workspaceId "12345" -type "file"
+```
 
 ## PARAMETERS
 

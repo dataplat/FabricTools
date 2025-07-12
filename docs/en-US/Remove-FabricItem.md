@@ -36,9 +36,11 @@ If a filter is provided, only items whose DisplayName matches the filter are rem
 
 ### EXAMPLE 1
 
-Remove-FabricItems -WorkspaceID "12345678-90ab-cdef-1234-567890abcdef" -Filter "*test*"
+This command removes all items from the workspace with the specified ID whose DisplayName includes "test". .INPUTS String. You can pipe two strings that contain the workspace ID and filter to Remove-FabricItems.
 
-This command removes all items from the workspace with the specified ID whose DisplayName includes "test".
+```powershell
+Remove-FabricItems -WorkspaceID "12345678-90ab-cdef-1234-567890abcdef" -Filter "*test*"
+```
 
 ## PARAMETERS
 
@@ -160,10 +162,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 [about_CommonParameters](https://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
-
-### String. You can pipe two strings that contain the workspace ID and filter to Remove-FabricItems.
-
-{{ Fill in the Description }}
 
 ## OUTPUTS
 

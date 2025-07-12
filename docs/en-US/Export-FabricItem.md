@@ -39,15 +39,19 @@ Otherwise, all items in the workspace will be exported.
 
 ### EXAMPLE 1
 
-Export-FabricItem -workspaceId "12345678-1234-1234-1234-1234567890AB" -path "C:\ExportedItems"
-
 This example exports all items from the Fabric workspace with the specified ID to the "C:\ExportedItems" directory.
+
+```powershell
+Export-FabricItem -workspaceId "12345678-1234-1234-1234-1234567890AB" -path "C:\ExportedItems"
+```
 
 ### EXAMPLE 2
 
-Export-FabricItem -workspaceId "12345678-1234-1234-1234-1234567890AB" -itemID "98765432-4321-4321-4321-9876543210BA" -path "C:\ExportedItems"
-
 This example exports the item with the specified ID from the Fabric workspace with the specified ID to the "C:\ExportedItems" directory.
+
+```powershell
+Export-FabricItem -workspaceId "12345678-1234-1234-1234-1234567890AB" -itemID "98765432-4321-4321-4321-9876543210BA" -path "C:\ExportedItems"
+```
 
 ## PARAMETERS
 

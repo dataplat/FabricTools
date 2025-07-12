@@ -36,15 +36,19 @@ It automatically handles pagination when retrieving all pipelines.
 
 ### EXAMPLE 1
 
-Get-FabricDeploymentPipeline
-
 Retrieves all deployment pipelines that the user can access.
+
+```powershell
+Get-FabricDeploymentPipeline
+```
 
 ### EXAMPLE 2
 
-Get-FabricDeploymentPipeline -DeploymentPipelineId "GUID-GUID-GUID-GUID"
-
 Retrieves a specific deployment pipeline with detailed information including its stages.
+
+```powershell
+Get-FabricDeploymentPipeline -DeploymentPipelineId "GUID-GUID-GUID-GUID"
+```
 
 ## PARAMETERS
 

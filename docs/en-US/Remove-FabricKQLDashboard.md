@@ -34,9 +34,11 @@ The `Remove-FabricKQLDashboard` function sends a DELETE request to the Fabric AP
 
 ### EXAMPLE 1
 
-Remove-FabricKQLDashboard -WorkspaceId "12345" -KQLDashboardId "67890"
-
 Deletes the KQLDashboard with ID "67890" from workspace "12345".
+
+```powershell
+Remove-FabricKQLDashboard -WorkspaceId "12345" -KQLDashboardId "67890"
+```
 
 ## PARAMETERS
 

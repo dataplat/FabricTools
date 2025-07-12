@@ -42,8 +42,11 @@ from the specified workspace using the provided WorkspaceId and EventhouseId.
 
 ### EXAMPLE 1
 
-Remove-FabricEventhouse -WorkspaceId "workspace-12345" -EventhouseId "eventhouse-67890"
 This example removes the Eventhouse with ID "eventhouse-67890" from the workspace with ID "workspace-12345".
+
+```powershell
+Remove-FabricEventhouse -WorkspaceId "workspace-12345" -EventhouseId "eventhouse-67890"
+```
 
 ## PARAMETERS
 

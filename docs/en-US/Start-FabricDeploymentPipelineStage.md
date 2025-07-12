@@ -36,31 +36,19 @@ This API supports long running operations (LRO) and will return an operation ID 
 
 ### EXAMPLE 1
 
-$params = @{
-    DeploymentPipelineId = "GUID-GUID-GUID-GUID"
-    SourceStageId = "GUID-GUID-GUID-GUID"
-    TargetStageId = "GUID-GUID-GUID-GUID"
-    Note = "Deploying business ready items"
-}
-Start-FabricDeploymentPipelineStage @params
+This example deploys items from the source stage to the target stage in the specified deployment pipeline.
 
-Deploys all supported items from the source stage to the target stage.
+```powershell
+Start-FabricDeploymentPipelineStage -DeploymentPipelineId "12345678-1234-1234-1234-1234567890AB" -SourceStageId "23456789-2345-2345-2345-2345678901BC" -TargetStageId "34567890-3456-3456-3456-3456789012CD" -Items @(@{sourceItemId="45678901-4567-4567-4567-4567890123EF"; itemType="Report"})
+```
 
 ### EXAMPLE 2
 
-$items = @(
-    @{
-        sourceItemId = "6bfe235c-6d7b-41b7-98a6-2b8276b3e82b"
-        itemType = "Datamart"
-    },
-    @{
-        sourceItemId = "1a201f2a-d1d8-45c0-8c61-1676338517de"
-        itemType = "SemanticModel"
-    }
-)
-Start-FabricDeploymentPipelineStage -DeploymentPipelineId "GUID-GUID-GUID-GUID" -SourceStageId "GUID-GUID-GUID-GUID" -TargetStageId "GUID-GUID-GUID-GUID" -Items $items -Note "Deploying specific items"
+This example deploys all items from the source stage to the target stage in the specified deployment pipeline without waiting for completion.
 
-Deploys specific items from the source stage to the target stage.
+```powershell
+Start-FabricDeploymentPipelineStage -DeploymentPipelineId "12345678-1234-1234-1234-1234567890AB" -SourceStageId "23456789-2345-2345-2345-2345678901BC" -TargetStageId "34567890-3456-3456-3456-3456789012CD" -NoWait
+```
 
 ## PARAMETERS
 

@@ -41,7 +41,11 @@ and path definitions for the KQLDatabase content.
 
 ### EXAMPLE 1
 
-Add-FabricKQLDatabase -WorkspaceId "workspace-12345" -KQLDatabaseName "New KQLDatabase" -KQLDatabasePathDefinition "C:\KQLDatabases\example.ipynb"
+Creates a new KQLDatabase named "New KQLDatabase" in the workspace with ID "workspace-12345".
+
+```powershell
+New-FabricKQLDatabase -WorkspaceId "workspace-12345" -KQLDatabaseName "New KQLDatabase"
+```
 
 ## PARAMETERS
 

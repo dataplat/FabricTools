@@ -37,7 +37,9 @@ environment staging area for the given workspace.
 
 ### EXAMPLE 1
 
+```powershell
 Import-FabricEnvironmentStagingLibrary -WorkspaceId "workspace-12345" -EnvironmentId "env-67890"
+```
 
 ## PARAMETERS
 

@@ -35,24 +35,25 @@ It can filter the results by `KQLDashboardName`.
 
 ### EXAMPLE 1
 
-Get-FabricKQLDashboard -WorkspaceId "12345" -KQLDashboardName "Development"
+Retrieves the "Development" KQLDashboard from workspace "12345". .PARAMETER KQLDashboardID The Id of the KQLDashboard to retrieve. This parameter cannot be used together with KQLDashboardName. The value for KQLDashboardID is a GUID. An example of a GUID is '12345678-1234-1234-1234-123456789012'.
 
-Retrieves the "Development" KQLDashboard from workspace "12345".
+```powershell
+Get-FabricKQLDashboard -WorkspaceId "12345" -KQLDashboardName "Development"
+```
 
 ### EXAMPLE 2
 
-Get-FabricKQLDashboard -WorkspaceId "12345"
-
 Retrieves all KQLDashboards in workspace "12345".
+
+```powershell
+Get-FabricKQLDashboard -WorkspaceId "12345"
+```
 
 ## PARAMETERS
 
 ### -KQLDashboardId
 
-The Id of the KQLDashboard to retrieve.
-This parameter cannot be used together with KQLDashboardName.
-The value for KQLDashboardID is a GUID.
-An example of a GUID is '12345678-1234-1234-1234-123456789012'.
+{{ Fill KQLDashboardId Description }}
 
 ```yaml
 Type: System.Guid

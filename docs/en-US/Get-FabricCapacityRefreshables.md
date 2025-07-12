@@ -36,9 +36,11 @@ It supports multiple aliases for flexibility.
 
 ### EXAMPLE 1
 
-Get-FabricCapacityRefreshables -top 5
-
 This example retrieves the top 5 refreshable capacities for the tenant.
+
+```powershell
+Get-FabricCapacityRefreshables -top 5
+```
 
 ## PARAMETERS
 

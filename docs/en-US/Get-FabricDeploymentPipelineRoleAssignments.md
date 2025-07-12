@@ -34,9 +34,11 @@ The function automatically handles pagination and returns all available role ass
 
 ### EXAMPLE 1
 
-Get-FabricDeploymentPipelineRoleAssignments -DeploymentPipelineId "GUID-GUID-GUID-GUID"
-
 Returns all role assignments for the specified deployment pipeline.
+
+```powershell
+Get-FabricDeploymentPipelineRoleAssignments -DeploymentPipelineId "GUID-GUID-GUID-GUID"
+```
 
 ## PARAMETERS
 

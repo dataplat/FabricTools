@@ -35,15 +35,19 @@ It can filter the results by `KQLDatabaseName`.
 
 ### EXAMPLE 1
 
-Get-FabricKQLDatabase -WorkspaceId "12345" -KQLDatabaseName "Development"
-
 Retrieves the "Development" KQLDatabase from workspace "12345".
+
+```powershell
+Get-FabricKQLDatabase -WorkspaceId "12345" -KQLDatabaseName "Development"
+```
 
 ### EXAMPLE 2
 
-Get-FabricKQLDatabase -WorkspaceId "12345"
-
 Retrieves all KQLDatabases in workspace "12345".
+
+```powershell
+Get-FabricKQLDatabase -WorkspaceId "12345"
+```
 
 ## PARAMETERS
 

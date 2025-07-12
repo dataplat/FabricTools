@@ -36,15 +36,19 @@ The KQLDashboard content can be provided as file paths, and metadata updates can
 
 ### EXAMPLE 1
 
-Update-FabricKQLDashboardDefinition -WorkspaceId "12345" -KQLDashboardId "67890" -KQLDashboardPathDefinition "C:\KQLDashboards\KQLDashboard.ipynb"
-
 Updates the content of the KQLDashboard with ID `67890` in the workspace `12345` using the specified KQLDashboard file.
+
+```powershell
+Update-FabricKQLDashboardDefinition -WorkspaceId "12345" -KQLDashboardId "67890" -KQLDashboardPathDefinition "C:\KQLDashboards\KQLDashboard.ipynb"
+```
 
 ### EXAMPLE 2
 
-Update-FabricKQLDashboardDefinition -WorkspaceId "12345" -KQLDashboardId "67890" -KQLDashboardPathDefinition "C:\KQLDashboards\KQLDashboard.ipynb"
-
 Updates both the content and metadata of the KQLDashboard with ID `67890` in the workspace `12345`.
+
+```powershell
+Update-FabricKQLDashboardDefinition -WorkspaceId "12345" -KQLDashboardId "67890" -KQLDashboardPathDefinition "C:\KQLDashboards\KQLDashboard.ipynb"
+```
 
 ## PARAMETERS
 

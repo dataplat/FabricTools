@@ -34,9 +34,11 @@ It validates the authentication token, constructs the API request, and handles b
 
 ### EXAMPLE 1
 
-Publish-FabricEnvironment -WorkspaceId "workspace-12345" -EnvironmentId "environment-67890"
-
 Initiates the publishing process for the specified staging environment.
+
+```powershell
+Publish-FabricEnvironment -WorkspaceId "workspace-12345" -EnvironmentId "environment-67890"
+```
 
 ## PARAMETERS
 

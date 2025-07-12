@@ -18,14 +18,18 @@ Defaults to api.powerbi.com
 If set, the configuration will not be persisted to the registry.
 
 .EXAMPLE
-PS> Set-FabricConfig -WorkspaceGUID 'GUID-GUID-GUID-GUID' -DataWarehouseGUID 'GUID-GUID-GUID-GUID'
+    Registers the specified Fabric Data Warehouse configuration for use with all functions in the PSFabricTools module.
 
-Registers the specified Fabric Data Warehouse configuration for use with all functions in the PSFabricTools module.
+    ```powershell
+    Set-FabricConfig -WorkspaceGUID 'GUID-GUID-GUID-GUID' -DataWarehouseGUID 'GUID-GUID-GUID-GUID'
+    ```
 
 .EXAMPLE
-PS> Set-FabricConfig -WorkspaceGUID 'GUID-GUID-GUID-GUID' -DataWarehouseGUID 'GUID-GUID-GUID-GUID' -SkipPersist
+    Registers the specified Fabric Data Warehouse configuration for use with all functions in the PSFabricTools module, but does not persist the values.
 
-Registers the specified Fabric Data Warehouse configuration for use with all functions in the PSFabricTools module - but it does not persist the values, only uses them for the current session.
+    ```powershell
+    Set-FabricConfig -WorkspaceGUID 'GUID-GUID-GUID-GUID' -DataWarehouseGUID 'GUID-GUID-GUID-GUID' -SkipPersist
+    ```
 
 .NOTES
 

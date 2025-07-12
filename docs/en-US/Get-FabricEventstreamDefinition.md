@@ -35,15 +35,19 @@ Handles both synchronous and asynchronous operations, with detailed logging and 
 
 ### EXAMPLE 1
 
-Get-FabricEventstreamDefinition -WorkspaceId "12345" -EventstreamId "67890"
-
 Retrieves the definition of the Eventstream with ID `67890` from the workspace with ID `12345` in the `ipynb` format.
+
+```powershell
+Get-FabricEventstreamDefinition -WorkspaceId "12345" -EventstreamId "67890"
+```
 
 ### EXAMPLE 2
 
-Get-FabricEventstreamDefinition -WorkspaceId "12345"
-
 Retrieves the definitions of all Eventstreams in the workspace with ID `12345` in the `ipynb` format.
+
+```powershell
+Get-FabricEventstreamDefinition -WorkspaceId "12345"
+```
 
 ## PARAMETERS
 

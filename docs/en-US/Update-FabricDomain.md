@@ -34,9 +34,11 @@ The `Update-FabricDomain` function modifies a specified domain in Microsoft Fabr
 
 ### EXAMPLE 1
 
-Update-FabricDomain -DomainId "12345" -DomainName "NewDomain" -DomainDescription "Updated description" -DomainContributorsScope "AdminsOnly"
-
 Updates the domain with ID "12345" with a new name, description, and contributors' scope.
+
+```powershell
+Update-FabricDomain -DomainId "12345" -DomainName "NewDomain" -DomainDescription "Updated description" -DomainContributorsScope "AdminsOnly"
+```
 
 ## PARAMETERS
 

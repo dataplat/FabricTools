@@ -34,7 +34,7 @@ It uses the Az module to interact with Azure.
 
 ### EXAMPLE 1
 
-This command retrieves all resources of type "Microsoft.Fabric/capacities" from all resource groups in the subscription with the ID "12345678-1234-1234-1234-123456789012".
+This command retrieves all resources of type "Microsoft.Fabric/capacities" from all resource groups in the subscription with the ID "12345678-1234-1234-1234-123456789012". ```powershell ```
 
 ```powershell
 Get-FabricCapacitiess -subscriptionID "12345678-1234-1234-1234-123456789012"
@@ -42,7 +42,7 @@ Get-FabricCapacitiess -subscriptionID "12345678-1234-1234-1234-123456789012"
 
 ### EXAMPLE 2
 
-This command retrieves all resources of type "Microsoft.Fabric/capacities" from all resource groups in all subscriptions.
+This command retrieves all resources of type "Microsoft.Fabric/capacities" from all resource groups in all subscriptions. ```powershell ```
 
 ```powershell
 Get-FabricCapacities

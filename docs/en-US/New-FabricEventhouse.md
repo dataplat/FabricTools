@@ -37,8 +37,11 @@ It supports optional parameters for Eventhouse description and path definitions.
 
 ### EXAMPLE 1
 
-New-FabricEventhouse -WorkspaceId "workspace-12345" -EventhouseName "New Eventhouse" -EventhouseDescription "Description of the new Eventhouse"
 This example creates a new Eventhouse named "New Eventhouse" in the workspace with ID "workspace-12345" with the provided description.
+
+```powershell
+New-FabricEventhouse -WorkspaceId "workspace-12345" -EventhouseName "New Eventhouse" -EventhouseDescription "Description of the new Eventhouse"
+```
 
 ## PARAMETERS
 

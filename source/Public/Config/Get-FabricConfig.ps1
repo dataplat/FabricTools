@@ -10,14 +10,18 @@ Gets the configuration for use with all functions in the PSFabricTools module.
 The name of the configuration to be retrieved.
 
 .EXAMPLE
-PS> Get-FabricConfig
+    Gets all configuration values for the PSFabricTools module and outputs them.
 
-Gets all the configuration values for the PSFabricTools module and outputs them.
+    ```powershell
+    Get-FabricConfig
+    ```
 
 .EXAMPLE
-PS> Get-FabricConfig -ConfigName BaseUrl
+    Gets the BaseUrl configuration value for the PSFabricTools module.
 
-Gets the BaseUrl configuration value for the PSFabricTools module.
+    ```powershell
+    Get-FabricConfig -ConfigName BaseUrl
+    ```
 
 .NOTES
 

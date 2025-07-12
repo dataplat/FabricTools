@@ -36,9 +36,11 @@ It supports multiple aliases for flexibility.
 
 ### EXAMPLE 1
 
-Get-FabricCapacityWorkload -capacityID "your-capacity-id"
-
 This example retrieves the workloads for a specific capacity given the capacity ID and authentication token.
+
+```powershell
+Get-FabricCapacityWorkload -capacityID "your-capacity-id"
+```
 
 ## PARAMETERS
 

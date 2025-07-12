@@ -35,15 +35,19 @@ It can filter the results by `EnvironmentName`.
 
 ### EXAMPLE 1
 
-Get-FabricEnvironment -WorkspaceId "12345" -EnvironmentName "Development"
-
 Retrieves the "Development" environment from workspace "12345".
+
+```powershell
+Get-FabricEnvironment -WorkspaceId "12345" -EnvironmentName "Development"
+```
 
 ### EXAMPLE 2
 
-Get-FabricEnvironment -WorkspaceId "12345"
-
 Retrieves all environments in workspace "12345".
+
+```powershell
+Get-FabricEnvironment -WorkspaceId "12345"
+```
 
 ## PARAMETERS
 

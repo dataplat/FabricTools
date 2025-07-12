@@ -37,15 +37,19 @@ it returns a list of all stages in the pipeline.
 
 ### EXAMPLE 1
 
-Get-FabricDeploymentPipelineStage -DeploymentPipelineId "GUID-GUID-GUID-GUID" -StageId "GUID-GUID-GUID-GUID"
-
 Retrieves details of a specific deployment pipeline stage, including its workspace assignment and settings.
+
+```powershell
+Get-FabricDeploymentPipelineStage -DeploymentPipelineId "GUID-GUID-GUID-GUID" -StageId "GUID-GUID-GUID-GUID"
+```
 
 ### EXAMPLE 2
 
-Get-FabricDeploymentPipelineStage -DeploymentPipelineId "GUID-GUID-GUID-GUID"
-
 Retrieves a list of all stages in the specified deployment pipeline.
+
+```powershell
+Get-FabricDeploymentPipelineStage -DeploymentPipelineId "GUID-GUID-GUID-GUID"
+```
 
 ## PARAMETERS
 

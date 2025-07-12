@@ -35,9 +35,11 @@ performed on a deployment pipeline, including the deployment execution plan, sta
 
 ### EXAMPLE 1
 
-Get-FabricDeploymentPipelineOperation -DeploymentPipelineId "GUID-GUID-GUID-GUID" -OperationId "GUID-GUID-GUID-GUID"
-
 Retrieves details of a specific deployment operation, including its execution plan and status.
+
+```powershell
+Get-FabricDeploymentPipelineOperation -DeploymentPipelineId "GUID-GUID-GUID-GUID" -OperationId "GUID-GUID-GUID-GUID"
+```
 
 ## PARAMETERS
 

@@ -35,15 +35,19 @@ Additionally, it can filter to return only non-empty domains.
 
 ### EXAMPLE 1
 
-Get-FabricDomain -DomainId "12345"
-
 Fetches the domain with ID "12345".
+
+```powershell
+Get-FabricDomain -DomainId "12345"
+```
 
 ### EXAMPLE 2
 
-Get-FabricDomain -DomainName "Finance"
-
 Fetches the domain with the display name "Finance".
+
+```powershell
+Get-FabricDomain -DomainName "Finance"
+```
 
 ## PARAMETERS
 

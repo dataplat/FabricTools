@@ -36,15 +36,19 @@ The KQLDatabase content can be provided as file paths, and metadata updates can 
 
 ### EXAMPLE 1
 
-Update-FabricKQLDatabaseDefinition -WorkspaceId "12345" -KQLDatabaseId "67890" -KQLDatabasePathDefinition "C:\KQLDatabases\KQLDatabase.ipynb"
-
 Updates the content of the KQLDatabase with ID `67890` in the workspace `12345` using the specified KQLDatabase file.
+
+```powershell
+Update-FabricKQLDatabaseDefinition -WorkspaceId "12345" -KQLDatabaseId "67890" -KQLDatabasePathDefinition "C:\KQLDatabases\KQLDatabase.ipynb"
+```
 
 ### EXAMPLE 2
 
-Update-FabricKQLDatabaseDefinition -WorkspaceId "12345" -KQLDatabaseId "67890" -KQLDatabasePathDefinition "C:\KQLDatabases\KQLDatabase.ipynb" -UpdateMetadata $true
-
 Updates both the content and metadata of the KQLDatabase with ID `67890` in the workspace `12345`.
+
+```powershell
+Update-FabricKQLDatabaseDefinition -WorkspaceId "12345" -KQLDatabaseId "67890" -KQLDatabasePathDefinition "C:\KQLDatabases\KQLDatabase.ipynb" -UpdateMetadata $true
+```
 
 ## PARAMETERS
 

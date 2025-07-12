@@ -34,8 +34,11 @@ It handles token validation, constructs the API URL, makes the API request, and 
 
 ### EXAMPLE 1
 
-Get-FabricDashboard -WorkspaceId "12345"
 This example retrieves all dashboards from the workspace with ID "12345".
+
+```powershell
+Get-FabricDashboard -WorkspaceId "12345"
+```
 
 ## PARAMETERS
 

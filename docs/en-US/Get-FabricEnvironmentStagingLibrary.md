@@ -36,9 +36,11 @@ It ensures token validity and handles API errors gracefully.
 
 ### EXAMPLE 1
 
-Get-FabricEnvironmentStagingLibrary -WorkspaceId "workspace-12345" -EnvironmentId "environment-67890"
-
 Retrieves the staging libraries for the specified environment in the given workspace.
+
+```powershell
+Get-FabricEnvironmentStagingLibrary -WorkspaceId "workspace-12345" -EnvironmentId "environment-67890"
+```
 
 ## PARAMETERS
 

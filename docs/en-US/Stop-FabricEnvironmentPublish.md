@@ -35,9 +35,11 @@ It ensures that the token is valid before making the request and handles both su
 
 ### EXAMPLE 1
 
-Stop-FabricEnvironmentPublish -WorkspaceId "workspace-12345" -EnvironmentId "environment-67890"
-
 Cancels the publish operation for the specified environment.
+
+```powershell
+Stop-FabricEnvironmentPublish -WorkspaceId "workspace-12345" -EnvironmentId "environment-67890"
+```
 
 ## PARAMETERS
 
