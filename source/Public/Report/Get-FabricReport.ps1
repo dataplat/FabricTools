@@ -16,12 +16,18 @@
     The name of the Report to retrieve. This parameter is optional.
 
 .EXAMPLE
-    Get-FabricReport -WorkspaceId "workspace-12345" -ReportId "Report-67890"
     This example retrieves the Report details for the Report with ID "Report-67890" in the workspace with ID "workspace-12345".
 
+    ```powershell
+    Get-FabricReport -WorkspaceId "workspace-12345" -ReportId "Report-67890"
+    ```
+
 .EXAMPLE
-    Get-FabricReport -WorkspaceId "workspace-12345" -ReportName "My Report"
     This example retrieves the Report details for the Report named "My Report" in the workspace with ID "workspace-12345".
+
+    ```powershell
+    Get-FabricReport -WorkspaceId "workspace-12345" -ReportName "My Report"
+    ```
 
 .NOTES
     - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.

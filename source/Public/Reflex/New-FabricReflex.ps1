@@ -22,8 +22,11 @@
     An optional path to the platform-specific definition file to upload.
 
 .EXAMPLE
-    New-FabricReflex -WorkspaceId "workspace-12345" -ReflexName "New Reflex" -ReflexDescription "Description of the new Reflex"
     This example creates a new Reflex named "New Reflex" in the workspace with ID "workspace-12345" with the provided description.
+
+    ```powershell
+    New-FabricReflex -WorkspaceId "workspace-12345" -ReflexName "New Reflex" -ReflexDescription "Description of the new Reflex"
+    ```
 
 .NOTES
     - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.

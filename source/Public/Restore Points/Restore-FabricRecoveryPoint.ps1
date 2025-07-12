@@ -21,14 +21,18 @@ The GUID for the data warehouse which we want to retrieve restore points for.
 Wait for the restore to complete before returning.
 
 .EXAMPLE
-PS> Restore-FabricRecoveryPoint -CreateTime '2024-07-23T11:20:26Z'
+    Restore a Fabric Data Warehouse to a specific restore point that has been set using Set-FabricConfig.
 
-Restore a Fabric Data Warehouse to a specific restore point that has been set using Set-FabricConfig.
+    ```powershell
+    Restore-FabricRecoveryPoint -CreateTime '2024-07-23T11:20:26Z'
+    ```
 
 .EXAMPLE
-PS> Restore-FabricRecoveryPoint -CreateTime '2024-07-23T11:20:26Z' -WorkspaceGUID 'GUID-GUID-GUID-GUID' -DataWarehouseGUID 'GUID-GUID-GUID-GUID'
+    Restore a Fabric Data Warehouse to a specific restore point, specifying the workspace and data warehouse GUIDs.
 
-Restore a Fabric Data Warehouse to a specific restore point, specifying the workspace and data warehouse GUIDs.
+    ```powershell
+    Restore-FabricRecoveryPoint -CreateTime '2024-07-23T11:20:26Z' -WorkspaceGUID 'GUID-GUID-GUID-GUID' -DataWarehouseGUID 'GUID-GUID-GUID-GUID'
+    ```
 
 .NOTES
 

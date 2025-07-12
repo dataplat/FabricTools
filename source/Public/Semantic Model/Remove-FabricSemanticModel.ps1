@@ -13,8 +13,11 @@
     The unique identifier of the SemanticModel to be removed.
 
 .EXAMPLE
-    Remove-FabricSemanticModel -WorkspaceId "workspace-12345" -SemanticModelId "SemanticModel-67890"
     This example removes the SemanticModel with ID "SemanticModel-67890" from the workspace with ID "workspace-12345".
+
+    ```powershell
+    Remove-FabricSemanticModel -WorkspaceId "workspace-12345" -SemanticModelId "SemanticModel-67890"
+    ```
 
 .NOTES
     - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.

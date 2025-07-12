@@ -20,7 +20,9 @@
     A boolean flag indicating whether to wait for the job to complete. The default value is $false. This parameter is optional.
 
 .EXAMPLE
+    ```powershell
     Start-FabricSparkJobDefinitionOnDemand -WorkspaceId "workspace123" -SparkJobDefinitionId "jobdef456" -waitForCompletion $true
+    ```
 
 .NOTES
     Ensure that the necessary authentication tokens are valid before running this function.

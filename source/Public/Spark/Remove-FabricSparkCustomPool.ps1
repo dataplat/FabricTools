@@ -13,8 +13,11 @@
     The unique identifier of the Spark custom pool to be removed.
 
 .EXAMPLE
-    Remove-FabricSparkCustomPool -WorkspaceId "workspace-12345" -SparkCustomPoolId "pool-67890"
     This example removes the Spark custom pool with ID "pool-67890" from the workspace with ID "workspace-12345".
+
+    ```powershell
+    Remove-FabricSparkCustomPool -WorkspaceId "workspace-12345" -SparkCustomPoolId "pool-67890"
+    ```
 
 .NOTES
     - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.

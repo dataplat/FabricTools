@@ -24,9 +24,11 @@ Filter the results to only include restore points of this type.
 The specific unique time of the restore point to remove. Get this from Get-FabricRecoveryPoint.
 
 .EXAMPLE
-PS> Get-FabricRecoveryPoint -WorkspaceGUID 'GUID-GUID-GUID-GUID' -DataWarehouseGUID 'GUID-GUID-GUID-GUID'
+    Gets all the available recovery points for the specified data warehouse, in the specified workspace.
 
-Gets all the available recovery points for the specified data warehouse, in the specified workspace.
+    ```powershell
+    Get-FabricRecoveryPoint -WorkspaceGUID 'GUID-GUID-GUID-GUID' -DataWarehouseGUID 'GUID-GUID-GUID-GUID'
+    ```
 
 .NOTES
 Based on API calls from this blog post: https://blog.fabric.microsoft.com/en-US/blog/the-art-of-data-warehouse-recovery-within-microsoft-fabric/

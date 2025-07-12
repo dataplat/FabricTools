@@ -10,8 +10,11 @@
     The unique identifier of the workspace from which to retrieve Spark settings. This parameter is mandatory.
 
 .EXAMPLE
-    Get-FabricSparkSettings -WorkspaceId "workspace-12345"
     This example retrieves the Spark settings for the workspace with ID "workspace-12345".
+
+    ```powershell
+    Get-FabricSparkSettings -WorkspaceId "workspace-12345"
+    ```
 
 .NOTES
     - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.

@@ -16,12 +16,18 @@
     The format in which to retrieve the Report definition. This parameter is optional.
 
 .EXAMPLE
-    Get-FabricReportDefinition -WorkspaceId "workspace-12345" -ReportId "Report-67890"
     This example retrieves the definition of the Report with ID "Report-67890" in the workspace with ID "workspace-12345".
 
+    ```powershell
+    Get-FabricReportDefinition -WorkspaceId "workspace-12345" -ReportId "Report-67890"
+    ```
+
 .EXAMPLE
-    Get-FabricReportDefinition -WorkspaceId "workspace-12345" -ReportId "Report-67890" -ReportFormat "json"
     This example retrieves the definition of the Report with ID "Report-67890" in the workspace with ID "workspace-12345" in JSON format.
+
+    ```powershell
+    Get-FabricReportDefinition -WorkspaceId "workspace-12345" -ReportId "Report-67890" -ReportFormat "json"
+    ```
 
 .NOTES
     - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.

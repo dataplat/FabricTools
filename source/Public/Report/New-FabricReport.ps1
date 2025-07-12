@@ -20,8 +20,11 @@
 
 
 .EXAMPLE
-    New-FabricReport -WorkspaceId "workspace-12345" -ReportName "New Report" -ReportDescription "Description of the new Report"
     This example creates a new Report named "New Report" in the workspace with ID "workspace-12345" with the provided description.
+
+    ```powershell
+    New-FabricReport -WorkspaceId "workspace-12345" -ReportName "New Report" -ReportDescription "Description of the new Report"
+    ```
 
 .NOTES
     - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
