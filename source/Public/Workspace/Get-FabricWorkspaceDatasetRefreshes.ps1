@@ -11,12 +11,11 @@ function Get-FabricWorkspaceDatasetRefreshes {
    The ID of the PowerBI workspace. This is a mandatory parameter.
 
 .EXAMPLE
-   Get-FabricWorkspaceDatasetRefreshes -WorkspaceID "12345678-90ab-cdef-1234-567890abcdef"
+    This command retrieves the refresh history of all datasets in the workspace with the specified ID. .INPUTS String. You can pipe a string that contains the workspace ID to Get-FabricWorkspaceDatasetRefreshes.
 
-   This command retrieves the refresh history of all datasets in the workspace with the specified ID.
-
-.INPUTS
-   String. You can pipe a string that contains the workspace ID to Get-FabricWorkspaceDatasetRefreshes.
+    ```powershell
+    Get-FabricWorkspaceDatasetRefreshes -WorkspaceID "12345678-90ab-cdef-1234-567890abcdef"
+    ```
 
 .OUTPUTS
    Array. Get-FabricWorkspaceDatasetRefreshes returns an array of refresh history objects.

@@ -17,9 +17,11 @@ The URL provided in the Location header of the initial request. This is used to 
 The interval (in seconds) to wait between polling the operation status. The default is 5 seconds.
 
 .EXAMPLE
-Get-FabricLongRunningOperation -operationId "12345-abcd-67890-efgh" -retryAfter 10
+    This command polls the status of the operation with the given operationId every 10 seconds until it completes. ```powershell ```
 
-This command polls the status of the operation with the given operationId every 10 seconds until it completes.
+    ```powershell
+    Get-FabricLongRunningOperation -operationId "12345-abcd-67890-efgh" -retryAfter 10
+    ```
 
 .NOTES
 

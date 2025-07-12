@@ -12,9 +12,11 @@ The unique identifier of the workspace to be assigned.
 The unique identifier of the capacity to which the workspace should be assigned.
 
 .EXAMPLE
-Add-FabricWorkspaceCapacityAssignment -WorkspaceId "workspace123" -CapacityId "capacity456"
+    Assigns the workspace with ID "workspace123" to the capacity "capacity456".
 
-Assigns the workspace with ID "workspace123" to the capacity "capacity456".
+    ```powershell
+    Add-FabricWorkspaceCapacityAssignment -WorkspaceId "workspace123" -CapacityId "capacity456"
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.

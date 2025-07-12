@@ -16,12 +16,18 @@
     The name of the warehouse to retrieve. This parameter is optional.
 
 .EXAMPLE
-     Get-FabricWarehouse -WorkspaceId "workspace-12345" -WarehouseId "warehouse-67890"
     This example retrieves the warehouse details for the warehouse with ID "warehouse-67890" in the workspace with ID "workspace-12345".
 
+    ```powershell
+    Get-FabricWarehouse -WorkspaceId "workspace-12345" -WarehouseId "warehouse-67890"
+    ```
+
 .EXAMPLE
-     Get-FabricWarehouse -WorkspaceId "workspace-12345" -WarehouseName "My Warehouse"
     This example retrieves the warehouse details for the warehouse named "My Warehouse" in the workspace with ID "workspace-12345".
+
+    ```powershell
+    Get-FabricWarehouse -WorkspaceId "workspace-12345" -WarehouseName "My Warehouse"
+    ```
 
 .NOTES
     - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.

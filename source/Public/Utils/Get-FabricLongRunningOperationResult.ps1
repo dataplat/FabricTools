@@ -11,9 +11,11 @@ of a specific long-running operation. This is typically used after confirming th
 The unique identifier of the completed long-running operation whose result you want to retrieve.
 
 .EXAMPLE
-Get-FabricLongRunningOperationResult -operationId "12345-abcd-67890-efgh"
+    This command fetches the result of the operation with the specified operationId. ```powershell ```
 
-This command fetches the result of the operation with the specified operationId.
+    ```powershell
+    Get-FabricLongRunningOperationResult -operationId "12345-abcd-67890-efgh"
+    ```
 
 .NOTES
 - Ensure the Fabric API headers (e.g., authorization tokens) are defined in $FabricConfig.FabricHeaders.

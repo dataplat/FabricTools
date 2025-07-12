@@ -15,14 +15,18 @@ The new name for the workspace.
 (Optional) The new description for the workspace.
 
 .EXAMPLE
-Update-FabricWorkspace -WorkspaceId "workspace123" -WorkspaceName "NewWorkspaceName"
+    Updates the name of the workspace with the ID "workspace123" to "NewWorkspaceName".
 
-Updates the name of the workspace with the ID "workspace123" to "NewWorkspaceName".
+    ```powershell
+    Update-FabricWorkspace -WorkspaceId "workspace123" -WorkspaceName "NewWorkspaceName"
+    ```
 
 .EXAMPLE
-Update-FabricWorkspace -WorkspaceId "workspace123" -WorkspaceName "NewName" -WorkspaceDescription "Updated description"
+    Updates both the name and description of the workspace "workspace123".
 
-Updates both the name and description of the workspace "workspace123".
+    ```powershell
+    Update-FabricWorkspace -WorkspaceId "workspace123" -WorkspaceName "NewName" -WorkspaceDescription "Updated description"
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.

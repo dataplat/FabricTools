@@ -13,8 +13,11 @@
     The unique identifier of the warehouse to be removed.
 
 .EXAMPLE
-    Remove-FabricWarehouse -WorkspaceId "workspace-12345" -WarehouseId "warehouse-67890"
     This example removes the warehouse with ID "warehouse-67890" from the workspace with ID "workspace-12345".
+
+    ```powershell
+    Remove-FabricWarehouse -WorkspaceId "workspace-12345" -WarehouseId "warehouse-67890"
+    ```
 
 .NOTES
     - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.

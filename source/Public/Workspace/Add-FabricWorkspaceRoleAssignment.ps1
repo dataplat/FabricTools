@@ -18,9 +18,11 @@ The type of the principal. Allowed values: Group, ServicePrincipal, ServicePrinc
 The role to assign to the principal. Allowed values: Admin, Contributor, Member, Viewer.
 
 .EXAMPLE
-Add-FabricWorkspaceRoleAssignment -WorkspaceId "workspace123" -PrincipalId "principal123" -PrincipalType "User" -WorkspaceRole "Admin"
+    Assigns the Admin role to the user with ID "principal123" in the workspace "workspace123".
 
-Assigns the Admin role to the user with ID "principal123" in the workspace "workspace123".
+    ```powershell
+    Add-FabricWorkspaceRoleAssignment -WorkspaceId "workspace123" -PrincipalId "principal123" -PrincipalType "User" -WorkspaceRole "Admin"
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.

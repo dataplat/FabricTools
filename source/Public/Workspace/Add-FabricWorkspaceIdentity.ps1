@@ -9,9 +9,11 @@ The `Add-FabricWorkspaceIdentity` function provisions an identity for a specifie
 The unique identifier of the workspace for which the identity will be provisioned.
 
 .EXAMPLE
-Add-FabricWorkspaceIdentity -WorkspaceId "workspace123"
+    Provisions a Managed Identity for the workspace with ID "workspace123".
 
-Provisions a Managed Identity for the workspace with ID "workspace123".
+    ```powershell
+    Add-FabricWorkspaceIdentity -WorkspaceId "workspace123"
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.

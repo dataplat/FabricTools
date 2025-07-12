@@ -12,15 +12,18 @@ Specifies the ID of the workspace to be unregistered from the capacity. This par
 Specifies the workspace object to be unregistered from the capacity. This parameter is mandatory when using the 'WorkspaceObject' parameter set. The workspace object can be piped into the function.
 
 .EXAMPLE
-Unregister-FabricWorkspaceToCapacity -WorkspaceId "12345678"
-Unregisters the workspace with ID "12345678" from the capacity.
+    Unregisters the workspace with ID "12345678" from the capacity.
+
+    ```powershell
+    Unregister-FabricWorkspaceToCapacity -WorkspaceId "12345678"
+    ```
 
 .EXAMPLE
-Get-FabricWorkspace | Unregister-FabricWorkspaceToCapacity
-Unregisters the workspace objects piped from Get-FabricWorkspace from the capacity.
+    Unregisters the workspace objects piped from Get-FabricWorkspace from the capacity. .INPUTS System.Management.Automation.PSCustomObject
 
-.INPUTS
-System.Management.Automation.PSCustomObject
+    ```powershell
+    Get-FabricWorkspace | Unregister-FabricWorkspaceToCapacity
+    ```
 
 .OUTPUTS
 System.Object

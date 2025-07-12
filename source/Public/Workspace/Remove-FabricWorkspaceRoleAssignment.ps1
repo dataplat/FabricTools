@@ -12,9 +12,11 @@ The unique identifier of the workspace.
 The unique identifier of the role assignment to be removed.
 
 .EXAMPLE
-Remove-FabricWorkspaceRoleAssignment -WorkspaceId "workspace123" -WorkspaceRoleAssignmentId "role123"
+    Removes the role assignment with the ID "role123" from the workspace "workspace123".
 
-Removes the role assignment with the ID "role123" from the workspace "workspace123".
+    ```powershell
+    Remove-FabricWorkspaceRoleAssignment -WorkspaceId "workspace123" -WorkspaceRoleAssignmentId "role123"
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.

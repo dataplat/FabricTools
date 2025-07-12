@@ -17,9 +17,11 @@ The display name of the workspace to be created. Must only contain alphanumeric 
 (Optional) The ID of the capacity to be associated with the workspace. This parameter is optional.
 
 .EXAMPLE
-Add-FabricWorkspace -WorkspaceName "NewWorkspace"
+    Creates a workspace named "NewWorkspace".
 
-Creates a workspace named "NewWorkspace".
+    ```powershell
+    Add-FabricWorkspace -WorkspaceName "NewWorkspace"
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.

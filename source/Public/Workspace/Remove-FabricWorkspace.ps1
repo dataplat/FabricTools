@@ -9,9 +9,11 @@ The `Remove-FabricWorkspace` function deletes a workspace in the Fabric platform
 The unique identifier of the workspace to be deleted.
 
 .EXAMPLE
-Remove-FabricWorkspace -WorkspaceId "workspace123"
+    Deletes the workspace with the ID "workspace123".
 
-Deletes the workspace with the ID "workspace123".
+    ```powershell
+    Remove-FabricWorkspace -WorkspaceId "workspace123"
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.

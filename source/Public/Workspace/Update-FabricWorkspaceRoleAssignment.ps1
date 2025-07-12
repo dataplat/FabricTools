@@ -19,9 +19,11 @@ The new role to assign to the principal. Must be one of the following:
 - Viewer
 
 .EXAMPLE
-Update-FabricWorkspaceRoleAssignment -WorkspaceId "workspace123" -WorkspaceRoleAssignmentId "assignment456" -WorkspaceRole "Admin"
+    Updates the role assignment to "Admin" for the specified workspace and role assignment.
 
-Updates the role assignment to "Admin" for the specified workspace and role assignment.
+    ```powershell
+    Update-FabricWorkspaceRoleAssignment -WorkspaceId "workspace123" -WorkspaceRoleAssignmentId "assignment456" -WorkspaceRole "Admin"
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.

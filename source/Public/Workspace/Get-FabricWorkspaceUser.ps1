@@ -14,32 +14,41 @@ The ID of the workspace. This is a mandatory parameter if Workspace is not provi
 The workspace object. This normally comes from the Get-FabricWorkspace cmdlet. This is a mandatory parameter if WorkspaceId is not provided.
 
 .EXAMPLE
-Get-FabricWorkspaceUser -WorkspaceId '12345678-1234-1234-1234-123456789012
+    This example retrieves the users of a workspace of the workspace with the ID '12345678-1234-1234-1234-123456789012'.
 
-This example retrieves the users of a workspace of the workspace with the ID '12345678-1234-1234-1234-123456789012'.
-
-.EXAMPLE
-$workspace = Get-FabricWorkspace -WorkspaceName 'prod-workspace'
-$workspace | Get-FabricWorkspaceUser
-
-This example retrieves the users of the prod-workspace workspace by piping the object.
+    ```powershell
+    Get-FabricWorkspaceUser -WorkspaceId '12345678-1234-1234-1234-123456789012
+    ```
 
 .EXAMPLE
-Get-FabricWorkspaceUser -Workspace (Get-FabricWorkspace -WorkspaceName 'prod-workspace')
+    This example retrieves the users of the prod-workspace workspace by piping the object.
 
-This example retrieves the users of the prod-workspace workspace by piping the object.
+    ```powershell
+    $workspace = Get-FabricWorkspace -WorkspaceName 'prod-workspace'
+
+    $workspace | Get-FabricWorkspaceUser
+    ```
 
 .EXAMPLE
-Get-FabricWorkspace| Get-FabricWorkspaceUser
+    This example retrieves the users of the prod-workspace workspace by piping the object.
 
-This example retrieves the users of all of the workspaces. IMPORTANT: This will not return the workspace name or ID at present.
+    ```powershell
+    Get-FabricWorkspaceUser -Workspace (Get-FabricWorkspace -WorkspaceName 'prod-workspace')
+    ```
 
 .EXAMPLE
-Get-FabricWorkspace| Foreach-Object {
-Get-FabricWorkspaceUser -WorkspaceId $_.Id | Select-Object @{Name='WorkspaceName';Expression={$_.displayName;}}, *
-}
+    This example retrieves the users of all of the workspaces. IMPORTANT: This will not return the workspace name or ID at present.
 
-This example retrieves the users of all of the workspaces. It will also add the workspace name to the output.
+    ```powershell
+    Get-FabricWorkspace| Get-FabricWorkspaceUser
+    ```
+
+.EXAMPLE
+    Get-FabricWorkspaceUser -WorkspaceId $_.Id | Select-Object @{Name='WorkspaceName';Expression={$_.displayName;}}, * } This example retrieves the users of all of the workspaces. It will also add the workspace name to the output.
+
+    ```powershell
+    Get-FabricWorkspace| Foreach-Object {
+    ```
 
 .NOTES
 It supports multiple aliases for backward compatibility.

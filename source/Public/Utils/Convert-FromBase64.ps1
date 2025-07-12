@@ -12,17 +12,19 @@ function Convert-FromBase64 {
     The Base64-encoded string that you want to decode.
 
 .EXAMPLE
-    Convert-FromBase64 -Base64String "SGVsbG8sIFdvcmxkIQ=="
+    Output: Hello, World!
 
-    Output:
-    Hello, World!
+    ```powershell
+    Convert-FromBase64 -Base64String "SGVsbG8sIFdvcmxkIQ=="
+    ```
 
 .EXAMPLE
+    Output: Some encoded text
+
+    ```powershell
     $encodedString = "U29tZSBlbmNvZGVkIHRleHQ="
     Convert-FromBase64 -Base64String $encodedString
-
-    Output:
-    Some encoded text
+    ```
 
 .NOTES
 This function assumes the Base64 input is a valid UTF-8 encoded string.

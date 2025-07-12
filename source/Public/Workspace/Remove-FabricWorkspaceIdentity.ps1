@@ -9,9 +9,11 @@ The `Remove-FabricWorkspaceCapacity` function deprovisions the Managed Identity 
 The unique identifier of the workspace from which the identity will be removed.
 
 .EXAMPLE
-Remove-FabricWorkspaceCapacity -WorkspaceId "workspace123"
+    Deprovisions the Managed Identity for the workspace with ID "workspace123".
 
-Deprovisions the Managed Identity for the workspace with ID "workspace123".
+    ```powershell
+    Remove-FabricWorkspaceCapacity -WorkspaceId "workspace123"
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.

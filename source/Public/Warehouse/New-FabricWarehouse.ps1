@@ -16,8 +16,11 @@
     An optional description for the warehouse.
 
 .EXAMPLE
-    New-FabricWarehouse -WorkspaceId "workspace-12345" -WarehouseName "New Warehouse" -WarehouseDescription "Description of the new warehouse"
     This example creates a new warehouse named "New Warehouse" in the workspace with ID "workspace-12345" with the provided description.
+
+    ```powershell
+    New-FabricWarehouse -WorkspaceId "workspace-12345" -WarehouseName "New Warehouse" -WarehouseDescription "Description of the new warehouse"
+    ```
 
 .NOTES
     - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.

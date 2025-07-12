@@ -19,8 +19,11 @@
     An optional new description for the warehouse.
 
 .EXAMPLE
-    Update-FabricWarehouse -WorkspaceId "workspace-12345" -WarehouseId "warehouse-67890" -WarehouseName "Updated Warehouse" -WarehouseDescription "Updated description"
     This example updates the warehouse with ID "warehouse-67890" in the workspace with ID "workspace-12345" with a new name and description.
+
+    ```powershell
+    Update-FabricWarehouse -WorkspaceId "workspace-12345" -WarehouseId "warehouse-67890" -WarehouseName "Updated Warehouse" -WarehouseDescription "Updated description"
+    ```
 
 .NOTES
     - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.

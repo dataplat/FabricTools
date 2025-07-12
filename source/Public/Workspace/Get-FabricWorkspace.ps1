@@ -12,14 +12,18 @@ The unique identifier of the workspace to retrieve.
 The display name of the workspace to retrieve.
 
 .EXAMPLE
-Get-FabricWorkspace -WorkspaceId "workspace123"
+    Fetches details of the workspace with ID "workspace123".
 
-Fetches details of the workspace with ID "workspace123".
+    ```powershell
+    Get-FabricWorkspace -WorkspaceId "workspace123"
+    ```
 
 .EXAMPLE
-Get-FabricWorkspace -WorkspaceName "MyWorkspace"
+    Fetches details of the workspace with the name "MyWorkspace".
 
-Fetches details of the workspace with the name "MyWorkspace".
+    ```powershell
+    Get-FabricWorkspace -WorkspaceName "MyWorkspace"
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.

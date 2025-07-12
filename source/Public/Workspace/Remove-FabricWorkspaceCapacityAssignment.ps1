@@ -9,9 +9,11 @@ The `Remove-FabricWorkspaceCapacityAssignment` function sends a POST request to 
 The unique identifier of the workspace to be unassigned from its capacity.
 
 .EXAMPLE
-Remove-FabricWorkspaceCapacityAssignment -WorkspaceId "workspace123"
+    Unassigns the workspace with ID "workspace123" from its capacity.
 
-Unassigns the workspace with ID "workspace123" from its capacity.
+    ```powershell
+    Remove-FabricWorkspaceCapacityAssignment -WorkspaceId "workspace123"
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
