@@ -191,7 +191,7 @@ Function Invoke-FabricRestMethod {
         if ($null -ne $response) {
             $continuationToken = Get-FabricContinuationToken -Response $response
 
-            if ($ExtractValue -eq 'Auto' -and $response.value -ne $null) {
+            if ($ExtractValue -eq 'Auto' -and $null -ne $response.value) {
                 $ExtractValue = 'True'
             }
             if ($ExtractValue -eq 'True') {

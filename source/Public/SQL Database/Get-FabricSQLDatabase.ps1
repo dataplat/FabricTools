@@ -76,7 +76,6 @@ function Get-FabricSQLDatabase
 
     begin
     {
-        $return = @()
         Confirm-TokenState
 
         if ($PSBoundParameters.ContainsKey("SQLDatabaseName") -and $PSBoundParameters.ContainsKey("SQLDatabaseId"))
