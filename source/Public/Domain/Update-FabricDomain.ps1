@@ -1,3 +1,6 @@
+
+function Update-FabricDomain
+{
 <#
 .SYNOPSIS
 Updates a Fabric domain by its ID.
@@ -31,9 +34,6 @@ The new name for the domain. Must be alphanumeric.
 Author: Tiago Balabuch
 
 #>
-
-function Update-FabricDomain
-{
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]

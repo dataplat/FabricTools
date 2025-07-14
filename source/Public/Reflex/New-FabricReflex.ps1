@@ -1,3 +1,5 @@
+function New-FabricReflex
+{
 <#
 .SYNOPSIS
     Creates a new Reflex in a specified Microsoft Fabric workspace.
@@ -35,8 +37,6 @@
     Author: Tiago Balabuch
 
 #>
-function New-FabricReflex
-{
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]

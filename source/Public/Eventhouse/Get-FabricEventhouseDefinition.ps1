@@ -1,3 +1,4 @@
+function Get-FabricEventhouseDefinition {
 <#
 .SYNOPSIS
     Retrieves the definition of an Eventhouse from a specified Microsoft Fabric workspace.
@@ -36,7 +37,6 @@
     Author: Tiago Balabuch
 
 #>
-function Get-FabricEventhouseDefinition {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]

@@ -1,3 +1,5 @@
+
+function Get-FabricDomainWorkspace {
 <#
 .SYNOPSIS
 Retrieves the workspaces associated with a specific domain in Microsoft Fabric.
@@ -22,8 +24,6 @@ The ID of the domain for which to retrieve workspaces.
 Author: Tiago Balabuch
 
 #>
-
-function Get-FabricDomainWorkspace {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]

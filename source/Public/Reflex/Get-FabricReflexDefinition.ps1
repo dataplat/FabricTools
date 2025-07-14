@@ -1,3 +1,4 @@
+function Get-FabricReflexDefinition {
 <#
 .SYNOPSIS
     Retrieves the definition of an Reflex from a specified Microsoft Fabric workspace.
@@ -36,7 +37,6 @@
     Author: Tiago Balabuch
 
 #>
-function Get-FabricReflexDefinition {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]

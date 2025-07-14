@@ -1,3 +1,5 @@
+function New-FabricReport
+{
 <#
 .SYNOPSIS
     Creates a new Report in a specified Microsoft Fabric workspace.
@@ -33,8 +35,6 @@
     Author: Tiago Balabuch
 
 #>
-function New-FabricReport
-{
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]

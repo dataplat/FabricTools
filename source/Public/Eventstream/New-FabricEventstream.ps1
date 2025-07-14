@@ -1,5 +1,6 @@
 function New-FabricEventstream
 {
+    #TODO SupportsShouldProcess
     <#
 .SYNOPSIS
 Creates a new Eventstream in a specified Microsoft Fabric workspace.
@@ -38,7 +39,6 @@ An optional path to the platform-specific definition (e.g., .platform file) to u
 Author: Tiago Balabuch
 
 #>
-    #TODO SupportsShouldProcess
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]

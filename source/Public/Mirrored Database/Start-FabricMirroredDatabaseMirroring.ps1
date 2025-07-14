@@ -1,5 +1,6 @@
 function Start-FabricMirroredDatabaseMirroring
 {
+
     <#
 
     .SYNOPSIS
@@ -30,7 +31,6 @@ function Start-FabricMirroredDatabaseMirroring
     Author: Tiago Balabuch
 
     #>
-
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]

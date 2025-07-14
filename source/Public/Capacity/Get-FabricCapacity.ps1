@@ -1,4 +1,5 @@
 
+function Get-FabricCapacity {
 <#
 .SYNOPSIS
     Retrieves capacity details from a specified Microsoft Fabric workspace.
@@ -33,7 +34,6 @@
 
     Author: Tiago Balabuch
 #>
-function Get-FabricCapacity {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $false)]

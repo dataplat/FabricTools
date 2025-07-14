@@ -1,3 +1,5 @@
+
+function Get-FabricDeploymentPipelineStage {
 <#
 .SYNOPSIS
 Retrieves details of deployment pipeline stages.
@@ -39,8 +41,6 @@ Optional. The ID of the specific stage to retrieve. If not provided, returns all
 
 Author: Kamil Nowinski
 #>
-
-function Get-FabricDeploymentPipelineStage {
     [CmdletBinding()]
     param(
         [Parameter(Mandatory = $true)]

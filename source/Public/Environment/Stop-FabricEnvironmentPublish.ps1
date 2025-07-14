@@ -1,3 +1,5 @@
+function Stop-FabricEnvironmentPublish
+{
 <#
 .SYNOPSIS
 Cancels the publish operation for a specified environment in Microsoft Fabric.
@@ -26,8 +28,6 @@ The unique identifier of the environment for which the publish operation is to b
 Author: Tiago Balabuch
 
 #>
-function Stop-FabricEnvironmentPublish
-{
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]

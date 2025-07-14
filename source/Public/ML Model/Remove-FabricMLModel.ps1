@@ -1,3 +1,5 @@
+function Remove-FabricMLModel
+{
 <#
 .SYNOPSIS
     Removes an ML Model from a specified Microsoft Fabric workspace.
@@ -26,8 +28,6 @@
     Author: Tiago Balabuch
 
 #>
-function Remove-FabricMLModel
-{
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param (
         [Parameter(Mandatory = $true)]

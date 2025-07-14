@@ -1,3 +1,5 @@
+
+function Restore-FabricRecoveryPoint {
 <#
 .SYNOPSIS
 Restore a Fabric data warehouse to a specified restore pont.
@@ -39,8 +41,6 @@ Wait for the restore to complete before returning.
 Author: Jess Pomfret
 
 #>
-
-function Restore-FabricRecoveryPoint {
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [string]$CreateTime,

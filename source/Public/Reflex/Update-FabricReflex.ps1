@@ -1,3 +1,5 @@
+function Update-FabricReflex
+{
 <#
 .SYNOPSIS
     Updates an existing Reflex in a specified Microsoft Fabric workspace.
@@ -32,8 +34,6 @@
     Author: Tiago Balabuch
 
 #>
-function Update-FabricReflex
-{
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]

@@ -1,4 +1,6 @@
 
+function Remove-FabricDomainWorkspaceAssignment
+{
 <#
 .SYNOPSIS
 Unassign workspaces from a specified Fabric domain.
@@ -35,8 +37,6 @@ The unique identifier of the Fabric domain.
 Author: Tiago Balabuch
 
 #>
-function Remove-FabricDomainWorkspaceAssignment
-{
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     [Alias("Unassign-FabricDomainWorkspace")]
     param (

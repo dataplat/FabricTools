@@ -1,33 +1,31 @@
-<#
-.SYNOPSIS
-Removes a role assignment from a Fabric workspace.
-
-.DESCRIPTION
-The `Remove-FabricWorkspaceRoleAssignment` function deletes a specific role assignment from a Fabric workspace by making a DELETE request to the API.
-
-.PARAMETER WorkspaceId
-The unique identifier of the workspace.
-
-.PARAMETER WorkspaceRoleAssignmentId
-The unique identifier of the role assignment to be removed.
-
-.EXAMPLE
-    Removes the role assignment with the ID "role123" from the workspace "workspace123".
-
-    ```powershell
-    Remove-FabricWorkspaceRoleAssignment -WorkspaceId "workspace123" -WorkspaceRoleAssignmentId "role123"
-    ```
-
-.NOTES
-- Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-- Calls `Confirm-TokenState` to ensure token validity before making the API request.
-
-Author: Tiago Balabuch
-
-#>
-
 function Remove-FabricWorkspaceRoleAssignment
 {
+    <#
+    .SYNOPSIS
+        Removes a role assignment from a Fabric workspace.
+
+    .DESCRIPTION
+        The `Remove-FabricWorkspaceRoleAssignment` function deletes a specific role assignment from a Fabric workspace by making a DELETE request to the API.
+
+    .PARAMETER WorkspaceId
+        The unique identifier of the workspace.
+
+    .PARAMETER WorkspaceRoleAssignmentId
+        The unique identifier of the role assignment to be removed.
+
+    .EXAMPLE
+        Removes the role assignment with the ID "role123" from the workspace "workspace123".
+
+        ```powershell
+        Remove-FabricWorkspaceRoleAssignment -WorkspaceId "workspace123" -WorkspaceRoleAssignmentId "role123"
+        ```
+
+    .NOTES
+        - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
+        - Calls `Confirm-TokenState` to ensure token validity before making the API request.
+
+        Author: Tiago Balabuch
+    #>
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param (
         [Parameter(Mandatory = $true)]

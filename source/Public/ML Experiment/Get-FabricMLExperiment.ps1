@@ -1,3 +1,4 @@
+function Get-FabricMLExperiment {
 <#
 .SYNOPSIS
     Retrieves ML Experiment details from a specified Microsoft Fabric workspace.
@@ -36,7 +37,6 @@
     Author: Tiago Balabuch
 
 #>
-function Get-FabricMLExperiment {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]

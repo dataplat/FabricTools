@@ -1,3 +1,5 @@
+function Update-FabricCopyJob
+{
 <#
 .SYNOPSIS
     Updates an existing Copy Job in a specified Microsoft Fabric workspace.
@@ -31,8 +33,6 @@
 
     Author: Tiago Balabuch
 #>
-function Update-FabricCopyJob
-{
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]

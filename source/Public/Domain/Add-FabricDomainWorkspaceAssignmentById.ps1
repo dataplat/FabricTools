@@ -1,3 +1,5 @@
+
+function Add-FabricDomainWorkspaceAssignmentById {
 <#
 .SYNOPSIS
 Assigns workspaces to a specified domain in Microsoft Fabric by their IDs.
@@ -24,8 +26,6 @@ An array of workspace IDs to be assigned to the domain. This parameter is mandat
 
 Author: Tiago Balabuch
 #>
-
-function Add-FabricDomainWorkspaceAssignmentById {
     [CmdletBinding()]
     [Alias("Assign-FabricDomainWorkspaceById")]
     param (

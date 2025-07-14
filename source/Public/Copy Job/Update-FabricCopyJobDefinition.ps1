@@ -1,3 +1,5 @@
+
+function Update-FabricCopyJobDefinition {
 <#
 .SYNOPSIS
 Updates the definition of a Copy Job in a Microsoft Fabric workspace.
@@ -40,8 +42,6 @@ The Copy Job content and platform-specific definitions can be provided as file p
 
 Author: Tiago Balabuch
 #>
-
-function Update-FabricCopyJobDefinition {
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]

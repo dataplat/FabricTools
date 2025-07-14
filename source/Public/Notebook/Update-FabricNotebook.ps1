@@ -1,3 +1,6 @@
+
+function Update-FabricNotebook
+{
 <#
 .SYNOPSIS
 Updates the properties of a Fabric Notebook.
@@ -38,9 +41,6 @@ The new name for the Notebook.
 Author: Tiago Balabuch
 
 #>
-
-function Update-FabricNotebook
-{
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]

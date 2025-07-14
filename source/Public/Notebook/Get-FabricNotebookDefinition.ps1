@@ -1,4 +1,6 @@
 
+
+function Get-FabricNotebookDefinition {
 <#
 .SYNOPSIS
 Retrieves the definition of a notebook from a specific workspace in Microsoft Fabric.
@@ -40,8 +42,6 @@ Default: 'ipynb'.
 Author: Tiago Balabuch
 
 #>
-
-function Get-FabricNotebookDefinition {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]

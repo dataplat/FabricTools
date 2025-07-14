@@ -1,3 +1,5 @@
+
+function Update-FabricKQLQuerysetDefinition {
 <#
 .SYNOPSIS
 Updates the definition of a KQLQueryset in a Microsoft Fabric workspace.
@@ -41,8 +43,6 @@ The KQLQueryset content can be provided as file paths, and metadata updates can 
 Author: Tiago Balabuch
 
 #>
-
-function Update-FabricKQLQuerysetDefinition {
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]

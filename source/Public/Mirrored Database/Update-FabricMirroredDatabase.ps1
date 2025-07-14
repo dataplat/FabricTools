@@ -1,3 +1,6 @@
+
+function Update-FabricMirroredDatabase
+{
 <#
 .SYNOPSIS
 Updates the properties of a Fabric MirroredDatabase.
@@ -38,9 +41,6 @@ The new name for the MirroredDatabase.
 Author: Tiago Balabuch
 
 #>
-
-function Update-FabricMirroredDatabase
-{
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]

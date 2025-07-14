@@ -1,3 +1,5 @@
+function Update-FabricDataPipeline
+{
 <#
 .SYNOPSIS
     Updates an existing DataPipeline in a specified Microsoft Fabric workspace.
@@ -31,8 +33,6 @@
 
     Author: Tiago Balabuch
 #>
-function Update-FabricDataPipeline
-{
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]

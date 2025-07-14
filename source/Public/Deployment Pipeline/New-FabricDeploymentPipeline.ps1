@@ -1,3 +1,5 @@
+
+function New-FabricDeploymentPipeline {
 <#
 .SYNOPSIS
 Creates a new deployment pipeline.
@@ -36,8 +38,6 @@ Required. An array of hashtables containing stage configurations. Each stage sho
 
 Author: Kamil Nowinski
 #>
-
-function New-FabricDeploymentPipeline {
     [CmdletBinding(SupportsShouldProcess)]
     param(
         [Parameter(Mandatory = $true)]

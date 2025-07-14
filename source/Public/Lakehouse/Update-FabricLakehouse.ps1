@@ -1,3 +1,6 @@
+
+function Update-FabricLakehouse
+{
 <#
 .SYNOPSIS
 Updates the properties of a Fabric Lakehouse.
@@ -38,9 +41,6 @@ The new name for the Lakehouse.
 Author: Tiago Balabuch
 
 #>
-
-function Update-FabricLakehouse
-{
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]

@@ -1,3 +1,5 @@
+
+function Add-FabricDomainWorkspaceRoleAssignment {
 <#
 .SYNOPSIS
 Bulk assigns roles to principals for workspaces in a Fabric domain.
@@ -31,8 +33,6 @@ An array of principals to assign roles to. Each principal must include:
 
 Author: Tiago Balabuch
 #>
-
-function Add-FabricDomainWorkspaceRoleAssignment {
     [CmdletBinding()]
     [Alias("Assign-FabricDomainWorkspaceRoleAssignment")]
     param (

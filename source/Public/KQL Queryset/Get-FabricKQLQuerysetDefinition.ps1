@@ -1,4 +1,5 @@
 
+function Get-FabricKQLQuerysetDefinition {
 <#
 .SYNOPSIS
 Retrieves the definition of a KQLQueryset from a specific workspace in Microsoft Fabric.
@@ -38,7 +39,6 @@ Specifies the format of the KQLQueryset definition.
 Author: Tiago Balabuch
 
 #>
-function Get-FabricKQLQuerysetDefinition {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]

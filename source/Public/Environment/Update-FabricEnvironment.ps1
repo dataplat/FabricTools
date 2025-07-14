@@ -1,3 +1,6 @@
+
+function Update-FabricEnvironment
+{
 <#
 .SYNOPSIS
 Updates the properties of a Fabric Environment.
@@ -38,9 +41,6 @@ The unique identifier of the workspace where the Environment resides.
 Author: Tiago Balabuch
 
 #>
-
-function Update-FabricEnvironment
-{
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]

@@ -1,3 +1,5 @@
+
+function Get-FabricDeploymentPipeline {
 <#
 .SYNOPSIS
 Retrieves deployment pipeline(s) from Microsoft Fabric.
@@ -35,8 +37,6 @@ Optional. The display name of a specific deployment pipeline to retrieve. If pro
 
 Author: Kamil Nowinski
 #>
-
-function Get-FabricDeploymentPipeline {
     [CmdletBinding()]
     param(
         [Parameter(Mandatory = $false)]

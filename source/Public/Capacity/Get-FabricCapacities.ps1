@@ -1,4 +1,5 @@
-<#
+function Get-FabricCapacities {
+    <#
 .SYNOPSIS
     This function retrieves all resources of type "Microsoft.Fabric/capacities" from all resource groups in a given subscription or all subscriptions if no subscription ID is provided.
 
@@ -27,7 +28,6 @@
     Imported into FabricTools April 2025
     Alias: Get-AllFabCapacities
 #>
-function Get-FabricCapacities {
     # Define aliases for the function for flexibility.
 
     # Define parameters for the function

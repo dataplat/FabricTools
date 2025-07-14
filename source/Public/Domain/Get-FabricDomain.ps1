@@ -1,3 +1,4 @@
+function Get-FabricDomain {
 <#
 .SYNOPSIS
 Retrieves domain information from Microsoft Fabric, optionally filtering by domain ID, domain name, or only non-empty domains.
@@ -35,7 +36,6 @@ The `Get-FabricDomain` function allows retrieval of domains in Microsoft Fabric,
 Author: Tiago Balabuch
 
 #>
-function Get-FabricDomain {
     [CmdletBinding()]
     [OutputType([System.Object[]])]
     param (

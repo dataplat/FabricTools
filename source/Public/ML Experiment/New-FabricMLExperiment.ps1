@@ -1,3 +1,5 @@
+function New-FabricMLExperiment
+{
 <#
 .SYNOPSIS
     Creates a new ML Experiment in a specified Microsoft Fabric workspace.
@@ -29,8 +31,6 @@
     Author: Tiago Balabuch
 
 #>
-function New-FabricMLExperiment
-{
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]

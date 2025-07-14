@@ -1,4 +1,5 @@
 function Invoke-FabricKQLCommand {
+
     <#
 .SYNOPSIS
     Executes a KQL command in a Kusto Database.
@@ -33,24 +34,15 @@ function Invoke-FabricKQLCommand {
     ```
 
 .EXAMPLE
-    | take 100' This example will Execute the Query 'productcategory | take 100' in the KQLDatabase 'MyEventhouse2' and it will return the result as an array of PowerShell objects.
+    This example will Execute the Query 'productcategory | take 100' in the KQLDatabase 'MyEventhouse2' and it will return the result as an array of PowerShell objects.
 
     ```powershell
     Invoke-FabricKQLCommand `
-    -WorkspaceId '2c4ccbb5-9b13-4495-9ab3-ba41152733d9' `
-    -KQLDatabaseName 'MyEventhouse2' `
-    -KQLCommand 'productcategory
-    ```
-
-.EXAMPLE
-    | take 100' This example will Execute the Query 'productcategory | take 100' in the KQLDatabase 'MyEventhouse2' and it will return the result as the raw result of the KQL command, which is a JSON object.
-
-    ```powershell
-    Invoke-FabricKQLCommand `
-    -WorkspaceId '2c4ccbb5-9b13-4495-9ab3-ba41152733d9' `
-    -KQLDatabaseName 'MyEventhouse2' `
-    -ReturnRawResult `
-    -KQLCommand 'productcategory
+        -WorkspaceId '2c4ccbb5-9b13-4495-9ab3-ba41152733d9' `
+        -KQLDatabaseName 'MyEventhouse2' `
+        -ReturnRawResult `
+        -KQLCommand 'productcategory
+                    | take 100'
     ```
 
 .NOTES
@@ -62,7 +54,6 @@ function Invoke-FabricKQLCommand {
     Author: Frank Geisler
 
     #>
-
     [CmdletBinding()]
     param (
 

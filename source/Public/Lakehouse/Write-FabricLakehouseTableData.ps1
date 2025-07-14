@@ -1,5 +1,6 @@
 function Write-FabricLakehouseTableData
 {
+
     <#
 
     .SYNOPSIS
@@ -57,7 +58,6 @@ function Write-FabricLakehouseTableData
     Author: Tiago Balabuch
 
     #>
-
     [CmdletBinding(SupportsShouldProcess)]
     [Alias("Import-FabricLakehouseTableData")]
     param (

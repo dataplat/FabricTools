@@ -1,3 +1,4 @@
+function Get-FabricReportDefinition {
 <#
 .SYNOPSIS
     Retrieves the definition of an Report from a specified Microsoft Fabric workspace.
@@ -36,7 +37,6 @@
     Author: Tiago Balabuch
 
 #>
-function Get-FabricReportDefinition {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]

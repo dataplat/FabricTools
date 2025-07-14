@@ -1,25 +1,25 @@
-<#
-.SYNOPSIS
-Retrieves tenant setting overrides for a specific domain or all capacities in the Fabric tenant.
-
-.DESCRIPTION
-The `Get-FabricDomainTenantSettingOverrides` function retrieves tenant setting overrides for all domains in the Fabric tenant by making a GET request to the designated API endpoint. The function ensures token validity before making the request and handles the response appropriately.
-
-.EXAMPLE
-    Fetches tenant setting overrides for all domains in the Fabric tenant.
-
-    ```powershell
-    Get-FabricDomainTenantSettingOverrides
-    ```
-
-.NOTES
-- Requires the `$FabricConfig` global configuration, which must include `BaseUrl` and `FabricHeaders`.
-- Ensures token validity by invoking `Confirm-TokenState` before making the API request.
-- Logs detailed messages for debugging and error handling.
-
-Author: Tiago Balabuch
-#>
 function Get-FabricDomainTenantSettingOverrides {
+    <#
+    .SYNOPSIS
+    Retrieves tenant setting overrides for a specific domain or all capacities in the Fabric tenant.
+
+    .DESCRIPTION
+    The `Get-FabricDomainTenantSettingOverrides` function retrieves tenant setting overrides for all domains in the Fabric tenant by making a GET request to the designated API endpoint. The function ensures token validity before making the request and handles the response appropriately.
+
+    .EXAMPLE
+        Fetches tenant setting overrides for all domains in the Fabric tenant.
+
+        ```powershell
+        Get-FabricDomainTenantSettingOverrides
+        ```
+
+    .NOTES
+    - Requires the `$FabricConfig` global configuration, which must include `BaseUrl` and `FabricHeaders`.
+    - Ensures token validity by invoking `Confirm-TokenState` before making the API request.
+    - Logs detailed messages for debugging and error handling.
+
+    Author: Tiago Balabuch
+    #>
     [CmdletBinding()]
     param ( )
 

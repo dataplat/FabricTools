@@ -1,3 +1,5 @@
+
+function Remove-FabricDomainWorkspaceRoleAssignment {
 <#
 .SYNOPSIS
 Bulk unUnassign roles to principals for workspaces in a Fabric domain.
@@ -32,8 +34,6 @@ An array of principals to assign roles to. Each principal must include:
 Author: Tiago Balabuch
 
 #>
-
-function Remove-FabricDomainWorkspaceRoleAssignment {
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     [Alias("Unassign-FabricDomainWorkspaceRoleAssignment")]
     param (

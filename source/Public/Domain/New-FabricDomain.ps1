@@ -1,3 +1,6 @@
+
+function New-FabricDomain
+{
 <#
 .SYNOPSIS
 Creates a new Fabric domain.
@@ -28,9 +31,6 @@ A description of the domain to be created.
 Author: Tiago Balabuch
 
 #>
-
-function New-FabricDomain
-{
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]

@@ -1,4 +1,5 @@
-<#
+function Set-FabricConfig {
+    <#
 .SYNOPSIS
 Register the configuration for use with all functions in the PSFabricTools module.
 
@@ -35,8 +36,6 @@ If set, the configuration will not be persisted to the registry.
 
 Author: Jess Pomfret
 #>
-
-function Set-FabricConfig {
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [guid]$WorkspaceGUID,

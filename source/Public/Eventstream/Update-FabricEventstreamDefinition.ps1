@@ -1,3 +1,6 @@
+
+function Update-FabricEventstreamDefinition
+{
 <#
 .SYNOPSIS
 Updates the definition of a Eventstream in a Microsoft Fabric workspace.
@@ -45,9 +48,6 @@ Default: `$false`.
 Author: Tiago Balabuch
 
 #>
-
-function Update-FabricEventstreamDefinition
-{
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]

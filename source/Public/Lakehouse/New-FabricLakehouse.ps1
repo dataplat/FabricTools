@@ -1,3 +1,6 @@
+
+function New-FabricLakehouse
+{
 <#
 .SYNOPSIS
 Creates a new Lakehouse in a specified Microsoft Fabric workspace.
@@ -31,9 +34,6 @@ An optional path to enable schemas in the Lakehouse
 Author: Tiago Balabuch
 
 #>
-
-function New-FabricLakehouse
-{
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]

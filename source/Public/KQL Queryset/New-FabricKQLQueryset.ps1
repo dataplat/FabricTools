@@ -1,3 +1,5 @@
+
+function New-FabricKQLQueryset {
 <#
 .SYNOPSIS
 Creates a new KQLQueryset in a specified Microsoft Fabric workspace.
@@ -35,8 +37,6 @@ An optional path to the platform-specific definition (e.g., .platform file) to u
 Author: Tiago Balabuch
 
 #>
-
-function New-FabricKQLQueryset {
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]

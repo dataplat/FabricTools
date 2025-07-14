@@ -1,3 +1,4 @@
+Function Export-FabricItem {
 <#
 .SYNOPSIS
 Exports items from a Fabric workspace. Either all items in a workspace or a specific item.
@@ -39,7 +40,6 @@ This function is based on the Export-FabricItems function written by Rui Romano.
 https://github.com/microsoft/Analysis-Services/tree/master/pbidevmode/fabricps-pbip
 
 #>
-Function Export-FabricItem {
     [Alias("Export-FabItem")]
     [CmdletBinding()]
     param

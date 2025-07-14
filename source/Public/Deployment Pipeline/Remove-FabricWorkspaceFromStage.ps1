@@ -1,3 +1,5 @@
+
+function Remove-FabricWorkspaceFromStage {
 <#
 .SYNOPSIS
 Removes a workspace from a deployment pipeline stage.
@@ -28,8 +30,6 @@ Required. The ID of the deployment pipeline stage.
 
 Author: Kamil Nowinski
 #>
-
-function Remove-FabricWorkspaceFromStage {
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param(
         [Parameter(Mandatory = $true)]

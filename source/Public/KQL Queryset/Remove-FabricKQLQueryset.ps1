@@ -1,3 +1,6 @@
+
+function Remove-FabricKQLQueryset
+{
 <#
 .SYNOPSIS
 Deletes an KQLQueryset from a specified workspace in Microsoft Fabric.
@@ -25,9 +28,6 @@ The `Remove-FabricKQLQueryset` function sends a DELETE request to the Fabric API
 Author: Tiago Balabuch
 
 #>
-
-function Remove-FabricKQLQueryset
-{
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param (
         [Parameter(Mandatory = $true)]

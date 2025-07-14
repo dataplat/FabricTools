@@ -1,3 +1,4 @@
+function Get-FabricCopyJobDefinition {
 <#
 .SYNOPSIS
 Retrieves the definition of a Copy Job from a specific workspace in Microsoft Fabric.
@@ -31,7 +32,6 @@ It supports both synchronous and asynchronous operations, with detailed logging 
 Author: Tiago Balabuch
 
 #>
-function Get-FabricCopyJobDefinition {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]

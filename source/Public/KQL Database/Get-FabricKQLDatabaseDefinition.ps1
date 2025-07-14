@@ -1,4 +1,5 @@
 
+function Get-FabricKQLDatabaseDefinition {
 <#
 .SYNOPSIS
 Retrieves the definition of a KQLDatabase from a specific workspace in Microsoft Fabric.
@@ -39,7 +40,6 @@ Specifies the format of the KQLDatabase definition. Currently, only 'ipynb' is s
 Author: Tiago Balabuch
 
 #>
-function Get-FabricKQLDatabaseDefinition {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]

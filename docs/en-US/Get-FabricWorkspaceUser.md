@@ -4,7 +4,7 @@ external help file: FabricTools-Help.xml
 HelpUri: ''
 Locale: en-US
 Module Name: FabricTools
-ms.date: 07/12/2025
+ms.date: 07/14/2025
 PlatyPS schema version: 2024-05-01
 title: Get-FabricWorkspaceUser
 ---
@@ -75,10 +75,12 @@ Get-FabricWorkspace| Get-FabricWorkspaceUser
 
 ### EXAMPLE 5
 
-Get-FabricWorkspaceUser -WorkspaceId $_.Id | Select-Object @{Name='WorkspaceName';Expression={$_.displayName;}}, * } This example retrieves the users of all of the workspaces. It will also add the workspace name to the output.
+This example retrieves the users of all of the workspaces and returns the workspace name as well.
 
 ```powershell
 Get-FabricWorkspace| Foreach-Object {
+    Get-FabricWorkspaceUser -WorkspaceId $_.Id | Select-Object @{Name='WorkspaceName';Expression={$_.displayName;}}, *
+}
 ```
 
 ## PARAMETERS

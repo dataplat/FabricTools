@@ -4,7 +4,7 @@ external help file: FabricTools-Help.xml
 HelpUri: ''
 Locale: en-US
 Module Name: FabricTools
-ms.date: 07/12/2025
+ms.date: 07/14/2025
 PlatyPS schema version: 2024-05-01
 title: Get-FabricDatasetRefreshes
 ---
@@ -37,9 +37,11 @@ If it is, the function retrieves the refresh history.
 
 ### EXAMPLE 1
 
-Get-FabricDatasetRefreshes -DatasetID "12345678-90ab-cdef-1234-567890abcdef" -workspaceId "abcdef12-3456-7890-abcd-ef1234567890"
-
 This command retrieves the refresh history of the specified dataset in the specified workspace.
+
+```powershell
+Get-FabricDatasetRefreshes -DatasetID "12345678-90ab-cdef-1234-567890abcdef" -workspaceId "abcdef12-3456-7890-abcd-ef1234567890"
+```
 
 ## PARAMETERS
 
@@ -111,6 +113,9 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 Alias: Get-PowerBIDatasetRefreshes, Get-FabDatasetRefreshes
 
 Author: Ioana Bouariu
+
+
+Define aliases for the function for flexibility.
 
 ## RELATED LINKS
 

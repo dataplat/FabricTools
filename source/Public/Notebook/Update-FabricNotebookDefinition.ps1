@@ -1,3 +1,6 @@
+
+function Update-FabricNotebookDefinition
+{
 <#
 .SYNOPSIS
 Updates the definition of a notebook in a Microsoft Fabric workspace.
@@ -41,9 +44,6 @@ The notebook content can be provided as file paths, and metadata updates can opt
 Author: Tiago Balabuch
 
 #>
-
-function Update-FabricNotebookDefinition
-{
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]

@@ -1,3 +1,6 @@
+
+function Update-FabricEventstream
+{
 <#
 .SYNOPSIS
 Updates the properties of a Fabric Eventstream.
@@ -38,9 +41,6 @@ The unique identifier of the workspace where the Eventstream resides.
 Author: Tiago Balabuch
 
 #>
-
-function Update-FabricEventstream
-{
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]

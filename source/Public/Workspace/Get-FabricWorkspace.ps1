@@ -1,39 +1,38 @@
-<#
-.SYNOPSIS
-Retrieves details of a Microsoft Fabric workspace by its ID or name.
-
-.DESCRIPTION
-The `Get-FabricWorkspace` function fetches workspace details from the Fabric API. It supports filtering by WorkspaceId or WorkspaceName.
-
-.PARAMETER WorkspaceId
-The unique identifier of the workspace to retrieve.
-
-.PARAMETER WorkspaceName
-The display name of the workspace to retrieve.
-
-.EXAMPLE
-    Fetches details of the workspace with ID "workspace123".
-
-    ```powershell
-    Get-FabricWorkspace -WorkspaceId "workspace123"
-    ```
-
-.EXAMPLE
-    Fetches details of the workspace with the name "MyWorkspace".
-
-    ```powershell
-    Get-FabricWorkspace -WorkspaceName "MyWorkspace"
-    ```
-
-.NOTES
-- Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-- Calls `Confirm-TokenState` to ensure token validity before making the API request.
-- Returns the matching workspace details or all workspaces if no filter is provided.
-
-Author: Tiago Balabuch
-#>
-
 function Get-FabricWorkspace {
+    <#
+    .SYNOPSIS
+        Retrieves details of a Microsoft Fabric workspace by its ID or name.
+
+    .DESCRIPTION
+        The `Get-FabricWorkspace` function fetches workspace details from the Fabric API. It supports filtering by WorkspaceId or WorkspaceName.
+
+    .PARAMETER WorkspaceId
+        The unique identifier of the workspace to retrieve.
+
+    .PARAMETER WorkspaceName
+        The display name of the workspace to retrieve.
+
+    .EXAMPLE
+        Fetches details of the workspace with ID "workspace123".
+
+        ```powershell
+        Get-FabricWorkspace -WorkspaceId "workspace123"
+        ```
+
+    .EXAMPLE
+        Fetches details of the workspace with the name "MyWorkspace".
+
+        ```powershell
+        Get-FabricWorkspace -WorkspaceName "MyWorkspace"
+        ```
+
+    .NOTES
+        - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
+        - Calls `Confirm-TokenState` to ensure token validity before making the API request.
+        - Returns the matching workspace details or all workspaces if no filter is provided.
+
+        Author: Tiago Balabuch
+    #>
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $false)]

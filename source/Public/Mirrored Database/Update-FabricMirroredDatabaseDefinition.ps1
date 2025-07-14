@@ -1,3 +1,6 @@
+
+function Update-FabricMirroredDatabaseDefinition
+{
 <#
 .SYNOPSIS
 Updates the definition of a MirroredDatabase in a Microsoft Fabric workspace.
@@ -45,9 +48,6 @@ Default: `$false`.
 Author: Tiago Balabuch
 
 #>
-
-function Update-FabricMirroredDatabaseDefinition
-{
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]

@@ -1,3 +1,6 @@
+
+function New-FabricEnvironment
+{
 <#
 .SYNOPSIS
 Creates a new environment in a specified workspace.
@@ -28,9 +31,6 @@ The `Add-FabricEnvironment` function creates a new environment within a given wo
 Author: Tiago Balabuch
 
 #>
-
-function New-FabricEnvironment
-{
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]

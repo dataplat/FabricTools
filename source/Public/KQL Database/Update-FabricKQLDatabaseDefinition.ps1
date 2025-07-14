@@ -1,3 +1,6 @@
+
+function Update-FabricKQLDatabaseDefinition
+{
 <#
 .SYNOPSIS
 Updates the definition of a KQLDatabase in a Microsoft Fabric workspace.
@@ -48,9 +51,6 @@ Default: `$false`.
 Author: Tiago Balabuch
 
 #>
-
-function Update-FabricKQLDatabaseDefinition
-{
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]

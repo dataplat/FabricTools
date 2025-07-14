@@ -1,3 +1,4 @@
+function Get-FabricReflex {
 <#
 .SYNOPSIS
     Retrieves Reflex details from a specified Microsoft Fabric workspace.
@@ -36,7 +37,6 @@
     Author: Tiago Balabuch
 
 #>
-function Get-FabricReflex {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]

@@ -1,4 +1,5 @@
 function Get-FabricEnvironment {
+
     <#
 .SYNOPSIS
 Retrieves an environment or a list of environments from a specified workspace in Microsoft Fabric.
@@ -37,7 +38,6 @@ The `Get-FabricEnvironment` function sends a GET request to the Fabric API to re
 Author: Tiago Balabuch
 
     #>
-
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]

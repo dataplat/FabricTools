@@ -1,3 +1,5 @@
+
+function New-FabricRecoveryPoint {
 <#
 .SYNOPSIS
 Create a recovery point for a Fabric data warehouse
@@ -30,8 +32,6 @@ Create a new recovery point for the data warehouse specified in the configuratio
 Author: Jess Pomfret
 
 #>
-
-function New-FabricRecoveryPoint {
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [guid]$WorkspaceGUID,

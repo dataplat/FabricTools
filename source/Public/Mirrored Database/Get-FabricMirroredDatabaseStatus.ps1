@@ -1,4 +1,5 @@
 function Get-FabricMirroredDatabaseStatus {
+
     <#
 
     .SYNOPSIS
@@ -26,7 +27,6 @@ function Get-FabricMirroredDatabaseStatus {
     Author: Tiago Balabuch
 
     #>
-
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]

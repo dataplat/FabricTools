@@ -1,3 +1,6 @@
+
+function New-FabricDataPipeline
+{
 <#
 .SYNOPSIS
     Creates a new DataPipeline in a specified Microsoft Fabric workspace.
@@ -29,9 +32,6 @@
 
     Author: Tiago Balabuch
 #>
-
-function New-FabricDataPipeline
-{
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]

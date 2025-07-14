@@ -4,7 +4,7 @@ external help file: FabricTools-Help.xml
 HelpUri: ''
 Locale: en-US
 Module Name: FabricTools
-ms.date: 07/12/2025
+ms.date: 07/14/2025
 PlatyPS schema version: 2024-05-01
 title: New-FabricEventstream
 ---
@@ -13,7 +13,7 @@ title: New-FabricEventstream
 
 ## SYNOPSIS
 
-Creates a new Eventstream in a specified Microsoft Fabric workspace.
+{{ Fill in the Synopsis }}
 
 ## SYNTAX
 
@@ -29,20 +29,13 @@ New-FabricEventstream [-WorkspaceId] <guid> [-EventstreamName] <string>
 
 ## DESCRIPTION
 
-This function sends a POST request to the Microsoft Fabric API to create a new Eventstream
-in the specified workspace.
-It supports optional parameters for Eventstream description
-and path definitions for the Eventstream content.
+{{ Fill in the Description }}
 
 ## EXAMPLES
 
-### EXAMPLE 1
+### Example 1
 
-Creates a new Eventstream named "New Eventstream" in the workspace with ID "workspace-12345".
-
-```powershell
-New-FabricEventstream -WorkspaceId "workspace-12345" -EventstreamName "New Eventstream"
-```
+{{ Add example description here }}
 
 ## PARAMETERS
 
@@ -70,7 +63,7 @@ HelpMessage: ''
 
 ### -EventstreamDescription
 
-An optional description for the Eventstream.
+{{ Fill EventstreamDescription Description }}
 
 ```yaml
 Type: System.String
@@ -91,7 +84,7 @@ HelpMessage: ''
 
 ### -EventstreamName
 
-The name of the Eventstream to be created.
+{{ Fill EventstreamName Description }}
 
 ```yaml
 Type: System.String
@@ -112,7 +105,7 @@ HelpMessage: ''
 
 ### -EventstreamPathDefinition
 
-An optional path to the Eventstream definition file (e.g., .ipynb file) to upload.
+{{ Fill EventstreamPathDefinition Description }}
 
 ```yaml
 Type: System.String
@@ -133,7 +126,7 @@ HelpMessage: ''
 
 ### -EventstreamPathPlatformDefinition
 
-An optional path to the platform-specific definition (e.g., .platform file) to upload.
+{{ Fill EventstreamPathPlatformDefinition Description }}
 
 ```yaml
 Type: System.String
@@ -176,7 +169,7 @@ HelpMessage: ''
 
 ### -WorkspaceId
 
-The unique identifier of the workspace where the Eventstream will be created.
+{{ Fill WorkspaceId Description }}
 
 ```yaml
 Type: System.Guid
@@ -206,15 +199,13 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
+### System.Object
+
+{{ Fill in the Description }}
+
 ## NOTES
 
-- Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-- Calls `Confirm-TokenState` to ensure token validity before making the API request.
-
-Author: Tiago Balabuch
-
-
-TODO SupportsShouldProcess
+{{ Fill in the Notes }}
 
 ## RELATED LINKS
 

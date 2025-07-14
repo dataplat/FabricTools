@@ -1,4 +1,5 @@
 function Revoke-FabricExternalDataShares {
+
     <#
 .SYNOPSIS
     Retrieves External Data Shares details from a specified Microsoft Fabric.
@@ -29,7 +30,6 @@ function Revoke-FabricExternalDataShares {
 
     Author: Tiago Balabuch
     #>
-
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param (
         [Parameter(Mandatory = $true)]

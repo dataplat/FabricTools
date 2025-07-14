@@ -1,3 +1,5 @@
+
+function Remove-FabricDeploymentPipeline {
 <#
 .SYNOPSIS
 Deletes a specified deployment pipeline.
@@ -24,8 +26,6 @@ Required. The ID of the deployment pipeline to delete.
 
 Author: Kamil Nowinski
 #>
-
-function Remove-FabricDeploymentPipeline {
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param(
         [Parameter(Mandatory = $true)]

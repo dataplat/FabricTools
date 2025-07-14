@@ -1,4 +1,5 @@
 function Get-FabricLakehouseTable {
+
     <#
 .SYNOPSIS
 Retrieves tables from a specified Lakehouse in a Fabric workspace.
@@ -24,7 +25,6 @@ The ID of the Lakehouse from which to retrieve tables.
 Author: Tiago Balabuch
 
 #>
-
     [CmdletBinding()]
     [OutputType([System.Object[]])]
     param (

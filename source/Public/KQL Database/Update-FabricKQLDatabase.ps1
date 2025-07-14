@@ -1,3 +1,6 @@
+
+function Update-FabricKQLDatabase
+{
 <#
 .SYNOPSIS
 Updates the properties of a Fabric KQLDatabase.
@@ -38,9 +41,6 @@ The new name for the KQLDatabase.
 Author: Tiago Balabuch
 
 #>
-
-function Update-FabricKQLDatabase
-{
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]

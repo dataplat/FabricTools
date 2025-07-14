@@ -1,29 +1,28 @@
-<#
-.SYNOPSIS
-Unassigns a Fabric workspace from its capacity.
-
-.DESCRIPTION
-The `Remove-FabricWorkspaceCapacityAssignment` function sends a POST request to unassign a workspace from its assigned capacity.
-
-.PARAMETER WorkspaceId
-The unique identifier of the workspace to be unassigned from its capacity.
-
-.EXAMPLE
-    Unassigns the workspace with ID "workspace123" from its capacity.
-
-    ```powershell
-    Remove-FabricWorkspaceCapacityAssignment -WorkspaceId "workspace123"
-    ```
-
-.NOTES
-- Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-- Calls `Confirm-TokenState` to ensure token validity before making the API request.
-
-Author: Tiago Balabuch
-#>
-
 function Remove-FabricWorkspaceCapacityAssignment
 {
+    <#
+    .SYNOPSIS
+        Unassigns a Fabric workspace from its capacity.
+
+    .DESCRIPTION
+        The `Remove-FabricWorkspaceCapacityAssignment` function sends a POST request to unassign a workspace from its assigned capacity.
+
+    .PARAMETER WorkspaceId
+        The unique identifier of the workspace to be unassigned from its capacity.
+
+    .EXAMPLE
+        Unassign the workspace with ID "workspace123" from its capacity.
+
+        ```powershell
+        Remove-FabricWorkspaceCapacityAssignment -WorkspaceId "workspace123"
+        ```
+
+    .NOTES
+        - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
+        - Calls `Confirm-TokenState` to ensure token validity before making the API request.
+
+        Author: Tiago Balabuch
+    #>
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     [Alias("Unassign-FabricWorkspaceCapacity")]
     param (

@@ -4,7 +4,7 @@ external help file: FabricTools-Help.xml
 HelpUri: ''
 Locale: en-US
 Module Name: FabricTools
-ms.date: 07/12/2025
+ms.date: 07/14/2025
 PlatyPS schema version: 2024-05-01
 title: Get-FabricCapacities
 ---
@@ -88,6 +88,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 Author: Ioana Bouariu
 Imported into FabricTools April 2025
 Alias: Get-AllFabCapacities
+
+Define aliases for the function for flexibility.
 
 ## RELATED LINKS
 

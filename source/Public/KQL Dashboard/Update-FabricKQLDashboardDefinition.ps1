@@ -1,3 +1,6 @@
+
+function Update-FabricKQLDashboardDefinition
+{
 <#
 .SYNOPSIS
 Updates the definition of a KQLDashboard in a Microsoft Fabric workspace.
@@ -42,9 +45,6 @@ The KQLDashboard content can be provided as file paths, and metadata updates can
 Author: Tiago Balabuch
 
 #>
-
-function Update-FabricKQLDashboardDefinition
-{
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]

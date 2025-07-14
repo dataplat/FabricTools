@@ -1,3 +1,5 @@
+function Remove-FabricReport
+{
 <#
 .SYNOPSIS
     Removes an Report from a specified Microsoft Fabric workspace.
@@ -26,8 +28,6 @@
     Author: Tiago Balabuch
 
 #>
-function Remove-FabricReport
-{
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]

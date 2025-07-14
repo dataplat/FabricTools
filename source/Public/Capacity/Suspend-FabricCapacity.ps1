@@ -1,5 +1,8 @@
 # This function suspends a capacity.
 function Suspend-FabricCapacity {
+
+    # Define aliases for the function for flexibility.
+    [Alias("Suspend-PowerBICapacity", "Suspend-FabCapacity")]
     <#
 .SYNOPSIS
 Suspends a capacity.
@@ -29,9 +32,6 @@ The function defines parameters for the subscription ID, resource group, and cap
 Author: Ioana Bouariu
 
     #>
-
-    # Define aliases for the function for flexibility.
-    [Alias("Suspend-PowerBICapacity", "Suspend-FabCapacity")]
     [CmdletBinding(SupportsShouldProcess)]
 
     # Define parameters for the subscription ID, resource group, and capacity.

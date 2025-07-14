@@ -1,3 +1,5 @@
+
+function Get-FabricDeploymentPipelineOperation {
 <#
 .SYNOPSIS
 Retrieves details of a specific deployment pipeline operation.
@@ -32,8 +34,6 @@ Required. The ID of the operation to retrieve.
 
 Author: Kamil Nowinski
 #>
-
-function Get-FabricDeploymentPipelineOperation {
     [CmdletBinding()]
     param(
         [Parameter(Mandatory = $true)]

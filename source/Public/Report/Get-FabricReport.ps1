@@ -1,3 +1,4 @@
+function Get-FabricReport {
 <#
 .SYNOPSIS
     Retrieves Report details from a specified Microsoft Fabric workspace.
@@ -36,7 +37,6 @@
     Author: Tiago Balabuch
 
 #>
-function Get-FabricReport {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]

@@ -1,4 +1,5 @@
 
+function Get-FabricMirroredDatabaseDefinition {
 <#
 .SYNOPSIS
 Retrieves the definition of a MirroredDatabase from a specific workspace in Microsoft Fabric.
@@ -35,7 +36,6 @@ Handles both synchronous and asynchronous operations, with detailed logging and 
 Author: Tiago Balabuch
 
 #>
-function Get-FabricMirroredDatabaseDefinition {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]

@@ -1,3 +1,4 @@
+function Get-FabricExternalDataShares {
 <#
 .SYNOPSIS
     Retrieves External Data Shares details from a specified Microsoft Fabric.
@@ -19,7 +20,6 @@
 
     Author: Tiago Balabuch
 #>
-function Get-FabricExternalDataShares {
     [CmdletBinding()]
     param ( )
 

@@ -1,3 +1,5 @@
+
+function Add-FabricDomainWorkspaceAssignmentByPrincipal {
 <#
 .SYNOPSIS
 Assigns workspaces to a domain based on principal IDs in Microsoft Fabric.
@@ -24,8 +26,6 @@ An array representing the principals with their `id` and `type` properties. Must
 
 Author: Tiago Balabuch
 #>
-
-function Add-FabricDomainWorkspaceAssignmentByPrincipal {
     [CmdletBinding()]
     [Alias("Assign-FabricDomainWorkspaceByPrincipal")]
     param (

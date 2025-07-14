@@ -1,3 +1,5 @@
+function Update-FabricMLExperiment
+{
 <#
 .SYNOPSIS
     Updates an existing ML Experiment in a specified Microsoft Fabric workspace.
@@ -32,8 +34,6 @@
     Author: Tiago Balabuch
 
 #>
-function Update-FabricMLExperiment
-{
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]

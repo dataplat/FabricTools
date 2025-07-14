@@ -1,3 +1,5 @@
+function Remove-FabricMLExperiment
+{
 <#
 .SYNOPSIS
     Removes an ML Experiment from a specified Microsoft Fabric workspace.
@@ -26,8 +28,6 @@
     Author: Tiago Balabuch
 
 #>
-function Remove-FabricMLExperiment
-{
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = "High")]
     param (
         [Parameter(Mandatory = $true)]

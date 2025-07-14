@@ -1,4 +1,7 @@
 function Resume-FabricCapacity {
+
+    # Define aliases for the function for flexibility.
+    [Alias("Resume-FabCapacity")]
     <#
 .SYNOPSIS
 Resumes a capacity.
@@ -28,9 +31,6 @@ The function defines parameters for the subscription ID, resource group, and cap
 Author: Ioana Bouariu
 
     #>
-
-    # Define aliases for the function for flexibility.
-    [Alias("Resume-FabCapacity")]
     [CmdletBinding(SupportsShouldProcess)]
 
     # Define parameters for the subscription ID, resource group, and capacity.

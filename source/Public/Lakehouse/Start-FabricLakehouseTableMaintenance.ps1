@@ -1,5 +1,6 @@
 function Start-FabricLakehouseTableMaintenance
 {
+
     <#
     .SYNOPSIS
     Initiates a table maintenance job for a specified Lakehouse in a Fabric workspace.
@@ -62,7 +63,6 @@ function Start-FabricLakehouseTableMaintenance
     Author: Tiago Balabuch
 
     #>
-
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]

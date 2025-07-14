@@ -1,3 +1,5 @@
+function Remove-FabricReflex
+{
 <#
 .SYNOPSIS
     Removes an Reflex from a specified Microsoft Fabric workspace.
@@ -26,8 +28,6 @@
     Author: Tiago Balabuch
 
 #>
-function Remove-FabricReflex
-{
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param (
         [Parameter(Mandatory = $true)]

@@ -1,3 +1,6 @@
+
+function Remove-FabricDataPipeline
+{
 <#
 .SYNOPSIS
     Removes a DataPipeline from a specified Microsoft Fabric workspace.
@@ -25,9 +28,6 @@
 
     Author: Tiago Balabuch
 #>
-
-function Remove-FabricDataPipeline
-{
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param (
         [Parameter(Mandatory = $true)]

@@ -1,41 +1,40 @@
-<#
-.SYNOPSIS
-    Retrieves SQL Endpoints from a specified workspace in Fabric.
-
-.DESCRIPTION
-    The `Get-FabricSQLEndpoint` function retrieves SQL Endpoints from a specified workspace in Fabric.
-    It supports filtering by SQL Endpoint ID or SQL Endpoint Name. If both filters are provided,
-    an error message is returned. The function handles token validation, API requests with continuation
-    tokens, and processes the response to return the desired SQL Endpoint(s).
-
-.PARAMETER WorkspaceId
-    The ID of the workspace from which to retrieve SQL Endpoints. This parameter is mandatory.
-
-.PARAMETER SQLEndpointId
-    The ID of the SQL Endpoint to retrieve. This parameter is optional but cannot be used together with SQLEndpointName.
-
-.PARAMETER SQLEndpointName
-    The name of the SQL Endpoint to retrieve. This parameter is optional but cannot be used together with SQLEndpointId.
-
-.EXAMPLE
-    ```powershell
-    Get-FabricSQLEndpoint -WorkspaceId "workspace123" -SQLEndpointId "endpoint456"
-    ```
-
-.EXAMPLE
-    ```powershell
-    Get-FabricSQLEndpoint -WorkspaceId "workspace123" -SQLEndpointName "MySQLEndpoint"
-    ```
-
-.NOTES
-    - This function requires the FabricConfig object to be properly configured with BaseUrl and FabricHeaders.
-    - The function uses continuation tokens to handle paginated API responses.
-    - If no filter parameters are provided, all SQL Endpoints in the specified workspace are returned.
-
-    Author: Tiago Balabuch
-
-#>
 function Get-FabricSQLEndpoint {
+    <#
+    .SYNOPSIS
+        Retrieves SQL Endpoints from a specified workspace in Fabric.
+
+    .DESCRIPTION
+        The `Get-FabricSQLEndpoint` function retrieves SQL Endpoints from a specified workspace in Fabric.
+        It supports filtering by SQL Endpoint ID or SQL Endpoint Name. If both filters are provided,
+        an error message is returned. The function handles token validation, API requests with continuation
+        tokens, and processes the response to return the desired SQL Endpoint(s).
+
+    .PARAMETER WorkspaceId
+        The ID of the workspace from which to retrieve SQL Endpoints. This parameter is mandatory.
+
+    .PARAMETER SQLEndpointId
+        The ID of the SQL Endpoint to retrieve. This parameter is optional but cannot be used together with SQLEndpointName.
+
+    .PARAMETER SQLEndpointName
+        The name of the SQL Endpoint to retrieve. This parameter is optional but cannot be used together with SQLEndpointId.
+
+    .EXAMPLE
+        ```powershell
+        Get-FabricSQLEndpoint -WorkspaceId "workspace123" -SQLEndpointId "endpoint456"
+        ```
+
+    .EXAMPLE
+        ```powershell
+        Get-FabricSQLEndpoint -WorkspaceId "workspace123" -SQLEndpointName "MySQLEndpoint"
+        ```
+
+    .NOTES
+        - This function requires the FabricConfig object to be properly configured with BaseUrl and FabricHeaders.
+        - The function uses continuation tokens to handle paginated API responses.
+        - If no filter parameters are provided, all SQL Endpoints in the specified workspace are returned.
+
+        Author: Tiago Balabuch
+#>
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]

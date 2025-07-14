@@ -1,3 +1,6 @@
+
+function Remove-FabricMirroredDatabase
+{
 <#
 .SYNOPSIS
 Deletes an MirroredDatabase from a specified workspace in Microsoft Fabric.
@@ -24,9 +27,6 @@ The `Remove-FabricMirroredDatabase` function sends a DELETE request to the Fabri
 
 Author: Tiago Balabuch
 #>
-
-function Remove-FabricMirroredDatabase
-{
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param (
         [Parameter(Mandatory = $true)]

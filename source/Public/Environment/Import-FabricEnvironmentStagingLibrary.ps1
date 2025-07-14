@@ -1,3 +1,4 @@
+function Import-FabricEnvironmentStagingLibrary {
 <#
 .SYNOPSIS
 Uploads a library to the staging environment in a Microsoft Fabric workspace.
@@ -25,7 +26,6 @@ The unique identifier of the environment where the library will be uploaded.
 Author: Tiago Balabuch
 
 #>
-function Import-FabricEnvironmentStagingLibrary {
     [CmdletBinding()]
     [Alias("Upload-FabricEnvironmentStagingLibrary")]
     param (

@@ -1,3 +1,5 @@
+
+function Add-FabricWorkspaceToStage {
 <#
 .SYNOPSIS
 Assigns a workspace to a deployment pipeline stage.
@@ -35,8 +37,6 @@ Required. The ID of the workspace to assign to the stage.
 
 Author: Kamil Nowinski
 #>
-
-function Add-FabricWorkspaceToStage {
     [CmdletBinding()]
     param(
         [Parameter(Mandatory = $true)]

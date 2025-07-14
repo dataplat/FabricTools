@@ -4,7 +4,7 @@ external help file: FabricTools-Help.xml
 HelpUri: ''
 Locale: en-US
 Module Name: FabricTools
-ms.date: 07/12/2025
+ms.date: 07/14/2025
 PlatyPS schema version: 2024-05-01
 title: Get-FabricSQLDatabase
 ---
@@ -46,10 +46,14 @@ These parameters cannot be used together.
 
 ### EXAMPLE 1
 
-WorkspaceId = '12345678-1234-1234-1234-123456789012' SQLDatabaseName = 'MySQLDatabase' } Get-FabricSQLDatabase @FabricSQLDatabaseConfig Returns the details of the Fabric SQL Database with the name 'MySQLDatabase' in the workspace that is specified by the WorkspaceId.
+Returns the details of the Fabric SQL Database with the name 'MySQLDatabase' in the workspace that is specified by the WorkspaceId.
 
 ```powershell
 $FabricSQLDatabaseConfig = @{
+    WorkspaceId = '12345678-1234-1234-1234-123456789012'
+    SQLDatabaseName = 'MySQLDatabase'
+}
+Get-FabricSQLDatabase @FabricSQLDatabaseConfig
 ```
 
 ### EXAMPLE 2
@@ -62,11 +66,10 @@ Get-FabricSQLDatabase -WorkspaceId '12345678-1234-1234-1234-123456789012'
 
 ### EXAMPLE 3
 
-WorkspaceId = '12345678-1234-1234-1234-123456789012' } Get-FabricSQLDatabase @FabricSQLDatabaseConfig Returns the details of the Fabric SQL Database with the ID '12345678-1234-1234-1234-123456789012' from the workspace with the ID '12345678-1234-1234-1234-123456789012'.
+Returns the details of the Fabric SQL Database with the ID '12345678-1234-1234-1234-123456789012' from the workspace with the ID '12345678-1234-1234-1234-123456789012'.
 
 ```powershell
-$FabricSQLDatabaseConfig = @{
--SQLDatabaseId = '12345678-1234-1234-1234-123456789012'
+Get-FabricSQLDatabase -WorkspaceId '12345678-1234-1234-1234-123456789012' -SQLDatabaseId '12345678-1234-1234-1234-123456789012'
 ```
 
 ### EXAMPLE 4

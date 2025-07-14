@@ -1,3 +1,4 @@
+function Get-FabricEnvironmentStagingLibrary {
 <#
 .SYNOPSIS
 Retrieves the staging library details for a specific environment in a Microsoft Fabric workspace.
@@ -25,7 +26,6 @@ The unique identifier of the environment for which staging library details are b
 
 Author: Tiago Balabuch
 #>
-function Get-FabricEnvironmentStagingLibrary {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]

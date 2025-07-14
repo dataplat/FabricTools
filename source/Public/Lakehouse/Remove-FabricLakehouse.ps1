@@ -1,3 +1,6 @@
+
+function Remove-FabricLakehouse
+{
 <#
 .SYNOPSIS
 Deletes an Lakehouse from a specified workspace in Microsoft Fabric.
@@ -25,9 +28,6 @@ The `Remove-FabricLakehouse` function sends a DELETE request to the Fabric API t
 Author: Tiago Balabuch
 
 #>
-
-function Remove-FabricLakehouse
-{
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]

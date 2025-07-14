@@ -1,3 +1,5 @@
+function Update-FabricReportDefinition
+{
 <#
 .SYNOPSIS
     Updates the definition of an existing Report in a specified Microsoft Fabric workspace.
@@ -29,8 +31,6 @@
     Author: Tiago Balabuch
 
 #>
-function Update-FabricReportDefinition
-{
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]

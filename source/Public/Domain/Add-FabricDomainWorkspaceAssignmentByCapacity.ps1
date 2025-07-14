@@ -1,3 +1,5 @@
+
+function Add-FabricDomainWorkspaceAssignmentByCapacity {
 <#
 .SYNOPSIS
 Assigns workspaces to a Fabric domain based on specified capacities.
@@ -24,8 +26,6 @@ An array of capacity IDs used to assign workspaces to the domain.
 
 Author: Tiago Balabuch
 #>
-
-function Add-FabricDomainWorkspaceAssignmentByCapacity {
     [CmdletBinding()]
     [Alias("Assign-FabricDomainWorkspaceByCapacity")]
     param (

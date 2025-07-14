@@ -1,3 +1,6 @@
+
+function Remove-FabricKQLDashboard
+{
 <#
 .SYNOPSIS
 Deletes an KQLDashboard from a specified workspace in Microsoft Fabric.
@@ -25,9 +28,6 @@ The `Remove-FabricKQLDashboard` function sends a DELETE request to the Fabric AP
 Author: Tiago Balabuch
 
 #>
-
-function Remove-FabricKQLDashboard
-{
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]`
     param (
         [Parameter(Mandatory = $true)]

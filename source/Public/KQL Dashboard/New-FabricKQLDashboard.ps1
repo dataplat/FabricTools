@@ -1,3 +1,6 @@
+
+function New-FabricKQLDashboard
+{
 <#
 .SYNOPSIS
 Creates a new KQLDashboard in a specified Microsoft Fabric workspace.
@@ -43,9 +46,6 @@ An optional path to the platform-specific definition (e.g., .platform file) to u
 Author: Tiago Balabuch
 
 #>
-
-function New-FabricKQLDashboard
-{
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]

@@ -1,4 +1,5 @@
 
+function Get-FabricKQLDashboardDefinition {
 <#
 .SYNOPSIS
 Retrieves the definition of a KQLDashboard from a specific workspace in Microsoft Fabric.
@@ -38,7 +39,6 @@ Specifies the format of the KQLDashboard definition.
 Author: Tiago Balabuch
 
 #>
-function Get-FabricKQLDashboardDefinition {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]

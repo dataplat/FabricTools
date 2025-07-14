@@ -1,5 +1,6 @@
 function New-FabricEventhouse
 {
+
     <#
     .SYNOPSIS
         Creates a new Eventhouse in a specified Microsoft Fabric workspace.
@@ -37,7 +38,6 @@ function New-FabricEventhouse
         Author: Tiago Balabuch
 
     #>
-
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]

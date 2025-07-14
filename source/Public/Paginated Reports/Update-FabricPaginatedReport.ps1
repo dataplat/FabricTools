@@ -1,3 +1,5 @@
+function Update-FabricPaginatedReport
+{
 <#
 .SYNOPSIS
     Updates an existing paginated report in a specified Microsoft Fabric workspace.
@@ -32,8 +34,6 @@
     Author: Tiago Balabuch
 
 #>
-function Update-FabricPaginatedReport
-{
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]

@@ -1,3 +1,6 @@
+
+function Remove-FabricDomain
+{
 <#
 .SYNOPSIS
 Deletes a Fabric domain by its ID.
@@ -22,9 +25,6 @@ The unique identifier of the domain to be deleted.
 Author: Tiago Balabuch
 
 #>
-
-function Remove-FabricDomain
-{
     [CmdletBinding(SupportsShouldProcess,ConfirmImpact = 'High')]
     param (
         [Parameter(Mandatory = $true)]

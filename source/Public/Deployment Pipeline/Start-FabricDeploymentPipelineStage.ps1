@@ -1,3 +1,5 @@
+
+function Start-FabricDeploymentPipelineStage {
 <#
 .SYNOPSIS
 Deploys items from one stage to another in a deployment pipeline.
@@ -51,8 +53,6 @@ Optional. If specified, the function will not wait for the deployment to complet
 
 Author: Kamil Nowinski
 #>
-
-function Start-FabricDeploymentPipelineStage {
     [CmdletBinding(SupportsShouldProcess)]
     param(
         [Parameter(Mandatory = $true)]

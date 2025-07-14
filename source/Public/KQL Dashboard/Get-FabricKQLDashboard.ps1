@@ -1,3 +1,5 @@
+
+function Get-FabricKQLDashboard {
 <#
 .SYNOPSIS
 Retrieves an KQLDashboard or a list of KQLDashboards from a specified workspace in Microsoft Fabric.
@@ -32,8 +34,6 @@ The `Get-FabricKQLDashboard` function sends a GET request to the Fabric API to r
 Author: Tiago Balabuch
 
 #>
-
-function Get-FabricKQLDashboard {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]

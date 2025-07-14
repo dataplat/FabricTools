@@ -44,10 +44,12 @@ The workspace object. This normally comes from the Get-FabricWorkspace cmdlet. T
     ```
 
 .EXAMPLE
-    Get-FabricWorkspaceUser -WorkspaceId $_.Id | Select-Object @{Name='WorkspaceName';Expression={$_.displayName;}}, * } This example retrieves the users of all of the workspaces. It will also add the workspace name to the output.
+    This example retrieves the users of all of the workspaces and returns the workspace name as well.
 
     ```powershell
     Get-FabricWorkspace| Foreach-Object {
+        Get-FabricWorkspaceUser -WorkspaceId $_.Id | Select-Object @{Name='WorkspaceName';Expression={$_.displayName;}}, *
+    }
     ```
 
 .NOTES

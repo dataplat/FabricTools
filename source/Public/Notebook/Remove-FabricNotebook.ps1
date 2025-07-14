@@ -1,3 +1,6 @@
+
+function Remove-FabricNotebook
+{
 <#
 .SYNOPSIS
 Deletes an Notebook from a specified workspace in Microsoft Fabric.
@@ -25,9 +28,6 @@ The `Remove-FabricNotebook` function sends a DELETE request to the Fabric API to
 Author: Tiago Balabuch
 
 #>
-
-function Remove-FabricNotebook
-{
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]

@@ -1,3 +1,5 @@
+
+function Get-FabricDeploymentPipelineStageItem {
 <#
 .SYNOPSIS
 Retrieves the supported items from the workspace assigned to a specific stage of a deployment pipeline.
@@ -33,8 +35,6 @@ Required. The ID of the stage to retrieve items from.
 
 Author: Kamil Nowinski
 #>
-
-function Get-FabricDeploymentPipelineStageItem {
     [CmdletBinding()]
     param(
         [Parameter(Mandatory = $true)]

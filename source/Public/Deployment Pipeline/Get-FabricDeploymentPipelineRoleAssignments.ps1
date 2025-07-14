@@ -1,3 +1,5 @@
+
+function Get-FabricDeploymentPipelineRoleAssignments {
 <#
 .SYNOPSIS
 Returns a list of deployment pipeline role assignments.
@@ -24,8 +26,6 @@ Required. The ID of the deployment pipeline to get role assignments for.
 
 Author: Kamil Nowinski
 #>
-
-function Get-FabricDeploymentPipelineRoleAssignments {
     [CmdletBinding()]
     param(
         [Parameter(Mandatory = $true)]

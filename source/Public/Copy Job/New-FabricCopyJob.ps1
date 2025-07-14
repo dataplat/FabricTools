@@ -1,3 +1,4 @@
+function New-FabricCopyJob {
 <#
 .SYNOPSIS
     Creates a new copy job in a specified Microsoft Fabric workspace.
@@ -34,7 +35,6 @@
 
     Author: Tiago Balabuch
 #>
-function New-FabricCopyJob {
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]

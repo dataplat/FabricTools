@@ -1,3 +1,5 @@
+
+function Publish-FabricEnvironment {
 <#
 .SYNOPSIS
 Publishes a staging environment in a specified Microsoft Fabric workspace.
@@ -26,8 +28,6 @@ The unique identifier of the staging environment to be published.
 
 Author: Tiago Balabuch
 #>
-
-function Publish-FabricEnvironment {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]

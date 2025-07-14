@@ -1,3 +1,5 @@
+
+function Get-FabricEventstreamDefinition {
 <#
 .SYNOPSIS
 Retrieves the definition of a Eventstream from a specific workspace in Microsoft Fabric.
@@ -38,8 +40,6 @@ Default: 'ipynb'.
 Author: Tiago Balabuch
 
 #>
-
-function Get-FabricEventstreamDefinition {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]

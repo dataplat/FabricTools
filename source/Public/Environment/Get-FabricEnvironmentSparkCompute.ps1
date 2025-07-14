@@ -1,3 +1,4 @@
+function Get-FabricEnvironmentSparkCompute {
 <#
 .SYNOPSIS
 Retrieves the Spark compute details for a specific environment in a Microsoft Fabric workspace.
@@ -26,7 +27,6 @@ The unique identifier of the environment whose Spark compute details are being r
 
 Author: Tiago Balabuch
 #>
-function Get-FabricEnvironmentSparkCompute {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]

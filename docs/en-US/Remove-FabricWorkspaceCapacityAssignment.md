@@ -4,7 +4,7 @@ external help file: FabricTools-Help.xml
 HelpUri: ''
 Locale: en-US
 Module Name: FabricTools
-ms.date: 07/12/2025
+ms.date: 07/14/2025
 PlatyPS schema version: 2024-05-01
 title: Remove-FabricWorkspaceCapacityAssignment
 ---
@@ -36,7 +36,7 @@ The `Remove-FabricWorkspaceCapacityAssignment` function sends a POST request to 
 
 ### EXAMPLE 1
 
-Unassigns the workspace with ID "workspace123" from its capacity.
+Unassign the workspace with ID "workspace123" from its capacity.
 
 ```powershell
 Remove-FabricWorkspaceCapacityAssignment -WorkspaceId "workspace123"

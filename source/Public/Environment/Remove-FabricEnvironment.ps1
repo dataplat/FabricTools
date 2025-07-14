@@ -1,3 +1,6 @@
+
+function Remove-FabricEnvironment
+{
 <#
 .SYNOPSIS
 Deletes an environment from a specified workspace in Microsoft Fabric.
@@ -25,9 +28,6 @@ The `Remove-FabricEnvironment` function sends a DELETE request to the Fabric API
 Author: Tiago Balabuch
 
 #>
-
-function Remove-FabricEnvironment
-{
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param (
         [Parameter(Mandatory = $true)]

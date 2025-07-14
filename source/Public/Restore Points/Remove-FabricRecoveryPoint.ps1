@@ -1,3 +1,5 @@
+
+function Remove-FabricRecoveryPoint {
 <#
 .SYNOPSIS
 Remove a selected Fabric Recovery Point.
@@ -36,8 +38,6 @@ The GUID for the data warehouse which we want to retrieve restore points for.
 Author: Jess Pomfret
 
 #>
-
-function Remove-FabricRecoveryPoint {
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [string]$CreateTime,

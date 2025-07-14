@@ -4,7 +4,7 @@ external help file: FabricTools-Help.xml
 HelpUri: ''
 Locale: en-US
 Module Name: FabricTools
-ms.date: 07/12/2025
+ms.date: 07/14/2025
 PlatyPS schema version: 2024-05-01
 title: Suspend-FabricCapacity
 ---
@@ -13,7 +13,7 @@ title: Suspend-FabricCapacity
 
 ## SYNOPSIS
 
-Suspends a capacity.
+{{ Fill in the Synopsis }}
 
 ## SYNTAX
 
@@ -30,26 +30,19 @@ Suspend-FabCapacity Suspend-PowerBICapacity
 
 ## DESCRIPTION
 
-The Suspend-FabricCapacity function suspends a capacity.
-It supports multiple aliases for flexibility.
+{{ Fill in the Description }}
 
 ## EXAMPLES
 
-### EXAMPLE 1
+### Example 1
 
-This example suspends a capacity given the subscription ID, resource group, and capacity.
-
-```powershell
-Suspend-FabricCapacity -subscriptionID "your-subscription-id" -resourcegroupID "your-resource-group" -capacityID "your-capacity"
-```
+{{ Add example description here }}
 
 ## PARAMETERS
 
 ### -capacity
 
-The the capacity.
-This is a mandatory parameter.
-This is a parameter found in Azure, not Fabric.
+{{ Fill capacity Description }}
 
 ```yaml
 Type: System.String
@@ -92,9 +85,7 @@ HelpMessage: ''
 
 ### -resourcegroup
 
-The resource group.
-This is a mandatory parameter.
-This is a parameter found in Azure, not Fabric.
+{{ Fill resourcegroup Description }}
 
 ```yaml
 Type: System.String
@@ -115,9 +106,7 @@ HelpMessage: ''
 
 ### -subscriptionID
 
-The ID of the subscription.
-This is a mandatory parameter.
-This is a parameter found in Azure, not Fabric.
+{{ Fill subscriptionID Description }}
 
 ```yaml
 Type: System.Guid
@@ -169,13 +158,13 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
+### System.Object
+
+{{ Fill in the Description }}
+
 ## NOTES
 
-The function defines parameters for the subscription ID, resource group, and capacity.
-If the 'azToken' environment variable is null, it connects to the Azure account and sets the 'azToken' environment variable.
-It then defines the headers for the request, defines the URI for the request, and makes a GET request to the URI.
-
-Author: Ioana Bouariu
+{{ Fill in the Notes }}
 
 ## RELATED LINKS
 

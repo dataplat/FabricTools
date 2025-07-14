@@ -1,3 +1,5 @@
+function Update-FabricMLModel
+{
 <#
 .SYNOPSIS
     Updates an existing ML Model in a specified Microsoft Fabric workspace.
@@ -29,8 +31,6 @@
     Author: Tiago Balabuch
 
 #>
-function Update-FabricMLModel
-{
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]

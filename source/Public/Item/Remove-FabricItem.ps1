@@ -1,3 +1,5 @@
+
+Function Remove-FabricItem {
 <#
 .SYNOPSIS
    Removes selected items from a Fabric workspace.
@@ -30,8 +32,6 @@
    https://github.com/microsoft/Analysis-Services/tree/master/pbidevmode/fabricps-pbip
 
 #>
-
-Function Remove-FabricItem {
    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
    param
    (

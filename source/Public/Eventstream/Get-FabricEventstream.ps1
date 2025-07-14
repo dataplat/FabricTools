@@ -1,4 +1,6 @@
 function Get-FabricEventstream {
+
+
     <#
 .SYNOPSIS
 Retrieves an Eventstream or a list of Eventstreams from a specified workspace in Microsoft Fabric.
@@ -39,8 +41,6 @@ Retrieves an Eventstream or a list of Eventstreams from a specified workspace in
 Author: Tiago Balabuch
 
     #>
-
-
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]

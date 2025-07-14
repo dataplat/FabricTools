@@ -1,3 +1,4 @@
+function Get-FabricMLModel {
 <#
 .SYNOPSIS
     Retrieves ML Model details from a specified Microsoft Fabric workspace.
@@ -36,7 +37,6 @@
     Author: Tiago Balabuch
 
 #>
-function Get-FabricMLModel {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]

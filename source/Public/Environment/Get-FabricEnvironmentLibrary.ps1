@@ -1,3 +1,4 @@
+function Get-FabricEnvironmentLibrary {
 <#
 .SYNOPSIS
 Retrieves the list of libraries associated with a specific environment in a Microsoft Fabric workspace.
@@ -26,7 +27,6 @@ The unique identifier of the environment whose libraries are being queried.
 
 Author: Tiago Balabuch
 #>
-function Get-FabricEnvironmentLibrary {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]

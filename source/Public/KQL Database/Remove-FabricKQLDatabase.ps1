@@ -1,3 +1,6 @@
+
+function Remove-FabricKQLDatabase
+{
 <#
 .SYNOPSIS
 Deletes an KQLDatabase from a specified workspace in Microsoft Fabric.
@@ -25,9 +28,6 @@ The `Remove-FabricKQLDatabase` function sends a DELETE request to the Fabric API
 Author: Tiago Balabuch
 
 #>
-
-function Remove-FabricKQLDatabase
-{
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param (
         [Parameter(Mandatory = $true)]

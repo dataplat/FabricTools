@@ -1,3 +1,5 @@
+function Update-FabricEnvironmentStagingSparkCompute
+{
 <#
 .SYNOPSIS
 Updates the Spark compute configuration in the staging environment for a given workspace.
@@ -57,8 +59,6 @@ A hashtable of additional Spark properties to configure.
 Author: Tiago Balabuch
 
 #>
-function Update-FabricEnvironmentStagingSparkCompute
-{
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]

@@ -1,3 +1,6 @@
+
+function New-FabricMirroredDatabase
+{
 <#
 .SYNOPSIS
 Creates a new MirroredDatabase in a specified Microsoft Fabric workspace.
@@ -34,9 +37,6 @@ An optional path to the platform-specific definition (e.g., .platform file) to u
 Author: Tiago Balabuch
 
 #>
-
-function New-FabricMirroredDatabase
-{
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]

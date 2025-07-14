@@ -1,3 +1,5 @@
+function Update-FabricEventhouse
+{
 <#
 .SYNOPSIS
     Updates an existing Eventhouse in a specified Microsoft Fabric workspace.
@@ -32,8 +34,6 @@
     Author: Tiago Balabuch
 
 #>
-function Update-FabricEventhouse
-{
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]

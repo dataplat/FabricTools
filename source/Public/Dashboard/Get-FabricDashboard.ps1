@@ -1,3 +1,5 @@
+
+function Get-FabricDashboard {
 <#
 .SYNOPSIS
     Retrieves dashboards from a specified workspace.
@@ -22,8 +24,6 @@
 
     Author: Tiago Balabuch
 #>
-
-function Get-FabricDashboard {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]

@@ -1,3 +1,5 @@
+function New-FabricMLModel
+{
 <#
 .SYNOPSIS
     Creates a new ML Model in a specified Microsoft Fabric workspace.
@@ -29,8 +31,6 @@
     Author: Tiago Balabuch
 
 #>
-function New-FabricMLModel
-{
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]

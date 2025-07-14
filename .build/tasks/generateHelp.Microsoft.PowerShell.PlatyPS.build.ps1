@@ -92,6 +92,7 @@ task Generate_help_from_built_module {
 
     `$docOutputFolder = Join-Path '$DocOutputFolder' -ChildPath '$ProjectName'
 
+    `$commandsArray = @()
     foreach (`$publicFunction in `$targetModule.ExportedFunctions.Keys) {
         `$command = Get-Command -Name `$publicFunction -Module `$targetModule
 
@@ -106,6 +107,9 @@ task Generate_help_from_built_module {
         `$Output = New-MarkdownCommandHelp @newMarkdownCommandHelpParams
 
         `$helpCommand = Import-MarkdownCommandHelp -Path `$Output -ErrorAction Ignore
+
+        # Add the command to the array
+        `$commandsArray += `$helpCommand
 
         # Known issue: https://github.com/PowerShell/platyPS/issues/735
         `$whatIf = `$helpCommand.Parameters | Where-Object -Property Name -EQ 'WhatIf'
@@ -130,6 +134,18 @@ task Generate_help_from_built_module {
 
         Copy-Item -Path `$Output -Destination `$helpDestination -Force
     }
+
+    `$newMarkdownModuleFileParams = @{
+        CommandHelp  = `$commandsArray
+        OutputFolder = '$DocOutputFolder'
+        Force        = `$true
+    }
+    `$markdownFile = New-MarkdownModuleFile @newMarkdownModuleFileParams
+
+    if (`$markdownFile) {
+        Copy-Item -Path `$markdownFile -Destination `$helpDestination -Force
+    }
+
 "@
     Write-Build -Color DarkGray -Text "$generateHelpCommands"
     $sb = [ScriptBlock]::create($generateHelpCommands)

@@ -1,38 +1,38 @@
-<#
-.SYNOPSIS
-    Updates an existing SparkJobDefinition in a specified Microsoft Fabric workspace.
-
-.DESCRIPTION
-    This function sends a PATCH request to the Microsoft Fabric API to update an existing SparkJobDefinition
-    in the specified workspace. It supports optional parameters for SparkJobDefinition description.
-
-.PARAMETER WorkspaceId
-    The unique identifier of the workspace where the SparkJobDefinition exists. This parameter is optional.
-
-.PARAMETER SparkJobDefinitionId
-    The unique identifier of the SparkJobDefinition to be updated. This parameter is mandatory.
-
-.PARAMETER SparkJobDefinitionName
-    The new name of the SparkJobDefinition. This parameter is mandatory.
-
-.PARAMETER SparkJobDefinitionDescription
-    An optional new description for the SparkJobDefinition.
-
-.EXAMPLE
-    This example updates the SparkJobDefinition with ID "SparkJobDefinition-67890" in the workspace with ID "workspace-12345" with a new name and description.
-
-    ```powershell
-    Update-FabricSparkJobDefinition -WorkspaceId "workspace-12345" -SparkJobDefinitionId "SparkJobDefinition-67890" -SparkJobDefinitionName "Updated SparkJobDefinition" -SparkJobDefinitionDescription "Updated description"
-    ```
-
-.NOTES
-    - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-    - Calls `Confirm-TokenState` to ensure token validity before making the API request.
-
-    Author: Tiago Balabuch
-#>
 function Update-FabricSparkJobDefinition
 {
+    <#
+    .SYNOPSIS
+        Updates an existing SparkJobDefinition in a specified Microsoft Fabric workspace.
+
+    .DESCRIPTION
+        This function sends a PATCH request to the Microsoft Fabric API to update an existing SparkJobDefinition
+        in the specified workspace. It supports optional parameters for SparkJobDefinition description.
+
+    .PARAMETER WorkspaceId
+        The unique identifier of the workspace where the SparkJobDefinition exists. This parameter is optional.
+
+    .PARAMETER SparkJobDefinitionId
+        The unique identifier of the SparkJobDefinition to be updated. This parameter is mandatory.
+
+    .PARAMETER SparkJobDefinitionName
+        The new name of the SparkJobDefinition. This parameter is mandatory.
+
+    .PARAMETER SparkJobDefinitionDescription
+        An optional new description for the SparkJobDefinition.
+
+    .EXAMPLE
+        This example updates the SparkJobDefinition with ID "SparkJobDefinition-67890" in the workspace with ID "workspace-12345" with a new name and description.
+
+        ```powershell
+        Update-FabricSparkJobDefinition -WorkspaceId "workspace-12345" -SparkJobDefinitionId "SparkJobDefinition-67890" -SparkJobDefinitionName "Updated SparkJobDefinition" -SparkJobDefinitionDescription "Updated description"
+        ```
+
+    .NOTES
+        - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
+        - Calls `Confirm-TokenState` to ensure token validity before making the API request.
+
+        Author: Tiago Balabuch
+    #>
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]

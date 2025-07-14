@@ -1,3 +1,6 @@
+
+function Update-FabricKQLQueryset
+{
 <#
 .SYNOPSIS
 Updates the properties of a Fabric KQLQueryset.
@@ -38,9 +41,6 @@ The unique identifier of the workspace where the KQLQueryset exists.
 Author: Tiago Balabuch
 
 #>
-
-function Update-FabricKQLQueryset
-{
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]

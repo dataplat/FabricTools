@@ -1,14 +1,10 @@
 ---
 document type: cmdlet
 external help file: FabricTools-Help.xml
-HelpUri: >-
-  https://learn.microsoft.com/en-us/rest/api/fabric/eventhouse/items/delete-eventhouse?tabs=HTTP
-
-
-  -
+HelpUri: https://learn.microsoft.com/en-us/rest/api/fabric/eventhouse/items/delete-eventhouse?tabs=HTTP
 Locale: en-US
 Module Name: FabricTools
-ms.date: 07/12/2025
+ms.date: 07/14/2025
 PlatyPS schema version: 2024-05-01
 title: Remove-FabricEventhouse
 ---
@@ -30,9 +26,6 @@ Remove-FabricEventhouse [-WorkspaceId] <guid> [-EventhouseId] <guid> [-WhatIf] [
 
 ## ALIASES
 
-This cmdlet has the following aliases,
-  {{Insert list of aliases}}
-
 ## DESCRIPTION
 
 This function sends a DELETE request to the Microsoft Fabric API to remove an Eventhouse
@@ -52,7 +45,7 @@ Remove-FabricEventhouse -WorkspaceId "workspace-12345" -EventhouseId "eventhouse
 
 ### -Confirm
 
-{{ Fill Confirm Description }}
+Prompts you for confirmation before running the cmdlet.
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
@@ -95,7 +88,7 @@ HelpMessage: ''
 
 ### -WhatIf
 
-{{ Fill WhatIf Description }}
+Tells PowerShell to run the command in a mode that only reports what would happen, but not actually let the command run or make changes.
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
@@ -149,24 +142,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-Revsion History:
+- Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
+- Calls `Confirm-TokenState` to ensure token validity before making the API request.
 
-- 2024-11-07 - FGE: Implemented SupportShouldProcess
-- 2024-11-09 - FGE: Added DisplaName as Alias for EventhouseName
-- 2024-11-27 - FGE: Added Verbose Output
-
+Author: Tiago Balabuch
 
 ## RELATED LINKS
 
-- [](https://learn.microsoft.com/en-us/rest/api/fabric/eventhouse/items/delete-eventhouse?tabs=HTTP
-
-- Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-- Calls `Confirm-TokenState` to ensure token validity before making the API request.
-
-Author: Tiago Balabuch)
-- [https://learn.microsoft.com/en-us/rest/api/fabric/eventhouse/items/delete-eventhouse?tabs=HTTP
-
-- Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-- Calls `Confirm-TokenState` to ensure token validity before making the API request.
-
-Author: Tiago Balabuch]()
+- [](https://learn.microsoft.com/en-us/rest/api/fabric/eventhouse/items/delete-eventhouse?tabs=HTTP)
