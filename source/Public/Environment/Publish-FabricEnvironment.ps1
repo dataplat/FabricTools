@@ -1,4 +1,3 @@
-
 function Publish-FabricEnvironment {
 <#
 .SYNOPSIS

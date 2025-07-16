@@ -1,4 +1,3 @@
-
 function Start-FabricDeploymentPipelineStage {
 <#
 .SYNOPSIS

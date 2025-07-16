@@ -39,7 +39,7 @@ If a filter is provided, only items whose DisplayName matches the filter are rem
 This command removes all items from the workspace with the specified ID whose DisplayName includes "test". .INPUTS String. You can pipe two strings that contain the workspace ID and filter to Remove-FabricItems.
 
 ```powershell
-Remove-FabricItems -WorkspaceID "12345678-90ab-cdef-1234-567890abcdef" -Filter "*test*"
+Remove-FabricItem -WorkspaceID "12345678-90ab-cdef-1234-567890abcdef" -Filter "*test*"
 ```
 
 ## PARAMETERS
@@ -177,4 +177,3 @@ https://github.com/microsoft/Analysis-Services/tree/master/pbidevmode/fabricps-p
 ## RELATED LINKS
 
 {{ Fill in the related links here }}
-

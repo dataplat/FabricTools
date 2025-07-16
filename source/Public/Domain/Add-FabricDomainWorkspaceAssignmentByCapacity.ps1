@@ -1,4 +1,3 @@
-
 function Add-FabricDomainWorkspaceAssignmentByCapacity {
 <#
 .SYNOPSIS

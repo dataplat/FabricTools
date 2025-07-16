@@ -1,4 +1,3 @@
-
 function Get-FabricCapacitySkus {
     <#
 .SYNOPSIS

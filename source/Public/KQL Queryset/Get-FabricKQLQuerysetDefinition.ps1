@@ -1,4 +1,3 @@
-
 function Get-FabricKQLQuerysetDefinition {
 <#
 .SYNOPSIS

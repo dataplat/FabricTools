@@ -13,7 +13,7 @@ title: Remove-FabricDomainWorkspaceRoleAssignment
 
 ## SYNOPSIS
 
-Bulk unUnassign roles to principals for workspaces in a Fabric domain.
+Bulk unassign roles to principals for workspaces in a Fabric domain.
 
 ## SYNTAX
 
@@ -179,4 +179,3 @@ Author: Tiago Balabuch
 ## RELATED LINKS
 
 {{ Fill in the related links here }}
-

@@ -1,4 +1,3 @@
-
 Function Import-FabricItem {
     <#
     .SYNOPSIS
@@ -24,7 +23,7 @@ Function Import-FabricItem {
     This example imports PBIP files from the 'C:\PBIPFiles' folder into the Fabric workspace with ID '12345'. It only searches for PBIP files in the 'C:\PBIPFiles\Reports' folder.
 
     ```powershell
-    Import-FabricItems -path 'C:\PBIPFiles' -workspaceId '12345' -filter 'C:\PBIPFiles\Reports'
+    Import-FabricItem -path 'C:\PBIPFiles' -workspaceId '12345' -filter 'C:\PBIPFiles\Reports'
     ```
 
     .NOTES

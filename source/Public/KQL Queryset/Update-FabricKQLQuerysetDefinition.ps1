@@ -1,4 +1,3 @@
-
 function Update-FabricKQLQuerysetDefinition {
 <#
 .SYNOPSIS

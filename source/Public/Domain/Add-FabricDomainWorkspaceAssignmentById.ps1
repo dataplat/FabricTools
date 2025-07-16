@@ -1,4 +1,3 @@
-
 function Add-FabricDomainWorkspaceAssignmentById {
 <#
 .SYNOPSIS

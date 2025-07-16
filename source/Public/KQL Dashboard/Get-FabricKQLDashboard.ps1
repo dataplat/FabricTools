@@ -1,4 +1,3 @@
-
 function Get-FabricKQLDashboard {
 <#
 .SYNOPSIS

@@ -1,4 +1,3 @@
-# This function suspends a capacity.
 function Suspend-FabricCapacity {
 
     # Define aliases for the function for flexibility.

@@ -38,8 +38,10 @@ and path definitions for the Lakehouse content.
 
 ### EXAMPLE 1
 
+Creates a new Lakehouse in the specified workspace with a given name and enable schemas option.
+
 ```powershell
-Add-FabricLakehouse -WorkspaceId "workspace-12345" -LakehouseName "New Lakehouse" -LakehouseEnableSchemas $true
+New-FabricLakehouse -WorkspaceId "workspace-12345" -LakehouseName "New Lakehouse" -LakehouseEnableSchemas $true
 ```
 
 ## PARAMETERS
@@ -193,4 +195,3 @@ Author: Tiago Balabuch
 ## RELATED LINKS
 
 {{ Fill in the related links here }}
-

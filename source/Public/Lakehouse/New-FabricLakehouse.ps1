@@ -1,4 +1,3 @@
-
 function New-FabricLakehouse
 {
 <#
@@ -23,8 +22,10 @@ An optional description for the Lakehouse.
 An optional path to enable schemas in the Lakehouse
 
 .EXAMPLE
+    Creates a new Lakehouse in the specified workspace with a given name and enable schemas option.
+
     ```powershell
-    Add-FabricLakehouse -WorkspaceId "workspace-12345" -LakehouseName "New Lakehouse" -LakehouseEnableSchemas $true
+    New-FabricLakehouse -WorkspaceId "workspace-12345" -LakehouseName "New Lakehouse" -LakehouseEnableSchemas $true
     ```
 
 .NOTES

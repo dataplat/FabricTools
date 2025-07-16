@@ -1,4 +1,3 @@
-
 function New-FabricRecoveryPoint {
 <#
 .SYNOPSIS

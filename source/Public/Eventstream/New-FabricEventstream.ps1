@@ -1,6 +1,5 @@
 function New-FabricEventstream
 {
-    #TODO SupportsShouldProcess
     <#
 .SYNOPSIS
 Creates a new Eventstream in a specified Microsoft Fabric workspace.

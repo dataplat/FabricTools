@@ -1,4 +1,3 @@
-
 Function Remove-FabricItem {
 <#
 .SYNOPSIS
@@ -20,7 +19,7 @@ Function Remove-FabricItem {
     This command removes all items from the workspace with the specified ID whose DisplayName includes "test". .INPUTS String. You can pipe two strings that contain the workspace ID and filter to Remove-FabricItems.
 
     ```powershell
-    Remove-FabricItems -WorkspaceID "12345678-90ab-cdef-1234-567890abcdef" -Filter "*test*"
+    Remove-FabricItem -WorkspaceID "12345678-90ab-cdef-1234-567890abcdef" -Filter "*test*"
     ```
 
 .OUTPUTS

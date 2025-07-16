@@ -1,8 +1,7 @@
-
 function Remove-FabricDomainWorkspaceRoleAssignment {
 <#
 .SYNOPSIS
-Bulk unUnassign roles to principals for workspaces in a Fabric domain.
+Bulk unassign roles to principals for workspaces in a Fabric domain.
 
 .DESCRIPTION
 The `AssignFabricDomainWorkspaceRoleAssignment` function performs bulk role assignments for principals in a specific Fabric domain. It sends a POST request to the relevant API endpoint.
