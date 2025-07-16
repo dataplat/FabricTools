@@ -10,7 +10,7 @@ This operation requires admin deployment pipelines role and will fail if there's
 Required. The ID of the deployment pipeline to delete.
 
 .EXAMPLE
-Remove-FabricDeploymentPipeline -DeploymentPipelineId "a5ded933-57b7-41f4-b072-ed4c1f9d5824"
+Remove-FabricDeploymentPipeline -DeploymentPipelineId "GUID-GUID-GUID-GUID"
 
 Deletes the specified deployment pipeline.
 

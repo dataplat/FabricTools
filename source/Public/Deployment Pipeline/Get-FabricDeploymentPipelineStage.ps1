@@ -14,12 +14,12 @@ Required. The ID of the deployment pipeline.
 Optional. The ID of the specific stage to retrieve. If not provided, returns all stages in the pipeline.
 
 .EXAMPLE
-Get-FabricDeploymentPipelineStage -DeploymentPipelineId "a5ded933-57b7-41f4-b072-ed4c1f9d5824" -StageId "2e6f0272-e809-410a-be63-50e1d97ba75a"
+Get-FabricDeploymentPipelineStage -DeploymentPipelineId "GUID-GUID-GUID-GUID" -StageId "GUID-GUID-GUID-GUID"
 
 Retrieves details of a specific deployment pipeline stage, including its workspace assignment and settings.
 
 .EXAMPLE
-Get-FabricDeploymentPipelineStage -DeploymentPipelineId "a5ded933-57b7-41f4-b072-ed4c1f9d5824"
+Get-FabricDeploymentPipelineStage -DeploymentPipelineId "GUID-GUID-GUID-GUID"
 
 Retrieves a list of all stages in the specified deployment pipeline.
 
@@ -73,6 +73,5 @@ function Get-FabricDeploymentPipelineStage {
         # Step 6: Error handling
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to retrieve deployment pipeline stage(s). Error: $errorDetails" -Level Error
-        return $null
     }
 }

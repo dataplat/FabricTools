@@ -19,7 +19,7 @@ Get-FabricDeploymentPipeline
 Retrieves all deployment pipelines that the user can access.
 
 .EXAMPLE
-Get-FabricDeploymentPipeline -DeploymentPipelineId "a5ded933-57b7-41f4-b072-ed4c1f9d5824"
+Get-FabricDeploymentPipeline -DeploymentPipelineId "GUID-GUID-GUID-GUID"
 
 Retrieves a specific deployment pipeline with detailed information including its stages.
 
@@ -133,6 +133,5 @@ function Get-FabricDeploymentPipeline {
         # Step 8: Error handling
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to retrieve deployment pipelines. Error: $errorDetails" -Level Error
-        return $null
     }
 }
