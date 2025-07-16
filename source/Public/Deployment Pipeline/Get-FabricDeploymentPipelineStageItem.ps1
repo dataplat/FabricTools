@@ -48,46 +48,24 @@ function Get-FabricDeploymentPipelineStageItem {
         # Step 1: Ensure token validity
         Confirm-TokenState
 
-        # Step 2: Initialize variables for pagination
-        $continuationToken = $null
-        $allItems = @()
+        # Step 3: Construct the API URL
+        $apiEndpointUrl = "deploymentPipelines/$DeploymentPipelineId/stages/$StageId/items"
 
-        do {
-            # Step 3: Construct the API URL
-            $apiEndpointUrl = "deploymentPipelines/$DeploymentPipelineId/stages/$StageId/items"
-            if ($continuationToken) {
-                # URL-encode the continuation token
-                $encodedToken = [System.Web.HttpUtility]::UrlEncode($continuationToken)
-                $apiEndpointUrl = "{0}?continuationToken={1}" -f $apiEndpointUrl, $encodedToken
-            }
-            Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
+        # Step 4: Make the API request
+        $apiParameters = @{
+            Uri = $apiEndpointUrl
+            Method = 'GET'
+            HandleResponse = $true
+            TypeName = "deployment pipeline stage items"
+            ObjectIdOrName = $StageId
+        }
+        $response = Invoke-FabricRestMethod @apiParameters
 
-            # Step 4: Make the API request
-            $response = Invoke-FabricRestMethod -Uri $apiEndpointUrl -Method Get
+        $response
 
-            # Step 5: Validate response
-            Test-FabricApiResponse -response $response -ObjectIdOrName $StageId -typeName "deployment pipeline stage items"
-
-            # Step 6: Process results
-            if ($response.value) {
-                $allItems += $response.value
-                Write-Message -Message "Retrieved $($response.value.Count) items." -Level Debug
-            }
-            $continuationToken = Get-FabricContinuationToken -Response $response
-        } while ($continuationToken)
-
-        # Step 7: Return all items
-        $allItems
-        # if ($allItems.Count -gt 0) {
-        #     Write-Message -Message "Successfully retrieved $($allItems.Count) items in total." -Level Debug
-        #     return $allItems
-        # } else {
-        #     Write-Message -Message "No items found in the deployment pipeline stage." -Level Warning
-        #     return $null
-        # }
     } catch {
         # Step 8: Error handling
         $errorDetails = $_.Exception.Message
-        Write-Message -Message "Failed to retrieve deployment pipeline stage items. Error: $errorDetails" -Level Error
+        Write-Error -Message "Failed to retrieve deployment pipeline stage items. Error: $errorDetails"
     }
 }

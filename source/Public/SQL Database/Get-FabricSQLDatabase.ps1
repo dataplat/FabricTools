@@ -76,7 +76,6 @@ function Get-FabricSQLDatabase
 
     begin
     {
-        $return = @()
         Confirm-TokenState
 
         if ($PSBoundParameters.ContainsKey("SQLDatabaseName") -and $PSBoundParameters.ContainsKey("SQLDatabaseId"))
@@ -101,25 +100,26 @@ function Get-FabricSQLDatabase
         {
             $uri = "$uri/$SQLDatabaseId"
         }
-        $response = Invoke-FabricRestMethod -Uri $uri
 
-        # Step: Validate the response code
-        Test-FabricApiResponse -Response $response -ObjectIdOrName $SQLDatabaseId -TypeName "SQL Database"
+        # Make the API request and validate the response code
+        $apiParams = @{
+            Uri = $uri
+            Method = 'GET'
+            TypeName = 'SQL Database'
+            ObjectIdOrName = $SQLDatabaseName
+            HandleResponse = $true
+            ExtractValue = 'True'
+        }
 
-        $response = $response.value
+        $response = Invoke-FabricRestMethod @apiParams
+
         if ($SQLDatabaseName)
         {
             # Filter the SQLDatabase by name
             $response = $response | Where-Object { $_.displayName -eq $SQLDatabaseName }
         }
-        if ($response)
-        {
-            $return += $response
-        }
+        $response
     }
 
-    End
-    {
-        $return
-    }
+    End {}
 }

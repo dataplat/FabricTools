@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `Remove-FabricWorkspaceFromStage`,  
   - `Start-FabricDeploymentPipelineStage`
 - Added private function `Get-FabricContinuationToken` to facilitate pagination
+- `Invoke-FabricRestMethod` handles throttling (error 429) by pausing and repeating the request (#88)
 
 ### Changed
 
@@ -32,6 +33,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Get-FabricSqlDatabase` accepts Workspace as a pipeline, handles errors correctly and can filter by name (#117).
 - Applied splatting for several parameters in `Invoke-FabricRestMethod` and output results in debug mode
 - `Remove-FabricSQLDatabase` uses unified function to handle API results
+- Internal function `Invoke-FabricRestMethod`: (#143)
+  - handles API response, no need to use `Test-FabricApiResponse` from parent public function 
+  - handles pagination automatically (when `-HandleResponse` is provided)
+- All Deployment Pipeline functions raise an error when an exception is caught. Used splatting for params.
+- Refactored SQL Database functions to use enhanced capability in `Invoke-FabricRestMethod`. Used splatting for params.
+- `Write-Message` uses PSFramework function for logging, which logs function name (#84)
 
 Updated the `WorkspaceId`, `CapacitiesIds`,`CapacityId`,`CopyJobId`,`datamartId`,`DataPipelineId`,`DataWarehouseGUID`,`DomainId`,`EnvironmentId`,`EventhouseId`,`EventstreamId`,`ExternalDataShareId`,`ItemId`,`KQLDashboardId`,`KQLDatabaseId`,`KQLQuerysetId`,`LakehouseId`,`MirroredDatabaseId`,`MirroredWarehouseId`,`MLExperimentId`,`MLModelId`,`NotebookId`,`operationId`,`PaginatedReportId`,`ParentDomainId`,`parentEventhouseId`,`PrincipalId`,`ReflexId`,`ReportId`,`SemanticModelId`,`SparkCustomPoolId`,`SparkJobDefinitionId`,`SQLDatabaseId`,`SQLEndpointId`,`subscriptionID`,`UserId`,`WarehouseId`,`WorkspaceGUID`,`WorkspaceId`,`WorkspaceIds`,and `WorkspaceRoleAssignmentId` parameters to the datatype GUID [#125](https://github.com/dataplat/FabricTools/issues/125)
 
@@ -40,6 +47,7 @@ Updated the `WorkspaceId`, `CapacitiesIds`,`CapacityId`,`CopyJobId`,`datamartId`
 - Enhanced logic in unified function `Test-FabricApiResponse` to handle API results and moved it to private functions
 - Fixed bug in `Get-FabricLongRunningOperation` - Uri was incorectly created (#131)
 - Fixed bug in `Get-FabricLongRunningOperationResult` - uses correct statusCode (#131)
+- Fixed `Start-FabricDeploymentPipelineStage` that supports `-NoWait` correctly
 
 ### Deprecated
 

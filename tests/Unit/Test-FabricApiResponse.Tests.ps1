@@ -6,8 +6,12 @@ param(
     $ModuleName = "FabricTools",
     $expectedParams = @(
         "Response"
+        "ResponseHeader"
+        "StatusCode"
+        "Operation"
         "ObjectIdOrName"
         "TypeName"
+        "SuccessMessage"
         "NoWait"
         "Verbose"
         "Debug"
@@ -44,8 +48,8 @@ Describe "Test-FabricApiResponse" -Tag "UnitTests" {
         }
 
         It "Should have exactly the number of expected parameters $($expected.Count)" {
-            $hasparms = $command.Parameters.Values.Name
-            Compare-Object -ReferenceObject $script:expected -DifferenceObject $hasparms | Should -BeNullOrEmpty
+            $hasParams = $command.Parameters.Values.Name
+            Compare-Object -ReferenceObject $script:expected -DifferenceObject $hasParams | Should -BeNullOrEmpty
         }
     }
 }
@@ -74,22 +78,28 @@ Describe "Test-FabricApiResponse - StatusCode Handling" -Tag "UnitTests" {
         Mock -CommandName Write-Message -MockWith { }
     }
 
-    It "Returns `$null when statusCode is 200" {
+    It "Returns `$null when statusCode is 200 and Operation is 'Get'" {
         $script:statusCode = 200
-        $result = Test-FabricApiResponse -Response $script:response
+        $result = Test-FabricApiResponse -Response $script:response -ResponseHeader $script:responseHeader -StatusCode $script:statusCode -Operation "Get"
+        $result | Should -Be $script:response
+    }
+
+    It "Returns response when statusCode is 200 and Operation is not 'Get'" {
+        $script:statusCode = 200
+        $result = Test-FabricApiResponse -Response $script:response -ResponseHeader $script:responseHeader -StatusCode $script:statusCode -Operation "New"
         $result | Should -Be $null
     }
 
     It "Returns response when statusCode is 201" {
         $script:statusCode = 201
-        $result = Test-FabricApiResponse -Response $script:response
+        $result = Test-FabricApiResponse -Response $script:response -ResponseHeader $script:responseHeader -StatusCode $script:statusCode
         $result | Should -Be $script:response
     }
 
     It "Returns operation result when statusCode is 202 and operation succeeds" {
         $script:statusCode = 202
         $expectedResult = "Completed"
-        $result = Test-FabricApiResponse -Response $script:response
+        $result = Test-FabricApiResponse -Response $script:response -ResponseHeader $script:responseHeader -StatusCode $script:statusCode -Operation "Create" -ObjectIdOrName "TestObject" -TypeName "TestType"
         $result | Should -Be $expectedResult
         Should -Invoke Get-FabricLongRunningOperation -Exactly 1
         Should -Invoke Get-FabricLongRunningOperationResult -Exactly 1
@@ -97,7 +107,7 @@ Describe "Test-FabricApiResponse - StatusCode Handling" -Tag "UnitTests" {
 
     It "Returns PSCustomObject with 3 properties when statusCode is 202 and -NoWait is specified" {
         $script:statusCode = 202
-        $result = Test-FabricApiResponse -Response $script:response -NoWait
+        $result = Test-FabricApiResponse -Response $script:response -ResponseHeader $script:responseHeader -StatusCode $script:statusCode $script:responseHeader -NoWait
 
         $expected = [PSCustomObject]@{
             Location    = $script:responseHeader.Location
@@ -111,7 +121,7 @@ Describe "Test-FabricApiResponse - StatusCode Handling" -Tag "UnitTests" {
 
     It "Throws when statusCode is not 200, 201, or 202" {
         $script:statusCode = 400
-        { Test-FabricApiResponse -Response $script:response -ErrorAction Stop } | Should -Throw
+        { Test-FabricApiResponse -Response $script:response -ResponseHeader $script:responseHeader -StatusCode $script:statusCode -ErrorAction Stop } | Should -Throw
     }
 }
 
