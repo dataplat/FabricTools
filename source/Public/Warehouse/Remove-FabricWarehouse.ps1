@@ -44,8 +44,14 @@ function Remove-FabricWarehouse
         if ($PSCmdlet.ShouldProcess($apiEndpointURI, "Delete Warehouse"))
         {
             # Step 3: Make the API request and Validate the response
-            $response = Invoke-FabricRestMethod -Uri $apiEndpointURI -Method Delete
-            $response = Test-FabricApiResponse -response $response -ObjectIdOrName $WarehouseId -typeName "Warehouse"
+            $apiParameters = @{
+                Uri = $apiEndpointURI
+                Method = 'DELETE'
+                HandleResponse = $true
+                TypeName = "Warehouse"
+                ObjectIdOrName = $WarehouseId
+            }
+            $response = Invoke-FabricRestMethod @apiParameters
         }
 
         # Step 4: Handle results
