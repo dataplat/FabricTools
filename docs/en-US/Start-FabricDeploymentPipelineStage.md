@@ -39,7 +39,13 @@ This API supports long running operations (LRO) and will return an operation ID 
 This example deploys items from the source stage to the target stage in the specified deployment pipeline.
 
 ```powershell
-Start-FabricDeploymentPipelineStage -DeploymentPipelineId "12345678-1234-1234-1234-1234567890AB" -SourceStageId "23456789-2345-2345-2345-2345678901BC" -TargetStageId "34567890-3456-3456-3456-3456789012CD" -Items @(@{sourceItemId="45678901-4567-4567-4567-4567890123EF"; itemType="Report"})
+$deploymentParams = @{
+    DeploymentPipelineId = "12345678-1234-1234-1234-1234567890AB"
+    SourceStageId = "23456789-2345-2345-2345-2345678901BC"
+    TargetStageId = "34567890-3456-3456-3456-3456789012CD"
+    Items = @(@{sourceItemId="45678901-4567-4567-4567-4567890123EF"; itemType="Report"})
+}
+Start-FabricDeploymentPipelineStage @deploymentParams
 ```
 
 ### EXAMPLE 2
@@ -47,7 +53,13 @@ Start-FabricDeploymentPipelineStage -DeploymentPipelineId "12345678-1234-1234-12
 This example deploys all items from the source stage to the target stage in the specified deployment pipeline without waiting for completion.
 
 ```powershell
-Start-FabricDeploymentPipelineStage -DeploymentPipelineId "12345678-1234-1234-1234-1234567890AB" -SourceStageId "23456789-2345-2345-2345-2345678901BC" -TargetStageId "34567890-3456-3456-3456-3456789012CD" -NoWait
+$deploymentParams = @{
+    DeploymentPipelineId = "12345678-1234-1234-1234-1234567890AB"
+    SourceStageId = "23456789-2345-2345-2345-2345678901BC"
+    TargetStageId = "34567890-3456-3456-3456-3456789012CD"
+    NoWait = $true
+}
+Start-FabricDeploymentPipelineStage @deploymentParams
 ```
 
 ## PARAMETERS
@@ -258,4 +270,3 @@ Author: Kamil Nowinski
 ## RELATED LINKS
 
 {{ Fill in the related links here }}
-

@@ -1,4 +1,3 @@
-
 function Restore-FabricRecoveryPoint {
 <#
 .SYNOPSIS

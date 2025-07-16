@@ -38,8 +38,10 @@ and path definitions for the notebook content.
 
 ### EXAMPLE 1
 
+Creates a new notebook in the specified workspace with a given name and path definition.
+
 ```powershell
-Add-FabricNotebook -WorkspaceId "workspace-12345" -NotebookName "New Notebook" -NotebookPathDefinition "C:\notebooks\example.ipynb"
+New-FabricNotebook -WorkspaceId "workspace-12345" -NotebookName "New Notebook" -NotebookPathDefinition "C:\notebooks\example.ipynb"
 ```
 
 ## PARAMETERS
@@ -214,4 +216,3 @@ Author: Tiago Balabuch
 ## RELATED LINKS
 
 {{ Fill in the related links here }}
-

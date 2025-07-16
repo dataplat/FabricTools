@@ -28,7 +28,7 @@ New-FabricWorkspace [-WorkspaceName] <string> [[-WorkspaceDescription] <string>]
 
 ## DESCRIPTION
 
-The `Add-FabricWorkspace` function creates a new workspace in the Fabric platform by sending a POST request to the API.
+The `New-FabricWorkspace` function creates a new workspace in the Fabric platform by sending a POST request to the API.
 It validates the display name and handles both success and error responses.
 
 ## EXAMPLES
@@ -38,7 +38,7 @@ It validates the display name and handles both success and error responses.
 Creates a workspace named "NewWorkspace".
 
 ```powershell
-Add-FabricWorkspace -WorkspaceName "NewWorkspace"
+New-FabricWorkspace -WorkspaceName "NewWorkspace"
 ```
 
 ## PARAMETERS
@@ -174,4 +174,3 @@ Author: Tiago Balabuch
 ## RELATED LINKS
 
 {{ Fill in the related links here }}
-

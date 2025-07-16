@@ -51,8 +51,6 @@ BuildWorkflow:
     - Build_Module_ModuleBuilder
     - Build_NestedModules_ModuleBuilder
     - Create_changelog_release_output
-    - Generate_help_from_built_module
-
 
   pack:
     - build

@@ -13,7 +13,7 @@ function Get-FabricCapacities {
     This command retrieves all resources of type "Microsoft.Fabric/capacities" from all resource groups in the subscription with the ID "12345678-1234-1234-1234-123456789012". ```powershell ```
 
     ```powershell
-    Get-FabricCapacitiess -subscriptionID "12345678-1234-1234-1234-123456789012"
+    Get-FabricCapacities -subscriptionID "12345678-1234-1234-1234-123456789012"
     ```
 
 .EXAMPLE

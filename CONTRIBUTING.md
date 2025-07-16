@@ -105,7 +105,13 @@ You should also resolve all dependencies before you start developing. This will 
    ### Fixed
    - Fixed issue with `New-FabricDataPipeline` not working correctly.
    ```
-9. Once you are happy with your code and you have updated the changelog, push your branch to GitHub and create a PR against the repo.
+9. Once you are happy with your code and you have updated the changelog, there is one thing left to do if, which is documentation. To run the generation of the documentation, the `build.ps1` can leverage the `Generate_help_from_built_module` task:
+
+   ```powershell
+   ./build.ps1 -Tasks Generate_help_from_built_module
+   ```
+
+10. When the process finishes, the documentation should be updated. Now push your branch to GitHub and create a PR against the repo.
 
 ## Thanks!
 

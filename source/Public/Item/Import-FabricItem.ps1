@@ -4,15 +4,8 @@ Function Import-FabricItem {
     .SYNOPSIS
         Imports items using the Power BI Project format (PBIP) into a Fabric workspace from a specified file system source.
 
-    .PARAMETER fileOverrides
-        This parameter let's you override a PBIP file without altering the local file.
-    #>
-<#
-    .SYNOPSIS
-        Imports items using the Power BI Project format (PBIP) into a Fabric workspace from a specified file system source.
-
     .DESCRIPTION
-        The Import-FabricItem function imports items using the Power BI Project format (PBIP) into a Fabric workspace from a specified file system source. It supports multiple aliases for flexibility.
+        The `Import-FabricItem` function imports items using the Power BI Project format (PBIP) into a Fabric workspace from a specified file system source. It supports multiple aliases for flexibility.
         The function handles the import of datasets and reports, ensuring that the correct item type is used and that the items are created or updated as necessary.
 
     .PARAMETER fileOverrides
@@ -38,8 +31,7 @@ Function Import-FabricItem {
         This function requires the Invoke-FabricRestMethod function to be available in the current session.
 
         Author: Rui Romano
-
-#>
+    #>
     [CmdletBinding(SupportsShouldProcess)]
     param
     (
