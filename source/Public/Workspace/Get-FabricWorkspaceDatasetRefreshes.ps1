@@ -17,7 +17,7 @@ function Get-FabricWorkspaceDatasetRefreshes {
         Get-FabricWorkspaceDatasetRefreshes -WorkspaceID "12345678-90ab-cdef-1234-567890abcdef"
         ```
     .INPUTS
-        String. You can pipe two strings that contain the dataset ID and workspace ID to Get-FabricDatasetRefreshes.
+        Guid. You can pipe a string that contains the workspace ID to Get-FabricWorkspaceDatasetRefreshes.
 
     .OUTPUTS
         Array. Get-FabricWorkspaceDatasetRefreshes returns an array of refresh history objects.

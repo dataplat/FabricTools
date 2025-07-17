@@ -77,7 +77,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### Array. Get-FabricWorkspaceDatasetRefreshes returns an array of refresh history objects.
+### Guid. You can pipe a string that contains the workspace ID to Get-FabricWorkspaceDatasetRefreshes.
 
 {{ Fill in the Description }}
 
@@ -88,4 +88,3 @@ Alias: Get-PowerBIWorkspaceDatasetRefreshes, Get-FabWorkspaceDatasetRefreshes
 ## RELATED LINKS
 
 {{ Fill in the related links here }}
-
