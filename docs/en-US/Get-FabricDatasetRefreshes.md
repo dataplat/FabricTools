@@ -114,10 +114,6 @@ Alias: Get-PowerBIDatasetRefreshes, Get-FabDatasetRefreshes
 
 Author: Ioana Bouariu
 
-
-Define aliases for the function for flexibility.
-
 ## RELATED LINKS
 
 {{ Fill in the related links here }}
-

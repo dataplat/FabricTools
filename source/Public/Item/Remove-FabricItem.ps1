@@ -22,6 +22,9 @@ Function Remove-FabricItem {
     Remove-FabricItem -WorkspaceID "12345678-90ab-cdef-1234-567890abcdef" -Filter "*test*"
     ```
 
+.INPUTS
+   String. You can pipe a string that contains the workspace ID to Remove-FabricItem.
+
 .OUTPUTS
    None. This function does not return any output.
 

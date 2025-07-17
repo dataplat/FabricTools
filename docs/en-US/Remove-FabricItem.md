@@ -163,6 +163,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
+### String. You can pipe a string that contains the workspace ID to Remove-FabricItem.
+
+{{ Fill in the Description }}
+
 ## OUTPUTS
 
 ### None. This function does not return any output.
