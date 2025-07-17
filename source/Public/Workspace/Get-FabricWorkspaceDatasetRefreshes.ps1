@@ -16,6 +16,8 @@ function Get-FabricWorkspaceDatasetRefreshes {
         ```powershell
         Get-FabricWorkspaceDatasetRefreshes -WorkspaceID "12345678-90ab-cdef-1234-567890abcdef"
         ```
+    .INPUTS
+        String. You can pipe two strings that contain the dataset ID and workspace ID to Get-FabricDatasetRefreshes.
 
     .OUTPUTS
         Array. Get-FabricWorkspaceDatasetRefreshes returns an array of refresh history objects.
