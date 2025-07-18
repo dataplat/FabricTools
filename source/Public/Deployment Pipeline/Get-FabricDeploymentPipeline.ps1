@@ -61,80 +61,32 @@ Author: Kamil Nowinski
         if ($DeploymentPipelineId) {
             Write-Message -Message "Retrieving specific deployment pipeline with ID: $DeploymentPipelineId" -Level Debug
             $apiEndpointUrl = "deploymentPipelines/$DeploymentPipelineId"
-
-            $response = Invoke-FabricRestMethod -Uri $apiEndpointUrl -Method Get
-
-            # Validate response
-            Test-FabricApiResponse -response $response -ObjectIdOrName $DeploymentPipelineId -typeName "deployment pipeline"
-
-            if ($response) {
-                Write-Message -Message "Successfully retrieved deployment pipeline." -Level Debug
-                return $response
-            } else {
-                Write-Message -Message "No deployment pipeline found with the specified ID." -Level Warning
-                return $null
-            }
+        } else {
+            $apiEndpointUrl = "deploymentPipelines"
         }
 
-        # Step 2: Initialize variables for listing all pipelines
-        $continuationToken = $null
-        $pipelines = @()
-
-        if (-not ([AppDomain]::CurrentDomain.GetAssemblies() | Where-Object { $_.GetName().Name -eq "System.Web" })) {
-            Add-Type -AssemblyName System.Web
+        # Step 5: Make the API request
+        $apiParameters = @{
+            Uri = $apiEndpointUrl
+            Method = 'GET'
+            HandleResponse = $true
+            TypeName = "deployment pipeline"
         }
-
-        # Step 3: Loop to retrieve all pipelines with continuation token
-        Write-Message -Message "Loop started to get continuation token" -Level Debug
-        $baseApiEndpointUrl = "deploymentPipelines"
-
-        do {
-            # Step 4: Construct the API URL
-            $apiEndpointUrl = $baseApiEndpointUrl
-
-            if ($null -ne $continuationToken) {
-                # URL-encode the continuation token
-                $encodedToken = [System.Web.HttpUtility]::UrlEncode($continuationToken)
-                $apiEndpointUrl = "{0}?continuationToken={1}" -f $apiEndpointUrl, $encodedToken
-            }
-            Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
-
-            # Step 5: Make the API request
-            $response = Invoke-FabricRestMethod -Uri $apiEndpointUrl -Method Get
-
-            # Validate response
-            Test-FabricApiResponse -response $response -typeName "deployment pipeline"
-
-            # Step 6: Process response and update continuation token
-            if ($null -ne $response) {
-                $pipelines += $response.value
-            }
-            $continuationToken = Get-FabricContinuationToken -Response $response
-
-        } while ($null -ne $continuationToken)
-
-        Write-Message -Message "Loop finished and all data added to the list" -Level Debug
+        $response = Invoke-FabricRestMethod @apiParameters
 
         if ($DeploymentPipelineName)
         {
             # Filter the list by name
             Write-Message -Message "Filtering deployment pipelines by name: $DeploymentPipelineName" -Level Debug
-            $pipelines = $pipelines | Where-Object { $_.displayName -eq $DeploymentPipelineName }
+            $response = $response | Where-Object { $_.displayName -eq $DeploymentPipelineName }
         }
 
         # Step 7: Handle results
-        $pipelines
-        # if ($pipelines) {
-        #     Write-Message -Message "Successfully retrieved deployment pipelines." -Level Debug
-        #     return $pipelines
-        # } else {
-        #     Write-Message -Message "No deployment pipelines found." -Level Warning
-        #     return $null
-        # }
+        $response
 
     } catch {
         # Step 8: Error handling
         $errorDetails = $_.Exception.Message
-        Write-Message -Message "Failed to retrieve deployment pipelines. Error: $errorDetails" -Level Error
+        Write-Error -Message "Failed to retrieve deployment pipelines. Error: $errorDetails"
     }
 }

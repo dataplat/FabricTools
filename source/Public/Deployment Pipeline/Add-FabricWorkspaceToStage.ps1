@@ -65,15 +65,23 @@ Author: Kamil Nowinski
         }
 
         # Step 4: Make the API request and validate response
-        $response = Invoke-FabricRestMethod -Uri $apiEndpointUrl -Method Post -Body $requestBody
-        Test-FabricApiResponse -Response $response
+        $apiParameters = @{
+            Uri = $apiEndpointUrl
+            Method = 'POST'
+            Body = $requestBody
+            HandleResponse = $true
+            TypeName = "deployment pipeline stage"
+            ObjectIdOrName = $StageId
+            SuccessMessage = "Successfully assigned workspace to deployment pipeline stage."
+        }
+        $response = Invoke-FabricRestMethod @apiParameters
 
         # Step 5: Return results
-        Write-Message -Message "Successfully assigned workspace to deployment pipeline stage." -Level Info
         $response
+
     } catch {
         # Step 6: Error handling
         $errorDetails = $_.Exception.Message
-        Write-Message -Message "Failed to assign workspace to deployment pipeline stage. Error: $errorDetails" -Level Error
+        Write-Error -Message "Failed to assign workspace to deployment pipeline stage. Error: $errorDetails"
     }
 }
