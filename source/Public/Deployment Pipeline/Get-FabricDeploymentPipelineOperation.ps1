@@ -13,7 +13,7 @@ Required. The ID of the deployment pipeline.
 Required. The ID of the operation to retrieve.
 
 .EXAMPLE
-Get-FabricDeploymentPipelineOperation -DeploymentPipelineId "a5ded933-57b7-41f4-b072-ed4c1f9d5824" -OperationId "1065e6a3-a020-4c0c-ada7-92b5fe99eec5"
+Get-FabricDeploymentPipelineOperation -DeploymentPipelineId "GUID-GUID-GUID-GUID" -OperationId "GUID-GUID-GUID-GUID"
 
 Retrieves details of a specific deployment operation, including its execution plan and status.
 
@@ -49,27 +49,22 @@ function Get-FabricDeploymentPipelineOperation {
 
         # Step 2: Construct the API URL
         $apiEndpointUrl = "deploymentPipelines/$DeploymentPipelineId/operations/$OperationId"
-        Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
         # Step 3: Make the API request
-        $response = Invoke-FabricRestMethod -Uri $apiEndpointUrl -Method Get
+        $apiParameters = @{
+            Uri = $apiEndpointUrl
+            Method = 'GET'
+            HandleResponse = $true
+            TypeName = "deployment pipeline operation"
+            ObjectIdOrName = $DeploymentPipelineId
+        }
+        $response = Invoke-FabricRestMethod @apiParameters
 
-        # Step 4: Validate response
-        Test-FabricApiResponse -response $response -ObjectIdOrName $DeploymentPipelineId -typeName "deployment pipeline operation"
-
-        # Step 5: Handle results
         $response
-        # if ($response) {
-        #     Write-Message -Message "Successfully retrieved deployment pipeline operation details." -Level Debug
-        #     return $response
-        # } else {
-        #     Write-Message -Message "No deployment pipeline operation found with the specified IDs." -Level Warning
-        #     return $null
-        # }
+
     } catch {
         # Step 6: Error handling
         $errorDetails = $_.Exception.Message
-        Write-Message -Message "Failed to retrieve deployment pipeline operation. Error: $errorDetails" -Level Error
-        return $null
+        Write-Error -Message "Failed to retrieve deployment pipeline operation. Error: $errorDetails"
     }
 }

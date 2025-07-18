@@ -28,7 +28,13 @@ Optional. A note describing the deployment. Limited to 1024 characters.
 Optional. If specified, the function will not wait for the deployment to complete and will return immediately.
 
 .EXAMPLE
-Start-FabricDeploymentPipelineStage -DeploymentPipelineId "a5ded933-57b7-41f4-b072-ed4c1f9d5824" -SourceStageId "db1577e0-0132-4d6d-92b9-952c359988f2" -TargetStageId "f1c39546-6282-4590-8af3-847a6226ad16" -Note "Deploying business ready items"
+$params = @{
+    DeploymentPipelineId = "GUID-GUID-GUID-GUID"
+    SourceStageId = "GUID-GUID-GUID-GUID"
+    TargetStageId = "GUID-GUID-GUID-GUID"
+    Note = "Deploying business ready items"
+}
+Start-FabricDeploymentPipelineStage @params
 
 Deploys all supported items from the source stage to the target stage.
 
@@ -43,7 +49,7 @@ $items = @(
         itemType = "SemanticModel"
     }
 )
-Start-FabricDeploymentPipelineStage -DeploymentPipelineId "a5ded933-57b7-41f4-b072-ed4c1f9d5824" -SourceStageId "db1577e0-0132-4d6d-92b9-952c359988f2" -TargetStageId "f1c39546-6282-4590-8af3-847a6226ad16" -Items $items -Note "Deploying specific items"
+Start-FabricDeploymentPipelineStage -DeploymentPipelineId "GUID-GUID-GUID-GUID" -SourceStageId "GUID-GUID-GUID-GUID" -TargetStageId "GUID-GUID-GUID-GUID" -Items $items -Note "Deploying specific items"
 
 Deploys specific items from the source stage to the target stage.
 
@@ -108,9 +114,16 @@ function Start-FabricDeploymentPipelineStage {
 
         # Step 4: Make the API request and validate response
         if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Start Deployment Pipeline")) {
-            $response = Invoke-FabricRestMethod -Uri $apiEndpointUrl -Method Post -Body $requestBody
-            #Write-Message -Message "Successfully initiated deployment. Operation ID: $($script:responseHeader['x-ms-operation-id'])" -Level Info
-            $response = Test-FabricApiResponse -Response $response -typeName 'Deploy Pipeline Stage' -ObjectIdOrName $DeploymentPipelineId -NoWait:$NoWait
+            $apiParameters = @{
+                Uri = $apiEndpointUrl
+                Method = 'POST'
+                Body = $requestBody
+                HandleResponse = $true
+                TypeName = "Deploy Pipeline Stage"
+                ObjectIdOrName = $DeploymentPipelineId
+                NoWait = $NoWait
+            }
+            $response = Invoke-FabricRestMethod @apiParameters
         }
 
         # Step 5: Return results
@@ -119,7 +132,6 @@ function Start-FabricDeploymentPipelineStage {
     } catch {
         # Step 6: Error handling
         $errorDetails = $_.Exception.Message
-        Write-Message -Message "Failed to initiate deployment. Error: $errorDetails" -Level Error
-        return $null
+        Write-Error -Message "Failed to initiate deployment. Error: $errorDetails"
     }
 }

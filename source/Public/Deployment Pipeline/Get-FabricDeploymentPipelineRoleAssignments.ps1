@@ -10,7 +10,7 @@ The function automatically handles pagination and returns all available role ass
 Required. The ID of the deployment pipeline to get role assignments for.
 
 .EXAMPLE
-Get-FabricDeploymentPipelineRoleAssignments -DeploymentPipelineId "8ce96c50-85a0-4db3-85c6-7ccc3ed46523"
+Get-FabricDeploymentPipelineRoleAssignments -DeploymentPipelineId "GUID-GUID-GUID-GUID"
 
 Returns all role assignments for the specified deployment pipeline.
 
@@ -35,39 +35,25 @@ function Get-FabricDeploymentPipelineRoleAssignments {
         # Step 1: Ensure token validity
         Confirm-TokenState
 
-        # Step 2: Initialize variables
-        $continuationToken = $null
-        $roleAssignments = @()
+        # Step 3: Construct the API URL
+        $apiEndpointUrl = "deploymentPipelines/$DeploymentPipelineId/roleAssignments"
 
-        do {
-            # Step 3: Construct the API URL
-            $apiEndpointUrl = "deploymentPipelines/$DeploymentPipelineId/roleAssignments"
-            if ($continuationToken) {
-                $apiEndpointUrl += "?continuationToken=$continuationToken"
-            }
-            Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
-
-            # Step 4: Make the API request and validate response
-            $response = Invoke-FabricRestMethod -Uri $apiEndpointUrl -Method Get
-            Test-FabricApiResponse -Response $response -ObjectIdOrName $DeploymentPipelineId -TypeName "Deployment Pipeline Role Assignments"
-
-            # Step 5: Process response and update continuation token
-            if ($response.value) {
-                $roleAssignments += $response.value
-                Write-Message -Message "Added $($response.value.Count) role assignments to the result set." -Level Debug
-            }
-            $continuationToken = Get-FabricContinuationToken -Response $response
-
-        } while ($continuationToken)
+        # Step 4: Make the API request and validate response
+        $apiParameters = @{
+            Uri = $apiEndpointUrl
+            Method = 'GET'
+            HandleResponse = $true
+            TypeName = "deployment pipeline role assignments"
+            ObjectIdOrName = $DeploymentPipelineId
+        }
+        $response = Invoke-FabricRestMethod @apiParameters
 
         # Step 7: Return results
-        Write-Message -Message "Successfully retrieved $($roleAssignments.Count) role assignments." -Level Debug
-        $roleAssignments
+        $response
 
     } catch {
         # Step 8: Error handling
         $errorDetails = $_.Exception.Message
-        Write-Message -Message "Failed to get deployment pipeline role assignments. Error: $errorDetails" -Level Error
-        return $null
+        Write-Error -Message "Failed to get deployment pipeline role assignments. Error: $errorDetails"
     }
 }

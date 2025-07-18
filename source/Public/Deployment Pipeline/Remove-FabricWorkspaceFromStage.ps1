@@ -13,7 +13,7 @@ Required. The ID of the deployment pipeline.
 Required. The ID of the deployment pipeline stage.
 
 .EXAMPLE
-Remove-FabricWorkspaceFromStage -DeploymentPipelineId "a5ded933-57b7-41f4-b072-ed4c1f9d5824" -StageId "db1577e0-0132-4d6d-92b9-952c359988f2"
+Remove-FabricWorkspaceFromStage -DeploymentPipelineId "GUID-GUID-GUID-GUID" -StageId "GUID-GUID-GUID-GUID"
 
 Removes the workspace from the specified deployment pipeline stage.
 
@@ -49,18 +49,23 @@ function Remove-FabricWorkspaceFromStage {
 
         # Step 3: Make the API request and validate response
         if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Remove Workspace from Deployment Pipeline Stage")) {
-            $response = Invoke-FabricRestMethod -Uri $apiEndpointUrl -Method Post
-            $response = Test-FabricApiResponse -Response $response
+            $apiParameters = @{
+                Uri = $apiEndpointUrl
+                Method = 'POST'
+                HandleResponse = $true
+                TypeName = "deployment pipeline stage"
+                ObjectIdOrName = $StageId
+                SuccessMessage = "Successfully unassigned workspace from deployment pipeline stage."
+            }
+            $response = Invoke-FabricRestMethod @apiParameters
         }
 
         # Step 4: Return results
-        Write-Message -Message "Successfully unassigned workspace from deployment pipeline stage." -Level Info
         $response
 
     } catch {
         # Step 5: Error handling
         $errorDetails = $_.Exception.Message
-        Write-Message -Message "Failed to unassign workspace from deployment pipeline stage. Error: $errorDetails" -Level Error
-        return $null
+        Write-Error -Message "Failed to unassign workspace from deployment pipeline stage. Error: $errorDetails"
     }
 }

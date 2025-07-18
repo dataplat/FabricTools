@@ -16,7 +16,7 @@ Required. The ID of the deployment pipeline stage.
 Required. The ID of the workspace to assign to the stage.
 
 .EXAMPLE
-Add-FabricWorkspaceToStage -DeploymentPipelineId "a5ded933-57b7-41f4-b072-ed4c1f9d5824" -StageId "db1577e0-0132-4d6d-92b9-952c359988f2" -WorkspaceId "4de5bcc4-2c88-4efe-b827-4ee7b289b496"
+Add-FabricWorkspaceToStage -DeploymentPipelineId "GUID-GUID-GUID-GUID" -StageId "GUID-GUID-GUID-GUID" -WorkspaceId "GUID-GUID-GUID-GUID"
 
 Assigns the specified workspace to the deployment pipeline stage.
 
@@ -55,7 +55,7 @@ function Add-FabricWorkspaceToStage {
         Confirm-TokenState
 
         # Step 2: Construct the API URL
-        $apiEndpointUrl = "deploymentPipelines/$DeploymentPipelineId/stages/$StageId/assignWorkspace"
+        $apiEndpointUrl = ("deploymentPipelines/{0}/stages/{1}/assignWorkspace" -f $DeploymentPipelineId, $StageId)
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
         # Step 3: Construct the request body
@@ -64,16 +64,23 @@ function Add-FabricWorkspaceToStage {
         }
 
         # Step 4: Make the API request and validate response
-        $response = Invoke-FabricRestMethod -Uri $apiEndpointUrl -Method Post -Body $requestBody
-        Test-FabricApiResponse -Response $response
+        $apiParameters = @{
+            Uri = $apiEndpointUrl
+            Method = 'POST'
+            Body = $requestBody
+            HandleResponse = $true
+            TypeName = "deployment pipeline stage"
+            ObjectIdOrName = $StageId
+            SuccessMessage = "Successfully assigned workspace to deployment pipeline stage."
+        }
+        $response = Invoke-FabricRestMethod @apiParameters
 
         # Step 5: Return results
-        Write-Message -Message "Successfully assigned workspace to deployment pipeline stage." -Level Info
-        return $response
+        $response
+
     } catch {
         # Step 6: Error handling
         $errorDetails = $_.Exception.Message
-        Write-Message -Message "Failed to assign workspace to deployment pipeline stage. Error: $errorDetails" -Level Error
-        return $null
+        Write-Error -Message "Failed to assign workspace to deployment pipeline stage. Error: $errorDetails"
     }
 }
