@@ -4,7 +4,7 @@ external help file: FabricTools-Help.xml
 HelpUri: ''
 Locale: en-US
 Module Name: FabricTools
-ms.date: 07/14/2025
+ms.date: 07/18/2025
 PlatyPS schema version: 2024-05-01
 title: Get-FabricDatasetRefreshes
 ---
@@ -114,6 +114,10 @@ Alias: Get-PowerBIDatasetRefreshes, Get-FabDatasetRefreshes
 
 Author: Ioana Bouariu
 
+
+Define aliases for the function for flexibility.
+
 ## RELATED LINKS
 
 {{ Fill in the related links here }}
+

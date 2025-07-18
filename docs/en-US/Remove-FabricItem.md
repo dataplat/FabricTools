@@ -4,7 +4,7 @@ external help file: FabricTools-Help.xml
 HelpUri: ''
 Locale: en-US
 Module Name: FabricTools
-ms.date: 07/14/2025
+ms.date: 07/18/2025
 PlatyPS schema version: 2024-05-01
 title: Remove-FabricItem
 ---
@@ -181,3 +181,4 @@ https://github.com/microsoft/Analysis-Services/tree/master/pbidevmode/fabricps-p
 ## RELATED LINKS
 
 {{ Fill in the related links here }}
+

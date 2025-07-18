@@ -4,7 +4,7 @@ external help file: FabricTools-Help.xml
 HelpUri: ''
 Locale: en-US
 Module Name: FabricTools
-ms.date: 07/14/2025
+ms.date: 07/18/2025
 PlatyPS schema version: 2024-05-01
 title: Get-FabricWorkspaceDatasetRefreshes
 ---
@@ -75,16 +75,23 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
+### Guid. You can pipe a string that contains the workspace ID to Get-FabricWorkspaceDatasetRefreshes.
+
+{{ Fill in the Description }}
+
 ## OUTPUTS
 
-### Guid. You can pipe a string that contains the workspace ID to Get-FabricWorkspaceDatasetRefreshes.
+### Array. Get-FabricWorkspaceDatasetRefreshes returns an array of refresh history objects.
 
 {{ Fill in the Description }}
 
 ## NOTES
 
-Alias: Get-PowerBIWorkspaceDatasetRefreshes, Get-FabWorkspaceDatasetRefreshes
+Alias: Get-FabWorkspaceDatasetRefreshes
+
+Author: Ioana Bouariu
 
 ## RELATED LINKS
 
 {{ Fill in the related links here }}
+

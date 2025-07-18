@@ -111,17 +111,6 @@ task Generate_help_from_built_module {
         # Add the command to the array
         `$commandsArray += `$helpCommand
 
-        # Known issue: https://github.com/PowerShell/platyPS/issues/735
-        `$whatIf = `$helpCommand.Parameters | Where-Object -Property Name -EQ 'WhatIf'
-        if (`$whatIf) {
-            (`$helpCommand.Parameters | Where-Object -Property Name -EQ 'WhatIf').Description = 'Tells PowerShell to run the command in a mode that only reports what would happen, but not actually let the command run or make changes.'
-        }
-
-        `$confirm = `$helpCommand.Parameters | Where-Object -Property Name -EQ 'Confirm'
-        if (`$confirm) {
-            (`$helpCommand.Parameters | Where-Object -Property Name -EQ 'Confirm').Description = 'Prompts you for confirmation before running the cmdlet.'
-        }
-
         `$alias = Get-Alias -Definition `$command.Name -ErrorAction Ignore
 
         if (`$alias) {

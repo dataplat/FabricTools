@@ -4,7 +4,7 @@ external help file: FabricTools-Help.xml
 HelpUri: ''
 Locale: en-US
 Module Name: FabricTools
-ms.date: 07/14/2025
+ms.date: 07/18/2025
 PlatyPS schema version: 2024-05-01
 title: New-FabricKQLQueryset
 ---
@@ -39,6 +39,7 @@ and path definitions for the KQLQueryset content.
 ### EXAMPLE 1
 
 Creates a new KQLQueryset named "New KQLQueryset" in the specified workspace with a path to the definition file.
+
 ```powershell
 New-FabricKQLQueryset -WorkspaceId "workspace-12345" -KQLQuerysetName "New KQLQueryset" -KQLQuerysetPathDefinition "C:\kql\example.ipynb"
 ```

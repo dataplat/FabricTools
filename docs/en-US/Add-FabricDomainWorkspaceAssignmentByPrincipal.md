@@ -4,7 +4,7 @@ external help file: FabricTools-Help.xml
 HelpUri: ''
 Locale: en-US
 Module Name: FabricTools
-ms.date: 07/14/2025
+ms.date: 07/18/2025
 PlatyPS schema version: 2024-05-01
 title: Add-FabricDomainWorkspaceAssignmentByPrincipal
 ---
@@ -40,8 +40,8 @@ This example assigns workspaces to a domain using a list of principal IDs and ty
 
 ```powershell
 $PrincipalIds = @(
-  @{id = "813abb4a-414c-4ac0-9c2c-bd17036fd58c";  type = "User"},
-  @{id = "b5b9495c-685a-447a-b4d3-2d8e963e6288"; type = "User"}
+    @{id = "813abb4a-414c-4ac0-9c2c-bd17036fd58c";  type = "User"},
+    @{id = "b5b9495c-685a-447a-b4d3-2d8e963e6288"; type = "User"}
 )
 
 Add-FabricDomainWorkspaceAssignmentByPrincipal -DomainId "12345" -PrincipalIds $PrincipalIds
@@ -114,3 +114,4 @@ Author: Tiago Balabuch
 ## RELATED LINKS
 
 {{ Fill in the related links here }}
+

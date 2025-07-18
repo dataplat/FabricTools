@@ -4,7 +4,7 @@ external help file: FabricTools-Help.xml
 HelpUri: ''
 Locale: en-US
 Module Name: FabricTools
-ms.date: 07/14/2025
+ms.date: 07/18/2025
 PlatyPS schema version: 2024-05-01
 title: Get-FabricCapacities
 ---
@@ -34,7 +34,7 @@ It uses the Az module to interact with Azure.
 
 ### EXAMPLE 1
 
-This command retrieves all resources of type "Microsoft.Fabric/capacities" from all resource groups in the subscription with the ID "12345678-1234-1234-1234-123456789012". 
+This command retrieves all resources of type "Microsoft.Fabric/capacities" from all resource groups in the subscription with the ID "12345678-1234-1234-1234-123456789012". ```powershell ```
 
 ```powershell
 Get-FabricCapacities -subscriptionID "12345678-1234-1234-1234-123456789012"
@@ -42,7 +42,7 @@ Get-FabricCapacities -subscriptionID "12345678-1234-1234-1234-123456789012"
 
 ### EXAMPLE 2
 
-This command retrieves all resources of type "Microsoft.Fabric/capacities" from all resource groups in all subscriptions.
+This command retrieves all resources of type "Microsoft.Fabric/capacities" from all resource groups in all subscriptions. ```powershell ```
 
 ```powershell
 Get-FabricCapacities
@@ -94,3 +94,4 @@ Define aliases for the function for flexibility.
 ## RELATED LINKS
 
 {{ Fill in the related links here }}
+

@@ -4,7 +4,7 @@ external help file: FabricTools-Help.xml
 HelpUri: ''
 Locale: en-US
 Module Name: FabricTools
-ms.date: 07/16/2025
+ms.date: 07/18/2025
 PlatyPS schema version: 2024-05-01
 title: Import-FabricItem
 ---
@@ -23,6 +23,8 @@ Imports items using the Power BI Project format (PBIP) into a Fabric workspace f
 Import-FabricItem [[-path] <string>] [[-workspaceId] <guid>] [[-filter] <string>]
  [[-fileOverrides] <hashtable>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
+
+## ALIASES
 
 ## DESCRIPTION
 
@@ -188,7 +190,7 @@ This function requires the Invoke-FabricRestMethod function to be available in t
 
 Author: Rui Romano
 
-
 ## RELATED LINKS
 
 {{ Fill in the related links here }}
+

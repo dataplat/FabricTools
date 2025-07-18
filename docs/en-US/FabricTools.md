@@ -5,7 +5,7 @@ HelpInfoUri: https://www.github.com/dataplat/FabricTools
 Locale: en-US
 Module Guid: f2a0f9e6-fab6-41fc-9e1c-0c94ff38f794
 Module Name: FabricTools
-ms.date: 07/14/2025
+ms.date: 07/18/2025
 PlatyPS schema version: 2024-05-01
 title: FabricTools Module
 ---
@@ -16,7 +16,7 @@ title: FabricTools Module
 
 A module to be able to do more with Microsoft Fabric.
     It lets you pause and resume Fabric capacities.
-    Adds functionallity previously only available with the REST API as PowerShell functions.
+    Adds functionality previously only available with the REST API as PowerShell functions.
     There are also functions to make it easier to monitor usage metrics and refreshes.
     It also adds Fabric-friendly aliases for PowerBI functions to make it easier to use the module.
 
@@ -454,7 +454,7 @@ Creates a new Eventhouse in a specified Microsoft Fabric workspace.
 
 ### [New-FabricEventstream](New-FabricEventstream.md)
 
-{{ Fill in the Synopsis }}
+Creates a new Eventstream in a specified Microsoft Fabric workspace.
 
 ### [New-FabricKQLDashboard](New-FabricKQLDashboard.md)
 
@@ -562,7 +562,7 @@ Unassign workspaces from a specified Fabric domain.
 
 ### [Remove-FabricDomainWorkspaceRoleAssignment](Remove-FabricDomainWorkspaceRoleAssignment.md)
 
-Bulk unUnassign roles to principals for workspaces in a Fabric domain.
+Bulk unassign roles to principals for workspaces in a Fabric domain.
 
 ### [Remove-FabricEnvironment](Remove-FabricEnvironment.md)
 
@@ -674,7 +674,7 @@ Restore a Fabric data warehouse to a specified restore pont.
 
 ### [Resume-FabricCapacity](Resume-FabricCapacity.md)
 
-{{ Fill in the Synopsis }}
+Resumes a capacity.
 
 ### [Revoke-FabricCapacityTenantSettingOverrides](Revoke-FabricCapacityTenantSettingOverrides.md)
 
@@ -714,7 +714,7 @@ Stops the mirroring of a specified mirrored database in a given workspace.
 
 ### [Suspend-FabricCapacity](Suspend-FabricCapacity.md)
 
-{{ Fill in the Synopsis }}
+Suspends a capacity.
 
 ### [Unregister-FabricWorkspaceToCapacity](Unregister-FabricWorkspaceToCapacity.md)
 

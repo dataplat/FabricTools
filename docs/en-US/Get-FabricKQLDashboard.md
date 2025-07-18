@@ -4,7 +4,7 @@ external help file: FabricTools-Help.xml
 HelpUri: ''
 Locale: en-US
 Module Name: FabricTools
-ms.date: 07/14/2025
+ms.date: 07/18/2025
 PlatyPS schema version: 2024-05-01
 title: Get-FabricKQLDashboard
 ---
@@ -53,7 +53,7 @@ Get-FabricKQLDashboard -WorkspaceId "12345"
 
 ### -KQLDashboardId
 
-{{ Fill KQLDashboardId Description }}
+(Optional) The ID of the specific KQLDashboard to retrieve.
 
 ```yaml
 Type: System.Guid

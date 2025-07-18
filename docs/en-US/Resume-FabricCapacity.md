@@ -4,7 +4,7 @@ external help file: FabricTools-Help.xml
 HelpUri: ''
 Locale: en-US
 Module Name: FabricTools
-ms.date: 07/14/2025
+ms.date: 07/18/2025
 PlatyPS schema version: 2024-05-01
 title: Resume-FabricCapacity
 ---
@@ -13,7 +13,7 @@ title: Resume-FabricCapacity
 
 ## SYNOPSIS
 
-{{ Fill in the Synopsis }}
+Resumes a capacity.
 
 ## SYNTAX
 
@@ -30,19 +30,26 @@ Resume-FabCapacity
 
 ## DESCRIPTION
 
-{{ Fill in the Description }}
+The Resume-FabricCapacity function resumes a capacity.
+It supports multiple aliases for flexibility.
 
 ## EXAMPLES
 
-### Example 1
+### EXAMPLE 1
 
-{{ Add example description here }}
+This example resumes a capacity given the subscription ID, resource group, and capacity.
+
+```powershell
+Resume-FabricCapacity -subscriptionID "your-subscription-id" -resourcegroupID "your-resource-group" -capacityID "your-capacity"
+```
 
 ## PARAMETERS
 
 ### -capacity
 
-{{ Fill capacity Description }}
+The capacity.
+This is a mandatory parameter.
+This is a parameter found in Azure, not Fabric.
 
 ```yaml
 Type: System.String
@@ -85,7 +92,9 @@ HelpMessage: ''
 
 ### -resourcegroup
 
-{{ Fill resourcegroup Description }}
+The resource group.
+This is a mandatory parameter.
+This is a parameter found in Azure, not Fabric.
 
 ```yaml
 Type: System.String
@@ -106,7 +115,9 @@ HelpMessage: ''
 
 ### -subscriptionID
 
-{{ Fill subscriptionID Description }}
+The the ID of the subscription.
+This is a mandatory parameter.
+This is a parameter found in Azure, not Fabric.
 
 ```yaml
 Type: System.Guid
@@ -158,13 +169,15 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### System.Object
-
-{{ Fill in the Description }}
-
 ## NOTES
 
-{{ Fill in the Notes }}
+The function defines parameters for the subscription ID, resource group, and capacity.
+If the 'azToken' environment variable is null, it connects to the Azure account and sets the 'azToken' environment variable.
+It then defines the headers for the request, defines the URI for the request, and makes a GET request to the URI.
+
+Author: Ioana Bouariu
+
+Define aliases for the function for flexibility.
 
 ## RELATED LINKS
 
