@@ -9,6 +9,9 @@ The `Get-FabricKQLDashboard` function sends a GET request to the Fabric API to r
 .PARAMETER WorkspaceId
 (Mandatory) The ID of the workspace to query KQLDashboards.
 
+.PARAMETER KQLDashboardId
+(Optional) The ID of the specific KQLDashboard to retrieve.
+
 .PARAMETER KQLDashboardName
 (Optional) The name of the specific KQLDashboard to retrieve.
 

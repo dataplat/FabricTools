@@ -25,7 +25,7 @@
     'Az.Resources'                 = '6.15.1'
     'MicrosoftPowerBIMgmt'         = '1.2.1111'
     'Microsoft.PowerShell.PlatyPS' = @{
-        Version    = '1.0.0-preview5'
+        Version    = '1.0.0-rc1'
         Parameters = @{
             AllowPrerelease = $true
         } # TODO: Simply remove after GA
