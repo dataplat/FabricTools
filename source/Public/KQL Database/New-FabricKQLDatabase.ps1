@@ -43,7 +43,11 @@ An optional path to the KQLDatabase definition file (e.g., .ipynb file) to uploa
 An optional path to the platform-specific definition (e.g., .platform file) to upload.
 
 .EXAMPLE
-Add-FabricKQLDatabase -WorkspaceId "workspace-12345" -KQLDatabaseName "New KQLDatabase" -KQLDatabasePathDefinition "C:\KQLDatabases\example.ipynb"
+    Creates a new KQLDatabase named "New KQLDatabase" in the workspace with ID "workspace-12345".
+
+    ```powershell
+    New-FabricKQLDatabase -WorkspaceId "workspace-12345" -KQLDatabaseName "New KQLDatabase"
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.

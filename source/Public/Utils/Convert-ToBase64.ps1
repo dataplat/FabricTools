@@ -12,16 +12,20 @@ function Convert-ToBase64 {
     The full path to the file whose contents you want to encode into Base64.
 
 .EXAMPLE
-     Convert-ToBase64  -filePath "C:\Path\To\File.txt"
+    Output: VGhpcyBpcyBhbiBlbmNvZGVkIGZpbGUu
 
-    Output:
-    VGhpcyBpcyBhbiBlbmNvZGVkIGZpbGUu
+    ```powershell
+    Convert-ToBase64  -filePath "C:\Path\To\File.txt"
+    ```
 
 .EXAMPLE
-     $encodedContent = Convert-ToBase64  -filePath "C:\Path\To\Image.jpg"
-     $encodedContent | Set-Content -Path "C:\Path\To\EncodedImage.txt"
-
     This saves the Base64-encoded content of the image to a text file.
+
+    ```powershell
+    $encodedContent = Convert-ToBase64  -filePath "C:\Path\To\Image.jpg
+
+    $encodedContent | Set-Content -Path "C:\Path\To\EncodedImage.txt" This saves the Base64-encoded content of the image to a text file.
+    ```
 
 .NOTES
     - Ensure the file exists at the specified path before running this function.

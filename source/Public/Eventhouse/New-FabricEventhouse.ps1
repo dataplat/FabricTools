@@ -1,5 +1,6 @@
 function New-FabricEventhouse
 {
+
     <#
     .SYNOPSIS
         Creates a new Eventhouse in a specified Microsoft Fabric workspace.
@@ -24,8 +25,11 @@ function New-FabricEventhouse
         An optional path to the platform-specific definition file to upload.
 
     .EXAMPLE
-        New-FabricEventhouse -WorkspaceId "workspace-12345" -EventhouseName "New Eventhouse" -EventhouseDescription "Description of the new Eventhouse"
-        This example creates a new Eventhouse named "New Eventhouse" in the workspace with ID "workspace-12345" with the provided description.
+    This example creates a new Eventhouse named "New Eventhouse" in the workspace with ID "workspace-12345" with the provided description.
+
+    ```powershell
+    New-FabricEventhouse -WorkspaceId "workspace-12345" -EventhouseName "New Eventhouse" -EventhouseDescription "Description of the new Eventhouse"
+    ```
 
     .NOTES
         - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
@@ -34,7 +38,6 @@ function New-FabricEventhouse
         Author: Tiago Balabuch
 
     #>
-
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]

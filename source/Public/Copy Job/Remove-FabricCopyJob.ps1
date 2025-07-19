@@ -1,3 +1,4 @@
+function Remove-FabricCopyJob {
 <#
 .SYNOPSIS
     Deletes a Copy Job from a specified Microsoft Fabric workspace.
@@ -13,8 +14,11 @@
     The unique identifier of the Copy Job to delete.
 
 .EXAMPLE
-    Remove-FabricCopyJob -WorkspaceId "workspace-12345" -CopyJobId "copyjob-67890"
     Deletes the Copy Job with ID "copyjob-67890" from the workspace with ID "workspace-12345".
+
+    ```powershell
+    Remove-FabricCopyJob -WorkspaceId "workspace-12345" -CopyJobId "copyjob-67890"
+    ```
 
 .NOTES
     - Requires the `$FabricConfig` global configuration, which must include `BaseUrl` and `FabricHeaders`.
@@ -22,7 +26,6 @@
 
     Author: Tiago Balabuch
 #>
-function Remove-FabricCopyJob {
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param (
         [Parameter(Mandatory = $true)]

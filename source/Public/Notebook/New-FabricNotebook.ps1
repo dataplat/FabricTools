@@ -1,3 +1,5 @@
+function New-FabricNotebook
+{
 <#
 .SYNOPSIS
 Creates a new notebook in a specified Microsoft Fabric workspace.
@@ -23,7 +25,11 @@ An optional path to the notebook definition file (e.g., .ipynb file) to upload.
 An optional path to the platform-specific definition (e.g., .platform file) to upload.
 
 .EXAMPLE
- Add-FabricNotebook -WorkspaceId "workspace-12345" -NotebookName "New Notebook" -NotebookPathDefinition "C:\notebooks\example.ipynb"
+    Creates a new notebook in the specified workspace with a given name and path definition.
+
+    ```powershell
+    New-FabricNotebook -WorkspaceId "workspace-12345" -NotebookName "New Notebook" -NotebookPathDefinition "C:\notebooks\example.ipynb"
+    ```
 
  .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
@@ -32,9 +38,6 @@ An optional path to the platform-specific definition (e.g., .platform file) to u
 Author: Tiago Balabuch
 
 #>
-
-function New-FabricNotebook
-{
     [CmdletBinding(supportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]

@@ -1,3 +1,5 @@
+function Update-FabricEnvironmentStagingSparkCompute
+{
 <#
 .SYNOPSIS
 Updates the Spark compute configuration in the staging environment for a given workspace.
@@ -46,7 +48,9 @@ The Spark runtime version to use.
 A hashtable of additional Spark properties to configure.
 
 .EXAMPLE
-Update-FabricEnvironmentStagingSparkCompute -WorkspaceId "workspace-12345" -EnvironmentId "env-67890" -InstancePoolName "pool1" -InstancePoolType "Workspace" -DriverCores 4 -DriverMemory "16GB" -ExecutorCores 8 -ExecutorMemory "32GB" -DynamicExecutorAllocationEnabled $true -DynamicExecutorAllocationMinExecutors 2 -DynamicExecutorAllocationMaxExecutors 10 -RuntimeVersion "3.1" -SparkProperties @{ "spark.executor.memoryOverhead"="4GB" }
+    ```powershell
+    Update-FabricEnvironmentStagingSparkCompute -WorkspaceId "workspace-12345" -EnvironmentId "env-67890" -InstancePoolName "pool1" -InstancePoolType "Workspace" -DriverCores 4 -DriverMemory "16GB" -ExecutorCores 8 -ExecutorMemory "32GB" -DynamicExecutorAllocationEnabled $true -DynamicExecutorAllocationMinExecutors 2 -DynamicExecutorAllocationMaxExecutors 10 -RuntimeVersion "3.1" -SparkProperties @{ "spark.executor.memoryOverhead"="4GB" }
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
@@ -55,8 +59,6 @@ Update-FabricEnvironmentStagingSparkCompute -WorkspaceId "workspace-12345" -Envi
 Author: Tiago Balabuch
 
 #>
-function Update-FabricEnvironmentStagingSparkCompute
-{
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]

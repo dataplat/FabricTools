@@ -1,3 +1,5 @@
+function New-FabricMLModel
+{
 <#
 .SYNOPSIS
     Creates a new ML Model in a specified Microsoft Fabric workspace.
@@ -16,8 +18,11 @@
     An optional description for the ML Model.
 
 .EXAMPLE
-    New-FabricMLModel -WorkspaceId "workspace-12345" -MLModelName "New ML Model" -MLModelDescription "Description of the new ML Model"
     This example creates a new ML Model named "New ML Model" in the workspace with ID "workspace-12345" with the provided description.
+
+    ```powershell
+    New-FabricMLModel -WorkspaceId "workspace-12345" -MLModelName "New ML Model" -MLModelDescription "Description of the new ML Model"
+    ```
 
 .NOTES
     - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
@@ -26,8 +31,6 @@
     Author: Tiago Balabuch
 
 #>
-function New-FabricMLModel
-{
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]

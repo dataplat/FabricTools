@@ -31,7 +31,7 @@ Copyright         = 'Copyright (c) 2025 by FabricTools Team'
 # Description of the functionality provided by this module
 Description       = 'A module to be able to do more with Microsoft Fabric.
     It lets you pause and resume Fabric capacities.
-    Adds functionallity previously only available with the REST API as PowerShell functions.
+    Adds functionality previously only available with the REST API as PowerShell functions.
     There are also functions to make it easier to monitor usage metrics and refreshes.
     It also adds Fabric-friendly aliases for PowerBI functions to make it easier to use the module.'
 

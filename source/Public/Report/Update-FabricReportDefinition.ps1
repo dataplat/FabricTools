@@ -1,3 +1,5 @@
+function Update-FabricReportDefinition
+{
 <#
 .SYNOPSIS
     Updates the definition of an existing Report in a specified Microsoft Fabric workspace.
@@ -16,8 +18,11 @@
     A mandatory path to the Report definition file to upload.
 
 .EXAMPLE
-    Update-FabricReportDefinition -WorkspaceId "workspace-12345" -ReportId "Report-67890" -ReportPathDefinition "C:\Path\To\ReportDefinition.json"
     This example updates the definition of the Report with ID "Report-67890" in the workspace with ID "workspace-12345" using the provided definition file.
+
+    ```powershell
+    Update-FabricReportDefinition -WorkspaceId "workspace-12345" -ReportId "Report-67890" -ReportPathDefinition "C:\Path\To\ReportDefinition.json"
+    ```
 
 .NOTES
     - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
@@ -26,8 +31,6 @@
     Author: Tiago Balabuch
 
 #>
-function Update-FabricReportDefinition
-{
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]

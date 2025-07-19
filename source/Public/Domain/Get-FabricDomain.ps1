@@ -1,3 +1,4 @@
+function Get-FabricDomain {
 <#
 .SYNOPSIS
 Retrieves domain information from Microsoft Fabric, optionally filtering by domain ID, domain name, or only non-empty domains.
@@ -15,14 +16,18 @@ The `Get-FabricDomain` function allows retrieval of domains in Microsoft Fabric,
 (Optional) If set to `$true`, only domains containing workspaces will be returned.
 
 .EXAMPLE
-Get-FabricDomain -DomainId "12345"
+    Fetches the domain with ID "12345".
 
-Fetches the domain with ID "12345".
+    ```powershell
+    Get-FabricDomain -DomainId "12345"
+    ```
 
 .EXAMPLE
-Get-FabricDomain -DomainName "Finance"
+    Fetches the domain with the display name "Finance".
 
-Fetches the domain with the display name "Finance".
+    ```powershell
+    Get-FabricDomain -DomainName "Finance"
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
@@ -31,7 +36,6 @@ Fetches the domain with the display name "Finance".
 Author: Tiago Balabuch
 
 #>
-function Get-FabricDomain {
     [CmdletBinding()]
     [OutputType([System.Object[]])]
     param (

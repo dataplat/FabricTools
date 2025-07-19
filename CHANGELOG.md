@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `Start-FabricDeploymentPipelineStage`
 - Added private function `Get-FabricContinuationToken` to facilitate pagination
 - `Invoke-FabricRestMethod` handles throttling (error 429) by pausing and repeating the request (#88)
+- New build automation task added `Generate_help_from_built_module`
 
 ### Changed
 
@@ -40,6 +41,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - All Deployment Pipeline functions raise an error when an exception is caught. Used splatting for params.
 - Refactored SQL Database functions to use enhanced capability in `Invoke-FabricRestMethod`. Used splatting for params.
 - `Write-Message` uses PSFramework function for logging, which logs function name (#84)
+- Changed the `documentation` folder to `docs/<locale>`
+- Code-fenced blocks included in function examples
 
 ### Fixed
 

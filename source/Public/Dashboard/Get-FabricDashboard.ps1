@@ -1,3 +1,4 @@
+function Get-FabricDashboard {
 <#
 .SYNOPSIS
     Retrieves dashboards from a specified workspace.
@@ -10,8 +11,11 @@
     The ID of the workspace from which to retrieve dashboards. This parameter is mandatory.
 
 .EXAMPLE
-    Get-FabricDashboard -WorkspaceId "12345"
     This example retrieves all dashboards from the workspace with ID "12345".
+
+    ```powershell
+    Get-FabricDashboard -WorkspaceId "12345"
+    ```
 
 .NOTES
     - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
@@ -19,8 +23,6 @@
 
     Author: Tiago Balabuch
 #>
-
-function Get-FabricDashboard {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]

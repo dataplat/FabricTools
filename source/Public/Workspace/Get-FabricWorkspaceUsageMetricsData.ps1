@@ -13,9 +13,11 @@ The ID of the workspace. This is a mandatory parameter.
 The username. This is a mandatory parameter.
 
 .EXAMPLE
-Get-FabricWorkspaceUsageMetricsData -workspaceId "your-workspace-id" -username "your-username"
+    This example retrieves the workspace usage metrics for a specific workspace given the workspace ID and username.
 
-This example retrieves the workspace usage metrics for a specific workspace given the workspace ID and username.
+    ```powershell
+    Get-FabricWorkspaceUsageMetricsData -workspaceId "your-workspace-id" -username "your-username"
+    ```
 
 .NOTES
 The function retrieves the PowerBI access token and creates a new usage metrics report. It then defines the names of the reports to retrieve, initializes an empty hashtable to store the reports, and for each report name, retrieves the report and adds it to the hashtable. It then returns the hashtable of reports.

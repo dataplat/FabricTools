@@ -1,3 +1,4 @@
+function Start-FabricDeploymentPipelineStage {
 <#
 .SYNOPSIS
 Deploys items from one stage to another in a deployment pipeline.
@@ -28,30 +29,34 @@ Optional. A note describing the deployment. Limited to 1024 characters.
 Optional. If specified, the function will not wait for the deployment to complete and will return immediately.
 
 .EXAMPLE
-$params = @{
-    DeploymentPipelineId = "GUID-GUID-GUID-GUID"
-    SourceStageId = "GUID-GUID-GUID-GUID"
-    TargetStageId = "GUID-GUID-GUID-GUID"
-    Note = "Deploying business ready items"
-}
-Start-FabricDeploymentPipelineStage @params
+    Deploys all supported items from the source stage to the target stage.
 
-Deploys all supported items from the source stage to the target stage.
+    ```powershell
+    $params = @{
+        DeploymentPipelineId = "GUID-GUID-GUID-GUID"
+        SourceStageId = "GUID-GUID-GUID-GUID"
+        TargetStageId = "GUID-GUID-GUID-GUID"
+        Note = "Deploying business ready items"
+    }
+    Start-FabricDeploymentPipelineStage @params
+    ```
 
 .EXAMPLE
-$items = @(
-    @{
-        sourceItemId = "6bfe235c-6d7b-41b7-98a6-2b8276b3e82b"
-        itemType = "Datamart"
-    },
-    @{
-        sourceItemId = "1a201f2a-d1d8-45c0-8c61-1676338517de"
-        itemType = "SemanticModel"
-    }
-)
-Start-FabricDeploymentPipelineStage -DeploymentPipelineId "GUID-GUID-GUID-GUID" -SourceStageId "GUID-GUID-GUID-GUID" -TargetStageId "GUID-GUID-GUID-GUID" -Items $items -Note "Deploying specific items"
+    Deploys specific items from the source stage to the target stage.
 
-Deploys specific items from the source stage to the target stage.
+    ```powershell
+    $items = @(
+        @{
+            sourceItemId = "6bfe235c-6d7b-41b7-98a6-2b8276b3e82b"
+            itemType = "Datamart"
+        },
+        @{
+            sourceItemId = "1a201f2a-d1d8-45c0-8c61-1676338517de"
+            itemType = "SemanticModel"
+        }
+    )
+    Start-FabricDeploymentPipelineStage -DeploymentPipelineId "GUID-GUID-GUID-GUID" -SourceStageId "GUID-GUID-GUID-GUID" -TargetStageId "GUID-GUID-GUID-GUID" -Items $items -Note "Deploying specific items"
+    ```
 
 .NOTES
 - Calls `Confirm-TokenState` to ensure token validity before making the API request.
@@ -63,8 +68,6 @@ Deploys specific items from the source stage to the target stage.
 
 Author: Kamil Nowinski
 #>
-
-function Start-FabricDeploymentPipelineStage {
     [CmdletBinding(SupportsShouldProcess)]
     param(
         [Parameter(Mandatory = $true)]

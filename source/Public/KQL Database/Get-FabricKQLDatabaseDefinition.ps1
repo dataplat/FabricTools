@@ -1,4 +1,4 @@
-
+function Get-FabricKQLDatabaseDefinition {
 <#
 .SYNOPSIS
 Retrieves the definition of a KQLDatabase from a specific workspace in Microsoft Fabric.
@@ -18,14 +18,18 @@ Handles both synchronous and asynchronous operations, with detailed logging and 
 Specifies the format of the KQLDatabase definition. Currently, only 'ipynb' is supported.
 
 .EXAMPLE
-Get-FabricKQLDatabaseDefinition -WorkspaceId "12345" -KQLDatabaseId "67890"
+    Retrieves the definition of the KQLDatabase with ID `67890` from the workspace with ID `12345` in the `ipynb` format.
 
-Retrieves the definition of the KQLDatabase with ID `67890` from the workspace with ID `12345` in the `ipynb` format.
+    ```powershell
+    Get-FabricKQLDatabaseDefinition -WorkspaceId "12345" -KQLDatabaseId "67890"
+    ```
 
 .EXAMPLE
-Get-FabricKQLDatabaseDefinition -WorkspaceId "12345"
+    Retrieves the definitions of all KQLDatabases in the workspace with ID `12345` in the `ipynb` format.
 
-Retrieves the definitions of all KQLDatabases in the workspace with ID `12345` in the `ipynb` format.
+    ```powershell
+    Get-FabricKQLDatabaseDefinition -WorkspaceId "12345"
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
@@ -35,7 +39,6 @@ Retrieves the definitions of all KQLDatabases in the workspace with ID `12345` i
 Author: Tiago Balabuch
 
 #>
-function Get-FabricKQLDatabaseDefinition {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]

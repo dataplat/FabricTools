@@ -1,3 +1,4 @@
+function Get-FabricEventhouseDefinition {
 <#
 .SYNOPSIS
     Retrieves the definition of an Eventhouse from a specified Microsoft Fabric workspace.
@@ -16,12 +17,18 @@
     The format in which to retrieve the Eventhouse definition. This parameter is optional.
 
 .EXAMPLE
-     Get-FabricEventhouseDefinition -WorkspaceId "workspace-12345" -EventhouseId "eventhouse-67890"
     This example retrieves the definition of the Eventhouse with ID "eventhouse-67890" in the workspace with ID "workspace-12345".
 
+    ```powershell
+    Get-FabricEventhouseDefinition -WorkspaceId "workspace-12345" -EventhouseId "eventhouse-67890"
+    ```
+
 .EXAMPLE
-     Get-FabricEventhouseDefinition -WorkspaceId "workspace-12345" -EventhouseId "eventhouse-67890" -EventhouseFormat "json"
     This example retrieves the definition of the Eventhouse with ID "eventhouse-67890" in the workspace with ID "workspace-12345" in JSON format.
+
+    ```powershell
+    Get-FabricEventhouseDefinition -WorkspaceId "workspace-12345" -EventhouseId "eventhouse-67890" -EventhouseFormat "json"
+    ```
 
 .NOTES
     - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
@@ -30,7 +37,6 @@
     Author: Tiago Balabuch
 
 #>
-function Get-FabricEventhouseDefinition {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]

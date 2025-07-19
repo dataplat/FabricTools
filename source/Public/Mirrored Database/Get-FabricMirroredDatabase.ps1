@@ -16,14 +16,18 @@ The `Get-FabricMirroredDatabase` function sends a GET request to the Fabric API 
 (Optional) The name of the specific MirroredDatabase to retrieve.
 
 .EXAMPLE
-Get-FabricMirroredDatabase -WorkspaceId "12345" -MirroredDatabaseName "Development"
+    Retrieves the "Development" MirroredDatabase from workspace "12345".
 
-Retrieves the "Development" MirroredDatabase from workspace "12345".
+    ```powershell
+    Get-FabricMirroredDatabase -WorkspaceId "12345" -MirroredDatabaseName "Development"
+    ```
 
 .EXAMPLE
-Get-FabricMirroredDatabase -WorkspaceId "12345"
+    Retrieves all MirroredDatabases in workspace "12345".
 
-Retrieves all MirroredDatabases in workspace "12345".
+    ```powershell
+    Get-FabricMirroredDatabase -WorkspaceId "12345"
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.

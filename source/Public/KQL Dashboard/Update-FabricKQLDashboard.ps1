@@ -20,14 +20,18 @@ The new name for the KQLDashboard.
 The unique identifier of the workspace where the KQLDashboard exists.
 
 .EXAMPLE
-Update-FabricKQLDashboard -KQLDashboardId "KQLDashboard123" -KQLDashboardName "NewKQLDashboardName"
+    Updates the name of the KQLDashboard with the ID "KQLDashboard123" to "NewKQLDashboardName".
 
-Updates the name of the KQLDashboard with the ID "KQLDashboard123" to "NewKQLDashboardName".
+    ```powershell
+    Update-FabricKQLDashboard -KQLDashboardId "KQLDashboard123" -KQLDashboardName "NewKQLDashboardName"
+    ```
 
 .EXAMPLE
-Update-FabricKQLDashboard -KQLDashboardId "KQLDashboard123" -KQLDashboardName "NewName" -KQLDashboardDescription "Updated description"
+    Updates both the name and description of the KQLDashboard "KQLDashboard123".
 
-Updates both the name and description of the KQLDashboard "KQLDashboard123".
+    ```powershell
+    Update-FabricKQLDashboard -KQLDashboardId "KQLDashboard123" -KQLDashboardName "NewName" -KQLDashboardDescription "Updated description"
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.

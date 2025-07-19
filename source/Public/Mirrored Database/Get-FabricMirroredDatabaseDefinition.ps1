@@ -1,4 +1,4 @@
-
+function Get-FabricMirroredDatabaseDefinition {
 <#
 .SYNOPSIS
 Retrieves the definition of a MirroredDatabase from a specific workspace in Microsoft Fabric.
@@ -14,14 +14,18 @@ Handles both synchronous and asynchronous operations, with detailed logging and 
 (Optional)The unique identifier of the MirroredDatabase whose definition needs to be retrieved.
 
 .EXAMPLE
-Get-FabricMirroredDatabaseDefinition -WorkspaceId "12345" -MirroredDatabaseId "67890"
+    Retrieves the definition of the MirroredDatabase with ID `67890` from the workspace with ID `12345`.
 
-Retrieves the definition of the MirroredDatabase with ID `67890` from the workspace with ID `12345`.
+    ```powershell
+    Get-FabricMirroredDatabaseDefinition -WorkspaceId "12345" -MirroredDatabaseId "67890"
+    ```
 
 .EXAMPLE
-Get-FabricMirroredDatabaseDefinition -WorkspaceId "12345"
+    Retrieves the definitions of all MirroredDatabases in the workspace with ID `12345`.
 
-Retrieves the definitions of all MirroredDatabases in the workspace with ID `12345`.
+    ```powershell
+    Get-FabricMirroredDatabaseDefinition -WorkspaceId "12345"
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
@@ -31,7 +35,6 @@ Retrieves the definitions of all MirroredDatabases in the workspace with ID `123
 Author: Tiago Balabuch
 
 #>
-function Get-FabricMirroredDatabaseDefinition {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]

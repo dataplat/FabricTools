@@ -1,33 +1,35 @@
-<#
-.SYNOPSIS
-    Updates the definition of an existing SemanticModel in a specified Microsoft Fabric workspace.
-
-.DESCRIPTION
-    This function sends a PATCH request to the Microsoft Fabric API to update the definition of an existing SemanticModel
-    in the specified workspace. It supports optional parameters for SemanticModel definition and platform-specific definition.
-
-.PARAMETER WorkspaceId
-    The unique identifier of the workspace where the SemanticModel exists. This parameter is mandatory.
-
-.PARAMETER SemanticModelId
-    The unique identifier of the SemanticModel to be updated. This parameter is mandatory.
-
-.PARAMETER SemanticModelPathDefinition
-    An optional path to the SemanticModel definition file to upload.
-
-.EXAMPLE
-    Update-FabricSemanticModelDefinition -WorkspaceId "workspace-12345" -SemanticModelId "SemanticModel-67890" -SemanticModelPathDefinition "C:\Path\To\SemanticModelDefinition.json"
-    This example updates the definition of the SemanticModel with ID "SemanticModel-67890" in the workspace with ID "workspace-12345" using the provided definition file.
-
-.NOTES
-    - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-    - Calls `Confirm-TokenState` to ensure token validity before making the API request.
-
-    Author: Tiago Balabuch
-
-#>
 function Update-FabricSemanticModelDefinition
 {
+    <#
+    .SYNOPSIS
+        Updates the definition of an existing SemanticModel in a specified Microsoft Fabric workspace.
+
+    .DESCRIPTION
+        This function sends a PATCH request to the Microsoft Fabric API to update the definition of an existing SemanticModel
+        in the specified workspace. It supports optional parameters for SemanticModel definition and platform-specific definition.
+
+    .PARAMETER WorkspaceId
+        The unique identifier of the workspace where the SemanticModel exists. This parameter is mandatory.
+
+    .PARAMETER SemanticModelId
+        The unique identifier of the SemanticModel to be updated. This parameter is mandatory.
+
+    .PARAMETER SemanticModelPathDefinition
+        An optional path to the SemanticModel definition file to upload.
+
+    .EXAMPLE
+        This example updates the definition of the SemanticModel with ID "SemanticModel-67890" in the workspace with ID "workspace-12345" using the provided definition file.
+
+        ```powershell
+        Update-FabricSemanticModelDefinition -WorkspaceId "workspace-12345" -SemanticModelId "SemanticModel-67890" -SemanticModelPathDefinition "C:\Path\To\SemanticModelDefinition.json"
+        ```
+
+    .NOTES
+        - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
+        - Calls `Confirm-TokenState` to ensure token validity before making the API request.
+
+        Author: Tiago Balabuch
+    #>
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]

@@ -1,3 +1,4 @@
+function Update-FabricKQLQuerysetDefinition {
 <#
 .SYNOPSIS
 Updates the definition of a KQLQueryset in a Microsoft Fabric workspace.
@@ -19,14 +20,18 @@ The KQLQueryset content can be provided as file paths, and metadata updates can 
 (Optional) The file path to the KQLQueryset's platform-specific definition file. The content will be encoded as Base64 and sent in the request.
 
 .EXAMPLE
-Update-FabricKQLQuerysetDefinition -WorkspaceId "12345" -KQLQuerysetId "67890" -KQLQuerysetPathDefinition "C:\KQLQuerysets\KQLQueryset.ipynb"
+    Updates the content of the KQLQueryset with ID `67890` in the workspace `12345` using the specified KQLQueryset file.
 
-Updates the content of the KQLQueryset with ID `67890` in the workspace `12345` using the specified KQLQueryset file.
+    ```powershell
+    Update-FabricKQLQuerysetDefinition -WorkspaceId "12345" -KQLQuerysetId "67890" -KQLQuerysetPathDefinition "C:\KQLQuerysets\KQLQueryset.ipynb"
+    ```
 
 .EXAMPLE
-Update-FabricKQLQuerysetDefinition -WorkspaceId "12345" -KQLQuerysetId "67890" -KQLQuerysetPathDefinition "C:\KQLQuerysets\KQLQueryset.ipynb"
+    Updates both the content and metadata of the KQLQueryset with ID `67890` in the workspace `12345`.
 
-Updates both the content and metadata of the KQLQueryset with ID `67890` in the workspace `12345`.
+    ```powershell
+    Update-FabricKQLQuerysetDefinition -WorkspaceId "12345" -KQLQuerysetId "67890" -KQLQuerysetPathDefinition "C:\KQLQuerysets\KQLQueryset.ipynb"
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
@@ -37,8 +42,6 @@ Updates both the content and metadata of the KQLQueryset with ID `67890` in the 
 Author: Tiago Balabuch
 
 #>
-
-function Update-FabricKQLQuerysetDefinition {
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]

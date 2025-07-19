@@ -1,32 +1,34 @@
-<#
-.SYNOPSIS
-Retrieves tenant settings from the Fabric environment.
-
-.DESCRIPTION
-The `Get-FabricTenantSetting` function retrieves tenant settings for a Fabric environment by making a GET request to the appropriate API endpoint. Optionally, it filters the results by the `SettingTitle` parameter.
-
-.PARAMETER SettingTitle
-(Optional) The title of a specific tenant setting to filter the results.
-
-.EXAMPLE
-Get-FabricTenantSetting
-
-Returns all tenant settings.
-
-.EXAMPLE
-Get-FabricTenantSetting -SettingTitle "SomeSetting"
-
-Returns the tenant setting with the title "SomeSetting".
-
-.NOTES
-- Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-- Calls `Is-TokenExpired` to ensure token validity before making the API request.
-
-Author: Tiago Balabuch
-
-#>
-
 function Get-FabricTenantSetting {
+    <#
+    .SYNOPSIS
+    Retrieves tenant settings from the Fabric environment.
+
+    .DESCRIPTION
+    The `Get-FabricTenantSetting` function retrieves tenant settings for a Fabric environment by making a GET request to the appropriate API endpoint. Optionally, it filters the results by the `SettingTitle` parameter.
+
+    .PARAMETER SettingTitle
+    (Optional) The title of a specific tenant setting to filter the results.
+
+    .EXAMPLE
+        Returns all tenant settings.
+
+        ```powershell
+        Get-FabricTenantSetting
+        ```
+
+    .EXAMPLE
+        Returns the tenant setting with the title "SomeSetting".
+
+        ```powershell
+        Get-FabricTenantSetting -SettingTitle "SomeSetting"
+        ```
+
+    .NOTES
+    - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
+    - Calls `Is-TokenExpired` to ensure token validity before making the API request.
+
+    Author: Tiago Balabuch
+    #>
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $false)]

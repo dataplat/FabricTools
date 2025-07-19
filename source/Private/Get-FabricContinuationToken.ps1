@@ -1,4 +1,5 @@
-<#
+function Get-FabricContinuationToken {
+    <#
 .SYNOPSIS
 Internal function to handle continuation token logic for Fabric API calls.
 
@@ -19,8 +20,6 @@ This is an internal function used by other functions in the module.
 
 Author: Kamil Nowinski
 #>
-
-function Get-FabricContinuationToken {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $false)]

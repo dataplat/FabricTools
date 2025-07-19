@@ -16,14 +16,18 @@ The `Get-FabricMirroredWarehouse` function sends a GET request to the Fabric API
 (Optional) The name of the specific MirroredWarehouse to retrieve.
 
 .EXAMPLE
-Get-FabricMirroredWarehouse -WorkspaceId "12345" -MirroredWarehouseName "Development"
+    Retrieves the "Development" MirroredWarehouse from workspace "12345".
 
-Retrieves the "Development" MirroredWarehouse from workspace "12345".
+    ```powershell
+    Get-FabricMirroredWarehouse -WorkspaceId "12345" -MirroredWarehouseName "Development"
+    ```
 
 .EXAMPLE
-Get-FabricMirroredWarehouse -WorkspaceId "12345"
+    Retrieves all MirroredWarehouses in workspace "12345".
 
-Retrieves all MirroredWarehouses in workspace "12345".
+    ```powershell
+    Get-FabricMirroredWarehouse -WorkspaceId "12345"
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.

@@ -1,3 +1,5 @@
+function Update-FabricEventhouseDefinition
+{
 <#
 .SYNOPSIS
     Updates the definition of an existing Eventhouse in a specified Microsoft Fabric workspace.
@@ -19,8 +21,11 @@
     An optional path to the platform-specific definition file to upload.
 
 .EXAMPLE
-     Update-FabricEventhouseDefinition -WorkspaceId "workspace-12345" -EventhouseId "eventhouse-67890" -EventhousePathDefinition "C:\Path\To\EventhouseDefinition.json"
     This example updates the definition of the Eventhouse with ID "eventhouse-67890" in the workspace with ID "workspace-12345" using the provided definition file.
+
+    ```powershell
+    Update-FabricEventhouseDefinition -WorkspaceId "workspace-12345" -EventhouseId "eventhouse-67890" -EventhousePathDefinition "C:\Path\To\EventhouseDefinition.json"
+    ```
 
 .NOTES
     - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
@@ -29,8 +34,6 @@
     Author: Tiago Balabuch
 
 #>
-function Update-FabricEventhouseDefinition
-{
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]

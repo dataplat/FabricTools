@@ -1,3 +1,5 @@
+function Remove-FabricReflex
+{
 <#
 .SYNOPSIS
     Removes an Reflex from a specified Microsoft Fabric workspace.
@@ -13,8 +15,11 @@
     The unique identifier of the Reflex to be removed.
 
 .EXAMPLE
-    Remove-FabricReflex -WorkspaceId "workspace-12345" -ReflexId "Reflex-67890"
     This example removes the Reflex with ID "Reflex-67890" from the workspace with ID "workspace-12345".
+
+    ```powershell
+    Remove-FabricReflex -WorkspaceId "workspace-12345" -ReflexId "Reflex-67890"
+    ```
 
 .NOTES
     - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
@@ -23,8 +28,6 @@
     Author: Tiago Balabuch
 
 #>
-function Remove-FabricReflex
-{
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param (
         [Parameter(Mandatory = $true)]

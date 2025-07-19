@@ -1,3 +1,5 @@
+function Update-FabricReflexDefinition
+{
 <#
 .SYNOPSIS
     Updates the definition of an existing Reflex in a specified Microsoft Fabric workspace.
@@ -19,8 +21,11 @@
     An optional path to the platform-specific definition file to upload.
 
 .EXAMPLE
-    Update-FabricReflexDefinition -WorkspaceId "workspace-12345" -ReflexId "Reflex-67890" -ReflexPathDefinition "C:\Path\To\ReflexDefinition.json"
     This example updates the definition of the Reflex with ID "Reflex-67890" in the workspace with ID "workspace-12345" using the provided definition file.
+
+    ```powershell
+    Update-FabricReflexDefinition -WorkspaceId "workspace-12345" -ReflexId "Reflex-67890" -ReflexPathDefinition "C:\Path\To\ReflexDefinition.json"
+    ```
 
 .NOTES
     - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
@@ -29,8 +34,6 @@
     Author: Tiago Balabuch
 
 #>
-function Update-FabricReflexDefinition
-{
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]

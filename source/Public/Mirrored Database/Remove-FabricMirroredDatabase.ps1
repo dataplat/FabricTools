@@ -1,3 +1,5 @@
+function Remove-FabricMirroredDatabase
+{
 <#
 .SYNOPSIS
 Deletes an MirroredDatabase from a specified workspace in Microsoft Fabric.
@@ -12,9 +14,11 @@ The `Remove-FabricMirroredDatabase` function sends a DELETE request to the Fabri
 (Mandatory) The ID of the MirroredDatabase to be deleted.
 
 .EXAMPLE
-Remove-FabricMirroredDatabase -WorkspaceId "12345" -MirroredDatabaseId "67890"
+    Deletes the MirroredDatabase with ID "67890" from workspace "12345".
 
-Deletes the MirroredDatabase with ID "67890" from workspace "12345".
+    ```powershell
+    Remove-FabricMirroredDatabase -WorkspaceId "12345" -MirroredDatabaseId "67890"
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
@@ -22,9 +26,6 @@ Deletes the MirroredDatabase with ID "67890" from workspace "12345".
 
 Author: Tiago Balabuch
 #>
-
-function Remove-FabricMirroredDatabase
-{
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param (
         [Parameter(Mandatory = $true)]

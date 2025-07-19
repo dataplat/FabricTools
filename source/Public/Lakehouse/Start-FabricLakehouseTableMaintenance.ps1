@@ -1,5 +1,6 @@
 function Start-FabricLakehouseTableMaintenance
 {
+
     <#
     .SYNOPSIS
     Initiates a table maintenance job for a specified Lakehouse in a Fabric workspace.
@@ -37,12 +38,18 @@ function Start-FabricLakehouseTableMaintenance
     A boolean flag indicating whether to wait for the job to complete. Default is false. This parameter is optional.
 
     .EXAMPLE
-    Start-FabricLakehouseTableMaintenance -WorkspaceId "12345" -LakehouseId "67890" -JobType "TableMaintenance" -SchemaName "dbo" -TableName "MyTable" -IsVOrder $true -ColumnsZOrderBy @("Column1", "Column2") -retentionPeriod "7:00:00" -waitForCompletion $true
     Initiates a table maintenance job for the specified Lakehouse and waits for its completion.
 
+    ```powershell
+    Start-FabricLakehouseTableMaintenance -WorkspaceId "12345" -LakehouseId "67890" -JobType "TableMaintenance" -SchemaName "dbo" -TableName "MyTable" -IsVOrder $true -ColumnsZOrderBy @("Column1", "Column2") -retentionPeriod "7:00:00" -waitForCompletion $true
+    ```
+
     .EXAMPLE
-    Start-FabricLakehouseTableMaintenance -WorkspaceId "12345" -LakehouseId "67890" -JobType "TableMaintenance" -SchemaName "dbo" -TableName "MyTable" -IsVOrder $false -ColumnsZOrderBy @("Column1", "Column2") -retentionPeriod "7:00:00"
     Initiates a table maintenance job for the specified Lakehouse without waiting for its completion.
+
+    ```powershell
+    Start-FabricLakehouseTableMaintenance -WorkspaceId "12345" -LakehouseId "67890" -JobType "TableMaintenance" -SchemaName "dbo" -TableName "MyTable" -IsVOrder $false -ColumnsZOrderBy @("Column1", "Column2") -retentionPeriod "7:00:00"
+    ```
 
     .NOTES
     - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
@@ -56,7 +63,6 @@ function Start-FabricLakehouseTableMaintenance
     Author: Tiago Balabuch
 
     #>
-
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]

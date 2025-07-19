@@ -1,4 +1,5 @@
 function Get-FabricEnvironment {
+
     <#
 .SYNOPSIS
 Retrieves an environment or a list of environments from a specified workspace in Microsoft Fabric.
@@ -16,14 +17,18 @@ The `Get-FabricEnvironment` function sends a GET request to the Fabric API to re
 (Optional) The name of the specific environment to retrieve.
 
 .EXAMPLE
-Get-FabricEnvironment -WorkspaceId "12345" -EnvironmentName "Development"
+    Retrieves the "Development" environment from workspace "12345".
 
-Retrieves the "Development" environment from workspace "12345".
+    ```powershell
+    Get-FabricEnvironment -WorkspaceId "12345" -EnvironmentName "Development"
+    ```
 
 .EXAMPLE
-Get-FabricEnvironment -WorkspaceId "12345"
+    Retrieves all environments in workspace "12345".
 
-Retrieves all environments in workspace "12345".
+    ```powershell
+    Get-FabricEnvironment -WorkspaceId "12345"
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
@@ -33,7 +38,6 @@ Retrieves all environments in workspace "12345".
 Author: Tiago Balabuch
 
     #>
-
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]

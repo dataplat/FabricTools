@@ -16,14 +16,18 @@ The `Get-FabricKQLDatabase` function sends a GET request to the Fabric API to re
 (Optional) The name of the specific KQLDatabase to retrieve.
 
 .EXAMPLE
-Get-FabricKQLDatabase -WorkspaceId "12345" -KQLDatabaseName "Development"
+    Retrieves the "Development" KQLDatabase from workspace "12345".
 
-Retrieves the "Development" KQLDatabase from workspace "12345".
+    ```powershell
+    Get-FabricKQLDatabase -WorkspaceId "12345" -KQLDatabaseName "Development"
+    ```
 
 .EXAMPLE
-Get-FabricKQLDatabase -WorkspaceId "12345"
+    Retrieves all KQLDatabases in workspace "12345".
 
-Retrieves all KQLDatabases in workspace "12345".
+    ```powershell
+    Get-FabricKQLDatabase -WorkspaceId "12345"
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.

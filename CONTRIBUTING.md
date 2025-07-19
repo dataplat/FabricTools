@@ -36,7 +36,7 @@ The workflow for using this and developing the code is shown below.
 
 3. Start a fresh new PowerShell session to avoid anythjing from your current working sessions to interfere with the module development and building. Develop your updates in the source directory.
 
-You should also resolve all dependencies before you start developing. This will ensure that you have all the required modules, and only them, installed and loaded into your session.
+   You should also resolve all dependencies before you start developing. This will ensure that you have all the required modules, and only them, installed and loaded into your session.
 
    ```PowerShell
    .\build.ps1 -ResolveDependency -Tasks noop -UsePSResourceGet
@@ -105,7 +105,14 @@ You should also resolve all dependencies before you start developing. This will 
    ### Fixed
    - Fixed issue with `New-FabricDataPipeline` not working correctly.
    ```
-9. Once you are happy with your code and you have updated the changelog, push your branch to GitHub and create a PR against the repo.
+
+10. Once you are happy with your code and you have updated the changelog, there is one thing left to do, which is documentation. To run the generation of the documentation, the `build.ps1` can leverage the `Generate_help_from_built_module` task:
+
+   ```powershell
+   ./build.ps1 -Tasks Generate_help_from_built_module
+   ```
+
+11. When the process finishes, the documentation should be updated. Now push your branch to GitHub and create a PR against the repo.
 
 ## Thanks!
 

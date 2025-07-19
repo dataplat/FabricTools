@@ -1,3 +1,5 @@
+function Update-FabricKQLDatabase
+{
 <#
 .SYNOPSIS
 Updates the properties of a Fabric KQLDatabase.
@@ -18,14 +20,18 @@ The new name for the KQLDatabase.
 (Optional) The new description for the KQLDatabase.
 
 .EXAMPLE
-Update-FabricKQLDatabase -KQLDatabaseId "KQLDatabase123" -KQLDatabaseName "NewKQLDatabaseName"
+    Updates the name of the KQLDatabase with the ID "KQLDatabase123" to "NewKQLDatabaseName".
 
-Updates the name of the KQLDatabase with the ID "KQLDatabase123" to "NewKQLDatabaseName".
+    ```powershell
+    Update-FabricKQLDatabase -KQLDatabaseId "KQLDatabase123" -KQLDatabaseName "NewKQLDatabaseName"
+    ```
 
 .EXAMPLE
-Update-FabricKQLDatabase -KQLDatabaseId "KQLDatabase123" -KQLDatabaseName "NewName" -KQLDatabaseDescription "Updated description"
+    Updates both the name and description of the KQLDatabase "KQLDatabase123".
 
-Updates both the name and description of the KQLDatabase "KQLDatabase123".
+    ```powershell
+    Update-FabricKQLDatabase -KQLDatabaseId "KQLDatabase123" -KQLDatabaseName "NewName" -KQLDatabaseDescription "Updated description"
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
@@ -34,9 +40,6 @@ Updates both the name and description of the KQLDatabase "KQLDatabase123".
 Author: Tiago Balabuch
 
 #>
-
-function Update-FabricKQLDatabase
-{
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]

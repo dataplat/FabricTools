@@ -1,3 +1,4 @@
+function Get-FabricExternalDataShares {
 <#
 .SYNOPSIS
     Retrieves External Data Shares details from a specified Microsoft Fabric.
@@ -7,8 +8,11 @@
     It handles token validation, constructs the API URL, makes the API request, and processes the response.
 
 .EXAMPLE
-    Get-FabricExternalDataShares
     This example retrieves the External Data Shares details
+
+    ```powershell
+    Get-FabricExternalDataShares
+    ```
 
 .NOTES
     - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
@@ -16,7 +20,6 @@
 
     Author: Tiago Balabuch
 #>
-function Get-FabricExternalDataShares {
     [CmdletBinding()]
     param ( )
 

@@ -11,17 +11,23 @@
     #        Repository = 'PSGallery'
     #    }
     #}
-    Assert = "0.9.6"
-    InvokeBuild                 = 'latest'
-    PSScriptAnalyzer            = '1.19.1'
-    Pester                      = 'latest'
-    ModuleBuilder               = 'latest'
-    ChangelogManagement         = 'latest'
-    Sampler                     = 'latest'
-    'Sampler.GitHubTasks'       = 'latest'
-    MarkdownLinkCheck           = 'latest'
-    PSFramework                = 'latest'
-    'Az.Accounts'              = '5.0.0'
-    'Az.Resources'             = '6.15.1'
-    'MicrosoftPowerBIMgmt'     = '1.2.1111'
+    Assert                         = "0.9.6"
+    InvokeBuild                    = 'latest'
+    PSScriptAnalyzer               = '1.19.1'
+    Pester                         = 'latest'
+    ModuleBuilder                  = 'latest'
+    ChangelogManagement            = 'latest'
+    Sampler                        = 'latest'
+    'Sampler.GitHubTasks'          = 'latest'
+    MarkdownLinkCheck              = 'latest'
+    PSFramework                    = 'latest'
+    'Az.Accounts'                  = '5.0.0'
+    'Az.Resources'                 = '6.15.1'
+    'MicrosoftPowerBIMgmt'         = '1.2.1111'
+    'Microsoft.PowerShell.PlatyPS' = @{
+        Version    = '1.0.0-rc1'
+        Parameters = @{
+            AllowPrerelease = $true
+        } # TODO: Simply remove after GA
+    }
 }
