@@ -20,9 +20,7 @@ function Remove-FabricWarehouse
         ```powershell
         Remove-FabricWarehouse -WorkspaceId "workspace-12345" -WarehouseId "warehouse-67890"
         ```
-
     .NOTES
-        - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
         - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 
         Author: Tiago Balabuch
@@ -47,14 +45,19 @@ function Remove-FabricWarehouse
 
         if ($PSCmdlet.ShouldProcess($apiEndpointURI, "Delete Warehouse"))
         {
-            # Step 3: Make the API request
-            $response = Invoke-FabricRestMethod `
-                -Uri $apiEndpointURI `
-                -method Delete `
+            # Step 3: Make the API request and Validate the response
+            $apiParameters = @{
+                Uri = $apiEndpointURI
+                Method = 'DELETE'
+                HandleResponse = $true
+                TypeName = "Warehouse"
+                ObjectIdOrName = $WarehouseId
+            }
+            $response = Invoke-FabricRestMethod @apiParameters
         }
 
-        Write-Message -Message "Warehouse '$WarehouseId' deleted successfully from workspace '$WorkspaceId'." -Level Info
-        return $response
+        # Step 4: Handle results
+        $response
 
     }
     catch

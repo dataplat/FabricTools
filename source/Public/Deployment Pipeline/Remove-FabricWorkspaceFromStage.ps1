@@ -50,17 +50,23 @@ Author: Kamil Nowinski
 
         # Step 3: Make the API request and validate response
         if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Remove Workspace from Deployment Pipeline Stage")) {
-            $response = Invoke-FabricRestMethod -Uri $apiEndpointUrl -Method Post
-            $response = Test-FabricApiResponse -Response $response
+            $apiParameters = @{
+                Uri = $apiEndpointUrl
+                Method = 'POST'
+                HandleResponse = $true
+                TypeName = "deployment pipeline stage"
+                ObjectIdOrName = $StageId
+                SuccessMessage = "Successfully unassigned workspace from deployment pipeline stage."
+            }
+            $response = Invoke-FabricRestMethod @apiParameters
         }
 
         # Step 4: Return results
-        Write-Message -Message "Successfully unassigned workspace from deployment pipeline stage." -Level Info
         $response
 
     } catch {
         # Step 5: Error handling
         $errorDetails = $_.Exception.Message
-        Write-Message -Message "Failed to unassign workspace from deployment pipeline stage. Error: $errorDetails" -Level Error
+        Write-Error -Message "Failed to unassign workspace from deployment pipeline stage. Error: $errorDetails"
     }
 }

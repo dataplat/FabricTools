@@ -48,11 +48,17 @@ function Remove-FabricSQLDatabase
         if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Delete SQL Database"))
         {
             # Step 3: Make the API request
-            $response = Invoke-FabricRestMethod -Uri $apiEndpointUrl -Method Delete
+            $apiParams = @{
+                Uri = $apiEndpointUrl
+                Method = 'DELETE'
+                TypeName = 'SQL Database'
+                ObjectIdOrName = $SQLDatabaseId
+                HandleResponse = $true
+            }
+            $response = Invoke-FabricRestMethod @apiParams
+            $response
         }
 
-        # Step 4: Validate the response code
-        Test-FabricApiResponse -Response $response -ObjectIdOrName $SQLDatabaseId -TypeName "SQL Database"
     }
     catch
     {
