@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `Remove-FabricWorkspaceFromStage`,  
   - `Start-FabricDeploymentPipelineStage`
 - Added private function `Get-FabricContinuationToken` to facilitate pagination
+- Added new build automation task `Generate_help_from_built_module`
 
 ### Changed
 
@@ -32,6 +33,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Get-FabricSqlDatabase` accepts Workspace as a pipeline, handles errors correctly and can filter by name (#117).
 - Applied splatting for several parameters in `Invoke-FabricRestMethod` and output results in debug mode
 - `Remove-FabricSQLDatabase` uses unified function to handle API results
+- Changed the `documentation` folder to `docs/<locale>`
+- Code-fenced blocks included in function examples
 
 Updated the `WorkspaceId`, `CapacitiesIds`,`CapacityId`,`CopyJobId`,`datamartId`,`DataPipelineId`,`DataWarehouseGUID`,`DomainId`,`EnvironmentId`,`EventhouseId`,`EventstreamId`,`ExternalDataShareId`,`ItemId`,`KQLDashboardId`,`KQLDatabaseId`,`KQLQuerysetId`,`LakehouseId`,`MirroredDatabaseId`,`MirroredWarehouseId`,`MLExperimentId`,`MLModelId`,`NotebookId`,`operationId`,`PaginatedReportId`,`ParentDomainId`,`parentEventhouseId`,`PrincipalId`,`ReflexId`,`ReportId`,`SemanticModelId`,`SparkCustomPoolId`,`SparkJobDefinitionId`,`SQLDatabaseId`,`SQLEndpointId`,`subscriptionID`,`UserId`,`WarehouseId`,`WorkspaceGUID`,`WorkspaceId`,`WorkspaceIds`,and `WorkspaceRoleAssignmentId` parameters to the datatype GUID [#125](https://github.com/dataplat/FabricTools/issues/125)
 
