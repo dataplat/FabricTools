@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+### Changed
+
+### Fixed
+
+### Deprecated
+
+### Removed
+
+### Security
+
+## 0.30.0 - 2025-07-20
+
+### Added
+
 - Added unit tests for `Get-FabricWorkspaceUser` function to ensure it works correctly with multiple workspaces both in the pipeline and passed to a parameter.
 - Added unit tests for Aliases for `Get-FabricWorkspaceUser` function to ensure backward compatibility.
 - Added credits for authors to all functions and Unit tests to verify the existence of such tags (#89)
@@ -54,13 +68,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deprecated
 
+- None
+
 ### Removed
 
 - Removed Revision History from `Get-FabricSQLDatabase`, `Get-FabricSQLDatabase`
 
-### Security
+**Contributors:**  
+Rob Sewell, Kamil Nowinski and Gijs Reijn.
 
-## 0.22.0 - 20250609
+**Note:**  
+For a full list of changes and details, please see the commit history.
+
+## 0.29.0 - 2025-06-10
 
 ### Added
 
