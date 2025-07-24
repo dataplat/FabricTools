@@ -1,3 +1,5 @@
+function New-FabricDataPipeline
+{
 <#
 .SYNOPSIS
     Creates a new DataPipeline in a specified Microsoft Fabric workspace.
@@ -17,8 +19,11 @@
     An optional description for the DataPipeline.
 
 .EXAMPLE
-    New-FabricDataPipeline -WorkspaceId "workspace-12345" -DataPipelineName "New DataPipeline"
     This example creates a new DataPipeline named "New DataPipeline" in the workspace with ID "workspace-12345" and uploads the definition file from the specified path.
+
+    ```powershell
+    New-FabricDataPipeline -WorkspaceId "workspace-12345" -DataPipelineName "New DataPipeline"
+    ```
 
 .NOTES
     - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
@@ -26,14 +31,11 @@
 
     Author: Tiago Balabuch
 #>
-
-function New-FabricDataPipeline
-{
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]

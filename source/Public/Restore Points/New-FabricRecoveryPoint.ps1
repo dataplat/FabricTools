@@ -1,3 +1,4 @@
+function New-FabricRecoveryPoint {
 <#
 .SYNOPSIS
 Create a recovery point for a Fabric data warehouse
@@ -20,17 +21,21 @@ PS> New-FabricRecoveryPoint
 Create a new recovery point for the data warehouse specified in the configuration.
 
 .EXAMPLE
-PS> New-FabricRecoveryPoint -WorkspaceGUID 'GUID-GUID-GUID-GUID' -DataWarehouseGUID 'GUID-GUID-GUID-GUID'
+    Create a new recovery point for the specified data warehouse, in the specified workspace.
 
-Create a new recovery point for the specified data warehouse, in the specified workspace.
+    ```powershell
+    New-FabricRecoveryPoint -WorkspaceGUID 'GUID-GUID-GUID-GUID' -DataWarehouseGUID 'GUID-GUID-GUID-GUID'
+    ```
+.NOTES
+
+Author: Jess Pomfret
 
 #>
-function New-FabricRecoveryPoint {
     [CmdletBinding(SupportsShouldProcess)]
     param (
-        [String]$WorkspaceGUID,
+        [guid]$WorkspaceGUID,
 
-        [String]$DataWarehouseGUID,
+        [guid]$DataWarehouseGUID,
 
         [String]$BaseUrl = 'api.powerbi.com'
     )

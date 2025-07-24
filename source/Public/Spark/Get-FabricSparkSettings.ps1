@@ -1,32 +1,34 @@
-<#
-.SYNOPSIS
-    Retrieves Spark settings from a specified Microsoft Fabric workspace.
-
-.DESCRIPTION
-    This function retrieves Spark settings from a specified workspace using the provided WorkspaceId.
-    It handles token validation, constructs the API URL, makes the API request, and processes the response.
-
-.PARAMETER WorkspaceId
-    The unique identifier of the workspace from which to retrieve Spark settings. This parameter is mandatory.
-
-.EXAMPLE
-    Get-FabricSparkSettings -WorkspaceId "workspace-12345"
-    This example retrieves the Spark settings for the workspace with ID "workspace-12345".
-
-.NOTES
-    - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-    - Calls `Confirm-TokenState` to ensure token validity before making the API request.
-
-    Author: Tiago Balabuch
-
-#>
 function Get-FabricSparkSettings {
+    <#
+    .SYNOPSIS
+        Retrieves Spark settings from a specified Microsoft Fabric workspace.
+
+    .DESCRIPTION
+        This function retrieves Spark settings from a specified workspace using the provided WorkspaceId.
+        It handles token validation, constructs the API URL, makes the API request, and processes the response.
+
+    .PARAMETER WorkspaceId
+        The unique identifier of the workspace from which to retrieve Spark settings. This parameter is mandatory.
+
+    .EXAMPLE
+        This example retrieves the Spark settings for the workspace with ID "workspace-12345".
+
+        ```powershell
+        Get-FabricSparkSettings -WorkspaceId "workspace-12345"
+        ```
+
+    .NOTES
+        - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
+        - Calls `Confirm-TokenState` to ensure token validity before making the API request.
+
+        Author: Tiago Balabuch
+    #>
     [CmdletBinding()]
     [OutputType([System.Object[]])]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId
+        [guid]$WorkspaceId
     )
 
     try {

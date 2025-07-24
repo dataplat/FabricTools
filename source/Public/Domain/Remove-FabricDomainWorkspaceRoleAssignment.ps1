@@ -1,6 +1,7 @@
+function Remove-FabricDomainWorkspaceRoleAssignment {
 <#
 .SYNOPSIS
-Bulk unUnassign roles to principals for workspaces in a Fabric domain.
+Bulk unassign roles to principals for workspaces in a Fabric domain.
 
 .DESCRIPTION
 The `AssignFabricDomainWorkspaceRoleAssignment` function performs bulk role assignments for principals in a specific Fabric domain. It sends a POST request to the relevant API endpoint.
@@ -19,9 +20,11 @@ An array of principals to assign roles to. Each principal must include:
 - `type`: The type of the principal (e.g., `User`, `Group`).
 
 .EXAMPLE
-AssignFabricDomainWorkspaceRoleAssignment -DomainId "12345" -DomainRole "Admins" -PrincipalIds @(@{id="user1"; type="User"}, @{id="group1"; type="Group"})
+    Unassign the `Admins` role to the specified principals in the domain with ID "12345".
 
-Unassign the `Admins` role to the specified principals in the domain with ID "12345".
+    ```powershell
+    Unassign-FabricDomainWorkspaceRoleAssignment -DomainId "12345" -DomainRole "Admins" -PrincipalIds @(@{id="user1"; type="User"}, @{id="group1"; type="Group"})
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
@@ -30,14 +33,12 @@ Unassign the `Admins` role to the specified principals in the domain with ID "12
 Author: Tiago Balabuch
 
 #>
-
-function Remove-FabricDomainWorkspaceRoleAssignment {
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     [Alias("Unassign-FabricDomainWorkspaceRoleAssignment")]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$DomainId,
+        [guid]$DomainId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]

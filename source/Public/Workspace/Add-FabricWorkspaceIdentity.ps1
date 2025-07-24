@@ -1,31 +1,32 @@
-<#
-.SYNOPSIS
-Provisions an identity for a Fabric workspace.
-
-.DESCRIPTION
-The `Add-FabricWorkspaceIdentity` function provisions an identity for a specified workspace by making an API call.
-
-.PARAMETER WorkspaceId
-The unique identifier of the workspace for which the identity will be provisioned.
-
-.EXAMPLE
-Add-FabricWorkspaceIdentity -WorkspaceId "workspace123"
-
-Provisions a Managed Identity for the workspace with ID "workspace123".
-
-.NOTES
-- Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-- Calls `Confirm-TokenState` to ensure token validity before making the API request.
-
-Author: Tiago Balabuch
-#>
-
 function Add-FabricWorkspaceIdentity {
+    <#
+    .SYNOPSIS
+        Provisions an identity for a Fabric workspace.
+
+    .DESCRIPTION
+        The `Add-FabricWorkspaceIdentity` function provisions an identity for a specified workspace by making an API call.
+
+    .PARAMETER WorkspaceId
+        The unique identifier of the workspace for which the identity will be provisioned.
+
+    .EXAMPLE
+        Provisions a Managed Identity for the workspace with ID "workspace123".
+
+        ```powershell
+        Add-FabricWorkspaceIdentity -WorkspaceId "workspace123"
+        ```
+
+    .NOTES
+        - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
+        - Calls `Confirm-TokenState` to ensure token validity before making the API request.
+
+        Author: Tiago Balabuch
+    #>
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId
+        [guid]$WorkspaceId
     )
 
     try {

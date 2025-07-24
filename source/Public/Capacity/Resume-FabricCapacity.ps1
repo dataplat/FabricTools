@@ -1,31 +1,32 @@
 function Resume-FabricCapacity {
     <#
-.SYNOPSIS
-Resumes a capacity.
+    .SYNOPSIS
+    Resumes a capacity.
 
-.DESCRIPTION
-The Resume-FabricCapacity function resumes a capacity. It supports multiple aliases for flexibility.
+    .DESCRIPTION
+    The Resume-FabricCapacity function resumes a capacity. It supports multiple aliases for flexibility.
 
-.PARAMETER subscriptionID
-The the ID of the subscription. This is a mandatory parameter. This is a parameter found in Azure, not Fabric.
+    .PARAMETER subscriptionID
+    The the ID of the subscription. This is a mandatory parameter. This is a parameter found in Azure, not Fabric.
 
-.PARAMETER resourcegroup
-The resource group. This is a mandatory parameter. This is a parameter found in Azure, not Fabric.
+    .PARAMETER resourcegroup
+    The resource group. This is a mandatory parameter. This is a parameter found in Azure, not Fabric.
 
-.PARAMETER capacity
-The capacity. This is a mandatory parameter. This is a parameter found in Azure, not Fabric.
+    .PARAMETER capacity
+    The capacity. This is a mandatory parameter. This is a parameter found in Azure, not Fabric.
 
-.EXAMPLE
-Resume-FabricCapacity -subscriptionID "your-subscription-id" -resourcegroupID "your-resource-group" -capacityID "your-capacity"
+    .EXAMPLE
+        This example resumes a capacity given the subscription ID, resource group, and capacity.
 
-This example resumes a capacity given the subscription ID, resource group, and capacity.
+        ```powershell
+        Resume-FabricCapacity -subscriptionID "your-subscription-id" -resourcegroupID "your-resource-group" -capacityID "your-capacity"
+        ```
 
-.NOTES
-The function defines parameters for the subscription ID, resource group, and capacity. If the 'azToken' environment variable is null, it connects to the Azure account and sets the 'azToken' environment variable. It then defines the headers for the request, defines the URI for the request, and makes a GET request to the URI.
+    .NOTES
+    The function defines parameters for the subscription ID, resource group, and capacity. If the 'azToken' environment variable is null, it connects to the Azure account and sets the 'azToken' environment variable. It then defines the headers for the request, defines the URI for the request, and makes a GET request to the URI.
+
+    Author: Ioana Bouariu
     #>
-
-    # This function resumes a capacity.
-
     # Define aliases for the function for flexibility.
     [Alias("Resume-FabCapacity")]
     [CmdletBinding(SupportsShouldProcess)]
@@ -33,7 +34,7 @@ The function defines parameters for the subscription ID, resource group, and cap
     # Define parameters for the subscription ID, resource group, and capacity.
     Param (
         [Parameter(Mandatory = $true)]
-        [string]$subscriptionID,
+        [guid]$subscriptionID,
         [Parameter(Mandatory = $true)]
         [string]$resourcegroup,
         [Parameter(Mandatory = $true)]

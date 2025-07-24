@@ -1,3 +1,4 @@
+Function Remove-FabricItem {
 <#
 .SYNOPSIS
    Removes selected items from a Fabric workspace.
@@ -15,31 +16,33 @@
    The ID of a specific item to remove. If provided, this item is removed regardless of the filter
 
 .EXAMPLE
-   Remove-FabricItems -WorkspaceID "12345678-90ab-cdef-1234-567890abcdef" -Filter "*test*"
+    This command removes all items from the workspace with the specified ID whose DisplayName includes "test". .INPUTS String. You can pipe two strings that contain the workspace ID and filter to Remove-FabricItems.
 
-   This command removes all items from the workspace with the specified ID whose DisplayName includes "test".
+    ```powershell
+    Remove-FabricItem -WorkspaceID "12345678-90ab-cdef-1234-567890abcdef" -Filter "*test*"
+    ```
 
 .INPUTS
-   String. You can pipe two strings that contain the workspace ID and filter to Remove-FabricItems.
+   String. You can pipe a string that contains the workspace ID to Remove-FabricItem.
 
 .OUTPUTS
    None. This function does not return any output.
 
 .NOTES
-   This function was written by Rui Romano.
-   https://github.com/microsoft/Analysis-Services/tree/master/pbidevmode/fabricps-pbip
-#>
 
-Function Remove-FabricItem {
+   Author: Rui Romano
+   https://github.com/microsoft/Analysis-Services/tree/master/pbidevmode/fabricps-pbip
+
+#>
    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
    param
    (
       [Parameter(Mandatory = $true)]
-      [string]$workspaceId,
+      [guid]$WorkspaceId,
       [Parameter(Mandatory = $false)]
       [string]$filter,
       [Parameter(Mandatory = $false)]
-      [string]$itemID
+      [guid]$itemID
    )
 
    Confirm-TokenState

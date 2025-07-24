@@ -1,46 +1,47 @@
-<#
-.SYNOPSIS
-Updates the role assignment for a specific principal in a Fabric workspace.
-
-.DESCRIPTION
-The `Update-FabricWorkspaceRoleAssignment` function updates the role assigned to a principal in a workspace by making a PATCH request to the API.
-
-.PARAMETER WorkspaceId
-The unique identifier of the workspace where the role assignment exists.
-
-.PARAMETER WorkspaceRoleAssignmentId
-The unique identifier of the role assignment to be updated.
-
-.PARAMETER WorkspaceRole
-The new role to assign to the principal. Must be one of the following:
-- Admin
-- Contributor
-- Member
-- Viewer
-
-.EXAMPLE
-Update-FabricWorkspaceRoleAssignment -WorkspaceId "workspace123" -WorkspaceRoleAssignmentId "assignment456" -WorkspaceRole "Admin"
-
-Updates the role assignment to "Admin" for the specified workspace and role assignment.
-
-.NOTES
-- Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-- Calls `Confirm-TokenState` to ensure token validity before making the API request.
-
-Author: Tiago Balabuch
-#>
-
 function Update-FabricWorkspaceRoleAssignment
 {
+    <#
+    .SYNOPSIS
+        Updates the role assignment for a specific principal in a Fabric workspace.
+
+    .DESCRIPTION
+        The `Update-FabricWorkspaceRoleAssignment` function updates the role assigned to a principal in a workspace by making a PATCH request to the API.
+
+    .PARAMETER WorkspaceId
+        The unique identifier of the workspace where the role assignment exists.
+
+    .PARAMETER WorkspaceRoleAssignmentId
+        The unique identifier of the role assignment to be updated.
+
+    .PARAMETER WorkspaceRole
+        The new role to assign to the principal. Must be one of the following:
+        - Admin
+        - Contributor
+        - Member
+        - Viewer
+
+    .EXAMPLE
+        Updates the role assignment to "Admin" for the specified workspace and role assignment.
+
+        ```powershell
+        Update-FabricWorkspaceRoleAssignment -WorkspaceId "workspace123" -WorkspaceRoleAssignmentId "assignment456" -WorkspaceRole "Admin"
+        ```
+
+    .NOTES
+        - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
+        - Calls `Confirm-TokenState` to ensure token validity before making the API request.
+
+        Author: Tiago Balabuch
+#>
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceRoleAssignmentId,
+        [guid]$WorkspaceRoleAssignmentId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]

@@ -1,39 +1,41 @@
-<#
-.SYNOPSIS
-    Removes an SemanticModel from a specified Microsoft Fabric workspace.
-
-.DESCRIPTION
-    This function sends a DELETE request to the Microsoft Fabric API to remove an SemanticModel
-    from the specified workspace using the provided WorkspaceId and SemanticModelId.
-
-.PARAMETER WorkspaceId
-    The unique identifier of the workspace from which the SemanticModel will be removed.
-
-.PARAMETER SemanticModelId
-    The unique identifier of the SemanticModel to be removed.
-
-.EXAMPLE
-    Remove-FabricSemanticModel -WorkspaceId "workspace-12345" -SemanticModelId "SemanticModel-67890"
-    This example removes the SemanticModel with ID "SemanticModel-67890" from the workspace with ID "workspace-12345".
-
-.NOTES
-    - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-    - Calls `Confirm-TokenState` to ensure token validity before making the API request.
-
-    Author: Tiago Balabuch
-
-#>
 function Remove-FabricSemanticModel
 {
+    <#
+    .SYNOPSIS
+        Removes an SemanticModel from a specified Microsoft Fabric workspace.
+
+    .DESCRIPTION
+        This function sends a DELETE request to the Microsoft Fabric API to remove an SemanticModel
+        from the specified workspace using the provided WorkspaceId and SemanticModelId.
+
+    .PARAMETER WorkspaceId
+        The unique identifier of the workspace from which the SemanticModel will be removed.
+
+    .PARAMETER SemanticModelId
+        The unique identifier of the SemanticModel to be removed.
+
+    .EXAMPLE
+        This example removes the SemanticModel with ID "SemanticModel-67890" from the workspace with ID "workspace-12345".
+
+        ```powershell
+        Remove-FabricSemanticModel -WorkspaceId "workspace-12345" -SemanticModelId "SemanticModel-67890"
+        ```
+
+    .NOTES
+        - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
+        - Calls `Confirm-TokenState` to ensure token validity before making the API request.
+
+        Author: Tiago Balabuch
+    #>
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$SemanticModelId
+        [guid]$SemanticModelId
     )
     try
     {

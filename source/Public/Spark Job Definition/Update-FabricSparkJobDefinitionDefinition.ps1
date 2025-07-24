@@ -1,44 +1,47 @@
-<#
-.SYNOPSIS
-    Updates the definition of an existing SparkJobDefinition in a specified Microsoft Fabric workspace.
-
-.DESCRIPTION
-    This function sends a PATCH request to the Microsoft Fabric API to update the definition of an existing SparkJobDefinition
-    in the specified workspace. It supports optional parameters for SparkJobDefinition definition and platform-specific definition.
-
-.PARAMETER WorkspaceId
-    The unique identifier of the workspace where the SparkJobDefinition exists. This parameter is mandatory.
-
-.PARAMETER SparkJobDefinitionId
-    The unique identifier of the SparkJobDefinition to be updated. This parameter is mandatory.
-
-.PARAMETER SparkJobDefinitionPathDefinition
-    An optional path to the SparkJobDefinition definition file to upload.
-
-.PARAMETER SparkJobDefinitionPathPlatformDefinition
-    An optional path to the platform-specific definition file to upload.
-
-.EXAMPLE
-    Update-FabricSparkJobDefinitionDefinition -WorkspaceId "workspace-12345" -SparkJobDefinitionId "SparkJobDefinition-67890" -SparkJobDefinitionPathDefinition "C:\Path\To\SparkJobDefinitionDefinition.json"
-    This example updates the definition of the SparkJobDefinition with ID "SparkJobDefinition-67890" in the workspace with ID "workspace-12345" using the provided definition file.
-
-.NOTES
-    - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-    - Calls `Confirm-TokenState` to ensure token validity before making the API request.
-
-    Author: Tiago Balabuch
-#>
 function Update-FabricSparkJobDefinitionDefinition
 {
+    <#
+    .SYNOPSIS
+        Updates the definition of an existing SparkJobDefinition in a specified Microsoft Fabric workspace.
+
+    .DESCRIPTION
+        This function sends a PATCH request to the Microsoft Fabric API to update the definition of an existing SparkJobDefinition
+        in the specified workspace. It supports optional parameters for SparkJobDefinition definition and platform-specific definition.
+
+    .PARAMETER WorkspaceId
+        The unique identifier of the workspace where the SparkJobDefinition exists. This parameter is mandatory.
+
+    .PARAMETER SparkJobDefinitionId
+        The unique identifier of the SparkJobDefinition to be updated. This parameter is mandatory.
+
+    .PARAMETER SparkJobDefinitionPathDefinition
+        An optional path to the SparkJobDefinition definition file to upload.
+
+    .PARAMETER SparkJobDefinitionPathPlatformDefinition
+        An optional path to the platform-specific definition file to upload.
+
+    .EXAMPLE
+        This example updates the definition of the SparkJobDefinition with ID "SparkJobDefinition-67890" in the workspace with ID "workspace-12345" using the provided definition file.
+
+        ```powershell
+        Update-FabricSparkJobDefinitionDefinition -WorkspaceId "workspace-12345" -SparkJobDefinitionId "SparkJobDefinition-67890" -SparkJobDefinitionPathDefinition "C:\Path\To\SparkJobDefinitionDefinition.json"
+        ```
+
+    .NOTES
+        - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
+        - Calls `Confirm-TokenState` to ensure token validity before making the API request.
+
+        Author: Tiago Balabuch
+    #>
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$SparkJobDefinitionId,
+        [guid]$SparkJobDefinitionId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]

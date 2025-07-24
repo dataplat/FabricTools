@@ -1,4 +1,4 @@
-
+function Get-FabricNotebookDefinition {
 <#
 .SYNOPSIS
 Retrieves the definition of a notebook from a specific workspace in Microsoft Fabric.
@@ -19,31 +19,36 @@ Specifies the format of the notebook definition. Currently, only 'ipynb' is supp
 Default: 'ipynb'.
 
 .EXAMPLE
-Get-FabricNotebookDefinition -WorkspaceId "12345" -NotebookId "67890"
+    Retrieves the definition of the notebook with ID `67890` from the workspace with ID `12345` in the `ipynb` format.
 
-Retrieves the definition of the notebook with ID `67890` from the workspace with ID `12345` in the `ipynb` format.
+    ```powershell
+    Get-FabricNotebookDefinition -WorkspaceId "12345" -NotebookId "67890"
+    ```
 
 .EXAMPLE
-Get-FabricNotebookDefinition -WorkspaceId "12345"
+    Retrieves the definitions of all notebooks in the workspace with ID `12345` in the `ipynb` format.
 
-Retrieves the definitions of all notebooks in the workspace with ID `12345` in the `ipynb` format.
+    ```powershell
+    Get-FabricNotebookDefinition -WorkspaceId "12345"
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
 - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 - Handles long-running operations asynchronously.
 
+Author: Tiago Balabuch
+
 #>
-function Get-FabricNotebookDefinition {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [string]$NotebookId,
+        [guid]$NotebookId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]

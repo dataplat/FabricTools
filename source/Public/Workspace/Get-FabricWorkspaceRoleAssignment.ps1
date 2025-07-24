@@ -1,44 +1,47 @@
-<#
-.SYNOPSIS
-Retrieves role assignments for a specified Fabric workspace.
-
-.DESCRIPTION
-The `Get-FabricWorkspaceRoleAssignments` function fetches the role assignments associated with a Fabric workspace by making a GET request to the API. If `WorkspaceRoleAssignmentId` is provided, it retrieves the specific role assignment.
-
-.PARAMETER WorkspaceId
-The unique identifier of the workspace to fetch role assignments for.
-
-.PARAMETER WorkspaceRoleAssignmentId
-(Optional) The unique identifier of a specific role assignment to retrieve.
-
-.EXAMPLE
-Get-FabricWorkspaceRoleAssignments -WorkspaceId "workspace123"
-
-Fetches all role assignments for the workspace with the ID "workspace123".
-
-.EXAMPLE
-Get-FabricWorkspaceRoleAssignments -WorkspaceId "workspace123" -WorkspaceRoleAssignmentId "role123"
-
-Fetches the role assignment with the ID "role123" for the workspace "workspace123".
-
-.NOTES
-- Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-- Calls `Confirm-TokenState` to ensure token validity before making the API request.
-
-Author: Tiago Balabuch
-#>
-
 function Get-FabricWorkspaceRoleAssignment {
+    <#
+    .SYNOPSIS
+        Retrieves role assignments for a specified Fabric workspace.
+
+    .DESCRIPTION
+        The `Get-FabricWorkspaceRoleAssignments` function fetches the role assignments associated with a Fabric workspace by making a GET request to the API. If `WorkspaceRoleAssignmentId` is provided, it retrieves the specific role assignment.
+
+    .PARAMETER WorkspaceId
+        The unique identifier of the workspace to fetch role assignments for.
+
+    .PARAMETER WorkspaceRoleAssignmentId
+        (Optional) The unique identifier of a specific role assignment to retrieve.
+
+    .EXAMPLE
+        Fetches all role assignments for the workspace with the ID "workspace123".
+
+        ```powershell
+        Get-FabricWorkspaceRoleAssignments -WorkspaceId "workspace123"
+        ```
+
+    .EXAMPLE
+        Fetches the role assignment with the ID "role123" for the workspace "workspace123".
+
+        ```powershell
+        Get-FabricWorkspaceRoleAssignments -WorkspaceId "workspace123" -WorkspaceRoleAssignmentId "role123"
+        ```
+
+    .NOTES
+        - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
+        - Calls `Confirm-TokenState` to ensure token validity before making the API request.
+
+        Author: Tiago Balabuch
+    #>
     [CmdletBinding()]
     [OutputType([System.Object[]])]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceRoleAssignmentId
+        [guid]$WorkspaceRoleAssignmentId
     )
 
     try {

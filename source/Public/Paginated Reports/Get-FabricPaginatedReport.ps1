@@ -1,3 +1,4 @@
+function Get-FabricPaginatedReport {
 <#
 .SYNOPSIS
     Retrieves paginated report details from a specified Microsoft Fabric workspace.
@@ -16,12 +17,18 @@
     The name of the paginated report to retrieve. This parameter is optional.
 
 .EXAMPLE
-    Get-FabricPaginatedReports -WorkspaceId "workspace-12345" -PaginatedReportId "report-67890"
     This example retrieves the paginated report details for the report with ID "report-67890" in the workspace with ID "workspace-12345".
 
+    ```powershell
+    Get-FabricPaginatedReports -WorkspaceId "workspace-12345" -PaginatedReportId "report-67890"
+    ```
+
 .EXAMPLE
-    Get-FabricPaginatedReports -WorkspaceId "workspace-12345" -PaginatedReportName "My Paginated Report"
     This example retrieves the paginated report details for the report named "My Paginated Report" in the workspace with ID "workspace-12345".
+
+    ```powershell
+    Get-FabricPaginatedReports -WorkspaceId "workspace-12345" -PaginatedReportName "My Paginated Report"
+    ```
 
 .NOTES
     - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
@@ -30,16 +37,15 @@
     Author: Tiago Balabuch
 
 #>
-function Get-FabricPaginatedReport {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [string]$PaginatedReportId,
+        [guid]$PaginatedReportId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]

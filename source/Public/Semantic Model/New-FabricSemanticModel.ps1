@@ -1,41 +1,43 @@
-<#
-.SYNOPSIS
-    Creates a new SemanticModel in a specified Microsoft Fabric workspace.
-
-.DESCRIPTION
-    This function sends a POST request to the Microsoft Fabric API to create a new SemanticModel
-    in the specified workspace. It supports optional parameters for SemanticModel description and path definitions.
-
-.PARAMETER WorkspaceId
-    The unique identifier of the workspace where the SemanticModel will be created. This parameter is mandatory.
-
-.PARAMETER SemanticModelName
-    The name of the SemanticModel to be created. This parameter is mandatory.
-
-.PARAMETER SemanticModelDescription
-    An optional description for the SemanticModel.
-
-.PARAMETER SemanticModelPathDefinition
-    An optional path to the SemanticModel definition file to upload.
-
-.EXAMPLE
-    New-FabricSemanticModel -WorkspaceId "workspace-12345" -SemanticModelName "New SemanticModel" -SemanticModelDescription "Description of the new SemanticModel"
-    This example creates a new SemanticModel named "New SemanticModel" in the workspace with ID "workspace-12345" with the provided description.
-
-.NOTES
-    - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-    - Calls `Confirm-TokenState` to ensure token validity before making the API request.
-
-    Author: Tiago Balabuch
-
-#>
 function New-FabricSemanticModel
 {
+    <#
+    .SYNOPSIS
+        Creates a new SemanticModel in a specified Microsoft Fabric workspace.
+
+    .DESCRIPTION
+        This function sends a POST request to the Microsoft Fabric API to create a new SemanticModel
+        in the specified workspace. It supports optional parameters for SemanticModel description and path definitions.
+
+    .PARAMETER WorkspaceId
+        The unique identifier of the workspace where the SemanticModel will be created. This parameter is mandatory.
+
+    .PARAMETER SemanticModelName
+        The name of the SemanticModel to be created. This parameter is mandatory.
+
+    .PARAMETER SemanticModelDescription
+        An optional description for the SemanticModel.
+
+    .PARAMETER SemanticModelPathDefinition
+        An optional path to the SemanticModel definition file to upload.
+
+    .EXAMPLE
+        This example creates a new SemanticModel named "New SemanticModel" in the workspace with ID "workspace-12345" with the provided description.
+
+        ```powershell
+        New-FabricSemanticModel -WorkspaceId "workspace-12345" -SemanticModelName "New SemanticModel" -SemanticModelDescription "Description of the new SemanticModel"
+        ```
+
+    .NOTES
+        - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
+        - Calls `Confirm-TokenState` to ensure token validity before making the API request.
+
+        Author: Tiago Balabuch
+    #>
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]

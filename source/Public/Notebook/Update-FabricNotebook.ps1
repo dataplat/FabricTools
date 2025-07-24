@@ -1,3 +1,5 @@
+function Update-FabricNotebook
+{
 <#
 .SYNOPSIS
 Updates the properties of a Fabric Notebook.
@@ -18,14 +20,18 @@ The new name for the Notebook.
 (Optional) The new description for the Notebook.
 
 .EXAMPLE
-Update-FabricNotebook -NotebookId "Notebook123" -NotebookName "NewNotebookName"
+    Updates the name of the Notebook with the ID "Notebook123" to "NewNotebookName".
 
-Updates the name of the Notebook with the ID "Notebook123" to "NewNotebookName".
+    ```powershell
+    Update-FabricNotebook -NotebookId "Notebook123" -NotebookName "NewNotebookName"
+    ```
 
 .EXAMPLE
-Update-FabricNotebook -NotebookId "Notebook123" -NotebookName "NewName" -NotebookDescription "Updated description"
+    Updates both the name and description of the Notebook "Notebook123".
 
-Updates both the name and description of the Notebook "Notebook123".
+    ```powershell
+    Update-FabricNotebook -NotebookId "Notebook123" -NotebookName "NewName" -NotebookDescription "Updated description"
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
@@ -34,18 +40,15 @@ Updates both the name and description of the Notebook "Notebook123".
 Author: Tiago Balabuch
 
 #>
-
-function Update-FabricNotebook
-{
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$NotebookId,
+        [guid]$NotebookId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]

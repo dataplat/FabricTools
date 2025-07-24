@@ -1,3 +1,5 @@
+function Update-FabricEnvironment
+{
 <#
 .SYNOPSIS
 Updates the properties of a Fabric Environment.
@@ -18,14 +20,18 @@ The new name for the Environment.
 The unique identifier of the workspace where the Environment resides.
 
 .EXAMPLE
-Update-FabricEnvironment -EnvironmentId "Environment123" -EnvironmentName "NewEnvironmentName"
+    Updates the name of the Environment with the ID "Environment123" to "NewEnvironmentName".
 
-Updates the name of the Environment with the ID "Environment123" to "NewEnvironmentName".
+    ```powershell
+    Update-FabricEnvironment -EnvironmentId "Environment123" -EnvironmentName "NewEnvironmentName"
+    ```
 
 .EXAMPLE
-Update-FabricEnvironment -EnvironmentId "Environment123" -EnvironmentName "NewName" -EnvironmentDescription "Updated description"
+    Updates both the name and description of the Environment "Environment123".
 
-Updates both the name and description of the Environment "Environment123".
+    ```powershell
+    Update-FabricEnvironment -EnvironmentId "Environment123" -EnvironmentName "NewName" -EnvironmentDescription "Updated description"
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
@@ -34,18 +40,15 @@ Updates both the name and description of the Environment "Environment123".
 Author: Tiago Balabuch
 
 #>
-
-function Update-FabricEnvironment
-{
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$EnvironmentId,
+        [guid]$EnvironmentId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]

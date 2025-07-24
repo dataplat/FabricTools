@@ -1,44 +1,50 @@
-<#
-.SYNOPSIS
-    Retrieves the definition of an SparkJobDefinition from a specified Microsoft Fabric workspace.
-
-.DESCRIPTION
-    This function retrieves the definition of an SparkJobDefinition from a specified workspace using the provided SparkJobDefinitionId.
-    It handles token validation, constructs the API URL, makes the API request, and processes the response.
-
-.PARAMETER WorkspaceId
-    The unique identifier of the workspace where the SparkJobDefinition exists. This parameter is mandatory.
-
-.PARAMETER SparkJobDefinitionId
-    The unique identifier of the SparkJobDefinition to retrieve the definition for. This parameter is optional.
-
-.PARAMETER SparkJobDefinitionFormat
-    The format in which to retrieve the SparkJobDefinition definition. This parameter is optional.
-
-.EXAMPLE
-    Get-FabricSparkJobDefinitionDefinition -WorkspaceId "workspace-12345" -SparkJobDefinitionId "SparkJobDefinition-67890"
-    This example retrieves the definition of the SparkJobDefinition with ID "SparkJobDefinition-67890" in the workspace with ID "workspace-12345".
-
-.EXAMPLE
-    Get-FabricSparkJobDefinitionDefinition -WorkspaceId "workspace-12345" -SparkJobDefinitionId "SparkJobDefinition-67890" -SparkJobDefinitionFormat "json"
-    This example retrieves the definition of the SparkJobDefinition with ID "SparkJobDefinition-67890" in the workspace with ID "workspace-12345" in JSON format.
-
-.NOTES
-    - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-    - Calls `Confirm-TokenState` to ensure token validity before making the API request.
-
-    Author: Tiago Balabuch
-#>
 function Get-FabricSparkJobDefinitionDefinition {
+    <#
+    .SYNOPSIS
+        Retrieves the definition of an SparkJobDefinition from a specified Microsoft Fabric workspace.
+
+    .DESCRIPTION
+        This function retrieves the definition of an SparkJobDefinition from a specified workspace using the provided SparkJobDefinitionId.
+        It handles token validation, constructs the API URL, makes the API request, and processes the response.
+
+    .PARAMETER WorkspaceId
+        The unique identifier of the workspace where the SparkJobDefinition exists. This parameter is mandatory.
+
+    .PARAMETER SparkJobDefinitionId
+        The unique identifier of the SparkJobDefinition to retrieve the definition for. This parameter is optional.
+
+    .PARAMETER SparkJobDefinitionFormat
+        The format in which to retrieve the SparkJobDefinition definition. This parameter is optional.
+
+    .EXAMPLE
+        This example retrieves the definition of the SparkJobDefinition with ID "SparkJobDefinition-67890" in the workspace with ID "workspace-12345".
+
+        ```powershell
+        Get-FabricSparkJobDefinitionDefinition -WorkspaceId "workspace-12345" -SparkJobDefinitionId "SparkJobDefinition-67890"
+        ```
+
+    .EXAMPLE
+        This example retrieves the definition of the SparkJobDefinition with ID "SparkJobDefinition-67890" in the workspace with ID "workspace-12345" in JSON format.
+
+        ```powershell
+        Get-FabricSparkJobDefinitionDefinition -WorkspaceId "workspace-12345" -SparkJobDefinitionId "SparkJobDefinition-67890" -SparkJobDefinitionFormat "json"
+        ```
+
+    .NOTES
+        - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
+        - Calls `Confirm-TokenState` to ensure token validity before making the API request.
+
+        Author: Tiago Balabuch
+    #>
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [string]$SparkJobDefinitionId,
+        [guid]$SparkJobDefinitionId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]

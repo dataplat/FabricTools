@@ -33,19 +33,24 @@ function Invoke-FabricAPIRequest_duplicate {
         The number of times to retry the request in case of a 429 (Too Many Requests) error. The default value is 0.
 
     .EXAMPLE
-        Invoke-FabricAPIRequest_duplicate -uri "/api/resource" -method "Get"
+    This example sends a GET request to the "/api/resource" endpoint of the Fabric API. ```powershell ```
 
-        This example sends a GET request to the "/api/resource" endpoint of the Fabric API.
+    ```powershell
+    Invoke-FabricAPIRequest_duplicate -uri "/api/resource" -method "Get"
+    ```
 
     .EXAMPLE
-        Invoke-FabricAPIRequest_duplicate -authToken "abc123" -uri "/api/resource" -method "Post" -body $requestBody
+    This example sends a POST request to the "/api/resource" endpoint of the Fabric API with a request body. ```powershell ```
 
-        This example sends a POST request to the "/api/resource" endpoint of the Fabric API with a request body.
+    ```powershell
+    Invoke-FabricAPIRequest_duplicate -authToken "abc123" -uri "/api/resource" -method "Post" -body $requestBody
+    ```
 
     .NOTES
         This function requires the Get-FabricAuthToken function to be defined in the same script or module.
-        This function was originally written by Rui Romano.
-        https://github.com/microsoft/Analysis-Services/tree/master/pbidevmode/fabricps-pbip
+
+        Author: Rui Romano.
+
     #>
     param (
         [Parameter(Mandatory = $true)]

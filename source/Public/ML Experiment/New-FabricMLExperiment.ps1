@@ -1,3 +1,5 @@
+function New-FabricMLExperiment
+{
 <#
 .SYNOPSIS
     Creates a new ML Experiment in a specified Microsoft Fabric workspace.
@@ -16,8 +18,11 @@
     An optional description for the ML Experiment.
 
 .EXAMPLE
-    New-FabricMLExperiment -WorkspaceId "workspace-12345" -MLExperimentName "New ML Experiment" -MLExperimentDescription "Description of the new ML Experiment"
     This example creates a new ML Experiment named "New ML Experiment" in the workspace with ID "workspace-12345" with the provided description.
+
+    ```powershell
+    New-FabricMLExperiment -WorkspaceId "workspace-12345" -MLExperimentName "New ML Experiment" -MLExperimentDescription "Description of the new ML Experiment"
+    ```
 
 .NOTES
     - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
@@ -26,13 +31,11 @@
     Author: Tiago Balabuch
 
 #>
-function New-FabricMLExperiment
-{
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]

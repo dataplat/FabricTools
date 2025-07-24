@@ -5,7 +5,7 @@ function New-FabricWorkspace
 Creates a new Fabric workspace with the specified display name.
 
 .DESCRIPTION
-The `Add-FabricWorkspace` function creates a new workspace in the Fabric platform by sending a POST request to the API. It validates the display name and handles both success and error responses.
+The `New-FabricWorkspace` function creates a new workspace in the Fabric platform by sending a POST request to the API. It validates the display name and handles both success and error responses.
 
 .PARAMETER WorkspaceName
 The display name of the workspace to be created. Must only contain alphanumeric characters, spaces, and underscores.
@@ -17,9 +17,11 @@ The display name of the workspace to be created. Must only contain alphanumeric 
 (Optional) The ID of the capacity to be associated with the workspace. This parameter is optional.
 
 .EXAMPLE
-Add-FabricWorkspace -WorkspaceName "NewWorkspace"
+    Creates a workspace named "NewWorkspace".
 
-Creates a workspace named "NewWorkspace".
+    ```powershell
+    New-FabricWorkspace -WorkspaceName "NewWorkspace"
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
@@ -39,7 +41,7 @@ Author: Tiago Balabuch
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [string]$CapacityId
+        [guid]$CapacityId
     )
 
     try

@@ -17,8 +17,11 @@ function Get-FabricDatamart {
     The name of the specific datamart to retrieve. This parameter is optional.
 
 .EXAMPLE
-    Get-FabricDatamart -WorkspaceId "12345"
     This example retrieves all datamarts from the workspace with ID "12345".
+
+    ```powershell
+    Get-FabricDatamart -WorkspaceId "12345"
+    ```
 
 .NOTES
     - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
@@ -30,11 +33,11 @@ function Get-FabricDatamart {
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [string]$datamartId,
+        [guid]$datamartId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]

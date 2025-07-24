@@ -1,3 +1,4 @@
+function Publish-FabricEnvironment {
 <#
 .SYNOPSIS
 Publishes a staging environment in a specified Microsoft Fabric workspace.
@@ -14,9 +15,11 @@ The unique identifier of the workspace containing the staging environment.
 The unique identifier of the staging environment to be published.
 
 .EXAMPLE
-Publish-FabricEnvironment -WorkspaceId "workspace-12345" -EnvironmentId "environment-67890"
+    Initiates the publishing process for the specified staging environment.
 
-Initiates the publishing process for the specified staging environment.
+    ```powershell
+    Publish-FabricEnvironment -WorkspaceId "workspace-12345" -EnvironmentId "environment-67890"
+    ```
 
 .NOTES
 - Requires the `$FabricConfig` global object, including `BaseUrl` and `FabricHeaders`.
@@ -24,17 +27,15 @@ Initiates the publishing process for the specified staging environment.
 
 Author: Tiago Balabuch
 #>
-
-function Publish-FabricEnvironment {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$EnvironmentId
+        [guid]$EnvironmentId
     )
 
     try {

@@ -23,20 +23,26 @@ function Connect-FabricAccount {
     A switch parameter. If provided, the function resets the Fabric authentication token.
 
 .EXAMPLE
-    Connect-FabricAccount -TenantId '12345678-1234-1234-1234-123456789012'
+    Connects to the stated Tenant with existing credentials
 
-    Connects to the stated Tenant with exisitng credentials
+    ```powershell
+    Connect-FabricAccount -TenantId '12345678-1234-1234-1234-123456789012'
+    ```
 
 .EXAMPLE
-    $credential = Get-Credential
-    Connect-FabricAccount -TenantId 'xxx' -credential $credential
-
     Prompts for Service Principal id and secret and connects as that Service Principal
 
-.EXAMPLE
-    Connect-FabricAccount -TenantId 'xxx' -ServicePrincipalId 'appId' -ServicePrincipalSecret $secret
+    ```powershell
+    $credential = Get-Credential
+    Connect-FabricAccount -TenantId 'xxx' -credential $credential
+    ```
 
+.EXAMPLE
     Connects as Service Principal using id and secret
+
+    ```powershell
+    Connect-FabricAccount -TenantId 'xxx' -ServicePrincipalId 'appId' -ServicePrincipalSecret $secret
+    ```
 
 .OUTPUTS
     None. This function does not return any output.
@@ -49,6 +55,8 @@ function Connect-FabricAccount {
     - 2025-05-26 - Jojobit: Added Service Principal support, with secure string handling and parameter descriptions, as supported by the original FabTools module
     - 2025-06-02 - KNO: Added Reset switch to force re-authentication and token refresh
 
+    Author: Frank Geisler, Kamil Nowinski
+
 .LINK
     Connect-AzAccount https://learn.microsoft.com/de-de/powershell/module/az.accounts/connect-azaccount?view=azps-12.4.0
     #>
@@ -56,11 +64,11 @@ function Connect-FabricAccount {
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $false, HelpMessage = "Azure AD Tenant ID.")]
-        [string] $TenantId,
+        [guid] $TenantId,
 
         [Parameter(Mandatory = $false, HelpMessage = "AppId of the service principal.")]
         [Alias('AppId')]
-        [string] $ServicePrincipalId,
+        [guid] $ServicePrincipalId,
 
         [Parameter(Mandatory = $false, HelpMessage = "Secure secret of the service principal.")]
         [Alias('AppSecret')]

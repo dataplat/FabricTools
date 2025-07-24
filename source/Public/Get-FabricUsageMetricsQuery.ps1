@@ -31,6 +31,9 @@ This example retrieves the usage metrics for a specific dataset given the datase
 
 .NOTES
 The function defines the headers and body for a POST request to the PowerBI API to retrieve the usage metrics for the specified dataset. It then makes the POST request and returns the response.
+
+Author: Ioana Bouariu
+
     #>
 
     # This function retrieves usage metrics for a specific dataset.
@@ -40,9 +43,9 @@ The function defines the headers and body for a POST request to the PowerBI API 
     # Define parameters for the dataset ID, group ID, report name, token, and impersonated user.
     param (
         [Parameter(Mandatory = $true)]
-        [string]$DatasetID,
+        [guid]$DatasetID,
         [Parameter(Mandatory = $true)]
-        [string]$groupId,
+        [guid]$groupId,
         [Parameter(Mandatory = $true)]
         $reportname,
         [Parameter(Mandatory = $false)]

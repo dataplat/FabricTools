@@ -16,14 +16,18 @@ The `Get-FabricKQLQueryset` function sends a GET request to the Fabric API to re
 (Optional) The name of the specific KQLQueryset to retrieve.
 
 .EXAMPLE
-Get-FabricKQLQueryset -WorkspaceId "12345" -KQLQuerysetName "Development"
+    Retrieves the "Development" KQLQueryset from workspace "12345".
 
-Retrieves the "Development" KQLQueryset from workspace "12345".
+    ```powershell
+    Get-FabricKQLQueryset -WorkspaceId "12345" -KQLQuerysetName "Development"
+    ```
 
 .EXAMPLE
-Get-FabricKQLQueryset -WorkspaceId "12345"
+    Retrieves all KQLQuerysets in workspace "12345".
 
-Retrieves all KQLQuerysets in workspace "12345".
+    ```powershell
+    Get-FabricKQLQueryset -WorkspaceId "12345"
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
@@ -36,11 +40,11 @@ Author: Tiago Balabuch
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [string]$KQLQuerysetId,
+        [guid]$KQLQuerysetId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]

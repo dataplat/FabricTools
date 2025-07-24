@@ -1,3 +1,5 @@
+function Update-FabricDomain
+{
 <#
 .SYNOPSIS
 Updates a Fabric domain by its ID.
@@ -18,9 +20,11 @@ The new name for the domain. Must be alphanumeric.
 (Optional) The contributors' scope for the domain. Accepted values: 'AdminsOnly', 'AllTenant', 'SpecificUsersAndGroups'.
 
 .EXAMPLE
-Update-FabricDomain -DomainId "12345" -DomainName "NewDomain" -DomainDescription "Updated description" -DomainContributorsScope "AdminsOnly"
+    Updates the domain with ID "12345" with a new name, description, and contributors' scope.
 
-Updates the domain with ID "12345" with a new name, description, and contributors' scope.
+    ```powershell
+    Update-FabricDomain -DomainId "12345" -DomainName "NewDomain" -DomainDescription "Updated description" -DomainContributorsScope "AdminsOnly"
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
@@ -29,14 +33,11 @@ Updates the domain with ID "12345" with a new name, description, and contributor
 Author: Tiago Balabuch
 
 #>
-
-function Update-FabricDomain
-{
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$DomainId,
+        [guid]$DomainId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]

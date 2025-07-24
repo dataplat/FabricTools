@@ -16,28 +16,32 @@ The workspace object to be Seted. This is a mandatory parameter and can be piped
 The ID of the capacity to which the workspace will be Seted. This is a mandatory parameter.
 
 .EXAMPLE
-Register-FabricWorkspaceToCapacity -WorkspaceId "Workspace-GUID" -CapacityId "Capacity-GUID"
+    This example Sets the workspace with ID "Workspace-GUID" to the capacity with ID "Capacity-GUID".
 
-This example Sets the workspace with ID "Workspace-GUID" to the capacity with ID "Capacity-GUID".
+    ```powershell
+    Register-FabricWorkspaceToCapacity -WorkspaceId "Workspace-GUID" -CapacityId "Capacity-GUID"
+    ```
 
 .EXAMPLE
-$workspace | Register-FabricWorkspaceToCapacity -CapacityId "Capacity-GUID"
+    This example Sets the workspace object stored in the $workspace variable to the capacity with ID "Capacity-GUID". The workspace object is piped into the function.
 
-This example Sets the workspace object stored in the $workspace variable to the capacity with ID "Capacity-GUID". The workspace object is piped into the function.
+    ```powershell
+    $workspace | Register-FabricWorkspaceToCapacity -CapacityId "Capacity-GUID"
+    ```
 
 .NOTES
-The function makes a POST request to the PowerBI API to Set the workspace to the capacity. The PowerBI access token is retrieved using the Get-PowerBIAccessToken function.
+    The function makes a POST request to the PowerBI API to Set the workspace to the capacity. The PowerBI access token is retrieved using the Get-PowerBIAccessToken function.
+
+    Author: Ioana Bouariu
     #>
 
-
-    # This function Sets a PowerBI workspace to a capacity.
     # It supports multiple aliases for flexibility.
     [Alias("Register-FabWorkspaceToCapacity")]
     [CmdletBinding(SupportsShouldProcess)]
     param(
         # WorkspaceId is a mandatory parameter. It represents the ID of the workspace to be Seted.
         [Parameter(ParameterSetName = 'WorkspaceId')]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         # Workspace is a mandatory parameter. It represents the workspace object to be Seted.
         # This parameter can be piped into the function.
@@ -46,7 +50,7 @@ The function makes a POST request to the PowerBI API to Set the workspace to the
 
         # CapacityId is a mandatory parameter. It represents the ID of the capacity to which the workspace will be Seted.
         [Parameter(Mandatory = $true)]
-        [string]$CapacityId
+        [guid]$CapacityId
     )
     Process {
         # If the parameter set name is 'WorkspaceObject', the workspace ID is extracted from the workspace object.

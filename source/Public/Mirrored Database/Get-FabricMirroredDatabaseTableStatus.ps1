@@ -14,11 +14,16 @@ function Get-FabricMirroredDatabaseTableStatus {
     The ID of the mirrored database whose table status is to be retrieved.
 
     .EXAMPLE
-    Get-FabricMirroredDatabaseTableStatus -WorkspaceId "your-workspace-id" -MirroredDatabaseId "your-mirrored-database-id"
     This example retrieves the status of tables in a mirrored database with the specified ID in the specified workspace.
+
+    ```powershell
+    Get-FabricMirroredDatabaseTableStatus -WorkspaceId "your-workspace-id" -MirroredDatabaseId "your-mirrored-database-id"
+    ```
 
     .NOTES
     The function retrieves the PowerBI access token and makes a POST request to the PowerBI API to retrieve the status of tables in the specified mirrored database. It then returns the 'value' property of the response, which contains the table statuses.
+
+    Author: Tiago Balabuch
 
     #>
     [CmdletBinding()]
@@ -26,11 +31,11 @@ function Get-FabricMirroredDatabaseTableStatus {
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [string]$MirroredDatabaseId
+        [guid]$MirroredDatabaseId
     )
 
     try {

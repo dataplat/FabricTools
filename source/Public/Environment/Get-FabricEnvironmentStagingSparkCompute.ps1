@@ -14,9 +14,11 @@ The unique identifier of the workspace containing the target environment.
 The unique identifier of the environment for which staging Spark compute details are being retrieved.
 
 .EXAMPLE
-Get-FabricEnvironmentStagingSparkCompute -WorkspaceId "workspace-12345" -EnvironmentId "environment-67890"
+    Retrieves the staging Spark compute configurations for the specified environment in the given workspace.
 
-Retrieves the staging Spark compute configurations for the specified environment in the given workspace.
+    ```powershell
+    Get-FabricEnvironmentStagingSparkCompute -WorkspaceId "workspace-12345" -EnvironmentId "environment-67890"
+    ```
 
 .NOTES
 - Requires the `$FabricConfig` global object, including `BaseUrl` and `FabricHeaders`.
@@ -28,11 +30,11 @@ Author: Tiago Balabuch
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$EnvironmentId
+        [guid]$EnvironmentId
     )
 
     try {

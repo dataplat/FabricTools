@@ -1,3 +1,5 @@
+function Remove-FabricDataPipeline
+{
 <#
 .SYNOPSIS
     Removes a DataPipeline from a specified Microsoft Fabric workspace.
@@ -13,8 +15,11 @@
     The unique identifier of the DataPipeline to be removed.
 
 .EXAMPLE
-     Remove-FabricDataPipeline -WorkspaceId "workspace-12345" -DataPipelineId "pipeline-67890"
     This example removes the DataPipeline with ID "pipeline-67890" from the workspace with ID "workspace-12345".
+
+    ```powershell
+    Remove-FabricDataPipeline -WorkspaceId "workspace-12345" -DataPipelineId "pipeline-67890"
+    ```
 
 .NOTES
     - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
@@ -22,18 +27,15 @@
 
     Author: Tiago Balabuch
 #>
-
-function Remove-FabricDataPipeline
-{
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$DataPipelineId
+        [guid]$DataPipelineId
     )
     try
     {

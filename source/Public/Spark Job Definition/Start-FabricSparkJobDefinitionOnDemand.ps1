@@ -1,42 +1,46 @@
-<#
-.SYNOPSIS
-    Starts a Fabric Spark Job Definition on demand.
-
-.DESCRIPTION
-    This function initiates a Spark Job Definition on demand within a specified workspace.
-    It constructs the appropriate API endpoint URL and makes a POST request to start the job.
-    The function can optionally wait for the job to complete based on the 'waitForCompletion' parameter.
-
-.PARAMETER WorkspaceId
-    The ID of the workspace where the Spark Job Definition is located. This parameter is mandatory.
-
-.PARAMETER SparkJobDefinitionId
-    The ID of the Spark Job Definition to be started. This parameter is mandatory.
-
-.PARAMETER JobType
-    The type of job to be started. The default value is 'sparkjob'. This parameter is optional.
-
-.PARAMETER waitForCompletion
-    A boolean flag indicating whether to wait for the job to complete. The default value is $false. This parameter is optional.
-
-.EXAMPLE
-    Start-FabricSparkJobDefinitionOnDemand -WorkspaceId "workspace123" -SparkJobDefinitionId "jobdef456" -waitForCompletion $true
-
-.NOTES
-    Ensure that the necessary authentication tokens are valid before running this function.
-    The function logs detailed messages for debugging and informational purposes.
-#>
 function Start-FabricSparkJobDefinitionOnDemand
 {
+    <#
+    .SYNOPSIS
+        Starts a Fabric Spark Job Definition on demand.
+
+    .DESCRIPTION
+        This function initiates a Spark Job Definition on demand within a specified workspace.
+        It constructs the appropriate API endpoint URL and makes a POST request to start the job.
+        The function can optionally wait for the job to complete based on the 'waitForCompletion' parameter.
+
+    .PARAMETER WorkspaceId
+        The ID of the workspace where the Spark Job Definition is located. This parameter is mandatory.
+
+    .PARAMETER SparkJobDefinitionId
+        The ID of the Spark Job Definition to be started. This parameter is mandatory.
+
+    .PARAMETER JobType
+        The type of job to be started. The default value is 'sparkjob'. This parameter is optional.
+
+    .PARAMETER waitForCompletion
+        A boolean flag indicating whether to wait for the job to complete. The default value is $false. This parameter is optional.
+
+    .EXAMPLE
+        ```powershell
+        Start-FabricSparkJobDefinitionOnDemand -WorkspaceId "workspace123" -SparkJobDefinitionId "jobdef456" -waitForCompletion $true
+        ```
+
+    .NOTES
+        Ensure that the necessary authentication tokens are valid before running this function.
+        The function logs detailed messages for debugging and informational purposes.
+
+    Author: Tiago Balabuch
+    #>
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$SparkJobDefinitionId,
+        [guid]$SparkJobDefinitionId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]

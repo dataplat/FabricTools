@@ -1,10 +1,10 @@
-
-<#
+Function Import-FabricItem {
+    <#
     .SYNOPSIS
         Imports items using the Power BI Project format (PBIP) into a Fabric workspace from a specified file system source.
 
     .DESCRIPTION
-        The Import-FabricItem function imports items using the Power BI Project format (PBIP) into a Fabric workspace from a specified file system source. It supports multiple aliases for flexibility.
+        The `Import-FabricItem` function imports items using the Power BI Project format (PBIP) into a Fabric workspace from a specified file system source. It supports multiple aliases for flexibility.
         The function handles the import of datasets and reports, ensuring that the correct item type is used and that the items are created or updated as necessary.
 
     .PARAMETER fileOverrides
@@ -20,29 +20,22 @@
         A filter to limit the search for PBIP files to specific folders.
 
     .EXAMPLE
-        Import-FabricItems -path 'C:\PBIPFiles' -workspaceId '12345' -filter 'C:\PBIPFiles\Reports'
+    This example imports PBIP files from the 'C:\PBIPFiles' folder into the Fabric workspace with ID '12345'. It only searches for PBIP files in the 'C:\PBIPFiles\Reports' folder.
 
-        This example imports PBIP files from the 'C:\PBIPFiles' folder into the Fabric workspace with ID '12345'. It only searches for PBIP files in the 'C:\PBIPFiles\Reports' folder.
+    ```powershell
+    Import-FabricItem -path 'C:\PBIPFiles' -workspaceId '12345' -filter 'C:\PBIPFiles\Reports'
+    ```
 
     .NOTES
         This function requires the Invoke-FabricRestMethod function to be available in the current session.
-        This function was originally written by Rui Romano.
-        https://github.com/microsoft/Analysis-Services/tree/master/pbidevmode/fabricps-pbip
-#>
 
-Function Import-FabricItem {
-    <#
-    .SYNOPSIS
-        Imports items using the Power BI Project format (PBIP) into a Fabric workspace from a specified file system source.
-
-    .PARAMETER fileOverrides
-        This parameter let's you override a PBIP file without altering the local file.
+        Author: Rui Romano
     #>
     [CmdletBinding(SupportsShouldProcess)]
     param
     (
         [string]    $path = '.\pbipOutput'
-        , [string]    $workspaceId
+        , [guid]    $workspaceId
         , [string]    $filter = $null
         , [hashtable] $fileOverrides
     )

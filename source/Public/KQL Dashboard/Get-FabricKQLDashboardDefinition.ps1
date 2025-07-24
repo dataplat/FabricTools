@@ -1,4 +1,4 @@
-
+function Get-FabricKQLDashboardDefinition {
 <#
 .SYNOPSIS
 Retrieves the definition of a KQLDashboard from a specific workspace in Microsoft Fabric.
@@ -17,31 +17,36 @@ Handles both synchronous and asynchronous operations, with detailed logging and 
 Specifies the format of the KQLDashboard definition.
 
 .EXAMPLE
-Get-FabricKQLDashboardDefinition -WorkspaceId "12345" -KQLDashboardId "67890"
+    Retrieves the definition of the KQLDashboard with ID `67890` from the workspace with ID `12345` in the `ipynb` format.
 
-Retrieves the definition of the KQLDashboard with ID `67890` from the workspace with ID `12345` in the `ipynb` format.
+    ```powershell
+    Get-FabricKQLDashboardDefinition -WorkspaceId "12345" -KQLDashboardId "67890"
+    ```
 
 .EXAMPLE
-Get-FabricKQLDashboardDefinition -WorkspaceId "12345"
+    Retrieves the definitions of all KQLDashboards in the workspace with ID `12345` in the `ipynb` format.
 
-Retrieves the definitions of all KQLDashboards in the workspace with ID `12345` in the `ipynb` format.
+    ```powershell
+    Get-FabricKQLDashboardDefinition -WorkspaceId "12345"
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
 - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 - Handles long-running operations asynchronously.
 
+Author: Tiago Balabuch
+
 #>
-function Get-FabricKQLDashboardDefinition {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [string]$KQLDashboardId,
+        [guid]$KQLDashboardId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]

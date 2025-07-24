@@ -1,3 +1,5 @@
+function Update-FabricKQLDatabaseDefinition
+{
 <#
 .SYNOPSIS
 Updates the definition of a KQLDatabase in a Microsoft Fabric workspace.
@@ -26,14 +28,18 @@ Default: `$false`.
 (Optional) The file path to the KQLDatabase's schema definition file. The content will be encoded as Base64 and sent in the request.
 
 .EXAMPLE
-Update-FabricKQLDatabaseDefinition -WorkspaceId "12345" -KQLDatabaseId "67890" -KQLDatabasePathDefinition "C:\KQLDatabases\KQLDatabase.ipynb"
+    Updates the content of the KQLDatabase with ID `67890` in the workspace `12345` using the specified KQLDatabase file.
 
-Updates the content of the KQLDatabase with ID `67890` in the workspace `12345` using the specified KQLDatabase file.
+    ```powershell
+    Update-FabricKQLDatabaseDefinition -WorkspaceId "12345" -KQLDatabaseId "67890" -KQLDatabasePathDefinition "C:\KQLDatabases\KQLDatabase.ipynb"
+    ```
 
 .EXAMPLE
-Update-FabricKQLDatabaseDefinition -WorkspaceId "12345" -KQLDatabaseId "67890" -KQLDatabasePathDefinition "C:\KQLDatabases\KQLDatabase.ipynb" -UpdateMetadata $true
+    Updates both the content and metadata of the KQLDatabase with ID `67890` in the workspace `12345`.
 
-Updates both the content and metadata of the KQLDatabase with ID `67890` in the workspace `12345`.
+    ```powershell
+    Update-FabricKQLDatabaseDefinition -WorkspaceId "12345" -KQLDatabaseId "67890" -KQLDatabasePathDefinition "C:\KQLDatabases\KQLDatabase.ipynb" -UpdateMetadata $true
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
@@ -44,18 +50,15 @@ Updates both the content and metadata of the KQLDatabase with ID `67890` in the 
 Author: Tiago Balabuch
 
 #>
-
-function Update-FabricKQLDatabaseDefinition
-{
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$KQLDatabaseId,
+        [guid]$KQLDatabaseId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]

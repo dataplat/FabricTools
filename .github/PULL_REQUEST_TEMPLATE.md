@@ -5,13 +5,15 @@
     Your contribution to this project is greatly appreciated!
 
     TITLE: Please be descriptive not sensationalist.
-    Prepend the title with the [DscResourceName] if your PR is specific to a DSC resource.
     Also prepend with [BREAKING CHANGE] if relevant.
     i.e. [BREAKING CHANGE][xFile] Add security descriptor property
 
     You may remove this comment block, and the other comment blocks, but please
     keep the headers and the task list.
     Try to keep your PRs atomic: changes grouped in smallest batch affecting a single logical unit.
+    
+    PLEASE DO NOT submit PRs that contain multiple unrelated changes.
+    If you have multiple changes, please submit them in separate PRs.
 -->
 
 ## Pull Request (PR) description
@@ -59,4 +61,4 @@
 - [ ] Unit tests added/updated..
 - [ ] Integration tests added/updated (where possible).
 - [ ] Documentation added/updated (where applicable).
-- [ ] Code follows the [contribution guidelines](../CONTRIBUTING.md).
+- [ ] Code follows the [contribution guidelines](https://github.com/dataplat/FabricTools/blob/develop/CONTRIBUTING.md).

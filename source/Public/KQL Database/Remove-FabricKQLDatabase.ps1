@@ -1,3 +1,5 @@
+function Remove-FabricKQLDatabase
+{
 <#
 .SYNOPSIS
 Deletes an KQLDatabase from a specified workspace in Microsoft Fabric.
@@ -12,9 +14,11 @@ The `Remove-FabricKQLDatabase` function sends a DELETE request to the Fabric API
 (Mandatory) The ID of the KQLDatabase to be deleted.
 
 .EXAMPLE
-Remove-FabricKQLDatabase -WorkspaceId "12345" -KQLDatabaseId "67890"
+    Deletes the KQLDatabase with ID "67890" from workspace "12345".
 
-Deletes the KQLDatabase with ID "67890" from workspace "12345".
+    ```powershell
+    Remove-FabricKQLDatabase -WorkspaceId "12345" -KQLDatabaseId "67890"
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
@@ -23,18 +27,15 @@ Deletes the KQLDatabase with ID "67890" from workspace "12345".
 Author: Tiago Balabuch
 
 #>
-
-function Remove-FabricKQLDatabase
-{
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$KQLDatabaseId
+        [guid]$KQLDatabaseId
     )
 
     try

@@ -17,12 +17,18 @@ function Get-FabricDataPipeline {
     The name of the Data Pipeline to retrieve. This parameter is optional.
 
 .EXAMPLE
-    Get-FabricDataPipeline -WorkspaceId "workspace-12345" -Data PipelineId "Data Pipeline-67890"
     This example retrieves the Data Pipeline details for the Data Pipeline with ID "Data Pipeline-67890" in the workspace with ID "workspace-12345".
 
+    ```powershell
+    Get-FabricDataPipeline -WorkspaceId "workspace-12345" -Data PipelineId "Data Pipeline-67890"
+    ```
+
 .EXAMPLE
-    Get-FabricDataPipeline -WorkspaceId "workspace-12345" -Data PipelineName "My Data Pipeline"
     This example retrieves the Data Pipeline details for the Data Pipeline named "My Data Pipeline" in the workspace with ID "workspace-12345".
+
+    ```powershell
+    Get-FabricDataPipeline -WorkspaceId "workspace-12345" -Data PipelineName "My Data Pipeline"
+    ```
 
 .NOTES
     - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
@@ -34,11 +40,11 @@ function Get-FabricDataPipeline {
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [string]$DataPipelineId,
+        [guid]$DataPipelineId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]

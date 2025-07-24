@@ -1,3 +1,5 @@
+function New-FabricDomain
+{
 <#
 .SYNOPSIS
 Creates a new Fabric domain.
@@ -15,9 +17,11 @@ A description of the domain to be created.
 (Optional) The ID of the parent domain, if applicable.
 
 .EXAMPLE
-Add-FabricDomain -DomainName "Finance" -DomainDescription "Finance data domain" -ParentDomainId "12345"
+    Creates a "Finance" domain under the parent domain with ID "12345".
 
-Creates a "Finance" domain under the parent domain with ID "12345".
+    ```powershell
+    Add-FabricDomain -DomainName "Finance" -DomainDescription "Finance data domain" -ParentDomainId "12345"
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
@@ -26,9 +30,6 @@ Creates a "Finance" domain under the parent domain with ID "12345".
 Author: Tiago Balabuch
 
 #>
-
-function New-FabricDomain
-{
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]
@@ -41,7 +42,7 @@ function New-FabricDomain
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [string]$ParentDomainId
+        [guid]$ParentDomainId
     )
 
     try

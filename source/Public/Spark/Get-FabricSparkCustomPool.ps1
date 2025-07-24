@@ -1,50 +1,59 @@
-<#
-.SYNOPSIS
-    Retrieves Spark custom pools from a specified workspace.
-
-.DESCRIPTION
-    This function retrieves all Spark custom pools from a specified workspace using the provided WorkspaceId.
-    It handles token validation, constructs the API URL, makes the API request, and processes the response.
-    The function supports filtering by SparkCustomPoolId or SparkCustomPoolName, but not both simultaneously.
-
-.PARAMETER WorkspaceId
-    The ID of the workspace from which to retrieve Spark custom pools. This parameter is mandatory.
-
-.PARAMETER SparkCustomPoolId
-    The ID of the specific Spark custom pool to retrieve. This parameter is optional.
-
-.PARAMETER SparkCustomPoolName
-    The name of the specific Spark custom pool to retrieve. This parameter is optional.
-
-.EXAMPLE
-    Get-FabricSparkCustomPool -WorkspaceId "12345"
-    This example retrieves all Spark custom pools from the workspace with ID "12345".
-
-.EXAMPLE
-    Get-FabricSparkCustomPool -WorkspaceId "12345" -SparkCustomPoolId "pool1"
-    This example retrieves the Spark custom pool with ID "pool1" from the workspace with ID "12345".
-
-.EXAMPLE
-    Get-FabricSparkCustomPool -WorkspaceId "12345" -SparkCustomPoolName "MyPool"
-    This example retrieves the Spark custom pool with name "MyPool" from the workspace with ID "12345".
-
-.NOTES
-    - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-    - Calls `Confirm-TokenState` to ensure token validity before making the API request.
-    - Handles continuation tokens to retrieve all Spark custom pools if there are multiple pages of results.
-
-    Author: Tiago Balabuch
-#>
 function Get-FabricSparkCustomPool {
+    <#
+    .SYNOPSIS
+        Retrieves Spark custom pools from a specified workspace.
+
+    .DESCRIPTION
+        This function retrieves all Spark custom pools from a specified workspace using the provided WorkspaceId.
+        It handles token validation, constructs the API URL, makes the API request, and processes the response.
+        The function supports filtering by SparkCustomPoolId or SparkCustomPoolName, but not both simultaneously.
+
+    .PARAMETER WorkspaceId
+        The ID of the workspace from which to retrieve Spark custom pools. This parameter is mandatory.
+
+    .PARAMETER SparkCustomPoolId
+        The ID of the specific Spark custom pool to retrieve. This parameter is optional.
+
+    .PARAMETER SparkCustomPoolName
+        The name of the specific Spark custom pool to retrieve. This parameter is optional.
+
+    .EXAMPLE
+        This example retrieves all Spark custom pools from the workspace with ID "12345".
+
+        ```powershell
+        Get-FabricSparkCustomPool -WorkspaceId "12345"
+        ```
+
+    .EXAMPLE
+        This example retrieves the Spark custom pool with ID "pool1" from the workspace with ID "12345".
+
+        ```powershell
+        Get-FabricSparkCustomPool -WorkspaceId "12345" -SparkCustomPoolId "pool1"
+        ```
+
+    .EXAMPLE
+        This example retrieves the Spark custom pool with name "MyPool" from the workspace with ID "12345".
+
+        ```powershell
+        Get-FabricSparkCustomPool -WorkspaceId "12345" -SparkCustomPoolName "MyPool"
+        ```
+
+    .NOTES
+        - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
+        - Calls `Confirm-TokenState` to ensure token validity before making the API request.
+        - Handles continuation tokens to retrieve all Spark custom pools if there are multiple pages of results.
+
+        Author: Tiago Balabuch
+    #>
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [string]$SparkCustomPoolId,
+        [guid]$SparkCustomPoolId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]

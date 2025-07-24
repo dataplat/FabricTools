@@ -1,3 +1,5 @@
+function New-FabricLakehouse
+{
 <#
 .SYNOPSIS
 Creates a new Lakehouse in a specified Microsoft Fabric workspace.
@@ -20,7 +22,11 @@ An optional description for the Lakehouse.
 An optional path to enable schemas in the Lakehouse
 
 .EXAMPLE
-Add-FabricLakehouse -WorkspaceId "workspace-12345" -LakehouseName "New Lakehouse" -LakehouseEnableSchemas $true
+    Creates a new Lakehouse in the specified workspace with a given name and enable schemas option.
+
+    ```powershell
+    New-FabricLakehouse -WorkspaceId "workspace-12345" -LakehouseName "New Lakehouse" -LakehouseEnableSchemas $true
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
@@ -29,14 +35,11 @@ Add-FabricLakehouse -WorkspaceId "workspace-12345" -LakehouseName "New Lakehouse
 Author: Tiago Balabuch
 
 #>
-
-function New-FabricLakehouse
-{
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]

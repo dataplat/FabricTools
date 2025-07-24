@@ -15,7 +15,8 @@ function Get-FabricDebugInfo {
     This example shows the current session object.
 
 .NOTES
-    AUTHOR: Somebody wrote this
+
+    Author: Frank Geisler, Kamil Nowinski
 
     #>
 

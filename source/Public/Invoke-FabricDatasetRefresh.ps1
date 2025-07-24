@@ -1,4 +1,5 @@
-<#
+function Invoke-FabricDatasetRefresh {
+    <#
     .SYNOPSIS
     This function invokes a refresh of a PowerBI dataset
 
@@ -15,8 +16,10 @@
 
     .NOTES
     Alias: Invoke-FabDatasetRefresh
+
+    Author: Ioana Bouariu
+
 #>
-function Invoke-FabricDatasetRefresh {
     # Define aliases for the function for flexibility.
     [Alias("Invoke-FabDatasetRefresh")]
 
@@ -24,7 +27,7 @@ function Invoke-FabricDatasetRefresh {
     param(
         # Mandatory parameter for the dataset ID
         [Parameter(Mandatory = $true, ParameterSetName = "DatasetId")]
-        [string]$DatasetID
+        [guid]$DatasetID
     )
 
     Confirm-TokenState

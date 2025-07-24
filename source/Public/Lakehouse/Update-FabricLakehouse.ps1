@@ -1,3 +1,5 @@
+function Update-FabricLakehouse
+{
 <#
 .SYNOPSIS
 Updates the properties of a Fabric Lakehouse.
@@ -18,14 +20,18 @@ The new name for the Lakehouse.
 (Optional) The new description for the Lakehouse.
 
 .EXAMPLE
-Update-FabricLakehouse -LakehouseId "Lakehouse123" -LakehouseName "NewLakehouseName"
+    Updates the name of the Lakehouse with the ID "Lakehouse123" to "NewLakehouseName".
 
-Updates the name of the Lakehouse with the ID "Lakehouse123" to "NewLakehouseName".
+    ```powershell
+    Update-FabricLakehouse -LakehouseId "Lakehouse123" -LakehouseName "NewLakehouseName"
+    ```
 
 .EXAMPLE
-Update-FabricLakehouse -LakehouseId "Lakehouse123" -LakehouseName "NewName" -LakehouseDescription "Updated description"
+    Updates both the name and description of the Lakehouse "Lakehouse123".
 
-Updates both the name and description of the Lakehouse "Lakehouse123".
+    ```powershell
+    Update-FabricLakehouse -LakehouseId "Lakehouse123" -LakehouseName "NewName" -LakehouseDescription "Updated description"
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
@@ -34,18 +40,15 @@ Updates both the name and description of the Lakehouse "Lakehouse123".
 Author: Tiago Balabuch
 
 #>
-
-function Update-FabricLakehouse
-{
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$LakehouseId,
+        [guid]$LakehouseId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]

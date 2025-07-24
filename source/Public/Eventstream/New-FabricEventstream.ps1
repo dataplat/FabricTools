@@ -25,8 +25,11 @@ An optional path to the Eventstream definition file (e.g., .ipynb file) to uploa
 An optional path to the platform-specific definition (e.g., .platform file) to upload.
 
 .EXAMPLE
-#TODO Fix example name
-Add-FabricEventstream -WorkspaceId "workspace-12345" -EventstreamName "New Eventstream" -EventstreamPathDefinition "C:\Eventstreams\example.ipynb"
+    Creates a new Eventstream named "New Eventstream" in the workspace with ID "workspace-12345".
+
+    ```powershell
+    New-FabricEventstream -WorkspaceId "workspace-12345" -EventstreamName "New Eventstream"
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
@@ -35,12 +38,11 @@ Add-FabricEventstream -WorkspaceId "workspace-12345" -EventstreamName "New Event
 Author: Tiago Balabuch
 
 #>
-    #TODO SupportsShouldProcess
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]

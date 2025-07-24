@@ -1,78 +1,126 @@
-function Get-FabricSQLDatabase {
-
+function Get-FabricSQLDatabase
+{
     <#
-.SYNOPSIS
-    Retrieves Fabric SQLDatabases
+    .SYNOPSIS
+        Retrieves Fabric SQL Database details.
 
-.DESCRIPTION
-    Retrieves Fabric SQLDatabases. Without the SQLDatabaseName or SQLDatabaseID parameter,
-    all SQLDatabases are returned. If you want to retrieve a specific SQLDatabase, you can
-    use the SQLDatabaseName or SQLDatabaseID parameter. These parameters cannot be used together.
+    .DESCRIPTION
+        Retrieves Fabric SQL Database details. Without the SQLDatabaseName or SQLDatabaseID parameter,
+        all SQL Databases are returned. If you want to retrieve a specific SQLDatabase, you can
+        use the SQLDatabaseName or SQLDatabaseID parameter. These parameters cannot be used together.
 
-.PARAMETER WorkspaceId
-    Id of the Fabric Workspace for which the SQLDatabases should be retrieved. The value for WorkspaceId is a GUID.
-    An example of a GUID is '12345678-1234-1234-1234-123456789012'.
+    .PARAMETER WorkspaceId
+        Id of the Fabric Workspace for which the SQL Databases should be retrieved. The value for WorkspaceId is a GUID.
+        An example of a GUID is '12345678-1234-1234-1234-123456789012'.
 
-.PARAMETER SQLDatabaseName
-    The name of the KQLDatabase to retrieve. This parameter cannot be used together with SQLDatabaseID.
+    .PARAMETER Workspace
+        The workspace object. This is a mandatory parameter for the 'WorkspaceObject' parameter set and can be pipelined into the function.
+        The object can be easily retrieved by Get-FabricWorkspace function.
 
-.PARAMETER SQLDatabaseID
-    The Id of the SQLDatabase to retrieve. This parameter cannot be used together with SQLDatabaseName.
-    The value for SQLDatabaseID is a GUID. An example of a GUID is '12345678-1234-1234-1234-123456789012'.
+    .PARAMETER SQLDatabaseName
+        The name of the SQLDatabase to retrieve. This parameter cannot be used together with SQLDatabaseID.
 
-.EXAMPLE
-    Get-FabricSQLDatabase `
-        -WorkspaceId '12345678-1234-1234-1234-123456789012' `
-        -SQLDatabaseName 'MySQLDatabase'
+    .PARAMETER SQLDatabaseID
+        The Id of the SQLDatabase to retrieve. This parameter cannot be used together with SQLDatabaseName.
+        The value for SQLDatabaseID is a GUID. An example of a GUID is '12345678-1234-1234-1234-123456789012'.
 
-    This example will retrieve the SQLDatabase with the name 'MySQLDatabase'.
+    .EXAMPLE
+        Returns the details of the Fabric SQL Database with the name 'MySQLDatabase' in the workspace that is specified by the WorkspaceId.
 
-.EXAMPLE
-    Get-FabricSQLDatabase
+        ```powershell
+        $FabricSQLDatabaseConfig = @{
+            WorkspaceId = '12345678-1234-1234-1234-123456789012'
+            SQLDatabaseName = 'MySQLDatabase'
+        }
+        Get-FabricSQLDatabase @FabricSQLDatabaseConfig
+        ```
 
-    This example will retrieve all SQLDatabases in the workspace that is specified
-    by the WorkspaceId.
+    .EXAMPLE
+        Returns the details of the Fabric SQL Databases in the workspace that is specified by the WorkspaceId.
 
-.EXAMPLE
-    Get-FabricSQLDatabase `
-        -WorkspaceId '12345678-1234-1234-1234-123456789012' `
-        -SQLDatabaseId '12345678-1234-1234-1234-123456789012'
+        ```powershell
+        Get-FabricSQLDatabase -WorkspaceId '12345678-1234-1234-1234-123456789012'
+        ```
 
-    This example will retrieve the SQLDatabase with the ID '12345678-1234-1234-1234-123456789012'.
+    .EXAMPLE
+        Returns the details of the Fabric SQL Database with the ID '12345678-1234-1234-1234-123456789012' from the workspace with the ID '12345678-1234-1234-1234-123456789012'.
 
-.NOTES
-    Revision History:
-        - 2025-03-06 - KNO: Init version of the function
+        ```powershell
+        Get-FabricSQLDatabase -WorkspaceId '12345678-1234-1234-1234-123456789012' -SQLDatabaseId '12345678-1234-1234-1234-123456789012'
+        ```
+
+    .EXAMPLE
+        Returns the details of the Fabric SQL Databases in the MsLearn-dev workspace.
+
+        ```powershell
+        Get-FabricWorkspace -WorkspaceName 'MsLearn-dev' | Get-FabricSQLDatabase
+        ```
+
+    .NOTES
+        Author: Kamil Nowinski
+
     #>
-
-
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory = $true)]
-        [string]$WorkspaceId,
+        [Parameter(Mandatory = $true, ParameterSetName = 'WorkspaceId')]
+        [guid]$WorkspaceId,
+
+        [Parameter(Mandatory = $true, ParameterSetName = 'WorkspaceObject', ValueFromPipeline = $true )]
+        $Workspace,
 
         [Alias("Name", "DisplayName")]
         [string]$SQLDatabaseName,
 
         [Alias("Id")]
-        [string]$SQLDatabaseId
+        [guid]$SQLDatabaseId
     )
 
-    Confirm-TokenState
+    begin
+    {
+        Confirm-TokenState
 
-    Write-Verbose "You can either use SQLDatabaseName or SQLDatabaseID not both. If both are used throw error"
-    if ($PSBoundParameters.ContainsKey("SQLDatabaseName") -and $PSBoundParameters.ContainsKey("SQLDatabaseId")) {
-        throw "Parameters SQLDatabaseName and SQLDatabaseId cannot be used together"
+        if ($PSBoundParameters.ContainsKey("SQLDatabaseName") -and $PSBoundParameters.ContainsKey("SQLDatabaseId"))
+        {
+            Write-Warning "The parameters SQLDatabaseName and SQLDatabaseId cannot be used together"
+            return
+        }
+
     }
 
-    # Create SQLDatabase API
-    $uri = "$($FabricSession.BaseApiUrl)/workspaces/$workspaceId/SqlDatabases"
-    if ($SQLDatabaseId) {
-        $uri = "$uri/$SQLDatabaseId"
+    process
+    {
+
+        if ($PSCmdlet.ParameterSetName -eq 'WorkspaceObject')
+        {
+            $WorkspaceId = $Workspace.id
+        }
+
+        # Create SQLDatabase API
+        $uri = "workspaces/$WorkspaceId/sqlDatabases"
+        if ($SQLDatabaseId)
+        {
+            $uri = "$uri/$SQLDatabaseId"
+        }
+
+        # Make the API request and validate the response code
+        $apiParams = @{
+            Uri = $uri
+            Method = 'GET'
+            TypeName = 'SQL Database'
+            ObjectIdOrName = $SQLDatabaseName
+            HandleResponse = $true
+            ExtractValue = 'True'
+        }
+
+        $response = Invoke-FabricRestMethod @apiParams
+
+        if ($SQLDatabaseName)
+        {
+            # Filter the SQLDatabase by name
+            $response = $response | Where-Object { $_.displayName -eq $SQLDatabaseName }
+        }
+        $response
     }
-    $result = Invoke-RestMethod -Headers $FabricSession.HeaderParams -Uri $uri
-    ##$databases.Where({$_.displayName -eq $body.displayName}).id
 
-    return $result.value
-
+    End {}
 }

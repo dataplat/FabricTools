@@ -227,3 +227,66 @@ Describe 'Help for module' -Tags 'helpQuality' {
         }
     }
 }
+
+Describe "Data Types for functions" -Tag "ParameterTypes" {
+    $tests = $allModuleFunctions | Where-Object -FilterScript {
+            $_.Name -notin (
+                'Get-FabricLongRunningOperation',
+                'Get-FabricDeploymentPipelineStage'
+            )
+        } | ForEach-Object {
+        [PSCustomObject]@{
+            FunctionName = $_.Name
+            Parameters   = @(
+                $_.Parameters.Values | ForEach-Object {
+                    [PSCustomObject]@{
+                        Name          = $_.Name
+                        ParameterType = $_.ParameterType.FullName
+                    }
+                }
+            )
+        }
+    }
+
+    Context "Checking Parameter Types for Function <_.FunctionName>" -ForEach $tests {
+        It "Should have correct parameter types for parameters that end id <_.Name>" -ForEach ($_.Parameters | Where-Object { $_.Name -like '*id' }) {
+            $_.ParameterType | Should -Be 'System.Guid' -Because "Parameter $_.Name should be of type System.Guid"
+        }
+    }
+}
+
+
+BeforeDiscovery {
+    # Must use the imported module to build test cases.
+    $path = ".\source\public"
+    $allFunctionFiles = Get-ChildItem -Path $path -Recurse -Filter "*.ps1"
+
+    # Build test cases.
+    $testCases = @()
+
+    foreach ($file in $allFunctionFiles)
+    {
+        $testCases += @{
+            FullName = $file.FullName
+            Name     = $file.BaseName
+        }
+    }
+}
+
+Describe 'Author for functions' {
+    It 'Should have an author for <Name>' -ForEach ($testCases) {
+        $scriptFileRawContent = Get-Content -Raw -Path $FullName
+
+        $authorLine = $scriptFileRawContent | Where-Object { $_ -match 'Author:\s*(.+)' } | Select-Object -First 1
+
+        if ($authorLine -match 'Author:\s*(.+)')
+        {
+            $author = $matches[1].Trim()
+            $author | Should -Not -BeNullOrEmpty
+        }
+        else
+        {
+            throw "Author not found in function file: $($functionFile.FullName)"
+        }
+    }
+}

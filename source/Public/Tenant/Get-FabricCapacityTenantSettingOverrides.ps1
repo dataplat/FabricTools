@@ -1,35 +1,39 @@
-<#
-.SYNOPSIS
-Retrieves tenant setting overrides for a specific capacity or all capacities in the Fabric tenant.
-
-.DESCRIPTION
-The `Get-FabricCapacityTenantSettingOverrides` function retrieves tenant setting overrides for a specific capacity or all capacities in the Fabric tenant by making a GET request to the appropriate API endpoint. If a `capacityId` is provided, the function retrieves overrides for that specific capacity. Otherwise, it retrieves overrides for all capacities.
-
-.PARAMETER capacityId
-The ID of the capacity for which tenant setting overrides should be retrieved. If not provided, overrides for all capacities will be retrieved.
-
-.EXAMPLE
-Get-FabricCapacityTenantSettingOverrides
-
-Returns all capacities tenant setting overrides.
-
-.EXAMPLE
-Get-FabricCapacityTenantSettingOverrides -capacityId "12345"
-
-Returns tenant setting overrides for the capacity with ID "12345".
-
-.NOTES
-- Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-- Calls `Confirm-TokenState` to ensure token validity before making the API request.
-
-Author: Tiago Balabuch
-#>
 function Get-FabricCapacityTenantSettingOverrides {
+    <#
+    .SYNOPSIS
+    Retrieves tenant setting overrides for a specific capacity or all capacities in the Fabric tenant.
+
+    .DESCRIPTION
+    The `Get-FabricCapacityTenantSettingOverrides` function retrieves tenant setting overrides for a specific capacity or all capacities in the Fabric tenant by making a GET request to the appropriate API endpoint. If a `capacityId` is provided, the function retrieves overrides for that specific capacity. Otherwise, it retrieves overrides for all capacities.
+
+    .PARAMETER capacityId
+    The ID of the capacity for which tenant setting overrides should be retrieved. If not provided, overrides for all capacities will be retrieved.
+
+    .EXAMPLE
+        Returns all capacities tenant setting overrides.
+
+        ```powershell
+        Get-FabricCapacityTenantSettingOverrides
+        ```
+
+    .EXAMPLE
+        Returns tenant setting overrides for the capacity with ID "12345".
+
+        ```powershell
+        Get-FabricCapacityTenantSettingOverrides -capacityId "12345"
+        ```
+
+    .NOTES
+    - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
+    - Calls `Confirm-TokenState` to ensure token validity before making the API request.
+
+    Author: Tiago Balabuch
+    #>
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [string]$capacityId
+        [guid]$CapacityId
     )
 
     try {

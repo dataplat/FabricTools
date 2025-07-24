@@ -1,3 +1,5 @@
+function Update-FabricEventstreamDefinition
+{
 <#
 .SYNOPSIS
 Updates the definition of a Eventstream in a Microsoft Fabric workspace.
@@ -23,14 +25,18 @@ The Eventstream content can be provided as file paths, and metadata updates can 
 Default: `$false`.
 
 .EXAMPLE
-Update-FabricEventstreamDefinition -WorkspaceId "12345" -EventstreamId "67890" -EventstreamPathDefinition "C:\Eventstreams\Eventstream.ipynb"
+    Updates the content of the Eventstream with ID `67890` in the workspace `12345` using the specified Eventstream file.
 
-Updates the content of the Eventstream with ID `67890` in the workspace `12345` using the specified Eventstream file.
+    ```powershell
+    Update-FabricEventstreamDefinition -WorkspaceId "12345" -EventstreamId "67890" -EventstreamPathDefinition "C:\Eventstreams\Eventstream.ipynb"
+    ```
 
 .EXAMPLE
-Update-FabricEventstreamDefinition -WorkspaceId "12345" -EventstreamId "67890" -EventstreamPathDefinition "C:\Eventstreams\Eventstream.ipynb" -UpdateMetadata $true
+    Updates both the content and metadata of the Eventstream with ID `67890` in the workspace `12345`.
 
-Updates both the content and metadata of the Eventstream with ID `67890` in the workspace `12345`.
+    ```powershell
+    Update-FabricEventstreamDefinition -WorkspaceId "12345" -EventstreamId "67890" -EventstreamPathDefinition "C:\Eventstreams\Eventstream.ipynb" -UpdateMetadata $true
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
@@ -41,18 +47,15 @@ Updates both the content and metadata of the Eventstream with ID `67890` in the 
 Author: Tiago Balabuch
 
 #>
-
-function Update-FabricEventstreamDefinition
-{
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$EventstreamId,
+        [guid]$EventstreamId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]

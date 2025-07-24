@@ -10,15 +10,18 @@ The New-FabricWorkspaceUsageMetricsReport function retrieves the workspace usage
 The ID of the workspace. This is a mandatory parameter.
 
 .EXAMPLE
-New-FabricWorkspaceUsageMetricsReport -workspaceId "your-workspace-id"
+    This example retrieves the workspace usage metrics dataset ID for a specific workspace given the workspace ID.
 
-This example retrieves the workspace usage metrics dataset ID for a specific workspace given the workspace ID.
+    ```powershell
+    New-FabricWorkspaceUsageMetricsReport -workspaceId "your-workspace-id"
+    ```
 
 .NOTES
 The function retrieves the PowerBI access token and the Fabric API cluster URI. It then makes a GET request to the Fabric API to retrieve the workspace usage metrics dataset ID, parses the response and replaces certain keys to match the expected format, and returns the 'dbName' property of the first model in the response, which is the dataset ID.
-    #>
 
-    # This function retrieves the workspace usage metrics dataset ID.
+Author: Ioana Bouariu
+
+    #>
 
     # Define aliases for the function for flexibility.
     [Alias("New-FabWorkspaceUsageMetricsReport")]
@@ -26,7 +29,7 @@ The function retrieves the PowerBI access token and the Fabric API cluster URI. 
     # Define a parameter for the workspace ID.
     param(
         [Parameter(Mandatory = $true)]
-        [string]$workspaceId
+        [guid]$WorkspaceId
     )
 
     Confirm-TokenState

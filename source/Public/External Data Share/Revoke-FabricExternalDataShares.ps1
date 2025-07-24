@@ -1,4 +1,5 @@
 function Revoke-FabricExternalDataShares {
+
     <#
 .SYNOPSIS
     Retrieves External Data Shares details from a specified Microsoft Fabric.
@@ -17,8 +18,11 @@ function Revoke-FabricExternalDataShares {
     The unique identifier of the External Data Share to be retrieved.
 
     .EXAMPLE
-    Get-FabricExternalDataShares
     This example retrieves the External Data Shares details
+
+    ```powershell
+    Get-FabricExternalDataShares
+    ```
 
 .NOTES
     - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
@@ -26,20 +30,19 @@ function Revoke-FabricExternalDataShares {
 
     Author: Tiago Balabuch
     #>
-
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$ItemId,
+        [guid]$ItemId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$ExternalDataShareId
+        [guid]$ExternalDataShareId
     )
 
     try {

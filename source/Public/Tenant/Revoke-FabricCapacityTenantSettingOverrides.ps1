@@ -1,33 +1,35 @@
-<#
-.SYNOPSIS
-Removes a tenant setting override from a specific capacity in the Fabric tenant.
-
-.DESCRIPTION
-The `Revoke-FabricCapacityTenantSettingOverrides` function deletes a specific tenant setting override for a given capacity in the Fabric tenant by making a DELETE request to the appropriate API endpoint.
-
-.PARAMETER capacityId
-The unique identifier of the capacity from which the tenant setting override will be removed.
-
-.PARAMETER tenantSettingName
-The name of the tenant setting override to be removed.
-
-.EXAMPLE
-Revoke-FabricCapacityTenantSettingOverrides -capacityId "12345" -tenantSettingName "ExampleSetting"
-
-Removes the tenant setting override named "ExampleSetting" from the capacity with ID "12345".
-
-.NOTES
-- Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-- Calls `Confirm-TokenState` to ensure token validity before making the API request.
-
-Author: Tiago Balabuch
-#>
 function Revoke-FabricCapacityTenantSettingOverrides {
+    <#
+    .SYNOPSIS
+        Removes a tenant setting override from a specific capacity in the Fabric tenant.
+
+    .DESCRIPTION
+        The `Revoke-FabricCapacityTenantSettingOverrides` function deletes a specific tenant setting override for a given capacity in the Fabric tenant by making a DELETE request to the appropriate API endpoint.
+
+    .PARAMETER capacityId
+        The unique identifier of the capacity from which the tenant setting override will be removed.
+
+    .PARAMETER tenantSettingName
+        The name of the tenant setting override to be removed.
+
+    .EXAMPLE
+        Removes the tenant setting override named "ExampleSetting" from the capacity with ID "12345".
+
+        ```powershell
+        Revoke-FabricCapacityTenantSettingOverrides -capacityId "12345" -tenantSettingName "ExampleSetting"
+        ```
+
+    .NOTES
+        - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
+        - Calls `Confirm-TokenState` to ensure token validity before making the API request.
+
+        Author: Tiago Balabuch
+    #>
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$capacityId,
+        [guid]$CapacityId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]

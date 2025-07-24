@@ -1,22 +1,24 @@
-<#
-.SYNOPSIS
-Retrieves tenant setting overrides for all workspaces in the Fabric tenant.
-
-.DESCRIPTION
-The `Get-FabricWorkspaceTenantSettingOverrides` function retrieves tenant setting overrides for all workspaces in the Fabric tenant by making a GET request to the appropriate API endpoint. The function validates the authentication token before making the request and handles the response accordingly.
-
-.EXAMPLE
-Get-FabricWorkspaceTenantSettingOverrides
-
-Returns all workspaces tenant setting overrides.
-
-.NOTES
-- Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-- Calls `Confirm-TokenState` to ensure token validity before making the API request.
-
-Author: Tiago Balabuch
-#>
 function Get-FabricWorkspaceTenantSettingOverrides {
+    <#
+    .SYNOPSIS
+        Retrieves tenant setting overrides for all workspaces in the Fabric tenant.
+
+    .DESCRIPTION
+        The `Get-FabricWorkspaceTenantSettingOverrides` function retrieves tenant setting overrides for all workspaces in the Fabric tenant by making a GET request to the appropriate API endpoint. The function validates the authentication token before making the request and handles the response accordingly.
+
+    .EXAMPLE
+        Returns all workspaces tenant setting overrides.
+
+        ```powershell
+        Get-FabricWorkspaceTenantSettingOverrides
+        ```
+
+    .NOTES
+        - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
+        - Calls `Confirm-TokenState` to ensure token validity before making the API request.
+
+        Author: Tiago Balabuch
+    #>
     [CmdletBinding()]
     param ( )
 

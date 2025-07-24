@@ -1,5 +1,6 @@
 function Start-FabricMirroredDatabaseMirroring
 {
+
     <#
 
     .SYNOPSIS
@@ -16,24 +17,29 @@ function Start-FabricMirroredDatabaseMirroring
     The unique identifier of the mirrored database to be started. This parameter is mandatory.
 
     .EXAMPLE
-    Start-FabricMirroredDatabaseMirroring -WorkspaceId "12345" -MirroredDatabaseId "67890"
     Starts the mirroring of the mirrored database with ID `67890` in the workspace `12345`.
+
+    ```powershell
+    Start-FabricMirroredDatabaseMirroring -WorkspaceId "12345" -MirroredDatabaseId "67890"
+    ```
 
     .NOTES
     - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
     - Calls `Confirm-TokenState` to ensure token validity before making the API request.
     - This function handles asynchronous operations and retrieves operation results if required.
 
+    Author: Tiago Balabuch
+
     #>
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [string]$MirroredDatabaseId
+        [guid]$MirroredDatabaseId
     )
 
     try

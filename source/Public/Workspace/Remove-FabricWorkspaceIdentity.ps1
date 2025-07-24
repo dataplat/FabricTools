@@ -1,32 +1,33 @@
-<#
-.SYNOPSIS
-Deprovisions the Managed Identity for a specified Fabric workspace.
-
-.DESCRIPTION
-The `Remove-FabricWorkspaceCapacity` function deprovisions the Managed Identity from the given workspace by calling the appropriate API endpoint.
-
-.PARAMETER WorkspaceId
-The unique identifier of the workspace from which the identity will be removed.
-
-.EXAMPLE
-Remove-FabricWorkspaceCapacity -WorkspaceId "workspace123"
-
-Deprovisions the Managed Identity for the workspace with ID "workspace123".
-
-.NOTES
-- Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-- Calls `Confirm-TokenState` to ensure token validity before making the API request.
-
-Author: Tiago Balabuch
-#>
-
 function Remove-FabricWorkspaceIdentity
 {
+    <#
+    .SYNOPSIS
+        Deprovisions the Managed Identity for a specified Fabric workspace.
+
+    .DESCRIPTION
+        The `Remove-FabricWorkspaceCapacity` function deprovisions the Managed Identity from the given workspace by calling the appropriate API endpoint.
+
+    .PARAMETER WorkspaceId
+        The unique identifier of the workspace from which the identity will be removed.
+
+    .EXAMPLE
+        Deprovisions the Managed Identity for the workspace with ID "workspace123".
+
+        ```powershell
+        Remove-FabricWorkspaceCapacity -WorkspaceId "workspace123"
+        ```
+
+    .NOTES
+        - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
+        - Calls `Confirm-TokenState` to ensure token validity before making the API request.
+
+        Author: Tiago Balabuch
+    #>
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId
+        [guid]$WorkspaceId
     )
 
     try

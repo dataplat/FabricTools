@@ -1,44 +1,50 @@
-<#
-.SYNOPSIS
-    Retrieves warehouse details from a specified Microsoft Fabric workspace.
-
-.DESCRIPTION
-    This function retrieves warehouse details from a specified workspace using either the provided WarehouseId or WarehouseName.
-    It handles token validation, constructs the API URL, makes the API request, and processes the response.
-
-.PARAMETER WorkspaceId
-    The unique identifier of the workspace where the warehouse exists. This parameter is mandatory.
-
-.PARAMETER WarehouseId
-    The unique identifier of the warehouse to retrieve. This parameter is optional.
-
-.PARAMETER WarehouseName
-    The name of the warehouse to retrieve. This parameter is optional.
-
-.EXAMPLE
-     Get-FabricWarehouse -WorkspaceId "workspace-12345" -WarehouseId "warehouse-67890"
-    This example retrieves the warehouse details for the warehouse with ID "warehouse-67890" in the workspace with ID "workspace-12345".
-
-.EXAMPLE
-     Get-FabricWarehouse -WorkspaceId "workspace-12345" -WarehouseName "My Warehouse"
-    This example retrieves the warehouse details for the warehouse named "My Warehouse" in the workspace with ID "workspace-12345".
-
-.NOTES
-    - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-    - Calls `Confirm-TokenState` to ensure token validity before making the API request.
-
-    Author: Tiago Balabuch
-#>
 function Get-FabricWarehouse {
+    <#
+    .SYNOPSIS
+        Retrieves warehouse details from a specified Microsoft Fabric workspace.
+
+    .DESCRIPTION
+        This function retrieves warehouse details from a specified workspace using either the provided WarehouseId or WarehouseName.
+        It handles token validation, constructs the API URL, makes the API request, and processes the response.
+
+    .PARAMETER WorkspaceId
+        The unique identifier of the workspace where the warehouse exists. This parameter is mandatory.
+
+    .PARAMETER WarehouseId
+        The unique identifier of the warehouse to retrieve. This parameter is optional.
+
+    .PARAMETER WarehouseName
+        The name of the warehouse to retrieve. This parameter is optional.
+
+    .EXAMPLE
+        This example retrieves the warehouse details for the warehouse with ID "warehouse-67890" in the workspace with ID "workspace-12345".
+
+        ```powershell
+        Get-FabricWarehouse -WorkspaceId "workspace-12345" -WarehouseId "warehouse-67890"
+        ```
+
+    .EXAMPLE
+        This example retrieves the warehouse details for the warehouse named "My Warehouse" in the workspace with ID "workspace-12345".
+
+        ```powershell
+        Get-FabricWarehouse -WorkspaceId "workspace-12345" -WarehouseName "My Warehouse"
+        ```
+
+    .NOTES
+        - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
+        - Calls `Confirm-TokenState` to ensure token validity before making the API request.
+
+        Author: Tiago Balabuch
+    #>
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [string]$WarehouseId,
+        [guid]$WarehouseId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]

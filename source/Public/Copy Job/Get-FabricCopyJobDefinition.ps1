@@ -1,3 +1,4 @@
+function Get-FabricCopyJobDefinition {
 <#
 .SYNOPSIS
 Retrieves the definition of a Copy Job from a specific workspace in Microsoft Fabric.
@@ -16,9 +17,11 @@ It supports both synchronous and asynchronous operations, with detailed logging 
 (Optional) Specifies the format of the Copy Job definition. For example, 'json' or 'xml'.
 
 .EXAMPLE
-Get-FabricCopyJobDefinition -WorkspaceId "12345" -CopyJobId "67890"
+    Retrieves the definition of the Copy Job with ID `67890` from the workspace with ID `12345`.
 
-Retrieves the definition of the Copy Job with ID `67890` from the workspace with ID `12345`.
+    ```powershell
+    Get-FabricCopyJobDefinition -WorkspaceId "12345" -CopyJobId "67890"
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
@@ -26,17 +29,18 @@ Retrieves the definition of the Copy Job with ID `67890` from the workspace with
 - Handles long-running operations asynchronously.
 - Logs detailed information for debugging purposes.
 
+Author: Tiago Balabuch
+
 #>
-function Get-FabricCopyJobDefinition {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$CopyJobId,
+        [guid]$CopyJobId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]

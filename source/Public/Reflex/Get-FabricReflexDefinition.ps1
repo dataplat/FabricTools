@@ -1,3 +1,4 @@
+function Get-FabricReflexDefinition {
 <#
 .SYNOPSIS
     Retrieves the definition of an Reflex from a specified Microsoft Fabric workspace.
@@ -16,12 +17,18 @@
     The format in which to retrieve the Reflex definition. This parameter is optional.
 
 .EXAMPLE
-    Get-FabricReflexDefinition -WorkspaceId "workspace-12345" -ReflexId "Reflex-67890"
     This example retrieves the definition of the Reflex with ID "Reflex-67890" in the workspace with ID "workspace-12345".
 
+    ```powershell
+    Get-FabricReflexDefinition -WorkspaceId "workspace-12345" -ReflexId "Reflex-67890"
+    ```
+
 .EXAMPLE
-    Get-FabricReflexDefinition -WorkspaceId "workspace-12345" -ReflexId "Reflex-67890" -ReflexFormat "json"
     This example retrieves the definition of the Reflex with ID "Reflex-67890" in the workspace with ID "workspace-12345" in JSON format.
+
+    ```powershell
+    Get-FabricReflexDefinition -WorkspaceId "workspace-12345" -ReflexId "Reflex-67890" -ReflexFormat "json"
+    ```
 
 .NOTES
     - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
@@ -30,16 +37,15 @@
     Author: Tiago Balabuch
 
 #>
-function Get-FabricReflexDefinition {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [string]$ReflexId,
+        [guid]$ReflexId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]

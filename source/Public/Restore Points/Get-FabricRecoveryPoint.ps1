@@ -1,43 +1,46 @@
-<#
-.SYNOPSIS
-Get a list of Fabric recovery points.
-
-.DESCRIPTION
-Get a list of Fabric recovery points. Results can be filter by date or type.
-
-.PARAMETER BaseUrl
-Defaults to api.powerbi.com
-
-.PARAMETER WorkspaceGUID
-This is the workspace GUID in which the data warehouse resides.
-
-.PARAMETER DataWarehouseGUID
-The GUID for the data warehouse which we want to retrieve restore points for.
-
-.PARAMETER Since
-Filter the results to only include restore points created after this date.
-
-.PARAMETER Type
-Filter the results to only include restore points of this type.
-
-.PARAMETER CreateTime
-The specific unique time of the restore point to remove. Get this from Get-FabricRecoveryPoint.
-
-.EXAMPLE
-PS> Get-FabricRecoveryPoint -WorkspaceGUID 'GUID-GUID-GUID-GUID' -DataWarehouseGUID 'GUID-GUID-GUID-GUID'
-
-Gets all the available recovery points for the specified data warehouse, in the specified workspace.
-
-.NOTES
-Based on API calls from this blog post: https://blog.fabric.microsoft.com/en-US/blog/the-art-of-data-warehouse-recovery-within-microsoft-fabric/
-
-#>
-
 function Get-FabricRecoveryPoint {
-    param (
-        [String]$WorkspaceGUID,
+    <#
+    .SYNOPSIS
+    Get a list of Fabric recovery points.
 
-        [String]$DataWarehouseGUID,
+    .DESCRIPTION
+    Get a list of Fabric recovery points. Results can be filter by date or type.
+
+    .PARAMETER BaseUrl
+    Defaults to api.powerbi.com
+
+    .PARAMETER WorkspaceGUID
+    This is the workspace GUID in which the data warehouse resides.
+
+    .PARAMETER DataWarehouseGUID
+    The GUID for the data warehouse which we want to retrieve restore points for.
+
+    .PARAMETER Since
+    Filter the results to only include restore points created after this date.
+
+    .PARAMETER Type
+    Filter the results to only include restore points of this type.
+
+    .PARAMETER CreateTime
+    The specific unique time of the restore point to remove. Get this from Get-FabricRecoveryPoint.
+
+    .EXAMPLE
+        Gets all the available recovery points for the specified data warehouse, in the specified workspace.
+
+        ```powershell
+        Get-FabricRecoveryPoint -WorkspaceGUID 'GUID-GUID-GUID-GUID' -DataWarehouseGUID 'GUID-GUID-GUID-GUID'
+        ```
+
+    .NOTES
+    Based on API calls from this blog post: https://blog.fabric.microsoft.com/en-US/blog/the-art-of-data-warehouse-recovery-within-microsoft-fabric/
+
+    Author: Jess Pomfret
+
+    #>
+    param (
+        [guid]$WorkspaceGUID,
+
+        [guid]$DataWarehouseGUID,
 
         [String]$BaseUrl = 'api.powerbi.com',
 

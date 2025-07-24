@@ -41,7 +41,7 @@ function Write-Message {
         [string]$Message,
 
         [Parameter()]
-        [ValidateSet("Message","Info", "Error", "Warning","Critical", "Verbose", "Debug", IgnoreCase = $true)]
+        [ValidateSet("Message", "Info", "Error", "Warning", "Critical", "Verbose", "Debug", IgnoreCase = $true)]
         [string]$Level = "Info",
 
         [Parameter()]
@@ -54,18 +54,18 @@ function Write-Message {
             $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
 
             # Construct log message
-            $logMessage = "[$timestamp] [$Level] $Message"
+            $logMessage = $Message
+            $fn = (Get-PSCallStack)[1].Command
 
             # Write log message to console with colors
             switch ($Level) {
-                "Message" { Write-Host $logMessage -ForegroundColor White }
-                "Info" { Write-Host $logMessage -ForegroundColor Green }
-                "Error" { Write-Host $logMessage -ForegroundColor Red }
-                "Warning" { Write-Host $logMessage -ForegroundColor Yellow } 
-                "Critical" { Write-Host $logMessage -ForegroundColor Red }
-                "Verbose" { Write-Verbose $logMessage }
-                "Debug" { Write-Debug $logMessage }
-
+                "Message"  { Write-PSFMessage -Message $logMessage -FunctionName $fn -Level Host }
+                "Info"     { Write-PSFMessage -Message $logMessage -FunctionName $fn -Level Important }
+                "Error"    { Write-PSFMessage -Message $logMessage -FunctionName $fn -Level Error }
+                "Warning"  { Write-PSFMessage -Message $logMessage -FunctionName $fn -Level Warning }
+                "Critical" { Write-PSFMessage -Message $logMessage -FunctionName $fn -Level Critical }
+                "Verbose"  { Write-PSFMessage -Message $logMessage -FunctionName $fn -Level Verbose }
+                "Debug"    { Write-PSFMessage -Message $logMessage -FunctionName $fn -Level Debug }
             }
 
             # Optionally write log message to a file
@@ -78,7 +78,7 @@ function Write-Message {
                 }
             }
         } catch {
-            Write-Host "[ERROR] An unexpected error occurred: $_" -ForegroundColor Red
+            Stop-PSFFunction -Message "An unexpected error occurred while writing the message to log file." -ErrorRecord $_ -Level Error
         }
     }
 }

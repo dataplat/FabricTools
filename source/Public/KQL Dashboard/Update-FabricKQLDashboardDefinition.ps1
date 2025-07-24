@@ -1,3 +1,5 @@
+function Update-FabricKQLDashboardDefinition
+{
 <#
 .SYNOPSIS
 Updates the definition of a KQLDashboard in a Microsoft Fabric workspace.
@@ -20,14 +22,18 @@ The KQLDashboard content can be provided as file paths, and metadata updates can
 
 
 .EXAMPLE
-Update-FabricKQLDashboardDefinition -WorkspaceId "12345" -KQLDashboardId "67890" -KQLDashboardPathDefinition "C:\KQLDashboards\KQLDashboard.ipynb"
+    Updates the content of the KQLDashboard with ID `67890` in the workspace `12345` using the specified KQLDashboard file.
 
-Updates the content of the KQLDashboard with ID `67890` in the workspace `12345` using the specified KQLDashboard file.
+    ```powershell
+    Update-FabricKQLDashboardDefinition -WorkspaceId "12345" -KQLDashboardId "67890" -KQLDashboardPathDefinition "C:\KQLDashboards\KQLDashboard.ipynb"
+    ```
 
 .EXAMPLE
-Update-FabricKQLDashboardDefinition -WorkspaceId "12345" -KQLDashboardId "67890" -KQLDashboardPathDefinition "C:\KQLDashboards\KQLDashboard.ipynb"
+    Updates both the content and metadata of the KQLDashboard with ID `67890` in the workspace `12345`.
 
-Updates both the content and metadata of the KQLDashboard with ID `67890` in the workspace `12345`.
+    ```powershell
+    Update-FabricKQLDashboardDefinition -WorkspaceId "12345" -KQLDashboardId "67890" -KQLDashboardPathDefinition "C:\KQLDashboards\KQLDashboard.ipynb"
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
@@ -38,18 +44,15 @@ Updates both the content and metadata of the KQLDashboard with ID `67890` in the
 Author: Tiago Balabuch
 
 #>
-
-function Update-FabricKQLDashboardDefinition
-{
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$KQLDashboardId,
+        [guid]$KQLDashboardId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]

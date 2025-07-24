@@ -7,12 +7,17 @@ Retrieves the tenant overrides for all capacities.
 The Get-FabricCapacityTenantOverrides function retrieves the tenant overrides for all capacities. It supports multiple aliases for flexibility.
 
 .EXAMPLE
-Get-FabricCapacityTenantOverrides
+    This example retrieves the tenant overrides for all capacities.
 
-This example retrieves the tenant overrides for all capacities.
+    ```powershell
+    Get-FabricCapacityTenantOverrides
+    ```
 
 .NOTES
 The function retrieves the PowerBI access token and makes a GET request to the Fabric API to retrieve the tenant overrides for all capacities. It then returns the response of the GET request.
+
+Author: Ioana Bouariu
+
     #>
 
     # This function retrieves the tenant overrides for all capacities.

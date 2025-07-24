@@ -5,6 +5,7 @@ param(
         "WorkspaceId"
         "Name"
         "Description"
+        "NoWait"
         "Verbose"
         "Debug"
         "ErrorAction"

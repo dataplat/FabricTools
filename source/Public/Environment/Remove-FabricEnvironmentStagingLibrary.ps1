@@ -18,9 +18,11 @@ The unique identifier of the staging environment containing the library.
 The name of the library to be deleted from the environment.
 
 .EXAMPLE
-Remove-FabricEnvironmentStagingLibrary -WorkspaceId "workspace-12345" -EnvironmentId "environment-67890" -LibraryName "library-to-delete"
+    Deletes the specified library from the staging environment in the specified workspace.
 
-Deletes the specified library from the staging environment in the specified workspace.
+    ```powershell
+    Remove-FabricEnvironmentStagingLibrary -WorkspaceId "workspace-12345" -EnvironmentId "environment-67890" -LibraryName "library-to-delete"
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
@@ -33,11 +35,11 @@ Author: Tiago Balabuch
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$EnvironmentId,
+        [guid]$EnvironmentId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]

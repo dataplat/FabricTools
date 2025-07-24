@@ -1,3 +1,4 @@
+function Get-FabricEnvironmentSparkCompute {
 <#
 .SYNOPSIS
 Retrieves the Spark compute details for a specific environment in a Microsoft Fabric workspace.
@@ -14,9 +15,11 @@ The unique identifier of the workspace containing the target environment.
 The unique identifier of the environment whose Spark compute details are being retrieved.
 
 .EXAMPLE
-Get-FabricEnvironmentSparkCompute -WorkspaceId "workspace-12345" -EnvironmentId "environment-67890"
+    Retrieves Spark compute details for the specified environment in the given workspace.
 
-Retrieves Spark compute details for the specified environment in the given workspace.
+    ```powershell
+    Get-FabricEnvironmentSparkCompute -WorkspaceId "workspace-12345" -EnvironmentId "environment-67890"
+    ```
 
 .NOTES
 - Requires the `$FabricConfig` global object, including `BaseUrl` and `FabricHeaders`.
@@ -24,16 +27,15 @@ Retrieves Spark compute details for the specified environment in the given works
 
 Author: Tiago Balabuch
 #>
-function Get-FabricEnvironmentSparkCompute {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$EnvironmentId
+        [guid]$EnvironmentId
     )
 
     try {

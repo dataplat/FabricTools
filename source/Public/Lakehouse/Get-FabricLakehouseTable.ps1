@@ -1,4 +1,5 @@
 function Get-FabricLakehouseTable {
+
     <#
 .SYNOPSIS
 Retrieves tables from a specified Lakehouse in a Fabric workspace.
@@ -13,20 +14,27 @@ The ID of the workspace containing the Lakehouse.
 The ID of the Lakehouse from which to retrieve tables.
 
 .EXAMPLE
-Get-FabricLakehouseTable -WorkspaceId "your-workspace-id" -LakehouseId "your-lakehouse-id"
-This example retrieves all tables from the specified Lakehouse in the specified workspace.
+    This example retrieves all tables from the specified Lakehouse in the specified workspace.
 
-    #>
+    ```powershell
+    Get-FabricLakehouseTable -WorkspaceId "your-workspace-id" -LakehouseId "your-lakehouse-id"
+    ```
+
+.NOTES
+
+Author: Tiago Balabuch
+
+#>
     [CmdletBinding()]
     [OutputType([System.Object[]])]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [string]$LakehouseId
+        [guid]$LakehouseId
     )
 
     try {

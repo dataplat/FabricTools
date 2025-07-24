@@ -17,12 +17,18 @@ function Get-FabricCopyJob {
     The name of the CopyJob to retrieve. This parameter is optional.
 
 .EXAMPLE
-    FabricCopyJob -WorkspaceId "workspace-12345" -CopyJobId "CopyJob-67890"
     This example retrieves the CopyJob details for the CopyJob with ID "CopyJob-67890" in the workspace with ID "workspace-12345".
 
+    ```powershell
+    Get-FabricCopyJob -WorkspaceId "workspace-12345" -CopyJobId "CopyJob-67890"
+    ```
+
 .EXAMPLE
-    FabricCopyJob -WorkspaceId "workspace-12345" -CopyJob "My CopyJob"
     This example retrieves the CopyJob details for the CopyJob named "My CopyJob" in the workspace with ID "workspace-12345".
+
+    ```powershell
+    Get-FabricCopyJob -WorkspaceId "workspace-12345" -CopyJob "My CopyJob"
+    ```
 
 .NOTES
     Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
@@ -34,11 +40,11 @@ function Get-FabricCopyJob {
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [string]$CopyJobId,
+        [guid]$CopyJobId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]

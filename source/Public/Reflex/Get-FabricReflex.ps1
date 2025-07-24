@@ -1,3 +1,4 @@
+function Get-FabricReflex {
 <#
 .SYNOPSIS
     Retrieves Reflex details from a specified Microsoft Fabric workspace.
@@ -16,12 +17,18 @@
     The name of the Reflex to retrieve. This parameter is optional.
 
 .EXAMPLE
-    Get-FabricReflex -WorkspaceId "workspace-12345" -ReflexId "Reflex-67890"
     This example retrieves the Reflex details for the Reflex with ID "Reflex-67890" in the workspace with ID "workspace-12345".
 
+    ```powershell
+    Get-FabricReflex -WorkspaceId "workspace-12345" -ReflexId "Reflex-67890"
+    ```
+
 .EXAMPLE
-    Get-FabricReflex -WorkspaceId "workspace-12345" -ReflexName "My Reflex"
     This example retrieves the Reflex details for the Reflex named "My Reflex" in the workspace with ID "workspace-12345".
+
+    ```powershell
+    Get-FabricReflex -WorkspaceId "workspace-12345" -ReflexName "My Reflex"
+    ```
 
 .NOTES
     - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
@@ -30,16 +37,15 @@
     Author: Tiago Balabuch
 
 #>
-function Get-FabricReflex {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [string]$ReflexId,
+        [guid]$ReflexId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]

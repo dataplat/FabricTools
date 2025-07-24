@@ -1,0 +1,60 @@
+function Get-FabricDeploymentPipelineRoleAssignments {
+<#
+.SYNOPSIS
+Returns a list of deployment pipeline role assignments.
+
+.DESCRIPTION
+The `Get-FabricDeploymentPipelineRoleAssignments` function retrieves a list of role assignments for a deployment pipeline.
+The function automatically handles pagination and returns all available role assignments.
+
+.PARAMETER DeploymentPipelineId
+Required. The ID of the deployment pipeline to get role assignments for.
+
+.EXAMPLE
+    Returns all role assignments for the specified deployment pipeline.
+
+    ```powershell
+    Get-FabricDeploymentPipelineRoleAssignments -DeploymentPipelineId "GUID-GUID-GUID-GUID"
+    ```
+
+.NOTES
+- Calls `Confirm-TokenState` to ensure token validity before making the API request.
+- Requires Pipeline.Read.All or Pipeline.ReadWrite.All delegated scope.
+- Requires admin deployment pipelines role.
+- This API is in preview.
+
+Author: Kamil Nowinski
+#>
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [Guid]$DeploymentPipelineId
+    )
+
+    try {
+        # Step 1: Ensure token validity
+        Confirm-TokenState
+
+        # Step 3: Construct the API URL
+        $apiEndpointUrl = "deploymentPipelines/$DeploymentPipelineId/roleAssignments"
+
+        # Step 4: Make the API request and validate response
+        $apiParameters = @{
+            Uri = $apiEndpointUrl
+            Method = 'GET'
+            HandleResponse = $true
+            TypeName = "deployment pipeline role assignments"
+            ObjectIdOrName = $DeploymentPipelineId
+        }
+        $response = Invoke-FabricRestMethod @apiParameters
+
+        # Step 7: Return results
+        $response
+
+    } catch {
+        # Step 8: Error handling
+        $errorDetails = $_.Exception.Message
+        Write-Error -Message "Failed to get deployment pipeline role assignments. Error: $errorDetails"
+    }
+}

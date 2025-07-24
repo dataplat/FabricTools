@@ -1,3 +1,5 @@
+function Update-FabricMLModel
+{
 <#
 .SYNOPSIS
     Updates an existing ML Model in a specified Microsoft Fabric workspace.
@@ -16,8 +18,11 @@
     New description for the ML Model.
 
 .EXAMPLE
-    Update-FabricMLModel -WorkspaceId "workspace-12345" -MLModelId "model-67890" -MLModelName "Updated ML Model" -MLModelDescription "Updated description"
     This example updates the ML Model with ID "model-67890" in the workspace with ID "workspace-12345" with a new name and description.
+
+    ```powershell
+    Update-FabricMLModel -WorkspaceId "workspace-12345" -MLModelId "model-67890" -MLModelName "Updated ML Model" -MLModelDescription "Updated description"
+    ```
 
 .NOTES
     - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
@@ -26,17 +31,15 @@
     Author: Tiago Balabuch
 
 #>
-function Update-FabricMLModel
-{
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$MLModelId,
+        [guid]$MLModelId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]

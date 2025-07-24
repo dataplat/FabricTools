@@ -1,38 +1,41 @@
-<#
-.SYNOPSIS
-    Removes an SparkJobDefinition from a specified Microsoft Fabric workspace.
-
-.DESCRIPTION
-    This function sends a DELETE request to the Microsoft Fabric API to remove an SparkJobDefinition
-    from the specified workspace using the provided WorkspaceId and SparkJobDefinitionId.
-
-.PARAMETER WorkspaceId
-    The unique identifier of the workspace from which the SparkJobDefinition will be removed.
-
-.PARAMETER SparkJobDefinitionId
-    The unique identifier of the SparkJobDefinition to be removed.
-
-.EXAMPLE
-    Remove-FabricSparkJobDefinition -WorkspaceId "workspace-12345" -SparkJobDefinitionId "SparkJobDefinition-67890"
-    This example removes the SparkJobDefinition with ID "SparkJobDefinition-67890" from the workspace with ID "workspace-12345".
-
-.NOTES
-    - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-    - Calls `Confirm-TokenState` to ensure token validity before making the API request.
-
-    Author: Tiago Balabuch
-#>
 function Remove-FabricSparkJobDefinition
 {
+    <#
+    .SYNOPSIS
+        Removes an SparkJobDefinition from a specified Microsoft Fabric workspace.
+
+    .DESCRIPTION
+        This function sends a DELETE request to the Microsoft Fabric API to remove an SparkJobDefinition
+        from the specified workspace using the provided WorkspaceId and SparkJobDefinitionId.
+
+    .PARAMETER WorkspaceId
+        The unique identifier of the workspace from which the SparkJobDefinition will be removed.
+
+    .PARAMETER SparkJobDefinitionId
+        The unique identifier of the SparkJobDefinition to be removed.
+
+    .EXAMPLE
+        This example removes the SparkJobDefinition with ID "SparkJobDefinition-67890" from the workspace with ID "workspace-12345".
+
+        ```powershell
+        Remove-FabricSparkJobDefinition -WorkspaceId "workspace-12345" -SparkJobDefinitionId "SparkJobDefinition-67890"
+        ```
+
+    .NOTES
+        - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
+        - Calls `Confirm-TokenState` to ensure token validity before making the API request.
+
+        Author: Tiago Balabuch
+    #>
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$SparkJobDefinitionId
+        [guid]$SparkJobDefinitionId
     )
     try
     {

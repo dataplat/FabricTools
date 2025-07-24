@@ -1,3 +1,5 @@
+function Remove-FabricNotebook
+{
 <#
 .SYNOPSIS
 Deletes an Notebook from a specified workspace in Microsoft Fabric.
@@ -12,9 +14,11 @@ The `Remove-FabricNotebook` function sends a DELETE request to the Fabric API to
 (Mandatory) The ID of the Notebook to be deleted.
 
 .EXAMPLE
-Remove-FabricNotebook -WorkspaceId "12345" -NotebookId "67890"
+    Deletes the Notebook with ID "67890" from workspace "12345".
 
-Deletes the Notebook with ID "67890" from workspace "12345".
+    ```powershell
+    Remove-FabricNotebook -WorkspaceId "12345" -NotebookId "67890"
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
@@ -23,18 +27,15 @@ Deletes the Notebook with ID "67890" from workspace "12345".
 Author: Tiago Balabuch
 
 #>
-
-function Remove-FabricNotebook
-{
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$WorkspaceId,
+        [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$NotebookId
+        [guid]$NotebookId
     )
 
     try
