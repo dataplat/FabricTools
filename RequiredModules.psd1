@@ -24,10 +24,5 @@
     'Az.Accounts'                  = '5.0.0'
     'Az.Resources'                 = '6.15.1'
     'MicrosoftPowerBIMgmt'         = '1.2.1111'
-    'Microsoft.PowerShell.PlatyPS' = @{
-        Version    = '1.0.0-rc1'
-        Parameters = @{
-            AllowPrerelease = $true
-        } # TODO: Simply remove after GA
-    }
+    'Microsoft.PowerShell.PlatyPS' = 'latest'
 }
