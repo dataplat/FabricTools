@@ -57,6 +57,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Write-Message` uses PSFramework function for logging, which logs function name (#84)
 - Changed the `documentation` folder to `docs/<locale>`
 - Code-fenced blocks included in function examples
+- Version of `Microsoft.PowerShell.PSResourceGet` and `Microsoft.PowerShell.PlatyPS` updated
 
 ### Fixed
 
