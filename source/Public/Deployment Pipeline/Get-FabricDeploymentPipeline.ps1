@@ -1,3 +1,4 @@
+function Get-FabricDeploymentPipeline {
 <#
 .SYNOPSIS
 Retrieves deployment pipeline(s) from Microsoft Fabric.
@@ -14,14 +15,18 @@ Optional. The ID of a specific deployment pipeline to retrieve. If not provided,
 Optional. The display name of a specific deployment pipeline to retrieve. If provided, it will filter the results to match this name.
 
 .EXAMPLE
-Get-FabricDeploymentPipeline
+    Retrieves all deployment pipelines that the user can access.
 
-Retrieves all deployment pipelines that the user can access.
+    ```powershell
+    Get-FabricDeploymentPipeline
+    ```
 
 .EXAMPLE
-Get-FabricDeploymentPipeline -DeploymentPipelineId "GUID-GUID-GUID-GUID"
+    Retrieves a specific deployment pipeline with detailed information including its stages.
 
-Retrieves a specific deployment pipeline with detailed information including its stages.
+    ```powershell
+    Get-FabricDeploymentPipeline -DeploymentPipelineId "GUID-GUID-GUID-GUID"
+    ```
 
 .NOTES
 - Calls `Confirm-TokenState` to ensure token validity before making the API request.
@@ -31,8 +36,6 @@ Retrieves a specific deployment pipeline with detailed information including its
 
 Author: Kamil Nowinski
 #>
-
-function Get-FabricDeploymentPipeline {
     [CmdletBinding()]
     param(
         [Parameter(Mandatory = $false)]

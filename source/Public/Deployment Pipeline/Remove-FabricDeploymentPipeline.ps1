@@ -1,3 +1,4 @@
+function Remove-FabricDeploymentPipeline {
 <#
 .SYNOPSIS
 Deletes a specified deployment pipeline.
@@ -10,9 +11,11 @@ This operation requires admin deployment pipelines role and will fail if there's
 Required. The ID of the deployment pipeline to delete.
 
 .EXAMPLE
-Remove-FabricDeploymentPipeline -DeploymentPipelineId "GUID-GUID-GUID-GUID"
+    Deletes the specified deployment pipeline.
 
-Deletes the specified deployment pipeline.
+    ```powershell
+    Remove-FabricDeploymentPipeline -DeploymentPipelineId "GUID-GUID-GUID-GUID"
+    ```
 
 .NOTES
 - Calls `Confirm-TokenState` to ensure token validity before making the API request.
@@ -22,8 +25,6 @@ Deletes the specified deployment pipeline.
 
 Author: Kamil Nowinski
 #>
-
-function Remove-FabricDeploymentPipeline {
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param(
         [Parameter(Mandatory = $true)]

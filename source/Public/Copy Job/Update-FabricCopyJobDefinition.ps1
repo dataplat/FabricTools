@@ -1,3 +1,4 @@
+function Update-FabricCopyJobDefinition {
 <#
 .SYNOPSIS
 Updates the definition of a Copy Job in a Microsoft Fabric workspace.
@@ -19,14 +20,18 @@ The Copy Job content and platform-specific definitions can be provided as file p
 (Optional) The file path to the platform-specific definition file for the Copy Job. The file content will be encoded as Base64.
 
 .EXAMPLE
-Update-FabricCopyJobDefinition -WorkspaceId "12345" -CopyJobId "67890" -CopyJobPathDefinition "C:\CopyJobs\CopyJob.ipynb"
+    Updates the content of the Copy Job with ID `67890` in the workspace `12345` using the specified Copy Job file.
 
-Updates the content of the Copy Job with ID `67890` in the workspace `12345` using the specified Copy Job file.
+    ```powershell
+    Update-FabricCopyJobDefinition -WorkspaceId "12345" -CopyJobId "67890" -CopyJobPathDefinition "C:\CopyJobs\CopyJob.ipynb"
+    ```
 
 .EXAMPLE
-Update-FabricCopyJobDefinition -WorkspaceId "12345" -CopyJobId "67890" -CopyJobPathDefinition "C:\CopyJobs\CopyJob.ipynb" -CopyJobPathPlatformDefinition "C:\CopyJobs\Platform.json"
+    Updates both the content and platform-specific definition of the Copy Job with ID `67890` in the workspace `12345`.
 
-Updates both the content and platform-specific definition of the Copy Job with ID `67890` in the workspace `12345`.
+    ```powershell
+    Update-FabricCopyJobDefinition -WorkspaceId "12345" -CopyJobId "67890" -CopyJobPathDefinition "C:\CopyJobs\CopyJob.ipynb" -CopyJobPathPlatformDefinition "C:\CopyJobs\Platform.json"
+    ```
 
 .NOTES
 - Requires the `$FabricConfig` global configuration, which must include `BaseUrl` and `FabricHeaders`.
@@ -36,8 +41,6 @@ Updates both the content and platform-specific definition of the Copy Job with I
 
 Author: Tiago Balabuch
 #>
-
-function Update-FabricCopyJobDefinition {
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]

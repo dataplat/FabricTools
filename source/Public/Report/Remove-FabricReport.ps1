@@ -1,3 +1,5 @@
+function Remove-FabricReport
+{
 <#
 .SYNOPSIS
     Removes an Report from a specified Microsoft Fabric workspace.
@@ -13,8 +15,11 @@
     The unique identifier of the Report to be removed.
 
 .EXAMPLE
-    Remove-FabricReport -WorkspaceId "workspace-12345" -ReportId "Report-67890"
     This example removes the Report with ID "Report-67890" from the workspace with ID "workspace-12345".
+
+    ```powershell
+    Remove-FabricReport -WorkspaceId "workspace-12345" -ReportId "Report-67890"
+    ```
 
 .NOTES
     - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
@@ -23,8 +28,6 @@
     Author: Tiago Balabuch
 
 #>
-function Remove-FabricReport
-{
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]

@@ -19,8 +19,11 @@ function Stop-FabricMirroredDatabaseMirroring
 
 
     .EXAMPLE
-    Stop-FabricMirroredDatabaseMirroring -WorkspaceId "12345" -MirroredDatabaseId "67890"
     Stops the mirroring of the mirrored database with ID `67890` in the workspace `12345`.
+
+    ```powershell
+    Stop-FabricMirroredDatabaseMirroring -WorkspaceId "12345" -MirroredDatabaseId "67890"
+    ```
 
 
     .NOTES

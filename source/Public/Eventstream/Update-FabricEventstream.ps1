@@ -1,3 +1,5 @@
+function Update-FabricEventstream
+{
 <#
 .SYNOPSIS
 Updates the properties of a Fabric Eventstream.
@@ -18,14 +20,18 @@ The new name for the Eventstream.
 The unique identifier of the workspace where the Eventstream resides.
 
 .EXAMPLE
-Update-FabricEventstream -EventstreamId "Eventstream123" -EventstreamName "NewEventstreamName"
+    Updates the name of the Eventstream with the ID "Eventstream123" to "NewEventstreamName".
 
-Updates the name of the Eventstream with the ID "Eventstream123" to "NewEventstreamName".
+    ```powershell
+    Update-FabricEventstream -EventstreamId "Eventstream123" -EventstreamName "NewEventstreamName"
+    ```
 
 .EXAMPLE
-Update-FabricEventstream -EventstreamId "Eventstream123" -EventstreamName "NewName" -EventstreamDescription "Updated description"
+    Updates both the name and description of the Eventstream "Eventstream123".
 
-Updates both the name and description of the Eventstream "Eventstream123".
+    ```powershell
+    Update-FabricEventstream -EventstreamId "Eventstream123" -EventstreamName "NewName" -EventstreamDescription "Updated description"
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
@@ -34,9 +40,6 @@ Updates both the name and description of the Eventstream "Eventstream123".
 Author: Tiago Balabuch
 
 #>
-
-function Update-FabricEventstream
-{
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]

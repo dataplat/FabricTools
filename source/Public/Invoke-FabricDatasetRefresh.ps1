@@ -1,4 +1,5 @@
-<#
+function Invoke-FabricDatasetRefresh {
+    <#
     .SYNOPSIS
     This function invokes a refresh of a PowerBI dataset
 
@@ -19,7 +20,6 @@
     Author: Ioana Bouariu
 
 #>
-function Invoke-FabricDatasetRefresh {
     # Define aliases for the function for flexibility.
     [Alias("Invoke-FabDatasetRefresh")]
 

@@ -1,4 +1,3 @@
-
 function Get-FabricCapacitySkus {
     <#
 .SYNOPSIS
@@ -17,8 +16,11 @@ Specifies the name of the resource group in which the Fabric capacity is located
 Specifies the capacity to retrieve information for. If not provided, all capacities will be retrieved.
 
 .EXAMPLE
-Get-FabricCapacitySkus -capacity "exampleCapacity"
-Retrieves the fabric capacity information for the specified capacity.
+    Retrieves the fabric capacity information for the specified capacity.
+
+    ```powershell
+    Get-FabricCapacitySkus -capacity "exampleCapacity"
+    ```
 
 .NOTES
 

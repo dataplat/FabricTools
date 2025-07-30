@@ -1,3 +1,5 @@
+function Update-FabricPaginatedReport
+{
 <#
 .SYNOPSIS
     Updates an existing paginated report in a specified Microsoft Fabric workspace.
@@ -19,8 +21,11 @@
     An optional new description for the paginated report.
 
 .EXAMPLE
-    Update-FabricPaginatedReport -WorkspaceId "workspace-12345" -PaginatedReportId "report-67890" -PaginatedReportName "Updated Paginated Report" -PaginatedReportDescription "Updated description"
     This example updates the paginated report with ID "report-67890" in the workspace with ID "workspace-12345" with a new name and description.
+
+    ```powershell
+    Update-FabricPaginatedReport -WorkspaceId "workspace-12345" -PaginatedReportId "report-67890" -PaginatedReportName "Updated Paginated Report" -PaginatedReportDescription "Updated description"
+    ```
 
 .NOTES
     - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
@@ -29,8 +34,6 @@
     Author: Tiago Balabuch
 
 #>
-function Update-FabricPaginatedReport
-{
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]

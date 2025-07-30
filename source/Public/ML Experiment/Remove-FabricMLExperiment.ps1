@@ -1,3 +1,5 @@
+function Remove-FabricMLExperiment
+{
 <#
 .SYNOPSIS
     Removes an ML Experiment from a specified Microsoft Fabric workspace.
@@ -13,8 +15,11 @@
     The unique identifier of the MLExperiment to be removed.
 
 .EXAMPLE
-    Remove-FabricMLExperiment -WorkspaceId "workspace-12345" -MLExperimentId "experiment-67890"
     This example removes the MLExperiment with ID "experiment-67890" from the workspace with ID "workspace-12345".
+
+    ```powershell
+    Remove-FabricMLExperiment -WorkspaceId "workspace-12345" -MLExperimentId "experiment-67890"
+    ```
 
 .NOTES
     - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
@@ -23,8 +28,6 @@
     Author: Tiago Balabuch
 
 #>
-function Remove-FabricMLExperiment
-{
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = "High")]
     param (
         [Parameter(Mandatory = $true)]

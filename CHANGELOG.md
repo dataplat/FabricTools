@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+### Changed
+
+- Version of `Microsoft.PowerShell.PSResourceGet` and `Microsoft.PowerShell.PlatyPS` updated
+
+### Fixed
+
+### Deprecated
+
+### Removed
+
+### Security
+
+## 0.30.0 - 2025-07-22
+
+### Added
+
 - Added unit tests for `Get-FabricWorkspaceUser` function to ensure it works correctly with multiple workspaces both in the pipeline and passed to a parameter.
 - Added unit tests for Aliases for `Get-FabricWorkspaceUser` function to ensure backward compatibility.
 - Added credits for authors to all functions and Unit tests to verify the existence of such tags (#89)
@@ -24,6 +40,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `Start-FabricDeploymentPipelineStage`
 - Added private function `Get-FabricContinuationToken` to facilitate pagination
 - `Invoke-FabricRestMethod` handles throttling (error 429) by pausing and repeating the request (#88)
+- New build automation task added `Generate_help_from_built_module`
 
 ### Changed
 
@@ -40,6 +57,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - All Deployment Pipeline functions raise an error when an exception is caught. Used splatting for params.
 - Refactored SQL Database functions to use enhanced capability in `Invoke-FabricRestMethod`. Used splatting for params.
 - `Write-Message` uses PSFramework function for logging, which logs function name (#84)
+- Changed the `documentation` folder to `docs/<locale>`
+- Code-fenced blocks included in function examples
 
 ### Fixed
 
@@ -51,13 +70,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deprecated
 
+- None
+
 ### Removed
 
 - Removed Revision History from `Get-FabricSQLDatabase`, `Get-FabricSQLDatabase`
 
-### Security
+**Contributors:**  
+Rob Sewell, Kamil Nowinski and Gijs Reijn.
 
-## 0.22.0 - 20250609
+**Note:**  
+For a full list of changes and details, please see the commit history.
+
+## 0.29.0 - 2025-06-10
 
 ### Added
 

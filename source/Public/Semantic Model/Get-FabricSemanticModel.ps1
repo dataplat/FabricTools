@@ -1,36 +1,41 @@
-<#
-.SYNOPSIS
-    Retrieves SemanticModel details from a specified Microsoft Fabric workspace.
-
-.DESCRIPTION
-    This function retrieves SemanticModel details from a specified workspace using either the provided SemanticModelId or SemanticModelName.
-    It handles token validation, constructs the API URL, makes the API request, and processes the response.
-
-.PARAMETER WorkspaceId
-    The unique identifier of the workspace where the SemanticModel exists. This parameter is mandatory.
-
-.PARAMETER SemanticModelId
-    The unique identifier of the SemanticModel to retrieve. This parameter is optional.
-
-.PARAMETER SemanticModelName
-    The name of the SemanticModel to retrieve. This parameter is optional.
-
-.EXAMPLE
-    Get-FabricSemanticModel -WorkspaceId "workspace-12345" -SemanticModelId "SemanticModel-67890"
-    This example retrieves the SemanticModel details for the SemanticModel with ID "SemanticModel-67890" in the workspace with ID "workspace-12345".
-
-.EXAMPLE
-    Get-FabricSemanticModel -WorkspaceId "workspace-12345" -SemanticModelName "My SemanticModel"
-    This example retrieves the SemanticModel details for the SemanticModel named "My SemanticModel" in the workspace with ID "workspace-12345".
-
-.NOTES
-    - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-    - Calls `Confirm-TokenState` to ensure token validity before making the API request.
-
-    Author: Tiago Balabuch
-
-#>
 function Get-FabricSemanticModel {
+    <#
+    .SYNOPSIS
+        Retrieves SemanticModel details from a specified Microsoft Fabric workspace.
+
+    .DESCRIPTION
+        This function retrieves SemanticModel details from a specified workspace using either the provided SemanticModelId or SemanticModelName.
+        It handles token validation, constructs the API URL, makes the API request, and processes the response.
+
+    .PARAMETER WorkspaceId
+        The unique identifier of the workspace where the SemanticModel exists. This parameter is mandatory.
+
+    .PARAMETER SemanticModelId
+        The unique identifier of the SemanticModel to retrieve. This parameter is optional.
+
+    .PARAMETER SemanticModelName
+        The name of the SemanticModel to retrieve. This parameter is optional.
+
+    .EXAMPLE
+        This example retrieves the SemanticModel details for the SemanticModel with ID "SemanticModel-67890" in the workspace with ID "workspace-12345".
+
+        ```powershell
+        Get-FabricSemanticModel -WorkspaceId "workspace-12345" -SemanticModelId "SemanticModel-67890"
+        ```
+
+    .EXAMPLE
+        This example retrieves the SemanticModel details for the SemanticModel named "My SemanticModel" in the workspace with ID "workspace-12345".
+
+        ```powershell
+        Get-FabricSemanticModel -WorkspaceId "workspace-12345" -SemanticModelName "My SemanticModel"
+        ```
+
+    .NOTES
+        - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
+        - Calls `Confirm-TokenState` to ensure token validity before making the API request.
+
+        Author: Tiago Balabuch
+    #>
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]

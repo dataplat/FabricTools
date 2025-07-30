@@ -1,25 +1,27 @@
-<#
-.SYNOPSIS
-Deletes an existing Fabric workspace by its workspace ID.
-
-.DESCRIPTION
-The `Remove-FabricWorkspace` function deletes a workspace in the Fabric platform by sending a DELETE request to the API. It validates the workspace ID and handles both success and error responses.
-
-.PARAMETER WorkspaceId
-The unique identifier of the workspace to be deleted.
-
-.EXAMPLE
-Remove-FabricWorkspace -WorkspaceId "workspace123"
-
-Deletes the workspace with the ID "workspace123".
-
-.NOTES
-- Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-- Calls `Confirm-TokenState` to ensure token validity before making the API request.
-
-Author: Tiago Balabuch
-#>
 function Remove-FabricWorkspace {
+    <#
+    .SYNOPSIS
+        Deletes an existing Fabric workspace by its workspace ID.
+
+    .DESCRIPTION
+        The `Remove-FabricWorkspace` function deletes a workspace in the Fabric platform by sending a DELETE request to the API. It validates the workspace ID and handles both success and error responses.
+
+    .PARAMETER WorkspaceId
+        The unique identifier of the workspace to be deleted.
+
+    .EXAMPLE
+        Deletes the workspace with the ID "workspace123".
+
+        ```powershell
+        Remove-FabricWorkspace -WorkspaceId "workspace123"
+        ```
+
+    .NOTES
+        - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
+        - Calls `Confirm-TokenState` to ensure token validity before making the API request.
+
+        Author: Tiago Balabuch
+    #>
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param (
         [Parameter(Mandatory = $true)]

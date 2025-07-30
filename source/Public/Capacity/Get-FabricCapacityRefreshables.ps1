@@ -10,9 +10,11 @@ The Get-FabricCapacityRefreshables function retrieves the top refreshable capaci
 The number of top refreshable capacities to retrieve. This is a mandatory parameter.
 
 .EXAMPLE
-Get-FabricCapacityRefreshables -top 5
+    This example retrieves the top 5 refreshable capacities for the tenant.
 
-This example retrieves the top 5 refreshable capacities for the tenant.
+    ```powershell
+    Get-FabricCapacityRefreshables -top 5
+    ```
 
 .NOTES
 The function retrieves the PowerBI access token and makes a GET request to the PowerBI API to retrieve the top refreshable capacities. It then returns the 'value' property of the response, which contains the capacities.

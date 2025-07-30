@@ -1,32 +1,38 @@
-<#
-.SYNOPSIS
-    Retrieves access entities for a specified user in Microsoft Fabric.
-
-.DESCRIPTION
-    This function retrieves a list of access entities associated with a specified user in Microsoft Fabric.
-    It supports filtering by entity type and handles token validation, constructs the API URL, makes the API request, and processes the response.
-
-.PARAMETER UserId
-    The unique identifier of the user whose access entities are to be retrieved. This parameter is mandatory.
-
-.PARAMETER Type
-    The type of access entity to filter the results by. This parameter is optional and supports predefined values such as 'CopyJob', 'Dashboard', 'DataPipeline', etc.
-
-.EXAMPLE
-    Get-FabricUserListAccessEntities -UserId "user-12345"
-    This example retrieves all access entities associated with the user having ID "user-12345".
-
-.EXAMPLE
-    Get-FabricUserListAccessEntities -UserId "user-12345" -Type "Dashboard"
-    This example retrieves only the 'Dashboard' access entities associated with the user having ID "user-12345".
-
-.NOTES
-    - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-    - Calls `Confirm-TokenState` to ensure token validity before making the API request.
-
-    Author: Tiago Balabuch
-#>
 function Get-FabricUserListAccessEntities {
+    <#
+    .SYNOPSIS
+        Retrieves access entities for a specified user in Microsoft Fabric.
+
+    .DESCRIPTION
+        This function retrieves a list of access entities associated with a specified user in Microsoft Fabric.
+        It supports filtering by entity type and handles token validation, constructs the API URL, makes the API request, and processes the response.
+
+    .PARAMETER UserId
+        The unique identifier of the user whose access entities are to be retrieved. This parameter is mandatory.
+
+    .PARAMETER Type
+        The type of access entity to filter the results by. This parameter is optional and supports predefined values such as 'CopyJob', 'Dashboard', 'DataPipeline', etc.
+
+    .EXAMPLE
+        This example retrieves all access entities associated with the user having ID "user-12345".
+
+        ```powershell
+        Get-FabricUserListAccessEntities -UserId "user-12345"
+        ```
+
+    .EXAMPLE
+        This example retrieves only the 'Dashboard' access entities associated with the user having ID "user-12345".
+
+        ```powershell
+        Get-FabricUserListAccessEntities -UserId "user-12345" -Type "Dashboard"
+        ```
+
+    .NOTES
+        - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
+        - Calls `Confirm-TokenState` to ensure token validity before making the API request.
+
+        Author: Tiago Balabuch
+    #>
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]

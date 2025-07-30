@@ -1,30 +1,30 @@
-<#
-.SYNOPSIS
-Deletes a SQL Database from a specified workspace in Microsoft Fabric.
-
-.DESCRIPTION
-The `Remove-FabricSQLDatabase` function sends a DELETE request to the Fabric API to remove a specified SQLDatabase from a given workspace.
-
-.PARAMETER WorkspaceId
-(Mandatory) The ID of the workspace containing the SQLDatabase to delete.
-
-.PARAMETER SQLDatabaseId
-(Mandatory) The ID of the SQL Database to be deleted.
-
-.EXAMPLE
-Remove-FabricSQLDatabas -WorkspaceId "12345" -SQLDatabaseId "67890"
-
-Deletes the SQL Database with ID "67890" from workspace "12345".
-
-.NOTES
-- Validates token expiration before making the API request.
-
-Author: Kamil Nowinski
-
-#>
-
 function Remove-FabricSQLDatabase
 {
+    <#
+    .SYNOPSIS
+        Deletes a SQL Database from a specified workspace in Microsoft Fabric.
+
+    .DESCRIPTION
+        The `Remove-FabricSQLDatabase` function sends a DELETE request to the Fabric API to remove a specified SQLDatabase from a given workspace.
+
+    .PARAMETER WorkspaceId
+        (Mandatory) The ID of the workspace containing the SQLDatabase to delete.
+
+    .PARAMETER SQLDatabaseId
+        (Mandatory) The ID of the SQL Database to be deleted.
+
+    .EXAMPLE
+        Deletes the SQL Database with ID "67890" from workspace "12345".
+
+        ```powershell
+        Remove-FabricSQLDatabas -WorkspaceId "12345" -SQLDatabaseId "67890"
+        ```
+
+    .NOTES
+        - Validates token expiration before making the API request.
+
+        Author: Kamil Nowinski
+    #>
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param (
         [Parameter(Mandatory = $true)]

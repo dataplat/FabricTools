@@ -1,4 +1,4 @@
-
+function Get-FabricKQLQuerysetDefinition {
 <#
 .SYNOPSIS
 Retrieves the definition of a KQLQueryset from a specific workspace in Microsoft Fabric.
@@ -17,14 +17,18 @@ Handles both synchronous and asynchronous operations, with detailed logging and 
 Specifies the format of the KQLQueryset definition.
 
 .EXAMPLE
-Get-FabricKQLQuerysetDefinition -WorkspaceId "12345" -KQLQuerysetId "67890"
+    Retrieves the definition of the KQLQueryset with ID `67890` from the workspace with ID `12345` in the `ipynb` format.
 
-Retrieves the definition of the KQLQueryset with ID `67890` from the workspace with ID `12345` in the `ipynb` format.
+    ```powershell
+    Get-FabricKQLQuerysetDefinition -WorkspaceId "12345" -KQLQuerysetId "67890"
+    ```
 
 .EXAMPLE
-Get-FabricKQLQuerysetDefinition -WorkspaceId "12345"
+    Retrieves the definitions of all KQLQuerysets in the workspace with ID `12345` in the `ipynb` format.
 
-Retrieves the definitions of all KQLQuerysets in the workspace with ID `12345` in the `ipynb` format.
+    ```powershell
+    Get-FabricKQLQuerysetDefinition -WorkspaceId "12345"
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
@@ -34,7 +38,6 @@ Retrieves the definitions of all KQLQuerysets in the workspace with ID `12345` i
 Author: Tiago Balabuch
 
 #>
-function Get-FabricKQLQuerysetDefinition {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]

@@ -19,9 +19,11 @@ The `Remove-FabricEventstream` function sends a DELETE request to the Fabric API
     The name of the Eventstream to delete. The value for Eventstream is a string.
 
 .EXAMPLE
-Remove-FabricEventstream -WorkspaceId "12345" -EventstreamId "67890"
+    Deletes the Eventstream with ID "67890" from workspace "12345".
 
-Deletes the Eventstream with ID "67890" from workspace "12345".
+    ```powershell
+    Remove-FabricEventstream -WorkspaceId "12345" -EventstreamId "67890"
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.

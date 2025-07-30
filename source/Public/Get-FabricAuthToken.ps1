@@ -1,4 +1,5 @@
-<#
+function Get-FabricAuthToken {
+      <#
 .SYNOPSIS
    Retrieves the Fabric API authentication token.
 
@@ -22,8 +23,6 @@
    Author: Rui Romano
 
 #>
-
-function Get-FabricAuthToken {
     [CmdletBinding()]
     param
     (

@@ -1,3 +1,4 @@
+function Get-FabricDeploymentPipelineRoleAssignments {
 <#
 .SYNOPSIS
 Returns a list of deployment pipeline role assignments.
@@ -10,9 +11,11 @@ The function automatically handles pagination and returns all available role ass
 Required. The ID of the deployment pipeline to get role assignments for.
 
 .EXAMPLE
-Get-FabricDeploymentPipelineRoleAssignments -DeploymentPipelineId "GUID-GUID-GUID-GUID"
+    Returns all role assignments for the specified deployment pipeline.
 
-Returns all role assignments for the specified deployment pipeline.
+    ```powershell
+    Get-FabricDeploymentPipelineRoleAssignments -DeploymentPipelineId "GUID-GUID-GUID-GUID"
+    ```
 
 .NOTES
 - Calls `Confirm-TokenState` to ensure token validity before making the API request.
@@ -22,8 +25,6 @@ Returns all role assignments for the specified deployment pipeline.
 
 Author: Kamil Nowinski
 #>
-
-function Get-FabricDeploymentPipelineRoleAssignments {
     [CmdletBinding()]
     param(
         [Parameter(Mandatory = $true)]

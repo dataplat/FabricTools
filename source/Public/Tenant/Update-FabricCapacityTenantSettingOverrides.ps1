@@ -1,48 +1,50 @@
-<#
-.SYNOPSIS
-Updates tenant setting overrides for a specified capacity ID.
-
-.DESCRIPTION
-The `Update-FabricCapacityTenantSettingOverrides` function updates tenant setting overrides in a Fabric environment by making a POST request to the appropriate API endpoint. It allows specifying settings such as enabling tenant settings, delegating to a workspace, and including or excluding security groups.
-
-.PARAMETER CapacityId
-(Mandatory) The ID of the capacity for which the tenant setting overrides are being updated.
-
-.PARAMETER SettingTitle
-(Mandatory) The title of the tenant setting to be updated.
-
-.PARAMETER EnableTenantSetting
-(Mandatory) Indicates whether the tenant setting should be enabled.
-
-.PARAMETER DelegateToWorkspace
-(Optional) Specifies the workspace to which the setting should be delegated.
-
-.PARAMETER EnabledSecurityGroups
-(Optional) A JSON array of security groups to be enabled, each containing `graphId` and `name` properties.
-
-.PARAMETER ExcludedSecurityGroups
-(Optional) A JSON array of security groups to be excluded, each containing `graphId` and `name` properties.
-
-.EXAMPLE
-Update-FabricCapacityTenantSettingOverrides -CapacityId "12345" -SettingTitle "SomeSetting" -EnableTenantSetting "true"
-
-Updates the tenant setting "SomeSetting" for the capacity with ID "12345" and enables it.
-
-.EXAMPLE
-Update-FabricCapacityTenantSettingOverrides -CapacityId "12345" -SettingTitle "SomeSetting" -EnableTenantSetting "true" -EnabledSecurityGroups @(@{graphId="1";name="Group1"},@{graphId="2";name="Group2"})
-
-Updates the tenant setting "SomeSetting" for the capacity with ID "12345", enables it, and specifies security groups to include.
-
-.NOTES
-- Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-- Calls `Confirm-TokenState` to ensure token validity before making the API request.
-
-Author: Tiago Balabuch
-
-#>
-
 function Update-FabricCapacityTenantSettingOverrides
 {
+    <#
+    .SYNOPSIS
+        Updates tenant setting overrides for a specified capacity ID.
+
+    .DESCRIPTION
+        The `Update-FabricCapacityTenantSettingOverrides` function updates tenant setting overrides in a Fabric environment by making a POST request to the appropriate API endpoint. It allows specifying settings such as enabling tenant settings, delegating to a workspace, and including or excluding security groups.
+
+    .PARAMETER CapacityId
+        (Mandatory) The ID of the capacity for which the tenant setting overrides are being updated.
+
+    .PARAMETER SettingTitle
+        (Mandatory) The title of the tenant setting to be updated.
+
+    .PARAMETER EnableTenantSetting
+        (Mandatory) Indicates whether the tenant setting should be enabled.
+
+    .PARAMETER DelegateToWorkspace
+        (Optional) Specifies the workspace to which the setting should be delegated.
+
+    .PARAMETER EnabledSecurityGroups
+        (Optional) A JSON array of security groups to be enabled, each containing `graphId` and `name` properties.
+
+    .PARAMETER ExcludedSecurityGroups
+        (Optional) A JSON array of security groups to be excluded, each containing `graphId` and `name` properties.
+
+    .EXAMPLE
+        Updates the tenant setting "SomeSetting" for the capacity with ID "12345" and enables it.
+
+        ```powershell
+        Update-FabricCapacityTenantSettingOverrides -CapacityId "12345" -SettingTitle "SomeSetting" -EnableTenantSetting "true"
+        ```
+
+    .EXAMPLE
+        Updates the tenant setting "SomeSetting" for the capacity with ID "12345", enables it, and specifies security groups to include.
+
+        ```powershell
+        Update-FabricCapacityTenantSettingOverrides -CapacityId "12345" -SettingTitle "SomeSetting" -EnableTenantSetting "true" -EnabledSecurityGroups @(@{graphId="1";name="Group1"},@{graphId="2";name="Group2"})
+        ```
+
+    .NOTES
+    - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
+    - Calls `Confirm-TokenState` to ensure token validity before making the API request.
+
+    Author: Tiago Balabuch
+    #>
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]

@@ -16,20 +16,23 @@ The workspace object to be Seted. This is a mandatory parameter and can be piped
 The ID of the capacity to which the workspace will be Seted. This is a mandatory parameter.
 
 .EXAMPLE
-Register-FabricWorkspaceToCapacity -WorkspaceId "Workspace-GUID" -CapacityId "Capacity-GUID"
+    This example Sets the workspace with ID "Workspace-GUID" to the capacity with ID "Capacity-GUID".
 
-This example Sets the workspace with ID "Workspace-GUID" to the capacity with ID "Capacity-GUID".
+    ```powershell
+    Register-FabricWorkspaceToCapacity -WorkspaceId "Workspace-GUID" -CapacityId "Capacity-GUID"
+    ```
 
 .EXAMPLE
-$workspace | Register-FabricWorkspaceToCapacity -CapacityId "Capacity-GUID"
+    This example Sets the workspace object stored in the $workspace variable to the capacity with ID "Capacity-GUID". The workspace object is piped into the function.
 
-This example Sets the workspace object stored in the $workspace variable to the capacity with ID "Capacity-GUID". The workspace object is piped into the function.
+    ```powershell
+    $workspace | Register-FabricWorkspaceToCapacity -CapacityId "Capacity-GUID"
+    ```
 
 .NOTES
-The function makes a POST request to the PowerBI API to Set the workspace to the capacity. The PowerBI access token is retrieved using the Get-PowerBIAccessToken function.
+    The function makes a POST request to the PowerBI API to Set the workspace to the capacity. The PowerBI access token is retrieved using the Get-PowerBIAccessToken function.
 
-Author: Ioana Bouariu
-
+    Author: Ioana Bouariu
     #>
 
     # It supports multiple aliases for flexibility.

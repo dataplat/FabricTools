@@ -1,3 +1,5 @@
+function Update-FabricDataPipeline
+{
 <#
 .SYNOPSIS
     Updates an existing DataPipeline in a specified Microsoft Fabric workspace.
@@ -19,8 +21,11 @@
     An optional new description for the DataPipeline.
 
 .EXAMPLE
-    Update-FabricDataPipeline -WorkspaceId "workspace-12345" -DataPipelineId "pipeline-67890" -DataPipelineName "Updated DataPipeline" -DataPipelineDescription "Updated description"
     This example updates the DataPipeline with ID "pipeline-67890" in the workspace with ID "workspace-12345" with a new name and description.
+
+    ```powershell
+    Update-FabricDataPipeline -WorkspaceId "workspace-12345" -DataPipelineId "pipeline-67890" -DataPipelineName "Updated DataPipeline" -DataPipelineDescription "Updated description"
+    ```
 
 .NOTES
     - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
@@ -28,8 +33,6 @@
 
     Author: Tiago Balabuch
 #>
-function Update-FabricDataPipeline
-{
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter(Mandatory = $true)]

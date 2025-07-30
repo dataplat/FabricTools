@@ -1,3 +1,4 @@
+function Remove-FabricRecoveryPoint {
 <#
 .SYNOPSIS
 Remove a selected Fabric Recovery Point.
@@ -18,22 +19,24 @@ This is the workspace GUID in which the data warehouse resides.
 The GUID for the data warehouse which we want to retrieve restore points for.
 
 .EXAMPLE
-PS> Remove-FabricRecoveryPoint -CreateTime '2024-07-23T11:20:26Z'
+    Remove a specific restore point from a Fabric Data Warehouse that has been set using Set-FabricConfig.
 
-Remove a specific restore point from a Fabric Data Warehouse that has been set using Set-FabricConfig.
+    ```powershell
+    Remove-FabricRecoveryPoint -CreateTime '2024-07-23T11:20:26Z'
+    ```
 
 .EXAMPLE
-PS> Remove-FabricRecoveryPoint -CreateTime '2024-07-23T11:20:26Z' -WorkspaceGUID 'GUID-GUID-GUID-GUID' -DataWarehouseGUID 'GUID-GUID-GUID-GUID'
+    Remove a specific restore point from a Fabric Data Warehouse, specifying the workspace and data warehouse GUIDs.
 
-Remove a specific restore point from a Fabric Data Warehouse, specifying the workspace and data warehouse GUIDs.
+    ```powershell
+    Remove-FabricRecoveryPoint -CreateTime '2024-07-23T11:20:26Z' -WorkspaceGUID 'GUID-GUID-GUID-GUID' -DataWarehouseGUID 'GUID-GUID-GUID-GUID'
+    ```
 
 .NOTES
 
 Author: Jess Pomfret
 
 #>
-
-function Remove-FabricRecoveryPoint {
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [string]$CreateTime,

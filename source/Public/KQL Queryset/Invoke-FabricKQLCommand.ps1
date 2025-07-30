@@ -1,4 +1,5 @@
 function Invoke-FabricKQLCommand {
+
     <#
 .SYNOPSIS
     Executes a KQL command in a Kusto Database.
@@ -26,31 +27,23 @@ function Invoke-FabricKQLCommand {
     a PowerShell object.
 
 .EXAMPLE
+    This example will create a table named 'MyTable' with a column named 'MyColumn' in the KQLDatabase 'MyKQLDatabase'.
+
+    ```powershell
     Invoke-FabricKQLCommand -WorkspaceId '12345678-1234-1234-1234-123456789012' -KQLDatabaseName 'MyKQLDatabase'-KQLCommand '.create table MyTable (MyColumn: string)
-
-    This example will create a table named 'MyTable' with a column named 'MyColumn' in
-    the KQLDatabase 'MyKQLDatabase'.
+    ```
 
 .EXAMPLE
+    This example will Execute the Query 'productcategory | take 100' in the KQLDatabase 'MyEventhouse2' and it will return the result as an array of PowerShell objects.
+
+    ```powershell
     Invoke-FabricKQLCommand `
-                -WorkspaceId '2c4ccbb5-9b13-4495-9ab3-ba41152733d9' `
-                -KQLDatabaseName 'MyEventhouse2' `
-                -KQLCommand 'productcategory
-                            | take 100'
-
-    This example will Execute the Query 'productcategory | take 100' in the KQLDatabase 'MyEventhouse2'
-    and it will return the result as an array of PowerShell objects.
-
-.EXAMPLE
-    Invoke-FabricKQLCommand `
-                -WorkspaceId '2c4ccbb5-9b13-4495-9ab3-ba41152733d9' `
-                -KQLDatabaseName 'MyEventhouse2' `
-                -ReturnRawResult `
-                -KQLCommand 'productcategory
-                            | take 100'
-
-    This example will Execute the Query 'productcategory | take 100' in the KQLDatabase 'MyEventhouse2'
-    and it will return the result as the raw result of the KQL command, which is a JSON object.
+        -WorkspaceId '2c4ccbb5-9b13-4495-9ab3-ba41152733d9' `
+        -KQLDatabaseName 'MyEventhouse2' `
+        -ReturnRawResult `
+        -KQLCommand 'productcategory
+                    | take 100'
+    ```
 
 .NOTES
     Revision History:
@@ -61,7 +54,6 @@ function Invoke-FabricKQLCommand {
     Author: Frank Geisler
 
     #>
-
     [CmdletBinding()]
     param (
 

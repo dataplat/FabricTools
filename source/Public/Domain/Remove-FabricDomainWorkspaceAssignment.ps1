@@ -1,4 +1,5 @@
-
+function Remove-FabricDomainWorkspaceAssignment
+{
 <#
 .SYNOPSIS
 Unassign workspaces from a specified Fabric domain.
@@ -14,14 +15,18 @@ The unique identifier of the Fabric domain.
 (Optional) An array of workspace IDs to unassign. If not provided, all workspaces will be unassigned.
 
 .EXAMPLE
-Remove-FabricDomainWorkspaceAssignment -DomainId "12345"
+    Unassigns all workspaces from the domain with ID "12345".
 
-Unassigns all workspaces from the domain with ID "12345".
+    ```powershell
+    Remove-FabricDomainWorkspaceAssignment -DomainId "12345"
+    ```
 
 .EXAMPLE
-Remove-FabricDomainWorkspaceAssignment -DomainId "12345" -WorkspaceIds @("workspace1", "workspace2")
+    Unassigns the specified workspaces from the domain with ID "12345".
 
-Unassigns the specified workspaces from the domain with ID "12345".
+    ```powershell
+    Remove-FabricDomainWorkspaceAssignment -DomainId "12345" -WorkspaceIds @("workspace1", "workspace2")
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
@@ -31,8 +36,6 @@ Unassigns the specified workspaces from the domain with ID "12345".
 Author: Tiago Balabuch
 
 #>
-function Remove-FabricDomainWorkspaceAssignment
-{
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     [Alias("Unassign-FabricDomainWorkspace")]
     param (

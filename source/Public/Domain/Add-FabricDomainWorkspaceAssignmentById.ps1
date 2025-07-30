@@ -1,3 +1,4 @@
+function Add-FabricDomainWorkspaceAssignmentById {
 <#
 .SYNOPSIS
 Assigns workspaces to a specified domain in Microsoft Fabric by their IDs.
@@ -12,9 +13,11 @@ The ID of the domain to which workspaces will be assigned. This parameter is man
 An array of workspace IDs to be assigned to the domain. This parameter is mandatory.
 
 .EXAMPLE
-Add-FabricDomainWorkspaceAssignmentById -DomainId "12345" -WorkspaceIds @("ws1", "ws2", "ws3")
+    Assigns the workspaces with IDs "ws1", "ws2", and "ws3" to the domain with ID "12345".
 
-Assigns the workspaces with IDs "ws1", "ws2", and "ws3" to the domain with ID "12345".
+    ```powershell
+    Add-FabricDomainWorkspaceAssignmentById -DomainId "12345" -WorkspaceIds @("ws1", "ws2", "ws3")
+    ```
 
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
@@ -22,8 +25,6 @@ Assigns the workspaces with IDs "ws1", "ws2", and "ws3" to the domain with ID "1
 
 Author: Tiago Balabuch
 #>
-
-function Add-FabricDomainWorkspaceAssignmentById {
     [CmdletBinding()]
     [Alias("Assign-FabricDomainWorkspaceById")]
     param (

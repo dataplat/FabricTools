@@ -1,3 +1,4 @@
+function Get-FabricEnvironmentStagingLibrary {
 <#
 .SYNOPSIS
 Retrieves the staging library details for a specific environment in a Microsoft Fabric workspace.
@@ -13,9 +14,11 @@ The unique identifier of the workspace containing the target environment.
 The unique identifier of the environment for which staging library details are being retrieved.
 
 .EXAMPLE
-Get-FabricEnvironmentStagingLibrary -WorkspaceId "workspace-12345" -EnvironmentId "environment-67890"
+    Retrieves the staging libraries for the specified environment in the given workspace.
 
-Retrieves the staging libraries for the specified environment in the given workspace.
+    ```powershell
+    Get-FabricEnvironmentStagingLibrary -WorkspaceId "workspace-12345" -EnvironmentId "environment-67890"
+    ```
 
 .NOTES
 - Requires the `$FabricConfig` global object, including `BaseUrl` and `FabricHeaders`.
@@ -23,7 +26,6 @@ Retrieves the staging libraries for the specified environment in the given works
 
 Author: Tiago Balabuch
 #>
-function Get-FabricEnvironmentStagingLibrary {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
