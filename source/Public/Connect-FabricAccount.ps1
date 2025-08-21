@@ -1,4 +1,5 @@
-function Connect-FabricAccount {
+function Connect-FabricAccount
+{
 
     <#
 .SYNOPSIS
@@ -34,14 +35,17 @@ function Connect-FabricAccount {
 
     ```powershell
     $credential = Get-Credential
-    Connect-FabricAccount -TenantId 'xxx' -credential $credential
+    Connect-FabricAccount -TenantId '12345678-1234-1234-1234-123456789012' -credential $credential
     ```
 
 .EXAMPLE
     Connects as Service Principal using id and secret
 
     ```powershell
-    Connect-FabricAccount -TenantId 'xxx' -ServicePrincipalId 'appId' -ServicePrincipalSecret $secret
+    Connect-FabricAccount `
+        -TenantId '12345678-1234-1234-1234-123456789012' `
+        -ServicePrincipalId 'appId' `
+        -ServicePrincipalSecret $secret
     ```
 
 .OUTPUTS
@@ -54,6 +58,12 @@ function Connect-FabricAccount {
     - 2024-12-22 - FGE: Added Verbose Output
     - 2025-05-26 - Jojobit: Added Service Principal support, with secure string handling and parameter descriptions, as supported by the original FabTools module
     - 2025-06-02 - KNO: Added Reset switch to force re-authentication and token refresh
+    - 2025-08-21 - FGE: Fixed Bug #164 Login with Service Principal fails with "Connect-FabricAccount: Cannot process
+                        argument transformation on parameter 'ServicePrincipalSecret'.
+                        Cannot convert the value of type "System.String" to type "System.Security.SecureString"." when passing in a
+                        String as ServicePrincipalSecret (AppSecret). Now it will convert the String to a SecureString if there is only
+                        String
+                        Fixed another bug on the Parameters. You can only access a parameter by its name, not by its alias.
 
     Author: Frank Geisler, Kamil Nowinski
 
@@ -63,75 +73,171 @@ function Connect-FabricAccount {
 
     [CmdletBinding(SupportsShouldProcess)]
     param (
-        [Parameter(Mandatory = $false, HelpMessage = "Azure AD Tenant ID.")]
+        [Parameter(Mandatory = $false, HelpMessage = 'Azure AD Tenant ID.')]
         [guid] $TenantId,
 
-        [Parameter(Mandatory = $false, HelpMessage = "AppId of the service principal.")]
+        [Parameter(Mandatory = $false, HelpMessage = 'AppId of the service principal.')]
         [Alias('AppId')]
         [guid] $ServicePrincipalId,
 
-        [Parameter(Mandatory = $false, HelpMessage = "Secure secret of the service principal.")]
+        [Parameter(Mandatory = $false, HelpMessage = 'Secure secret of the service principal.')]
         [Alias('AppSecret')]
-        [SecureString] $ServicePrincipalSecret,
+        [Object] $ServicePrincipalSecret,
 
-        [Parameter(Mandatory = $false, HelpMessage = "User credential.")]
+        [Parameter(Mandatory = $false, HelpMessage = 'User credential.')]
         [PSCredential] $Credential,
 
-        [Parameter(Mandatory = $false, HelpMessage = "Refresh current session.")]
+        [Parameter(Mandatory = $false, HelpMessage = 'Refresh current session.')]
         [switch] $Reset
     )
 
-    begin {
+    begin
+    {
+        Write-Message `
+            -Message "Function $($MyInvocation.MyCommand.Name) started." `
+            -Level Verbose
+
         # Checks if 'AppId' is provided without 'AppSecret' and vice versa.
-        if ($PSBoundParameters.ContainsKey('AppId') -and -not $PSBoundParameters.ContainsKey('AppSecret'))
+        # FGE: At this point we have to check ServicePrincipalId and ServicePrincipalSecret, because only they
+        #      will be filled, regardless if AppId or AppSecret is used. Checking for them will never match
+        if ($PSBoundParameters.ContainsKey('ServicePrincipalId') -and -not $PSBoundParameters.ContainsKey('ServicePrincipalSecret'))
         {
-            Write-Message -Message "AppSecret is required when using AppId: $AppId" -Level Error
-            throw "AppSecret is required when using AppId."
+            Write-Message `
+                -Message "ServicePrincipalSecret (AppSecret) is required when using ServicePrincipalId (AppId): $ServicePrincipalId" `
+                -Level Error
+
+            throw "ServicePrincipalSecret (AppSecret) is required when using ServicePrincipalId (AppId): $ServicePrincipalId"
         }
-        if ($PSBoundParameters.ContainsKey('AppSecret') -and -not $PSBoundParameters.ContainsKey('AppId'))
+        if ($PSBoundParameters.ContainsKey('ServicePrincipalSecret') -and -not $PSBoundParameters.ContainsKey('ServicePrincipalId'))
         {
-            Write-Message -Message "AppId is required when using AppSecret." -Level Error
-            throw "AppId is required when using AppId."
+            Write-Message `
+                -Message 'ServicePrincipalId (AppId) is required when using ServicePrincipalSecret (AppSecret).' `
+                -Level Error
+
+            throw 'ServicePrincipalId (AppId) is required when using ServicePrincipalSecret (AppSecret).'
+        }
+        if ($PSBoundParameters.ContainsKey('ServicePrincipalSecret'))
+        {
+            # FGE: If the $ServicePrincipalSecret is not a SecureString, we convert it to one.
+            if ($ServicePrincipalSecret -is [string])
+            {
+                Write-Message `
+                    -Message 'Converting ServicePrincipalSecret (AppSecret) to SecureString' `
+                    -Level Verbose
+
+                $SecureServicePrincipalSecret = ConvertTo-SecureString $ServicePrincipalSecret `
+                    -AsPlainText `
+                    -Force
+            }
+            elseif ($ServicePrincipalSecret -is [SecureString])
+            {
+                Write-Message `
+                    -Message 'ServicePrincipalSecret (AppSecret) is already a SecureString' `
+                    -Level Verbose
+
+                $SecureServicePrincipalSecret = $ServicePrincipalSecret
+            }
+            else
+            {
+                Write-Message `
+                    -Message 'ServicePrincipalSecret (AppSecret) must be a string or SecureString.' `
+                    -Level Error
+
+                throw 'ServicePrincipalSecret (AppSecret) must be a string or SecureString.'
+            }
         }
     }
 
-    process {
+    process
+    {
         if (!$Reset)
         {
             $azContext = Get-AzContext
         }
-        if (!$azContext) {
-            if ($ServicePrincipalId) {
-                Write-Message "Connecting to Azure Account using provided servicePrincipalId..." -Level Verbose
-                $credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $ServicePrincipalId, $ServicePrincipalSecret
-                $null = Connect-AzAccount -ServicePrincipal -TenantId $TenantId -Credential $credential
+        if (!$azContext)
+        {
+            if ($ServicePrincipalId)
+            {
+                Write-Message `
+                    -Message "Connecting to Azure Account using provided servicePrincipalId: $ServicePrincipalId" `
+                    -Level Verbose
+
+                Write-Message `
+                    -Message "Converting $ServicePrincipalSecret to SecureString" `
+                    -Level Verbose
+
+                $ServicePrincipalCredential = New-Object `
+                    -TypeName System.Management.Automation.PSCredential `
+                    -ArgumentList `
+                    $ServicePrincipalId, `
+                    $SecureServicePrincipalSecret
+
+                Connect-AzAccount `
+                    -ServicePrincipal `
+                    -TenantId $TenantId `
+                    -Credential $ServicePrincipalCredential | `
+                        Out-Null
             }
-            elseif ($null -ne $Credential) {
-                Write-Message "Connecting to Azure Account using provided credential..." -Level Verbose
-                $null = Connect-AzAccount -Credential $Credential -Tenant $TenantId
+            elseif ($null -ne $Credential)
+            {
+                # FGE: Question is should we deprecate this? It will not be possible in the future anyway
+                #      https://github.com/dataplat/FabricTools/issues/165
+                Write-Message `
+                    -Message 'Connecting to Azure Account using provided credential...' `
+                    -Level Verbose
+
+                Connect-AzAccount `
+                    -Tenant $TenantId `
+                    -Credential $Credential
             }
-            else {
-                Write-Message "Connecting to Azure Account using current user..." -Level Verbose
-                if ($TenantId) {
-                    $null = Connect-AzAccount -Tenant $TenantId
+            else
+            {
+                Write-Message `
+                    -Message 'Connecting to Azure Account using current user...' `
+                    -Level Verbose
+
+                if ($TenantId)
+                {
+                    Connect-AzAccount `
+                        -Tenant $TenantId | `
+                            Out-Null
                 }
-                else {
+                else
+                {
                     # If no TenantId is provided, connect to the default tenant
-                    Write-Message "No TenantId provided, connecting to default tenant..." -Level Verbose
-                    $null = Connect-AzAccount
+                    Write-Message `
+                        -Message 'No TenantId provided, connecting to default tenant...' `
+                        -Level Verbose
+
+                    Connect-AzAccount | `
+                            Out-Null
                 }
             }
             $azContext = Get-AzContext
         }
 
-        Write-Message "Connected: $($azContext.Account)" -Level Verbose
+        Write-Message `
+            -Message "Connected: $($azContext.Account)" `
+            -Level Verbose
 
-        if ($PSCmdlet.ShouldProcess("Setting Fabric authentication token and headers for $($azContext.Account)")) {
-            Write-Message "Get authentication token from $($FabricSession.ResourceUrl)" -Level Verbose
-            $FabricSession.AccessToken = (Get-AzAccessToken -ResourceUrl $FabricSession.ResourceUrl)
-            $plainTextToken = $FabricSession.AccessToken.Token | ConvertFrom-SecureString -AsPlainText
-            Write-Message "Setup headers for Fabric API calls" -Level Debug
-            $FabricSession.HeaderParams = @{'Authorization' = "Bearer {0}" -f $plainTextToken }
+        if ($PSCmdlet.ShouldProcess("Setting Fabric authentication token and headers for $($azContext.Account)"))
+        {
+            Write-Message `
+                -Message "Get authentication token from $($FabricSession.ResourceUrl)" `
+                -Level Verbose
+
+            $FabricSession.AccessToken = (Get-AzAccessToken `
+                    -ResourceUrl $FabricSession.ResourceUrl)
+
+            $plainTextToken = $FabricSession.AccessToken.Token | `
+                    ConvertFrom-SecureString `
+                    -AsPlainText
+
+            Write-Message `
+                -Message 'Setup headers for Fabric API calls' `
+                -Level Debug
+
+            $FabricSession.HeaderParams = @{'Authorization' = 'Bearer {0}' -f $plainTextToken }
 
             # Copy session values to exposed $FabricConfig
             $FabricConfig.TenantId = $FabricSession.AccessToken.TenantId
@@ -139,15 +245,31 @@ function Connect-FabricAccount {
             $FabricConfig.FabricHeaders = $FabricSession.HeaderParams    # Remove this;
         }
 
-        if ($PSCmdlet.ShouldProcess("Setting Azure authentication token and headers for $($azContext.Account)")) {
-            Write-Message "Get authentication token from $($AzureSession.BaseApiUrl)" -Level Verbose
-            $AzureSession.AccessToken = (Get-AzAccessToken -ResourceUrl $AzureSession.BaseApiUrl)
-            $plainTextToken = $AzureSession.AccessToken.Token | ConvertFrom-SecureString -AsPlainText
-            Write-Message "Setup headers for Azure API calls" -Level Debug
-            $AzureSession.HeaderParams = @{'Authorization' = "Bearer {0}" -f $plainTextToken }
+        if ($PSCmdlet.ShouldProcess("Setting Azure authentication token and headers for $($azContext.Account)"))
+        {
+            Write-Message `
+                -Message "Get authentication token from $($AzureSession.BaseApiUrl)" `
+                -Level Verbose
+
+            $AzureSession.AccessToken = (Get-AzAccessToken `
+                    -ResourceUrl $AzureSession.BaseApiUrl)
+
+            $plainTextToken = $AzureSession.AccessToken.Token | `
+                    ConvertFrom-SecureString `
+                    -AsPlainText
+
+            Write-Message `
+                -Message 'Setup headers for Azure API calls' `
+                -Level Debug
+
+            $AzureSession.HeaderParams = @{'Authorization' = 'Bearer {0}' -f $plainTextToken }
         }
 
     }
-    end {
+    end
+    {
+        Write-Message `
+            -Message "Function $($MyInvocation.MyCommand.Name) ended." `
+            -Level Verbose
     }
 }
