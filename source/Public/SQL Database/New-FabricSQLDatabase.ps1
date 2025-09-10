@@ -77,6 +77,7 @@ function New-FabricSQLDatabase
                 Uri = $apiEndpointUrl
                 Method = 'POST'
                 Body = $bodyJson
+                ObjectIdOrName = $Name
                 TypeName = 'SQL Database'
                 NoWait = $NoWait
                 HandleResponse = $true

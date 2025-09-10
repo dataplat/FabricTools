@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Fixed bug in `Update-FabricSemanticModelDefinition` - Uri was incorrect when a platform file exists
+- Name of new SQL database will be shown (#169)
 
 ### Deprecated
 
