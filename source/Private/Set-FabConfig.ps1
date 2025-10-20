@@ -11,21 +11,10 @@ Set-PSFConfig -Name 'FabricTools.FabricSession.TokenExpiresOn' -Value $null -Val
 Set-PSFConfig -Name 'FabricTools.FabricSession.AccessToken'    -Value $null
 
 Set-PSFConfig -Name 'FabricTools.KustoApi.BaseUrl'             -Value 'https://api.kusto.windows.net'
+Set-PSFConfig -Name 'FabricTools.AzureApi.BaseUrl'             -Value "https://management.azure.com"
 
-#$script:FabricSession = [ordered]@{
-    #BaseApiUrl   = 'https://api.fabric.microsoft.com/v1'
-    #ResourceUrl  = 'https://api.fabric.microsoft.com'
-    #HeaderParams = $null
-    #ContentType  = @{'Content-Type' = "application/json" }
-    #KustoURL     = "https://api.kusto.windows.net"
-    #AccessToken  = $null
-#}
-
-Set-PSFConfig -Name 'FabricTools.AzureApi.BaseUrl'           -Value "https://management.azure.com"
-
-Set-PSFConfig -Name 'FabricTools.AzureSession.AccessToken'   -Value $null
-Set-PSFConfig -Name 'FabricTools.AzureSession.Headers'       -Value @{}
-
+Set-PSFConfig -Name 'FabricTools.AzureSession.AccessToken'     -Value $null
+Set-PSFConfig -Name 'FabricTools.AzureSession.Headers'         -Value @{}
 
 $script:AzureSession = [ordered]@{
     BaseApiUrl   = "https://management.azure.com"
@@ -35,19 +24,8 @@ $script:AzureSession = [ordered]@{
 
 Set-PSFConfig -Name 'FabricTools.PowerBiApi.BaseUrl'      -Value "https://api.powerbi.com/v1.0/myorg"
 
-# $script:PowerBI = [ordered]@{
-#     BaseApiUrl = "https://api.powerbi.com/v1.0/myorg"
-# }
-
 $FabricConfig = @{
     BaseUrl        = "https://api.fabric.microsoft.com/v1"
-    # ResourceUrl    = "https://api.fabric.microsoft.com"
-    # FabricHeaders  = @{}
-    # TenantId = ""
-    # TokenExpiresOn = ""
-    # FeatureFlags = @{
-    #     EnableTokenRefresh = $true
-    # }
 }
 
 Set-PSFConfig -Name 'FabricTools.FeatureFlags.EnableTokenRefresh' -Value $true -Validation bool
