@@ -39,9 +39,12 @@ Author: Kamil Nowinski
 
     Confirm-TokenState
 
+    $AzureBaseApiUrl = Get-PSFConfigValue 'FabricTools.AzureApi.BaseUrl'
+    $AzureSessionHeaderParams = Get-PSFConfigValue 'FabricTools.AzureSession.Headers'
+
     #GET https://management.azure.com/subscriptions/548B7FB7-3B2A-4F46-BB02-66473F1FC22C/resourceGroups/TestRG/providers/Microsoft.Fabric/capacities/azsdktest/skus?api-version=2023-11-01
-    $uri = "$($AzureSession.BaseApiUrl)/subscriptions/$subscriptionID/resourceGroups/$ResourceGroupName/providers/Microsoft.Fabric/capacities/$capacity/skus?api-version=2023-11-01"
-    $result = Invoke-RestMethod -Headers $AzureSession.HeaderParams -Uri $uri -Method GET
+    $uri = "$AzureBaseApiUrl/subscriptions/$subscriptionID/resourceGroups/$ResourceGroupName/providers/Microsoft.Fabric/capacities/$capacity/skus?api-version=2023-11-01"
+    $result = Invoke-RestMethod -Headers $AzureSessionHeaderParams -Uri $uri -Method GET
 
     return $result.value
 

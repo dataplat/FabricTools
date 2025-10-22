@@ -24,6 +24,9 @@ function Confirm-TokenState {
     [CmdletBinding()]
     param ()
 
+    # Refresh the global FabricConfig variable to be backwards compatible
+    $script:FabricConfig = Get-PSFConfigValue 'FabricTools.FabricApi.BaseApiUrl'
+
     Write-Message -Message "Validating token..." -Level Verbose
 
     try {

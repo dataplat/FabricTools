@@ -1,13 +1,10 @@
-# this is a workaround to get the variables set for now
-# TODO: change to use PSFConfig?
-
 Set-PSFConfig -Name 'FabricTools.FabricApi.BaseApiUrl'         -Value 'https://api.fabric.microsoft.com/v1'
 Set-PSFConfig -Name 'FabricTools.FabricApi.ResourceUrl'        -Value 'https://api.fabric.microsoft.com'
 Set-PSFConfig -Name 'FabricTools.FabricApi.TenantId'
 Set-PSFConfig -Name 'FabricTools.FabricApi.ContentType'        -Value 'application/json; charset=utf-8'
 
 Set-PSFConfig -Name 'FabricTools.FabricSession.Headers'        -Value @{}
-Set-PSFConfig -Name 'FabricTools.FabricSession.TokenExpiresOn' -Value $null -Validation DateTimeOffset
+Set-PSFConfig -Name 'FabricTools.FabricSession.TokenExpiresOn' -Value $null
 Set-PSFConfig -Name 'FabricTools.FabricSession.AccessToken'    -Value $null
 
 Set-PSFConfig -Name 'FabricTools.KustoApi.BaseUrl'             -Value 'https://api.kusto.windows.net'
@@ -16,16 +13,12 @@ Set-PSFConfig -Name 'FabricTools.AzureApi.BaseUrl'             -Value "https://m
 Set-PSFConfig -Name 'FabricTools.AzureSession.AccessToken'     -Value $null
 Set-PSFConfig -Name 'FabricTools.AzureSession.Headers'         -Value @{}
 
-$script:AzureSession = [ordered]@{
-    BaseApiUrl   = "https://management.azure.com"
-    AccessToken  = $null
-    HeaderParams = $null
-}
+Set-PSFConfig -Name 'FabricTools.PowerBiApi.BaseUrl'           -Value "https://api.powerbi.com/v1.0/myorg"
 
-Set-PSFConfig -Name 'FabricTools.PowerBiApi.BaseUrl'      -Value "https://api.powerbi.com/v1.0/myorg"
-
-$FabricConfig = @{
+# Remain backwards compatible with scripts relying on $FabricConfig variable
+$script:FabricConfig = @{
     BaseUrl        = "https://api.fabric.microsoft.com/v1"
 }
 
+# Feature Flags
 Set-PSFConfig -Name 'FabricTools.FeatureFlags.EnableTokenRefresh' -Value $true -Validation bool
