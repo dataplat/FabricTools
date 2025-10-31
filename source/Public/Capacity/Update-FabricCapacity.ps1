@@ -71,6 +71,10 @@ function Update-FabricCapacity
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
+        [string]$Location,
+
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
         [string[]]$AdministrationMembers,
 
         [Parameter(Mandatory = $false)]
@@ -88,7 +92,6 @@ function Update-FabricCapacity
 
         # Step 2: Construct the API URL
         $apiEndpointUrl = "$($AzureSession.BaseApiUrl)/subscriptions/{0}/resourceGroups/{1}/providers/Microsoft.Fabric/capacities/{2}?api-version=2023-11-01" -f $SubscriptionId, $ResourceGroupName, $CapacityName
-        Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
         # Step 3: Construct the request body
         $body = @{
@@ -101,6 +104,7 @@ function Update-FabricCapacity
                 name = $SkuName
                 tier = $SkuTier
             }
+            location = $Location
         }
 
         if ($Tags)
@@ -113,7 +117,7 @@ function Update-FabricCapacity
         {
             $apiParams = @{
                 Uri = $apiEndpointUrl
-                Method = 'PATCH'
+                Method = 'PUT'
                 Body = $body
                 TypeName = 'Fabric Capacity'
                 NoWait = $NoWait

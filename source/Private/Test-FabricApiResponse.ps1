@@ -142,11 +142,19 @@ function Test-FabricApiResponse {
         default {
             Write-Message -Message "Test-FabricApiResponse::default" -Level Debug
             Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
-            Write-Message -Message "Error: $($response.message)" -Level Error
-            if ($response.moreDetails) {
-                Write-Message -Message "More Details: $($response.moreDetails)" -Level Error
+
+            if ($null -ne $Response.error) {
+                Write-Message -Message "Error Code: $($Response.error.code)" -Level Error
+                Write-Message -Message "Error Msg: $($Response.error.message)" -Level Error
+                $errorJson = $Response.error | ConvertTo-Json -Depth 10
+                Write-Message -Message "Error Detailed Info:`n$errorJson" -Level Debug
+            } else {
+                Write-Message -Message "Error Code: $($Response.errorCode)" -Level Error
+                Write-Message -Message "Error Msg: $($Response.message)" -Level Error
+                if ($Response.moreDetails) {
+                    Write-Message -Message "More Details: $($Response.moreDetails)" -Level Error
+                }
             }
-            Write-Message "Error Code: $($response.errorCode)" -Level Error
             throw "API request failed with status code $statusCode."
         }
     }
