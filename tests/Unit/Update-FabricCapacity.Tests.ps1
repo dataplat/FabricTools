@@ -6,6 +6,7 @@ param(
         "ResourceGroupName"
         "CapacityName"
         "SkuName"
+        "Location"
         "AdministrationMembers"
         "Tags"
         "NoWait"

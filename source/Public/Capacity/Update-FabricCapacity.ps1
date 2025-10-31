@@ -22,6 +22,9 @@ function Update-FabricCapacity
     .PARAMETER SkuName
         The name of the SKU level (e.g., "F2").
 
+    .PARAMETER Location
+        The Azure region where the capacity is located (e.g., "uksouth").
+
     .PARAMETER AdministrationMembers
         An array of administrator user identities for the capacity administration.
 
@@ -33,12 +36,26 @@ function Update-FabricCapacity
 
     .EXAMPLE
         ```powershell
-        Update-FabricCapacity -SubscriptionId "548B7FB7-3B2A-4F46-BB02-66473F1FC22C" -ResourceGroupName "TestRG" -CapacityName "azsdktest" -SkuName "F2" -AdministrationMembers @("azsdktest@microsoft.com", "azsdktest2@microsoft.com")
+        $azureResource = @{
+            subscriptionID = 'GUID-GUID'
+            ResourceGroup  = 'TestRG'
+            CapacityName   = 'fabricblogdemof4'
+            Location       = 'uksouth'
+        }
+        Update-FabricCapacity @azureResource -SkuName 'F8' -AdministrationMembers 'azsdktest@microsoft.com' -Debug -Confirm:$false
         ```
 
     .EXAMPLE
         ```powershell
-        Update-FabricCapacity -SubscriptionId "548B7FB7-3B2A-4F46-BB02-66473F1FC22C" -ResourceGroupName "TestRG" -CapacityName "azsdktest" -SkuName "F2" -AdministrationMembers @("admin@company.com") -Tags @{Environment="Production"; Owner="IT Team"}
+        $azureResource = @{
+            subscriptionID = 'GUID-GUID'
+            ResourceGroup  = 'TestRG'
+            CapacityName   = 'fabricblogdemof4'
+            Location       = 'uksouth'
+            SkuName        = 'F8'
+            AdministrationMembers = 'azsdktest@microsoft.com'
+        }
+        Update-FabricCapacity @azureResource -Tags @{Environment="Production"; Owner="IT Team"} -Confirm:$false
         ```
 
     .NOTES
