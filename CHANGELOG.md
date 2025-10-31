@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Added function `Update-FabricCapacity`
+- Added Error Detailed Info in `Test-FabricApiResponse` (Debug mode) when `response.error` exists
+
 ### Changed
 
 - Version of `Microsoft.PowerShell.PSResourceGet` and `Microsoft.PowerShell.PlatyPS` updated
