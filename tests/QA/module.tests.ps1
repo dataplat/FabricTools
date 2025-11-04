@@ -137,7 +137,8 @@ Describe 'Quality for module' -Tags 'TestQuality' {
         $Result = (Invoke-ScriptAnalyzer -Path $functionFile.FullName)
         $report = $Result | Format-Table -AutoSize | Out-String -Width 110
         $Errors = if ($Result) { $Result | Where-Object { $_.Severity -ne 'Warning' } } else { @() }
-        $Errors | Should -BeNullOrEmpty -Because "some rule triggered.`r`n`r`n $report"    }
+        $Errors | Should -BeNullOrEmpty -Because "some rule triggered.`r`n`r`n $report"
+    }
 }
 
 Describe 'Help for module' -Tags 'helpQuality' {

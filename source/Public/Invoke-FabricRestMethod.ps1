@@ -133,6 +133,12 @@ Function Invoke-FabricRestMethod {
         Write-Message -Message "PowerBIApi param is ignored when full Uri is provided." -Level Warning
     }
 
+    $Headers = $FabricSession.HeaderParams
+    if ($Uri.StartsWith($AzureSession.BaseApiUrl)) {
+        $Headers = $AzureSession.HeaderParams
+        Write-Message -Message "Using AzureSession headers for request." -Level Debug
+    }
+
     if ($Body -is [hashtable]) {
         $Body = $Body | ConvertTo-Json -Depth 10
         Write-Message -Message "Request Body: $Body" -Level Debug
