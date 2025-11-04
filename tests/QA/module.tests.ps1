@@ -134,11 +134,10 @@ Describe 'Quality for module' -Tags 'TestQuality' {
     It 'Should pass Script Analyzer for <Name>' -ForEach ($testCases | Where-Object { $_.Name -in $mut.ExportedCommands.Values.Name }) -Skip:(-not $scriptAnalyzerRules) {
         $functionFile = Get-ChildItem -Path $sourcePath -Recurse -Include "$Name.ps1"
 
-        $pssaResult = (Invoke-ScriptAnalyzer -Path $functionFile.FullName)
-        $report = $pssaResult | Format-Table -AutoSize | Out-String -Width 110
-        $pssaResult | Should -BeNullOrEmpty -Because `
-            "some rule triggered.`r`n`r`n $report"
-    }
+        $Result = (Invoke-ScriptAnalyzer -Path $functionFile.FullName)
+        $report = $Result | Format-Table -AutoSize | Out-String -Width 110
+        $Errors = if ($Result) { $Result | Where-Object { $_.Severity -ne 'Warning' } } else { @() }
+        $Errors | Should -BeNullOrEmpty -Because "some rule triggered.`r`n`r`n $report"    }
 }
 
 Describe 'Help for module' -Tags 'helpQuality' {

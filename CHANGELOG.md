@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Version of `Microsoft.PowerShell.PSResourceGet` and `Microsoft.PowerShell.PlatyPS` updated
+- Replace the repo's configuration approach with PSFramework (move config handling to PSFramework) #85
+- Applied `Invoke-FabricRestMethod` to several public cmdlets #85
 
 ### Fixed
 

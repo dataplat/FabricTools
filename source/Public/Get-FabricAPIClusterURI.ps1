@@ -28,7 +28,7 @@ function Get-FabricAPIclusterURI {
     Confirm-TokenState
 
     # Make a GET request to the PowerBI API to retrieve the datasets.
-    $reply = Invoke-RestMethod -uri "$($PowerBI.BaseApiUrl)/datasets" -Headers $FabricSession.HeaderParams -Method GET
+    $reply = Invoke-FabricRestMethod -Method GET -PowerBIApi -Uri "datasets"
 
     # Extract the '@odata.context' property from the response.
     $unaltered = $reply.'@odata.context'

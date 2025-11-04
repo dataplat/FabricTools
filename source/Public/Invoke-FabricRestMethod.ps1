@@ -124,7 +124,7 @@ Function Invoke-FabricRestMethod {
     $Method = $Method.ToUpperInvariant()
     $baseUrl = $FabricConfig.BaseUrl
     if ($PowerBIApi) {
-        $baseUrl = $PowerBI.BaseApiUrl
+        $baseUrl = Get-PSFConfigValue -FullName 'FabricTools.PowerBiApi.BaseUrl'
     }
 
     if ($Uri -notmatch '^https?://.*') {
@@ -142,6 +142,9 @@ Function Invoke-FabricRestMethod {
         Write-Message -Message "No request body provided." -Level Debug
     }
 
+    $headers = Get-PSFConfigValue -FullName 'FabricTools.FabricSession.Headers'
+    $contentType = Get-PSFConfigValue -FullName 'FabricTools.FabricApi.ContentType'
+
     $continuationToken = $null
     $repeat = $false
 
@@ -154,11 +157,11 @@ Function Invoke-FabricRestMethod {
         Write-Message -Message "API Endpoint: $Method $apiEndpointUrl" -Level Verbose
 
         $request = @{
-            Headers = $FabricSession.HeaderParams
+            Headers = $headers
             Uri = $Uri
             Method = $Method
             Body = $Body
-            ContentType = "application/json"
+            ContentType = $contentType
             ErrorAction = 'Stop'
             SkipHttpErrorCheck = $true
             ResponseHeadersVariable = "responseHeader"
