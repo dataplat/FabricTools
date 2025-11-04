@@ -74,7 +74,7 @@ function Update-FabricSemanticModelDefinition
 
         if ($hasPlatformFile -eq $true)
         {
-            $apiEndpointUrl = "?updateMetadata=true" -f $apiEndpointUrl
+            $apiEndpointUrl = "{0}?updateMetadata=true" -f $apiEndpointUrl
         }
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 

@@ -24,26 +24,32 @@ function Confirm-TokenState {
     [CmdletBinding()]
     param ()
 
+    # Refresh the global FabricConfig variable to be backwards compatible
+    $script:FabricConfig = Get-PSFConfigValue 'FabricTools.FabricApi.BaseApiUrl'
+
     Write-Message -Message "Validating token..." -Level Verbose
 
     try {
         # Ensure required properties have valid values
-        if ([string]::IsNullOrWhiteSpace($FabricConfig.TenantId) -or
-            [string]::IsNullOrWhiteSpace($FabricConfig.TokenExpiresOn)) {
+        $tenantId = Get-PSFConfigValue FabricTools.FabricApi.TenantId
+        $tokenExpiresOn = Get-PSFConfigValue FabricTools.FabricSession.TokenExpiresOn
+
+        if ([string]::IsNullOrWhiteSpace($tenantId) -or
+            [string]::IsNullOrWhiteSpace($tokenExpiresOn)) {
             Write-Message -Message "Token details are missing. Please run 'Connect-FabricAccount' to configure the session." -Level Error
             throw "MissingTokenDetailsException: Token details are missing."
         }
 
         # Convert the TokenExpiresOn value to a DateTime object
-        if ($FabricConfig.TokenExpiresOn.GetType() -eq [datetimeoffset]) {
-            $tokenExpiryDate = $FabricConfig.TokenExpiresOn
+        if ($tokenExpiresOn.GetType() -eq [DateTimeOffset]) {
+            $tokenExpiryDate = $tokenExpiresOn
         } else {
-            $tokenExpiryDate = [datetimeoffset]::Parse($FabricConfig.TokenExpiresOn)
+            $tokenExpiryDate = [DateTimeOffset]::Parse($tokenExpiresOn)
         }
 
         # Check if the token is expired
-        if ($tokenExpiryDate -le [datetimeoffset]::Now) {
-            if ($FabricConfig.FeatureFlags.EnableTokenRefresh) {
+        if ($tokenExpiryDate -le [DateTimeOffset]::Now) {
+            if (Get-PSFConfigValue -FullName 'FabricTools.FeatureFlags.EnableTokenRefresh') {
                 Write-Message -Message "Token has expired. Attempting to refresh the token..." -Level Warning
                 Connect-FabricAccount -reset
             } else {

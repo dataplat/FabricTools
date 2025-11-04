@@ -127,24 +127,27 @@ function Connect-FabricAccount {
         Write-Message "Connected: $($azContext.Account)" -Level Verbose
 
         if ($PSCmdlet.ShouldProcess("Setting Fabric authentication token and headers for $($azContext.Account)")) {
-            Write-Message "Get authentication token from $($FabricSession.ResourceUrl)" -Level Verbose
-            $FabricSession.AccessToken = (Get-AzAccessToken -ResourceUrl $FabricSession.ResourceUrl)
-            $plainTextToken = $FabricSession.AccessToken.Token | ConvertFrom-SecureString -AsPlainText
+            $ResourceUrl = Get-PSFConfigValue -FullName 'FabricTools.FabricApi.ResourceUrl'
+            Write-Message "Get authentication token from $ResourceUrl" -Level Verbose
+            $accessToken = (Get-AzAccessToken -ResourceUrl $ResourceUrl)
+            Set-PSFConfig -FullName 'FabricTools.FabricSession.AccessToken' -Value $accessToken
+            $plainTextToken = $accessToken.Token | ConvertFrom-SecureString -AsPlainText
             Write-Message "Setup headers for Fabric API calls" -Level Debug
-            $FabricSession.HeaderParams = @{'Authorization' = "Bearer {0}" -f $plainTextToken }
-
-            # Copy session values to exposed $FabricConfig
-            $FabricConfig.TenantId = $FabricSession.AccessToken.TenantId
-            $FabricConfig.TokenExpiresOn = $FabricSession.AccessToken.ExpiresOn
-            $FabricConfig.FabricHeaders = $FabricSession.HeaderParams    # Remove this;
+            $headerParams = @{'Authorization' = "Bearer {0}" -f $plainTextToken }
+            Set-PSFConfig -FullName 'FabricTools.FabricSession.Headers' -Value $headerParams
+            Set-PSFConfig -FullName 'FabricTools.FabricApi.TenantId' -Value $accessToken.TenantId
+            Set-PSFConfig -FullName 'FabricTools.FabricSession.TokenExpiresOn' -Value $accessToken.ExpiresOn
         }
 
         if ($PSCmdlet.ShouldProcess("Setting Azure authentication token and headers for $($azContext.Account)")) {
-            Write-Message "Get authentication token from $($AzureSession.BaseApiUrl)" -Level Verbose
-            $AzureSession.AccessToken = (Get-AzAccessToken -ResourceUrl $AzureSession.BaseApiUrl)
-            $plainTextToken = $AzureSession.AccessToken.Token | ConvertFrom-SecureString -AsPlainText
+            $BaseApiUrl = Get-PSFConfigValue -FullName 'FabricTools.AzureApi.BaseUrl'
+            Write-Message "Get authentication token from $BaseApiUrl" -Level Verbose
+            $accessToken = (Get-AzAccessToken -ResourceUrl $BaseApiUrl)
+            Set-PSFConfig -FullName 'FabricTools.AzureSession.AccessToken' -Value $accessToken
+            $plainTextToken = $accessToken.Token | ConvertFrom-SecureString -AsPlainText
             Write-Message "Setup headers for Azure API calls" -Level Debug
-            $AzureSession.HeaderParams = @{'Authorization' = "Bearer {0}" -f $plainTextToken }
+            $headerParams = @{'Authorization' = "Bearer {0}" -f $plainTextToken }
+            Set-PSFConfig -FullName 'FabricTools.AzureSession.Headers' -Value $headerParams
         }
 
     }

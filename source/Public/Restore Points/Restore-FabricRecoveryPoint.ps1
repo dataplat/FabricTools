@@ -56,15 +56,15 @@ Author: Jess Pomfret
 
     #region handle the config parameters
     if(-not $WorkspaceGUID) {
-        $WorkspaceGUID = Get-PSFConfigValue -FullName PSFabricTools.WorkspaceGUID
+        $WorkspaceGUID = Get-PSFConfigValue -FullName FabricTools.WorkspaceGUID
     }
 
     if(-not $DataWarehouseGUID) {
-        $DataWarehouseGUID = Get-PSFConfigValue -FullName PSFabricTools.DataWarehouseGUID
+        $DataWarehouseGUID = Get-PSFConfigValue -FullName FabricTools.DataWarehouseGUID
     }
 
     if(-not $BaseUrl) {
-        $BaseUrl = Get-PSFConfigValue -FullName PSFabricTools.BaseUrl
+        $BaseUrl = Get-PSFConfigValue -FullName FabricTools.BaseUrl
     }
 
     if (-not $WorkspaceGUID -or -not $DataWarehouseGUID -or -not $BaseUrl) {

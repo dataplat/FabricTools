@@ -45,8 +45,10 @@ Author: Ioana Bouariu
 
     Confirm-TokenState
 
+    $AzureBaseApiUrl = Get-PSFConfigValue 'FabricTools.AzureApi.BaseUrl'
+
     # Define the URL for the GET request.
-    $getCapacityState = "$($AzureSession.BaseApiUrl)/subscriptions/$subscriptionID/resourceGroups/$resourcegroup/providers/Microsoft.Fabric/capacities/$capacity/?api-version=2022-07-01-preview"
+    $getCapacityState = "$AzureBaseApiUrl/subscriptions/$subscriptionID/resourceGroups/$resourcegroup/providers/Microsoft.Fabric/capacities/$capacity/?api-version=2022-07-01-preview"
 
     # Make the GET request and return the response.
     return Invoke-RestMethod -Method GET -Uri $getCapacityState -Headers $script:AzureSession.HeaderParams -ErrorAction Stop

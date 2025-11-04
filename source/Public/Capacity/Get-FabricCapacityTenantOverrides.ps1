@@ -31,5 +31,5 @@ Author: Ioana Bouariu
 
     # Make a GET request to the Fabric API to retrieve the tenant overrides for all capacities.
     # The function returns the response of the GET request.
-    return Invoke-RestMethod -uri "$($FabricSession.BaseApiUrl)/admin/capacities/delegatedTenantSettingOverrides" -Headers $FabricSession.HeaderParams -Method GET
+    return Invoke-FabricRestMethod -uri "admin/capacities/delegatedTenantSettingOverrides" -Method GET
 }

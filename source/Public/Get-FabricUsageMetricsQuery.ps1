@@ -47,7 +47,7 @@ Author: Ioana Bouariu
         [Parameter(Mandatory = $true)]
         [guid]$groupId,
         [Parameter(Mandatory = $true)]
-        $reportname,
+        $reportName,
         [Parameter(Mandatory = $false)]
         [string]$ImpersonatedUser = ""
     )
@@ -57,10 +57,10 @@ Author: Ioana Bouariu
 
     # Define the body of the POST request.
     if ($ImpersonatedUser -ne "") {
-        $reportbody = '{
+        $reportBody = '{
       "queries": [
         {
-          "query": "EVALUATE VALUES(' + $reportname + ')"
+          "query": "EVALUATE VALUES(' + $reportName + ')"
         }
       ],
       "serializerSettings": {
@@ -69,10 +69,10 @@ Author: Ioana Bouariu
       "impersonatedUserName": "' + $ImpersonatedUser + '"
     }'
     } else {
-        $reportbody = '{
+        $reportBody = '{
       "queries": [
         {
-          "query": "EVALUATE VALUES(' + $reportname + ')"
+          "query": "EVALUATE VALUES(' + $reportName + ')"
         }
       ],
       "serializerSettings": {
@@ -82,5 +82,6 @@ Author: Ioana Bouariu
     }
     # Make a POST request to the PowerBI API to retrieve the usage metrics for the specified dataset.
     # The function returns the response of the POST request.
-    return Invoke-RestMethod -uri "$($PowerBI.BaseApiUrl)/groups/$groupId/datasets/$DatasetID/executeQueries" -Headers $FabricSession.HeaderParams -Body $reportbody -Method Post
+    Invoke-FabricRestMethod -Method POST -PowerBIApi -Uri "groups/$groupId/datasets/$DatasetID/executeQueries" -Body $reportBody
+
 }
