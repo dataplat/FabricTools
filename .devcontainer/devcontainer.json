@@ -1,0 +1,16 @@
+{
+  "name": "PowerShell Dev",
+  "features": {
+    "ghcr.io/devcontainers/features/powershell:1": {},
+    "ghcr.io/devcontainers/features/git:1": {}
+  },
+  "customizations": {
+     "extensions": [
+      "davidanson.vscode-markdownlint",
+      "ms-vscode.powershell",
+      "streetsidesoftware.code-spell-checker",
+      "redhat.vscode-yaml"
+    ]
+  },
+  "postCreateCommand": "pwsh .devcontainer/post-create.ps1"
+}
