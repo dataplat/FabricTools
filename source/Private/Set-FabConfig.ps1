@@ -1,4 +1,6 @@
-Set-PSFConfig -Name 'FabricTools.FabricApi.BaseApiUrl'         -Value 'https://api.fabric.microsoft.com/v1'
+Write-Verbose "Setting FabricTools configuration defaults..."
+
+Set-PSFConfig -Name 'FabricTools.FabricApi.BaseUrl'            -Value 'https://api.fabric.microsoft.com/v1'
 Set-PSFConfig -Name 'FabricTools.FabricApi.ResourceUrl'        -Value 'https://api.fabric.microsoft.com'
 Set-PSFConfig -Name 'FabricTools.FabricApi.TenantId'
 Set-PSFConfig -Name 'FabricTools.FabricApi.ContentType'        -Value 'application/json; charset=utf-8'

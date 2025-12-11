@@ -45,13 +45,14 @@ Author: Ioana Bouariu
     Confirm-TokenState
 
     $AzureBaseApiUrl = Get-PSFConfigValue 'FabricTools.AzureApi.BaseUrl'
+    $headers = Get-PSFConfigValue 'FabricTools.AzureSession.Headers'
 
     # Define the URI for the request.
     $suspendCapacity = "$AzureBaseApiUrl/subscriptions/$SubscriptionID/resourceGroups/$ResourceGroup/providers/Microsoft.Fabric/capacities/$Capacity/suspend?api-version=2023-11-01"
 
     # Make a GET request to the URI and return the response.
     if ($PSCmdlet.ShouldProcess("Suspend capacity $capacity")) {
-        return Invoke-RestMethod -Method POST -Uri $suspendCapacity -Headers $script:AzureSession.HeaderParams -ErrorAction Stop
+        return Invoke-RestMethod -Method POST -Uri $suspendCapacity -Headers $headers -ErrorAction Stop
     }
 
 }
