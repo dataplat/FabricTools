@@ -14,7 +14,7 @@ function Connect-FabricAccount {
     The Client ID (AppId) of the service principal used for authentication.
 
 .PARAMETER ServicePrincipalSecret
-    String representing the service principal secret.
+    The **secure string** representing the service principal secret.
 
 .PARAMETER Credential
     A PSCredential object representing a user credential (username and secure password).
@@ -70,9 +70,9 @@ function Connect-FabricAccount {
         [Alias('AppId')]
         [guid] $ServicePrincipalId,
 
-        [Parameter(Mandatory = $false, HelpMessage = "Secret of the service principal.")]
+        [Parameter(Mandatory = $false, HelpMessage = "Secure secret of the service principal.")]
         [Alias('AppSecret')]
-        [String] $ServicePrincipalSecret,
+        [SecureString] $ServicePrincipalSecret,
 
         [Parameter(Mandatory = $false, HelpMessage = "User credential.")]
         [PSCredential] $Credential,
@@ -91,7 +91,12 @@ function Connect-FabricAccount {
         if ($PSBoundParameters.ContainsKey('AppSecret') -and -not $PSBoundParameters.ContainsKey('AppId'))
         {
             Write-Message -Message "AppId is required when using AppSecret." -Level Error
-            throw "AppId is required when using AppId."
+            throw "AppId is required when using AppSecret."
+        }
+        # Warn if both Credential and AppId are provided
+        if ($PSBoundParameters.ContainsKey('Credential') -and $PSBoundParameters.ContainsKey('AppId'))
+        {
+            Write-Message -Message "Provided Credential will be ignored when AppId/ServicePrincipalId is also provided." -Level Warning
         }
     }
 
@@ -102,9 +107,8 @@ function Connect-FabricAccount {
         }
         if (!$azContext) {
             if ($ServicePrincipalId) {
-                Write-Message "Connecting to Azure Account using provided servicePrincipalId..." -Level Verbose
-                $ServicePrincipalSecretSecure = ($ServicePrincipalSecret | ConvertTo-SecureString -AsPlainText -Force)
-                $credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $ServicePrincipalId, $ServicePrincipalSecretSecure
+                Write-Message "Connecting to Azure Account using provided ServicePrincipalId..." -Level Verbose
+                $credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $ServicePrincipalId, $ServicePrincipalSecret
                 $null = Connect-AzAccount -ServicePrincipal -TenantId $TenantId -Credential $credential
             }
             elseif ($null -ne $Credential) {
