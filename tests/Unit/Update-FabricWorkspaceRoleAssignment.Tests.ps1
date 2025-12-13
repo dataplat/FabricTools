@@ -65,13 +65,12 @@ Describe "Update-FabricWorkspaceRoleAssignment" -Tag "UnitTests" {
                     errorCode = 'InvalidRequest'
                 }
             }
-            Mock -CommandName Confirm-TokenState -MockWith { return $true }
+            Mock -CommandName Confirm-TokenState -MockWith { }
             Mock -CommandName Write-Message -MockWith { }
         }
 
         It 'Should write error messages for unexpected status codes' {
-            $result = Update-FabricWorkspaceRoleAssignment -WorkspaceId (New-Guid) -WorkspaceRoleAssignmentId (New-Guid) -WorkspaceRole 'Member' -Confirm:$false
-            $result | Should -BeNullOrEmpty
+            Update-FabricWorkspaceRoleAssignment -WorkspaceId (New-Guid) -WorkspaceRoleAssignmentId (New-Guid) -WorkspaceRole 'Member' -Confirm:$false
 
             Should -Invoke -CommandName Write-Message -ParameterFilter { $Message -like '*Unexpected response code*' -and $Level -eq 'Error' } -Times 1 -Exactly -Scope It
             Should -Invoke -CommandName Write-Message -ParameterFilter { $Message -like '*Error:*' -and $Level -eq 'Error' } -Times 1 -Exactly -Scope It

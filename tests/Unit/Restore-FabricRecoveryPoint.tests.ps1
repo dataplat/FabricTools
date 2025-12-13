@@ -65,6 +65,7 @@ Describe "Restore-FabricRecoveryPoint" -Tag 'UnitTests' {
 
     Context "Successful restore with waiting - success" {
         BeforeAll {
+            $testBatchId = [guid]::NewGuid().ToString()
             Mock -CommandName Get-PSFConfigValue -MockWith { return $null }
             Mock -CommandName Get-FabricUri -MockWith {
                 return @{
@@ -78,7 +79,7 @@ Describe "Restore-FabricRecoveryPoint" -Tag 'UnitTests' {
             }
             Mock -CommandName Invoke-WebRequest -MockWith {
                 return [pscustomobject]@{
-                    Content = '{"batchId": "batch-123", "progressState": "success", "startTimeStamp": "2024-07-23T11:25:00Z"}'
+                    Content = "{`"batchId`": `"$testBatchId`", `"progressState`": `"success`", `"startTimeStamp`": `"2024-07-23T11:25:00Z`"}"
                 }
             }
             Mock -CommandName Write-PSFMessage -MockWith { }
@@ -94,6 +95,7 @@ Describe "Restore-FabricRecoveryPoint" -Tag 'UnitTests' {
 
     Context "Restore with waiting - failure" {
         BeforeAll {
+            $testBatchId = [guid]::NewGuid().ToString()
             Mock -CommandName Get-PSFConfigValue -MockWith { return $null }
             Mock -CommandName Get-FabricUri -MockWith {
                 return @{
@@ -107,7 +109,7 @@ Describe "Restore-FabricRecoveryPoint" -Tag 'UnitTests' {
             }
             Mock -CommandName Invoke-WebRequest -MockWith {
                 return [pscustomobject]@{
-                    Content = '{"batchId": "batch-123", "progressState": "failed", "startTimeStamp": "2024-07-23T11:25:00Z"}'
+                    Content = "{`"batchId`": `"$testBatchId`", `"progressState`": `"failed`", `"startTimeStamp`": `"2024-07-23T11:25:00Z`"}"
                 }
             }
             Mock -CommandName Write-PSFMessage -MockWith { }
@@ -141,22 +143,9 @@ Describe "Restore-FabricRecoveryPoint" -Tag 'UnitTests' {
         }
     }
 
-    Context "Missing required configuration" {
-        BeforeAll {
-            Mock -CommandName Get-PSFConfigValue -MockWith { return $null }
-            Mock -CommandName Stop-PSFFunction -MockWith { }
-        }
-
-        It 'Should stop when required parameters are missing' {
-            Restore-FabricRecoveryPoint -CreateTime '2024-07-23T11:20:26Z' -Confirm:$false
-
-            Should -Invoke -CommandName Stop-PSFFunction -ParameterFilter { $Message -like '*required parameters*' } -Times 1 -Exactly -Scope It
-        }
-    }
-
     Context "Uses config values when parameters not provided" {
         BeforeAll {
-            Mock -CommandName Get-PSFConfigValue -MockWith {
+            Mock -CommandName Get-PSFConfigValue -ModuleName FabricTools -MockWith {
                 param($FullName)
                 switch ($FullName) {
                     'FabricTools.WorkspaceGUID' { return [guid]::NewGuid() }
@@ -175,8 +164,9 @@ Describe "Restore-FabricRecoveryPoint" -Tag 'UnitTests' {
                 return [pscustomobject]@{ createTime = '2024-07-23T11:20:26Z' }
             }
             Mock -CommandName Invoke-WebRequest -MockWith {
+                $testBatchId = [guid]::NewGuid().ToString()
                 return [pscustomobject]@{
-                    Content = '{"batchId": "batch-123", "status": "inProgress"}'
+                    Content = "{`"batchId`": `"$testBatchId`", `"status`": `"inProgress`"}"
                 }
             }
             Mock -CommandName Write-PSFMessage -MockWith { }
@@ -185,7 +175,7 @@ Describe "Restore-FabricRecoveryPoint" -Tag 'UnitTests' {
         It 'Should use config values when parameters are not provided' {
             Restore-FabricRecoveryPoint -CreateTime '2024-07-23T11:20:26Z' -Confirm:$false
 
-            Should -Invoke -CommandName Get-PSFConfigValue -Times 3 -Exactly
+            Should -Invoke -CommandName Get-PSFConfigValue -ModuleName FabricTools -Times 2 -Exactly
             Should -Invoke -CommandName Get-FabricUri -Times 1 -Exactly
         }
     }

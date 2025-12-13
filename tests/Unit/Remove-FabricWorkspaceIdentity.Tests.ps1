@@ -50,18 +50,19 @@ Describe "Remove-FabricWorkspaceIdentity" -Tag "UnitTests" {
 
     Context "Long running operation - Succeeded" {
         BeforeAll {
+            $script:testOperationId = [guid]::NewGuid().ToString()
             Mock -CommandName Invoke-FabricRestMethod -MockWith {
-                InModuleScope -ModuleName 'FabricTools' {
+                InModuleScope -ModuleName 'FabricTools' -Parameters @{ operationId = $script:testOperationId } -ScriptBlock {
                     $script:statusCode = 202
-                    $script:responseHeader = @{ "x-ms-operation-id" = "op-12345" }
+                    $script:responseHeader = @{ "x-ms-operation-id" = $operationId }
                 }
                 return $null
             }
             Mock -CommandName Confirm-TokenState -MockWith { return $true }
-            Mock -CommandName Get-FabricLongRunningOperation -ModuleName FabricTools -MockWith {
+            Mock -CommandName Get-FabricLongRunningOperation -MockWith {
                 return [pscustomobject]@{ status = "Succeeded" }
             }
-            Mock -CommandName Get-FabricLongRunningOperationResult -ModuleName FabricTools -MockWith {
+            Mock -CommandName Get-FabricLongRunningOperationResult -MockWith {
                 return [pscustomobject]@{ result = "Identity deprovisioned" }
             }
             Mock -CommandName Write-Message -MockWith { }
@@ -71,22 +72,23 @@ Describe "Remove-FabricWorkspaceIdentity" -Tag "UnitTests" {
             $result = Remove-FabricWorkspaceIdentity -WorkspaceId (New-Guid) -Confirm:$false
             $result | Should -Not -BeNullOrEmpty
 
-            Should -Invoke -CommandName Get-FabricLongRunningOperation -ModuleName FabricTools -Times 1 -Exactly
-            Should -Invoke -CommandName Get-FabricLongRunningOperationResult -ModuleName FabricTools -Times 1 -Exactly
+            Should -Invoke -CommandName Get-FabricLongRunningOperation -Times 1 -Exactly
+            Should -Invoke -CommandName Get-FabricLongRunningOperationResult -Times 1 -Exactly
         }
     }
 
     Context "Long running operation - Failed" {
         BeforeAll {
+            $script:testOperationId = [guid]::NewGuid().ToString()
             Mock -CommandName Invoke-FabricRestMethod -MockWith {
-                InModuleScope -ModuleName 'FabricTools' {
+                InModuleScope -ModuleName 'FabricTools' -Parameters @{ operationId = $script:testOperationId } -ScriptBlock {
                     $script:statusCode = 202
-                    $script:responseHeader = @{ "x-ms-operation-id" = "op-12345" }
+                    $script:responseHeader = @{ "x-ms-operation-id" = $operationId }
                 }
                 return $null
             }
             Mock -CommandName Confirm-TokenState -MockWith { return $true }
-            Mock -CommandName Get-FabricLongRunningOperation -ModuleName FabricTools -MockWith {
+            Mock -CommandName Get-FabricLongRunningOperation -MockWith {
                 return [pscustomobject]@{ status = "Failed"; error = "Operation failed" }
             }
             Mock -CommandName Write-Message -MockWith { }
@@ -97,7 +99,7 @@ Describe "Remove-FabricWorkspaceIdentity" -Tag "UnitTests" {
             $result | Should -Not -BeNullOrEmpty
             $result.status | Should -Be "Failed"
 
-            Should -Invoke -CommandName Get-FabricLongRunningOperation -ModuleName FabricTools -Times 1 -Exactly
+            Should -Invoke -CommandName Get-FabricLongRunningOperation -Times 1 -Exactly
             Should -Invoke -CommandName Write-Message -ParameterFilter { $Level -eq 'Error' -and $Message -like '*Operation failed*' } -Times 1 -Exactly -Scope It
         }
     }
