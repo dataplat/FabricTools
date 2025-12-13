@@ -124,7 +124,7 @@ function Connect-FabricAccount {
             $azContext = Get-AzContext
         }
 
-        Write-Message "Connected: $($azContext.Account)" -Level Verbose
+        Write-Message "Connected: $($azContext.Account)" -Level Info
 
         if ($PSCmdlet.ShouldProcess("Setting Fabric authentication token and headers for $($azContext.Account)")) {
             $ResourceUrl = Get-PSFConfigValue -FullName 'FabricTools.FabricApi.ResourceUrl'
