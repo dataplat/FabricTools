@@ -38,10 +38,28 @@ function Connect-FabricAccount {
     ```
 
 .EXAMPLE
-    Connects as Service Principal using id and secret
+    Connects as Service Principal using AppId and secret
 
     ```powershell
-    Connect-FabricAccount -TenantId 'xxx' -ServicePrincipalId 'appId' -ServicePrincipalSecret $secret
+    $TenantID               = '12345678-1234-1234-1234-123456789012'
+    $ServicePrincipalId     = '4cbbe76e-1234-1234-0000-ffffffffffff'
+    $ServicePrincipalSecret = 'xyz'
+
+    $ServicePrincipalSecretSecure = ($ServicePrincipalSecret | ConvertTo-SecureString -AsPlainText -Force)
+    Connect-FabricAccount -TenantId $TenantID -ServicePrincipalId $ServicePrincipalId -ServicePrincipalSecret $ServicePrincipalSecretSecure -Reset
+    ```
+
+.EXAMPLE
+    Connects as Service Principal using credential object
+
+    ```powershell
+    $TenantID               = '12345678-1234-1234-1234-123456789012'
+    $ServicePrincipalId     = '4cbbe76e-1234-1234-0000-ffffffffffff'
+    $ServicePrincipalSecret = 'xyz'
+
+    $ServicePrincipalSecretSecure = ($ServicePrincipalSecret | ConvertTo-SecureString -AsPlainText -Force)
+    $credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $ServicePrincipalId, $ServicePrincipalSecretSecure
+    Connect-FabricAccount -TenantId $TenantID -Credential $credential -Verbose -Reset
     ```
 
 .OUTPUTS
@@ -91,7 +109,12 @@ function Connect-FabricAccount {
         if ($PSBoundParameters.ContainsKey('AppSecret') -and -not $PSBoundParameters.ContainsKey('AppId'))
         {
             Write-Message -Message "AppId is required when using AppSecret." -Level Error
-            throw "AppId is required when using AppId."
+            throw "AppId is required when using AppSecret."
+        }
+        # Warn if both Credential and AppId are provided
+        if ($PSBoundParameters.ContainsKey('Credential') -and $PSBoundParameters.ContainsKey('AppId'))
+        {
+            Write-Message -Message "Provided Credential will be ignored when AppId/ServicePrincipalId is also provided." -Level Warning
         }
     }
 
@@ -102,13 +125,13 @@ function Connect-FabricAccount {
         }
         if (!$azContext) {
             if ($ServicePrincipalId) {
-                Write-Message "Connecting to Azure Account using provided servicePrincipalId..." -Level Verbose
+                Write-Message "Connecting to Azure Account using provided ServicePrincipalId..." -Level Verbose
                 $credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $ServicePrincipalId, $ServicePrincipalSecret
                 $null = Connect-AzAccount -ServicePrincipal -TenantId $TenantId -Credential $credential
             }
             elseif ($null -ne $Credential) {
                 Write-Message "Connecting to Azure Account using provided credential..." -Level Verbose
-                $null = Connect-AzAccount -Credential $Credential -Tenant $TenantId
+                $null = Connect-AzAccount -ServicePrincipal -Credential $Credential -Tenant $TenantId
             }
             else {
                 Write-Message "Connecting to Azure Account using current user..." -Level Verbose
@@ -151,6 +174,5 @@ function Connect-FabricAccount {
         }
 
     }
-    end {
-    }
+    end { }
 }
