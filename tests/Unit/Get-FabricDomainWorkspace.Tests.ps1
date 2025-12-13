@@ -1,46 +1,113 @@
 #Requires -Module @{ ModuleName="Pester"; ModuleVersion="5.0"}
-param(
-    $ModuleName = "FabricTools",
-    $expectedParams = @(
-        "DomainId"
-                "Verbose"
-                "Debug"
-                "ErrorAction"
-                "WarningAction"
-                "InformationAction"
-                "ProgressAction"
-                "ErrorVariable"
-                "WarningVariable"
-                "InformationVariable"
-                "OutVariable"
-                "OutBuffer"
-                "PipelineVariable"
-                
-    )
-)
+
+BeforeDiscovery {
+    $CommandName = 'Get-FabricDomainWorkspace'
+}
+
+BeforeAll {
+    $ModuleName = 'FabricTools'
+    $PSDefaultParameterValues['Mock:ModuleName'] = $ModuleName
+    $PSDefaultParameterValues['InModuleScope:ModuleName'] = $ModuleName
+    $PSDefaultParameterValues['Should:ModuleName'] = $ModuleName
+}
 
 Describe "Get-FabricDomainWorkspace" -Tag "UnitTests" {
 
-    BeforeDiscovery {
+    BeforeAll {
         $command = Get-Command -Name Get-FabricDomainWorkspace
-        $expected = $expectedParams
     }
 
-    Context "Parameter validation" {
+    Context 'Command definition' {
+        It 'Should have a command definition' {
+            $command | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Should have the expected parameter: <Name>' -ForEach @(
+            @{ Name = 'DomainId'; Mandatory = $true }
+        ) {
+            $command | Should -HaveParameter $Name -Mandatory:$Mandatory
+        }
+    }
+
+    Context 'When getting domain workspaces successfully (200)' {
         BeforeAll {
-            $command = Get-Command -Name Get-FabricDomainWorkspace
-            $expected = $expectedParams
+            Mock -CommandName Confirm-TokenState -MockWith { }
+            Mock -CommandName Write-Message -MockWith { }
+            Mock -CommandName Invoke-FabricRestMethod -MockWith {
+                InModuleScope -ModuleName 'FabricTools' {
+                    $script:statusCode = 200
+                }
+                return @(
+                    [pscustomobject]@{ id = [guid]::NewGuid(); displayName = 'Workspace1' }
+                    [pscustomobject]@{ id = [guid]::NewGuid(); displayName = 'Workspace2' }
+                )
+            }
         }
 
-        It "Has parameter: <_>" -ForEach $expected {
-            $command | Should -HaveParameter $PSItem
+        It 'Should call Invoke-FabricRestMethod with the correct parameters' {
+            $mockDomainId = [guid]::NewGuid()
+
+            Get-FabricDomainWorkspace -DomainId $mockDomainId
+
+            Should -Invoke -CommandName Invoke-FabricRestMethod -Times 1 -ParameterFilter {
+                $Uri -like "*admin/domains/*/workspaces" -and
+                $Method -eq 'Get'
+            }
         }
 
-        It "Should have exactly the number of expected parameters $($expected.Count)" {
-            $hasparms = $command.Parameters.Values.Name
-            #$hasparms.Count | Should -BeExactly $expected.Count
-            Compare-Object -ReferenceObject $expected -DifferenceObject $hasparms | Should -BeNullOrEmpty
+        It 'Should return the list of workspaces' {
+            $mockDomainId = [guid]::NewGuid()
+
+            $result = Get-FabricDomainWorkspace -DomainId $mockDomainId
+
+            $result | Should -Not -BeNullOrEmpty
+            $result.Count | Should -Be 2
+        }
+    }
+
+    Context 'When an unexpected status code is returned' {
+        BeforeAll {
+            Mock -CommandName Confirm-TokenState -MockWith { }
+            Mock -CommandName Write-Message -MockWith { }
+            Mock -CommandName Invoke-FabricRestMethod -MockWith {
+                InModuleScope -ModuleName 'FabricTools' {
+                    $script:statusCode = 400
+                }
+                return [pscustomobject]@{
+                    message = 'Bad Request'
+                    errorCode = 'InvalidRequest'
+                }
+            }
+        }
+
+        It 'Should write an error message for unexpected status codes' {
+            $mockDomainId = [guid]::NewGuid()
+
+            Get-FabricDomainWorkspace -DomainId $mockDomainId
+
+            Should -Invoke -CommandName Write-Message -ParameterFilter {
+                $Level -eq 'Error'
+            }
+        }
+    }
+
+    Context 'When an exception is thrown' {
+        BeforeAll {
+            Mock -CommandName Confirm-TokenState -MockWith { }
+            Mock -CommandName Write-Message -MockWith { }
+            Mock -CommandName Invoke-FabricRestMethod -MockWith {
+                throw 'API connection failed'
+            }
+        }
+
+        It 'Should handle exceptions gracefully' {
+            $mockDomainId = [guid]::NewGuid()
+
+            { Get-FabricDomainWorkspace -DomainId $mockDomainId } | Should -Not -Throw
+
+            Should -Invoke -CommandName Write-Message -ParameterFilter {
+                $Level -eq 'Error' -and $Message -like "*Failed to retrieve domain workspaces*"
+            }
         }
     }
 }
-

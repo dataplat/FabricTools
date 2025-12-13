@@ -1,48 +1,92 @@
 #Requires -Module @{ ModuleName="Pester"; ModuleVersion="5.0"}
-param(
-    $ModuleName = "FabricTools",
-    $expectedParams = @(
-        "subscriptionID"
-                "resourcegroup"
-                "capacity"
-                "Verbose"
-                "Debug"
-                "ErrorAction"
-                "WarningAction"
-                "InformationAction"
-                "ProgressAction"
-                "ErrorVariable"
-                "WarningVariable"
-                "InformationVariable"
-                "OutVariable"
-                "OutBuffer"
-                "PipelineVariable"
-                
-    )
-)
+
+BeforeDiscovery {
+    $CommandName = 'Get-FabricCapacityState'
+}
+
+BeforeAll {
+    $ModuleName = 'FabricTools'
+    $PSDefaultParameterValues['Mock:ModuleName'] = $ModuleName
+    $PSDefaultParameterValues['InModuleScope:ModuleName'] = $ModuleName
+    $PSDefaultParameterValues['Should:ModuleName'] = $ModuleName
+}
 
 Describe "Get-FabricCapacityState" -Tag "UnitTests" {
 
-    BeforeDiscovery {
+    BeforeAll {
         $command = Get-Command -Name Get-FabricCapacityState
-        $expected = $expectedParams
     }
 
-    Context "Parameter validation" {
+    Context 'Command definition' {
+        It 'Should have a command definition' {
+            $command | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Should have the expected parameter: <Name>' -ForEach @(
+            @{ Name = 'subscriptionID'; Mandatory = $true }
+            @{ Name = 'resourcegroup'; Mandatory = $true }
+            @{ Name = 'capacity'; Mandatory = $true }
+        ) {
+            $command | Should -HaveParameter $Name -Mandatory:$Mandatory
+        }
+    }
+
+    Context 'When getting capacity state successfully' {
         BeforeAll {
-            $command = Get-Command -Name Get-FabricCapacityState
-            $expected = $expectedParams
+            Mock -CommandName Confirm-TokenState -MockWith { }
+            Mock -CommandName Write-Message -MockWith { }
+            Mock -CommandName Get-PSFConfigValue -MockWith {
+                return 'https://management.azure.com'
+            }
+            Mock -CommandName Invoke-RestMethod -MockWith {
+                return [pscustomobject]@{
+                    name = 'TestCapacity'
+                    properties = @{ state = 'Active' }
+                }
+            }
         }
 
-        It "Has parameter: <_>" -ForEach $expected {
-            $command | Should -HaveParameter $PSItem
+        It 'Should call Invoke-RestMethod with the correct parameters' {
+            $mockSubscriptionId = [guid]::NewGuid()
+            $mockResourceGroup = 'TestResourceGroup'
+            $mockCapacity = 'TestCapacity'
+
+            Get-FabricCapacityState -subscriptionID $mockSubscriptionId -resourcegroup $mockResourceGroup -capacity $mockCapacity
+
+            Should -Invoke -CommandName Invoke-RestMethod -Times 1 -ParameterFilter {
+                $Uri -like "*subscriptions/*/resourceGroups/*/providers/Microsoft.Fabric/capacities/*"
+            }
         }
 
-        It "Should have exactly the number of expected parameters $($expected.Count)" {
-            $hasparms = $command.Parameters.Values.Name
-            #$hasparms.Count | Should -BeExactly $expected.Count
-            Compare-Object -ReferenceObject $expected -DifferenceObject $hasparms | Should -BeNullOrEmpty
+        It 'Should return the capacity state' {
+            $mockSubscriptionId = [guid]::NewGuid()
+            $mockResourceGroup = 'TestResourceGroup'
+            $mockCapacity = 'TestCapacity'
+
+            $result = Get-FabricCapacityState -subscriptionID $mockSubscriptionId -resourcegroup $mockResourceGroup -capacity $mockCapacity
+
+            $result | Should -Not -BeNullOrEmpty
+        }
+    }
+
+    Context 'When an exception is thrown' {
+        BeforeAll {
+            Mock -CommandName Confirm-TokenState -MockWith { }
+            Mock -CommandName Write-Message -MockWith { }
+            Mock -CommandName Get-PSFConfigValue -MockWith {
+                return 'https://management.azure.com'
+            }
+            Mock -CommandName Invoke-RestMethod -MockWith {
+                throw 'API connection failed'
+            }
+        }
+
+        It 'Should throw an exception when API call fails' {
+            $mockSubscriptionId = [guid]::NewGuid()
+            $mockResourceGroup = 'TestResourceGroup'
+            $mockCapacity = 'TestCapacity'
+
+            { Get-FabricCapacityState -subscriptionID $mockSubscriptionId -resourcegroup $mockResourceGroup -capacity $mockCapacity } | Should -Throw -ExpectedMessage '*API connection failed*'
         }
     }
 }
-

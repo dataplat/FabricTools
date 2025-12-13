@@ -1,48 +1,74 @@
 #Requires -Module @{ ModuleName="Pester"; ModuleVersion="5.0"}
-param(
-    $ModuleName = "FabricTools",
-    $expectedParams = @(
-        "WorkspaceId"
-                "ReflexId"
-                "ReflexFormat"
-                "Verbose"
-                "Debug"
-                "ErrorAction"
-                "WarningAction"
-                "InformationAction"
-                "ProgressAction"
-                "ErrorVariable"
-                "WarningVariable"
-                "InformationVariable"
-                "OutVariable"
-                "OutBuffer"
-                "PipelineVariable"
-                
-    )
-)
+
+BeforeDiscovery {
+    $CommandName = 'Get-FabricReflexDefinition'
+}
+
+BeforeAll {
+    $ModuleName = 'FabricTools'
+    $PSDefaultParameterValues['Mock:ModuleName'] = $ModuleName
+    $PSDefaultParameterValues['InModuleScope:ModuleName'] = $ModuleName
+    $PSDefaultParameterValues['Should:ModuleName'] = $ModuleName
+
+    $Command = Get-Command -Name Get-FabricReflexDefinition
+}
 
 Describe "Get-FabricReflexDefinition" -Tag "UnitTests" {
 
-    BeforeDiscovery {
-        $command = Get-Command -Name Get-FabricReflexDefinition
-        $expected = $expectedParams
+    Context "Command definition" {
+        It 'Should have <ExpectedParameterName> parameter' -ForEach @(
+            @{ ExpectedParameterName = 'WorkspaceId'; ExpectedParameterType = 'guid'; Mandatory = 'True' }
+            @{ ExpectedParameterName = 'ReflexId'; ExpectedParameterType = 'guid'; Mandatory = 'False' }
+            @{ ExpectedParameterName = 'ReflexFormat'; ExpectedParameterType = 'string'; Mandatory = 'False' }
+        ) {
+            $Command | Should -HaveParameter -ParameterName $ExpectedParameterName -Type $ExpectedParameterType -Mandatory:([bool]::Parse($Mandatory))
+        }
     }
 
-    Context "Parameter validation" {
+    Context "Successful definition retrieval" {
         BeforeAll {
-            $command = Get-Command -Name Get-FabricReflexDefinition
-            $expected = $expectedParams
+            Mock -CommandName Invoke-FabricRestMethod -MockWith {
+                InModuleScope -ModuleName 'FabricTools' {
+                    $script:statusCode = 200
+                }
+                return [pscustomobject]@{
+                    definition = [pscustomobject]@{
+                        parts = @(
+                            [pscustomobject]@{ path = 'ReflexDefinition.json'; payload = 'encodedPayload'; payloadType = 'InlineBase64' }
+                        )
+                    }
+                }
+            }
+            Mock -CommandName Confirm-TokenState -MockWith { return $true }
         }
 
-        It "Has parameter: <_>" -ForEach $expected {
-            $command | Should -HaveParameter $PSItem
+        It 'Should return definition parts when WorkspaceId and ReflexId are provided' {
+            $result = Get-FabricReflexDefinition -WorkspaceId (New-Guid) -ReflexId (New-Guid)
+
+            $result | Should -Not -BeNullOrEmpty
+            $result.path | Should -Be 'ReflexDefinition.json'
+
+            Should -Invoke -CommandName Invoke-FabricRestMethod -Times 1 -Exactly
+        }
+    }
+
+    Context "Error handling" {
+        BeforeAll {
+            Mock -CommandName Invoke-FabricRestMethod -MockWith {
+                throw "API Error"
+            }
+            Mock -CommandName Confirm-TokenState -MockWith { return $true }
+            Mock -CommandName Write-Message -MockWith { }
         }
 
-        It "Should have exactly the number of expected parameters $($expected.Count)" {
-            $hasparms = $command.Parameters.Values.Name
-            #$hasparms.Count | Should -BeExactly $expected.Count
-            Compare-Object -ReferenceObject $expected -DifferenceObject $hasparms | Should -BeNullOrEmpty
+        It 'Should handle errors gracefully' {
+            {
+                Get-FabricReflexDefinition -WorkspaceId (New-Guid) -ReflexId (New-Guid)
+            } | Should -Not -Throw
+
+            Should -Invoke -CommandName Write-Message -ParameterFilter {
+                $Level -eq 'Error'
+            }
         }
     }
 }
-

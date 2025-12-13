@@ -45,11 +45,13 @@ https://github.com/microsoft/Analysis-Services/tree/master/pbidevmode/fabricps-p
     param
     (
         [string]$path = '.\pbipOutput',
-        [guid]$WorkspaceId = '',
+        [Parameter(Mandatory = $false)]
+        [guid]$WorkspaceId,
         [scriptblock]$filter = { $_.type -in @("Report", "SemanticModel", "Notebook", "SparkJobDefinitionV1") },
-        [guid]$itemID = $null
+        [Parameter(Mandatory = $false)]
+        [guid]$itemID
     )
-    if (-not $itemID) {
+    if ($PSBoundParameters.ContainsKey('itemID')) {
         # Invoke the Fabric API to get the specific item in the workspace
 
         $item = Invoke-FabricRestMethod -Uri "workspaces/$workspaceId/items/$itemID/getDefinition" -Method POST

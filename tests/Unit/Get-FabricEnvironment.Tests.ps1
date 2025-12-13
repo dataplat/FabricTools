@@ -1,48 +1,141 @@
 #Requires -Module @{ ModuleName="Pester"; ModuleVersion="5.0"}
-param(
-    $ModuleName = "FabricTools",
-    $expectedParams = @(
-        "WorkspaceId"
-                "EnvironmentId"
-                "EnvironmentName"
-                "Verbose"
-                "Debug"
-                "ErrorAction"
-                "WarningAction"
-                "InformationAction"
-                "ProgressAction"
-                "ErrorVariable"
-                "WarningVariable"
-                "InformationVariable"
-                "OutVariable"
-                "OutBuffer"
-                "PipelineVariable"
-                
-    )
-)
+
+BeforeDiscovery {
+    $CommandName = 'Get-FabricEnvironment'
+}
+
+BeforeAll {
+    $ModuleName = 'FabricTools'
+    $PSDefaultParameterValues['Mock:ModuleName'] = $ModuleName
+    $PSDefaultParameterValues['InModuleScope:ModuleName'] = $ModuleName
+    $PSDefaultParameterValues['Should:ModuleName'] = $ModuleName
+}
 
 Describe "Get-FabricEnvironment" -Tag "UnitTests" {
 
-    BeforeDiscovery {
+    BeforeAll {
         $command = Get-Command -Name Get-FabricEnvironment
-        $expected = $expectedParams
     }
 
-    Context "Parameter validation" {
+    Context 'Command definition' {
+        It 'Should have a command definition' {
+            $command | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Should have the expected parameter: <Name>' -ForEach @(
+            @{ Name = 'WorkspaceId'; Mandatory = $true }
+            @{ Name = 'EnvironmentId'; Mandatory = $false }
+            @{ Name = 'EnvironmentName'; Mandatory = $false }
+        ) {
+            $command | Should -HaveParameter $Name -Mandatory:$Mandatory
+        }
+    }
+
+    Context 'When retrieving environments successfully (200)' {
         BeforeAll {
-            $command = Get-Command -Name Get-FabricEnvironment
-            $expected = $expectedParams
+            Mock -CommandName Confirm-TokenState -MockWith { }
+            Mock -CommandName Write-Message -MockWith { }
+            Mock -CommandName Invoke-FabricRestMethod -MockWith {
+                InModuleScope -ModuleName 'FabricTools' {
+                    $script:statusCode = 200
+                }
+                return [pscustomobject]@{
+                    value = @(
+                        [pscustomobject]@{
+                            Id = [guid]::NewGuid()
+                            DisplayName = 'TestEnvironment1'
+                        },
+                        [pscustomobject]@{
+                            Id = [guid]::NewGuid()
+                            DisplayName = 'TestEnvironment2'
+                        }
+                    )
+                }
+            }
         }
 
-        It "Has parameter: <_>" -ForEach $expected {
-            $command | Should -HaveParameter $PSItem
+        It 'Should call Invoke-FabricRestMethod with the correct parameters' {
+            $mockWorkspaceId = [guid]::NewGuid()
+
+            Get-FabricEnvironment -WorkspaceId $mockWorkspaceId
+
+            Should -Invoke -CommandName Invoke-FabricRestMethod -Times 1 -ParameterFilter {
+                $Uri -like "*workspaces/*/environments*" -and
+                $Method -eq 'Get'
+            }
         }
 
-        It "Should have exactly the number of expected parameters $($expected.Count)" {
-            $hasparms = $command.Parameters.Values.Name
-            #$hasparms.Count | Should -BeExactly $expected.Count
-            Compare-Object -ReferenceObject $expected -DifferenceObject $hasparms | Should -BeNullOrEmpty
+        It 'Should return all environments when no filter is provided' {
+            $mockWorkspaceId = [guid]::NewGuid()
+
+            $result = Get-FabricEnvironment -WorkspaceId $mockWorkspaceId
+
+            $result | Should -Not -BeNullOrEmpty
+            $result.Count | Should -Be 2
+        }
+    }
+
+    Context 'When both EnvironmentId and EnvironmentName are provided' {
+        BeforeAll {
+            Mock -CommandName Confirm-TokenState -MockWith { }
+            Mock -CommandName Write-Message -MockWith { }
+        }
+
+        It 'Should write an error message' {
+            $mockWorkspaceId = [guid]::NewGuid()
+            $mockEnvironmentId = [guid]::NewGuid()
+
+            Get-FabricEnvironment -WorkspaceId $mockWorkspaceId -EnvironmentId $mockEnvironmentId -EnvironmentName 'TestEnvironment'
+
+            Should -Invoke -CommandName Write-Message -ParameterFilter {
+                $Level -eq 'Error' -and $Message -like "*Both*"
+            }
+        }
+    }
+
+    Context 'When an unexpected status code is returned' {
+        BeforeAll {
+            Mock -CommandName Confirm-TokenState -MockWith { }
+            Mock -CommandName Write-Message -MockWith { }
+            Mock -CommandName Invoke-FabricRestMethod -MockWith {
+                InModuleScope -ModuleName 'FabricTools' {
+                    $script:statusCode = 400
+                }
+                return [pscustomobject]@{
+                    message = 'Bad Request'
+                    errorCode = 'InvalidRequest'
+                }
+            }
+        }
+
+        It 'Should write an error message for unexpected status codes' {
+            $mockWorkspaceId = [guid]::NewGuid()
+
+            Get-FabricEnvironment -WorkspaceId $mockWorkspaceId
+
+            Should -Invoke -CommandName Write-Message -ParameterFilter {
+                $Level -eq 'Error'
+            }
+        }
+    }
+
+    Context 'When an exception is thrown' {
+        BeforeAll {
+            Mock -CommandName Confirm-TokenState -MockWith { }
+            Mock -CommandName Write-Message -MockWith { }
+            Mock -CommandName Invoke-FabricRestMethod -MockWith {
+                throw 'API connection failed'
+            }
+        }
+
+        It 'Should handle exceptions gracefully' {
+            $mockWorkspaceId = [guid]::NewGuid()
+
+            { Get-FabricEnvironment -WorkspaceId $mockWorkspaceId } | Should -Not -Throw
+
+            Should -Invoke -CommandName Write-Message -ParameterFilter {
+                $Level -eq 'Error'
+            }
         }
     }
 }
-

@@ -66,7 +66,7 @@ Author: Tiago Balabuch
 
     } catch {
         # Step 7: Capture and log error details
-        $errorDetails = Get-ErrorResponse($_.Exception)
+        $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to retrieve domain workspaces. Error: $errorDetails" -Level Error
     }
 }

@@ -1,46 +1,32 @@
 #Requires -Module @{ ModuleName="Pester"; ModuleVersion="5.0"}
-param(
-    $ModuleName = "FabricTools",
-    $expectedParams = @(
-        "WorkspaceId"
-        "Workspace"
-        "Verbose"
-        "Debug"
-        "ErrorAction"
-        "WarningAction"
-        "InformationAction"
-        "ProgressAction"
-        "ErrorVariable"
-        "WarningVariable"
-        "InformationVariable"
-        "OutVariable"
-        "OutBuffer"
-        "PipelineVariable"
 
-    )
-)
+BeforeDiscovery {
+    $CommandName = 'Get-FabricWorkspaceUser'
+}
+
+BeforeAll {
+    $ModuleName = 'FabricTools'
+    $PSDefaultParameterValues['Mock:ModuleName'] = $ModuleName
+    $PSDefaultParameterValues['InModuleScope:ModuleName'] = $ModuleName
+    $PSDefaultParameterValues['Should:ModuleName'] = $ModuleName
+}
 
 Describe "Get-FabricWorkspaceUser" -Tag "UnitTests" {
 
-    BeforeDiscovery {
+    BeforeAll {
         $command = Get-Command -Name Get-FabricWorkspaceUser
-        $expected = $expectedParams
     }
 
-    Context "Parameter validation" {
-        BeforeAll {
-            $command = Get-Command -Name Get-FabricWorkspaceUser
-            $expected = $expectedParams
+    Context 'Command definition' {
+        It 'Should have a command definition' {
+            $command | Should -Not -BeNullOrEmpty
         }
 
-        It "Has parameter: <_>" -ForEach $expected {
-            $command | Should -HaveParameter $PSItem
-        }
-
-        It "Should have exactly the number of expected parameters $($expected.Count)" {
-            $hasparms = $command.Parameters.Values.Name
-            #$hasparms.Count | Should -BeExactly $expected.Count
-            Compare-Object -ReferenceObject $expected -DifferenceObject $hasparms | Should -BeNullOrEmpty
+        It 'Should have the expected parameter: <Name>' -ForEach @(
+            @{ Name = 'WorkspaceId'; Mandatory = $false }
+            @{ Name = 'Workspace'; Mandatory = $false }
+        ) {
+            $command | Should -HaveParameter $Name -Mandatory:$Mandatory
         }
     }
 
@@ -54,27 +40,72 @@ Describe "Get-FabricWorkspaceUser" -Tag "UnitTests" {
         }
     }
 
+    Context 'When getting workspace users successfully' {
+        BeforeAll {
+            Mock -CommandName Confirm-TokenState -MockWith { }
+            Mock -CommandName Write-Message -MockWith { }
+            Mock -CommandName Get-FabricWorkspace -MockWith {
+                return [pscustomobject]@{
+                    id = [guid]::NewGuid()
+                    displayName = 'TestWorkspace'
+                }
+            }
+            Mock -CommandName Invoke-FabricRestMethod -MockWith {
+                return @{
+                    value = @(
+                        @{
+                            emailAddress         = 'name@domain.com'
+                            groupUserAccessRight = 'Admin'
+                            displayName          = 'Fabric'
+                            identifier           = 'name@domain.com'
+                            principalType        = 'User'
+                        }, @{
+                            emailAddress         = 'viewer@domain.com'
+                            groupUserAccessRight = 'Viewer'
+                            displayName          = 'Fabric viewer'
+                            identifier           = 'viewer@domain.com'
+                            principalType        = 'User'
+                        }
+                    )
+                }
+            }
+        }
+
+        It 'Should call Invoke-FabricRestMethod with the correct parameters' {
+            $mockWorkspaceId = [guid]::NewGuid()
+
+            Get-FabricWorkspaceUser -WorkspaceId $mockWorkspaceId
+
+            Should -Invoke -CommandName Invoke-FabricRestMethod -Times 1 -ParameterFilter {
+                $Uri -like "*groups/*/users*"
+            }
+        }
+
+        It 'Should return the list of users' {
+            $mockWorkspaceId = [guid]::NewGuid()
+
+            $result = Get-FabricWorkspaceUser -WorkspaceId $mockWorkspaceId
+
+            $result | Should -Not -BeNullOrEmpty
+        }
+    }
+
     Context "Multiple Workspaces" {
 
         BeforeEach {
-
-            function Confirm-TokenState {}
-            Mock Confirm-TokenState {}
-
-            Mock Get-FabricWorkspace {
+            Mock -CommandName Confirm-TokenState -MockWith { }
+            Mock -CommandName Get-FabricWorkspace -MockWith {
                 return @(
                     @{
                         displayName = 'prod-workspace'
-                        # until the guid datatype is added
                         Id          = [guid]::NewGuid().Guid.ToString()
                     }, @{
                         displayName = "test-workspace"
-                        # until the guid datatype is added
                         Id          = [guid]::NewGuid().Guid.ToString()
                     }
                 )
             }
-            Mock Invoke-FabricRestMethod {
+            Mock -CommandName Invoke-FabricRestMethod -MockWith {
                 return @{
                     value = @(
                         @{
@@ -102,6 +133,26 @@ Describe "Get-FabricWorkspaceUser" -Tag "UnitTests" {
         It "Should return users for multiple workspaces passed to the Workspace parameter from the pipeline" {
             { Get-FabricWorkspace | Get-FabricWorkspaceUser
             } | Should -Not -BeNullOrEmpty
+        }
+    }
+
+    Context 'When an exception is thrown' {
+        BeforeAll {
+            Mock -CommandName Confirm-TokenState -MockWith { }
+            Mock -CommandName Write-Message -MockWith { }
+            Mock -CommandName Invoke-FabricRestMethod -MockWith {
+                throw 'API connection failed'
+            }
+        }
+
+        It 'Should handle exceptions gracefully' {
+            $mockWorkspaceId = [guid]::NewGuid()
+
+            { Get-FabricWorkspaceUser -WorkspaceId $mockWorkspaceId } | Should -Not -Throw
+
+            Should -Invoke -CommandName Write-Message -ParameterFilter {
+                $Level -eq 'Error'
+            }
         }
     }
 }
