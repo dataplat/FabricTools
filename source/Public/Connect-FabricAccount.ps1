@@ -14,7 +14,7 @@ function Connect-FabricAccount {
     The Client ID (AppId) of the service principal used for authentication.
 
 .PARAMETER ServicePrincipalSecret
-    The **secure string** representing the service principal secret.
+    String representing the service principal secret.
 
 .PARAMETER Credential
     A PSCredential object representing a user credential (username and secure password).
@@ -70,9 +70,9 @@ function Connect-FabricAccount {
         [Alias('AppId')]
         [guid] $ServicePrincipalId,
 
-        [Parameter(Mandatory = $false, HelpMessage = "Secure secret of the service principal.")]
+        [Parameter(Mandatory = $false, HelpMessage = "Secret of the service principal.")]
         [Alias('AppSecret')]
-        [SecureString] $ServicePrincipalSecret,
+        [String] $ServicePrincipalSecret,
 
         [Parameter(Mandatory = $false, HelpMessage = "User credential.")]
         [PSCredential] $Credential,
@@ -103,12 +103,13 @@ function Connect-FabricAccount {
         if (!$azContext) {
             if ($ServicePrincipalId) {
                 Write-Message "Connecting to Azure Account using provided servicePrincipalId..." -Level Verbose
-                $credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $ServicePrincipalId, $ServicePrincipalSecret
+                $ServicePrincipalSecretSecure = ($ServicePrincipalSecret | ConvertTo-SecureString -AsPlainText -Force)
+                $credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $ServicePrincipalId, $ServicePrincipalSecretSecure
                 $null = Connect-AzAccount -ServicePrincipal -TenantId $TenantId -Credential $credential
             }
             elseif ($null -ne $Credential) {
                 Write-Message "Connecting to Azure Account using provided credential..." -Level Verbose
-                $null = Connect-AzAccount -Credential $Credential -Tenant $TenantId
+                $null = Connect-AzAccount -ServicePrincipal -Credential $Credential -Tenant $TenantId
             }
             else {
                 Write-Message "Connecting to Azure Account using current user..." -Level Verbose
@@ -151,6 +152,5 @@ function Connect-FabricAccount {
         }
 
     }
-    end {
-    }
+    end { }
 }
