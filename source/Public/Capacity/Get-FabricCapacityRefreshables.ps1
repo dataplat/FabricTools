@@ -4,7 +4,7 @@ function Get-FabricCapacityRefreshables {
 Retrieves the top refreshable capacities for the tenant.
 
 .DESCRIPTION
-The Get-FabricCapacityRefreshables function retrieves the top refreshable capacities for the tenant. It supports multiple aliases for flexibility.
+The Get-FabricCapacityRefreshables function retrieves the top refreshable capacities for the tenant.
 
 .PARAMETER top
 The number of top refreshable capacities to retrieve. This is a mandatory parameter.
@@ -22,9 +22,6 @@ The function retrieves the PowerBI access token and makes a GET request to the P
 Author: Ioana Bouariu
 
     #>
-
-    # Define aliases for the function for flexibility.
-    [Alias("Get-FabCapacityRefreshables")]
 
     # Define a mandatory parameter for the number of top refreshable capacities to retrieve.
     Param (

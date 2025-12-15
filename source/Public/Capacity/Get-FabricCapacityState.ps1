@@ -4,7 +4,7 @@ function Get-FabricCapacityState {
 Retrieves the state of a specific capacity.
 
 .DESCRIPTION
-The Get-FabricCapacityState function retrieves the state of a specific capacity. It supports multiple aliases for flexibility.
+The Get-FabricCapacityState function retrieves the state of a specific capacity.
 
 .PARAMETER SubscriptionID
 The ID of the subscription. This is a mandatory parameter. This is a parameter found in Azure, not Fabric.
@@ -23,15 +23,14 @@ The capacity. This is a mandatory parameter. This is a parameter found in Azure,
     ```
 
 .NOTES
-The function checks if the Azure token is null. If it is, it connects to the Azure account and retrieves the token. It then defines the headers for the GET request and the URL for the GET request. Finally, it makes the GET request and returns the response.
+The function checks if the Azure token is null. If it is, it connects to the Azure account and retrieves the token.
+It then defines the headers for the GET request and the URL for the GET request. Finally, it makes the GET request and returns the response.
 
 Author: Ioana Bouariu
 
     #>
 
     # This function retrieves the state of a specific capacity.
-    # Define aliases for the function for flexibility.
-    [Alias("Get-FabCapacityState")]
 
     # Define mandatory parameters for the subscription ID, resource group, and capacity.
     Param (

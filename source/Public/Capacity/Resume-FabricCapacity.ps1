@@ -4,7 +4,7 @@ function Resume-FabricCapacity {
     Resumes a capacity.
 
     .DESCRIPTION
-    The Resume-FabricCapacity function resumes a capacity. It supports multiple aliases for flexibility.
+    The Resume-FabricCapacity function resumes a capacity.
 
     .PARAMETER SubscriptionID
     The the ID of the subscription. This is a mandatory parameter. This is a parameter found in Azure, not Fabric.
@@ -23,12 +23,13 @@ function Resume-FabricCapacity {
         ```
 
     .NOTES
-    The function defines parameters for the subscription ID, resource group, and capacity. If the 'azToken' environment variable is null, it connects to the Azure account and sets the 'azToken' environment variable. It then defines the headers for the request, defines the URI for the request, and makes a GET request to the URI.
+    The function defines parameters for the subscription ID, resource group, and capacity.
+    If the 'azToken' environment variable is null, it connects to the Azure account and sets the 'azToken' environment variable.
+    It then defines the headers for the request, defines the URI for the request, and makes a GET request to the URI.
 
     Author: Ioana Bouariu
     #>
-    # Define aliases for the function for flexibility.
-    [Alias("Resume-FabCapacity")]
+
     [CmdletBinding(SupportsShouldProcess)]
 
     # Define parameters for the subscription ID, resource group, and capacity.

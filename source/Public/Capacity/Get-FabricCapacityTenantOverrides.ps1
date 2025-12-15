@@ -4,7 +4,7 @@ function Get-FabricCapacityTenantOverrides {
 Retrieves the tenant overrides for all capacities.
 
 .DESCRIPTION
-The Get-FabricCapacityTenantOverrides function retrieves the tenant overrides for all capacities. It supports multiple aliases for flexibility.
+The Get-FabricCapacityTenantOverrides function retrieves the tenant overrides for all capacities.
 
 .EXAMPLE
     This example retrieves the tenant overrides for all capacities.
@@ -21,8 +21,6 @@ Author: Ioana Bouariu
     #>
 
     # This function retrieves the tenant overrides for all capacities.
-    # Define aliases for the function for flexibility.
-    [Alias("Get-FabCapacityTenantOverrides")]
 
     Param (
     )

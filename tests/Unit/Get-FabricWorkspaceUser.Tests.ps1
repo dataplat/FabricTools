@@ -44,15 +44,15 @@ Describe "Get-FabricWorkspaceUser" -Tag "UnitTests" {
         }
     }
 
-    Context "Alias validation" {
-        $testCases = @('Get-FabWorkspaceUsers', 'Get-FabricWorkspaceUsers')
+    # Context "Alias validation" {
+    #     $testCases = @('Get-FabWorkspaceUsers', 'Get-FabricWorkspaceUsers')
 
-        It "Should have the alias <_>" -TestCases $TestCases {
-            $Alias = Get-Alias -Name $_ -ErrorAction SilentlyContinue
-            $Alias | Should -Not -BeNullOrEmpty
-            $Alias.ResolvedCommand.Name | Should -Be  'Get-FabricWorkspaceUser'
-        }
-    }
+    #     It "Should have the alias <_>" -TestCases $TestCases {
+    #         $Alias = Get-Alias -Name $_ -ErrorAction SilentlyContinue
+    #         $Alias | Should -Not -BeNullOrEmpty
+    #         $Alias.ResolvedCommand.Name | Should -Be 'Get-FabricWorkspaceUser'
+    #     }
+    # }
 
     Context "Multiple Workspaces" {
 

@@ -66,13 +66,6 @@ function Connect-FabricAccount {
     None. This function does not return any output.
 
 .NOTES
-
-    Revision History:
-
-    - 2024-12-22 - FGE: Added Verbose Output
-    - 2025-05-26 - Jojobit: Added Service Principal support, with secure string handling and parameter descriptions, as supported by the original FabTools module
-    - 2025-06-02 - KNO: Added Reset switch to force re-authentication and token refresh
-
     Author: Frank Geisler, Kamil Nowinski
 
 .LINK

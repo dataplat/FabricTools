@@ -23,14 +23,12 @@ function Get-FabricWorkspaceDatasetRefreshes {
         Array. Get-FabricWorkspaceDatasetRefreshes returns an array of refresh history objects.
 
     .NOTES
-        Alias: Get-FabWorkspaceDatasetRefreshes
-
         Author: Ioana Bouariu
     #>
 
     # Define a function to get the refresh history of all datasets in a PowerBI workspace
     # Set aliases for the function
-    [Alias("Get-FabWorkspaceDatasetRefreshes")]
+
     param(
         # Define a mandatory parameter for the workspace ID
         [Parameter(Mandatory = $true)]

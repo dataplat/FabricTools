@@ -40,8 +40,8 @@ This function is based on the Export-FabricItems function written by Rui Romano.
 https://github.com/microsoft/Analysis-Services/tree/master/pbidevmode/fabricps-pbip
 
 #>
-    [Alias("Export-FabItem")]
-    [CmdletBinding()]
+
+[CmdletBinding()]
     param
     (
         [string]$path = '.\pbipOutput',

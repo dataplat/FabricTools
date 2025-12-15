@@ -4,7 +4,7 @@ Function Import-FabricItem {
         Imports items using the Power BI Project format (PBIP) into a Fabric workspace from a specified file system source.
 
     .DESCRIPTION
-        The `Import-FabricItem` function imports items using the Power BI Project format (PBIP) into a Fabric workspace from a specified file system source. It supports multiple aliases for flexibility.
+        The `Import-FabricItem` function imports items using the Power BI Project format (PBIP) into a Fabric workspace from a specified file system source.
         The function handles the import of datasets and reports, ensuring that the correct item type is used and that the items are created or updated as necessary.
 
     .PARAMETER fileOverrides

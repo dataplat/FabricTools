@@ -26,8 +26,8 @@ function Get-FabricCapacities {
 .NOTES
     Author: Ioana Bouariu
     Imported into FabricTools April 2025
-    Alias: Get-AllFabCapacities
-#>
+
+    #>
     # Define aliases for the function for flexibility.
 
     # Define parameters for the function

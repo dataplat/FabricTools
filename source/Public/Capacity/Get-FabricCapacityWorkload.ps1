@@ -4,7 +4,7 @@ function Get-FabricCapacityWorkload {
 Retrieves the workloads for a specific capacity.
 
 .DESCRIPTION
-The Get-FabricCapacityWorkload function retrieves the workloads for a specific capacity. It supports multiple aliases for flexibility.
+The Get-FabricCapacityWorkload function retrieves the workloads for a specific capacity.
 
 .PARAMETER capacityID
 The ID of the capacity. This is a mandatory parameter.
@@ -24,8 +24,6 @@ Author: Ioana Bouariu
     #>
 
     # This function retrieves the workloads for a specific capacity.
-    # Define aliases for the function for flexibility.
-    [Alias("Get-FabCapacityWorkload")]
 
     # Define a mandatory parameter for the capacity ID.
     Param (

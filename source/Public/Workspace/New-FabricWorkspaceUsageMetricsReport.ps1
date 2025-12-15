@@ -4,7 +4,7 @@ function New-FabricWorkspaceUsageMetricsReport {
 Retrieves the workspace usage metrics dataset ID.
 
 .DESCRIPTION
-The New-FabricWorkspaceUsageMetricsReport function retrieves the workspace usage metrics dataset ID. It supports multiple aliases for flexibility.
+The New-FabricWorkspaceUsageMetricsReport function retrieves the workspace usage metrics dataset ID.
 
 .PARAMETER workspaceId
 The ID of the workspace. This is a mandatory parameter.
@@ -23,8 +23,6 @@ Author: Ioana Bouariu
 
     #>
 
-    # Define aliases for the function for flexibility.
-    [Alias("New-FabWorkspaceUsageMetricsReport")]
     [CmdletBinding(SupportsShouldProcess)]
     # Define a parameter for the workspace ID.
     param(

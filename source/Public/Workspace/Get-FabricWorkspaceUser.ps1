@@ -53,17 +53,14 @@ The workspace object. This normally comes from the Get-FabricWorkspace cmdlet. T
     ```
 
 .NOTES
-It supports multiple aliases for backward compatibility.
-The function defines parameters for the workspace ID and workspace object. If the parameter set name is 'WorkspaceId', it retrieves the workspace object. It then makes a GET request to the PowerBI API to retrieve the users of the workspace and returns the 'value' property of the response, which contains the users.
+The function defines parameters for the workspace ID and workspace object. If the parameter set name is 'WorkspaceId', it retrieves the workspace object.
+It then makes a GET request to the PowerBI API to retrieve the users of the workspace and returns the 'value' property of the response, which contains the users.
 
 Author: Ioana Bouariu
 
     #>
 
-    # This function retrieves the users of a workspace.
     # Define aliases for the function for flexibility.
-    [Alias("Get-FabWorkspaceUsers")]
-    [Alias("Get-FabricWorkspaceUsers")]
 
     # Define parameters for the workspace ID and workspace object.
     param(

@@ -4,7 +4,7 @@ function Get-FabricUsageMetricsQuery {
 Retrieves usage metrics for a specific dataset.
 
 .DESCRIPTION
-The Get-FabricUsageMetricsQuery function retrieves usage metrics for a specific dataset. It supports multiple aliases for flexibility.
+The Get-FabricUsageMetricsQuery function retrieves usage metrics for a specific dataset.
 
 .PARAMETER DatasetID
 The ID of the dataset. This is a mandatory parameter.
@@ -37,8 +37,6 @@ Author: Ioana Bouariu
     #>
 
     # This function retrieves usage metrics for a specific dataset.
-    # Define aliases for the function for flexibility.
-    [Alias("Get-FabUsageMetricsQuery")]
 
     # Define parameters for the dataset ID, group ID, report name, token, and impersonated user.
     param (
