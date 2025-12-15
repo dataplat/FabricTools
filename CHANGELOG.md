@@ -17,6 +17,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## 0.31.0 - 2025-12-14
+
+### Added
+
+- Added GitHub Codespaces and DevContainerSupport (Non Functional Change)
+- Added function `Update-FabricCapacity`
+- Added Error Detailed Info in `Test-FabricApiResponse` (Debug mode) when `response.error` exists
+
+### Changed
+
+- Version of `Microsoft.PowerShell.PSResourceGet` and `Microsoft.PowerShell.PlatyPS` updated
+- Replace the repo's configuration approach with PSFramework (move config handling to PSFramework) #85
+- Applied `Invoke-FabricRestMethod` to several public cmdlets #85
+
+### Fixed
+
+- Fixed bug in `Update-FabricSemanticModelDefinition` - Uri was incorrect when a platform file exists
+- Name of new SQL database will be shown (#169)
+- Logging in with a Service Principal does not work (#164)
+
 ## 0.30.0 - 2025-07-22
 
 ### Added

@@ -6,20 +6,20 @@ function Resume-FabricCapacity {
     .DESCRIPTION
     The Resume-FabricCapacity function resumes a capacity. It supports multiple aliases for flexibility.
 
-    .PARAMETER subscriptionID
+    .PARAMETER SubscriptionID
     The the ID of the subscription. This is a mandatory parameter. This is a parameter found in Azure, not Fabric.
 
-    .PARAMETER resourcegroup
+    .PARAMETER ResourceGroup
     The resource group. This is a mandatory parameter. This is a parameter found in Azure, not Fabric.
 
-    .PARAMETER capacity
+    .PARAMETER Capacity
     The capacity. This is a mandatory parameter. This is a parameter found in Azure, not Fabric.
 
     .EXAMPLE
         This example resumes a capacity given the subscription ID, resource group, and capacity.
 
         ```powershell
-        Resume-FabricCapacity -subscriptionID "your-subscription-id" -resourcegroupID "your-resource-group" -capacityID "your-capacity"
+        Resume-FabricCapacity -SubscriptionID "your-subscription-id" -ResourceGroup "your-resource-group" -Capacity "your-capacity"
         ```
 
     .NOTES
@@ -34,20 +34,23 @@ function Resume-FabricCapacity {
     # Define parameters for the subscription ID, resource group, and capacity.
     Param (
         [Parameter(Mandatory = $true)]
-        [guid]$subscriptionID,
+        [guid]$SubscriptionID,
         [Parameter(Mandatory = $true)]
-        [string]$resourcegroup,
+        [string]$ResourceGroup,
         [Parameter(Mandatory = $true)]
-        [string]$capacity
+        [string]$Capacity
     )
 
     Confirm-TokenState
 
+    $AzureBaseApiUrl = Get-PSFConfigValue 'FabricTools.AzureApi.BaseUrl'
+    $headers = Get-PSFConfigValue 'FabricTools.AzureSession.Headers'
+
     # Define the URI for the request.
-    $resumeCapacity = "$($AzureSession.BaseApiUrl)/subscriptions/$subscriptionID/resourceGroups/$resourcegroup/providers/Microsoft.Fabric/capacities/$capacity/resume?api-version=2022-07-01-preview"
+    $resumeCapacity = "$AzureBaseApiUrl/subscriptions/$SubscriptionID/resourceGroups/$ResourceGroup/providers/Microsoft.Fabric/capacities/$Capacity/resume?api-version=2022-07-01-preview"
 
     # Make a GET request to the URI and return the response.
-    if ($PSCmdlet.ShouldProcess("Resume capacity $capacity")) {
-        return Invoke-RestMethod -Method POST -Uri $resumeCapacity -Headers $script:AzureSession.HeaderParams -ErrorAction Stop
+    if ($PSCmdlet.ShouldProcess("Resume capacity $Capacity")) {
+        return Invoke-RestMethod -Method POST -Uri $resumeCapacity -Headers $headers -ErrorAction Stop
     }
 }

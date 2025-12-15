@@ -6,20 +6,20 @@ Retrieves the state of a specific capacity.
 .DESCRIPTION
 The Get-FabricCapacityState function retrieves the state of a specific capacity. It supports multiple aliases for flexibility.
 
-.PARAMETER subscriptionID
+.PARAMETER SubscriptionID
 The ID of the subscription. This is a mandatory parameter. This is a parameter found in Azure, not Fabric.
 
-.PARAMETER resourcegroup
+.PARAMETER ResourceGroup
 The resource group. This is a mandatory parameter. This is a parameter found in Azure, not Fabric.
 
-.PARAMETER capacity
+.PARAMETER Capacity
 The capacity. This is a mandatory parameter. This is a parameter found in Azure, not Fabric.
 
 .EXAMPLE
     This example retrieves the state of a specific capacity given the subscription ID, resource group, and capacity.
 
     ```powershell
-    Get-FabricCapacityState -subscriptionID "your-subscription-id" -resourcegroupID "your-resource-group" -capacityID "your-capacity"
+    Get-FabricCapacityState -SubscriptionID "your-subscription-id" -ResourceGroup "your-resource-group" -Capacity "your-capacity"
     ```
 
 .NOTES
@@ -36,18 +36,21 @@ Author: Ioana Bouariu
     # Define mandatory parameters for the subscription ID, resource group, and capacity.
     Param (
         [Parameter(Mandatory = $true)]
-        [guid]$subscriptionID,
+        [guid]$SubscriptionID,
         [Parameter(Mandatory = $true)]
-        [string]$resourcegroup,
+        [string]$ResourceGroup,
         [Parameter(Mandatory = $true)]
         [string]$capacity
     )
 
     Confirm-TokenState
 
+    $AzureBaseApiUrl = Get-PSFConfigValue 'FabricTools.AzureApi.BaseUrl'
+    $headers = Get-PSFConfigValue 'FabricTools.AzureSession.Headers'
+
     # Define the URL for the GET request.
-    $getCapacityState = "$($AzureSession.BaseApiUrl)/subscriptions/$subscriptionID/resourceGroups/$resourcegroup/providers/Microsoft.Fabric/capacities/$capacity/?api-version=2022-07-01-preview"
+    $getCapacityState = "$AzureBaseApiUrl/subscriptions/$SubscriptionID/resourceGroups/$ResourceGroup/providers/Microsoft.Fabric/capacities/$Capacity/?api-version=2022-07-01-preview"
 
     # Make the GET request and return the response.
-    return Invoke-RestMethod -Method GET -Uri $getCapacityState -Headers $script:AzureSession.HeaderParams -ErrorAction Stop
+    return Invoke-RestMethod -Method GET -Uri $getCapacityState -Headers $headers -ErrorAction Stop
 }

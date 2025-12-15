@@ -39,11 +39,6 @@ function Invoke-FabricDatasetRefresh {
     } else {
         # If the dataset is refreshable, invoke a PowerBI REST method to refresh the dataset
         # The URL for the request is constructed using the provided workspace ID and dataset ID.
-
-        # Check if the dataset is refreshable
-
-        # If the dataset is refreshable, invoke a PowerBI REST method to refresh the dataset
-        # The URL for the request is constructed using the provided workspace ID and dataset ID.
-        return Invoke-RestMethod -Method POST -uri ("$($PowerBI.BaseApiUrl)/datasets/$datasetid/refreshes") -Headers $FabricSession.HeaderParams
+        Invoke-FabricRestMethod -Method POST -PowerBIApi -Uri "datasets/$DatasetID/refreshes"
     }
 }

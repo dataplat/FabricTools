@@ -112,7 +112,7 @@ Retrieves the workloads for a specific capacity.
 
 ### [Get-FabricConfig](Get-FabricConfig.md)
 
-Gets the configuration for use with all functions in the PSFabricTools module.
+Gets the configuration for use with all functions in the FabricTools module.
 
 ### [Get-FabricConnection](Get-FabricConnection.md)
 
@@ -686,7 +686,7 @@ Retrieves External Data Shares details from a specified Microsoft Fabric.
 
 ### [Set-FabricConfig](Set-FabricConfig.md)
 
-Register the configuration for use with all functions in the PSFabricTools module.
+Register the configuration for use with all functions in the FabricTools module.
 
 ### [Start-FabricDeploymentPipelineStage](Start-FabricDeploymentPipelineStage.md)
 
@@ -875,4 +875,3 @@ Updates the role assignment for a specific principal in a Fabric workspace.
 ### [Write-FabricLakehouseTableData](Write-FabricLakehouseTableData.md)
 
 Loads data into a specified table in a Lakehouse within a Fabric workspace.
-

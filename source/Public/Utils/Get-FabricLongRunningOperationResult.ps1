@@ -18,7 +18,6 @@ The unique identifier of the completed long-running operation whose result you w
     ```
 
 .NOTES
-- Ensure the Fabric API headers (e.g., authorization tokens) are defined in $FabricConfig.FabricHeaders.
 - This function does not handle polling. Ensure the operation is in a terminal state before calling this function.
 
 Author: Tiago Balabuch

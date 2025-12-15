@@ -1,0 +1,27 @@
+{
+  "name": "FabricTools PowerShell Dev",
+  "features": {
+    "ghcr.io/devcontainers/features/powershell:1": {},
+    "ghcr.io/devcontainers/features/git:1": {},
+    "ghcr.io/devcontainers/features/common-utils:2": {},
+    "ghcr.io/devcontainers/features/azure-cli:1": {},
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "davidanson.vscode-markdownlint",
+        "ms-vscode.powershell",
+        "streetsidesoftware.code-spell-checker",
+        "redhat.vscode-yaml"
+      ]
+    }
+  },
+
+  "settings": {
+    "terminal.integrated.defaultProfile.linux": "pwsh"
+  },
+
+  "postCreateCommand": "pwsh .devcontainer/post-create.ps1"
+}

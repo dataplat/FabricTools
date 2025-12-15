@@ -13,7 +13,7 @@ title: Set-FabricConfig
 
 ## SYNOPSIS
 
-Register the configuration for use with all functions in the PSFabricTools module.
+Register the configuration for use with all functions in the FabricTools module.
 
 ## SYNTAX
 
@@ -28,13 +28,13 @@ Set-FabricConfig [[-WorkspaceGUID] <guid>] [[-DataWarehouseGUID] <guid>] [[-Base
 
 ## DESCRIPTION
 
-Register the configuration for use with all functions in the PSFabricTools module.
+Register the configuration for use with all functions in the FabricTools module.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 
-Registers the specified Fabric Data Warehouse configuration for use with all functions in the PSFabricTools module.
+Registers the specified Fabric Data Warehouse configuration for use with all functions in the FabricTools module.
 
 ```powershell
 Set-FabricConfig -WorkspaceGUID 'GUID-GUID-GUID-GUID' -DataWarehouseGUID 'GUID-GUID-GUID-GUID'
@@ -42,7 +42,7 @@ Set-FabricConfig -WorkspaceGUID 'GUID-GUID-GUID-GUID' -DataWarehouseGUID 'GUID-G
 
 ### EXAMPLE 2
 
-Registers the specified Fabric Data Warehouse configuration for use with all functions in the PSFabricTools module, but does not persist the values.
+Registers the specified Fabric Data Warehouse configuration for use with all functions in the FabricTools module, but does not persist the values.
 
 ```powershell
 Set-FabricConfig -WorkspaceGUID 'GUID-GUID-GUID-GUID' -DataWarehouseGUID 'GUID-GUID-GUID-GUID' -SkipPersist
@@ -196,4 +196,3 @@ Author: Jess Pomfret
 ## RELATED LINKS
 
 {{ Fill in the related links here }}
-
