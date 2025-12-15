@@ -74,6 +74,9 @@ BuildWorkflow:
     #- Merge_CodeCoverage_Files
 
   publish:
+    - publish_module_to_gallery
+
+  publish_full:
     - Publish_Release_To_GitHub # Runs first, if token is expired it will fail early
     # - Publish_GitHub_Wiki_Content
     - publish_module_to_gallery
