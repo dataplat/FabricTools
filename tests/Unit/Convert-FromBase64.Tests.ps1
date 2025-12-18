@@ -1,46 +1,40 @@
 #Requires -Module @{ ModuleName="Pester"; ModuleVersion="5.0"}
-param(
-    $ModuleName = "FabricTools",
-    $expectedParams = @(
-        "Base64String"
-                "Verbose"
-                "Debug"
-                "ErrorAction"
-                "WarningAction"
-                "InformationAction"
-                "ProgressAction"
-                "ErrorVariable"
-                "WarningVariable"
-                "InformationVariable"
-                "OutVariable"
-                "OutBuffer"
-                "PipelineVariable"
-                
-    )
-)
+
+BeforeDiscovery {
+    $CommandName = 'Convert-FromBase64'
+}
+
+BeforeAll {
+    $ModuleName = 'FabricTools'
+    $PSDefaultParameterValues['Mock:ModuleName'] = $ModuleName
+    $PSDefaultParameterValues['InModuleScope:ModuleName'] = $ModuleName
+    $PSDefaultParameterValues['Should:ModuleName'] = $ModuleName
+
+    $Command = Get-Command -Name Convert-FromBase64
+}
 
 Describe "Convert-FromBase64" -Tag "UnitTests" {
 
-    BeforeDiscovery {
-        $command = Get-Command -Name Convert-FromBase64
-        $expected = $expectedParams
+    Context "Command definition" {
+        It 'Should have <ExpectedParameterName> parameter' -ForEach @(
+            @{ ExpectedParameterName = 'Base64String'; ExpectedParameterType = 'string'; Mandatory = 'True' }
+        ) {
+            $Command | Should -HaveParameter -ParameterName $ExpectedParameterName -Type $ExpectedParameterType -Mandatory:([bool]::Parse($Mandatory))
+        }
     }
 
-    Context "Parameter validation" {
-        BeforeAll {
-            $command = Get-Command -Name Convert-FromBase64
-            $expected = $expectedParams
+    Context "Successful Base64 conversion" {
+        It 'Should convert Base64 string back to original text' {
+            $originalText = 'Hello World'
+            $base64 = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($originalText))
+            $result = Convert-FromBase64 -Base64String $base64
+            $result | Should -Be $originalText
         }
+    }
 
-        It "Has parameter: <_>" -ForEach $expected {
-            $command | Should -HaveParameter $PSItem
-        }
-
-        It "Should have exactly the number of expected parameters $($expected.Count)" {
-            $hasparms = $command.Parameters.Values.Name
-            #$hasparms.Count | Should -BeExactly $expected.Count
-            Compare-Object -ReferenceObject $expected -DifferenceObject $hasparms | Should -BeNullOrEmpty
+    Context "Error handling" {
+        It 'Should handle invalid Base64 string gracefully' {
+            { Convert-FromBase64 -Base64String 'NotValidBase64!!!' } | Should -Throw
         }
     }
 }
-

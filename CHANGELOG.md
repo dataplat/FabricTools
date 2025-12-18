@@ -24,6 +24,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added GitHub Codespaces and DevContainerSupport (Non Functional Change)
 - Added function `Update-FabricCapacity`
 - Added Error Detailed Info in `Test-FabricApiResponse` (Debug mode) when `response.error` exists
+- Enhanced Pester unit tests with coverage for many public functions including:
+  - Domain workspace assignment functions (`Add-FabricDomainWorkspaceAssignmentByCapacity`, `Add-FabricDomainWorkspaceAssignmentById`, `Add-FabricDomainWorkspaceAssignmentByPrincipal`, `Add-FabricDomainWorkspaceRoleAssignment`)
+  - Workspace functions (`Add-FabricWorkspaceCapacityAssignment`, `Add-FabricWorkspaceIdentity`, `Add-FabricWorkspaceRoleAssignment`, `Add-FabricWorkspaceToStage`, `Update-FabricWorkspace`, `Update-FabricWorkspaceRoleAssignment`)
+  - Utility functions (`Convert-FromBase64`, `Convert-ToBase64`, `Connect-FabricAccount`, `Export-FabricItem`)
+  - Update functions for various Fabric items (Notebooks, Reports, Semantic Models, Warehouses, ML models, etc.)
+  - Tests now include scenarios for successful API calls, long-running operations, error handling, and exception handling
+- Increased code coverage threshold from 0.1% to 50%
 
 ### Changed
 

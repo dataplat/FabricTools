@@ -1,50 +1,34 @@
 #Requires -Module @{ ModuleName="Pester"; ModuleVersion="5.0"}
-param(
-    $ModuleName = "FabricTools",
-    $expectedParams = @(
-        "TenantId"
-        "ServicePrincipalId"
-        "ServicePrincipalSecret"
-        "Credential"
-        "Reset"
-        "Verbose"
-        "Debug"
-        "ErrorAction"
-        "WarningAction"
-        "InformationAction"
-        "ProgressAction"
-        "ErrorVariable"
-        "WarningVariable"
-        "InformationVariable"
-        "OutVariable"
-        "OutBuffer"
-        "PipelineVariable"
-        "WhatIf"
-        "Confirm"
-    )
-)
+
+BeforeDiscovery {
+    $CommandName = 'Connect-FabricAccount'
+}
+
+BeforeAll {
+    $ModuleName = 'FabricTools'
+    $PSDefaultParameterValues['Mock:ModuleName'] = $ModuleName
+    $PSDefaultParameterValues['InModuleScope:ModuleName'] = $ModuleName
+    $PSDefaultParameterValues['Should:ModuleName'] = $ModuleName
+
+    $Command = Get-Command -Name Connect-FabricAccount
+}
 
 Describe "Connect-FabricAccount" -Tag "UnitTests" {
 
-    BeforeDiscovery {
-        $command = Get-Command -Name Connect-FabricAccount
-        $expected = $expectedParams
-    }
-
-    Context "Parameter validation" {
-        BeforeAll {
-            $command = Get-Command -Name Connect-FabricAccount
-            $expected = $expectedParams
+    Context "Command definition" {
+        It 'Should have <ExpectedParameterName> parameter' -ForEach @(
+            @{ ExpectedParameterName = 'TenantId'; ExpectedParameterType = 'guid'; Mandatory = 'False' }
+            @{ ExpectedParameterName = 'ServicePrincipalId'; ExpectedParameterType = 'guid'; Mandatory = 'False' }
+            @{ ExpectedParameterName = 'ServicePrincipalSecret'; ExpectedParameterType = 'securestring'; Mandatory = 'False' }
+            @{ ExpectedParameterName = 'Credential'; ExpectedParameterType = 'pscredential'; Mandatory = 'False' }
+            @{ ExpectedParameterName = 'Reset'; ExpectedParameterType = 'switch'; Mandatory = 'False' }
+        ) {
+            $Command | Should -HaveParameter -ParameterName $ExpectedParameterName -Type $ExpectedParameterType -Mandatory:([bool]::Parse($Mandatory))
         }
 
-        It "Has parameter: <_>" -ForEach $expected {
-            $command | Should -HaveParameter $PSItem
-        }
-
-        It "Should have exactly the number of expected parameters $($expected.Count)" {
-            $hasparms = $command.Parameters.Values.Name
-            #$hasparms.Count | Should -BeExactly $expected.Count
-            Compare-Object -ReferenceObject $expected -DifferenceObject $hasparms | Should -BeNullOrEmpty
+        It 'Should support ShouldProcess' {
+            $Command.Parameters.ContainsKey('WhatIf') | Should -BeTrue
+            $Command.Parameters.ContainsKey('Confirm') | Should -BeTrue
         }
     }
 }

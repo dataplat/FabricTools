@@ -1,54 +1,72 @@
 #Requires -Module @{ ModuleName="Pester"; ModuleVersion="5.0"}
-param(
-    $ModuleName = "FabricTools",
-    $expectedParams = @(
-        "Uri"
-        "Method"
-        "Body"
-        "TestTokenExpired"
-        "PowerBIApi"
-        "NoWait"
-        "HandleResponse"
-        "ExtractValue"
-        "TypeName"
-        "ObjectIdOrName"
-        "SuccessMessage"
-        "Verbose"
-        "Debug"
-        "ErrorAction"
-        "WarningAction"
-        "InformationAction"
-        "ProgressAction"
-        "ErrorVariable"
-        "WarningVariable"
-        "InformationVariable"
-        "OutVariable"
-        "OutBuffer"
-        "PipelineVariable"
-    )
-)
+
+BeforeDiscovery {
+    $CommandName = 'Invoke-FabricRestMethod'
+}
+
+BeforeAll {
+    $ModuleName = 'FabricTools'
+    $PSDefaultParameterValues['Mock:ModuleName'] = $ModuleName
+    $PSDefaultParameterValues['InModuleScope:ModuleName'] = $ModuleName
+    $PSDefaultParameterValues['Should:ModuleName'] = $ModuleName
+
+    $Command = Get-Command -Name Invoke-FabricRestMethod
+}
 
 Describe "Invoke-FabricRestMethod" -Tag "UnitTests" {
 
-    BeforeDiscovery {
-        $command = Get-Command -Name Invoke-FabricRestMethod
-        $expected = $expectedParams
+    Context "Command definition" {
+        It 'Should have <ExpectedParameterName> parameter' -ForEach @(
+            @{ ExpectedParameterName = 'Uri'; ExpectedParameterType = 'string'; Mandatory = 'True' }
+            @{ ExpectedParameterName = 'Method'; ExpectedParameterType = 'string'; Mandatory = 'False' }
+            @{ ExpectedParameterName = 'Body'; ExpectedParameterType = 'object'; Mandatory = 'False' }
+            @{ ExpectedParameterName = 'TestTokenExpired'; ExpectedParameterType = 'switch'; Mandatory = 'False' }
+            @{ ExpectedParameterName = 'PowerBIApi'; ExpectedParameterType = 'switch'; Mandatory = 'False' }
+            @{ ExpectedParameterName = 'NoWait'; ExpectedParameterType = 'switch'; Mandatory = 'False' }
+            @{ ExpectedParameterName = 'HandleResponse'; ExpectedParameterType = 'switch'; Mandatory = 'False' }
+            @{ ExpectedParameterName = 'ExtractValue'; ExpectedParameterType = 'string'; Mandatory = 'False' }
+            @{ ExpectedParameterName = 'TypeName'; ExpectedParameterType = 'string'; Mandatory = 'False' }
+            @{ ExpectedParameterName = 'ObjectIdOrName'; ExpectedParameterType = 'string'; Mandatory = 'False' }
+            @{ ExpectedParameterName = 'SuccessMessage'; ExpectedParameterType = 'string'; Mandatory = 'False' }
+        ) {
+            $Command | Should -HaveParameter -ParameterName $ExpectedParameterName -Type $ExpectedParameterType -Mandatory:([bool]::Parse($Mandatory))
+        }
     }
 
-    Context "Parameter validation" {
+    Context "Successful REST call" {
         BeforeAll {
-            $command = Get-Command -Name Invoke-FabricRestMethod
-            $expected = $expectedParams
+            Mock -CommandName Invoke-WebRequest -MockWith {
+                return @{
+                    StatusCode = 200
+                    Headers = @{}
+                    Content = '{"value": [{"id": "test-id", "name": "test-name"}]}'
+                }
+            }
+            Mock -CommandName Confirm-TokenState -MockWith { return $true }
         }
 
-        It "Has parameter: <_>" -ForEach $expected {
-            $command | Should -HaveParameter $PSItem
+        It 'Should invoke REST method successfully' {
+            InModuleScope -ModuleName 'FabricTools' {
+                { Invoke-FabricRestMethod -Uri 'https://api.fabric.microsoft.com/v1/workspaces' } | Should -Not -Throw
+            }
+        }
+    }
+
+    Context "Error handling" {
+        BeforeAll {
+            Mock -CommandName Invoke-RestMethod -MockWith {
+                return @{
+                    errorCode = 'TestError'
+                    message = 'API Error'
+                }
+            }
+            Mock -CommandName Confirm-TokenState -MockWith { return $true }
         }
 
-        It "Should have exactly the number of expected parameters $($expected.Count)" {
-            $hasparms = $command.Parameters.Values.Name
-            #$hasparms.Count | Should -BeExactly $expected.Count
-            Compare-Object -ReferenceObject $expected -DifferenceObject $hasparms | Should -BeNullOrEmpty
+        It 'Should not throw when API returns error response (SkipHttpErrorCheck is used)' {
+            InModuleScope -ModuleName 'FabricTools' {
+                { Invoke-FabricRestMethod -Uri 'https://api.fabric.microsoft.com/v1/workspaces' } | Should -Not -Throw
+            }
         }
     }
 }

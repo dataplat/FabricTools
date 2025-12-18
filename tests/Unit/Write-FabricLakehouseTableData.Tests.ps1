@@ -1,55 +1,78 @@
 #Requires -Module @{ ModuleName="Pester"; ModuleVersion="5.0"}
-param(
-    $ModuleName = "FabricTools",
-    $expectedParams = @(
-        "WorkspaceId"
-        "LakehouseId"
-        "TableName"
-        "PathType"
-        "RelativePath"
-        "FileFormat"
-        "CsvDelimiter"
-        "CsvHeader"
-        "Mode"
-        "Recursive"
-        "Verbose"
-        "Debug"
-        "ErrorAction"
-        "WarningAction"
-        "InformationAction"
-        "ProgressAction"
-        "ErrorVariable"
-        "WarningVariable"
-        "InformationVariable"
-        "OutVariable"
-        "OutBuffer"
-        "PipelineVariable"
-        "WhatIf"
-        "Confirm"
-    )
-)
+
+BeforeDiscovery {
+    $CommandName = 'Write-FabricLakehouseTableData'
+}
+
+BeforeAll {
+    $ModuleName = 'FabricTools'
+    $PSDefaultParameterValues['Mock:ModuleName'] = $ModuleName
+    $PSDefaultParameterValues['InModuleScope:ModuleName'] = $ModuleName
+    $PSDefaultParameterValues['Should:ModuleName'] = $ModuleName
+
+    $Command = Get-Command -Name Write-FabricLakehouseTableData
+}
 
 Describe "Write-FabricLakehouseTableData" -Tag "UnitTests" {
 
-    BeforeDiscovery {
-        $command = Get-Command -Name Write-FabricLakehouseTableData
-        $expected = $expectedParams
+    Context "Command definition" {
+        It 'Should have <ExpectedParameterName> parameter' -ForEach @(
+            @{ ExpectedParameterName = 'WorkspaceId'; ExpectedParameterType = 'guid'; Mandatory = 'True' }
+            @{ ExpectedParameterName = 'LakehouseId'; ExpectedParameterType = 'guid'; Mandatory = 'True' }
+            @{ ExpectedParameterName = 'TableName'; ExpectedParameterType = 'string'; Mandatory = 'True' }
+            @{ ExpectedParameterName = 'PathType'; ExpectedParameterType = 'string'; Mandatory = 'True' }
+            @{ ExpectedParameterName = 'RelativePath'; ExpectedParameterType = 'string'; Mandatory = 'True' }
+            @{ ExpectedParameterName = 'FileFormat'; ExpectedParameterType = 'string'; Mandatory = 'True' }
+            @{ ExpectedParameterName = 'CsvDelimiter'; ExpectedParameterType = 'string'; Mandatory = 'False' }
+            @{ ExpectedParameterName = 'CsvHeader'; ExpectedParameterType = 'bool'; Mandatory = 'False' }
+            @{ ExpectedParameterName = 'Mode'; ExpectedParameterType = 'string'; Mandatory = 'True' }
+            @{ ExpectedParameterName = 'Recursive'; ExpectedParameterType = 'bool'; Mandatory = 'False' }
+        ) {
+            $Command | Should -HaveParameter -ParameterName $ExpectedParameterName -Type $ExpectedParameterType -Mandatory:([bool]::Parse($Mandatory))
+        }
+
+        It 'Should support ShouldProcess' {
+            $Command.Parameters.ContainsKey('WhatIf') | Should -BeTrue
+            $Command.Parameters.ContainsKey('Confirm') | Should -BeTrue
+        }
     }
 
-    Context "Parameter validation" {
+    Context "Successful table data write" {
         BeforeAll {
-            $command = Get-Command -Name Write-FabricLakehouseTableData
-            $expected = $expectedParams
+            Mock -CommandName Invoke-FabricRestMethod -MockWith {
+                InModuleScope -ModuleName 'FabricTools' {
+                    $script:statusCode = 200
+                }
+                return $null
+            }
+            Mock -CommandName Confirm-TokenState -MockWith { return $true }
         }
 
-        It "Has parameter: <_>" -ForEach $expected {
-            $command | Should -HaveParameter $PSItem
+        It 'Should write table data with valid parameters' {
+            { Write-FabricLakehouseTableData -WorkspaceId (New-Guid) -LakehouseId (New-Guid) -TableName 'TestTable' -PathType 'File' -RelativePath '/data/test.csv' -FileFormat 'Csv' -Mode 'Overwrite' -Confirm:$false } | Should -Not -Throw
+
+            Should -Invoke -CommandName Invoke-FabricRestMethod -Times 1 -Exactly
+        }
+    }
+
+    Context "Error handling" {
+        BeforeAll {
+            Mock -CommandName Invoke-FabricRestMethod -MockWith {
+                InModuleScope -ModuleName 'FabricTools' {
+                    $script:statusCode = 400
+                }
+                throw "API Error"
+            }
+            Mock -CommandName Confirm-TokenState -MockWith { return $true }
+            Mock -CommandName Write-Message -MockWith { }
         }
 
-        It "Should have exactly the number of expected parameters $($expected.Count)" {
-            $hasparms = $command.Parameters.Values.Name
-            #$hasparms.Count | Should -BeExactly $expected.Count
-            Compare-Object -ReferenceObject $expected -DifferenceObject $hasparms | Should -BeNullOrEmpty
+        It 'Should handle error when API call fails' {
+            {
+                Write-FabricLakehouseTableData -WorkspaceId (New-Guid) -LakehouseId (New-Guid) -TableName 'TestTable' -PathType 'File' -RelativePath '/data/test.csv' -FileFormat 'Csv' -Mode 'Overwrite' -Confirm:$false
+            } | Should -Not -Throw
+
+            Should -Invoke -CommandName Write-Message -ParameterFilter { $Level -eq 'Error' } -Times 1 -Exactly -Scope It
         }
     }
 }

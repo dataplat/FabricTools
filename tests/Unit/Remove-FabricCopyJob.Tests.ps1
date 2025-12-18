@@ -1,47 +1,69 @@
 #Requires -Module @{ ModuleName="Pester"; ModuleVersion="5.0"}
-param(
-    $ModuleName = "FabricTools",
-    $expectedParams = @(
-        "WorkspaceId"
-        "CopyJobId"
-        "Verbose"
-        "Debug"
-        "ErrorAction"
-        "WarningAction"
-        "InformationAction"
-        "ProgressAction"
-        "ErrorVariable"
-        "WarningVariable"
-        "InformationVariable"
-        "OutVariable"
-        "OutBuffer"
-        "PipelineVariable"
-        "Confirm"
-        "WhatIf"
-    )
-)
+
+BeforeDiscovery {
+    $CommandName = 'Remove-FabricCopyJob'
+}
+
+BeforeAll {
+    $ModuleName = 'FabricTools'
+    $PSDefaultParameterValues['Mock:ModuleName'] = $ModuleName
+    $PSDefaultParameterValues['InModuleScope:ModuleName'] = $ModuleName
+    $PSDefaultParameterValues['Should:ModuleName'] = $ModuleName
+
+    $Command = Get-Command -Name Remove-FabricCopyJob
+}
 
 Describe "Remove-FabricCopyJob" -Tag "UnitTests" {
 
-    BeforeDiscovery {
-        $command = Get-Command -Name Remove-FabricCopyJob
-        $expected = $expectedParams
+    Context "Command definition" {
+        It 'Should have <ExpectedParameterName> parameter' -ForEach @(
+            @{ ExpectedParameterName = 'WorkspaceId'; ExpectedParameterType = 'guid'; Mandatory = 'True' }
+            @{ ExpectedParameterName = 'CopyJobId'; ExpectedParameterType = 'guid'; Mandatory = 'True' }
+        ) {
+            $Command | Should -HaveParameter -ParameterName $ExpectedParameterName -Type $ExpectedParameterType -Mandatory:([bool]::Parse($Mandatory))
+        }
+
+        It 'Should support ShouldProcess' {
+            $Command.Parameters.ContainsKey('WhatIf') | Should -BeTrue
+            $Command.Parameters.ContainsKey('Confirm') | Should -BeTrue
+        }
     }
 
-    Context "Parameter validation" {
+    Context "Successful copy job removal" {
         BeforeAll {
-            $command = Get-Command -Name Remove-FabricCopyJob
-            $expected = $expectedParams
+            Mock -CommandName Invoke-FabricRestMethod -MockWith {
+                InModuleScope -ModuleName 'FabricTools' {
+                    $script:statusCode = 200
+                }
+                return $null
+            }
+            Mock -CommandName Confirm-TokenState -MockWith { return $true }
         }
 
-        It "Has parameter: <_>" -ForEach $expected {
-            $command | Should -HaveParameter $PSItem
+        It 'Should remove copy job with valid parameters' {
+            { Remove-FabricCopyJob -WorkspaceId (New-Guid) -CopyJobId (New-Guid) -Confirm:$false } | Should -Not -Throw
+
+            Should -Invoke -CommandName Invoke-FabricRestMethod -Times 1 -Exactly
+        }
+    }
+
+    Context "Error handling" {
+        BeforeAll {
+            Mock -CommandName Invoke-FabricRestMethod -MockWith {
+                throw "API Error"
+            }
+            Mock -CommandName Confirm-TokenState -MockWith { return $true }
+            Mock -CommandName Write-Message -MockWith { }
         }
 
-        It "Should have exactly the number of expected parameters $($expected.Count)" {
-            $hasparms = $command.Parameters.Values.Name
-            #$hasparms.Count | Should -BeExactly $expected.Count
-            Compare-Object -ReferenceObject $expected -DifferenceObject $hasparms | Should -BeNullOrEmpty
+        It 'Should handle error gracefully and write error message' {
+            {
+                Remove-FabricCopyJob -WorkspaceId (New-Guid) -CopyJobId (New-Guid) -Confirm:$false
+            } | Should -Not -Throw
+
+            Should -Invoke -CommandName Write-Message -ParameterFilter {
+                $Level -eq 'Error' -and $Message -like "*Failed to delete Copy Job*"
+            }
         }
     }
 }

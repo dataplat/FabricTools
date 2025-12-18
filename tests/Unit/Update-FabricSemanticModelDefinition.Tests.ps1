@@ -1,48 +1,78 @@
 #Requires -Module @{ ModuleName="Pester"; ModuleVersion="5.0"}
-param(
-    $ModuleName = "FabricTools",
-    $expectedParams = @(
-        "WorkspaceId"
-        "SemanticModelId"
-        "SemanticModelPathDefinition"
-        "Verbose"
-        "Debug"
-        "ErrorAction"
-        "WarningAction"
-        "InformationAction"
-        "ProgressAction"
-        "ErrorVariable"
-        "WarningVariable"
-        "InformationVariable"
-        "OutVariable"
-        "OutBuffer"
-        "PipelineVariable"
-        "WhatIf"
-        "Confirm"
-    )
-)
+
+BeforeDiscovery {
+    $CommandName = 'Update-FabricSemanticModelDefinition'
+}
+
+BeforeAll {
+    $ModuleName = 'FabricTools'
+    $PSDefaultParameterValues['Mock:ModuleName'] = $ModuleName
+    $PSDefaultParameterValues['InModuleScope:ModuleName'] = $ModuleName
+    $PSDefaultParameterValues['Should:ModuleName'] = $ModuleName
+
+    $Command = Get-Command -Name Update-FabricSemanticModelDefinition
+}
 
 Describe "Update-FabricSemanticModelDefinition" -Tag "UnitTests" {
 
-    BeforeDiscovery {
-        $command = Get-Command -Name Update-FabricSemanticModelDefinition
-        $expected = $expectedParams
+    Context "Command definition" {
+        It 'Should have <ExpectedParameterName> parameter' -ForEach @(
+            @{ ExpectedParameterName = 'WorkspaceId'; ExpectedParameterType = 'guid'; Mandatory = 'True' }
+            @{ ExpectedParameterName = 'SemanticModelId'; ExpectedParameterType = 'guid'; Mandatory = 'True' }
+            @{ ExpectedParameterName = 'SemanticModelPathDefinition'; ExpectedParameterType = 'string'; Mandatory = 'True' }
+        ) {
+            $Command | Should -HaveParameter -ParameterName $ExpectedParameterName -Type $ExpectedParameterType -Mandatory:([bool]::Parse($Mandatory))
+        }
+
+        It 'Should support ShouldProcess' {
+            $Command.Parameters.ContainsKey('WhatIf') | Should -BeTrue
+            $Command.Parameters.ContainsKey('Confirm') | Should -BeTrue
+        }
     }
 
-    Context "Parameter validation" {
+    Context "Successful Semantic Model definition update" {
         BeforeAll {
-            $command = Get-Command -Name Update-FabricSemanticModelDefinition
-            $expected = $expectedParams
+            Mock -CommandName Invoke-FabricRestMethod -MockWith {
+                InModuleScope -ModuleName 'FabricTools' {
+                    $script:statusCode = 200
+                }
+                return $null
+            }
+            Mock -CommandName Confirm-TokenState -MockWith { return $true }
+            Mock -CommandName Get-FileDefinitionParts -ModuleName FabricTools -MockWith {
+                return @{ parts = @(@{ path = "test.json"; payload = "base64content"; payloadType = "InlineBase64" }) }
+            }
+            Mock -CommandName Write-Message -MockWith { }
         }
 
-        It "Has parameter: <_>" -ForEach $expected {
-            $command | Should -HaveParameter $PSItem
+        It 'Should update Semantic Model definition with valid parameters' {
+            { Update-FabricSemanticModelDefinition -WorkspaceId (New-Guid) -SemanticModelId (New-Guid) -SemanticModelPathDefinition 'TestPath' -Confirm:$false } | Should -Not -Throw
+
+            Should -Invoke -CommandName Invoke-FabricRestMethod -Times 1 -Exactly
+        }
+    }
+
+    Context "Error handling" {
+        BeforeAll {
+            Mock -CommandName Invoke-FabricRestMethod -MockWith {
+                InModuleScope -ModuleName 'FabricTools' {
+                    $script:statusCode = 400
+                }
+                throw "API Error"
+            }
+            Mock -CommandName Confirm-TokenState -MockWith { return $true }
+            Mock -CommandName Get-FileDefinitionParts -ModuleName FabricTools -MockWith {
+                return @{ parts = @(@{ path = "test.json"; payload = "base64content"; payloadType = "InlineBase64" }) }
+            }
+            Mock -CommandName Write-Message -MockWith { }
         }
 
-        It "Should have exactly the number of expected parameters $($expected.Count)" {
-            $hasparms = $command.Parameters.Values.Name
-            #$hasparms.Count | Should -BeExactly $expected.Count
-            Compare-Object -ReferenceObject $expected -DifferenceObject $hasparms | Should -BeNullOrEmpty
+        It 'Should handle error when API call fails' {
+            {
+                Update-FabricSemanticModelDefinition -WorkspaceId (New-Guid) -SemanticModelId (New-Guid) -SemanticModelPathDefinition 'TestPath' -Confirm:$false
+            } | Should -Not -Throw
+
+            Should -Invoke -CommandName Write-Message -ParameterFilter { $Level -eq 'Error' } -Times 1 -Exactly -Scope It
         }
     }
 }
