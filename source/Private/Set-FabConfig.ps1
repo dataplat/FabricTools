@@ -24,3 +24,9 @@ $script:FabricConfig = @{
 
 # Feature Flags
 Set-PSFConfig -Name 'FabricTools.FeatureFlags.EnableTokenRefresh' -Value $true -Validation bool
+
+# Build and persist a canonical User-Agent for all FabricTools HTTP calls
+# The helper function below builds the string; we set the config and a script-scoped variable once.
+$ua = Get-FabricUserAgent
+Set-PSFConfig -Name 'FabricTools.UserAgent' -Value $ua
+$script:UserAgent = $ua

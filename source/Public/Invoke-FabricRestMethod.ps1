@@ -148,8 +148,9 @@ Function Invoke-FabricRestMethod {
         Write-Message -Message "No request body provided." -Level Debug
     }
 
-    $headers = Get-PSFConfigValue -FullName 'FabricTools.FabricSession.Headers'
+    $sessionHeaders = Get-PSFConfigValue -FullName 'FabricTools.FabricSession.Headers'
     $contentType = Get-PSFConfigValue -FullName 'FabricTools.FabricApi.ContentType'
+    $userAgent = Get-PSFConfigValue -FullName 'FabricTools.UserAgent' -ErrorAction SilentlyContinue
 
     $continuationToken = $null
     $repeat = $false
@@ -162,8 +163,19 @@ Function Invoke-FabricRestMethod {
         }
         Write-Message -Message "API Endpoint: $Method $apiEndpointUrl" -Level Verbose
 
+        # Build a fresh headers hashtable by copying session headers and ensuring User-Agent is included.
+        $requestHeaders = @{}
+        if ($sessionHeaders -and $sessionHeaders -is [hashtable]) {
+            foreach ($key in $sessionHeaders.Keys) {
+                $requestHeaders[$key] = $sessionHeaders[$key]
+            }
+        }
+        if ($userAgent) {
+            $requestHeaders['User-Agent'] = $userAgent
+        }
+
         $request = @{
-            Headers = $headers
+            Headers = $requestHeaders
             Uri = $Uri
             Method = $Method
             Body = $Body
@@ -173,6 +185,7 @@ Function Invoke-FabricRestMethod {
             ResponseHeadersVariable = "responseHeader"
             StatusCodeVariable = "statusCode"
         }
+
         $response = Invoke-RestMethod @request
 
         # Needed for backward compatibility, example: Get-FabricWorkspace
