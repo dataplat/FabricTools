@@ -35,7 +35,7 @@ Describe "Get-FabricCapacityState" -Tag "UnitTests" {
         BeforeAll {
             Mock -CommandName Confirm-TokenState -MockWith { }
             Mock -CommandName Write-Message -MockWith { }
-            Mock -CommandName Get-PSFConfigValue -MockWith {
+            Mock -CommandName Get-PSFConfigValue -ParameterFilter {  $FullName -eq 'FabricTools.AzureApi.BaseUrl' } -MockWith {
                 return 'https://management.azure.com'
             }
             Mock -CommandName Invoke-RestMethod -MockWith {
@@ -73,7 +73,7 @@ Describe "Get-FabricCapacityState" -Tag "UnitTests" {
         BeforeAll {
             Mock -CommandName Confirm-TokenState -MockWith { }
             Mock -CommandName Write-Message -MockWith { }
-            Mock -CommandName Get-PSFConfigValue -MockWith {
+            Mock -CommandName Get-PSFConfigValue -ParameterFilter {  $FullName -eq 'FabricTools.AzureApi.BaseUrl' } -MockWith {
                 return 'https://management.azure.com'
             }
             Mock -CommandName Invoke-RestMethod -MockWith {

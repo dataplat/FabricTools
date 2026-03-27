@@ -35,11 +35,9 @@ Describe "Invoke-FabricRestMethod" -Tag "UnitTests" {
 
     Context "Successful REST call" {
         BeforeAll {
-            Mock -CommandName Invoke-WebRequest -MockWith {
+            Mock -CommandName Invoke-RestMethod -MockWith {
                 return @{
-                    StatusCode = 200
-                    Headers = @{}
-                    Content = '{"value": [{"id": "test-id", "name": "test-name"}]}'
+                    value = @(@{ id = 'test-id'; name = 'test-name' })
                 }
             }
             Mock -CommandName Confirm-TokenState -MockWith { return $true }
@@ -66,6 +64,36 @@ Describe "Invoke-FabricRestMethod" -Tag "UnitTests" {
         It 'Should not throw when API returns error response (SkipHttpErrorCheck is used)' {
             InModuleScope -ModuleName 'FabricTools' {
                 { Invoke-FabricRestMethod -Uri 'https://api.fabric.microsoft.com/v1/workspaces' } | Should -Not -Throw
+            }
+        }
+    }
+
+    Context "User-Agent header" {
+        BeforeAll {
+            Mock -CommandName Get-PSFConfigValue -MockWith {
+                param($FullName)
+                switch ($FullName) {
+                    'FabricTools.UserAgent' { return 'TestUA/1.2' }
+                    'FabricTools.FabricSession.Headers' { return @{} }
+                    'FabricTools.FabricApi.ContentType' { return 'application/json; charset=utf-8' }
+                    Default { return $null }
+                }
+            }
+
+            Mock -CommandName Invoke-RestMethod -MockWith {
+                return @{ value = @(); statusCode = 200 }
+            }
+
+            Mock -CommandName Confirm-TokenState -MockWith { return $true }
+        }
+
+        It 'Should include configured User-Agent header in request' {
+            InModuleScope -ModuleName 'FabricTools' {
+                Invoke-FabricRestMethod -Uri 'https://api.fabric.microsoft.com/v1/test' | Out-Null
+
+                Should -Invoke -CommandName Invoke-RestMethod -Times 1 -ParameterFilter {
+                    $Headers -ne $null -and $Headers['User-Agent'] -eq 'TestUA/1.2'
+                } -Because 'Invoke-RestMethod should be called with User-Agent header set to configured value'
             }
         }
     }
