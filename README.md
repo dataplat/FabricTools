@@ -104,6 +104,10 @@ See also the list of [contributors](https://github.com/dataplat/FabricTools/cont
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=dataplat/FabricTools&type=date&legend=top-left)](https://www.star-history.com/#dataplat/FabricTools&type=date&legend=top-left)
+
 ## Acknowledgments
 
 - GitHub Copilot and ChatGPT for helping with the documentation
