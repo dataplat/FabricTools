@@ -52,5 +52,5 @@ function Get-FabricUserAgent {
         $archToken = $env:PROCESSOR_ARCHITECTURE -or 'unknown'
     }
 
-    return "powershell/$psVersion,FabricTools/$moduleVersion,($osToken; $archToken)"
+    return "FabricTools/$moduleVersion powershell/$psVersion ($osToken; $archToken)"
 }

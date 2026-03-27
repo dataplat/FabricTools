@@ -152,6 +152,17 @@ Function Invoke-FabricRestMethod {
     $contentType = Get-PSFConfigValue -FullName 'FabricTools.FabricApi.ContentType'
     $userAgent = Get-PSFConfigValue -FullName 'FabricTools.UserAgent' -ErrorAction SilentlyContinue
 
+    # Build a fresh headers hashtable by copying session headers and ensuring User-Agent is included.
+    $requestHeaders = @{}
+    if ($sessionHeaders -and $sessionHeaders -is [hashtable]) {
+        foreach ($key in $sessionHeaders.Keys) {
+            $requestHeaders[$key] = $sessionHeaders[$key]
+        }
+    }
+    if ($userAgent) {
+        $requestHeaders['User-Agent'] = $userAgent
+    }
+
     $continuationToken = $null
     $repeat = $false
 
@@ -162,17 +173,6 @@ Function Invoke-FabricRestMethod {
             $apiEndpointUrl = "{0}?continuationToken={1}" -f $apiEndpointUrl, $encodedToken
         }
         Write-Message -Message "API Endpoint: $Method $apiEndpointUrl" -Level Verbose
-
-        # Build a fresh headers hashtable by copying session headers and ensuring User-Agent is included.
-        $requestHeaders = @{}
-        if ($sessionHeaders -and $sessionHeaders -is [hashtable]) {
-            foreach ($key in $sessionHeaders.Keys) {
-                $requestHeaders[$key] = $sessionHeaders[$key]
-            }
-        }
-        if ($userAgent) {
-            $requestHeaders['User-Agent'] = $userAgent
-        }
 
         $request = @{
             Headers = $requestHeaders
