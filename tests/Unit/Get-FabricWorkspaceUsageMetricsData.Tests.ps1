@@ -24,6 +24,13 @@ Describe "Get-FabricWorkspaceUsageMetricsData" -Tag "UnitTests" {
         }
     }
 
+    Context 'Parameter alias validation' {
+        It 'Should have "Id" as an alias for WorkspaceId parameter' {
+            $param = (Get-Command -Name 'Get-FabricWorkspaceUsageMetricsData').Parameters['WorkspaceId']
+            $param.Aliases | Should -Contain 'Id'
+        }
+    }
+
     Context "Successful workspace usage metrics data retrieval" {
         BeforeAll {
             Mock -CommandName New-FabricWorkspaceUsageMetricsReport -MockWith {

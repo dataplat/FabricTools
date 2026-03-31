@@ -30,6 +30,7 @@ function Add-FabricWorkspaceCapacityAssignment {
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
+        [Alias("Id")]
         [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $true)]

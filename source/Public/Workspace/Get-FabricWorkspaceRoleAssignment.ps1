@@ -37,6 +37,7 @@ function Get-FabricWorkspaceRoleAssignment {
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
+        [Alias("Id")]
         [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $false)]

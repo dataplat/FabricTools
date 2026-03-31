@@ -37,6 +37,7 @@ function Get-FabricWorkspace {
     param (
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
+        [Alias("Id")]
         [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $false)]

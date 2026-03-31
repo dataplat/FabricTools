@@ -30,6 +30,13 @@ Describe "Update-FabricWorkspaceRoleAssignment" -Tag "UnitTests" {
         }
     }
 
+    Context 'Parameter alias validation' {
+        It 'Should have "Id" as an alias for WorkspaceId parameter' {
+            $param = (Get-Command -Name 'Update-FabricWorkspaceRoleAssignment').Parameters['WorkspaceId']
+            $param.Aliases | Should -Contain 'Id'
+        }
+    }
+
     Context "Successful workspace role assignment update" {
         BeforeAll {
             Mock -CommandName Invoke-FabricRestMethod -MockWith {

@@ -22,7 +22,12 @@ Describe "Get-FabricWorkspaceDatasetRefreshes" -Tag "UnitTests" {
             $Command | Should -HaveParameter -ParameterName $ExpectedParameterName -Type $ExpectedParameterType -Mandatory:([bool]::Parse($Mandatory))
         }
     }
-
+    Context 'Parameter alias validation' {
+        It 'Should have "Id" as an alias for WorkspaceID parameter' {
+            $param = (Get-Command -Name 'Get-FabricWorkspaceDatasetRefreshes').Parameters['WorkspaceID']
+            $param.Aliases | Should -Contain 'Id'
+        }
+    }
     Context "Successful workspace dataset refreshes retrieval" -Skip {
         # Skipped: Function calls Get-FabricDataset which does not exist in the module
         BeforeAll {

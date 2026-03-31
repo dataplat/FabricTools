@@ -34,6 +34,7 @@ function Get-FabricWorkspaceDatasetRefreshes {
     param(
         # Define a mandatory parameter for the workspace ID
         [Parameter(Mandatory = $true)]
+        [Alias("Id")]
         [guid]$WorkspaceID
     )
 

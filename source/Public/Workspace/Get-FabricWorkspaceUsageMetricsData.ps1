@@ -32,6 +32,7 @@ Author: Ioana Bouariu
     # Define parameters for the workspace ID and username.
     param(
         [Parameter(Mandatory = $true)]
+        [Alias("Id")]
         [guid]$WorkspaceId,
         [Parameter(Mandatory = $false)]
         [string]$username = ""

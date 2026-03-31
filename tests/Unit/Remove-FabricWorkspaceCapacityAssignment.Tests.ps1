@@ -28,6 +28,13 @@ Describe "Remove-FabricWorkspaceCapacityAssignment" -Tag "UnitTests" {
         }
     }
 
+    Context 'Parameter alias validation' {
+        It 'Should have "Id" as an alias for WorkspaceId parameter' {
+            $param = (Get-Command -Name 'Remove-FabricWorkspaceCapacityAssignment').Parameters['WorkspaceId']
+            $param.Aliases | Should -Contain 'Id'
+        }
+    }
+
     Context "Successful capacity assignment removal" {
         BeforeAll {
             Mock -CommandName Invoke-FabricRestMethod -MockWith {

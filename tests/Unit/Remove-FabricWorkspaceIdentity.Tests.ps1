@@ -28,6 +28,13 @@ Describe "Remove-FabricWorkspaceIdentity" -Tag "UnitTests" {
         }
     }
 
+    Context 'Parameter alias validation' {
+        It 'Should have "Id" as an alias for WorkspaceId parameter' {
+            $param = (Get-Command -Name 'Remove-FabricWorkspaceIdentity').Parameters['WorkspaceId']
+            $param.Aliases | Should -Contain 'Id'
+        }
+    }
+
     Context "Successful workspace identity removal" {
         BeforeAll {
             Mock -CommandName Invoke-FabricRestMethod -MockWith {

@@ -29,6 +29,7 @@ Author: Ioana Bouariu
     # Define a parameter for the workspace ID.
     param(
         [Parameter(Mandatory = $true)]
+        [Alias("Id")]
         [guid]$WorkspaceId
     )
 

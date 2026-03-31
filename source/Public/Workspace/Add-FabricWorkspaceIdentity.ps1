@@ -26,6 +26,7 @@ function Add-FabricWorkspaceIdentity {
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
+        [Alias("Id")]
         [guid]$WorkspaceId
     )
 

@@ -36,6 +36,13 @@ Describe "Update-FabricWorkspace" -Tag "UnitTests" {
         }
     }
 
+    Context 'Parameter alias validation' {
+        It 'Should have "Id" as an alias for WorkspaceId parameter' {
+            $param = (Get-Command -Name 'Update-FabricWorkspace').Parameters['WorkspaceId']
+            $param.Aliases | Should -Contain 'Id'
+        }
+    }
+
     Context 'When updating workspace successfully (200)' {
         BeforeAll {
             Mock -CommandName Confirm-TokenState -MockWith { }
