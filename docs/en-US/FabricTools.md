@@ -406,11 +406,6 @@ Uploads a library to the staging environment in a Microsoft Fabric workspace.
 
 Imports items using the Power BI Project format (PBIP) into a Fabric workspace from a specified file system source.
 
-### [Invoke-FabricAPIRequest_duplicate](Invoke-FabricAPIRequest_duplicate.md)
-
-Sends an HTTP request to a Fabric API endpoint and retrieves the response.
-Takes care of: authentication, 429 throttling, Long-Running-Operation (LRO) response
-
 ### [Invoke-FabricDatasetRefresh](Invoke-FabricDatasetRefresh.md)
 
 This function invokes a refresh of a PowerBI dataset
@@ -874,4 +869,3 @@ Updates the role assignment for a specific principal in a Fabric workspace.
 ### [Write-FabricLakehouseTableData](Write-FabricLakehouseTableData.md)
 
 Loads data into a specified table in a Lakehouse within a Fabric workspace.
-

@@ -92,8 +92,7 @@ BeforeDiscovery {
                 'Get-FabricUri',
                 'Get-FileDefinitionParts',
                 'Set-FabConfig',
-                'Write-Message',
-                'Invoke-FabricAPIRequest_duplicate'
+                'Write-Message'
             )
         })
     {
