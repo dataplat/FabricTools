@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Added `Id` parameter alias to Workspace functions that take `WorkspaceId` to support compatibility with API field names and issue #158.
+
 ### Deprecated
 
 ### Removed

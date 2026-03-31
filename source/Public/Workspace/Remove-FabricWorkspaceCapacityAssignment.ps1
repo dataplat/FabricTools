@@ -28,6 +28,7 @@ function Remove-FabricWorkspaceCapacityAssignment
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
+        [Alias("Id")]
         [guid]$WorkspaceId
     )
     try

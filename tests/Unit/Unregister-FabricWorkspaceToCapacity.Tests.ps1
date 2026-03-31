@@ -29,6 +29,13 @@ Describe "Unregister-FabricWorkspaceToCapacity" -Tag "UnitTests" {
         }
     }
 
+    Context 'Parameter alias validation' {
+        It 'Should have "Id" as an alias for WorkspaceId parameter' {
+            $param = (Get-Command -Name 'Unregister-FabricWorkspaceToCapacity').Parameters['WorkspaceId']
+            $param.Aliases | Should -Contain 'Id'
+        }
+    }
+
     Context "Successful workspace unregistration from capacity" {
         BeforeAll {
             Mock -CommandName Invoke-FabricRestMethod -MockWith {

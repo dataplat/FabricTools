@@ -32,6 +32,13 @@ Describe "Add-FabricWorkspaceRoleAssignment" -Tag "UnitTests" {
         }
     }
 
+    Context 'Parameter alias validation' {
+        It 'Should have "Id" as an alias for WorkspaceId parameter' {
+            $param = (Get-Command -Name 'Add-FabricWorkspaceRoleAssignment').Parameters['WorkspaceId']
+            $param.Aliases | Should -Contain 'Id'
+        }
+    }
+
     Context 'When assigning role successfully (201)' {
         BeforeAll {
             Mock -CommandName Confirm-TokenState -MockWith { }

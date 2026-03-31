@@ -30,6 +30,13 @@ Describe "Get-FabricWorkspaceUser" -Tag "UnitTests" {
         }
     }
 
+    Context 'Parameter alias validation' {
+        It 'Should have "Id" as an alias for WorkspaceId parameter' {
+            $param = (Get-Command -Name 'Get-FabricWorkspaceUser').Parameters['WorkspaceId']
+            $param.Aliases | Should -Contain 'Id'
+        }
+    }
+
     Context "Alias validation" {
         $testCases = @('Get-FabWorkspaceUsers', 'Get-FabricWorkspaceUsers')
 

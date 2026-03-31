@@ -41,6 +41,7 @@ The ID of the capacity to which the workspace will be Seted. This is a mandatory
     param(
         # WorkspaceId is a mandatory parameter. It represents the ID of the workspace to be Seted.
         [Parameter(ParameterSetName = 'WorkspaceId')]
+        [Alias("Id")]
         [guid]$WorkspaceId,
 
         # Workspace is a mandatory parameter. It represents the workspace object to be Seted.

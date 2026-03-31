@@ -29,6 +29,13 @@ Describe "Add-FabricWorkspaceIdentity" -Tag "UnitTests" {
         }
     }
 
+    Context 'Parameter alias validation' {
+        It 'Should have "Id" as an alias for WorkspaceId parameter' {
+            $param = (Get-Command -Name 'Add-FabricWorkspaceIdentity').Parameters['WorkspaceId']
+            $param.Aliases | Should -Contain 'Id'
+        }
+    }
+
     Context 'When provisioning identity successfully with immediate completion (200)' {
         BeforeAll {
             Mock -CommandName Confirm-TokenState -MockWith { }

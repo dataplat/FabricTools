@@ -30,6 +30,13 @@ Describe "Add-FabricWorkspaceCapacityAssignment" -Tag "UnitTests" {
         }
     }
 
+    Context 'Parameter alias validation' {
+        It 'Should have "Id" as an alias for WorkspaceId parameter' {
+            $param = (Get-Command -Name 'Add-FabricWorkspaceCapacityAssignment').Parameters['WorkspaceId']
+            $param.Aliases | Should -Contain 'Id'
+        }
+    }
+
     Context 'When assigning capacity successfully (202)' {
         BeforeAll {
             Mock -CommandName Confirm-TokenState -MockWith { }

@@ -29,6 +29,13 @@ Describe "Remove-FabricWorkspaceRoleAssignment" -Tag "UnitTests" {
         }
     }
 
+    Context 'Parameter alias validation' {
+        It 'Should have "Id" as an alias for WorkspaceId parameter' {
+            $param = (Get-Command -Name 'Remove-FabricWorkspaceRoleAssignment').Parameters['WorkspaceId']
+            $param.Aliases | Should -Contain 'Id'
+        }
+    }
+
     Context "Successful workspace role assignment removal" {
         BeforeAll {
             Mock -CommandName Invoke-FabricRestMethod -MockWith {

@@ -28,6 +28,13 @@ Describe "New-FabricWorkspaceUsageMetricsReport" -Tag "UnitTests" {
         }
     }
 
+    Context 'Parameter alias validation' {
+        It 'Should have "Id" as an alias for WorkspaceId parameter' {
+            $param = (Get-Command -Name 'New-FabricWorkspaceUsageMetricsReport').Parameters['WorkspaceId']
+            $param.Aliases | Should -Contain 'Id'
+        }
+    }
+
     Context "Successful workspace usage metrics report creation" {
         BeforeAll {
             Mock -CommandName Confirm-TokenState -MockWith { return $true }
