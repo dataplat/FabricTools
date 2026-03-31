@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added `Id` parameter alias to Workspace functions that take `WorkspaceId` to support compatibility with API field names and issue #158.
 - Removed all legacy FAB and PowerBI aliases from functions to clean up the module and remove references to old PowerBI-focused codebase (issue #47).
+- The module is compatible with PS 5.1 (issue #166)
 
 ### Deprecated
 
