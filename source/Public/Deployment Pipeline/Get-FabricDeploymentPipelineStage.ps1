@@ -70,7 +70,7 @@ Author: Kamil Nowinski
             HandleResponse = $true
             ExtractValue = $true
             TypeName = "deployment pipeline stage"
-            ObjectIdOrName = $StageId ? $StageId : $DeploymentPipelineId
+            ObjectIdOrName = if ($StageId) { $StageId } else { $DeploymentPipelineId }
         }
         $response = Invoke-FabricRestMethod @apiParameters
 

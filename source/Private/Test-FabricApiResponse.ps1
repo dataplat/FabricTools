@@ -168,7 +168,7 @@ function Test-FabricApiResponse {
 
     # Try to get Name of Id from the response when new item is created
     if ($Operation -eq 'New' -and -not $ObjectIdOrName) {
-        $ObjectIdOrName = $Response.DisplayName ? $Response.DisplayName : $Response.id
+        $ObjectIdOrName = if ($Response.DisplayName) { $Response.DisplayName } else { $Response.id }
     }
     switch ($Operation) {
         'New'    { $msg = "$TypeName '$ObjectIdOrName' created successfully."; $level = 'Info' }

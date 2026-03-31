@@ -18,7 +18,7 @@ function New-FabricReport
     An optional description for the Report.
 
 .PARAMETER ReportPathDefinition
-    A mandatory path to the folder that contains Report definition files to upload.
+    An optional path to the folder that contains Report definition files to upload.
 
 
 .EXAMPLE
@@ -49,7 +49,7 @@ function New-FabricReport
         [ValidateNotNullOrEmpty()]
         [string]$ReportDescription,
 
-        [Parameter(Mandatory = $true)]
+        [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
         [string]$ReportPathDefinition
     )
