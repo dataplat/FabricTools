@@ -18,6 +18,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+- Removed `Invoke-FabricAPIRequest_duplicate` and `Invoke-FabricRestMethodExtended`
+
 ### Security
 
 ## 0.31.0 - 2025-12-14
