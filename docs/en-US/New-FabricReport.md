@@ -21,7 +21,7 @@ Creates a new Report in a specified Microsoft Fabric workspace.
 
 ```
 New-FabricReport [-WorkspaceId] <guid> [-ReportName] <string> [[-ReportDescription] <string>]
- [-ReportPathDefinition] <string> [-WhatIf] [-Confirm] [<CommonParameters>]
+ [[-ReportPathDefinition] <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## ALIASES
@@ -111,7 +111,7 @@ HelpMessage: ''
 
 ### -ReportPathDefinition
 
-A mandatory path to the folder that contains Report definition files to upload.
+An optional path to the folder that contains Report definition files to upload.
 
 ```yaml
 Type: System.String
@@ -121,7 +121,7 @@ Aliases: []
 ParameterSets:
 - Name: (All)
   Position: 3
-  IsRequired: true
+  IsRequired: false
   ValueFromPipeline: false
   ValueFromPipelineByPropertyName: false
   ValueFromRemainingArguments: false
@@ -195,4 +195,3 @@ Author: Tiago Balabuch
 ## RELATED LINKS
 
 {{ Fill in the related links here }}
-

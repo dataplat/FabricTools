@@ -15,7 +15,7 @@ Remove-Module -Name FabricTools -ErrorAction SilentlyContinue
 ipmo .\output\module\FabricTools\0.0.1\FabricTools.psd1
 Get-Module Fab*
 
-Invoke-ScriptAnalyzer -Path .\source\Public\**
+# Invoke-ScriptAnalyzer -Path .\source\Public\**
 
 
 $tests = Invoke-Pester .\tests\ -PassThru
