@@ -44,6 +44,9 @@ NestedModule:
 BuildWorkflow:
   '.': # "." is the default Invoke-Build workflow. It is called when no -Tasks is specified to the build.ps1
     - build
+
+  build_and_test:
+    - build
     - test
 
   build:
