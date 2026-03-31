@@ -20,9 +20,6 @@ function Invoke-FabricDatasetRefresh {
     Author: Ioana Bouariu
 
 #>
-    # Define aliases for the function for flexibility.
-    [Alias("Invoke-FabDatasetRefresh")]
-
     # Define parameters for the workspace ID and dataset ID.
     param(
         # Mandatory parameter for the dataset ID

@@ -29,8 +29,6 @@ function Get-FabricWorkspaceDatasetRefreshes {
     #>
 
     # Define a function to get the refresh history of all datasets in a PowerBI workspace
-    # Set aliases for the function
-    [Alias("Get-FabWorkspaceDatasetRefreshes")]
     param(
         # Define a mandatory parameter for the workspace ID
         [Parameter(Mandatory = $true)]

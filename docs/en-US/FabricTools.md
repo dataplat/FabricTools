@@ -5,7 +5,7 @@ HelpInfoUri: https://www.github.com/dataplat/FabricTools
 Locale: en-US
 Module Guid: f2a0f9e6-fab6-41fc-9e1c-0c94ff38f794
 Module Name: FabricTools
-ms.date: 07/18/2025
+ms.date: 03/31/2026
 PlatyPS schema version: 2024-05-01
 title: FabricTools Module
 ---
@@ -421,12 +421,7 @@ Executes a KQL command in a Kusto Database.
 
 ### [Invoke-FabricRestMethod](Invoke-FabricRestMethod.md)
 
-Sends an HTTP request to a Fabric API endpoint and retrieves the response.
-
-### [Invoke-FabricRestMethodExtended](Invoke-FabricRestMethodExtended.md)
-
-Sends an HTTP request to a Fabric API endpoint and retrieves the response.
-Takes care of: authentication, 429 throttling, Long-Running-Operation (LRO) response
+Sends an HTTP request to a Fabric or Power BI API endpoint and retrieve the response.
 
 ### [New-FabricCopyJob](New-FabricCopyJob.md)
 
@@ -720,6 +715,10 @@ Suspends a capacity.
 
 Unregisters a workspace from a capacity.
 
+### [Update-FabricCapacity](Update-FabricCapacity.md)
+
+Creates or updates a Microsoft Fabric capacity.
+
 ### [Update-FabricCapacityTenantSettingOverrides](Update-FabricCapacityTenantSettingOverrides.md)
 
 Updates tenant setting overrides for a specified capacity ID.
@@ -875,3 +874,4 @@ Updates the role assignment for a specific principal in a Fabric workspace.
 ### [Write-FabricLakehouseTableData](Write-FabricLakehouseTableData.md)
 
 Loads data into a specified table in a Lakehouse within a Fabric workspace.
+

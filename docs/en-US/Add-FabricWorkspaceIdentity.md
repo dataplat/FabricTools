@@ -4,7 +4,7 @@ external help file: FabricTools-Help.xml
 HelpUri: ''
 Locale: en-US
 Module Name: FabricTools
-ms.date: 07/18/2025
+ms.date: 03/31/2026
 PlatyPS schema version: 2024-05-01
 title: Add-FabricWorkspaceIdentity
 ---
@@ -49,7 +49,8 @@ The unique identifier of the workspace for which the identity will be provisione
 Type: System.Guid
 DefaultValue: ''
 SupportsWildcards: false
-Aliases: []
+Aliases:
+- Id
 ParameterSets:
 - Name: (All)
   Position: 0

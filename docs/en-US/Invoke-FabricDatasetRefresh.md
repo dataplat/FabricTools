@@ -4,7 +4,7 @@ external help file: FabricTools-Help.xml
 HelpUri: ''
 Locale: en-US
 Module Name: FabricTools
-ms.date: 07/18/2025
+ms.date: 03/31/2026
 PlatyPS schema version: 2024-05-01
 title: Invoke-FabricDatasetRefresh
 ---
@@ -24,8 +24,6 @@ Invoke-FabricDatasetRefresh -DatasetID <guid> [<CommonParameters>]
 ```
 
 ## ALIASES
-
-Invoke-FabDatasetRefresh
 
 ## DESCRIPTION
 
@@ -84,7 +82,7 @@ Alias: Invoke-FabDatasetRefresh
 Author: Ioana Bouariu
 
 
-Define aliases for the function for flexibility.
+Define parameters for the workspace ID and dataset ID.
 
 ## RELATED LINKS
 

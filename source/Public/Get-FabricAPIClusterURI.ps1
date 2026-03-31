@@ -18,8 +18,6 @@ function Get-FabricAPIclusterURI {
 
     #>
 
-    # Define aliases for the function for flexibility.
-    [Alias("Get-FabAPIClusterURI")]
     [CmdletBinding()]
     [OutputType([string])]
     Param (

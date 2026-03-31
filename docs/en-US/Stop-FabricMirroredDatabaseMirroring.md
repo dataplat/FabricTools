@@ -4,7 +4,7 @@ external help file: FabricTools-Help.xml
 HelpUri: ''
 Locale: en-US
 Module Name: FabricTools
-ms.date: 07/18/2025
+ms.date: 03/31/2026
 PlatyPS schema version: 2024-05-01
 title: Stop-FabricMirroredDatabaseMirroring
 ---
@@ -89,7 +89,7 @@ HelpMessage: ''
 
 ### -WhatIf
 
-Tells PowerShell to run the command in a mode that only reports what would happen, but not actually let the command run or make changes.
+Runs the command in a mode that only reports what would happen without performing the actions.
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter

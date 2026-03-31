@@ -23,9 +23,6 @@ Author: Ioana Bouariu
 
     #>
 
-    # Define aliases for the function for flexibility.
-    [Alias("Get-FabCapacityRefreshables")]
-
     # Define a mandatory parameter for the number of top refreshable capacities to retrieve.
     Param (
         [Parameter(Mandatory = $false)]

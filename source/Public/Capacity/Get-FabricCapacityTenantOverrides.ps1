@@ -21,9 +21,6 @@ Author: Ioana Bouariu
     #>
 
     # This function retrieves the tenant overrides for all capacities.
-    # Define aliases for the function for flexibility.
-    [Alias("Get-FabCapacityTenantOverrides")]
-
     Param (
     )
 

@@ -4,7 +4,7 @@ external help file: FabricTools-Help.xml
 HelpUri: ''
 Locale: en-US
 Module Name: FabricTools
-ms.date: 07/18/2025
+ms.date: 03/31/2026
 PlatyPS schema version: 2024-05-01
 title: Connect-FabricAccount
 ---
@@ -53,10 +53,29 @@ Connect-FabricAccount -TenantId 'xxx' -credential $credential
 
 ### EXAMPLE 3
 
-Connects as Service Principal using id and secret
+Connects as Service Principal using AppId and secret
 
 ```powershell
-Connect-FabricAccount -TenantId 'xxx' -ServicePrincipalId 'appId' -ServicePrincipalSecret $secret
+$TenantID               = '12345678-1234-1234-1234-123456789012'
+$ServicePrincipalId     = '4cbbe76e-1234-1234-0000-ffffffffffff'
+$ServicePrincipalSecret = 'xyz'
+
+$ServicePrincipalSecretSecure = ($ServicePrincipalSecret | ConvertTo-SecureString -AsPlainText -Force)
+Connect-FabricAccount -TenantId $TenantID -ServicePrincipalId $ServicePrincipalId -ServicePrincipalSecret $ServicePrincipalSecretSecure -Reset
+```
+
+### EXAMPLE 4
+
+Connects as Service Principal using credential object
+
+```powershell
+$TenantID               = '12345678-1234-1234-1234-123456789012'
+$ServicePrincipalId     = '4cbbe76e-1234-1234-0000-ffffffffffff'
+$ServicePrincipalSecret = 'xyz'
+
+$ServicePrincipalSecretSecure = ($ServicePrincipalSecret | ConvertTo-SecureString -AsPlainText -Force)
+$credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $ServicePrincipalId, $ServicePrincipalSecretSecure
+Connect-FabricAccount -TenantId $TenantID -Credential $credential -Verbose -Reset
 ```
 
 ## PARAMETERS
@@ -193,7 +212,7 @@ HelpMessage: ''
 
 ### -WhatIf
 
-Tells PowerShell to run the command in a mode that only reports what would happen, but not actually let the command run or make changes.
+Runs the command in a mode that only reports what would happen without performing the actions.
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
