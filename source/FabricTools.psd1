@@ -57,7 +57,8 @@ PowerShellVersion = '5.1'
 RequiredModules = @(
     @{ ModuleName = 'Az.Accounts' ; ModuleVersion = '5.0.0' },
     @{ ModuleName = 'MicrosoftPowerBIMgmt.Profile' ; ModuleVersion = '1.2.1111' },
-    @{ ModuleName = 'Az.Resources' ; ModuleVersion = '6.15.1' }
+    @{ ModuleName = 'Az.Resources' ; ModuleVersion = '6.15.1' },
+    @{ ModuleName = 'PSFramework' ; ModuleVersion = '1.0.0' }
 )
 
 # Assemblies that must be loaded prior to importing this module.
