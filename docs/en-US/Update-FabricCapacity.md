@@ -6,48 +6,108 @@ Locale: en-US
 Module Name: FabricTools
 ms.date: 03/31/2026
 PlatyPS schema version: 2024-05-01
-title: New-FabricKQLDatabase
+title: Update-FabricCapacity
 ---
 
-# New-FabricKQLDatabase
+# Update-FabricCapacity
 
 ## SYNOPSIS
 
-Creates a new KQLDatabase in a specified Microsoft Fabric workspace.
+Creates or updates a Microsoft Fabric capacity.
 
 ## SYNTAX
 
 ### __AllParameterSets
 
 ```
-New-FabricKQLDatabase [-WorkspaceId] <guid> [-KQLDatabaseName] <string>
- [[-KQLDatabaseDescription] <string>] [[-parentEventhouseId] <guid>] [-KQLDatabaseType] <string>
- [[-KQLInvitationToken] <string>] [[-KQLSourceClusterUri] <string>]
- [[-KQLSourceDatabaseName] <string>] [[-KQLDatabasePathDefinition] <string>]
- [[-KQLDatabasePathPlatformDefinition] <string>] [[-KQLDatabasePathSchemaDefinition] <string>]
- [-WhatIf] [-Confirm] [<CommonParameters>]
+Update-FabricCapacity [-SubscriptionId] <guid> [-ResourceGroupName] <string>
+ [-CapacityName] <string> [-SkuName] <string> [-Location] <string>
+ [-AdministrationMembers] <string[]> [[-Tags] <hashtable>] [-NoWait] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## ALIASES
 
 ## DESCRIPTION
 
-This function sends a POST request to the Microsoft Fabric API to create a new KQLDatabase
-in the specified workspace.
-It supports optional parameters for KQLDatabase description
-and path definitions for the KQLDatabase content.
+The `Update-FabricCapacity` function sends a PATCH request to the Microsoft Fabric API to create or update a capacity
+in the specified Azure subscription and resource group.
+It supports parameters for capacity administration,
+SKU details, and optional tags.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 
-Creates a new KQLDatabase named "New KQLDatabase" in the workspace with ID "workspace-12345".
+```powershell
+$azureResource = @{
+    subscriptionID = 'GUID-GUID'
+    ResourceGroup  = 'TestRG'
+    CapacityName   = 'fabricblogdemof4'
+    Location       = 'uksouth'
+}
+Update-FabricCapacity @azureResource -SkuName 'F8' -AdministrationMembers 'azsdktest@microsoft.com' -Debug -Confirm:$false
+```
+
+### EXAMPLE 2
 
 ```powershell
-New-FabricKQLDatabase -WorkspaceId "workspace-12345" -KQLDatabaseName "New KQLDatabase"
+$azureResource = @{
+    subscriptionID = 'GUID-GUID'
+    ResourceGroup  = 'TestRG'
+    CapacityName   = 'fabricblogdemof4'
+    Location       = 'uksouth'
+    SkuName        = 'F8'
+    AdministrationMembers = 'azsdktest@microsoft.com'
+}
+Update-FabricCapacity @azureResource -Tags @{Environment="Production"; Owner="IT Team"} -Confirm:$false
 ```
 
 ## PARAMETERS
+
+### -AdministrationMembers
+
+An array of administrator user identities for the capacity administration.
+
+```yaml
+Type: System.String[]
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: 5
+  IsRequired: true
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -CapacityName
+
+The name of the Microsoft Fabric capacity.
+It must be a minimum of 3 characters, and a maximum of 63.
+Must match pattern: ^[a-z][a-z0-9]*$
+
+```yaml
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: 2
+  IsRequired: true
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
 
 ### -Confirm
 
@@ -71,115 +131,9 @@ AcceptedValues: []
 HelpMessage: ''
 ```
 
-### -KQLDatabaseDescription
+### -Location
 
-An optional description for the KQLDatabase.
-
-```yaml
-Type: System.String
-DefaultValue: ''
-SupportsWildcards: false
-Aliases: []
-ParameterSets:
-- Name: (All)
-  Position: 2
-  IsRequired: false
-  ValueFromPipeline: false
-  ValueFromPipelineByPropertyName: false
-  ValueFromRemainingArguments: false
-DontShow: false
-AcceptedValues: []
-HelpMessage: ''
-```
-
-### -KQLDatabaseName
-
-The name of the KQLDatabase to be created.
-
-```yaml
-Type: System.String
-DefaultValue: ''
-SupportsWildcards: false
-Aliases: []
-ParameterSets:
-- Name: (All)
-  Position: 1
-  IsRequired: true
-  ValueFromPipeline: false
-  ValueFromPipelineByPropertyName: false
-  ValueFromRemainingArguments: false
-DontShow: false
-AcceptedValues: []
-HelpMessage: ''
-```
-
-### -KQLDatabasePathDefinition
-
-An optional path to the KQLDatabase definition file (e.g., .ipynb file) to upload.
-
-```yaml
-Type: System.String
-DefaultValue: ''
-SupportsWildcards: false
-Aliases: []
-ParameterSets:
-- Name: (All)
-  Position: 8
-  IsRequired: false
-  ValueFromPipeline: false
-  ValueFromPipelineByPropertyName: false
-  ValueFromRemainingArguments: false
-DontShow: false
-AcceptedValues: []
-HelpMessage: ''
-```
-
-### -KQLDatabasePathPlatformDefinition
-
-An optional path to the platform-specific definition (e.g., .platform file) to upload.
-
-```yaml
-Type: System.String
-DefaultValue: ''
-SupportsWildcards: false
-Aliases: []
-ParameterSets:
-- Name: (All)
-  Position: 9
-  IsRequired: false
-  ValueFromPipeline: false
-  ValueFromPipelineByPropertyName: false
-  ValueFromRemainingArguments: false
-DontShow: false
-AcceptedValues: []
-HelpMessage: ''
-```
-
-### -KQLDatabasePathSchemaDefinition
-
-the path to the KQLDatabase schema definition file (e.g., .kql file) to upload.
-
-```yaml
-Type: System.String
-DefaultValue: ''
-SupportsWildcards: false
-Aliases: []
-ParameterSets:
-- Name: (All)
-  Position: 10
-  IsRequired: false
-  ValueFromPipeline: false
-  ValueFromPipelineByPropertyName: false
-  ValueFromRemainingArguments: false
-DontShow: false
-AcceptedValues: []
-HelpMessage: ''
-```
-
-### -KQLDatabaseType
-
-The type of KQLDatabase to create.
-Valid values are "ReadWrite" and "Shortcut".
+The Azure region where the capacity is located (e.g., "uksouth").
 
 ```yaml
 Type: System.String
@@ -198,18 +152,18 @@ AcceptedValues: []
 HelpMessage: ''
 ```
 
-### -KQLInvitationToken
+### -NoWait
 
-An optional invitation token for the KQLDatabase.
+If specified, the function will not wait for the operation to complete and will return immediately.
 
 ```yaml
-Type: System.String
-DefaultValue: ''
+Type: System.Management.Automation.SwitchParameter
+DefaultValue: False
 SupportsWildcards: false
 Aliases: []
 ParameterSets:
 - Name: (All)
-  Position: 5
+  Position: Named
   IsRequired: false
   ValueFromPipeline: false
   ValueFromPipelineByPropertyName: false
@@ -219,30 +173,10 @@ AcceptedValues: []
 HelpMessage: ''
 ```
 
-### -KQLSourceClusterUri
+### -ResourceGroupName
 
-An optional source cluster URI for the KQLDatabase.
-
-```yaml
-Type: System.String
-DefaultValue: ''
-SupportsWildcards: false
-Aliases: []
-ParameterSets:
-- Name: (All)
-  Position: 6
-  IsRequired: false
-  ValueFromPipeline: false
-  ValueFromPipelineByPropertyName: false
-  ValueFromRemainingArguments: false
-DontShow: false
-AcceptedValues: []
-HelpMessage: ''
-```
-
-### -KQLSourceDatabaseName
-
-An optional source database name for the KQLDatabase.
+The name of the resource group.
+The name is case insensitive.
 
 ```yaml
 Type: System.String
@@ -251,8 +185,8 @@ SupportsWildcards: false
 Aliases: []
 ParameterSets:
 - Name: (All)
-  Position: 7
-  IsRequired: false
+  Position: 1
+  IsRequired: true
   ValueFromPipeline: false
   ValueFromPipelineByPropertyName: false
   ValueFromRemainingArguments: false
@@ -261,10 +195,31 @@ AcceptedValues: []
 HelpMessage: ''
 ```
 
-### -parentEventhouseId
+### -SkuName
 
-The ID of the parent Eventhouse item for the KQLDatabase.
-This is mandatory for ReadWrite type databases.
+The name of the SKU level (e.g., "F2").
+
+```yaml
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: 3
+  IsRequired: true
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -SubscriptionId
+
+The ID of the target subscription.
+The value must be a UUID.
 
 ```yaml
 Type: System.Guid
@@ -273,7 +228,28 @@ SupportsWildcards: false
 Aliases: []
 ParameterSets:
 - Name: (All)
-  Position: 3
+  Position: 0
+  IsRequired: true
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -Tags
+
+Optional resource tags as a hashtable.
+
+```yaml
+Type: System.Collections.Hashtable
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: 6
   IsRequired: false
   ValueFromPipeline: false
   ValueFromPipelineByPropertyName: false
@@ -305,27 +281,6 @@ AcceptedValues: []
 HelpMessage: ''
 ```
 
-### -WorkspaceId
-
-The unique identifier of the workspace where the KQLDatabase will be created.
-
-```yaml
-Type: System.Guid
-DefaultValue: ''
-SupportsWildcards: false
-Aliases: []
-ParameterSets:
-- Name: (All)
-  Position: 0
-  IsRequired: true
-  ValueFromPipeline: false
-  ValueFromPipelineByPropertyName: false
-  ValueFromRemainingArguments: false
-DontShow: false
-AcceptedValues: []
-HelpMessage: ''
-```
-
 ### CommonParameters
 
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable,
@@ -339,14 +294,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-- Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
 - Calls `Confirm-TokenState` to ensure token validity before making the API request.
-- Precedent Request Body
-    - Definition file high priority.
-    - CreationPayload is evaluate only if Definition file is not provided.
-        - invitationToken has priority over all other payload fields.
+- Uses Azure Resource Manager API endpoint for capacity management.
 
-Author: Tiago Balabuch
+Author: Kamil Nowinski
 
 ## RELATED LINKS
 

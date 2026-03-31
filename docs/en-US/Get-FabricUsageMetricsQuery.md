@@ -4,7 +4,7 @@ external help file: FabricTools-Help.xml
 HelpUri: ''
 Locale: en-US
 Module Name: FabricTools
-ms.date: 07/18/2025
+ms.date: 03/31/2026
 PlatyPS schema version: 2024-05-01
 title: Get-FabricUsageMetricsQuery
 ---
@@ -20,13 +20,11 @@ Retrieves usage metrics for a specific dataset.
 ### __AllParameterSets
 
 ```
-Get-FabricUsageMetricsQuery [-DatasetID] <guid> [-groupId] <guid> [-reportname] <Object>
+Get-FabricUsageMetricsQuery [-DatasetID] <guid> [-groupId] <guid> [-reportName] <Object>
  [[-ImpersonatedUser] <string>] [<CommonParameters>]
 ```
 
 ## ALIASES
-
-Get-FabUsageMetricsQuery
 
 ## DESCRIPTION
 
@@ -109,7 +107,7 @@ AcceptedValues: []
 HelpMessage: ''
 ```
 
-### -reportname
+### -reportName
 
 The name of the report.
 This is a mandatory parameter.
