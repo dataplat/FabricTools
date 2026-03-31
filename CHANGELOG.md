@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed PowerShell 5.1 compatibility by replacing ternary operators with if-else statements (issue #166)
 - Added PSFramework as a required module dependency to prevent "not recognized" errors on fresh environments (issue #167)
 - Added `Id` parameter alias to Workspace functions that take `WorkspaceId` to support compatibility with API field names and issue #158.
+- The module is compatible with PS 5.1 (issue #166)
 
 ### Deprecated
 
