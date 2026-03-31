@@ -11,14 +11,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Made `ReportPathDefinition` parameter optional in `New-FabricReport` (issue #43)
+- Fixed PowerShell 5.1 compatibility by replacing ternary operators with if-else statements (issue #166)
+- Added PSFramework as a required module dependency to prevent "not recognized" errors on fresh environments (issue #167)
 - Added `Id` parameter alias to Workspace functions that take `WorkspaceId` to support compatibility with API field names and issue #158.
-- Removed all legacy FAB and PowerBI aliases from functions to clean up the module and remove references to old PowerBI-focused codebase (issue #47).
 
 ### Deprecated
 
 ### Removed
 
 - Removed `Invoke-FabricAPIRequest_duplicate` and `Invoke-FabricRestMethodExtended`
+- Removed all legacy FAB and PowerBI aliases from functions to clean up the module and remove references to old PowerBI-focused codebase (issue #47).
 
 ### Security
 
