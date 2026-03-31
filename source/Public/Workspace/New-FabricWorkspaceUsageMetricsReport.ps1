@@ -23,8 +23,6 @@ Author: Ioana Bouariu
 
     #>
 
-    # Define aliases for the function for flexibility.
-    [Alias("New-FabWorkspaceUsageMetricsReport")]
     [CmdletBinding(SupportsShouldProcess)]
     # Define a parameter for the workspace ID.
     param(

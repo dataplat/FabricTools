@@ -61,10 +61,6 @@ Author: Ioana Bouariu
     #>
 
     # This function retrieves the users of a workspace.
-    # Define aliases for the function for flexibility.
-    [Alias("Get-FabWorkspaceUsers")]
-    [Alias("Get-FabricWorkspaceUsers")]
-
     # Define parameters for the workspace ID and workspace object.
     param(
         [Parameter(Mandatory = $true, ParameterSetName = 'WorkspaceId')]

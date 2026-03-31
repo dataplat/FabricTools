@@ -25,8 +25,6 @@ Author: Ioana Bouariu
 
     # This function retrieves the workloads for a specific capacity.
     # Define aliases for the function for flexibility.
-    [Alias("Get-FabCapacityWorkload")]
-
     # Define a mandatory parameter for the capacity ID.
     Param (
         [Parameter(Mandatory = $true)]

@@ -26,9 +26,6 @@ Author: Ioana Bouariu
 
     #>
 
-    # Define aliases for the function for flexibility.
-    [Alias("Get-FabWorkspaceUsageMetricsData")]
-
     # Define parameters for the workspace ID and username.
     param(
         [Parameter(Mandatory = $true)]

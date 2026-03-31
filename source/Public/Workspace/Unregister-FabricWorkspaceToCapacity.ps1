@@ -32,7 +32,6 @@ function Unregister-FabricWorkspaceToCapacity {
     .NOTES
         Author: Ioana Bouariu
     #>
-    [Alias("Unregister-FabWorkspaceToCapacity")]
     [CmdletBinding(SupportsShouldProcess)]
     param(
         [Parameter(Mandatory = $true, ParameterSetName = 'WorkspaceId')]

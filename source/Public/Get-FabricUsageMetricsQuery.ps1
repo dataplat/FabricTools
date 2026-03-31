@@ -37,9 +37,6 @@ Author: Ioana Bouariu
     #>
 
     # This function retrieves usage metrics for a specific dataset.
-    # Define aliases for the function for flexibility.
-    [Alias("Get-FabUsageMetricsQuery")]
-
     # Define parameters for the dataset ID, group ID, report name, token, and impersonated user.
     param (
         [Parameter(Mandatory = $true)]

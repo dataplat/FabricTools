@@ -35,8 +35,6 @@ The ID of the capacity to which the workspace will be Seted. This is a mandatory
     Author: Ioana Bouariu
     #>
 
-    # It supports multiple aliases for flexibility.
-    [Alias("Register-FabWorkspaceToCapacity")]
     [CmdletBinding(SupportsShouldProcess)]
     param(
         # WorkspaceId is a mandatory parameter. It represents the ID of the workspace to be Seted.

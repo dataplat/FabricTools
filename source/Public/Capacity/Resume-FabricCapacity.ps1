@@ -27,8 +27,6 @@ function Resume-FabricCapacity {
 
     Author: Ioana Bouariu
     #>
-    # Define aliases for the function for flexibility.
-    [Alias("Resume-FabCapacity")]
     [CmdletBinding(SupportsShouldProcess)]
 
     # Define parameters for the subscription ID, resource group, and capacity.

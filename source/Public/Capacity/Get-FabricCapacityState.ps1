@@ -30,9 +30,6 @@ Author: Ioana Bouariu
     #>
 
     # This function retrieves the state of a specific capacity.
-    # Define aliases for the function for flexibility.
-    [Alias("Get-FabCapacityState")]
-
     # Define mandatory parameters for the subscription ID, resource group, and capacity.
     Param (
         [Parameter(Mandatory = $true)]

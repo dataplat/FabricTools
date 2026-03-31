@@ -26,14 +26,9 @@ function Get-FabricDatasetRefreshes {
       Object. Get-FabricDatasetRefreshes returns an object that contains the refresh history.
 
    .NOTES
-      Alias: Get-PowerBIDatasetRefreshes, Get-FabDatasetRefreshes
-
       Author: Ioana Bouariu
 
    #>
-    # Define aliases for the function for flexibility.
-    [Alias("Get-FabDatasetRefreshes")]
-
     # Define a mandatory parameter for the dataset ID.
     Param (
         [Parameter(Mandatory = $true)]
