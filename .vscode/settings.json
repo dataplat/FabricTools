@@ -20,7 +20,9 @@
         "*.ps1xml": "xml"
     },
     "cSpell.words": [
-        "Balabuch",
+        "Tiago", "Balabuch",
+        "Kamil", "Nowinski",
+        "Lakehouse",
         "buildhelpers",
         "COMPANYNAME",
         "endregion",
