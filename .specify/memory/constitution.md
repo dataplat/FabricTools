@@ -28,7 +28,7 @@ All contributors MUST follow the project's Code of Conduct. Communication and co
 
 ### 2. Develop-in-Source & Reproducible Builds
 
-All development work MUST happen in the `source/` directory. Builds MUST be reproducible using the provided `build.ps1` workflow (examples: `./build.ps1 -ResolveDependency -Tasks noop -UsePSResourceGet` and `./build.ps1 -Tasks build`). The `output/` folder is the canonical build artifact location and MUST not be edited manually; any such edits will be overwritten by the build process.
+All development work MUST happen in the `src/` directory. Builds MUST be reproducible using the provided `build.ps1` workflow (examples: `./build.ps1 -ResolveDependency -Tasks noop -UsePSResourceGet` and `./build.ps1 -Tasks build`). The `output/` folder is the canonical build artifact location and MUST not be edited manually; any such edits will be overwritten by the build process.
 
 ### 3. Test-First Quality Gates
 
@@ -46,12 +46,12 @@ Dependencies MUST be declared and resolved using the build tools (the manifest's
 
 - The module supports PowerShell 5.1 and later as specified in the manifest; contributors MUST ensure compatibility with supported editions.
 - The module is currently published as Public PREVIEW; it MUST NOT be used in production environments without explicit risk acceptance.
-- Required modules listed in `source/FabricTools.psd1` (for example `Az.Accounts`, `MicrosoftPowerBIMgmt.Profile`, `Az.Resources`) MUST be respected; dependency resolution SHOULD use `PSResourceGet` or the included build helpers.
+- Required modules listed in `src/FabricTools.psd1` (for example `Az.Accounts`, `MicrosoftPowerBIMgmt.Profile`, `Az.Resources`) MUST be respected; dependency resolution SHOULD use `PSResourceGet` or the included build helpers.
 - All security disclosures and vulnerability reports MUST follow `SECURITY.md` and be handled confidentially.
 
 ## Development Workflow & Quality Gates
 
-- Develop in `source/` (not in `output/`). Use the Sampler structure described in the Wiki and run dependency resolution before development.
+- Develop in `src/` (not in `output/`). Use the Sampler structure described in the Wiki and run dependency resolution before development.
 - Dependency prep example commands (developer guidance):
 
 	- `./build.ps1 -ResolveDependency -Tasks noop -UsePSResourceGet` — resolve dependencies only.

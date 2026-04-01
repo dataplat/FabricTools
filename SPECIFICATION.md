@@ -6,7 +6,7 @@ FabricTools is a PowerShell module that provides administrative and automation c
 
 ## Key metadata
 
-- Module manifest: [source/FabricTools.psd1](source/FabricTools.psd1)
+- Module manifest: [src/FabricTools.psd1](src/FabricTools.psd1)
   - `ModuleVersion`: 0.31.0
   - `RootModule`: FabricTools.psm1 (generated at build time)
   - `PowerShellVersion` minimum: 5.1
@@ -15,10 +15,10 @@ FabricTools is a PowerShell module that provides administrative and automation c
 
 ## Source layout
 
-- Core module sources: [source](source)
-  - Public cmdlet implementations: `source/Public/**`
-  - Private/internal helpers: `source/Private/**`
-  - Manifest and build-time entrypoints: `source/FabricTools.psd1`, `source/FabricTools.psm1`
+- Core module sources: [source](src)
+  - Public cmdlet implementations: `src/Public/**`
+  - Private/internal helpers: `src/Private/**`
+  - Manifest and build-time entrypoints: `src/FabricTools.psd1`, `src/FabricTools.psm1`
 - Documentation: [docs/en-US](docs/en-US) — one markdown file per cmdlet/area (approx. 214 files)
 - Tests: [tests](tests) — Pester unit tests (approx. 216 test files, many correlating to cmdlets)
 - Helpers and CI: `helper/build-and-test.ps1`, `build.ps1`, `azure-pipelines.yml`

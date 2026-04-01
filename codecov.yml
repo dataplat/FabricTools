@@ -27,5 +27,4 @@ coverage:
 # Use this if there are paths that should not be part of the code coverage, for
 # example a deprecated function where tests has been removed.
 #ignore:
-#  - 'source/Public/Get-Deprecated.ps1'
-
+#  - 'src/Public/Get-Deprecated.ps1'
