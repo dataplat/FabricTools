@@ -121,7 +121,7 @@ function Test-FabricApiResponse {
                 Write-Message -Message "Operation Succeeded" -Level Debug
                 Write-Message -Message "Getting Long Running Operation result" -Level Verbose
 
-                $operationResult = Get-FabricLongRunningOperationResult -operationId $operationId -location $res.Location
+                $operationResult = Get-FabricLongRunningOperationResult -operationId $operationId
                 #Write-Message -Message "Long Running Operation status: $operationResult" -Level Debug
 
                 return $operationResult
