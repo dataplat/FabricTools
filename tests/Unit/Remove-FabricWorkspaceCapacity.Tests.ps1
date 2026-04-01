@@ -1,7 +1,7 @@
 #Requires -Module @{ ModuleName="Pester"; ModuleVersion="5.0"}
 
 BeforeDiscovery {
-    $CommandName = 'Unregister-FabricWorkspaceToCapacity'
+    $CommandName = 'Remove-FabricWorkspaceCapacity'
 }
 
 BeforeAll {
@@ -10,15 +10,14 @@ BeforeAll {
     $PSDefaultParameterValues['InModuleScope:ModuleName'] = $ModuleName
     $PSDefaultParameterValues['Should:ModuleName'] = $ModuleName
 
-    $Command = Get-Command -Name Unregister-FabricWorkspaceToCapacity
+    $Command = Get-Command -Name Remove-FabricWorkspaceCapacity
 }
 
-Describe "Unregister-FabricWorkspaceToCapacity" -Tag "UnitTests" {
+Describe "Remove-FabricWorkspaceCapacity" -Tag "UnitTests" {
 
     Context "Command definition" {
         It 'Should have <ExpectedParameterName> parameter' -ForEach @(
-            @{ ExpectedParameterName = 'WorkspaceId'; ExpectedParameterType = 'guid'; Mandatory = 'False' }
-            @{ ExpectedParameterName = 'Workspace'; ExpectedParameterType = 'object'; Mandatory = 'False' }
+            @{ ExpectedParameterName = 'WorkspaceId'; ExpectedParameterType = 'guid'; Mandatory = 'True' }
         ) {
             $Command | Should -HaveParameter -ParameterName $ExpectedParameterName -Type $ExpectedParameterType -Mandatory:([bool]::Parse($Mandatory))
         }
@@ -31,12 +30,12 @@ Describe "Unregister-FabricWorkspaceToCapacity" -Tag "UnitTests" {
 
     Context 'Parameter alias validation' {
         It 'Should have "Id" as an alias for WorkspaceId parameter' {
-            $param = (Get-Command -Name 'Unregister-FabricWorkspaceToCapacity').Parameters['WorkspaceId']
+            $param = (Get-Command -Name 'Remove-FabricWorkspaceCapacity').Parameters['WorkspaceId']
             $param.Aliases | Should -Contain 'Id'
         }
     }
 
-    Context "Successful workspace unregistration from capacity" {
+    Context "Successful capacity assignment removal" {
         BeforeAll {
             Mock -CommandName Invoke-FabricRestMethod -MockWith {
                 InModuleScope -ModuleName 'FabricTools' {
@@ -47,8 +46,8 @@ Describe "Unregister-FabricWorkspaceToCapacity" -Tag "UnitTests" {
             Mock -CommandName Confirm-TokenState -MockWith { return $true }
         }
 
-        It 'Should unregister workspace from capacity with valid parameters' {
-            { Unregister-FabricWorkspaceToCapacity -WorkspaceId (New-Guid) -Confirm:$false } | Should -Not -Throw
+        It 'Should remove workspace capacity assignment with valid parameters' {
+            { Remove-FabricWorkspaceCapacity -WorkspaceId (New-Guid) -Confirm:$false } | Should -Not -Throw
 
             Should -Invoke -CommandName Invoke-FabricRestMethod -Times 1 -Exactly
         }
@@ -63,12 +62,15 @@ Describe "Unregister-FabricWorkspaceToCapacity" -Tag "UnitTests" {
                 throw "API Error"
             }
             Mock -CommandName Confirm-TokenState -MockWith { return $true }
+            Mock -CommandName Write-Message -MockWith { }
         }
 
-        It 'Should throw an error when API call fails' {
-            {
-                Unregister-FabricWorkspaceToCapacity -WorkspaceId (New-Guid) -Confirm:$false
-            } | Should -Throw
+        It 'Should handle errors gracefully and write error message' {
+            { Remove-FabricWorkspaceCapacity -WorkspaceId (New-Guid) -Confirm:$false } | Should -Not -Throw
+
+            Should -Invoke -CommandName Write-Message -ParameterFilter {
+                $Level -eq 'Error' -and $Message -like "*Failed to unassign workspace from capacity*"
+            }
         }
     }
 }

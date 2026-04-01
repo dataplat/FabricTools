@@ -4,54 +4,41 @@ external help file: FabricTools-Help.xml
 HelpUri: ''
 Locale: en-US
 Module Name: FabricTools
-ms.date: 03/31/2026
+ms.date: 04/01/2026
 PlatyPS schema version: 2024-05-01
-title: Unregister-FabricWorkspaceToCapacity
+title: Remove-FabricWorkspaceCapacity
 ---
 
-# Unregister-FabricWorkspaceToCapacity
+# Remove-FabricWorkspaceCapacity
 
 ## SYNOPSIS
 
-Unregisters a workspace from a capacity.
+Unassigns a Fabric workspace from its capacity.
 
 ## SYNTAX
 
-### WorkspaceId
+### __AllParameterSets
 
 ```
-Unregister-FabricWorkspaceToCapacity -WorkspaceId <guid> [-WhatIf] [-Confirm] [<CommonParameters>]
-```
-
-### WorkspaceObject
-
-```
-Unregister-FabricWorkspaceToCapacity -Workspace <Object> [-WhatIf] [-Confirm] [<CommonParameters>]
+Remove-FabricWorkspaceCapacity [-WorkspaceId] <guid> [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## ALIASES
 
+Unassign-FabricWorkspaceCapacity
+
 ## DESCRIPTION
 
-The Unregister-FabricWorkspaceToCapacity function unregisters a workspace from a capacity in PowerBI.
-It can be used to remove a workspace from a capacity, allowing it to be assigned to a different capacity or remain unassigned.
+The `Remove-FabricWorkspaceCapacity` function sends a POST request to unassign a workspace from its assigned capacity.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 
-Unregisters the workspace with ID "12345678" from the capacity.
+Unassign the workspace with ID "workspace123" from its capacity.
 
 ```powershell
-Unregister-FabricWorkspaceToCapacity -WorkspaceId "12345678"
-```
-
-### EXAMPLE 2
-
-Unregisters the workspace objects piped from Get-FabricWorkspace from the capacity. .INPUTS System.Management.Automation.PSCustomObject
-
-```powershell
-Get-FabricWorkspace | Unregister-FabricWorkspaceToCapacity
+Remove-FabricWorkspaceCapacity -WorkspaceId "workspace123"
 ```
 
 ## PARAMETERS
@@ -100,33 +87,9 @@ AcceptedValues: []
 HelpMessage: ''
 ```
 
-### -Workspace
-
-Specifies the workspace object to be unregistered from the capacity.
-This parameter is mandatory when using the 'WorkspaceObject' parameter set.
-The workspace object can be piped into the function.
-
-```yaml
-Type: System.Object
-DefaultValue: ''
-SupportsWildcards: false
-Aliases: []
-ParameterSets:
-- Name: WorkspaceObject
-  Position: Named
-  IsRequired: true
-  ValueFromPipeline: true
-  ValueFromPipelineByPropertyName: false
-  ValueFromRemainingArguments: false
-DontShow: false
-AcceptedValues: []
-HelpMessage: ''
-```
-
 ### -WorkspaceId
 
-Specifies the ID of the workspace to be unregistered from the capacity.
-This parameter is mandatory when using the 'WorkspaceId' parameter set.
+The unique identifier of the workspace to be unassigned from its capacity.
 
 ```yaml
 Type: System.Guid
@@ -135,8 +98,8 @@ SupportsWildcards: false
 Aliases:
 - Id
 ParameterSets:
-- Name: WorkspaceId
-  Position: Named
+- Name: (All)
+  Position: 0
   IsRequired: true
   ValueFromPipeline: false
   ValueFromPipelineByPropertyName: false
@@ -155,19 +118,14 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### System.Object
-
-{{ Fill in the Description }}
-
 ## OUTPUTS
-
-### System.Object
-
-{{ Fill in the Description }}
 
 ## NOTES
 
-Author: Ioana Bouariu
+- Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
+- Calls `Confirm-TokenState` to ensure token validity before making the API request.
+
+Author: Tiago Balabuch
 
 ## RELATED LINKS
 

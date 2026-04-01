@@ -42,7 +42,7 @@ function Write-Message {
 
         [Parameter()]
         [ValidateSet("Message", "Info", "Error", "Warning", "Critical", "Verbose", "Debug", IgnoreCase = $true)]
-        [string]$Level = "Info",
+        [string]$Level = "Message",
 
         [Parameter()]
         [string]$LogFile

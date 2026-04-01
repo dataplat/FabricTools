@@ -1,7 +1,7 @@
 #Requires -Module @{ ModuleName="Pester"; ModuleVersion="5.0"}
 
 BeforeDiscovery {
-    $CommandName = 'Add-FabricWorkspaceCapacityAssignment'
+    $CommandName = 'Add-FabricWorkspaceCapacity'
 }
 
 BeforeAll {
@@ -11,10 +11,10 @@ BeforeAll {
     $PSDefaultParameterValues['Should:ModuleName'] = $ModuleName
 }
 
-Describe "Add-FabricWorkspaceCapacityAssignment" -Tag "UnitTests" {
+Describe "Add-FabricWorkspaceCapacity" -Tag "UnitTests" {
 
     BeforeAll {
-        $command = Get-Command -Name Add-FabricWorkspaceCapacityAssignment
+        $command = Get-Command -Name Add-FabricWorkspaceCapacity
     }
 
     Context 'Command definition' {
@@ -32,7 +32,7 @@ Describe "Add-FabricWorkspaceCapacityAssignment" -Tag "UnitTests" {
 
     Context 'Parameter alias validation' {
         It 'Should have "Id" as an alias for WorkspaceId parameter' {
-            $param = (Get-Command -Name 'Add-FabricWorkspaceCapacityAssignment').Parameters['WorkspaceId']
+            $param = (Get-Command -Name 'Add-FabricWorkspaceCapacity').Parameters['WorkspaceId']
             $param.Aliases | Should -Contain 'Id'
         }
     }
@@ -55,7 +55,7 @@ Describe "Add-FabricWorkspaceCapacityAssignment" -Tag "UnitTests" {
             $mockWorkspaceId = [guid]::NewGuid()
             $mockCapacityId = [guid]::NewGuid()
 
-            Add-FabricWorkspaceCapacityAssignment -WorkspaceId $mockWorkspaceId -CapacityId $mockCapacityId
+            Add-FabricWorkspaceCapacity -WorkspaceId $mockWorkspaceId -CapacityId $mockCapacityId
 
             Should -Invoke -CommandName Invoke-FabricRestMethod -Times 1 -ParameterFilter {
                 $Uri -like "*workspaces/*/assignToCapacity" -and
@@ -67,7 +67,7 @@ Describe "Add-FabricWorkspaceCapacityAssignment" -Tag "UnitTests" {
             $mockWorkspaceId = [guid]::NewGuid()
             $mockCapacityId = [guid]::NewGuid()
 
-            Add-FabricWorkspaceCapacityAssignment -WorkspaceId $mockWorkspaceId -CapacityId $mockCapacityId
+            Add-FabricWorkspaceCapacity -WorkspaceId $mockWorkspaceId -CapacityId $mockCapacityId
 
             Should -Invoke -CommandName Write-Message -ParameterFilter {
                 $Level -eq 'Info' -and $Message -like "*Successfully assigned workspace*"
@@ -94,7 +94,7 @@ Describe "Add-FabricWorkspaceCapacityAssignment" -Tag "UnitTests" {
             $mockWorkspaceId = [guid]::NewGuid()
             $mockCapacityId = [guid]::NewGuid()
 
-            Add-FabricWorkspaceCapacityAssignment -WorkspaceId $mockWorkspaceId -CapacityId $mockCapacityId
+            Add-FabricWorkspaceCapacity -WorkspaceId $mockWorkspaceId -CapacityId $mockCapacityId
 
             Should -Invoke -CommandName Write-Message -ParameterFilter {
                 $Level -eq 'Error'
@@ -115,7 +115,7 @@ Describe "Add-FabricWorkspaceCapacityAssignment" -Tag "UnitTests" {
             $mockWorkspaceId = [guid]::NewGuid()
             $mockCapacityId = [guid]::NewGuid()
 
-            { Add-FabricWorkspaceCapacityAssignment -WorkspaceId $mockWorkspaceId -CapacityId $mockCapacityId } | Should -Not -Throw
+            { Add-FabricWorkspaceCapacity -WorkspaceId $mockWorkspaceId -CapacityId $mockCapacityId } | Should -Not -Throw
 
             Should -Invoke -CommandName Write-Message -ParameterFilter {
                 $Level -eq 'Error' -and $Message -like "*Failed to assign workspace*"
