@@ -31,4 +31,5 @@ markdownissues.txt
 node_modules
 package-lock.json
 
-# just a comment
+# Agents
+.agents/
