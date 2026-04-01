@@ -6,41 +6,39 @@ Locale: en-US
 Module Name: FabricTools
 ms.date: 04/01/2026
 PlatyPS schema version: 2024-05-01
-title: New-FabricDataPipeline
+title: Remove-FabricWorkspaceCapacity
 ---
 
-# New-FabricDataPipeline
+# Remove-FabricWorkspaceCapacity
 
 ## SYNOPSIS
 
-Creates a new DataPipeline in a specified Microsoft Fabric workspace.
+Unassigns a Fabric workspace from its capacity.
 
 ## SYNTAX
 
 ### __AllParameterSets
 
 ```
-New-FabricDataPipeline [-WorkspaceId] <guid> [-DataPipelineName] <string>
- [[-DataPipelineDescription] <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Remove-FabricWorkspaceCapacity [-WorkspaceId] <guid> [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## ALIASES
 
+Unassign-FabricWorkspaceCapacity
+
 ## DESCRIPTION
 
-This function sends a POST request to the Microsoft Fabric API to create a new DataPipeline
-in the specified workspace.
-It supports optional parameters for DataPipeline description
-and path definitions for the DataPipeline content.
+The `Remove-FabricWorkspaceCapacity` function sends a POST request to unassign a workspace from its assigned capacity.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 
-This example creates a new DataPipeline named "New DataPipeline" in the workspace with ID "workspace-12345" and uploads the definition file from the specified path.
+Unassign the workspace with ID "workspace123" from its capacity.
 
 ```powershell
-New-FabricDataPipeline -WorkspaceId "workspace-12345" -DataPipelineName "New DataPipeline"
+Remove-FabricWorkspaceCapacity -WorkspaceId "workspace123"
 ```
 
 ## PARAMETERS
@@ -59,48 +57,6 @@ ParameterSets:
 - Name: (All)
   Position: Named
   IsRequired: false
-  ValueFromPipeline: false
-  ValueFromPipelineByPropertyName: false
-  ValueFromRemainingArguments: false
-DontShow: false
-AcceptedValues: []
-HelpMessage: ''
-```
-
-### -DataPipelineDescription
-
-An optional description for the DataPipeline.
-
-```yaml
-Type: System.String
-DefaultValue: ''
-SupportsWildcards: false
-Aliases: []
-ParameterSets:
-- Name: (All)
-  Position: 2
-  IsRequired: false
-  ValueFromPipeline: false
-  ValueFromPipelineByPropertyName: false
-  ValueFromRemainingArguments: false
-DontShow: false
-AcceptedValues: []
-HelpMessage: ''
-```
-
-### -DataPipelineName
-
-The name of the DataPipeline to be created.
-
-```yaml
-Type: System.String
-DefaultValue: ''
-SupportsWildcards: false
-Aliases: []
-ParameterSets:
-- Name: (All)
-  Position: 1
-  IsRequired: true
   ValueFromPipeline: false
   ValueFromPipelineByPropertyName: false
   ValueFromRemainingArguments: false
@@ -133,13 +89,14 @@ HelpMessage: ''
 
 ### -WorkspaceId
 
-The unique identifier of the workspace where the DataPipeline will be created.
+The unique identifier of the workspace to be unassigned from its capacity.
 
 ```yaml
 Type: System.Guid
 DefaultValue: ''
 SupportsWildcards: false
-Aliases: []
+Aliases:
+- Id
 ParameterSets:
 - Name: (All)
   Position: 0

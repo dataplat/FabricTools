@@ -6,47 +6,46 @@ Locale: en-US
 Module Name: FabricTools
 ms.date: 04/01/2026
 PlatyPS schema version: 2024-05-01
-title: Get-FabricEnvironmentLibrary
+title: Add-FabricWorkspaceCapacity
 ---
 
-# Get-FabricEnvironmentLibrary
+# Add-FabricWorkspaceCapacity
 
 ## SYNOPSIS
 
-Retrieves the list of libraries associated with a specific environment in a Microsoft Fabric workspace.
+Assigns a Fabric workspace to a specified capacity.
 
 ## SYNTAX
 
 ### __AllParameterSets
 
 ```
-Get-FabricEnvironmentLibrary [-WorkspaceId] <guid> [-EnvironmentId] <guid> [<CommonParameters>]
+Add-FabricWorkspaceCapacity [-WorkspaceId] <guid> [-CapacityId] <guid> [<CommonParameters>]
 ```
 
 ## ALIASES
 
+Assign-FabricWorkspaceCapacity
+
 ## DESCRIPTION
 
-The Get-FabricEnvironmentLibrary function fetches library information for a given workspace and environment
-using the Microsoft Fabric API.
-It ensures the authentication token is valid and validates the response
-to handle errors gracefully.
+The `Add-FabricWorkspaceCapacity` function sends a POST request to assign a workspace to a specific capacity.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 
-Retrieves the libraries associated with the specified environment in the given workspace.
+Assigns the workspace with ID "workspace123" to the capacity "capacity456".
 
 ```powershell
-Get-FabricEnvironmentLibrary -WorkspaceId "workspace-12345" -EnvironmentId "environment-67890"
+Add-FabricWorkspaceCapacity -WorkspaceId "workspace123" -CapacityId "capacity456"
 ```
 
 ## PARAMETERS
 
-### -EnvironmentId
+### -CapacityId
 
-The unique identifier of the environment whose libraries are being queried.
+The unique identifier of the capacity to which the workspace should be assigned.
 
 ```yaml
 Type: System.Guid
@@ -67,13 +66,14 @@ HelpMessage: ''
 
 ### -WorkspaceId
 
-(Mandatory) The unique identifier of the workspace where the environment is located.
+The unique identifier of the workspace to be assigned.
 
 ```yaml
 Type: System.Guid
 DefaultValue: ''
 SupportsWildcards: false
-Aliases: []
+Aliases:
+- Id
 ParameterSets:
 - Name: (All)
   Position: 0
@@ -99,8 +99,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-- Requires the `$FabricConfig` global object, including `BaseUrl` and `FabricHeaders`.
-- Uses `Confirm-TokenState` to validate the token before making API calls.
+- Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
+- Calls `Confirm-TokenState` to ensure token validity before making the API request.
 
 Author: Tiago Balabuch
 

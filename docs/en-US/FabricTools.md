@@ -5,7 +5,7 @@ HelpInfoUri: https://www.github.com/dataplat/FabricTools
 Locale: en-US
 Module Guid: f2a0f9e6-fab6-41fc-9e1c-0c94ff38f794
 Module Name: FabricTools
-ms.date: 03/31/2026
+ms.date: 04/01/2026
 PlatyPS schema version: 2024-05-01
 title: FabricTools Module
 ---
@@ -38,7 +38,7 @@ Assigns workspaces to a domain based on principal IDs in Microsoft Fabric.
 
 Bulk assigns roles to principals for workspaces in a Fabric domain.
 
-### [Add-FabricWorkspaceCapacityAssignment](Add-FabricWorkspaceCapacityAssignment.md)
+### [Add-FabricWorkspaceCapacity](Add-FabricWorkspaceCapacity.md)
 
 Assigns a Fabric workspace to a specified capacity.
 
@@ -526,10 +526,6 @@ Retrieves the workspace usage metrics dataset ID.
 
 Publishes a staging environment in a specified Microsoft Fabric workspace.
 
-### [Register-FabricWorkspaceToCapacity](Register-FabricWorkspaceToCapacity.md)
-
-Sets a PowerBI workspace to a capacity.
-
 ### [Remove-FabricCopyJob](Remove-FabricCopyJob.md)
 
 Deletes a Copy Job from a specified Microsoft Fabric workspace.
@@ -642,7 +638,7 @@ Removes a warehouse from a specified Microsoft Fabric workspace.
 
 Deletes an existing Fabric workspace by its workspace ID.
 
-### [Remove-FabricWorkspaceCapacityAssignment](Remove-FabricWorkspaceCapacityAssignment.md)
+### [Remove-FabricWorkspaceCapacity](Remove-FabricWorkspaceCapacity.md)
 
 Unassigns a Fabric workspace from its capacity.
 
@@ -705,10 +701,6 @@ Stops the mirroring of a specified mirrored database in a given workspace.
 ### [Suspend-FabricCapacity](Suspend-FabricCapacity.md)
 
 Suspends a capacity.
-
-### [Unregister-FabricWorkspaceToCapacity](Unregister-FabricWorkspaceToCapacity.md)
-
-Unregisters a workspace from a capacity.
 
 ### [Update-FabricCapacity](Update-FabricCapacity.md)
 
@@ -869,3 +861,4 @@ Updates the role assignment for a specific principal in a Fabric workspace.
 ### [Write-FabricLakehouseTableData](Write-FabricLakehouseTableData.md)
 
 Loads data into a specified table in a Lakehouse within a Fabric workspace.
+

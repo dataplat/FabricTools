@@ -4,7 +4,7 @@ external help file: FabricTools-Help.xml
 HelpUri: ''
 Locale: en-US
 Module Name: FabricTools
-ms.date: 03/31/2026
+ms.date: 04/01/2026
 PlatyPS schema version: 2024-05-01
 title: Get-FabricCapacityState
 ---
@@ -25,8 +25,6 @@ Get-FabricCapacityState [-SubscriptionID] <guid> [-ResourceGroup] <string> [-cap
 ```
 
 ## ALIASES
-
-Get-FabCapacityState
 
 ## DESCRIPTION
 
