@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Renamed `Add-FabricWorkspaceCapacityAssignment` to `Add-FabricWorkspaceCapacity` (issue #42)
+- Renamed `Remove-FabricWorkspaceCapacityAssignment` to `Remove-FabricWorkspaceCapacity` (issue #42)
+
 ### Fixed
 
 - Made `ReportPathDefinition` parameter optional in `New-FabricReport` (issue #43)
@@ -23,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Removed `Invoke-FabricAPIRequest_duplicate` and `Invoke-FabricRestMethodExtended`
 - Removed all legacy FAB and PowerBI aliases from functions to clean up the module and remove references to old PowerBI-focused codebase (issue #47).
+- Removed `Register-FabricWorkspaceToCapacity` and `Unregister-FabricWorkspaceToCapacity`, as they are no longer needed (issue #42)
 
 ### Security
 
