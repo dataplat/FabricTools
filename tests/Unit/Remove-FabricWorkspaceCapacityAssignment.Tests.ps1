@@ -1,7 +1,7 @@
 #Requires -Module @{ ModuleName="Pester"; ModuleVersion="5.0"}
 
 BeforeDiscovery {
-    $CommandName = 'Remove-FabricWorkspaceCapacityAssignment'
+    $CommandName = 'Remove-FabricWorkspaceCapacity'
 }
 
 BeforeAll {
@@ -10,10 +10,10 @@ BeforeAll {
     $PSDefaultParameterValues['InModuleScope:ModuleName'] = $ModuleName
     $PSDefaultParameterValues['Should:ModuleName'] = $ModuleName
 
-    $Command = Get-Command -Name Remove-FabricWorkspaceCapacityAssignment
+    $Command = Get-Command -Name Remove-FabricWorkspaceCapacity
 }
 
-Describe "Remove-FabricWorkspaceCapacityAssignment" -Tag "UnitTests" {
+Describe "Remove-FabricWorkspaceCapacity" -Tag "UnitTests" {
 
     Context "Command definition" {
         It 'Should have <ExpectedParameterName> parameter' -ForEach @(
@@ -30,7 +30,7 @@ Describe "Remove-FabricWorkspaceCapacityAssignment" -Tag "UnitTests" {
 
     Context 'Parameter alias validation' {
         It 'Should have "Id" as an alias for WorkspaceId parameter' {
-            $param = (Get-Command -Name 'Remove-FabricWorkspaceCapacityAssignment').Parameters['WorkspaceId']
+            $param = (Get-Command -Name 'Remove-FabricWorkspaceCapacity').Parameters['WorkspaceId']
             $param.Aliases | Should -Contain 'Id'
         }
     }
@@ -47,7 +47,7 @@ Describe "Remove-FabricWorkspaceCapacityAssignment" -Tag "UnitTests" {
         }
 
         It 'Should remove workspace capacity assignment with valid parameters' {
-            { Remove-FabricWorkspaceCapacityAssignment -WorkspaceId (New-Guid) -Confirm:$false } | Should -Not -Throw
+            { Remove-FabricWorkspaceCapacity -WorkspaceId (New-Guid) -Confirm:$false } | Should -Not -Throw
 
             Should -Invoke -CommandName Invoke-FabricRestMethod -Times 1 -Exactly
         }
@@ -66,7 +66,7 @@ Describe "Remove-FabricWorkspaceCapacityAssignment" -Tag "UnitTests" {
         }
 
         It 'Should handle errors gracefully and write error message' {
-            { Remove-FabricWorkspaceCapacityAssignment -WorkspaceId (New-Guid) -Confirm:$false } | Should -Not -Throw
+            { Remove-FabricWorkspaceCapacity -WorkspaceId (New-Guid) -Confirm:$false } | Should -Not -Throw
 
             Should -Invoke -CommandName Write-Message -ParameterFilter {
                 $Level -eq 'Error' -and $Message -like "*Failed to unassign workspace from capacity*"

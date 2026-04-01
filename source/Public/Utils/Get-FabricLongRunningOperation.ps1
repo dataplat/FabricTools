@@ -49,6 +49,14 @@ Author: Tiago Balabuch
     } else {
         $apiEndpointUrl = "operations/{0}" -f $OperationId
     }
+
+    # Validate that we have a valid endpoint URL
+    if ([string]::IsNullOrEmpty($apiEndpointUrl)) {
+        $errorMessage = "Cannot construct operation URL - both OperationId and Location are empty or null."
+        Write-Message -Message "[Get-FabricLongRunningOperation] $errorMessage" -Level Error
+        throw $errorMessage
+    }
+
     Write-Message -Message "[Get-FabricLongRunningOperation] API Endpoint: $apiEndpointUrl" -Level Debug
 
     try {

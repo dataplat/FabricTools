@@ -99,28 +99,29 @@ function Test-FabricApiResponse {
         202 {
             Write-Message -Message "$Operation Request for $TypeName '$ObjectIdOrName' accepted. Provisioning in progress!" -Level Info
             [string]$operationId = $responseHeader["x-ms-operation-id"]
+            [PSCustomObject] $res = @{
+                Location     = $responseHeader["Location"]
+                RetryAfter   = $responseHeader["Retry-After"]
+                OperationId  = $responseHeader["x-ms-operation-id"]
+            }
 
             if ($NoWait) {
                 Write-Message -Message "NoWait parameter is set. Operation ID: $operationId" -Level Debug
                 Write-Message -Message "Run to check the progress: Get-FabricLongRunningOperationResult -operationId '$operationId'" -Level Verbose
-                return [PSCustomObject]@{
-                    Location     = $responseHeader["Location"]
-                    RetryAfter   = $responseHeader["Retry-After"]
-                    OperationId  = $responseHeader["x-ms-operation-id"]
-                }
+                return $res
             }
 
-            Write-Message -Message "Operation ID: '$operationId'" -Level Debug
+            Write-Message -Message "Operation ID: '$operationId'" -Level "Debug"
             Write-Message -Message "Getting Long Running Operation status" -Level Debug
 
-            $operationStatus = Get-FabricLongRunningOperation -operationId $operationId
+            $operationStatus = Get-FabricLongRunningOperation -operationId $operationId -location $res.Location -retryAfter $res.RetryAfter
             Write-Message -Message "Long Running Operation status: $operationStatus" -Level Debug
             # Handle operation result
             if ($operationStatus.status -eq "Succeeded") {
                 Write-Message -Message "Operation Succeeded" -Level Debug
                 Write-Message -Message "Getting Long Running Operation result" -Level Verbose
 
-                $operationResult = Get-FabricLongRunningOperationResult -operationId $operationId
+                $operationResult = Get-FabricLongRunningOperationResult -operationId $operationId -location $res.Location
                 #Write-Message -Message "Long Running Operation status: $operationResult" -Level Debug
 
                 return $operationResult
