@@ -104,13 +104,13 @@ function Update-FabricCapacity
 
     try
     {
-        # Step 1: Ensure token validity
+        # Ensure token validity
         Confirm-TokenState
 
-        # Step 2: Construct the API URL
+        # Construct the API URL
         $apiEndpointUrl = "$($AzureSession.BaseApiUrl)/subscriptions/{0}/resourceGroups/{1}/providers/Microsoft.Fabric/capacities/{2}?api-version=2023-11-01" -f $SubscriptionId, $ResourceGroupName, $CapacityName
 
-        # Step 3: Construct the request body
+        # Construct the request body
         $body = @{
             properties = @{
                 administration = @{
@@ -129,7 +129,7 @@ function Update-FabricCapacity
             $body.tags = $Tags
         }
 
-        # Step 4: Make the API request
+        # Make the API request
         if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Update Fabric Capacity"))
         {
             $apiParams = @{
@@ -147,7 +147,7 @@ function Update-FabricCapacity
     }
     catch
     {
-        # Step 5: Handle and log errors
+        # Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to update Fabric Capacity. Error: $errorDetails" -Level Error
         throw

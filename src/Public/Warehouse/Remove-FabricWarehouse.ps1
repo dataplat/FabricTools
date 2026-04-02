@@ -37,15 +37,15 @@ function Remove-FabricWarehouse
     )
     try
     {
-        # Step 1: Ensure token validity
+        # Ensure token validity
         Confirm-TokenState
 
-        # Step 2: Construct the API URL
+        # Construct the API URL
         $apiEndpointURI = "workspaces/{0}/warehouses/{1}" -f $WorkspaceId, $WarehouseId
 
         if ($PSCmdlet.ShouldProcess($apiEndpointURI, "Delete Warehouse"))
         {
-            # Step 3: Make the API request and Validate the response
+            # Make the API request and Validate the response
             $apiParameters = @{
                 Uri = $apiEndpointURI
                 Method = 'DELETE'
@@ -56,13 +56,13 @@ function Remove-FabricWarehouse
             $response = Invoke-FabricRestMethod @apiParameters
         }
 
-        # Step 4: Handle results
+        # Handle results
         $response
 
     }
     catch
     {
-        # Step 5: Log and handle errors
+        # Log and handle errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to delete Warehouse '$WarehouseId' from workspace '$WorkspaceId'. Error: $errorDetails" -Level Error
     }

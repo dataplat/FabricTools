@@ -44,21 +44,21 @@ Author: Tiago Balabuch
     )
 
     try {
-        # Step 1: Ensure each principal contains 'id' and 'type'
+        # Ensure each principal contains 'id' and 'type'
         foreach ($principal in $PrincipalIds) {
             if (-not ($principal.ContainsKey('id') -and $principal.ContainsKey('type'))) {
                 throw "Each principal object must contain 'id' and 'type' properties."
             }
         }
 
-        # Step 2: Ensure token validity
+        # Ensure token validity
         Confirm-TokenState
 
-        # Step 3: Construct the API URL
+        # Construct the API URL
         $apiEndpointUrl = "{0}/admin/domains/{1}/assignWorkspacesByPrincipals" -f $FabricConfig.BaseUrl, $DomainId
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Message
 
-        # Step 4: Construct the request body
+        # Construct the request body
         $body = @{
             principals = $PrincipalIds
         }
@@ -67,13 +67,13 @@ Author: Tiago Balabuch
         $bodyJson = $body | ConvertTo-Json -Depth 2
         Write-Message -Message "Request Body: $bodyJson" -Level Debug
 
-        # Step 5: Make the API request
+        # Make the API request
         $response = Invoke-FabricRestMethod `
             -Uri $apiEndpointUrl `
             -Method Post `
             -Body $bodyJson
 
-        # Step 6: Handle and log the response
+        # Handle and log the response
         switch ($statusCode) {
             201 {
                 Write-Message -Message "Assigning domain workspaces by principal completed successfully!" -Level Info
@@ -104,7 +104,7 @@ Author: Tiago Balabuch
             }
         }
     } catch {
-        # Step 7: Handle and log errors
+        # Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to assign domain workspaces by principals. Error: $errorDetails" -Level Error
     }

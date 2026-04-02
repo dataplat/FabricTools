@@ -50,14 +50,14 @@ function New-FabricSQLDatabase
 
     try
     {
-        # Step 1: Ensure token validity
+        # Ensure token validity
         Confirm-TokenState
 
-        # Step 2: Construct the API URL
+        # Construct the API URL
         $apiEndpointUrl = "workspaces/{0}/sqldatabases" -f $WorkspaceId
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
-        # Step 3: Construct the request body
+        # Construct the request body
         $body = @{
             displayName = $Name
         }
@@ -70,7 +70,7 @@ function New-FabricSQLDatabase
         $bodyJson = $body | ConvertTo-Json -Depth 10
         Write-Message -Message "Request Body: $bodyJson" -Level Debug
 
-        # Step 4: Make the API request
+        # Make the API request
         if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Create SQL Database"))
         {
             $apiParams = @{
@@ -88,7 +88,7 @@ function New-FabricSQLDatabase
     }
     catch
     {
-        # Step 6: Handle and log errors
+        # Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to create SQL Database. Error: $errorDetails" -Level Error
     }

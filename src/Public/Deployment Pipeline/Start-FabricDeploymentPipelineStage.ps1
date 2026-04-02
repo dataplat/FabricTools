@@ -94,14 +94,14 @@ Author: Kamil Nowinski
     )
 
     try {
-        # Step 1: Ensure token validity
+        # Ensure token validity
         Confirm-TokenState
 
-        # Step 2: Construct the API URL
+        # Construct the API URL
         $apiEndpointUrl = "deploymentPipelines/$DeploymentPipelineId/deploy"
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
-        # Step 3: Construct the request body
+        # Construct the request body
         $requestBody = @{
             sourceStageId = $SourceStageId
             targetStageId = $TargetStageId
@@ -115,7 +115,7 @@ Author: Kamil Nowinski
             $requestBody.note = $Note
         }
 
-        # Step 4: Make the API request and validate response
+        # Make the API request and validate response
         if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Start Deployment Pipeline")) {
             $apiParameters = @{
                 Uri = $apiEndpointUrl
@@ -129,11 +129,11 @@ Author: Kamil Nowinski
             $response = Invoke-FabricRestMethod @apiParameters
         }
 
-        # Step 5: Return results
+        # Return results
         $response
 
     } catch {
-        # Step 6: Error handling
+        # Error handling
         $errorDetails = $_.Exception.Message
         Write-Error -Message "Failed to initiate deployment. Error: $errorDetails"
     }

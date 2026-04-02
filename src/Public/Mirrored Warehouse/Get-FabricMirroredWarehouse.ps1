@@ -52,13 +52,13 @@ Author: Tiago Balabuch
     )
 
     try {
-        # Step 1: Handle ambiguous input
+        # Handle ambiguous input
         if ($MirroredWarehouseId -and $MirroredWarehouseName) {
             Write-Message -Message "Both 'MirroredWarehouseId' and 'MirroredWarehouseName' were provided. Please specify only one." -Level Error
             return $null
         }
 
-        # Step 2: Ensure token validity
+        # Ensure token validity
         Confirm-TokenState
 
         $continuationToken = $null
@@ -68,14 +68,14 @@ Author: Tiago Balabuch
             Add-Type -AssemblyName System.Web
         }
 
-        # Step 4: Loop to retrieve all capacities with continuation token
+        # Loop to retrieve all capacities with continuation token
         Write-Message -Message "Loop started to get continuation token" -Level Debug
         $baseApiEndpointUrl = "{0}/workspaces/{1}/MirroredWarehouses" -f $FabricConfig.BaseUrl, $WorkspaceId
 
-        # Step 3:  Loop to retrieve data with continuation token
+        #  Loop to retrieve data with continuation token
 
         do {
-            # Step 5: Construct the API URL
+            # Construct the API URL
             $apiEndpointUrl = $baseApiEndpointUrl
 
             if ($null -ne $continuationToken) {
@@ -85,12 +85,12 @@ Author: Tiago Balabuch
             }
             Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
-            # Step 6: Make the API request
+            # Make the API request
             $response = Invoke-FabricRestMethod `
                 -Uri $apiEndpointUrl `
                 -Method Get
 
-            # Step 7: Validate the response code
+            # Validate the response code
             if ($statusCode -ne 200) {
                 Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
                 Write-Message -Message "Error: $($response.message)" -Level Error
@@ -99,7 +99,7 @@ Author: Tiago Balabuch
                 return $null
             }
 
-            # Step 8: Add data to the list
+            # Add data to the list
             if ($null -ne $response) {
                 Write-Message -Message "Adding data to the list" -Level Debug
                 $MirroredWarehouses += $response.value
@@ -121,7 +121,7 @@ Author: Tiago Balabuch
         Write-Message -Message "Loop finished and all data added to the list" -Level Debug
 
 
-        # Step 8: Filter results based on provided parameters
+        # Filter results based on provided parameters
         $MirroredWarehouse = if ($MirroredWarehouseId) {
             $MirroredWarehouses | Where-Object { $_.Id -eq $MirroredWarehouseId }
         } elseif ($MirroredWarehouseName) {
@@ -132,7 +132,7 @@ Author: Tiago Balabuch
             $MirroredWarehouses
         }
 
-        # Step 9: Handle results
+        # Handle results
         if ($MirroredWarehouse) {
             Write-Message -Message "MirroredWarehouse found matching the specified criteria." -Level Debug
             return $MirroredWarehouse
@@ -141,7 +141,7 @@ Author: Tiago Balabuch
             return $null
         }
     } catch {
-        # Step 10: Capture and log error details
+        # Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to retrieve MirroredWarehouse. Error: $errorDetails" -Level Error
     }

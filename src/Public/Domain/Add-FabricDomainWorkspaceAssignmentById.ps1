@@ -38,14 +38,14 @@ Author: Tiago Balabuch
     )
 
     try {
-        # Step 1: Ensure token validity
+        # Ensure token validity
         Confirm-TokenState
 
-        # Step 2: Construct the API URL
+        # Construct the API URL
         $apiEndpointUrl = "{0}/admin/domains/{1}/assignWorkspaces" -f $FabricConfig.BaseUrl, $DomainId
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
-        # Step 3: Construct the request body
+        # Construct the request body
         $body = @{
             workspacesIds = $WorkspaceIds
         }
@@ -54,13 +54,13 @@ Author: Tiago Balabuch
         $bodyJson = $body | ConvertTo-Json -Depth 2
         Write-Message -Message "Request Body: $bodyJson" -Level Debug
 
-        # Step 4: Make the API request
+        # Make the API request
         $response = Invoke-FabricRestMethod `
             -Uri $apiEndpointUrl `
             -Method Post `
             -Body $bodyJson
 
-        # Step 5: Validate the response code
+        # Validate the response code
         if ($statusCode -ne 200) {
             Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
             Write-Message -Message "Error: $($response.message)" -Level Error
@@ -69,7 +69,7 @@ Author: Tiago Balabuch
         }
         Write-Message -Message "Successfully assigned workspaces to the domain with ID '$DomainId'." -Level Info
     } catch {
-        # Step 6: Capture and log error details
+        # Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to assign workspaces to the domain with ID '$DomainId'. Error: $errorDetails" -Level Error
     }

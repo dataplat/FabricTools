@@ -33,14 +33,14 @@ Author: Kamil Nowinski
     )
 
     try {
-        # Step 1: Ensure token validity
+        # Ensure token validity
         Confirm-TokenState
 
-        # Step 2: Construct the API URL
+        # Construct the API URL
         $apiEndpointUrl = "deploymentPipelines/$DeploymentPipelineId"
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
-        # Step 3: Make the API request & validate response
+        # Make the API request & validate response
         if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Delete Deployment Pipeline"))
         {
             $apiParameters = @{
@@ -53,11 +53,11 @@ Author: Kamil Nowinski
             $response = Invoke-FabricRestMethod @apiParameters
         }
 
-        # Step 4: Handle results
+        # Handle results
         $response
 
     } catch {
-        # Step 5: Error handling
+        # Error handling
         $errorDetails = $_.Exception.Message
         Write-Error -Message "Failed to delete deployment pipeline. Error: $errorDetails"
     }

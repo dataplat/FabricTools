@@ -59,14 +59,14 @@ function New-FabricCopyJob {
     )
 
     try {
-        # Step 1: Ensure token validity
+        # Ensure token validity
         Confirm-TokenState
 
-        # Step 2: Construct the API URL
+        # Construct the API URL
         $apiEndpointURI = "workspaces/{0}/copyJobs" -f $WorkspaceId
         Write-Message -Message "API Endpoint: $apiEndpointURI" -Level Debug
 
-        # Step 3: Construct the request body
+        # Construct the request body
         $body = @{
             displayName = $CopyJobName
         }
@@ -75,7 +75,7 @@ function New-FabricCopyJob {
             $body.description = $CopyJobDescription
         }
 
-        # Step 4: Add copy job definition file content if provided
+        # Add copy job definition file content if provided
         if ($CopyJobPathDefinition) {
             $CopyJobEncodedContent = Convert-ToBase64 -filePath $CopyJobPathDefinition
 
@@ -127,7 +127,7 @@ function New-FabricCopyJob {
 
         if($PSCmdlet.ShouldProcess($apiEndpointURI, "Create Copy Job")) {
 
-        # Step 6: Make the API request
+        # Make the API request
         $apiParams = @{
             Uri    = $apiEndpointURI
             Method = 'Post'
@@ -140,7 +140,7 @@ function New-FabricCopyJob {
     return $response
 
     } catch {
-        # Step 7: Handle and log errors
+        # Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to create Copy Job. Error: $errorDetails" -Level Error
     }

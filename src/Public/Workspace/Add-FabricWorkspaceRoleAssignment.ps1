@@ -55,14 +55,14 @@ function Add-FabricWorkspaceRoleAssignment {
     )
 
     try {
-        # Step 1: Ensure token validity
+        # Ensure token validity
         Confirm-TokenState
 
-        # Step 2: Construct the API URL
+        # Construct the API URL
         $apiEndpointUrl = "{0}/workspaces/{1}/roleAssignments" -f $FabricConfig.BaseUrl, $WorkspaceId
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
-        # Step 3: Construct the request body
+        # Construct the request body
         $body = @{
             principal = @{
                 id   = $PrincipalId
@@ -75,13 +75,13 @@ function Add-FabricWorkspaceRoleAssignment {
         $bodyJson = $body | ConvertTo-Json -Depth 4
         Write-Message -Message "Request Body: $bodyJson" -Level Debug
 
-        # Step 4: Make the API request
+        # Make the API request
         $response = Invoke-FabricRestMethod `
             -Uri $apiEndpointUrl `
             -Method Post `
             -Body $bodyJson
 
-        # Step 5: Validate the response code
+        # Validate the response code
         if ($statusCode -ne 201) {
             Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
             Write-Message -Message "Error: $($response.message)" -Level Error
@@ -89,7 +89,7 @@ function Add-FabricWorkspaceRoleAssignment {
             return $null
         }
 
-        # Step 6: Handle empty response
+        # Handle empty response
         if (-not $response) {
             Write-Message -Message "No data returned from the API." -Level Warning
             return $null
@@ -99,7 +99,7 @@ function Add-FabricWorkspaceRoleAssignment {
         return $response
 
     } catch {
-        # Step 7: Handle and log errors
+        # Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to assign role. Error: $errorDetails" -Level Error
     }

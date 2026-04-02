@@ -51,15 +51,15 @@ function Get-FabricSQLEndpoint {
     )
 
     try {
-        # Step 1: Handle ambiguous input
+        # Handle ambiguous input
         if ($SQLEndpointId -and $SQLEndpointName) {
             Write-Message -Message "Both 'SQLEndpointId' and 'SQLEndpointName' were provided. Please specify only one." -Level Error
             return $null
         }
 
-        # Step 2: Ensure token validity
+        # Ensure token validity
         Confirm-TokenState
-        # Step 3: Initialize variables
+        # Initialize variables
         $continuationToken = $null
         $SQLEndpoints = @()
 
@@ -67,13 +67,13 @@ function Get-FabricSQLEndpoint {
             Add-Type -AssemblyName System.Web
         }
 
-        # Step 4: Loop to retrieve all capacities with continuation token
+        # Loop to retrieve all capacities with continuation token
         Write-Message -Message "Loop started to get continuation token" -Level Debug
         $baseApiEndpointUrl = "{0}/workspaces/{1}/SQLEndpoints" -f $FabricConfig.BaseUrl, $WorkspaceId
 
 
         do {
-            # Step 5: Construct the API URL
+            # Construct the API URL
             $apiEndpointUrl = $baseApiEndpointUrl
 
             if ($null -ne $continuationToken) {
@@ -83,12 +83,12 @@ function Get-FabricSQLEndpoint {
             }
             Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
-            # Step 6: Make the API request
+            # Make the API request
             $response = Invoke-FabricRestMethod `
                 -Uri $apiEndpointUrl `
                 -Method Get
 
-            # Step 7: Validate the response code
+            # Validate the response code
             if ($statusCode -ne 200) {
                 Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
                 Write-Message -Message "Error: $($response.message)" -Level Error
@@ -97,7 +97,7 @@ function Get-FabricSQLEndpoint {
                 return $null
             }
 
-            # Step 8: Add data to the list
+            # Add data to the list
             if ($null -ne $response) {
                 Write-Message -Message "Adding data to the list" -Level Debug
                 $SQLEndpoints += $response.value
@@ -118,7 +118,7 @@ function Get-FabricSQLEndpoint {
         } while ($null -ne $continuationToken)
         Write-Message -Message "Loop finished and all data added to the list" -Level Debug
 
-        # Step 8: Filter results based on provided parameters
+        # Filter results based on provided parameters
         $SQLEndpoint = if ($SQLEndpointId) {
             $SQLEndpoints | Where-Object { $_.Id -eq $SQLEndpointId }
         } elseif ($SQLEndpointName) {
@@ -129,7 +129,7 @@ function Get-FabricSQLEndpoint {
             $SQLEndpoints
         }
 
-        # Step 9: Handle results
+        # Handle results
         if ($SQLEndpoint) {
             Write-Message -Message "Paginated Report found matching the specified criteria." -Level Debug
             return $SQLEndpoint
@@ -138,7 +138,7 @@ function Get-FabricSQLEndpoint {
             return $null
         }
     } catch {
-        # Step 10: Capture and log error details
+        # Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to retrieve Paginated Report. Error: $errorDetails" -Level Error
     }

@@ -52,15 +52,15 @@ Author: Tiago Balabuch
     )
 
     try {
-        # Step 1: Handle ambiguous input
+        # Handle ambiguous input
         if ($LakehouseId -and $LakehouseName) {
             Write-Message -Message "Both 'LakehouseId' and 'LakehouseName' were provided. Please specify only one." -Level Error
             return $null
         }
 
-        # Step 2: Ensure token validity
+        # Ensure token validity
         Confirm-TokenState
-        # Step 3: Initialize variables
+        # Initialize variables
         $continuationToken = $null
         $lakehouses = @()
 
@@ -68,12 +68,12 @@ Author: Tiago Balabuch
             Add-Type -AssemblyName System.Web
         }
 
-        # Step 4: Loop to retrieve all capacities with continuation token
+        # Loop to retrieve all capacities with continuation token
         Write-Message -Message "Loop started to get continuation token" -Level Debug
         $baseApiEndpointUrl = "{0}/workspaces/{1}/lakehouses" -f $FabricConfig.BaseUrl, $WorkspaceId
 
         do {
-            # Step 5: Construct the API URL
+            # Construct the API URL
             $apiEndpointUrl = $baseApiEndpointUrl
 
             if ($null -ne $continuationToken) {
@@ -83,12 +83,12 @@ Author: Tiago Balabuch
             }
             Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
-            # Step 6: Make the API request
+            # Make the API request
             $response = Invoke-FabricRestMethod `
                 -Uri $apiEndpointUrl `
                 -Method Get
 
-            # Step 7: Validate the response code
+            # Validate the response code
             if ($statusCode -ne 200) {
                 Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
                 Write-Message -Message "Error: $($response.message)" -Level Error
@@ -97,7 +97,7 @@ Author: Tiago Balabuch
                 return $null
             }
 
-            # Step 8: Add data to the list
+            # Add data to the list
             if ($null -ne $response) {
                 Write-Message -Message "Adding data to the list" -Level Debug
                 $lakehouses += $response.value
@@ -118,7 +118,7 @@ Author: Tiago Balabuch
         } while ($null -ne $continuationToken)
         Write-Message -Message "Loop finished and all data added to the list" -Level Debug
 
-        # Step 8: Filter results based on provided parameters
+        # Filter results based on provided parameters
         $lakehouse = if ($LakehouseId) {
             $lakehouses | Where-Object { $_.Id -eq $LakehouseId }
         } elseif ($LakehouseName) {
@@ -129,7 +129,7 @@ Author: Tiago Balabuch
             $lakehouses
         }
 
-        # Step 9: Handle results
+        # Handle results
         if ($Lakehouse) {
             Write-Message -Message "Lakehouse found matching the specified criteria." -Level Debug
             return $Lakehouse
@@ -138,7 +138,7 @@ Author: Tiago Balabuch
             return $null
         }
     } catch {
-        # Step 10: Capture and log error details
+        # Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to retrieve Lakehouse. Error: $errorDetails" -Level Error
     }

@@ -52,19 +52,19 @@ Author: Kamil Nowinski
     )
 
     try {
-        # Step 1: Ensure token validity
+        # Ensure token validity
         Confirm-TokenState
 
-        # Step 2: Construct the API URL
+        # Construct the API URL
         $apiEndpointUrl = ("deploymentPipelines/{0}/stages/{1}/assignWorkspace" -f $DeploymentPipelineId, $StageId)
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
-        # Step 3: Construct the request body
+        # Construct the request body
         $requestBody = @{
             workspaceId = $WorkspaceId
         }
 
-        # Step 4: Make the API request and validate response
+        # Make the API request and validate response
         $apiParameters = @{
             Uri = $apiEndpointUrl
             Method = 'POST'
@@ -76,11 +76,11 @@ Author: Kamil Nowinski
         }
         $response = Invoke-FabricRestMethod @apiParameters
 
-        # Step 5: Return results
+        # Return results
         $response
 
     } catch {
-        # Step 6: Error handling
+        # Error handling
         $errorDetails = $_.Exception.Message
         Write-Error -Message "Failed to assign workspace to deployment pipeline stage. Error: $errorDetails"
     }

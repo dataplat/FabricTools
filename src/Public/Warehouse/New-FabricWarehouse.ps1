@@ -47,14 +47,14 @@ function New-FabricWarehouse
 
     try
     {
-        # Step 1: Ensure token validity
+        # Ensure token validity
         Confirm-TokenState
 
-        # Step 2: Construct the API URL
+        # Construct the API URL
         $apiEndpointURI = "workspaces/{0}/warehouses" -f $WorkspaceId
         Write-Message -Message "API Endpoint: $apiEndpointURI" -Level Debug
 
-        # Step 3: Construct the request body
+        # Construct the request body
         $body = @{
             displayName = $WarehouseName
         }
@@ -69,7 +69,7 @@ function New-FabricWarehouse
 
         if ($PSCmdlet.ShouldProcess($apiEndpointURI, "Create Warehouse"))
         {
-            # Step 4: Make the API request
+            # Make the API request
             $apiParams = @{
                 Uri    = $apiEndpointURI
                 Method = 'Post'
@@ -84,7 +84,7 @@ function New-FabricWarehouse
     }
     catch
     {
-        # Step 6: Handle and log errors
+        # Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to create Warehouse. Error: $errorDetails" -Level Error
     }

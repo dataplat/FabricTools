@@ -40,21 +40,21 @@ Author: Tiago Balabuch
 
     try
     {
-        # Step 1: Ensure token validity
+        # Ensure token validity
         Confirm-TokenState
 
-        # Step 2: Construct the API URL
+        # Construct the API URL
         $apiEndpointUrl = "{0}/workspaces/{1}/environments/{2}" -f $FabricConfig.BaseUrl, $WorkspaceId, $EnvironmentId
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
         if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Remove Environment"))
         {
-            # Step 3: Make the API request
+            # Make the API request
             $response = Invoke-FabricRestMethod `
                 -Uri $apiEndpointUrl `
                 -Method Delete
         }
 
-        # Step 4: Validate the response code
+        # Validate the response code
         if ($statusCode -ne 200)
         {
             Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
@@ -67,7 +67,7 @@ Author: Tiago Balabuch
     }
     catch
     {
-        # Step 5: Log and handle errors
+        # Log and handle errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to delete environment '$EnvironmentId' from workspace '$WorkspaceId'. Error: $errorDetails" -Level Error
     }

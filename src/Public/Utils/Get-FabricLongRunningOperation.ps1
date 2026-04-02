@@ -42,7 +42,7 @@ Author: Tiago Balabuch
     Write-Message -Message "[Get-FabricLongRunningOperation]::Begin" -Level Debug
     Confirm-TokenState
 
-    # Step 1: Construct the API URL
+    # Construct the API URL
     if (-not $OperationId) {
         # Use the Location header to define the operationUrl, if OperationId is not provided
         $apiEndpointUrl = $Location
@@ -62,7 +62,7 @@ Author: Tiago Balabuch
     try {
         do {
 
-            # Step 2: Wait before the next request
+            # Wait before the next request
             if ($RetryAfter) {
                 Write-Message -Message "Waiting $RetryAfter seconds..." -Level Verbose
                 Start-Sleep -Seconds $RetryAfter
@@ -71,10 +71,10 @@ Author: Tiago Balabuch
                 Start-Sleep -Seconds 5  # Default retry interval if no Retry-After header
             }
 
-            # Step 3: Make the API request
+            # Make the API request
             $response = Invoke-FabricRestMethod -Uri $apiEndpointUrl -Method Get
 
-            # Step 4: Parse the response
+            # Parse the response
             $jsonOperation = $response | ConvertTo-Json
             $operation = $jsonOperation | ConvertFrom-Json
 
@@ -83,11 +83,11 @@ Author: Tiago Balabuch
 
         } while ($operation.status -notin @("Succeeded", "Completed", "Failed"))
 
-        # Step 5: Return the operation result
+        # Return the operation result
         return $operation
 
     } catch {
-        # Step 6: Capture and log error details
+        # Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "An error occurred while checking the operation: $errorDetails" -Level Error
         throw

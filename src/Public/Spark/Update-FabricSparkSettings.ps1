@@ -129,14 +129,14 @@ function Update-FabricSparkSettings
 
     try
     {
-        # Step 1: Ensure token validity
+        # Ensure token validity
         Confirm-TokenState
 
-        # Step 2: Construct the API URL
+        # Construct the API URL
         $apiEndpointUrl = "{0}/workspaces/{1}/spark/settings" -f $FabricConfig.BaseUrl, $WorkspaceId, $SparkSettingsId
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
-        # Step 3: Construct the request body
+        # Construct the request body
         # Construct the request body with optional properties
 
         $body = @{ }
@@ -199,14 +199,14 @@ function Update-FabricSparkSettings
         if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Update SparkSettings"))
         {
 
-            # Step 4: Make the API request
+            # Make the API request
             $response = Invoke-FabricRestMethod `
                 -Uri $apiEndpointUrl `
                 -Method Patch `
                 -Body $bodyJson
         }
 
-        # Step 5: Validate the response code
+        # Validate the response code
         if ($statusCode -ne 200)
         {
             Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
@@ -216,13 +216,13 @@ function Update-FabricSparkSettings
             return $null
         }
 
-        # Step 6: Handle results
+        # Handle results
         Write-Message -Message "Spark Custom Pool '$SparkSettingsName' updated successfully!" -Level Info
         return $response
     }
     catch
     {
-        # Step 7: Handle and log errors
+        # Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to update SparkSettings. Error: $errorDetails" -Level Error
     }

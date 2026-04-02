@@ -53,28 +53,28 @@ Author: Tiago Balabuch
     )
 
     try {
-        # Step 1: Handle ambiguous input
+        # Handle ambiguous input
         if ($DomainId -and $DomainName) {
             Write-Message -Message "Both 'DomainId' and 'DomainName' were provided. Please specify only one." -Level Error
             return @()
         }
 
-        # Step 2: Ensure token validity
+        # Ensure token validity
         Confirm-TokenState
 
-        # Step 3: Construct the API URL with filtering logic
+        # Construct the API URL with filtering logic
         $apiEndpointUrl = "{0}/admin/domains" -f $FabricConfig.BaseUrl
         if ($NonEmptyDomainsOnly) {
             $apiEndpointUrl = "{0}?nonEmptyOnly=true" -f $apiEndpointUrl
         }
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
-        # Step 4: Make the API request
+        # Make the API request
         $response = Invoke-FabricRestMethod `
             -Uri $apiEndpointUrl `
             -Method 'Get'
 
-        # Step 5: Validate the response code
+        # Validate the response code
         if ($statusCode -ne 200) {
             Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
             Write-Message -Message "Error: $($response.message)" -Level Error
@@ -82,13 +82,13 @@ Author: Tiago Balabuch
             return $null
         }
 
-        # Step 6: Handle empty response
+        # Handle empty response
         if (-not $response) {
             Write-Message -Message "No data returned from the API." -Level Warning
             return $null
         }
 
-        # Step 7: Filter results based on provided parameters
+        # Filter results based on provided parameters
         $domains = if ($DomainId) {
             $response.domains | Where-Object { $_.Id -eq $DomainId }
         } elseif ($DomainName) {
@@ -99,7 +99,7 @@ Author: Tiago Balabuch
             return $response.domains
         }
 
-        # Step 8: Handle results
+        # Handle results
         if ($domains) {
             return $domains
         } else {
@@ -107,7 +107,7 @@ Author: Tiago Balabuch
             return $null
         }
     } catch {
-        # Step 9: Capture and log error details
+        # Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to retrieve environment. Error: $errorDetails" -Level Error
     }

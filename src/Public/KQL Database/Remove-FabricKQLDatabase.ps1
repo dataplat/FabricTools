@@ -40,22 +40,22 @@ Author: Tiago Balabuch
 
     try
     {
-        # Step 1: Ensure token validity
+        # Ensure token validity
         Confirm-TokenState
 
-        # Step 2: Construct the API URL
+        # Construct the API URL
         $apiEndpointUrl = "{0}/workspaces/{1}/kqlDatabases/{2}" -f $FabricConfig.BaseUrl, $WorkspaceId, $KQLDatabaseId
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
         if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Remove KQLDatabase"))
         {
-            # Step 3: Check if the API endpoint is valid
-            # Step 3: Make the API request
+            # Check if the API endpoint is valid
+            # Make the API request
             $response = Invoke-FabricRestMethod `
                 -Uri $apiEndpointUrl `
                 -Method Delete
         }
 
-        # Step 4: Validate the response code
+        # Validate the response code
         if ($statusCode -ne 200)
         {
             Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
@@ -69,7 +69,7 @@ Author: Tiago Balabuch
     }
     catch
     {
-        # Step 5: Log and handle errors
+        # Log and handle errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to delete KQLDatabase '$KQLDatabaseId' from workspace '$WorkspaceId'. Error: $errorDetails" -Level Error
     }

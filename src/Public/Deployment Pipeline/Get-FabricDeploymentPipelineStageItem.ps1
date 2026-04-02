@@ -46,13 +46,13 @@ Author: Kamil Nowinski
     )
 
     try {
-        # Step 1: Ensure token validity
+        # Ensure token validity
         Confirm-TokenState
 
-        # Step 3: Construct the API URL
+        # Construct the API URL
         $apiEndpointUrl = "deploymentPipelines/$DeploymentPipelineId/stages/$StageId/items"
 
-        # Step 4: Make the API request
+        # Make the API request
         $apiParameters = @{
             Uri = $apiEndpointUrl
             Method = 'GET'
@@ -65,7 +65,7 @@ Author: Kamil Nowinski
         $response
 
     } catch {
-        # Step 8: Error handling
+        # Error handling
         $errorDetails = $_.Exception.Message
         Write-Error -Message "Failed to retrieve deployment pipeline stage items. Error: $errorDetails"
     }

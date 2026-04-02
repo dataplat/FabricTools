@@ -49,7 +49,7 @@ function Get-FabricUserListAccessEntities {
 
         Confirm-TokenState
 
-        # Step 4: Loop to retrieve all capacities with continuation token
+        # Loop to retrieve all capacities with continuation token
         $apiEndpointURI = "admin/users/{0}/access" -f $UserId
         if ($Type) {
             $apiEndpointURI += "?type=$Type"
@@ -61,7 +61,7 @@ function Get-FabricUserListAccessEntities {
 
         return $response
     } catch {
-        # Step 10: Capture and log error details
+        # Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to retrieve Warehouse. Error: $errorDetails" -Level Error
     }

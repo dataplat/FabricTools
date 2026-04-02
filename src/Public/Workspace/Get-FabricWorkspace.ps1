@@ -46,16 +46,16 @@ function Get-FabricWorkspace {
     )
 
     try {
-        # Step 1: Handle ambiguous input
+        # Handle ambiguous input
         if ($WorkspaceId -and $WorkspaceName) {
             Write-Message -Message "Both 'WorkspaceId' and 'WorkspaceName' were provided. Please specify only one." -Level Error
             return $null
         }
 
-        # Step 2: Ensure token validity
+        # Ensure token validity
         Confirm-TokenState
 
-        # Step 3: Initialize variables
+        # Initialize variables
         $continuationToken = $null
         $workspaces = @()
 
@@ -63,11 +63,11 @@ function Get-FabricWorkspace {
             Add-Type -AssemblyName System.Web
         }
 
-        # Step 4: Loop to retrieve all capacities with continuation token
+        # Loop to retrieve all capacities with continuation token
         Write-Message -Message "Loop started to get continuation token" -Level Debug
         $baseApiEndpointUrl = "{0}/workspaces" -f $FabricConfig.BaseUrl
         do {
-            # Step 5: Construct the API URL
+            # Construct the API URL
             $apiEndpointUrl = $baseApiEndpointUrl
 
             if ($null -ne $continuationToken) {
@@ -77,12 +77,12 @@ function Get-FabricWorkspace {
             }
             Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
-            # Step 6: Make the API request
+            # Make the API request
             $response = Invoke-FabricRestMethod `
                 -Uri $apiEndpointUrl `
                 -Method Get
 
-            # Step 7: Validate the response code
+            # Validate the response code
             if ($statusCode -ne 200) {
                 Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
                 Write-Message -Message "Error: $($response.message)" -Level Error
@@ -91,7 +91,7 @@ function Get-FabricWorkspace {
                 return $null
             }
 
-            # Step 8: Add data to the list
+            # Add data to the list
             if ($null -ne $response) {
                 Write-Message -Message "Adding data to the list" -Level Debug
                 $workspaces += $response.value
@@ -112,7 +112,7 @@ function Get-FabricWorkspace {
         } while ($null -ne $continuationToken)
         Write-Message -Message "Loop finished and all data added to the list" -Level Debug
 
-        # Step 8: Filter results based on provided parameters
+        # Filter results based on provided parameters
         $workspace = if ($WorkspaceId) {
             $workspaces | Where-Object { $_.Id -eq $WorkspaceId }
         } elseif ($WorkspaceName) {
@@ -123,7 +123,7 @@ function Get-FabricWorkspace {
             $workspaces
         }
 
-        # Step 9: Handle results
+        # Handle results
         if ($workspace) {
             Write-Message -Message "Workspace found matching the specified criteria." -Level Debug
             return $workspace
@@ -132,7 +132,7 @@ function Get-FabricWorkspace {
             return $null
         }
     } catch {
-        # Step 10: Capture and log error details
+        # Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to retrieve workspace. Error: $errorDetails" -Level Error
     }

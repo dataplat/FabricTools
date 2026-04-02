@@ -55,13 +55,13 @@ function Update-FabricWarehouse
 
     try
     {
-        # Step 1: Ensure token validity
+        # Ensure token validity
         Confirm-TokenState
 
-        # Step 2: Construct the API URL
+        # Construct the API URL
         $apiEndpointURI = "workspaces/{0}/warehouses/{1}" -f $WorkspaceId, $WarehouseId
 
-        # Step 3: Construct the request body
+        # Construct the request body
         $body = @{
             displayName = $WarehouseName
         }
@@ -83,13 +83,13 @@ function Update-FabricWarehouse
                 -body $bodyJson
         }
 
-        # Step 6: Handle results
+        # Handle results
         Write-Message -Message "Warehouse '$WarehouseName' updated successfully!" -Level Info
         return $response
     }
     catch
     {
-        # Step 7: Handle and log errors
+        # Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to update Warehouse. Error: $errorDetails" -Level Error
     }

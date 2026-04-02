@@ -24,19 +24,19 @@ function Get-FabricDomainTenantSettingOverrides {
     param ( )
 
     try {
-        # Step 1: Validate authentication token before making API requests
+        # Validate authentication token before making API requests
         Confirm-TokenState
 
-        # Step 2: Construct the API endpoint URL for retrieving domain tenant setting overrides
+        # Construct the API endpoint URL for retrieving domain tenant setting overrides
         $apiEndpointURI = "admin/domains/delegatedTenantSettingOverrides"
         Write-Message -Message "Constructed API Endpoint: $apiEndpointURI" -Level Debug
 
-        # Step 3: Invoke the Fabric API to retrieve domain tenant setting overrides
+        # Invoke the Fabric API to retrieve domain tenant setting overrides
         $response = Invoke-FabricRestMethod `
             -Uri $apiEndpointURI `
             -Method Get
 
-        # Step 4: Check if any domain tenant setting overrides were retrieved and handle results accordingly
+        # Check if any domain tenant setting overrides were retrieved and handle results accordingly
         if ($response) {
             Write-Message -Message "Successfully retrieved domain tenant setting overrides." -Level Debug
             return $response
@@ -45,7 +45,7 @@ function Get-FabricDomainTenantSettingOverrides {
             return $null
         }
     } catch {
-        # Step 5: Log detailed error information if the API request fails
+        # Log detailed error information if the API request fails
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Error retrieving domain tenant setting overrides: $errorDetails" -Level Error
     }

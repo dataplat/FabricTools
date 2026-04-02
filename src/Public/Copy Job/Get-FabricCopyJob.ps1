@@ -83,7 +83,7 @@ function Get-FabricCopyJob {
             $copyJobs
         }
 
-        # Step 9: Handle results
+        # Handle results
         if ($response) {
             Write-Message -Message "CopyJob found matching the specified criteria." -Level Debug
             return $response
@@ -92,7 +92,7 @@ function Get-FabricCopyJob {
             return $null
         }
     } catch {
-        # Step 10: Capture and log error details
+        # Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to retrieve CopyJob. Error: $errorDetails" -Level Error
     }

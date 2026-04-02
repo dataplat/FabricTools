@@ -51,21 +51,21 @@ Author: Tiago Balabuch
     )
 
     try {
-        # Step 1: Validate PrincipalIds structure
+        # Validate PrincipalIds structure
         foreach ($principal in $PrincipalIds) {
             if (-not ($principal.id -and $principal.type)) {
                 throw "Invalid principal detected: Each principal must include 'id' and 'type' properties. Found: $principal"
             }
         }
 
-        # Step 2: Ensure token validity
+        # Ensure token validity
         Confirm-TokenState
 
-        # Step 3: Construct the API URL
+        # Construct the API URL
         $apiEndpointUrl = "{0}/admin/domains/{1}/roleAssignments/bulkUnassign" -f $FabricConfig.BaseUrl, $DomainId
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
-        # Step 4: Construct the request body
+        # Construct the request body
         $body = @{
             type       = $DomainRole
             principals = $PrincipalIds
@@ -74,14 +74,14 @@ Author: Tiago Balabuch
         Write-Message -Message "Request Body: $bodyJson" -Level Debug
 
         if($PSCmdlet.ShouldProcess($DomainId, "Unassign Roles")) {
-        # Step 5: Make the API request
+        # Make the API request
         $response = Invoke-FabricRestMethod `
             -Uri $apiEndpointUrl `
             -Method Post `
             -Body $bodyJson
     }
 
-        # Step 6: Validate the response code
+        # Validate the response code
         if ($statusCode -ne 200) {
             Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
             Write-Message -Message "Error: $($response.message)" -Level Error
@@ -91,7 +91,7 @@ Author: Tiago Balabuch
         Write-Message -Message "Bulk role unassignment for domain '$DomainId' completed successfully!" -Level Info
 
     } catch {
-        # Step 7: Handle and log errors
+        # Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to bulk assign roles in domain '$DomainId'. Error: $errorDetails" -Level Error
     }

@@ -48,29 +48,29 @@ Author: Tiago Balabuch
     )
 
     try {
-        # Step 1: Validate authentication token before proceeding.
+        # Validate authentication token before proceeding.
         Confirm-TokenState
 
-        # Step 2: Construct the API endpoint URL for retrieving the Copy Job definition.
+        # Construct the API endpoint URL for retrieving the Copy Job definition.
         $apiEndpointUrl = "workspaces/{0}/copyJobs/{1}/getDefinition" -f $WorkspaceId, $CopyJobId
 
-        # Step 3: Append the format query parameter if specified by the user.
+        # Append the format query parameter if specified by the user.
         if ($CopyJobFormat) {
             $apiEndpointUrl = "{0}?format={1}" -f $apiEndpointUrl, $CopyJobFormat
         }
         Write-Message -Message "Constructed API Endpoint URL: $apiEndpointUrl" -Level Debug
 
-        # Step 4: Execute the API request to retrieve the Copy Job definition.
+        # Execute the API request to retrieve the Copy Job definition.
         $apiParams = @{
             Uri     = $apiEndpointUrl
             Method  = 'POST'
         }
         $response = Invoke-FabricRestMethod @apiParams
 
-        # Step 5: Return the API response containing the Copy Job definition.
+        # Return the API response containing the Copy Job definition.
         return $response
     } catch {
-        # Step 6: Capture and log detailed error information for troubleshooting.
+        # Capture and log detailed error information for troubleshooting.
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to retrieve Copy Job definition. Error: $errorDetails" -Level Error
     }

@@ -41,14 +41,14 @@ Author: Kamil Nowinski
     )
 
     try {
-        # Step 1: Ensure token validity
+        # Ensure token validity
         Confirm-TokenState
 
-        # Step 2: Construct the API URL
+        # Construct the API URL
         $apiEndpointUrl = "deploymentPipelines/$DeploymentPipelineId/stages/$StageId/unassignWorkspace"
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
-        # Step 3: Make the API request and validate response
+        # Make the API request and validate response
         if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Remove Workspace from Deployment Pipeline Stage")) {
             $apiParameters = @{
                 Uri = $apiEndpointUrl
@@ -61,11 +61,11 @@ Author: Kamil Nowinski
             $response = Invoke-FabricRestMethod @apiParameters
         }
 
-        # Step 4: Return results
+        # Return results
         $response
 
     } catch {
-        # Step 5: Error handling
+        # Error handling
         $errorDetails = $_.Exception.Message
         Write-Error -Message "Failed to unassign workspace from deployment pipeline stage. Error: $errorDetails"
     }

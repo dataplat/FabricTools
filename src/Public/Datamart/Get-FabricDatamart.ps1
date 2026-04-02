@@ -45,9 +45,9 @@ function Get-FabricDatamart {
     )
 
     try {
-        # Step 2: Ensure token validity
+        # Ensure token validity
         Confirm-TokenState
-        # Step 3: Initialize variables
+        # Initialize variables
 
         $apiEndpointURI = "workspaces/{0}/Datamarts" -f $WorkspaceId
 
@@ -57,7 +57,7 @@ function Get-FabricDatamart {
         }
         $Datamarts = Invoke-FabricRestMethod @apiParams
 
-        # Step 9: Filter results based on provided parameters
+        # Filter results based on provided parameters
 
         $response = if ($datamartId) {
             $Datamarts | Where-Object { $_.Id -eq $datamartId }
@@ -69,7 +69,7 @@ function Get-FabricDatamart {
             return $Datamarts
         }
 
-        # Step 10: Handle results
+        # Handle results
         if ($response) {
             Write-Message -Message "Datamart found matching the specified criteria." -Level Debug
             return $response
@@ -78,7 +78,7 @@ function Get-FabricDatamart {
             return $null
         }
     } catch {
-        # Step 10: Capture and log error details
+        # Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to retrieve Datamart. Error: $errorDetails" -Level Error
     }

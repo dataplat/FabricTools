@@ -31,19 +31,19 @@ Author: Tiago Balabuch
     )
 
     try {
-        # Step 1: Ensure token validity
+        # Ensure token validity
         Confirm-TokenState
 
-        # Step 2: Construct the API URL
+        # Construct the API URL
         $apiEndpointUrl = "{0}/admin/domains/{1}/workspaces" -f $FabricConfig.BaseUrl, $DomainId
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
-        # Step 3: Make the API request
+        # Make the API request
         $response = Invoke-FabricRestMethod `
             -Uri $apiEndpointUrl `
             -Method Get
 
-        # Step 4: Validate the response code
+        # Validate the response code
         if ($statusCode -ne 200) {
             Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
             Write-Message -Message "Error: $($response.message)" -Level Error
@@ -51,12 +51,12 @@ Author: Tiago Balabuch
             return $null
         }
 
-        # Step 5: Handle empty response
+        # Handle empty response
         if (-not $response) {
             Write-Message -Message "No data returned from the API." -Level Warning
             return $null
         }
-        # Step 6: Handle results
+        # Handle results
         if ($response) {
             return $response.value
         } else {
@@ -65,7 +65,7 @@ Author: Tiago Balabuch
         }
 
     } catch {
-        # Step 7: Capture and log error details
+        # Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to retrieve domain workspaces. Error: $errorDetails" -Level Error
     }

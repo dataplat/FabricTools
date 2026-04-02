@@ -52,18 +52,18 @@ function Get-FabricWarehouse {
     )
 
     try {
-        # Step 1: Handle ambiguous input
+        # Handle ambiguous input
         if ($WarehouseId -and $WarehouseName) {
             Write-Message -Message "Both 'WarehouseId' and 'WarehouseName' were provided. Please specify only one." -Level Error
             return $null
         }
 
-        # Step 2: Ensure token validity
+        # Ensure token validity
         Confirm-TokenState
-        # Step 3: Initialize variables
+        # Initialize variables
 
 
-        # Step 4: Loop to retrieve all capacities with continuation token
+        # Loop to retrieve all capacities with continuation token
         $apiEndpointURI = "workspaces/{0}/warehouses" -f $WorkspaceId
 
         $apiParams = @{
@@ -72,7 +72,7 @@ function Get-FabricWarehouse {
         }
         $Warehouses = (Invoke-FabricRestMethod @apiParams).Value
 
-        # Step 8: Filter results based on provided parameters
+        # Filter results based on provided parameters
         $Warehouse = if ($WarehouseId) {
             $Warehouses | Where-Object { $_.Id -eq $WarehouseId }
         } elseif ($WarehouseName) {
@@ -83,7 +83,7 @@ function Get-FabricWarehouse {
             $Warehouses
         }
 
-        # Step 9: Handle results
+        # Handle results
         if ($Warehouse) {
             Write-Message -Message "Warehouse found matching the specified criteria." -Level Debug
             return $Warehouse
@@ -92,7 +92,7 @@ function Get-FabricWarehouse {
             return $null
         }
     } catch {
-        # Step 10: Capture and log error details
+        # Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to retrieve Warehouse. Error: $errorDetails" -Level Error
     }

@@ -31,19 +31,19 @@ function Add-FabricWorkspaceIdentity {
     )
 
     try {
-        # Step 1: Ensure token validity
+        # Ensure token validity
         Confirm-TokenState
 
-        # Step 2: Construct the API URL
+        # Construct the API URL
         $apiEndpointUrl = "{0}/workspaces/{1}/provisionIdentity" -f $FabricConfig.BaseUrl, $WorkspaceId
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
-        # Step 3: Make the API request
+        # Make the API request
         $response = Invoke-FabricRestMethod `
             -Uri $apiEndpointUrl `
             -Method Post
 
-        # Step 4: Handle and log the response
+        # Handle and log the response
         switch ($statusCode) {
             200 {
                 Write-Message -Message "Workspace identity was successfully provisioned for workspace '$WorkspaceId'." -Level Info
@@ -86,7 +86,7 @@ function Add-FabricWorkspaceIdentity {
             }
         }
     } catch {
-        # Step 5: Handle and log errors
+        # Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to provision workspace identity. Error: $errorDetails" -Level Error
     }

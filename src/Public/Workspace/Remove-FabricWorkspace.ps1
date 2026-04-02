@@ -32,22 +32,22 @@ function Remove-FabricWorkspace {
 
     try
     {
-        # Step 1: Ensure token validity
+        # Ensure token validity
         Confirm-TokenState
 
-        # Step 2: Construct the API URL
+        # Construct the API URL
         $apiEndpointUrl = "{0}/workspaces/{1}" -f $FabricConfig.BaseUrl, $WorkspaceId
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
         if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Delete Workspace"))
         {
-            # Step 3: Make the API request
+            # Make the API request
             $response = Invoke-FabricRestMethod `
                 -Uri $apiEndpointUrl `
                 -Method Delete
         }
 
-        # Step 4: Validate the response code
+        # Validate the response code
         if ($statusCode -ne 200)
         {
             Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
@@ -62,7 +62,7 @@ function Remove-FabricWorkspace {
     }
     catch
     {
-        # Step 5: Capture and log error details
+        # Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to retrieve capacity. Error: $errorDetails" -Level Error
         return $null

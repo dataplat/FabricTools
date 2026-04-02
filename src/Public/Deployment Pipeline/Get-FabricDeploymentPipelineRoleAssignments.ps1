@@ -33,13 +33,13 @@ Author: Kamil Nowinski
     )
 
     try {
-        # Step 1: Ensure token validity
+        # Ensure token validity
         Confirm-TokenState
 
-        # Step 3: Construct the API URL
+        # Construct the API URL
         $apiEndpointUrl = "deploymentPipelines/$DeploymentPipelineId/roleAssignments"
 
-        # Step 4: Make the API request and validate response
+        # Make the API request and validate response
         $apiParameters = @{
             Uri = $apiEndpointUrl
             Method = 'GET'
@@ -49,11 +49,11 @@ Author: Kamil Nowinski
         }
         $response = Invoke-FabricRestMethod @apiParameters
 
-        # Step 7: Return results
+        # Return results
         $response
 
     } catch {
-        # Step 8: Error handling
+        # Error handling
         $errorDetails = $_.Exception.Message
         Write-Error -Message "Failed to get deployment pipeline role assignments. Error: $errorDetails"
     }

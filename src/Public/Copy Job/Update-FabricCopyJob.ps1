@@ -77,7 +77,7 @@ function Update-FabricCopyJob
 
         if ($PSCmdlet.ShouldProcess($apiEndpointURI, "Update Copy Job"))
         {
-            # Step 4: Make the API request
+            # Make the API request
             $response = Invoke-FabricRestMethod `
                 -Uri $apiEndpointURI `
                 -method Patch `

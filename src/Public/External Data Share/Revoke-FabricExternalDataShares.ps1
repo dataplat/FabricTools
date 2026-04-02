@@ -47,10 +47,10 @@ function Revoke-FabricExternalDataShares {
 
     try {
 
-        # Step 2: Ensure token validity
+        # Ensure token validity
         Confirm-TokenState
 
-        # Step 4: Loop to retrieve all capacities with continuation token
+        # Loop to retrieve all capacities with continuation token
         Write-Message -Message "Constructing API endpoint URI..." -Level Debug
         $apiEndpointURI = "admin/workspaces/{0}/items/{1}/externalDataShares/{2}/revoke" -f $WorkspaceId, $ItemId, $ExternalDataShareId
 
@@ -61,11 +61,11 @@ function Revoke-FabricExternalDataShares {
             -Method Post
         }
 
-        # Step 4: Return retrieved data
+        # Return retrieved data
         Write-Message -Message "Successfully revoked external data shares." -Level Info
         return $externalDataShares
     } catch {
-        # Step 10: Capture and log error details
+        # Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to retrieve External Data Shares. Error: $errorDetails" -Level Error
     }

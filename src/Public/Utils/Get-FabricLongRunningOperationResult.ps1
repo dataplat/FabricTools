@@ -31,15 +31,15 @@ Author: Tiago Balabuch
     Write-Message -Message "[Get-FabricLongRunningOperationResult]::Begin" -Level Debug
     Confirm-TokenState
 
-    # Step 1: Construct the API URL
+    # Construct the API URL
     $apiEndpointUrl = "{0}/operations/{1}/result" -f $FabricConfig.BaseUrl, $OperationId
     Write-Message -Message "[Get-FabricLongRunningOperationResult] API Endpoint: $apiEndpointUrl" -Level Debug
 
     try {
-        # Step 2: Make the API request
+        # Make the API request
         $response = Invoke-FabricRestMethod -Uri $apiEndpointUrl -Method Get
 
-        # Step 3: Validate the response code
+        # Validate the response code
         if ($script:statusCode -ne 200) {
             Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Debug
             Write-Message -Message "Error: $($response.message)" -Level Debug
@@ -50,7 +50,7 @@ Author: Tiago Balabuch
         return $response
 
     } catch {
-        # Step 3: Capture and log error details
+        # Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "An error occurred while returning the operation result: $errorDetails" -Level Error
         throw

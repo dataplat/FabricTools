@@ -55,14 +55,14 @@ function New-FabricReport
     )
     try
     {
-        # Step 1: Ensure token validity
+        # Ensure token validity
         Confirm-TokenState
 
-        # Step 2: Construct the API URL
+        # Construct the API URL
         $apiEndpointUrl = "{0}/workspaces/{1}/reports" -f $FabricConfig.BaseUrl, $WorkspaceId
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
-        # Step 3: Construct the request body
+        # Construct the request body
         $body = @{
             displayName = $ReportName
         }
@@ -89,7 +89,7 @@ function New-FabricReport
         Write-Message -Message "Request Body: $bodyJson" -Level Debug
 
         if ($PSCmdlet.ShouldProcess($ReportName, "Create Report")){
-            # Step 4: Make the API request
+            # Make the API request
             $response = Invoke-FabricRestMethod `
                 -Uri $apiEndpointUrl `
                 -Method Post `
@@ -98,7 +98,7 @@ function New-FabricReport
 
         Write-Message -Message "Response Code: $statusCode" -Level Debug
 
-        # Step 5: Handle and log the response
+        # Handle and log the response
         switch ($statusCode)
         {
             201
@@ -151,7 +151,7 @@ function New-FabricReport
     }
     catch
     {
-        # Step 6: Handle and log errors
+        # Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to create Report. Error: $errorDetails" -Level Error
     }

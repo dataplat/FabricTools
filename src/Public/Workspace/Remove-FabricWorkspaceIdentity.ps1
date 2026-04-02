@@ -33,23 +33,23 @@ function Remove-FabricWorkspaceIdentity
 
     try
     {
-        # Step 1: Ensure token validity
+        # Ensure token validity
         Confirm-TokenState
 
-        # Step 2: Construct the API URL
+        # Construct the API URL
         $apiEndpointUrl = "{0}/workspaces/{1}/deprovisionIdentity" -f $FabricConfig.BaseUrl, $WorkspaceId
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
         if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Deprovision Identity"))
         {
 
-            # Step 3: Make the API request
+            # Make the API request
             $response = Invoke-FabricRestMethod `
                 -Uri $apiEndpointUrl `
                 -Method Post
         }
 
-        # Step 4: Handle and log the response
+        # Handle and log the response
         switch ($statusCode)
         {
             200
@@ -94,7 +94,7 @@ function Remove-FabricWorkspaceIdentity
     }
     catch
     {
-        # Step 5: Handle and log errors
+        # Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to deprovision workspace identity. Error: $errorDetails" -Level Error
     }

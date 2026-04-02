@@ -52,10 +52,10 @@ Author: Kamil Nowinski
     )
 
     try {
-        # Step 1: Ensure token validity
+        # Ensure token validity
         Confirm-TokenState
 
-        # Step 2: Construct the API URL
+        # Construct the API URL
         if ($StageId) {
             $apiEndpointUrl = "deploymentPipelines/$DeploymentPipelineId/stages/$StageId"
         } else {
@@ -63,7 +63,7 @@ Author: Kamil Nowinski
         }
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
-        # Step 3: Make the API request
+        # Make the API request
         $apiParameters = @{
             Uri = $apiEndpointUrl
             Method = 'GET'
@@ -77,7 +77,7 @@ Author: Kamil Nowinski
         $response
 
     } catch {
-        # Step 6: Error handling
+        # Error handling
         $errorDetails = $_.Exception.Message
         Write-Error -Message "Failed to retrieve deployment pipeline stage(s). Error: $errorDetails"
     }

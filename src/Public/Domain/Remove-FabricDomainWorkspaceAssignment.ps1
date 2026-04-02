@@ -50,10 +50,10 @@ Author: Tiago Balabuch
 
     try
     {
-        # Step 1: Ensure token validity
+        # Ensure token validity
         Confirm-TokenState
 
-        # Step 2: Construct the API URL
+        # Construct the API URL
         # Determine the API endpoint URL based on the presence of WorkspaceIds
         $endpointSuffix = if ($WorkspaceIds)
         {
@@ -68,7 +68,7 @@ Author: Tiago Balabuch
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
 
-        # Step 3: Construct the request body (if needed)
+        # Construct the request body (if needed)
         $bodyJson = if ($WorkspaceIds)
         {
             $body = @{ workspacesIds = $WorkspaceIds }
@@ -82,14 +82,14 @@ Author: Tiago Balabuch
         Write-Message -Message "Request Body: $bodyJson" -Level Debug
         if ($PSCmdlet.ShouldProcess($DomainId, "Unassign Workspaces"))
         {
-            # Step 4: Make the API request to unassign specific workspaces
+            # Make the API request to unassign specific workspaces
             $response = Invoke-FabricRestMethod `
                 -Uri $apiEndpointUrl `
                 -Method Post `
                 -Body $bodyJson
         }
 
-        # Step 5: Validate the response code
+        # Validate the response code
         if ($statusCode -ne 200)
         {
             Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
@@ -101,7 +101,7 @@ Author: Tiago Balabuch
     }
     catch
     {
-        # Step 6: Capture and log error details
+        # Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to unassign workspaces to the domain with ID '$DomainId'. Error: $errorDetails" -Level Error
     }

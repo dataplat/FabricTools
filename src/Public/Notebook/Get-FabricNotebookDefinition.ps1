@@ -57,10 +57,10 @@ Author: Tiago Balabuch
     )
 
     try {
-        # Step 2: Ensure token validity
+        # Ensure token validity
         Confirm-TokenState
 
-        # Step 3: Construct the API URL
+        # Construct the API URL
         $apiEndpointUrl = "{0}/workspaces/{1}/notebooks/{2}/getDefinition" -f $FabricConfig.BaseUrl, $WorkspaceId, $NotebookId
 
         if ($NotebookFormat) {
@@ -70,12 +70,12 @@ Author: Tiago Balabuch
 
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
-        # Step 4: Make the API request
+        # Make the API request
         $response = Invoke-FabricRestMethod `
             -Uri $apiEndpointUrl `
             -Method Post
 
-        # Step 5: Validate the response code and handle the response
+        # Validate the response code and handle the response
         switch ($statusCode) {
             200 {
                 Write-Message -Message "Notebook '$NotebookId' definition retrieved successfully!" -Level Debug
@@ -120,7 +120,7 @@ Author: Tiago Balabuch
 
         }
     } catch {
-        # Step 9: Capture and log error details
+        # Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to retrieve Notebook. Error: $errorDetails" -Level Error
     }

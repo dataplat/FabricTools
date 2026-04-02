@@ -54,10 +54,10 @@ Author: Kamil Nowinski
     )
 
     try {
-        # Step 1: Ensure token validity
+        # Ensure token validity
         Confirm-TokenState
 
-        # Step 2: Validate stages
+        # Validate stages
         foreach ($stage in $Stages) {
             if (-not $stage.ContainsKey('DisplayName') -or
                 -not $stage.ContainsKey('IsPublic') -or
@@ -67,7 +67,7 @@ Author: Kamil Nowinski
             }
         }
 
-        # Step 3: Construct the request body
+        # Construct the request body
         $requestBody = @{
             displayName = $DisplayName
             stages = $Stages
@@ -76,7 +76,7 @@ Author: Kamil Nowinski
             $requestBody.description = $Description
         }
 
-        # Step 4: Make the API request and Validate response
+        # Make the API request and Validate response
         if ($PSCmdlet.ShouldProcess("Create new Deployment Pipeline")) {
             $apiParameters = @{
                 Uri = "deploymentPipelines"
@@ -88,11 +88,11 @@ Author: Kamil Nowinski
             $response = Invoke-FabricRestMethod @apiParameters
         }
 
-        # Step 5: Handle results
+        # Handle results
         $response
 
     } catch {
-        # Step 6: Error handling
+        # Error handling
         $errorDetails = $_.Exception.Message
         Write-Error -Message "Failed to create deployment pipeline. Error: $errorDetails"
     }

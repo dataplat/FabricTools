@@ -48,7 +48,7 @@ Author: Kamil Nowinski
     )
 
     try {
-        # Step 1: Ensure token validity
+        # Ensure token validity
         Confirm-TokenState
 
         if ($PSBoundParameters.ContainsKey("DeploymentPipelineName") -and $PSBoundParameters.ContainsKey("DeploymentPipelineId"))
@@ -65,7 +65,7 @@ Author: Kamil Nowinski
             $apiEndpointUrl = "deploymentPipelines"
         }
 
-        # Step 5: Make the API request
+        # Make the API request
         $apiParameters = @{
             Uri = $apiEndpointUrl
             Method = 'GET'
@@ -81,11 +81,11 @@ Author: Kamil Nowinski
             $response = $response | Where-Object { $_.displayName -eq $DeploymentPipelineName }
         }
 
-        # Step 7: Handle results
+        # Handle results
         $response
 
     } catch {
-        # Step 8: Error handling
+        # Error handling
         $errorDetails = $_.Exception.Message
         Write-Error -Message "Failed to retrieve deployment pipelines. Error: $errorDetails"
     }

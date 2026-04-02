@@ -37,21 +37,21 @@ function Get-FabricTenantSetting {
     )
 
     try {
-        # Step 1: Validate authentication token before making API requests
+        # Validate authentication token before making API requests
         Write-Message -Message "Validating authentication token..." -Level Debug
         Confirm-TokenState
         Write-Message -Message "Authentication token is valid." -Level Debug
 
-        # Step 2: Construct the API endpoint URL for retrieving tenant settings
+        # Construct the API endpoint URL for retrieving tenant settings
         $apiEndpointURI = "admin/tenantsettings"
         Write-Message -Message "Constructed API Endpoint: $apiEndpointURI" -Level Debug
 
-        # Step 3: Invoke the Fabric API to retrieve tenant settings
+        # Invoke the Fabric API to retrieve tenant settings
         $response = Invoke-FabricRestMethod `
             -Uri $apiEndpointURI `
             -Method Get
 
-        # Step 4: Filter tenant settings based on the provided SettingTitle parameter (if specified)
+        # Filter tenant settings based on the provided SettingTitle parameter (if specified)
         $settings = if ($SettingTitle) {
             Write-Message -Message "Filtering tenant settings by title: '$SettingTitle'" -Level Debug
             $response.tenantSettings | Where-Object { $_.title -eq $SettingTitle }
@@ -60,7 +60,7 @@ function Get-FabricTenantSetting {
             $response.tenantSettings
         }
 
-        # Step 5: Check if any tenant settings were found and return results accordingly
+        # Check if any tenant settings were found and return results accordingly
         if ($settings) {
             Write-Message -Message "Tenant settings successfully retrieved." -Level Debug
             return $settings
@@ -69,7 +69,7 @@ function Get-FabricTenantSetting {
             return $null
         }
     } catch {
-        # Step 6: Log detailed error information if the API request fails
+        # Log detailed error information if the API request fails
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Error retrieving tenant settings: $errorDetails" -Level Error
     }

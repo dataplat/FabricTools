@@ -54,14 +54,14 @@ function Update-FabricReport
     )
     try
     {
-        # Step 1: Ensure token validity
+        # Ensure token validity
         Confirm-TokenState
 
-        # Step 2: Construct the API URL
+        # Construct the API URL
         $apiEndpointUrl = "{0}/workspaces/{1}/reports/{2}" -f $FabricConfig.BaseUrl, $WorkspaceId, $ReportId
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
-        # Step 3: Construct the request body
+        # Construct the request body
         $body = @{
             displayName = $ReportName
         }
@@ -77,14 +77,14 @@ function Update-FabricReport
 
         if ($PSCmdlet.ShouldProcess($ReportName, "Update Report"))
         {
-            # Step 4: Make the API request
+            # Make the API request
             $response = Invoke-FabricRestMethod `
                 -Uri $apiEndpointUrl `
                 -Method Patch `
                 -Body $bodyJson
         }
 
-        # Step 5: Validate the response code
+        # Validate the response code
         if ($statusCode -ne 200)
         {
             Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
@@ -94,13 +94,13 @@ function Update-FabricReport
             return $null
         }
 
-        # Step 6: Handle results
+        # Handle results
         Write-Message -Message "Report '$ReportName' updated successfully!" -Level Info
         return $response
     }
     catch
     {
-        # Step 7: Handle and log errors
+        # Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to update Report. Error: $errorDetails" -Level Error
     }

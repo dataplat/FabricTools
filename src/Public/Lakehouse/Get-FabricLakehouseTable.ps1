@@ -38,12 +38,12 @@ Author: Tiago Balabuch
     )
 
     try {
-        # Step 1: Ensure token validity
+        # Ensure token validity
         Confirm-TokenState
 
 
 
-        # Step 2: Initialize variables
+        # Initialize variables
         $continuationToken = $null
         $tables = @()
         $maxResults = 100
@@ -54,10 +54,10 @@ Author: Tiago Balabuch
 
         $baseApiEndpointUrl = "{0}/workspaces/{1}/lakehouses/{2}/tables?maxResults={3}" -f $FabricConfig.BaseUrl, $WorkspaceId, $LakehouseId, $maxResults
 
-        # Step 3:  Loop to retrieve data with continuation token
+        #  Loop to retrieve data with continuation token
         Write-Message -Message "Loop started to get continuation token" -Level Debug
         do {
-            # Step 4: Construct the API URL
+            # Construct the API URL
             $apiEndpointUrl = $baseApiEndpointUrl
 
             if ($null -ne $continuationToken) {
@@ -67,13 +67,13 @@ Author: Tiago Balabuch
             }
             Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
-            # Step 5: Make the API request
+            # Make the API request
             $response = Invoke-FabricRestMethod `
                 -Uri $apiEndpointUrl `
                 -Method Get
 
             Write-Message -Message "API response code: $statusCode" -Level Debug
-            # Step 6: Validate the response code
+            # Validate the response code
             if ($statusCode -ne 200) {
                 Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
                 Write-Message -Message "Error: $($response.message)" -Level Error
@@ -82,7 +82,7 @@ Author: Tiago Balabuch
                 return $null
             }
 
-            # Step 7: Add data to the list
+            # Add data to the list
             if ($null -ne $response) {
                 Write-Message -Message "Adding data to the list" -Level Debug
                 $tables += $response.data
@@ -102,7 +102,7 @@ Author: Tiago Balabuch
             }
         } while ($null -ne $continuationToken)
         Write-Message -Message "Loop finished and all data added to the list" -Level Debug
-        # Step 9: Handle results
+        # Handle results
         if ($tables) {
             Write-Message -Message "Tables found in the Lakehouse '$LakehouseId'." -Level Debug
             return $tables
@@ -111,7 +111,7 @@ Author: Tiago Balabuch
             return $null
         }
     } catch {
-        # Step 10: Capture and log error details
+        # Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to retrieve Lakehouse. Error: $errorDetails" -Level Error
     }

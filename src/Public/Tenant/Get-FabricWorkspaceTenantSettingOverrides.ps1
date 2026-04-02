@@ -23,18 +23,18 @@ function Get-FabricWorkspaceTenantSettingOverrides {
     param ( )
 
     try {
-        # Step 1: Validate authentication token before making API requests
+        # Validate authentication token before making API requests
         Confirm-TokenState
 
-        # Step 2: Construct the API endpoint URL for retrieving workspaces tenant setting overrides
+        # Construct the API endpoint URL for retrieving workspaces tenant setting overrides
         $apiEndpointURI = "admin/workspaces/delegatedTenantSettingOverrides"
 
-        # Step 3: Invoke the Fabric API to retrieve workspaces tenant setting overrides
+        # Invoke the Fabric API to retrieve workspaces tenant setting overrides
         $response = Invoke-FabricRestMethod `
             -Uri $apiEndpointURI `
             -Method Get
 
-        # Step 4: Check if any workspaces tenant setting overrides were retrieved and handle results accordingly
+        # Check if any workspaces tenant setting overrides were retrieved and handle results accordingly
         if ($response) {
             Write-Message -Message "Successfully retrieved workspaces tenant setting overrides." -Level Debug
             return $response
@@ -43,7 +43,7 @@ function Get-FabricWorkspaceTenantSettingOverrides {
             return $null
         }
     } catch {
-        # Step 5: Log detailed error information if the API request fails
+        # Log detailed error information if the API request fails
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Error retrieving workspaces tenant setting overrides: $errorDetails" -Level Error
     }

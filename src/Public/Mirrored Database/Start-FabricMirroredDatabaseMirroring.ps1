@@ -44,20 +44,20 @@ function Start-FabricMirroredDatabaseMirroring
 
     try
     {
-        # Step 2: Ensure token validity
+        # Ensure token validity
         Confirm-TokenState
 
         $apiEndpointUrl = "{0}/workspaces/{1}/mirroredDatabases/{2}/startMirroring" -f $FabricConfig.BaseUrl, $WorkspaceId, $MirroredDatabaseId
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
         if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Start MirroredDatabase Mirroring"))
         {
-            # Step 6: Make the API request
+            # Make the API request
             $response = Invoke-FabricRestMethod `
                 -Uri $apiEndpointUrl `
                 -Method Post
         }
 
-        # Step 7: Validate the response code
+        # Validate the response code
         if ($statusCode -ne 200)
         {
             Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
@@ -67,13 +67,13 @@ function Start-FabricMirroredDatabaseMirroring
             return $null
         }
 
-        # Step 9: Handle results
+        # Handle results
         Write-Message -Message "Database mirroring started successfully for MirroredDatabaseId: $MirroredDatabaseId" -Level Info
         return
     }
     catch
     {
-        # Step 10: Capture and log error details
+        # Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to start MirroredDatabase. Error: $errorDetails" -Level Error
     }

@@ -52,7 +52,7 @@ function Get-FabricDataPipeline {
     )
 
     try {
-        # Step 1: Handle ambiguous input
+        # Handle ambiguous input
         if ($DataPipelineId -and $DataPipelineName) {
             Write-Message -Message "Both 'DataPipelineId' and 'DataPipelineName' were provided. Please specify only one." -Level Error
             return $null

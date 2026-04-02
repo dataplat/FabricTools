@@ -47,10 +47,10 @@ Author: Tiago Balabuch
 
     try
     {
-        # Step 1: Ensure token validity
+        # Ensure token validity
         Confirm-TokenState
 
-        # Step 3: Construct the request body
+        # Construct the request body
         $apiEndpointUrl = "{0}/admin/domains" -f $FabricConfig.BaseUrl
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
@@ -76,14 +76,14 @@ Author: Tiago Balabuch
         if ($PSCmdlet.ShouldProcess($DomainName, "Create Domain"))
         {
 
-            # Step 4: Make the API request
+            # Make the API request
             $response = Invoke-FabricRestMethod `
                 -Uri $apiEndpointUrl `
                 -Method Post `
                 -Body $bodyJson
         }
 
-        # Step 5: Handle and log the response
+        # Handle and log the response
         switch ($statusCode)
         {
             201
@@ -128,7 +128,7 @@ Author: Tiago Balabuch
     }
     catch
     {
-        # Step 6: Handle and log errors
+        # Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to create domain. Error: $errorDetails" -Level Error
     }

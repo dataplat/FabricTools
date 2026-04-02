@@ -33,21 +33,21 @@ function Remove-FabricWorkspaceCapacity
     )
     try
     {
-        # Step 1: Ensure token validity
+        # Ensure token validity
         Confirm-TokenState
 
-        # Step 2: Construct the API URL
+        # Construct the API URL
         $apiEndpointUrl = "{0}/workspaces/{1}/unassignFromCapacity" -f $FabricConfig.BaseUrl, $WorkspaceId
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Message
 
         if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Unassign Workspace from Capacity"))
         {
-            # Step 3: Make the API request
+            # Make the API request
             $response = Invoke-FabricRestMethod `
                 -Uri $apiEndpointUrl `
                 -Method Post
         }
-        # Step 4: Validate the response code
+        # Validate the response code
         if ($statusCode -ne 202)
         {
             Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
@@ -60,7 +60,7 @@ function Remove-FabricWorkspaceCapacity
     }
     catch
     {
-        # Step 5: Capture and log error details
+        # Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to unassign workspace from capacity. Error: $errorDetails" -Level Error
     }
