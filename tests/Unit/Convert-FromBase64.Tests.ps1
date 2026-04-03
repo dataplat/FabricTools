@@ -33,6 +33,9 @@ Describe "Convert-FromBase64" -Tag "UnitTests" {
     }
 
     Context "Error handling" {
+        BeforeAll {
+            Mock Write-Message
+        }
         It 'Should handle invalid Base64 string gracefully' {
             { Convert-FromBase64 -Base64String 'NotValidBase64!!!' } | Should -Throw
         }
