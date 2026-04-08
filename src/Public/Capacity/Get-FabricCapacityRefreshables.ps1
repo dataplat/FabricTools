@@ -1,24 +1,43 @@
 function Get-FabricCapacityRefreshables {
     <#
 .SYNOPSIS
-Retrieves the top refreshable capacities for the tenant.
+Returns a list of refreshables for all capacities that the user has access to.
 
 .DESCRIPTION
-The Get-FabricCapacityRefreshables function retrieves the top refreshable capacities for the tenant. It supports multiple aliases for flexibility.
+The Get-FabricCapacityRefreshables function returns refreshables (datasets with refresh activity)
+for all capacities the user has access to. Power BI retains a seven-day refresh history for each
+dataset, up to a maximum of 60 refreshes.
+
+Requires scope: Capacity.Read.All or Capacity.ReadWrite.All
 
 .PARAMETER top
-The number of top refreshable capacities to retrieve. This is a mandatory parameter.
+Required. Returns only the first n results. Must be a positive integer (minimum: 1).
+
+.PARAMETER expand
+Optional. Accepts a comma-separated list of data types to expand inline in the response.
+Supported values: 'capacity', 'group'.
+
+.PARAMETER filter
+Optional. Returns a subset of results based on an OData filter query condition.
+
+.PARAMETER skip
+Optional. Skips the first n results. Use together with -top to fetch results beyond the first 1000.
 
 .EXAMPLE
-    This example retrieves the top 5 refreshable capacities for the tenant.
+    Retrieves the top 10 refreshables across all capacities.
 
     ```powershell
-    Get-FabricCapacityRefreshables -top 5
+    Get-FabricCapacityRefreshables -top 10
+    ```
+
+.EXAMPLE
+    Retrieves the top 5 refreshables with capacity details expanded.
+
+    ```powershell
+    Get-FabricCapacityRefreshables -top 5 -expand 'capacity'
     ```
 
 .NOTES
-The function retrieves the PowerBI access token and makes a GET request to the PowerBI API to retrieve the top refreshable capacities. It then returns the 'value' property of the response, which contains the capacities.
-
 Author: Ioana Bouariu
 
     #>
