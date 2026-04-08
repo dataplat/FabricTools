@@ -37,7 +37,8 @@
         "pscmdlet",
         "RELEASENOTES",
         "steppable",
-        "Kusto"
+        "Kusto",
+        "Eventstreams"
     ],
     "[markdown]": {
         "files.trimTrailingWhitespace": false,
