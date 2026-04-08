@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Added `Get-FabricDataset` cmdlet to retrieve Power BI datasets from My Workspace or a specific workspace, with optional filtering by `DatasetId` or `DatasetName` (`WorkspaceId` parameter, alias `GroupId`)
+- Added `Get-FabricDatasetRefreshHistory` cmdlet to retrieve the refresh history of a Power BI dataset, with optional `WorkspaceId` (alias `GroupId`) and `Top` parameters
+- Added `Invoke-FabricDatasetRefresh` cmdlet (in `Dataset` folder) to trigger on-demand dataset refreshes, supporting both standard and enhanced refresh parameters (`Type`, `CommitMode`, `MaxParallelism`, `RetryCount`, `Timeout`, `EffectiveDate`, `ApplyRefreshPolicy`, `Objects`)
+- Updated unit tests for `Invoke-FabricDatasetRefresh` to cover the new parameter set, alias, ShouldProcess, body construction, and error handling
+
 ### Changed
 
 - Renamed `Add-FabricWorkspaceCapacityAssignment` to `Add-FabricWorkspaceCapacity` (issue #42)

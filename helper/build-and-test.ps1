@@ -35,3 +35,13 @@ $tests.Tests | where Result -eq 'Failed' | ft -Property Path, Result, ErrorRecor
 
 
 Invoke-Pester .\tests\Integration\Notebook* -PassThru
+
+
+Get-FabricDataset
+Get-FabricDataset -DatasetName 'sampledwh'
+Get-FabricDataset -GroupId '653b4281-c1d1-4307-a8c9-cc18c0b0b8ff'
+
+Get-FabricDataset -DatasetName 'sampledwh' | Get-FabricDatasetRefreshHistory
+Get-FabricDatasetRefreshHistory -DatasetId e1483950-dce9-414c-be60-8d4e66c37e2e
+
+Get-FabricWorkspace -WorkspaceId '653b4281-c1d1-4307-a8c9-cc18c0b0b8ff'
