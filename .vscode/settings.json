@@ -38,7 +38,10 @@
         "RELEASENOTES",
         "steppable",
         "Kusto",
-        "Eventstreams"
+        "Eventstreams",
+        "Eventhouse",
+        "Queryset",
+        "Refreshables"
     ],
     "[markdown]": {
         "files.trimTrailingWhitespace": false,

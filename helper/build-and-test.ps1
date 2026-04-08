@@ -31,3 +31,7 @@ $e.ErrorRecord
 Connect-FabricAccount -Debug
 $tests = Invoke-Pester .\tests\Integration -PassThru
 $tests.Tests | where Result -eq 'Failed' | ft -Property Path, Result, ErrorRecord -AutoSize
+
+
+
+Invoke-Pester .\tests\Integration\Notebook* -PassThru

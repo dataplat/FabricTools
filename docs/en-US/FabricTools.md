@@ -478,10 +478,6 @@ Creates a new ML Model in a specified Microsoft Fabric workspace.
 
 Creates a new notebook in a specified Microsoft Fabric workspace.
 
-### [New-FabricNotebookNEW](New-FabricNotebookNEW.md)
-
-Creates a new notebook in a specified Microsoft Fabric workspace.
-
 ### [New-FabricRecoveryPoint](New-FabricRecoveryPoint.md)
 
 Create a recovery point for a Fabric data warehouse
@@ -861,4 +857,3 @@ Updates the role assignment for a specific principal in a Fabric workspace.
 ### [Write-FabricLakehouseTableData](Write-FabricLakehouseTableData.md)
 
 Loads data into a specified table in a Lakehouse within a Fabric workspace.
-

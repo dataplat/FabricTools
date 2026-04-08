@@ -121,7 +121,6 @@ Generated on 2026-01-11.
 - New-FabricMLExperiment
 - New-FabricMLModel
 - New-FabricNotebook
-- New-FabricNotebookNEW
 - New-FabricReport
 - New-FabricRecoveryPoint
 - New-FabricSemanticModel
@@ -310,7 +309,6 @@ Generated on 2026-01-11.
 - New-FabricRecoveryPoint
 - New-FabricReflex
 - New-FabricSemanticModel
-- New-FabricNotebookNEW
 - New-FabricNotebook
 - New-FabricMLModel
 - New-FabricMLExperiment
@@ -550,7 +548,6 @@ Generated on 2026-01-11.
 - New-FabricRecoveryPoint
 - New-FabricReflex
 - New-FabricSemanticModel
-- New-FabricNotebookNEW
 - New-FabricNotebook
 - New-FabricMLModel
 - New-FabricMLExperiment
