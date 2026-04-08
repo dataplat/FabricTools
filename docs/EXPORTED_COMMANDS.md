@@ -34,7 +34,9 @@ Generated on 2026-04-08.
 - Get-FabricDashboard
 - Get-FabricDatamart
 - Get-FabricDataPipeline
+- Get-FabricDataset
 - Get-FabricDatasetRefreshes
+- Get-FabricDatasetRefreshHistory
 - Get-FabricDebugInfo
 - Get-FabricDeploymentPipeline
 - Get-FabricDeploymentPipelineOperation

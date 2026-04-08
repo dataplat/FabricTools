@@ -6,21 +6,21 @@ Locale: en-US
 Module Name: FabricTools
 ms.date: 04/08/2026
 PlatyPS schema version: 2024-05-01
-title: Get-FabricNotebook
+title: Get-FabricDataset
 ---
 
-# Get-FabricNotebook
+# Get-FabricDataset
 
 ## SYNOPSIS
 
-Retrieves an Notebook or a list of Notebooks from a specified workspace in Microsoft Fabric.
+Retrieves one or more Power BI datasets from My Workspace or a specific workspace.
 
 ## SYNTAX
 
 ### __AllParameterSets
 
 ```
-Get-FabricNotebook [-WorkspaceId] <guid> [[-NotebookId] <guid>] [[-NotebookName] <string>]
+Get-FabricDataset [[-WorkspaceId] <guid>] [[-DatasetId] <guid>] [[-DatasetName] <string>]
  [<CommonParameters>]
 ```
 
@@ -28,32 +28,52 @@ Get-FabricNotebook [-WorkspaceId] <guid> [[-NotebookId] <guid>] [[-NotebookName]
 
 ## DESCRIPTION
 
-The `Get-FabricNotebook` function sends a GET request to the Fabric API to retrieve Notebook details for a given workspace.
-It can filter the results by `NotebookName`.
+Calls the Power BI REST API to list datasets.
+When `GroupId` is supplied the request targets a specific workspace
+(`groups/{groupId}/datasets`); otherwise it targets My Workspace (`datasets`).
+
+Optionally filter the results to a single dataset by `DatasetId` or `DatasetName`.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 
-Retrieves the "Development" Notebook from workspace "12345".
+Retrieves all datasets from My Workspace.
 
 ```powershell
-Get-FabricNotebook -WorkspaceId "12345" -NotebookName "Development"
+Get-FabricDataset
 ```
 
 ### EXAMPLE 2
 
-Retrieves all Notebooks in workspace "12345".
+Retrieves all datasets from a specific workspace.
 
 ```powershell
-Get-FabricNotebook -WorkspaceId "12345"
+Get-FabricDataset -WorkspaceId "abcdef12-3456-7890-abcd-ef1234567890"
+```
+
+### EXAMPLE 3
+
+Retrieves a specific dataset by name from a workspace.
+
+```powershell
+Get-FabricDataset -WorkspaceId "abcdef12-3456-7890-abcd-ef1234567890" -DatasetName "Sales Model"
+```
+
+### EXAMPLE 4
+
+Retrieves a specific dataset by ID from My Workspace.
+
+```powershell
+Get-FabricDataset -DatasetId "12345678-90ab-cdef-1234-567890abcdef"
 ```
 
 ## PARAMETERS
 
-### -NotebookId
+### -DatasetId
 
-(Optional) The ID of a specific Notebook to retrieve.
+(Optional) The unique identifier of a specific dataset to return.
+Cannot be combined with `DatasetName`.
 
 ```yaml
 Type: System.Guid
@@ -72,9 +92,10 @@ AcceptedValues: []
 HelpMessage: ''
 ```
 
-### -NotebookName
+### -DatasetName
 
-(Optional) The name of the specific Notebook to retrieve.
+(Optional) The display name of a specific dataset to return.
+Cannot be combined with `DatasetId`.
 
 ```yaml
 Type: System.String
@@ -95,17 +116,19 @@ HelpMessage: ''
 
 ### -WorkspaceId
 
-(Mandatory) The ID of the workspace to query Notebooks.
+(Optional) The unique identifier of the workspace to query.
+When omitted, datasets from My Workspace are returned.
 
 ```yaml
 Type: System.Guid
 DefaultValue: ''
 SupportsWildcards: false
-Aliases: []
+Aliases:
+- GroupId
 ParameterSets:
 - Name: (All)
   Position: 0
-  IsRequired: true
+  IsRequired: false
   ValueFromPipeline: false
   ValueFromPipelineByPropertyName: false
   ValueFromRemainingArguments: false
@@ -127,10 +150,12 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-- Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
+- Requires a valid Power BI / Fabric token (call `Connect-FabricAccount` first).
 - Calls `Confirm-TokenState` to ensure token validity before making the API request.
+- Callers with Read-only access to a workspace may receive a limited response
+  (only `id` and `name` fields) from the in-group endpoint.
 
-Author: Tiago Balabuch, Kamil Nowinski
+Author: Kamil Nowinski
 
 ## RELATED LINKS
 

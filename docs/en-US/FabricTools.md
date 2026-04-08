@@ -5,7 +5,7 @@ HelpInfoUri: https://www.github.com/dataplat/FabricTools
 Locale: en-US
 Module Guid: f2a0f9e6-fab6-41fc-9e1c-0c94ff38f794
 Module Name: FabricTools
-ms.date: 04/01/2026
+ms.date: 04/08/2026
 PlatyPS schema version: 2024-05-01
 title: FabricTools Module
 ---
@@ -88,7 +88,7 @@ Retrieves capacity details from a specified Microsoft Fabric workspace.
 
 ### [Get-FabricCapacityRefreshables](Get-FabricCapacityRefreshables.md)
 
-Retrieves the top refreshable capacities for the tenant.
+Returns a list of refreshables for all capacities that the user has access to.
 
 ### [Get-FabricCapacitySkus](Get-FabricCapacitySkus.md)
 
@@ -138,9 +138,17 @@ Retrieves datamarts from a specified workspace.
 
 Retrieves data pipelines from a specified Microsoft Fabric workspace.
 
+### [Get-FabricDataset](Get-FabricDataset.md)
+
+Retrieves one or more Power BI datasets from My Workspace or a specific workspace.
+
 ### [Get-FabricDatasetRefreshes](Get-FabricDatasetRefreshes.md)
 
 Retrieves the refresh history of a specified dataset in a PowerBI workspace.
+
+### [Get-FabricDatasetRefreshHistory](Get-FabricDatasetRefreshHistory.md)
+
+Retrieves the refresh history of a Power BI dataset.
 
 ### [Get-FabricDebugInfo](Get-FabricDebugInfo.md)
 
@@ -302,10 +310,6 @@ Retrieves the definition of a notebook from a specific workspace in Microsoft Fa
 
 Retrieves paginated report details from a specified Microsoft Fabric workspace.
 
-### [Get-FabricRecoveryPoint](Get-FabricRecoveryPoint.md)
-
-Get a list of Fabric recovery points.
-
 ### [Get-FabricReflex](Get-FabricReflex.md)
 
 Retrieves Reflex details from a specified Microsoft Fabric workspace.
@@ -394,10 +398,6 @@ Retrieves workspace usage metrics data.
 
 Retrieves the user(s) of a workspace.
 
-### [Get-Sha256](Get-Sha256.md)
-
-Calculates the SHA256 hash of a string.
-
 ### [Import-FabricEnvironmentStagingLibrary](Import-FabricEnvironmentStagingLibrary.md)
 
 Uploads a library to the staging environment in a Microsoft Fabric workspace.
@@ -408,7 +408,7 @@ Imports items using the Power BI Project format (PBIP) into a Fabric workspace f
 
 ### [Invoke-FabricDatasetRefresh](Invoke-FabricDatasetRefresh.md)
 
-This function invokes a refresh of a PowerBI dataset
+Triggers a refresh of a Power BI dataset.
 
 ### [Invoke-FabricKQLCommand](Invoke-FabricKQLCommand.md)
 
@@ -477,10 +477,6 @@ Creates a new ML Model in a specified Microsoft Fabric workspace.
 ### [New-FabricNotebook](New-FabricNotebook.md)
 
 Creates a new notebook in a specified Microsoft Fabric workspace.
-
-### [New-FabricRecoveryPoint](New-FabricRecoveryPoint.md)
-
-Create a recovery point for a Fabric data warehouse
 
 ### [New-FabricReflex](New-FabricReflex.md)
 
@@ -598,10 +594,6 @@ Removes an ML Model from a specified Microsoft Fabric workspace.
 
 Deletes an Notebook from a specified workspace in Microsoft Fabric.
 
-### [Remove-FabricRecoveryPoint](Remove-FabricRecoveryPoint.md)
-
-Remove a selected Fabric Recovery Point.
-
 ### [Remove-FabricReflex](Remove-FabricReflex.md)
 
 Removes an Reflex from a specified Microsoft Fabric workspace.
@@ -649,10 +641,6 @@ Deprovisions the Managed Identity for a specified Fabric workspace.
 ### [Remove-FabricWorkspaceRoleAssignment](Remove-FabricWorkspaceRoleAssignment.md)
 
 Removes a role assignment from a Fabric workspace.
-
-### [Restore-FabricRecoveryPoint](Restore-FabricRecoveryPoint.md)
-
-Restore a Fabric data warehouse to a specified restore pont.
 
 ### [Resume-FabricCapacity](Resume-FabricCapacity.md)
 
@@ -857,3 +845,4 @@ Updates the role assignment for a specific principal in a Fabric workspace.
 ### [Write-FabricLakehouseTableData](Write-FabricLakehouseTableData.md)
 
 Loads data into a specified table in a Lakehouse within a Fabric workspace.
+

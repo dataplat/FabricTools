@@ -6,21 +6,21 @@ Locale: en-US
 Module Name: FabricTools
 ms.date: 04/08/2026
 PlatyPS schema version: 2024-05-01
-title: Get-FabricNotebook
+title: Get-FabricDatasetRefreshHistory
 ---
 
-# Get-FabricNotebook
+# Get-FabricDatasetRefreshHistory
 
 ## SYNOPSIS
 
-Retrieves an Notebook or a list of Notebooks from a specified workspace in Microsoft Fabric.
+Retrieves the refresh history of a Power BI dataset.
 
 ## SYNTAX
 
 ### __AllParameterSets
 
 ```
-Get-FabricNotebook [-WorkspaceId] <guid> [[-NotebookId] <guid>] [[-NotebookName] <string>]
+Get-FabricDatasetRefreshHistory [-DatasetId] <guid> [[-WorkspaceId] <guid>] [[-Top] <int>]
  [<CommonParameters>]
 ```
 
@@ -28,32 +28,37 @@ Get-FabricNotebook [-WorkspaceId] <guid> [[-NotebookId] <guid>] [[-NotebookName]
 
 ## DESCRIPTION
 
-The `Get-FabricNotebook` function sends a GET request to the Fabric API to retrieve Notebook details for a given workspace.
-It can filter the results by `NotebookName`.
+Calls the Power BI REST API to retrieve the refresh history for a specified dataset.
+When `GroupId` is supplied the request targets the dataset inside a specific workspace
+(`groups/{groupId}/datasets/{datasetId}/refreshes`); otherwise it targets the dataset
+in My Workspace (`datasets/{datasetId}/refreshes`).
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 
-Retrieves the "Development" Notebook from workspace "12345".
+Retrieves the refresh history for a dataset in My Workspace.
 
 ```powershell
-Get-FabricNotebook -WorkspaceId "12345" -NotebookName "Development"
+Get-FabricDatasetRefreshHistory -DatasetId "12345678-90ab-cdef-1234-567890abcdef"
 ```
 
 ### EXAMPLE 2
 
-Retrieves all Notebooks in workspace "12345".
+Retrieves the last 10 refresh history entries for a dataset in a specific workspace.
 
 ```powershell
-Get-FabricNotebook -WorkspaceId "12345"
+Get-FabricDatasetRefreshHistory `
+    -DatasetId "12345678-90ab-cdef-1234-567890abcdef" `
+    -WorkspaceId "abcdef12-3456-7890-abcd-ef1234567890" `
+    -Top 10
 ```
 
 ## PARAMETERS
 
-### -NotebookId
+### -DatasetId
 
-(Optional) The ID of a specific Notebook to retrieve.
+(Mandatory) The unique identifier of the dataset whose refresh history to retrieve.
 
 ```yaml
 Type: System.Guid
@@ -62,8 +67,8 @@ SupportsWildcards: false
 Aliases: []
 ParameterSets:
 - Name: (All)
-  Position: 1
-  IsRequired: false
+  Position: 0
+  IsRequired: true
   ValueFromPipeline: false
   ValueFromPipelineByPropertyName: false
   ValueFromRemainingArguments: false
@@ -72,13 +77,15 @@ AcceptedValues: []
 HelpMessage: ''
 ```
 
-### -NotebookName
+### -Top
 
-(Optional) The name of the specific Notebook to retrieve.
+(Optional) The number of refresh history entries to return.
+Must be at least 1.
+Defaults to 60 (Power BI API default).
 
 ```yaml
-Type: System.String
-DefaultValue: ''
+Type: System.Int32
+DefaultValue: 0
 SupportsWildcards: false
 Aliases: []
 ParameterSets:
@@ -95,17 +102,19 @@ HelpMessage: ''
 
 ### -WorkspaceId
 
-(Mandatory) The ID of the workspace to query Notebooks.
+(Optional) The unique identifier of the workspace that contains the dataset.
+When omitted, the My Workspace endpoint is used.
 
 ```yaml
 Type: System.Guid
 DefaultValue: ''
 SupportsWildcards: false
-Aliases: []
+Aliases:
+- GroupId
 ParameterSets:
 - Name: (All)
-  Position: 0
-  IsRequired: true
+  Position: 1
+  IsRequired: false
   ValueFromPipeline: false
   ValueFromPipelineByPropertyName: false
   ValueFromRemainingArguments: false
@@ -127,10 +136,13 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-- Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
+- Requires a valid Power BI / Fabric token (call `Connect-FabricAccount` first).
 - Calls `Confirm-TokenState` to ensure token validity before making the API request.
+- OneDrive refresh history is not returned by the Power BI API.
+- The API retains at most 60 entries; entries older than 3 days are pruned once more
+  than 20 exist.
 
-Author: Tiago Balabuch, Kamil Nowinski
+Author: Kamil Nowinski
 
 ## RELATED LINKS
 
