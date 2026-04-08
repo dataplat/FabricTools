@@ -49,9 +49,11 @@ function Remove-FabricDataPipeline
         if ($PSCmdlet.ShouldProcess($apiEndpointURI, "Delete DataPipeline"))
         {
             # Make the API request
-            $response = Invoke-FabricRestMethod `
-                -Uri $apiEndpointURI `
-                -Method Delete
+            $apiParams = @{
+                Uri    = $apiEndpointURI
+                Method = 'Delete'
+            }
+            $response = Invoke-FabricRestMethod @apiParams
         }
         Write-Message -Message "DataPipeline '$DataPipelineId' deleted successfully from workspace '$WorkspaceId'." -Level Info
         return $response

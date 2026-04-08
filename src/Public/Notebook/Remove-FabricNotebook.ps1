@@ -49,9 +49,11 @@ Author: Tiago Balabuch
         if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Remove Notebook"))
         {
             # Make the API request
-            $response = Invoke-FabricRestMethod `
-                -Uri $apiEndpointUrl `
-                -Method Delete
+            $apiParams = @{
+                Uri    = $apiEndpointUrl
+                Method = 'Delete'
+            }
+            $response = Invoke-FabricRestMethod @apiParams
         }
 
         # Validate the response code

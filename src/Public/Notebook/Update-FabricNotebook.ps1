@@ -84,10 +84,12 @@ Author: Tiago Balabuch
         if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Update Notebook"))
         {
             # Make the API request
-            $response = Invoke-FabricRestMethod `
-                -Uri $apiEndpointUrl `
-                -Method Patch `
-                -Body $bodyJson
+            $apiParams = @{
+                Uri    = $apiEndpointUrl
+                Method = 'Patch'
+                Body   = $bodyJson
+            }
+            $response = Invoke-FabricRestMethod @apiParams
         }
         # Validate the response code
         if ($statusCode -ne 200)

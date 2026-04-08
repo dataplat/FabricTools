@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Renamed `Add-FabricWorkspaceCapacityAssignment` to `Add-FabricWorkspaceCapacity` (issue #42)
 - Renamed `Remove-FabricWorkspaceCapacityAssignment` to `Remove-FabricWorkspaceCapacity` (issue #42)
+- Refactored all `Invoke-FabricRestMethod` calls in Notebook cmdlets to use hash splatting instead of backtick line continuation (issue #87)
+- Refactored all `Invoke-FabricRestMethod` calls in Data Pipeline cmdlets to use hash splatting instead of backtick line continuation (issue #87)
 
 ### Fixed
 

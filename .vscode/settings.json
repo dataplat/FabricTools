@@ -41,7 +41,8 @@
         "Eventstreams",
         "Eventhouse",
         "Queryset",
-        "Refreshables"
+        "Refreshables",
+        "ipynb"
     ],
     "[markdown]": {
         "files.trimTrailingWhitespace": false,

@@ -74,8 +74,8 @@ function New-FabricDataPipeline
             # Make the API request
             $apiParams = @{
                 Uri    = $apiEndpointURI
-                method = 'Post'
-                body   = $bodyJson
+                Method = 'Post'
+                Body   = $bodyJson
             }
             $response = Invoke-FabricRestMethod @apiParams
         }

@@ -78,10 +78,12 @@ function Update-FabricDataPipeline
         if ($PSCmdlet.ShouldProcess($apiEndpointURI, "Update DataPipeline"))
         {
             # Make the API request
-            $response = Invoke-FabricRestMethod `
-                -Uri $apiEndpointURI `
-                -Method Patch `
-                -Body $bodyJson
+            $apiParams = @{
+                Uri    = $apiEndpointURI
+                Method = 'Patch'
+                Body   = $bodyJson
+            }
+            $response = Invoke-FabricRestMethod @apiParams
         }
 
         Write-Message -Message "DataPipeline '$DataPipelineName' updated successfully!" -Level Info

@@ -85,9 +85,11 @@ Author: Tiago Balabuch
             Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
             # Make the API request
-            $response = Invoke-FabricRestMethod `
-                -Uri $apiEndpointUrl `
-                -Method Get
+            $apiParams = @{
+                Uri    = $apiEndpointUrl
+                Method = 'Get'
+            }
+            $response = Invoke-FabricRestMethod @apiParams
 
             # Validate the response code
             if ($statusCode -ne 200) {

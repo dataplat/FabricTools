@@ -143,10 +143,12 @@ Author: Tiago Balabuch
         if ($PSCmdlet.ShouldProcess($NotebookName, "Create Notebook"))
         {
             # Make the API request
-            $response = Invoke-FabricRestMethod `
-                -Uri $apiEndpointUrl `
-                -Method Post `
-                -Body $bodyJson
+            $apiParams = @{
+                Uri    = $apiEndpointUrl
+                Method = 'Post'
+                Body   = $bodyJson
+            }
+            $response = Invoke-FabricRestMethod @apiParams
         }
         # Handle and log the response
         switch ($statusCode)
