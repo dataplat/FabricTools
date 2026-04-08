@@ -152,7 +152,14 @@ function Connect-FabricAccount {
         if ($PSCmdlet.ShouldProcess("Setting Fabric authentication token and headers for $($azContext.Account)")) {
             $ResourceUrl = Get-PSFConfigValue -FullName 'FabricTools.FabricApi.ResourceUrl'
             Write-Message "Get authentication token from $ResourceUrl" -Level Verbose
-            $accessToken = (Get-AzAccessToken -ResourceUrl $ResourceUrl)
+            try {
+                $accessToken = Get-AzAccessToken -ResourceUrl $ResourceUrl -ErrorAction Stop
+            } catch {
+                Write-Message "Token acquisition failed for $ResourceUrl (MFA or conditional access may have expired). Re-authenticating with resource scope..." -Level Warning
+                $reconnectTenantId = if ($TenantId) { $TenantId } else { $azContext.Tenant.Id }
+                $null = Connect-AzAccount -Tenant $reconnectTenantId -AuthScope $ResourceUrl
+                $accessToken = Get-AzAccessToken -ResourceUrl $ResourceUrl -ErrorAction Stop
+            }
             Set-PSFConfig -FullName 'FabricTools.FabricSession.AccessToken' -Value $accessToken
             $plainTextToken = $accessToken.Token | ConvertFrom-SecureString -AsPlainText
             Write-Message "Setup headers for Fabric API calls" -Level Debug
@@ -165,7 +172,14 @@ function Connect-FabricAccount {
         if ($PSCmdlet.ShouldProcess("Setting Azure authentication token and headers for $($azContext.Account)")) {
             $BaseApiUrl = Get-PSFConfigValue -FullName 'FabricTools.AzureApi.BaseUrl'
             Write-Message "Get authentication token from $BaseApiUrl" -Level Verbose
-            $accessToken = (Get-AzAccessToken -ResourceUrl $BaseApiUrl)
+            try {
+                $accessToken = Get-AzAccessToken -ResourceUrl $BaseApiUrl -ErrorAction Stop
+            } catch {
+                Write-Message "Token acquisition failed for $BaseApiUrl (MFA or conditional access may have expired). Re-authenticating with resource scope..." -Level Warning
+                $reconnectTenantId = if ($TenantId) { $TenantId } else { $azContext.Tenant.Id }
+                $null = Connect-AzAccount -Tenant $reconnectTenantId -AuthScope $BaseApiUrl
+                $accessToken = Get-AzAccessToken -ResourceUrl $BaseApiUrl -ErrorAction Stop
+            }
             Set-PSFConfig -FullName 'FabricTools.AzureSession.AccessToken' -Value $accessToken
             $plainTextToken = $accessToken.Token | ConvertFrom-SecureString -AsPlainText
             Write-Message "Setup headers for Azure API calls" -Level Debug

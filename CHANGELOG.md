@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- `Connect-FabricAccount` now automatically re-authenticates when MFA or conditional access has expired, without requiring the `-Reset` switch
 - Made `ReportPathDefinition` parameter optional in `New-FabricReport` (issue #43)
 - Fixed PowerShell 5.1 compatibility by replacing ternary operators with if-else statements (issue #166)
 - Added PSFramework as a required module dependency to prevent "not recognized" errors on fresh environments (issue #167)
