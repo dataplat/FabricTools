@@ -36,7 +36,8 @@
         "PROJECTURI",
         "pscmdlet",
         "RELEASENOTES",
-        "steppable"
+        "steppable",
+        "Kusto"
     ],
     "[markdown]": {
         "files.trimTrailingWhitespace": false,

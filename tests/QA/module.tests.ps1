@@ -91,7 +91,6 @@ BeforeDiscovery {
                 'Confirm-TokenState',
                 'Get-FabricUri',
                 'Get-FileDefinitionParts',
-                'Set-FabConfig',
                 'Write-Message'
             )
         })
