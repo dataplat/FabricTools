@@ -13,6 +13,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Renamed `Remove-FabricWorkspaceCapacityAssignment` to `Remove-FabricWorkspaceCapacity` (issue #42)
 - Refactored all `Invoke-FabricRestMethod` calls in Notebook cmdlets to use hash splatting instead of backtick line continuation (issue #87)
 - Refactored all `Invoke-FabricRestMethod` calls in Data Pipeline cmdlets to use hash splatting instead of backtick line continuation (issue #87)
+- Refactored all `Invoke-FabricRestMethod` calls in Lakehouse cmdlets to use hash splatting instead of backtick line continuation (issue #87)
+- Refactored Lakehouse cmdlets to use `HandleResponse = $true` on `Invoke-FabricRestMethod`, removing manual status-code switches, LRO polling, and pagination loops from each cmdlet
+- Refactored Notebook cmdlets to use `HandleResponse = $true` on `Invoke-FabricRestMethod`, removing manual status-code switches, LRO polling, and pagination loops from each cmdlet
 
 ### Fixed
 

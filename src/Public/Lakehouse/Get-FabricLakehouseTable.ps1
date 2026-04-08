@@ -22,7 +22,7 @@ The ID of the Lakehouse from which to retrieve tables.
 
 .NOTES
 
-Author: Tiago Balabuch
+Author: Tiago Balabuch, Kamil Nowinski
 
 #>
     [CmdletBinding()]
@@ -41,68 +41,18 @@ Author: Tiago Balabuch
         # Ensure token validity
         Confirm-TokenState
 
+        $apiEndpointUrl = "workspaces/{0}/lakehouses/{1}/tables" -f $WorkspaceId, $LakehouseId
+        Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
-
-        # Initialize variables
-        $continuationToken = $null
-        $tables = @()
-        $maxResults = 100
-
-        if (-not ([AppDomain]::CurrentDomain.GetAssemblies() | Where-Object { $_.GetName().Name -eq "System.Web" })) {
-            Add-Type -AssemblyName System.Web
+        # Table list endpoint returns .data instead of .value; collect per-page response objects
+        $apiParams = @{
+            Uri            = $apiEndpointUrl
+            Method         = 'Get'
+            TypeName       = 'Lakehouse Table'
+            HandleResponse = $true
         }
+        $tables = @(Invoke-FabricRestMethod @apiParams) | ForEach-Object { $_.data }
 
-        $baseApiEndpointUrl = "{0}/workspaces/{1}/lakehouses/{2}/tables?maxResults={3}" -f $FabricConfig.BaseUrl, $WorkspaceId, $LakehouseId, $maxResults
-
-        #  Loop to retrieve data with continuation token
-        Write-Message -Message "Loop started to get continuation token" -Level Debug
-        do {
-            # Construct the API URL
-            $apiEndpointUrl = $baseApiEndpointUrl
-
-            if ($null -ne $continuationToken) {
-                # URL-encode the continuation token
-                $encodedToken = [System.Web.HttpUtility]::UrlEncode($continuationToken)
-                $apiEndpointUrl = "{0}&continuationToken={1}" -f $apiEndpointUrl, $encodedToken
-            }
-            Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
-
-            # Make the API request
-            $response = Invoke-FabricRestMethod `
-                -Uri $apiEndpointUrl `
-                -Method Get
-
-            Write-Message -Message "API response code: $statusCode" -Level Debug
-            # Validate the response code
-            if ($statusCode -ne 200) {
-                Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
-                Write-Message -Message "Error: $($response.message)" -Level Error
-                Write-Message -Message "Error Details: $($response.moreDetails)" -Level Error
-                Write-Message "Error Code: $($response.errorCode)" -Level Error
-                return $null
-            }
-
-            # Add data to the list
-            if ($null -ne $response) {
-                Write-Message -Message "Adding data to the list" -Level Debug
-                $tables += $response.data
-
-                # Update the continuation token if present
-                if ($response.PSObject.Properties.Match("continuationToken")) {
-                    Write-Message -Message "Updating the continuation token" -Level Debug
-                    $continuationToken = $response.continuationToken
-                    Write-Message -Message "Continuation token: $continuationToken" -Level Debug
-                } else {
-                    Write-Message -Message "Updating the continuation token to null" -Level Debug
-                    $continuationToken = $null
-                }
-            } else {
-                Write-Message -Message "No data received from the API." -Level Warning
-                break
-            }
-        } while ($null -ne $continuationToken)
-        Write-Message -Message "Loop finished and all data added to the list" -Level Debug
-        # Handle results
         if ($tables) {
             Write-Message -Message "Tables found in the Lakehouse '$LakehouseId'." -Level Debug
             return $tables

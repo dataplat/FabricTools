@@ -75,11 +75,40 @@ MicrosoftPowerBIMgmt.Profile  # Power BI backward compat
 PSFramework              # Logging & configuration
 ```
 
+## Invoke-FabricRestMethod Conventions
+
+In order to prepare input parameters for `Invoke-FabricRestMethod` function - **always use hash splatting** (no backtick line continuation):
+
+```powershell
+$apiParams = @{
+    Uri            = $apiEndpointUrl
+    Method         = 'Post'
+    Body           = $bodyJson
+    TypeName       = 'Notebook'        # item type for log messages
+    ObjectIdOrName = $NotebookName     # id or name for log messages
+    HandleResponse = $true             # delegate ALL response handling to the method
+}
+$response = Invoke-FabricRestMethod @apiParams
+$response
+```
+
+**Always set `HandleResponse = $true`** — do not write manual `switch ($statusCode)` blocks, `if ($statusCode -ne 200)` checks, or LRO polling loops. `Invoke-FabricRestMethod` handles 200/201/202, HTTP 429 throttling, LRO polling, and pagination internally when this flag is set.
+
+**`ExtractValue` for list (GET all) operations:**
+
+- `ExtractValue = 'True'` — always extract `.value` from the response (standard Fabric API list shape)
+- `ExtractValue = 'Auto'` — extract `.value` only if it exists
+- Wrap the call in `@(...)` to ensure an array when a single item or empty result is returned: `$items = @(Invoke-FabricRestMethod @apiParams)`
+
+**Table endpoint anomaly** — the `/tables` endpoint returns `.data` instead of `.value`. Use `ExtractValue = 'False'` (or omit it) and manually extract: `@(Invoke-FabricRestMethod @apiParams) | ForEach-Object { $_.data }`
+
+**`NoWait` parameter** — for operations that support a `$waitForCompletion` bool param, map it as `NoWait = (-not $waitForCompletion)`.
+
 ## Adding a New Cmdlet
 
 1. Create `src/Public/<FeatureArea>/Verb-FabricNoun.ps1`
 2. Add comprehensive comment-based help (`.SYNOPSIS`, `.DESCRIPTION`, `.PARAMETER`, `.EXAMPLE`)
-3. Use `Invoke-FabricRestMethod` for all API calls
+3. Use `Invoke-FabricRestMethod` for all API calls — follow the hash splatting + `HandleResponse = $true` conventions above
 4. Use `Write-Message` (PSFramework) for logging, not `Write-Verbose`/`Write-Host`
 5. Create matching test file at `tests/Unit/Verb-FabricNoun.Tests.ps1`
 6. Build, then regenerate docs: `./build.ps1 -Tasks Generate_help_from_built_module`

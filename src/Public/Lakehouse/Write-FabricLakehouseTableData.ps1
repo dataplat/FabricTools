@@ -55,7 +55,7 @@ function Write-FabricLakehouseTableData
 
     .NOTES
 
-    Author: Tiago Balabuch
+    Author: Tiago Balabuch, Kamil Nowinski
 
     #>
     [CmdletBinding(SupportsShouldProcess)]
@@ -137,60 +137,17 @@ function Write-FabricLakehouseTableData
 
         if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Load Lakehouse Table Data"))
         {
-            # Make the API request
-            $response = Invoke-FabricRestMethod `
-                -Uri $apiEndpointUrl `
-                -Method Post `
-                -Body $bodyJson
-        }
-
-        # Validate the response code
-        if ($statusCode -ne 202)
-        {
-            Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
-            Write-Message -Message "Error: $($response.message)" -Level Error
-            Write-Message -Message "Error Details: $($response.moreDetails)" -Level Error
-            Write-Message "Error Code: $($response.errorCode)" -Level Error
-            return $null
-        }
-
-        # Handle and log the response
-        switch ($statusCode)
-        {
-            202
-            {
-                Write-Message -Message "Load table '$TableName' request accepted. Load table operation in progress!" -Level Info
-
-                [string]$operationId = $responseHeader["x-ms-operation-id"]
-                Write-Message -Message "Operation ID: '$operationId'" -Level Debug
-                Write-Message -Message "Getting Long Running Operation status" -Level Debug
-
-                $operationStatus = Get-FabricLongRunningOperation -operationId $operationId
-                Write-Message -Message "Long Running Operation status: $operationStatus" -Level Debug
-                # Handle operation result
-                if ($operationStatus.status -eq "Succeeded")
-                {
-                    Write-Message -Message "Operation Succeeded" -Level Debug
-                    Write-Message -Message "Load table '$TableName' operation complete successfully!" -Level Info
-                    return $operationStatus
-                }
-                else
-                {
-                    Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Debug
-                    Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Error
-                    return $operationStatus
-                }
+            $apiParams = @{
+                Uri            = $apiEndpointUrl
+                Method         = 'Post'
+                Body           = $bodyJson
+                TypeName       = 'Lakehouse Table'
+                ObjectIdOrName = $TableName
+                HandleResponse = $true
             }
-            default
-            {
-                Write-Message -Message "Unexpected response code: $statusCode" -Level Error
-                Write-Message -Message "Error: $($response.message)" -Level Error
-                Write-Message -Message "Error Details: $($response.moreDetails)" -Level Error
-                throw "API request failed with status code $statusCode."
-            }
+            $response = Invoke-FabricRestMethod @apiParams
+            $response
         }
-
-        # Handle results
 
     }
     catch

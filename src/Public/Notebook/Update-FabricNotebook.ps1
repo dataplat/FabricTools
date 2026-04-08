@@ -37,7 +37,7 @@ The new name for the Notebook.
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
 - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 
-Author: Tiago Balabuch
+Author: Tiago Balabuch, Kamil Nowinski
 
 #>
     [CmdletBinding(SupportsShouldProcess)]
@@ -85,24 +85,16 @@ Author: Tiago Balabuch
         {
             # Make the API request
             $apiParams = @{
-                Uri    = $apiEndpointUrl
-                Method = 'Patch'
-                Body   = $bodyJson
+                Uri            = $apiEndpointUrl
+                Method         = 'Patch'
+                Body           = $bodyJson
+                TypeName       = 'Notebook'
+                ObjectIdOrName = $NotebookName
+                HandleResponse = $true
             }
             $response = Invoke-FabricRestMethod @apiParams
+            $response
         }
-        # Validate the response code
-        if ($statusCode -ne 200)
-        {
-            Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
-            Write-Message -Message "Error: $($response.message)" -Level Error
-            Write-Message "Error Code: $($response.errorCode)" -Level Error
-            return $null
-        }
-
-        # Handle results
-        Write-Message -Message "Notebook '$NotebookName' updated successfully!" -Level Info
-        return $response
     }
     catch
     {

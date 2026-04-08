@@ -60,7 +60,7 @@ function Start-FabricLakehouseTableMaintenance
     - The function uses the `Get-FabricLongRunningOperation` function to check the status of long-running operations.
     - The function uses the `Invoke-RestMethod` cmdlet to make API requests.
 
-    Author: Tiago Balabuch
+    Author: Tiago Balabuch, Kamil Nowinski
 
     #>
     [CmdletBinding(SupportsShouldProcess)]
@@ -169,59 +169,17 @@ function Start-FabricLakehouseTableMaintenance
         Write-Message -Message "Request Body: $bodyJson" -Level Debug
         if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Start Table Maintenance Job"))
         {
-            # Make the API request
-            $response = Invoke-FabricRestMethod `
-                -Uri $apiEndpointUrl `
-                -Method Post `
-                -Body $bodyJson
-        }
-
-        Write-Message -Message "Response Code: $statusCode" -Level Debug
-        # Handle and log the response
-        switch ($statusCode)
-        {
-            201
-            {
-                Write-Message -Message "Table maintenance job successfully initiated for Lakehouse '$lakehouse.displayName'." -Level Info
-                return $response
+            $apiParams = @{
+                Uri            = $apiEndpointUrl
+                Method         = 'Post'
+                Body           = $bodyJson
+                TypeName       = 'Lakehouse Table Maintenance'
+                ObjectIdOrName = $LakehouseId
+                NoWait         = (-not $waitForCompletion)
+                HandleResponse = $true
             }
-            202
-            {
-                Write-Message -Message "Table maintenance job accepted and is now running in the background. Job execution is in progress." -Level Info
-                [string]$operationId = $responseHeader["x-ms-operation-id"]
-                [string]$location = $responseHeader["Location"]
-                [string]$retryAfter = $responseHeader["Retry-After"]
-
-                Write-Message -Message "Operation ID: '$operationId'" -Level Debug
-                Write-Message -Message "Location: '$location'" -Level Debug
-                Write-Message -Message "Retry-After: '$retryAfter'" -Level Debug
-
-                if ($waitForCompletion -eq $true)
-                {
-                    Write-Message -Message "Getting Long Running Operation status" -Level Debug
-                    $operationStatus = Get-FabricLongRunningOperation -operationId $operationId -location $location -retryAfter $retryAfter
-                    Write-Message -Message "Long Running Operation status: $operationStatus" -Level Debug
-                    return $operationStatus
-                }
-                else
-                {
-                    Write-Message -Message "The operation is running asynchronously." -Level Info
-                    Write-Message -Message "Use the returned details to check the operation status." -Level Info
-                    Write-Message -Message "To wait for the operation to complete, set the 'waitForCompletion' parameter to true." -Level Info
-                    $operationDetails = [PSCustomObject]@{
-                        OperationId = $operationId
-                        Location    = $location
-                        RetryAfter  = $retryAfter
-                    }
-                    return $operationDetails
-                }
-            }
-            default
-            {
-                Write-Message -Message "Unexpected response code: $statusCode" -Level Error
-                Write-Message -Message "Error details: $($response.message)" -Level Error
-                throw "API request failed with status code $statusCode."
-            }
+            $response = Invoke-FabricRestMethod @apiParams
+            $response
         }
     }
     catch
