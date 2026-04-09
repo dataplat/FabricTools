@@ -164,7 +164,6 @@ Generated on 2026-04-08.
 - Resume-FabricCapacity
 - Revoke-FabricCapacityTenantSettingOverrides
 - Revoke-FabricExternalDataShares
-- Set-FabricConfig
 - Start-FabricDeploymentPipelineStage
 - Start-FabricLakehouseTableMaintenance
 - Start-FabricMirroredDatabaseMirroring

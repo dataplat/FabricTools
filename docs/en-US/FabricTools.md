@@ -654,10 +654,6 @@ Removes a tenant setting override from a specific capacity in the Fabric tenant.
 
 Retrieves External Data Shares details from a specified Microsoft Fabric.
 
-### [Set-FabricConfig](Set-FabricConfig.md)
-
-Register the configuration for use with all functions in the FabricTools module.
-
 ### [Start-FabricDeploymentPipelineStage](Start-FabricDeploymentPipelineStage.md)
 
 Deploys items from one stage to another in a deployment pipeline.
@@ -845,4 +841,3 @@ Updates the role assignment for a specific principal in a Fabric workspace.
 ### [Write-FabricLakehouseTableData](Write-FabricLakehouseTableData.md)
 
 Loads data into a specified table in a Lakehouse within a Fabric workspace.
-
