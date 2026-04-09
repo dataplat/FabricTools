@@ -29,11 +29,9 @@ The unique identifier of the Fabric domain.
     ```
 
 .NOTES
-- Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
 - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 
-
-Author: Tiago Balabuch
+Author: Tiago Balabuch, Kamil Nowinski
 
 #>
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
@@ -48,61 +46,46 @@ Author: Tiago Balabuch
         [guid[]]$WorkspaceIds
     )
 
-    try
+    # Ensure token validity
+    Confirm-TokenState
+
+    $endpointSuffix = if ($WorkspaceIds)
     {
-        # Ensure token validity
-        Confirm-TokenState
-
-        # Construct the API URL
-        # Determine the API endpoint URL based on the presence of WorkspaceIds
-        $endpointSuffix = if ($WorkspaceIds)
-        {
-            "unassignWorkspaces"
-        }
-        else
-        {
-            "unassignAllWorkspaces"
-        }
-
-        $apiEndpointUrl = "{0}/admin/domains/{1}/{2}" -f $FabricConfig.BaseUrl, $DomainId, $endpointSuffix
-        Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
-
-
-        # Construct the request body (if needed)
-        $bodyJson = if ($WorkspaceIds)
-        {
-            $body = @{ workspacesIds = $WorkspaceIds }
-            $body | ConvertTo-Json -Depth 2
-        }
-        else
-        {
-            $null
-        }
-
-        Write-Message -Message "Request Body: $bodyJson" -Level Debug
-        if ($PSCmdlet.ShouldProcess($DomainId, "Unassign Workspaces"))
-        {
-            # Make the API request to unassign specific workspaces
-            $response = Invoke-FabricRestMethod `
-                -Uri $apiEndpointUrl `
-                -Method Post `
-                -Body $bodyJson
-        }
-
-        # Validate the response code
-        if ($statusCode -ne 200)
-        {
-            Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
-            Write-Message -Message "Error: $($response.message)" -Level Error
-            Write-Message "Error Code: $($response.errorCode)" -Level Error
-            return $null
-        }
-        Write-Message -Message "Successfully unassigned workspaces to the domain with ID '$DomainId'." -Level Info
+        "unassignWorkspaces"
     }
-    catch
+    else
     {
-        # Capture and log error details
-        $errorDetails = $_.Exception.Message
-        Write-Message -Message "Failed to unassign workspaces to the domain with ID '$DomainId'. Error: $errorDetails" -Level Error
+        "unassignAllWorkspaces"
+    }
+
+    $bodyJson = if ($WorkspaceIds)
+    {
+        $body = @{ workspacesIds = $WorkspaceIds }
+        $body | ConvertTo-Json -Depth 2
+    }
+    else
+    {
+        $null
+    }
+
+    Write-Message -Message "Request Body: $bodyJson" -Level Debug
+
+    if ($PSCmdlet.ShouldProcess($DomainId, "Unassign Workspaces"))
+    {
+        $apiParams = @{
+            Uri            = "admin/domains/$DomainId/$endpointSuffix"
+            Method         = 'Post'
+            TypeName       = 'Domain'
+            ObjectIdOrName = $DomainId
+            HandleResponse = $true
+        }
+
+        if ($bodyJson)
+        {
+            $apiParams.Body = $bodyJson
+        }
+
+        Invoke-FabricRestMethod @apiParams
+        Write-Message -Message "Successfully unassigned workspaces to the domain with ID '$DomainId'." -Level Info
     }
 }

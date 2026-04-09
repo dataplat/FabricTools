@@ -39,8 +39,8 @@
         "steppable",
         "Kusto",
         "Eventstream", "Eventstreams",
-        "Eventhouse",
-        "Queryset",
+        "Eventhouse", "eventhouses",
+        "Queryset", "Querysets",
         "Refreshables",
         "ipynb"
     ],

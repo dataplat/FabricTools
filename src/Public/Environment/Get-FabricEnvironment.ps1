@@ -31,11 +31,10 @@ The `Get-FabricEnvironment` function sends a GET request to the Fabric API to re
     ```
 
 .NOTES
-- Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
 - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 - Returns the matching environment details or all environments if no filter is provided.
 
-Author: Tiago Balabuch
+Author: Tiago Balabuch, Kamil Nowinski
 
     #>
     [CmdletBinding()]
@@ -53,98 +52,31 @@ Author: Tiago Balabuch
         [string]$EnvironmentName
     )
 
-    try {
-        # Handle ambiguous input
-        if ($EnvironmentId -and $EnvironmentName) {
-            Write-Message -Message "Both 'EnvironmentId' and 'EnvironmentName' were provided. Please specify only one." -Level Error
-            return $null
-        }
-
-        # Ensure token validity
-        Confirm-TokenState
-
-        # Initialize variables
-        $continuationToken = $null
-        $environments = @()
-
-        if (-not ([AppDomain]::CurrentDomain.GetAssemblies() | Where-Object { $_.GetName().Name -eq "System.Web" })) {
-            Add-Type -AssemblyName System.Web
-        }
-
-        $baseApiEndpointUrl = "{0}/workspaces/{1}/environments" -f $FabricConfig.BaseUrl, $WorkspaceId
-
-        #  Loop to retrieve data with continuation token
-        Write-Message -Message "Loop started to get continuation token" -Level Debug
-
-        do {
-            # Construct the API URL
-            $apiEndpointUrl = $baseApiEndpointUrl
-
-            if ($null -ne $continuationToken) {
-                # URL-encode the continuation token
-                $encodedToken = [System.Web.HttpUtility]::UrlEncode($continuationToken)
-                $apiEndpointUrl = "{0}?continuationToken={1}" -f $apiEndpointUrl, $encodedToken
-            }
-            Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
-
-            # Make the API request
-            $response = Invoke-FabricRestMethod `
-                -Uri $apiEndpointUrl `
-                -Method Get
-
-            # Validate the response code
-            if ($statusCode -ne 200) {
-                Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
-                Write-Message -Message "Error: $($response.message)" -Level Error
-                Write-Message -Message "Error Details: $($response.moreDetails)" -Level Error
-                Write-Message "Error Code: $($response.errorCode)" -Level Error
-                return $null
-            }
-
-            # Add data to the list
-            if ($null -ne $response) {
-                Write-Message -Message "Adding data to the list" -Level Debug
-                $environments += $response.value
-
-                # Update the continuation token if present
-                if ($response.PSObject.Properties.Match("continuationToken")) {
-                    Write-Message -Message "Updating the continuation token" -Level Debug
-                    $continuationToken = $response.continuationToken
-                    Write-Message -Message "Continuation token: $continuationToken" -Level Debug
-                } else {
-                    Write-Message -Message "Updating the continuation token to null" -Level Debug
-                    $continuationToken = $null
-                }
-            } else {
-                Write-Message -Message "No data received from the API." -Level Warning
-                break
-            }
-        } while ($null -ne $continuationToken)
-        Write-Message -Message "Loop finished and all data added to the list" -Level Debug
-
-        # Filter results based on provided parameters
-        $environment = if ($EnvironmentId) {
-            $environments | Where-Object { $_.Id -eq $EnvironmentId }
-        } elseif ($EnvironmentName) {
-            $environments | Where-Object { $_.DisplayName -eq $EnvironmentName }
-        } else {
-            # Return all workspaces if no filter is provided
-            Write-Message -Message "No filter provided. Returning all environments." -Level Debug
-            $environments
-        }
-
-        # Handle results
-        if ($environment) {
-            Write-Message -Message "Environment found in the Workspace '$WorkspaceId'." -Level Debug
-            return $environment
-        } else {
-            Write-Message -Message "No environment found matching the provided criteria." -Level Warning
-            return $null
-        }
-    } catch {
-        # Capture and log error details
-        $errorDetails = $_.Exception.Message
-        Write-Message -Message "Failed to retrieve environment. Error: $errorDetails" -Level Error
+    # Handle ambiguous input
+    if ($EnvironmentId -and $EnvironmentName) {
+        Write-Message -Message "Both 'EnvironmentId' and 'EnvironmentName' were provided. Please specify only one." -Level Error
+        return $null
     }
 
+    # Ensure token validity
+    Confirm-TokenState
+
+    $apiParams = @{
+        Uri            = "workspaces/$WorkspaceId/environments"
+        Method         = 'Get'
+        TypeName       = 'Environment'
+        ObjectIdOrName = $EnvironmentName
+        HandleResponse = $true
+        ExtractValue   = 'True'
+    }
+
+    $environments = @(Invoke-FabricRestMethod @apiParams)
+
+    if ($EnvironmentId) {
+        $environments | Where-Object { $_.Id -eq $EnvironmentId }
+    } elseif ($EnvironmentName) {
+        $environments | Where-Object { $_.DisplayName -eq $EnvironmentName }
+    } else {
+        $environments
+    }
 }

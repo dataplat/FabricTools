@@ -30,10 +30,9 @@ The `Get-FabricDomain` function allows retrieval of domains in Microsoft Fabric,
     ```
 
 .NOTES
-- Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
 - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 
-Author: Tiago Balabuch
+Author: Tiago Balabuch, Kamil Nowinski
 
 #>
     [CmdletBinding()]
@@ -52,63 +51,35 @@ Author: Tiago Balabuch
         [bool]$NonEmptyDomainsOnly = $false
     )
 
-    try {
-        # Handle ambiguous input
-        if ($DomainId -and $DomainName) {
-            Write-Message -Message "Both 'DomainId' and 'DomainName' were provided. Please specify only one." -Level Error
-            return @()
-        }
+    # Handle ambiguous input
+    if ($DomainId -and $DomainName) {
+        Write-Message -Message "Both 'DomainId' and 'DomainName' were provided. Please specify only one." -Level Error
+        return @()
+    }
 
-        # Ensure token validity
-        Confirm-TokenState
+    # Ensure token validity
+    Confirm-TokenState
 
-        # Construct the API URL with filtering logic
-        $apiEndpointUrl = "{0}/admin/domains" -f $FabricConfig.BaseUrl
-        if ($NonEmptyDomainsOnly) {
-            $apiEndpointUrl = "{0}?nonEmptyOnly=true" -f $apiEndpointUrl
-        }
-        Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
+    $uri = "admin/domains"
+    if ($NonEmptyDomainsOnly) {
+        $uri = "$uri?nonEmptyOnly=true"
+    }
 
-        # Make the API request
-        $response = Invoke-FabricRestMethod `
-            -Uri $apiEndpointUrl `
-            -Method 'Get'
+    $apiParams = @{
+        Uri            = $uri
+        Method         = 'Get'
+        TypeName       = 'Domain'
+        ObjectIdOrName = $DomainName
+        HandleResponse = $true
+    }
 
-        # Validate the response code
-        if ($statusCode -ne 200) {
-            Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
-            Write-Message -Message "Error: $($response.message)" -Level Error
-            Write-Message "Error Code: $($response.errorCode)" -Level Error
-            return $null
-        }
+    $response = Invoke-FabricRestMethod @apiParams
 
-        # Handle empty response
-        if (-not $response) {
-            Write-Message -Message "No data returned from the API." -Level Warning
-            return $null
-        }
-
-        # Filter results based on provided parameters
-        $domains = if ($DomainId) {
-            $response.domains | Where-Object { $_.Id -eq $DomainId }
-        } elseif ($DomainName) {
-            $response.domains | Where-Object { $_.DisplayName -eq $DomainName }
-        } else {
-            # Return all domains if no filter is provided
-            Write-Message -Message "No filter provided. Returning all domains." -Level Debug
-            return $response.domains
-        }
-
-        # Handle results
-        if ($domains) {
-            return $domains
-        } else {
-            Write-Message -Message "No domain found matching the provided criteria." -Level Warning
-            return $null
-        }
-    } catch {
-        # Capture and log error details
-        $errorDetails = $_.Exception.Message
-        Write-Message -Message "Failed to retrieve environment. Error: $errorDetails" -Level Error
+    if ($DomainId) {
+        $response.domains | Where-Object { $_.Id -eq $DomainId }
+    } elseif ($DomainName) {
+        $response.domains | Where-Object { $_.DisplayName -eq $DomainName }
+    } else {
+        $response.domains
     }
 }

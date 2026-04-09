@@ -24,10 +24,9 @@ A description of the domain to be created.
     ```
 
 .NOTES
-- Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
 - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 
-Author: Tiago Balabuch
+Author: Tiago Balabuch, Kamil Nowinski
 
 #>
     [CmdletBinding(SupportsShouldProcess)]
@@ -45,91 +44,40 @@ Author: Tiago Balabuch
         [guid]$ParentDomainId
     )
 
-    try
-    {
-        # Ensure token validity
-        Confirm-TokenState
+    # Ensure token validity
+    Confirm-TokenState
 
-        # Construct the request body
-        $apiEndpointUrl = "{0}/admin/domains" -f $FabricConfig.BaseUrl
-        Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
-
-        # Construct the request body
-        $body = @{
-            displayName = $DomainName
-        }
-
-        if ($DomainDescription)
-        {
-            $body.description = $DomainDescription
-        }
-
-        if ($ParentDomainId)
-        {
-            $body.parentDomainId = $ParentDomainId
-        }
-
-        # Convert the body to JSON
-        $bodyJson = $body | ConvertTo-Json -Depth 2
-        Write-Message -Message "Request Body: $bodyJson" -Level Debug
-
-        if ($PSCmdlet.ShouldProcess($DomainName, "Create Domain"))
-        {
-
-            # Make the API request
-            $response = Invoke-FabricRestMethod `
-                -Uri $apiEndpointUrl `
-                -Method Post `
-                -Body $bodyJson
-        }
-
-        # Handle and log the response
-        switch ($statusCode)
-        {
-            201
-            {
-                Write-Message -Message "Domain '$DomainName' created successfully!" -Level Info
-                return $response
-            }
-            202
-            {
-                Write-Message -Message "Domain '$DomainName' creation accepted. Provisioning in progress!" -Level Info
-                [string]$operationId = $responseHeader["x-ms-operation-id"]
-                Write-Message -Message "Operation ID: '$operationId'" -Level Debug
-                Write-Message -Message "Getting Long Running Operation status" -Level Debug
-
-                $operationStatus = Get-FabricLongRunningOperation -operationId $operationId
-                Write-Message -Message "Long Running Operation status: $operationStatus" -Level Debug
-                # Handle operation result
-                if ($operationStatus.status -eq "Succeeded")
-                {
-                    Write-Message -Message "Operation Succeeded" -Level Debug
-                    Write-Message -Message "Getting Long Running Operation result" -Level Debug
-
-                    $operationResult = Get-FabricLongRunningOperationResult -operationId $operationId
-                    Write-Message -Message "Long Running Operation status: $operationResult" -Level Debug
-
-                    return $operationResult
-                }
-                else
-                {
-                    Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Debug
-                    Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Error
-                    return $operationStatus
-                }
-            }
-            default
-            {
-                Write-Message -Message "Unexpected response code: $statusCode" -Level Error
-                Write-Message -Message "Error details: $($response.message)" -Level Error
-                throw "API request failed with status code $statusCode."
-            }
-        }
+    # Construct the request body
+    $body = @{
+        displayName = $DomainName
     }
-    catch
+
+    if ($DomainDescription)
     {
-        # Handle and log errors
-        $errorDetails = $_.Exception.Message
-        Write-Message -Message "Failed to create domain. Error: $errorDetails" -Level Error
+        $body.description = $DomainDescription
+    }
+
+    if ($ParentDomainId)
+    {
+        $body.parentDomainId = $ParentDomainId
+    }
+
+    $bodyJson = $body | ConvertTo-Json -Depth 2
+    Write-Message -Message "Request Body: $bodyJson" -Level Debug
+
+    if ($PSCmdlet.ShouldProcess($DomainName, "Create Domain"))
+    {
+        $apiParams = @{
+            Uri            = "admin/domains"
+            Method         = 'Post'
+            Body           = $bodyJson
+            TypeName       = 'Domain'
+            ObjectIdOrName = $DomainName
+            HandleResponse = $true
+        }
+
+        $response = Invoke-FabricRestMethod @apiParams
+        Write-Message -Message "Domain '$DomainName' created successfully!" -Level Info
+        $response
     }
 }

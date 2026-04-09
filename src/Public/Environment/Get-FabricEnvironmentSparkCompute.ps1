@@ -22,10 +22,9 @@ The unique identifier of the environment whose Spark compute details are being r
     ```
 
 .NOTES
-- Requires the `$FabricConfig` global object, including `BaseUrl` and `FabricHeaders`.
 - Uses `Confirm-TokenState` to validate the token before making API calls.
 
-Author: Tiago Balabuch
+Author: Tiago Balabuch, Kamil Nowinski
 #>
     [CmdletBinding()]
     param (
@@ -38,33 +37,16 @@ Author: Tiago Balabuch
         [guid]$EnvironmentId
     )
 
-    try {
-        # Ensure token validity
-        Confirm-TokenState
+    # Ensure token validity
+    Confirm-TokenState
 
-        # Construct the API URL
-        $apiEndpointUrl = "{0}/workspaces/{1}/environments/{2}/sparkcompute" -f $FabricConfig.BaseUrl, $WorkspaceId, $EnvironmentId
-        Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
-
-        # Make the API request
-        $response = Invoke-FabricRestMethod `
-            -Uri $apiEndpointUrl `
-            -Method Get
-
-        # Validate the response code
-        if ($statusCode -ne 200) {
-            Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
-            Write-Message -Message "Error: $($response.message)" -Level Error
-            Write-Message "Error Code: $($response.errorCode)" -Level Error
-            return $null
-        }
-
-        # Handle results
-        return $response
-    } catch {
-        # Capture and log error details
-        $errorDetails = $_.Exception.Message
-        Write-Message -Message "Failed to retrieve environment Spark compute. Error: $errorDetails" -Level Error
+    $apiParams = @{
+        Uri            = "workspaces/$WorkspaceId/environments/$EnvironmentId/sparkcompute"
+        Method         = 'Get'
+        TypeName       = 'Environment'
+        ObjectIdOrName = $EnvironmentId
+        HandleResponse = $true
     }
 
+    Invoke-FabricRestMethod @apiParams
 }

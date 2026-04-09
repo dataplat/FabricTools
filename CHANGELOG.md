@@ -21,6 +21,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Refactored all `Invoke-FabricRestMethod` calls in Lakehouse cmdlets to use hash splatting instead of backtick line continuation (issue #87)
 - Refactored Lakehouse cmdlets to use `HandleResponse = $true` on `Invoke-FabricRestMethod`, removing manual status-code switches, LRO polling, and pagination loops from each cmdlet
 - Refactored Notebook cmdlets to use `HandleResponse = $true` on `Invoke-FabricRestMethod`, removing manual status-code switches, LRO polling, and pagination loops from each cmdlet
+- Refactored all `Invoke-FabricRestMethod` calls in Domain cmdlets to use hash splatting instead of backtick line continuation (issue #87)
+- Refactored Domain cmdlets to use `HandleResponse = $true` on `Invoke-FabricRestMethod`, removing manual status-code switches, LRO polling, and pagination loops from each cmdlet
+- Refactored all `Invoke-FabricRestMethod` calls in Environment cmdlets to use hash splatting instead of backtick line continuation (issue #87)
+- Refactored Environment cmdlets to use `HandleResponse = $true` on `Invoke-FabricRestMethod`, removing manual status-code switches, LRO polling, and pagination loops from each cmdlet
 
 ### Fixed
 

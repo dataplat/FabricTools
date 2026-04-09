@@ -21,10 +21,9 @@ The unique identifier of the environment for which staging library details are b
     ```
 
 .NOTES
-- Requires the `$FabricConfig` global object, including `BaseUrl` and `FabricHeaders`.
 - Uses `Confirm-TokenState` to validate the token before making API calls.
 
-Author: Tiago Balabuch
+Author: Tiago Balabuch, Kamil Nowinski
 #>
     [CmdletBinding()]
     param (
@@ -37,34 +36,17 @@ Author: Tiago Balabuch
         [guid]$EnvironmentId
     )
 
-    try {
+    # Ensure token validity
+    Confirm-TokenState
 
-        # Ensure token validity
-        Confirm-TokenState
-
-        # Construct the API URL
-        $apiEndpointUrl = "{0}/workspaces/{1}/environments/{2}/staging/libraries" -f $FabricConfig.BaseUrl, $WorkspaceId, $EnvironmentId
-        Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
-
-        # Make the API request
-        $response = Invoke-FabricRestMethod `
-            -Uri $apiEndpointUrl `
-            -Method Get
-
-        # Validate the response code
-        if ($statusCode -ne 200) {
-            Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
-            Write-Message -Message "Error: $($response.message)" -Level Error
-            Write-Message "Error Code: $($response.errorCode)" -Level Error
-            return $null
-        }
-
-        # Handle results
-        return $response.customLibraries
-    } catch {
-        # Capture and log error details
-        $errorDetails = $_.Exception.Message
-        Write-Message -Message "Failed to retrieve environment spark compute. Error: $errorDetails" -Level Error
+    $apiParams = @{
+        Uri            = "workspaces/$WorkspaceId/environments/$EnvironmentId/staging/libraries"
+        Method         = 'Get'
+        TypeName       = 'Environment'
+        ObjectIdOrName = $EnvironmentId
+        HandleResponse = $true
     }
 
+    $response = Invoke-FabricRestMethod @apiParams
+    $response.customLibraries
 }

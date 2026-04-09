@@ -22,10 +22,9 @@ The unique identifier of the environment for which the publish operation is to b
     ```
 
 .NOTES
-- Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
 - Validates token expiration before making the API request.
 
-Author: Tiago Balabuch
+Author: Tiago Balabuch, Kamil Nowinski
 
 #>
     [CmdletBinding(SupportsShouldProcess)]
@@ -39,38 +38,20 @@ Author: Tiago Balabuch
         [guid]$EnvironmentId
     )
 
-    try
+    # Ensure token validity
+    Confirm-TokenState
+
+    if ($PSCmdlet.ShouldProcess($EnvironmentId, "Cancel Publish"))
     {
-        # Ensure token validity
-        Confirm-TokenState
-
-        # Construct the API URL
-        $apiEndpointUrl = "{0}/workspaces/{1}/environments/{2}/staging/cancelPublish" -f $FabricConfig.BaseUrl, $WorkspaceId, $EnvironmentId
-        Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
-        if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Cancel Publish"))
-        {
-            # Make the API request
-            $response = Invoke-FabricRestMethod `
-                -Uri $apiEndpointUrl `
-                -Method Post `
-                -Body $bodyJson
+        $apiParams = @{
+            Uri            = "workspaces/$WorkspaceId/environments/$EnvironmentId/staging/cancelPublish"
+            Method         = 'Post'
+            TypeName       = 'Environment'
+            ObjectIdOrName = $EnvironmentId
+            HandleResponse = $true
         }
 
-        # Validate the response code
-        if ($statusCode -ne 200)
-        {
-            Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
-            Write-Message -Message "Error: $($response.message)" -Level Error
-            Write-Message "Error Code: $($response.errorCode)" -Level Error
-            return $null
-        }
+        Invoke-FabricRestMethod @apiParams
         Write-Message -Message "Publication for environment '$EnvironmentId' has been successfully canceled." -Level Info
-
-    }
-    catch
-    {
-        # Log and handle errors
-        $errorDetails = $_.Exception.Message
-        Write-Message -Message "Failed to cancel publication for environment '$EnvironmentId' from workspace '$WorkspaceId'. Error: $errorDetails" -Level Error
     }
 }

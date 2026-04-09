@@ -20,10 +20,9 @@ The unique identifier of the environment where the library will be uploaded.
 
 .NOTES
 - This is not working code. It is a placeholder for future development. Fabric documentation is missing some important details on how to upload libraries.
-- Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
 - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 
-Author: Tiago Balabuch
+Author: Tiago Balabuch, Kamil Nowinski
 
 #>
     [CmdletBinding()]
@@ -38,36 +37,18 @@ Author: Tiago Balabuch
         [guid]$EnvironmentId
     )
 
-    try {
-        # Ensure token validity
-        Confirm-TokenState
+    # Ensure token validity
+    Confirm-TokenState
 
-        # Construct the API URL
-        $apiEndpointUrl = "{0}/workspaces/{1}/environments/{2}/staging/libraries" -f $FabricConfig.BaseUrl, $WorkspaceId, $EnvironmentId
-        Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
-
-        # Construct the request body
-
-        # Make the API request
-        $response = Invoke-FabricRestMethod `
-            -Uri $apiEndpointUrl `
-            -Method Post `
-            -Body $bodyJson
-
-        # Validate the response code
-        if ($statusCode -ne 200) {
-            Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
-            Write-Message -Message "Error: $($response.message)" -Level Error
-            Write-Message "Error Code: $($response.errorCode)" -Level Error
-            return $null
-        }
-
-        # Handle results
-        Write-Message -Message "Environment staging library uploaded successfully!" -Level Info
-        return $response
-    } catch {
-        # Handle and log errors
-        $errorDetails = $_.Exception.Message
-        Write-Message -Message "Failed to upload environment staging library. Error: $errorDetails" -Level Error
+    $apiParams = @{
+        Uri            = "workspaces/$WorkspaceId/environments/$EnvironmentId/staging/libraries"
+        Method         = 'Post'
+        TypeName       = 'Environment'
+        ObjectIdOrName = $EnvironmentId
+        HandleResponse = $true
     }
+
+    $response = Invoke-FabricRestMethod @apiParams
+    Write-Message -Message "Environment staging library uploaded successfully!" -Level Info
+    $response
 }

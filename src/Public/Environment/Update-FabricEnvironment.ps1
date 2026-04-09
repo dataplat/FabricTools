@@ -34,10 +34,9 @@ The unique identifier of the workspace where the Environment resides.
     ```
 
 .NOTES
-- Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
 - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 
-Author: Tiago Balabuch
+Author: Tiago Balabuch, Kamil Nowinski
 
 #>
     [CmdletBinding(SupportsShouldProcess)]
@@ -59,55 +58,34 @@ Author: Tiago Balabuch
         [string]$EnvironmentDescription
     )
 
-    try
-    {
-        # Ensure token validity
-        Confirm-TokenState
+    # Ensure token validity
+    Confirm-TokenState
 
-        # Construct the API URL
-        $apiEndpointUrl = "{0}/workspaces/{1}/environments/{2}" -f $FabricConfig.BaseUrl, $WorkspaceId, $EnvironmentId
-        Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
-
-        # Construct the request body
-        $body = @{
-            displayName = $EnvironmentName
-        }
-
-        if ($EnvironmentDescription)
-        {
-            $body.description = $EnvironmentDescription
-        }
-
-        # Convert the body to JSON
-        $bodyJson = $body | ConvertTo-Json
-        Write-Message -Message "Request Body: $bodyJson" -Level Debug
-
-        if ($PSCmdlet.ShouldProcess($EnvironmentId, "Update Environment"))
-        {
-            # Make the API request
-            $response = Invoke-FabricRestMethod `
-                -Uri $apiEndpointUrl `
-                -Method Patch `
-                -Body $bodyJson
-        }
-
-        # Validate the response code
-        if ($statusCode -ne 200)
-        {
-            Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
-            Write-Message -Message "Error: $($response.message)" -Level Error
-            Write-Message "Error Code: $($response.errorCode)" -Level Error
-            return $null
-        }
-
-        # Handle results
-        Write-Message -Message "Environment '$EnvironmentName' updated successfully!" -Level Info
-        return $response
+    $body = @{
+        displayName = $EnvironmentName
     }
-    catch
+
+    if ($EnvironmentDescription)
     {
-        # Handle and log errors
-        $errorDetails = $_.Exception.Message
-        Write-Message -Message "Failed to update Environment. Error: $errorDetails" -Level Error
+        $body.description = $EnvironmentDescription
+    }
+
+    $bodyJson = $body | ConvertTo-Json
+    Write-Message -Message "Request Body: $bodyJson" -Level Debug
+
+    if ($PSCmdlet.ShouldProcess($EnvironmentId, "Update Environment"))
+    {
+        $apiParams = @{
+            Uri            = "workspaces/$WorkspaceId/environments/$EnvironmentId"
+            Method         = 'Patch'
+            Body           = $bodyJson
+            TypeName       = 'Environment'
+            ObjectIdOrName = $EnvironmentName
+            HandleResponse = $true
+        }
+
+        $response = Invoke-FabricRestMethod @apiParams
+        Write-Message -Message "Environment '$EnvironmentName' updated successfully!" -Level Info
+        $response
     }
 }

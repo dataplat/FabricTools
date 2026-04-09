@@ -18,51 +18,32 @@ The unique identifier of the domain to be deleted.
     ```
 
 .NOTES
-- Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
 - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 
-Author: Tiago Balabuch
+Author: Tiago Balabuch, Kamil Nowinski
 
 #>
-    [CmdletBinding(SupportsShouldProcess,ConfirmImpact = 'High')]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
         [guid]$DomainId
     )
 
-    try
+    # Ensure token validity
+    Confirm-TokenState
+
+    if ($PSCmdlet.ShouldProcess($DomainId, "Remove Domain"))
     {
-        # Ensure token validity
-        Confirm-TokenState
-
-        # Construct the API URL
-        $apiEndpointUrl = "{0}/admin/domains/{1}" -f $FabricConfig.BaseUrl, $DomainId
-        Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
-        if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Remove Domain"))
-        {
-            # Make the API request
-            $response = Invoke-FabricRestMethod `
-                -Uri $apiEndpointUrl `
-                -Method Delete
+        $apiParams = @{
+            Uri            = "admin/domains/$DomainId"
+            Method         = 'Delete'
+            TypeName       = 'Domain'
+            ObjectIdOrName = $DomainId
+            HandleResponse = $true
         }
 
-        # Validate the response code
-        if ($statusCode -ne 200)
-        {
-            Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
-            Write-Message -Message "Error: $($response.message)" -Level Error
-            Write-Message "Error Code: $($response.errorCode)" -Level Error
-            return $null
-        }
-
+        Invoke-FabricRestMethod @apiParams
         Write-Message -Message "Domain '$DomainId' deleted successfully!" -Level Info
-
-    }
-    catch
-    {
-        # Log and handle errors
-        $errorDetails = $_.Exception.Message
-        Write-Message -Message "Failed to delete domain '$DomainId'. Error: $errorDetails" -Level Error
     }
 }

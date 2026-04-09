@@ -25,10 +25,10 @@ The name of the library to be deleted from the environment.
     ```
 
 .NOTES
-- Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
 - Validates token expiration before making the API request.
 - This function currently supports deleting one library at a time.
-Author: Tiago Balabuch
+
+Author: Tiago Balabuch, Kamil Nowinski
 
     #>
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
@@ -46,37 +46,20 @@ Author: Tiago Balabuch
         [string]$LibraryName
     )
 
-    try
+    # Ensure token validity
+    Confirm-TokenState
+
+    if ($PSCmdlet.ShouldProcess($LibraryName, "Remove Staging Library"))
     {
-        # Ensure token validity
-        Confirm-TokenState
-
-
-        # Construct the API URL
-        $apiEndpointUrl = "{0}/workspaces/{1}/environments/{2}/staging/libraries?libraryToDelete={3}" -f $FabricConfig.BaseUrl, $WorkspaceId, $EnvironmentId, $LibraryName
-        Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
-        if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Remove Staging Library"))
-        {
-            # Make the API request
-            $response = Invoke-FabricRestMethod `
-                -Uri $apiEndpointUrl `
-                -Method Delete
+        $apiParams = @{
+            Uri            = "workspaces/$WorkspaceId/environments/$EnvironmentId/staging/libraries?libraryToDelete=$LibraryName"
+            Method         = 'Delete'
+            TypeName       = 'Environment'
+            ObjectIdOrName = $LibraryName
+            HandleResponse = $true
         }
 
-        # Validate the response code
-        if ($statusCode -ne 200)
-        {
-            Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
-            Write-Message -Message "Error: $($response.message)" -Level Error
-            Write-Message "Error Code: $($response.errorCode)" -Level Error
-            return $null
-        }
+        Invoke-FabricRestMethod @apiParams
         Write-Message -Message "Staging library $LibraryName for the Environment '$EnvironmentId' deleted successfully from workspace '$WorkspaceId'." -Level Info
-    }
-    catch
-    {
-        # Log and handle errors
-        $errorDetails = $_.Exception.Message
-        Write-Message -Message "Failed to delete environment '$EnvironmentId' from workspace '$WorkspaceId'. Error: $errorDetails" -Level Error
     }
 }

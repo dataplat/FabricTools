@@ -20,10 +20,9 @@ An array of workspace IDs to be assigned to the domain. This parameter is mandat
     ```
 
 .NOTES
-- Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
 - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 
-Author: Tiago Balabuch
+Author: Tiago Balabuch, Kamil Nowinski
 #>
     [CmdletBinding()]
     [Alias("Assign-FabricDomainWorkspaceById")]
@@ -37,40 +36,25 @@ Author: Tiago Balabuch
         [guid[]]$WorkspaceIds
     )
 
-    try {
-        # Ensure token validity
-        Confirm-TokenState
+    # Ensure token validity
+    Confirm-TokenState
 
-        # Construct the API URL
-        $apiEndpointUrl = "{0}/admin/domains/{1}/assignWorkspaces" -f $FabricConfig.BaseUrl, $DomainId
-        Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
-
-        # Construct the request body
-        $body = @{
-            workspacesIds = $WorkspaceIds
-        }
-
-        # Convert the body to JSON
-        $bodyJson = $body | ConvertTo-Json -Depth 2
-        Write-Message -Message "Request Body: $bodyJson" -Level Debug
-
-        # Make the API request
-        $response = Invoke-FabricRestMethod `
-            -Uri $apiEndpointUrl `
-            -Method Post `
-            -Body $bodyJson
-
-        # Validate the response code
-        if ($statusCode -ne 200) {
-            Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
-            Write-Message -Message "Error: $($response.message)" -Level Error
-            Write-Message "Error Code: $($response.errorCode)" -Level Error
-            return $null
-        }
-        Write-Message -Message "Successfully assigned workspaces to the domain with ID '$DomainId'." -Level Info
-    } catch {
-        # Capture and log error details
-        $errorDetails = $_.Exception.Message
-        Write-Message -Message "Failed to assign workspaces to the domain with ID '$DomainId'. Error: $errorDetails" -Level Error
+    $body = @{
+        workspacesIds = $WorkspaceIds
     }
+
+    $bodyJson = $body | ConvertTo-Json -Depth 2
+    Write-Message -Message "Request Body: $bodyJson" -Level Debug
+
+    $apiParams = @{
+        Uri            = "admin/domains/$DomainId/assignWorkspaces"
+        Method         = 'Post'
+        Body           = $bodyJson
+        TypeName       = 'Domain'
+        ObjectIdOrName = $DomainId
+        HandleResponse = $true
+    }
+
+    Invoke-FabricRestMethod @apiParams
+    Write-Message -Message "Successfully assigned workspaces to the domain with ID '$DomainId'." -Level Info
 }

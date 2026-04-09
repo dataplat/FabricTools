@@ -27,10 +27,9 @@ The new name for the domain. Must be alphanumeric.
     ```
 
 .NOTES
-- Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
 - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 
-Author: Tiago Balabuch
+Author: Tiago Balabuch, Kamil Nowinski
 
 #>
     [CmdletBinding(SupportsShouldProcess)]
@@ -53,61 +52,40 @@ Author: Tiago Balabuch
         [string]$DomainContributorsScope
     )
 
-    try
-    {
-        # Ensure token validity
-        Confirm-TokenState
+    # Ensure token validity
+    Confirm-TokenState
 
-        # Construct the API URL
-        $apiEndpointUrl = "{0}/admin/domains/{1}" -f $FabricConfig.BaseUrl, $DomainId
-        Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
-
-        # Construct the request body
-        $body = @{
-            displayName = $DomainName
-        }
-
-        if ($DomainDescription)
-        {
-            $body.description = $DomainDescription
-        }
-
-        if ($DomainContributorsScope)
-        {
-            $body.contributorsScope = $DomainContributorsScope
-        }
-
-        # Convert the body to JSON
-        $bodyJson = $body | ConvertTo-Json -Depth 10
-        Write-Message -Message "Request Body: $bodyJson" -Level Debug
-
-        if ($PSCmdlet.ShouldProcess($DomainName, "Update Domain"))
-        {
-
-            # Make the API request
-            $response = Invoke-FabricRestMethod `
-                -Uri $apiEndpointUrl `
-                -Method Patch `
-                -Body $bodyJson
-        }
-
-        # Validate the response code
-        if ($statusCode -ne 200)
-        {
-            Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
-            Write-Message -Message "Error: $($response.message)" -Level Error
-            Write-Message "Error Code: $($response.errorCode)" -Level Error
-            return $null
-        }
-
-        # Handle results
-        Write-Message -Message "Domain '$DomainName' updated successfully!" -Level Info
-        return $response
+    # Construct the request body
+    $body = @{
+        displayName = $DomainName
     }
-    catch
+
+    if ($DomainDescription)
     {
-        # Log and handle errors
-        $errorDetails = $_.Exception.Message
-        Write-Message -Message "Failed to update domain '$DomainId'. Error: $errorDetails" -Level Error
+        $body.description = $DomainDescription
+    }
+
+    if ($DomainContributorsScope)
+    {
+        $body.contributorsScope = $DomainContributorsScope
+    }
+
+    $bodyJson = $body | ConvertTo-Json -Depth 10
+    Write-Message -Message "Request Body: $bodyJson" -Level Debug
+
+    if ($PSCmdlet.ShouldProcess($DomainName, "Update Domain"))
+    {
+        $apiParams = @{
+            Uri            = "admin/domains/$DomainId"
+            Method         = 'Patch'
+            Body           = $bodyJson
+            TypeName       = 'Domain'
+            ObjectIdOrName = $DomainName
+            HandleResponse = $true
+        }
+
+        $response = Invoke-FabricRestMethod @apiParams
+        Write-Message -Message "Domain '$DomainName' updated successfully!" -Level Info
+        $response
     }
 }

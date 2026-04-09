@@ -37,7 +37,7 @@ The unique identifier of the workspace where the KQLDashboard exists.
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
 - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 
-Author: Tiago Balabuch
+Author: Tiago Balabuch, Kamil Nowinski
 
     #>
     [CmdletBinding(SupportsShouldProcess)]
@@ -84,25 +84,18 @@ Author: Tiago Balabuch
 
         if ($PSCmdlet.ShouldProcess($KQLDashboardId, "Update KQLDashboard"))
         {
-            # Make the API request
-            $response = Invoke-FabricRestMethod `
-                -Uri $apiEndpointUrl `
-                -Method Patch `
-                -Body $bodyJson
+            $apiParams = @{
+                Uri            = $apiEndpointUrl
+                Method         = 'Patch'
+                Body           = $bodyJson
+                TypeName       = 'KQL Dashboard'
+                ObjectIdOrName = $KQLDashboardName
+                HandleResponse = $true
+            }
+            $response = Invoke-FabricRestMethod @apiParams
+            Write-Message -Message "KQLDashboard '$KQLDashboardName' updated successfully!" -Level Info
+            $response
         }
-
-        # Validate the response code
-        if ($statusCode -ne 200)
-        {
-            Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
-            Write-Message -Message "Error: $($response.message)" -Level Error
-            Write-Message "Error Code: $($response.errorCode)" -Level Error
-            return $null
-        }
-
-        # Handle results
-        Write-Message -Message "KQLDashboard '$KQLDashboardName' updated successfully!" -Level Info
-        return $response
     }
     catch
     {

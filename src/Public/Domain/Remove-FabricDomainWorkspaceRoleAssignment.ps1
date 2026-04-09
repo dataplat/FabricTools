@@ -27,10 +27,9 @@ An array of principals to assign roles to. Each principal must include:
     ```
 
 .NOTES
-- Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
 - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 
-Author: Tiago Balabuch
+Author: Tiago Balabuch, Kamil Nowinski
 
 #>
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
@@ -50,49 +49,35 @@ Author: Tiago Balabuch
         [array]$PrincipalIds # Array with 'id' and 'type'
     )
 
-    try {
-        # Validate PrincipalIds structure
-        foreach ($principal in $PrincipalIds) {
-            if (-not ($principal.id -and $principal.type)) {
-                throw "Invalid principal detected: Each principal must include 'id' and 'type' properties. Found: $principal"
-            }
+    # Validate PrincipalIds structure
+    foreach ($principal in $PrincipalIds) {
+        if (-not ($principal.id -and $principal.type)) {
+            throw "Invalid principal detected: Each principal must include 'id' and 'type' properties. Found: $principal"
         }
-
-        # Ensure token validity
-        Confirm-TokenState
-
-        # Construct the API URL
-        $apiEndpointUrl = "{0}/admin/domains/{1}/roleAssignments/bulkUnassign" -f $FabricConfig.BaseUrl, $DomainId
-        Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
-
-        # Construct the request body
-        $body = @{
-            type       = $DomainRole
-            principals = $PrincipalIds
-        }
-        $bodyJson = $body | ConvertTo-Json -Depth 2
-        Write-Message -Message "Request Body: $bodyJson" -Level Debug
-
-        if($PSCmdlet.ShouldProcess($DomainId, "Unassign Roles")) {
-        # Make the API request
-        $response = Invoke-FabricRestMethod `
-            -Uri $apiEndpointUrl `
-            -Method Post `
-            -Body $bodyJson
     }
 
-        # Validate the response code
-        if ($statusCode -ne 200) {
-            Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
-            Write-Message -Message "Error: $($response.message)" -Level Error
-            Write-Message "Error Code: $($response.errorCode)" -Level Error
-            return $null
-        }
-        Write-Message -Message "Bulk role unassignment for domain '$DomainId' completed successfully!" -Level Info
+    # Ensure token validity
+    Confirm-TokenState
 
-    } catch {
-        # Handle and log errors
-        $errorDetails = $_.Exception.Message
-        Write-Message -Message "Failed to bulk assign roles in domain '$DomainId'. Error: $errorDetails" -Level Error
+    $body = @{
+        type       = $DomainRole
+        principals = $PrincipalIds
+    }
+
+    $bodyJson = $body | ConvertTo-Json -Depth 2
+    Write-Message -Message "Request Body: $bodyJson" -Level Debug
+
+    if ($PSCmdlet.ShouldProcess($DomainId, "Unassign Roles")) {
+        $apiParams = @{
+            Uri            = "admin/domains/$DomainId/roleAssignments/bulkUnassign"
+            Method         = 'Post'
+            Body           = $bodyJson
+            TypeName       = 'Domain'
+            ObjectIdOrName = $DomainId
+            HandleResponse = $true
+        }
+
+        Invoke-FabricRestMethod @apiParams
+        Write-Message -Message "Bulk role unassignment for domain '$DomainId' completed successfully!" -Level Info
     }
 }

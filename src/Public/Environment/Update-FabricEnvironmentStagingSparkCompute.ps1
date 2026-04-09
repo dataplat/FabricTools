@@ -53,10 +53,9 @@ A hashtable of additional Spark properties to configure.
     ```
 
 .NOTES
-- Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
 - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 
-Author: Tiago Balabuch
+Author: Tiago Balabuch, Kamil Nowinski
 
 #>
     [CmdletBinding(SupportsShouldProcess)]
@@ -114,64 +113,43 @@ Author: Tiago Balabuch
         [System.Object]$SparkProperties
     )
 
-    try
-    {
-        # Ensure token validity
-        Confirm-TokenState
+    # Ensure token validity
+    Confirm-TokenState
 
-        # Construct the API URL
-        $apiEndpointUrl = "{0}/workspaces/{1}/environments/{2}/staging/sparkcompute" -f $FabricConfig.BaseUrl, $WorkspaceId, $EnvironmentId
-        Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
-
-        # Construct the request body
-        $body = @{
-            instancePool              = @{
-                name = $InstancePoolName
-                type = $InstancePoolType
-            }
-            driverCores               = $DriverCores
-            driverMemory              = $DriverMemory
-            executorCores             = $ExecutorCores
-            executorMemory            = $ExecutorMemory
-            dynamicExecutorAllocation = @{
-                enabled      = $DynamicExecutorAllocationEnabled
-                minExecutors = $DynamicExecutorAllocationMinExecutors
-                maxExecutors = $DynamicExecutorAllocationMaxExecutors
-            }
-            runtimeVersion            = $RuntimeVersion
-            sparkProperties           = $SparkProperties
+    $body = @{
+        instancePool              = @{
+            name = $InstancePoolName
+            type = $InstancePoolType
         }
-
-        # Convert the body to JSON
-        $bodyJson = $body | ConvertTo-Json -Depth 4
-        Write-Message -Message "Request Body: $bodyJson" -Level Debug
-
-        if ($PSCmdlet.ShouldProcess($EnvironmentId, "Update Environment Staging Spark Compute"))
-        {
-            # Make the API request
-            $response = Invoke-FabricRestMethod `
-                -Uri $apiEndpointUrl `
-                -Method Patch `
-                -Body $bodyJson
+        driverCores               = $DriverCores
+        driverMemory              = $DriverMemory
+        executorCores             = $ExecutorCores
+        executorMemory            = $ExecutorMemory
+        dynamicExecutorAllocation = @{
+            enabled      = $DynamicExecutorAllocationEnabled
+            minExecutors = $DynamicExecutorAllocationMinExecutors
+            maxExecutors = $DynamicExecutorAllocationMaxExecutors
         }
-
-        # Validate the response code
-        if ($statusCode -ne 200)
-        {
-            Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
-            Write-Message -Message "Error: $($response.message)" -Level Error
-            Write-Message "Error Code: $($response.errorCode)" -Level Error
-            return $null
-        }
-
-        # Handle results
-        Write-Message -Message "Environment staging Spark compute updated successfully!" -Level Info
-        return $response
+        runtimeVersion            = $RuntimeVersion
+        sparkProperties           = $SparkProperties
     }
-    catch
+
+    $bodyJson = $body | ConvertTo-Json -Depth 4
+    Write-Message -Message "Request Body: $bodyJson" -Level Debug
+
+    if ($PSCmdlet.ShouldProcess($EnvironmentId, "Update Environment Staging Spark Compute"))
     {
-        # Handle and log errors
-        $errorDetails = $_.Exception.Message
-        Write-Message -Message "Failed to update environment staging Spark compute. Error: $errorDetails" -Level Error
+        $apiParams = @{
+            Uri            = "workspaces/$WorkspaceId/environments/$EnvironmentId/staging/sparkcompute"
+            Method         = 'Patch'
+            Body           = $bodyJson
+            TypeName       = 'Environment'
+            ObjectIdOrName = $EnvironmentId
+            HandleResponse = $true
+        }
+
+        $response = Invoke-FabricRestMethod @apiParams
+        Write-Message -Message "Environment staging Spark compute updated successfully!" -Level Info
+        $response
     }
 }
