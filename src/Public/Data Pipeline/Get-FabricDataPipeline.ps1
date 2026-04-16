@@ -62,11 +62,11 @@ function Get-FabricDataPipeline {
         Confirm-TokenState
 
         # Construct the API endpoint URL
-        $apiEndpointURI = ("workspaces/{0}/dataPipelines" -f $WorkspaceId)
+        $apiEndpointUrl = ("workspaces/{0}/dataPipelines" -f $WorkspaceId)
 
         # Invoke the Fabric API to retrieve data pipeline details
         $apiParams = @{
-            Uri    = $apiEndpointURI
+            Uri    = $apiEndpointUrl
             Method = 'Get'
         }
         $DataPipelines = (Invoke-FabricRestMethod @apiParams).Value

@@ -52,8 +52,8 @@ function New-FabricDataPipeline
         Confirm-TokenState
 
         # Construct the API URL
-        $apiEndpointURI = ("workspaces/{0}/dataPipelines" -f $WorkspaceId)
-        Write-Message -Message "API Endpoint: $apiEndpointURI" -Level Debug
+        $apiEndpointUrl = ("workspaces/{0}/dataPipelines" -f $WorkspaceId)
+        Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
         # Construct the request body
         $body = @{
@@ -69,11 +69,11 @@ function New-FabricDataPipeline
 
         Write-Message -Message "Request Body: $bodyJson" -Level Debug
 
-        if ($PSCmdlet.ShouldProcess($apiEndpointURI, "Create DataPipeline"))
+        if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Create DataPipeline"))
         {
             # Make the API request
             $apiParams = @{
-                Uri    = $apiEndpointURI
+                Uri    = $apiEndpointUrl
                 Method = 'Post'
                 Body   = $bodyJson
             }

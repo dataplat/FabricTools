@@ -43,14 +43,14 @@ function Remove-FabricDataPipeline
         Confirm-TokenState
 
         #  Construct the API URI
-        $apiEndpointURI = "workspaces/{0}/dataPipelines/{1}" -f $WorkspaceId, $DataPipelineId
-        Write-Message -Message "API Endpoint: $apiEndpointURI" -Level Debug
+        $apiEndpointUrl = "workspaces/{0}/dataPipelines/{1}" -f $WorkspaceId, $DataPipelineId
+        Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
-        if ($PSCmdlet.ShouldProcess($apiEndpointURI, "Delete DataPipeline"))
+        if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Delete DataPipeline"))
         {
             # Make the API request
             $apiParams = @{
-                Uri    = $apiEndpointURI
+                Uri    = $apiEndpointUrl
                 Method = 'Delete'
             }
             $response = Invoke-FabricRestMethod @apiParams

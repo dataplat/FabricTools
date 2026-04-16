@@ -44,7 +44,7 @@ Default: `$false`.
 - The MirroredDatabase content is encoded as Base64 before being sent to the Fabric API.
 - This function handles asynchronous operations and retrieves operation results if required.
 
-Author: Tiago Balabuch
+Author: Tiago Balabuch, Kamil Nowinski
 
 #>
     [CmdletBinding(SupportsShouldProcess)]
@@ -76,7 +76,7 @@ Author: Tiago Balabuch
 
         if ($MirroredDatabasePathPlatformDefinition)
         {
-            $apiEndpointUrl = "?updateMetadata=true" -f $apiEndpointUrl
+            $apiEndpointUrl += "?updateMetadata=true"
         }
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
@@ -128,49 +128,21 @@ Author: Tiago Balabuch
 
         $bodyJson = $body | ConvertTo-Json -Depth 10
         Write-Message -Message "Request Body: $bodyJson" -Level Debug
-        if ($PSCmdlet.ShouldProcess($MirroredDatabaseId, "Update MirroredDatabase"))
+
+        if ($PSCmdlet.ShouldProcess($MirroredDatabaseId, "Update MirroredDatabase Definition"))
         {
-            # Make the API request
-            $response = Invoke-FabricRestMethod `
-                -Uri $apiEndpointUrl `
-                -Method Post `
-                -Body $bodyJson
-        }
-
-        # Handle and log the response
-        switch ($statusCode)
-        {
-            200
-            {
-                Write-Message -Message "Update definition for MirroredDatabase '$MirroredDatabaseId' created successfully!" -Level Info
-                return $response
+            $apiParams = @{
+                Uri            = $apiEndpointUrl
+                Method         = 'Post'
+                Body           = $bodyJson
+                TypeName       = 'Mirrored Database Definition'
+                ObjectIdOrName = $MirroredDatabaseId
+                HandleResponse = $true
             }
-            202
-            {
-                Write-Message -Message "Update definition for MirroredDatabase '$MirroredDatabaseId' accepted. Operation in progress!" -Level Info
-                [string]$operationId = $responseHeader["x-ms-operation-id"]
-                $operationResult = Get-FabricLongRunningOperation -operationId $operationId
+            $response = Invoke-FabricRestMethod @apiParams
+            Write-Message -Message "Update definition for MirroredDatabase '$MirroredDatabaseId' created successfully!" -Level Info
 
-                # Handle operation result
-                if ($operationResult.status -eq "Succeeded")
-                {
-                    Write-Message -Message "Operation Succeeded" -Level Debug
-
-                    $result = Get-FabricLongRunningOperationResult -operationId $operationId
-                    return $result.definition.parts
-                }
-                else
-                {
-                    Write-Message -Message "Operation Failed" -Level Debug
-                    return $operationResult.definition.parts
-                }
-            }
-            default
-            {
-                Write-Message -Message "Unexpected response code: $statusCode" -Level Error
-                Write-Message -Message "Error details: $($response.message)" -Level Error
-                throw "API request failed with status code $statusCode."
-            }
+            return $response
         }
     }
     catch

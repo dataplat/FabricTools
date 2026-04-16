@@ -41,6 +41,7 @@
         "Eventstream", "Eventstreams",
         "Eventhouse", "eventhouses",
         "Queryset", "Querysets",
+        "Datamarts", "Datamart",
         "Refreshables",
         "ipynb"
     ],

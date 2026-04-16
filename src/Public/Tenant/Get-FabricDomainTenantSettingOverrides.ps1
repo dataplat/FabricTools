@@ -14,11 +14,9 @@ function Get-FabricDomainTenantSettingOverrides {
         ```
 
     .NOTES
-    - Requires the `$FabricConfig` global configuration, which must include `BaseUrl` and `FabricHeaders`.
     - Ensures token validity by invoking `Confirm-TokenState` before making the API request.
-    - Logs detailed messages for debugging and error handling.
 
-    Author: Tiago Balabuch
+    Author: Tiago Balabuch, Kamil Nowinski
     #>
     [CmdletBinding()]
     param ( )
@@ -28,13 +26,17 @@ function Get-FabricDomainTenantSettingOverrides {
         Confirm-TokenState
 
         # Construct the API endpoint URL for retrieving domain tenant setting overrides
-        $apiEndpointURI = "admin/domains/delegatedTenantSettingOverrides"
-        Write-Message -Message "Constructed API Endpoint: $apiEndpointURI" -Level Debug
+        $apiEndpointUrl = "admin/domains/delegatedTenantSettingOverrides"
+        Write-Message -Message "Constructed API Endpoint: $apiEndpointUrl" -Level Debug
 
-        # Invoke the Fabric API to retrieve domain tenant setting overrides
-        $response = Invoke-FabricRestMethod `
-            -Uri $apiEndpointURI `
-            -Method Get
+        $apiParams = @{
+            Uri            = $apiEndpointUrl
+            Method         = 'Get'
+            HandleResponse = $true
+            ExtractValue   = 'True'
+            TypeName       = 'DomainTenantSettingOverride'
+        }
+        $response = @(Invoke-FabricRestMethod @apiParams)
 
         # Check if any domain tenant setting overrides were retrieved and handle results accordingly
         if ($response) {

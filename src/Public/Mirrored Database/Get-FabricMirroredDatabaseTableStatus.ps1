@@ -23,7 +23,7 @@ function Get-FabricMirroredDatabaseTableStatus {
     .NOTES
     The function retrieves the PowerBI access token and makes a POST request to the PowerBI API to retrieve the status of tables in the specified mirrored database. It then returns the 'value' property of the response, which contains the table statuses.
 
-    Author: Tiago Balabuch
+    Author: Tiago Balabuch, Kamil Nowinski
 
     #>
     [CmdletBinding()]
@@ -39,73 +39,23 @@ function Get-FabricMirroredDatabaseTableStatus {
     )
 
     try {
-
         # Ensure token validity
         Confirm-TokenState
 
-        $continuationToken = $null
-        $MirroredDatabaseTableStatus = @()
+        $apiEndpointUrl = "{0}/workspaces/{1}/mirroredDatabases/{2}/getTablesMirroringStatus" -f $FabricConfig.BaseUrl, $WorkspaceId, $MirroredDatabaseId
+        Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
-        if (-not ([AppDomain]::CurrentDomain.GetAssemblies() | Where-Object { $_.GetName().Name -eq "System.Web" })) {
-            Add-Type -AssemblyName System.Web
+        # This endpoint returns .data instead of .value
+        $apiParams = @{
+            Uri            = $apiEndpointUrl
+            Method         = 'Post'
+            TypeName       = 'Mirrored Database Table Status'
+            ObjectIdOrName = $MirroredDatabaseId
+            HandleResponse = $true
+            ExtractValue   = 'False'
         }
-
-        # Loop to retrieve all capacities with continuation token
-        Write-Message -Message "Loop started to get continuation token" -Level Debug
-        $baseApiEndpointUrl = "{0}/workspaces/{1}/mirroredDatabases/{2}/getTablesMirroringStatus" -f $FabricConfig.BaseUrl, $WorkspaceId, $MirroredDatabaseId
-
-        #  Loop to retrieve data with continuation token
-
-        do {
-            # Construct the API URL
-            $apiEndpointUrl = $baseApiEndpointUrl
-
-            if ($null -ne $continuationToken) {
-                # URL-encode the continuation token
-                $encodedToken = [System.Web.HttpUtility]::UrlEncode($continuationToken)
-                $apiEndpointUrl = "{0}?continuationToken={1}" -f $apiEndpointUrl, $encodedToken
-            }
-            Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
-
-            # Make the API request
-            $response = Invoke-FabricRestMethod `
-                -Uri $apiEndpointUrl `
-                -Method Post
-
-            # Validate the response code
-            if ($statusCode -ne 200) {
-                Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
-                Write-Message -Message "Error: $($response.message)" -Level Error
-                Write-Message -Message "Error Details: $($response.moreDetails)" -Level Error
-                Write-Message "Error Code: $($response.errorCode)" -Level Error
-                return $null
-            }
-
-            # Add data to the list
-            if ($null -ne $response) {
-                Write-Message -Message "Adding data to the list" -Level Debug
-                $MirroredDatabaseTableStatus += $response.data
-
-                # Update the continuation token if present
-                if ($response.PSObject.Properties.Match("continuationToken")) {
-                    Write-Message -Message "Updating the continuation token" -Level Debug
-                    $continuationToken = $response.continuationToken
-                    Write-Message -Message "Continuation token: $continuationToken" -Level Debug
-                } else {
-                    Write-Message -Message "Updating the continuation token to null" -Level Debug
-                    $continuationToken = $null
-                }
-            } else {
-                Write-Message -Message "No data received from the API." -Level Warning
-                break
-            }
-        } while ($null -ne $continuationToken)
-        Write-Message -Message "Loop finished and all data added to the list" -Level Debug
-
-        # Handle results
-        # Return all Mirrored Database Table Status
         Write-Message -Message "No filter provided. Returning all MirroredDatabases." -Level Debug
-        $MirroredDatabaseTableStatus
+        @(Invoke-FabricRestMethod @apiParams) | ForEach-Object { $_.data }
     } catch {
         # Capture and log error details
         $errorDetails = $_.Exception.Message

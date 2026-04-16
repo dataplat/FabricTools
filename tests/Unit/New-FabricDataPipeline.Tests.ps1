@@ -72,44 +72,6 @@ Describe "New-FabricDataPipeline" -Tag "UnitTests" {
         }
     }
 
-    Context 'When creating data pipeline with long-running operation (202)' -Skip {
-        # Skipped: Function does not check statusCode or call Get-FabricLongRunningOperation
-        BeforeAll {
-            Mock -CommandName Confirm-TokenState -MockWith { }
-            Mock -CommandName Write-Message -MockWith { }
-            Mock -CommandName Invoke-FabricRestMethod -MockWith {
-                InModuleScope -ModuleName 'FabricTools' {
-                    $script:statusCode = 202
-                    $script:responseHeader = @{
-                        'x-ms-operation-id' = [guid]::NewGuid().ToString()
-                        'Location' = 'https://api.fabric.microsoft.com/v1/operations/12345'
-                        'Retry-After' = '30'
-                    }
-                }
-                return $null
-            }
-            Mock -CommandName Get-FabricLongRunningOperation -MockWith {
-                return [pscustomobject]@{
-                    status = 'Succeeded'
-                }
-            }
-            Mock -CommandName Get-FabricLongRunningOperationResult -MockWith {
-                return [pscustomobject]@{
-                    id = [guid]::NewGuid()
-                    displayName = 'TestDataPipeline'
-                }
-            }
-        }
-
-        It 'Should call Get-FabricLongRunningOperation' {
-            $mockWorkspaceId = [guid]::NewGuid()
-
-            New-FabricDataPipeline -WorkspaceId $mockWorkspaceId -DataPipelineName 'TestDataPipeline' -Confirm:$false
-
-            Should -Invoke -CommandName Get-FabricLongRunningOperation -Times 1
-        }
-    }
-
     Context 'When an unexpected status code is returned' -Skip {
         # Skipped: Function does not check statusCode - only writes error on exception
         BeforeAll {

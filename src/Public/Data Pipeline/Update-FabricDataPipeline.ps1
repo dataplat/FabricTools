@@ -58,8 +58,8 @@ function Update-FabricDataPipeline
         Confirm-TokenState
 
         # Construct the API URL
-        $apiEndpointURI = "workspaces/{0}/dataPipelines/{1}" -f $WorkspaceId, $DataPipelineId
-        Write-Message -Message "API Endpoint: $apiEndpointURI" -Level Debug
+        $apiEndpointUrl = "workspaces/{0}/dataPipelines/{1}" -f $WorkspaceId, $DataPipelineId
+        Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
         # Construct the request body
         $body = @{
@@ -75,11 +75,11 @@ function Update-FabricDataPipeline
         $bodyJson = $body | ConvertTo-Json
         Write-Message -Message "Request Body: $bodyJson" -Level Debug
 
-        if ($PSCmdlet.ShouldProcess($apiEndpointURI, "Update DataPipeline"))
+        if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Update DataPipeline"))
         {
             # Make the API request
             $apiParams = @{
-                Uri    = $apiEndpointURI
+                Uri    = $apiEndpointUrl
                 Method = 'Patch'
                 Body   = $bodyJson
             }

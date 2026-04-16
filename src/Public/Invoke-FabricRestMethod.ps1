@@ -90,7 +90,7 @@ Function Invoke-FabricRestMethod {
         [switch] $NoWait = $false,
 
         [Parameter(Mandatory = $false)]
-        [switch] $HandleResponse,
+        [switch] $HandleResponse = $true,
 
         [Parameter(Mandatory = $false)]
         [ValidateSet('True', 'False', 'Auto')]

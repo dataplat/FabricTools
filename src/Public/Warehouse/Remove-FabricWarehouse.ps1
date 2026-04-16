@@ -23,7 +23,7 @@ function Remove-FabricWarehouse
     .NOTES
         - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 
-        Author: Tiago Balabuch
+        Author: Tiago Balabuch, Kamil Nowinski
     #>
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param (
@@ -41,19 +41,19 @@ function Remove-FabricWarehouse
         Confirm-TokenState
 
         # Construct the API URL
-        $apiEndpointURI = "workspaces/{0}/warehouses/{1}" -f $WorkspaceId, $WarehouseId
+        $apiEndpointUrl = "workspaces/{0}/warehouses/{1}" -f $WorkspaceId, $WarehouseId
 
-        if ($PSCmdlet.ShouldProcess($apiEndpointURI, "Delete Warehouse"))
+        if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Delete Warehouse"))
         {
             # Make the API request and Validate the response
-            $apiParameters = @{
-                Uri = $apiEndpointURI
-                Method = 'DELETE'
+            $apiParams = @{
+                Uri            = $apiEndpointUrl
+                Method         = 'DELETE'
                 HandleResponse = $true
-                TypeName = "Warehouse"
+                TypeName       = "Warehouse"
                 ObjectIdOrName = $WarehouseId
             }
-            $response = Invoke-FabricRestMethod @apiParameters
+            $response = Invoke-FabricRestMethod @apiParams
         }
 
         # Handle results

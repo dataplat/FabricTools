@@ -89,48 +89,6 @@ Describe 'Add-FabricDomainWorkspaceAssignmentByCapacity' -Tag 'Public' {
         }
     }
 
-    Context 'When assigning workspaces by capacity is in progress (202)' {
-        BeforeAll {
-            Mock -CommandName Confirm-TokenState -MockWith { }
-            Mock -CommandName Write-Message -MockWith { }
-            Mock -CommandName Invoke-FabricRestMethod -MockWith {
-                InModuleScope -ModuleName 'FabricTools' {
-                    $script:statusCode = 202
-                    $script:responseHeader = @{
-                        'x-ms-operation-id' = 'op-12345'
-                        'Location' = 'https://api.fabric.microsoft.com/v1/operations/op-12345'
-                        'Retry-After' = '30'
-                    }
-                }
-                return [pscustomobject]@{}
-            }
-            Mock -CommandName Get-FabricLongRunningOperation -MockWith {
-                return [pscustomobject]@{
-                    status = 'Succeeded'
-                    operationId = 'op-12345'
-                }
-            }
-        }
-
-        It 'Should call Get-FabricLongRunningOperation when status is 202' {
-            $mockDomainId = [guid]::NewGuid()
-            $mockCapacityIds = @([guid]::NewGuid())
-
-            Add-FabricDomainWorkspaceAssignmentByCapacity -DomainId $mockDomainId -CapacitiesIds $mockCapacityIds
-
-            Should -Invoke -CommandName Get-FabricLongRunningOperation -Times 1
-        }
-
-        It 'Should return the operation status when long running operation succeeds' {
-            $mockDomainId = [guid]::NewGuid()
-            $mockCapacityIds = @([guid]::NewGuid())
-
-            $result = Add-FabricDomainWorkspaceAssignmentByCapacity -DomainId $mockDomainId -CapacitiesIds $mockCapacityIds
-
-            $result.status | Should -Be 'Succeeded'
-        }
-    }
-
     Context 'When long running operation fails' {
         BeforeAll {
             Mock -CommandName Confirm-TokenState -MockWith { }

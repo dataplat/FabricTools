@@ -31,10 +31,7 @@ function Get-FabricSparkJobDefinition {
         ```
 
     .NOTES
-        - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-        - Calls `Confirm-TokenState` to ensure token validity before making the API request.
-
-        Author: Tiago Balabuch
+        Author: Tiago Balabuch, Kamil Nowinski
     #>
     [CmdletBinding()]
     param (
@@ -51,7 +48,6 @@ function Get-FabricSparkJobDefinition {
         [string]$SparkJobDefinitionName
     )
     try {
-
         # Handle ambiguous input
         if ($SparkJobDefinitionId -and $SparkJobDefinitionName) {
             Write-Message -Message "Both 'SparkJobDefinitionId' and 'SparkJobDefinitionName' were provided. Please specify only one." -Level Error
@@ -61,63 +57,18 @@ function Get-FabricSparkJobDefinition {
         # Ensure token validity
         Confirm-TokenState
 
-        # Initialize variables
-        $continuationToken = $null
-        $SparkJobDefinitions = @()
+        # Construct the API endpoint URL
+        $apiEndpointUrl = "workspaces/$WorkspaceId/sparkJobDefinitions"
+        Write-Message -Message "Constructed API Endpoint: $apiEndpointUrl" -Level Debug
 
-        if (-not ([AppDomain]::CurrentDomain.GetAssemblies() | Where-Object { $_.GetName().Name -eq "System.Web" })) {
-            Add-Type -AssemblyName System.Web
+        # Invoke the Fabric API to retrieve Spark Job Definitions
+        $apiParams = @{
+            Uri            = $apiEndpointUrl
+            Method         = 'Get'
+            ExtractValue   = 'True'
+            HandleResponse = $true
         }
-
-        # Loop to retrieve all capacities with continuation token
-        Write-Message -Message "Loop started to get continuation token" -Level Debug
-        $baseApiEndpointUrl = "{0}/workspaces/{1}/sparkJobDefinitions" -f $FabricConfig.BaseUrl, $WorkspaceId
-        #  Loop to retrieve data with continuation token
-        do {
-            # Construct the API URL
-            $apiEndpointUrl = $baseApiEndpointUrl
-
-            if ($null -ne $continuationToken) {
-                # URL-encode the continuation token
-                $encodedToken = [System.Web.HttpUtility]::UrlEncode($continuationToken)
-                $apiEndpointUrl = "{0}?continuationToken={1}" -f $apiEndpointUrl, $encodedToken
-            }
-            Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
-
-            # Make the API request
-            $response = Invoke-FabricRestMethod `
-                -Uri $apiEndpointUrl `
-                -Method Get
-
-            # Validate the response code
-            if ($statusCode -ne 200) {
-                Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
-                Write-Message -Message "Error: $($response.message)" -Level Error
-                Write-Message -Message "Error Details: $($response.moreDetails)" -Level Error
-                Write-Message "Error Code: $($response.errorCode)" -Level Error
-                return $null
-            }
-
-            # Add data to the list
-            if ($null -ne $response) {
-                Write-Message -Message "Adding data to the list" -Level Debug
-                $SparkJobDefinitions += $response.value
-
-                # Update the continuation token if present
-                if ($response.PSObject.Properties.Match("continuationToken")) {
-                    Write-Message -Message "Updating the continuation token" -Level Debug
-                    $continuationToken = $response.continuationToken
-                    Write-Message -Message "Continuation token: $continuationToken" -Level Debug
-                } else {
-                    Write-Message -Message "Updating the continuation token to null" -Level Debug
-                    $continuationToken = $null
-                }
-            } else {
-                Write-Message -Message "No data received from the API." -Level Warning
-                break
-            }
-        } while ($null -ne $continuationToken)
-        Write-Message -Message "Loop finished and all data added to the list" -Level Debug
+        $SparkJobDefinitions = @(Invoke-FabricRestMethod @apiParams)
 
         # Filter results based on provided parameters
         $SparkJobDefinition = if ($SparkJobDefinitionId) {

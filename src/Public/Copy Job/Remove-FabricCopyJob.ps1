@@ -21,10 +21,9 @@ function Remove-FabricCopyJob {
     ```
 
 .NOTES
-    - Requires the `$FabricConfig` global configuration, which must include `BaseUrl` and `FabricHeaders`.
     - Ensures token validity by invoking `Confirm-TokenState` before making the API request.
 
-    Author: Tiago Balabuch
+    Author: Tiago Balabuch, Kamil Nowinski
 #>
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param (
@@ -36,28 +35,31 @@ function Remove-FabricCopyJob {
         [ValidateNotNullOrEmpty()]
         [guid]$CopyJobId
     )
+
     try {
         # Ensure token validity
         Confirm-TokenState
 
         # Construct the API endpoint URI
-        $apiEndpointURI = "workspaces/{0}/copyJobs/{1}" -f $WorkspaceId, $CopyJobId
-        Write-Message -Message "API Endpoint: $apiEndpointURI" -Level Debug
+        $apiEndpointUrl = "workspaces/{0}/copyJobs/{1}" -f $WorkspaceId, $CopyJobId
+        Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
+        if ($PSCmdlet.ShouldProcess($CopyJobId, "Delete Copy Job"))
+        {
+            $apiParams = @{
+                Uri            = $apiEndpointUrl
+                Method         = 'Delete'
+                TypeName       = 'CopyJob'
+                ObjectIdOrName = $CopyJobId
+                HandleResponse = $true
+            }
 
-        if($PSCmdlet.ShouldProcess($apiEndpointURI, "Delete Copy Job")) {
-
-        # Make the API request
-        $apiParams = @{
-            Uri = $apiEndpointURI
-            Method = 'DELETE'
+            $response = Invoke-FabricRestMethod @apiParams
         }
-        $response = Invoke-FabricRestMethod @apiParams
-    }
-    Write-Message -Message "Copy Job '$CopyJobId' deleted successfully from workspace '$WorkspaceId'." -Level Info
-    return $response
+        Write-Message -Message "Copy Job '$CopyJobId' deleted successfully from workspace '$WorkspaceId'." -Level Info
+        return $response
 
-} catch {
-    # Log and handle errors
+    } catch {
+        # Log and handle errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to delete Copy Job '$CopyJobId' from workspace '$WorkspaceId'. Error: $errorDetails" -Level Error
     }

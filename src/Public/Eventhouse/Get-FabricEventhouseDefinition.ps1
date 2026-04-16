@@ -31,10 +31,9 @@ function Get-FabricEventhouseDefinition {
     ```
 
 .NOTES
-    - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
     - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 
-    Author: Tiago Balabuch
+    Author: Tiago Balabuch, Kamil Nowinski
 
 #>
     [CmdletBinding()]
@@ -51,72 +50,29 @@ function Get-FabricEventhouseDefinition {
         [ValidateNotNullOrEmpty()]
         [string]$EventhouseFormat
     )
+
     try {
         # Ensure token validity
         Confirm-TokenState
 
-        # Construct the API URL
-        $apiEndpointUrl = "{0}/workspaces/{1}/eventhouses/{2}/getDefinition" -f $FabricConfig.BaseUrl, $WorkspaceId, $EventhouseId
-
+        $apiEndpointUrl = "workspaces/$WorkspaceId/eventhouses/$EventhouseId/getDefinition"
         if ($EventhouseFormat) {
-            $apiEndpointUrl = "{0}?format={1}" -f $apiEndpointUrl, $EventhouseFormat
+            $uri = "$uri?format=$EventhouseFormat"
         }
 
-        Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
-
-        # Make the API request
-        $response = Invoke-FabricRestMethod `
-            -Uri $apiEndpointUrl `
-            -Method Post
-
-        # Validate the response code and handle the response
-        switch ($statusCode) {
-            200 {
-                Write-Message -Message "Eventhouse '$EventhouseId' definition retrieved successfully!" -Level Debug
-                return $response
-            }
-            202 {
-
-                Write-Message -Message "Getting Eventhouse '$EventhouseId' definition request accepted. Retrieving in progress!" -Level Info
-
-                [string]$operationId = $responseHeader["x-ms-operation-id"]
-                [string]$location = $responseHeader["Location"]
-                [string]$retryAfter = $responseHeader["Retry-After"]
-
-                Write-Message -Message "Operation ID: '$operationId'" -Level Debug
-                Write-Message -Message "Location: '$location'" -Level Debug
-                Write-Message -Message "Retry-After: '$retryAfter'" -Level Debug
-                Write-Message -Message "Getting Long Running Operation status" -Level Debug
-
-                $operationStatus = Get-FabricLongRunningOperation -operationId $operationId -location $location
-                Write-Message -Message "Long Running Operation status: $operationStatus" -Level Debug
-                # Handle operation result
-                if ($operationStatus.status -eq "Succeeded") {
-                    Write-Message -Message "Operation Succeeded" -Level Debug
-                    Write-Message -Message "Getting Long Running Operation result" -Level Debug
-
-                    $operationResult = Get-FabricLongRunningOperationResult -operationId $operationId
-                    Write-Message -Message "Long Running Operation status: $operationResult" -Level Debug
-
-                    return $operationResult.definition.parts
-                } else {
-                    Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Debug
-                    Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Error
-                    return $operationStatus
-                }
-            }
-            default {
-                Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
-                Write-Message -Message "Error: $($response.message)" -Level Error
-                Write-Message -Message "Error Details: $($response.moreDetails)" -Level Error
-                Write-Message "Error Code: $($response.errorCode)" -Level Error
-                throw "API request failed with status code $statusCode."
-            }
+        $apiParams = @{
+            Uri            = $apiEndpointUrl
+            Method         = 'Post'
+            TypeName       = 'Eventhouse'
+            ObjectIdOrName = $EventhouseId
+            HandleResponse = $true
         }
+
+        Invoke-FabricRestMethod @apiParams
+
     } catch {
         # Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to retrieve Eventhouse. Error: $errorDetails" -Level Error
     }
-
 }

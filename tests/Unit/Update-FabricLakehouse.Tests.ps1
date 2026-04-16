@@ -79,13 +79,7 @@ Describe "Update-FabricLakehouse" -Tag "UnitTests" {
             Mock -CommandName Confirm-TokenState -MockWith { }
             Mock -CommandName Write-Message -MockWith { }
             Mock -CommandName Invoke-FabricRestMethod -MockWith {
-                InModuleScope -ModuleName 'FabricTools' {
-                    $script:statusCode = 400
-                }
-                return [pscustomobject]@{
-                    message = 'Bad Request'
-                    errorCode = 'InvalidRequest'
-                }
+                throw 'Unexpected response code: 400 - Bad Request'
             }
         }
 
@@ -93,7 +87,7 @@ Describe "Update-FabricLakehouse" -Tag "UnitTests" {
             $mockWorkspaceId = [guid]::NewGuid()
             $mockLakehouseId = [guid]::NewGuid()
 
-            Update-FabricLakehouse -WorkspaceId $mockWorkspaceId -LakehouseId $mockLakehouseId -LakehouseName 'UpdatedLakehouse' -Confirm:$false
+            { Update-FabricLakehouse -WorkspaceId $mockWorkspaceId -LakehouseId $mockLakehouseId -LakehouseName 'UpdatedLakehouse' -Confirm:$false } | Should -Not -Throw
 
             Should -Invoke -CommandName Write-Message -ParameterFilter {
                 $Level -eq 'Error'

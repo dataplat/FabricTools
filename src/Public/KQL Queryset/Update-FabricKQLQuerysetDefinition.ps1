@@ -34,12 +34,11 @@ The KQLQueryset content can be provided as file paths, and metadata updates can 
     ```
 
 .NOTES
-- Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
 - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 - The KQLQueryset content is encoded as Base64 before being sent to the Fabric API.
 - This function handles asynchronous operations and retrieves operation results if required.
 
-Author: Tiago Balabuch
+Author: Tiago Balabuch, Kamil Nowinski
 
 #>
     [CmdletBinding(SupportsShouldProcess)]
@@ -65,13 +64,13 @@ Author: Tiago Balabuch
         # Ensure token validity
         Confirm-TokenState
 
-        # Construct the API URL
-        $apiEndpointUrl = "{0}/workspaces/{1}/kqlQuerysets/{2}/updateDefinition" -f $FabricConfig.BaseUrl, $WorkspaceId, $KQLQuerysetId
+        # Construct the API endpoint URL
+        $apiEndpointUrl = "workspaces/$WorkspaceId/kqlQuerysets/$KQLQuerysetId/updateDefinition"
 
         if ($KQLQuerysetPathPlatformDefinition) {
-            $apiEndpointUrl = "?updateMetadata=true" -f $apiEndpointUrl
+            $apiEndpointUrl = "$apiEndpointUrl?updateMetadata=true"
         }
-        Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
+        Write-Message -Message "Constructed API Endpoint: $apiEndpointUrl" -Level Debug
 
         # Construct the request body
         $body = @{
@@ -116,40 +115,16 @@ Author: Tiago Balabuch
         Write-Message -Message "Request Body: $bodyJson" -Level Debug
 
         if ($PSCmdlet.ShouldProcess($KQLQuerysetId, "Update KQLQueryset")) {
-        # Make the API request
-        $response = Invoke-FabricRestMethod `
-            -Uri $apiEndpointUrl `
-            -Method Post `
-            -Body $bodyJson
-    }
-
-        # Handle and log the response
-        switch ($statusCode) {
-            200 {
-                Write-Message -Message "Update definition for KQLQueryset '$KQLQuerysetId' created successfully!" -Level Info
-                return $response
+            # Invoke Fabric API request
+            $apiParams = @{
+                Uri            = $apiEndpointUrl
+                Method         = 'Post'
+                Body           = $bodyJson
+                HandleResponse = $true
             }
-            202 {
-                Write-Message -Message "Update definition for KQLQueryset '$KQLQuerysetId' accepted. Operation in progress!" -Level Info
-                [string]$operationId = $responseHeader["x-ms-operation-id"]
-                $operationResult = Get-FabricLongRunningOperation -operationId $operationId
-
-                # Handle operation result
-                if ($operationResult.status -eq "Succeeded") {
-                    Write-Message -Message "Operation Succeeded" -Level Debug
-
-                    $result = Get-FabricLongRunningOperationResult -operationId $operationId
-                    return $result.definition.parts
-                } else {
-                    Write-Message -Message "Operation Failed" -Level Debug
-                    return $operationResult.definition.parts
-                }
-            }
-            default {
-                Write-Message -Message "Unexpected response code: $statusCode" -Level Error
-                Write-Message -Message "Error details: $($response.message)" -Level Error
-                throw "API request failed with status code $statusCode."
-            }
+            $response = Invoke-FabricRestMethod @apiParams
+            Write-Message -Message "Update definition for KQLQueryset '$KQLQuerysetId' created successfully!" -Level Info
+            return $response
         }
     } catch {
         # Handle and log errors

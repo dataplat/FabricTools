@@ -36,17 +36,31 @@ Author: Tiago Balabuch, Kamil Nowinski
         [guid]$EnvironmentId
     )
 
-    # Ensure token validity
-    Confirm-TokenState
+    try {
 
-    $apiParams = @{
-        Uri            = "workspaces/$WorkspaceId/environments/$EnvironmentId/staging/libraries"
-        Method         = 'Get'
-        TypeName       = 'Environment'
-        ObjectIdOrName = $EnvironmentId
-        HandleResponse = $true
+        # Ensure token validity
+        Confirm-TokenState
+
+        # Construct the API URL
+        $apiEndpointUrl = "workspaces/{0}/environments/{1}/staging/libraries" -f $WorkspaceId, $EnvironmentId
+        Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
+
+        # Make the API request
+        $apiParams = @{
+            Uri            = $apiEndpointUrl
+            Method         = 'Get'
+            TypeName       = 'Environment'
+            ObjectIdOrName = $EnvironmentId
+            HandleResponse = $true
+        }
+        $response = Invoke-FabricRestMethod @apiParams
+
+        # Handle results
+        return $response.customLibraries
+    } catch {
+        # Capture and log error details
+        $errorDetails = $_.Exception.Message
+        Write-Message -Message "Failed to retrieve environment spark compute. Error: $errorDetails" -Level Error
     }
 
-    $response = Invoke-FabricRestMethod @apiParams
-    $response.customLibraries
 }

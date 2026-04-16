@@ -56,7 +56,8 @@ Author: Tiago Balabuch, Kamil Nowinski
                 ObjectIdOrName = $NotebookId
                 HandleResponse = $true
             }
-            Invoke-FabricRestMethod @apiParams
+            $result = Invoke-FabricRestMethod @apiParams
+            Write-Message -Message "Notebook '$NotebookId' deleted successfully from workspace '$WorkspaceId'." -Level Info
         }
 
     }

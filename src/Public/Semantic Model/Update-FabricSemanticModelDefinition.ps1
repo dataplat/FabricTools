@@ -5,7 +5,7 @@ function Update-FabricSemanticModelDefinition
         Updates the definition of an existing SemanticModel in a specified Microsoft Fabric workspace.
 
     .DESCRIPTION
-        This function sends a PATCH request to the Microsoft Fabric API to update the definition of an existing SemanticModel
+        This function sends a POST request to the Microsoft Fabric API to update the definition of an existing SemanticModel
         in the specified workspace. It supports optional parameters for SemanticModel definition and platform-specific definition.
 
     .PARAMETER WorkspaceId
@@ -25,10 +25,9 @@ function Update-FabricSemanticModelDefinition
         ```
 
     .NOTES
-        - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
         - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 
-        Author: Tiago Balabuch
+        Author: Tiago Balabuch, Kamil Nowinski
     #>
     [CmdletBinding(SupportsShouldProcess)]
     param (
@@ -44,102 +43,52 @@ function Update-FabricSemanticModelDefinition
         [ValidateNotNullOrEmpty()]
         [string]$SemanticModelPathDefinition
     )
-    try
-    {
-        # Ensure token validity
-        Confirm-TokenState
 
-        # Construct the API URL
-        $apiEndpointUrl = "{0}/workspaces/{1}/SemanticModels/{2}/updateDefinition" -f $FabricConfig.BaseUrl, $WorkspaceId, $SemanticModelId
+    # Ensure token validity
+    Confirm-TokenState
 
-        # Construct the request body
-        $body = @{
-            definition = @{
-                parts = @()
-            }
-        }
-
-        $jsonObjectParts = Get-FileDefinitionParts -sourceDirectory $SemanticModelPathDefinition
-        # Add new part to the parts array
-        $body.definition.parts = $jsonObjectParts.parts
-        # Check if any path is .platform
-        foreach ($part in $jsonObjectParts.parts)
-        {
-            if ($part.path -eq ".platform")
-            {
-                $hasPlatformFile = $true
-                Write-Message -Message "Platform File: $hasPlatformFile" -Level Debug
-            }
-        }
-
-        if ($hasPlatformFile -eq $true)
-        {
-            $apiEndpointUrl = "{0}?updateMetadata=true" -f $apiEndpointUrl
-        }
-        Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
-
-
-        $bodyJson = $body | ConvertTo-Json -Depth 10
-        Write-Message -Message "Request Body: $bodyJson" -Level Debug
-
-        if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Update SemanticModel Definition"))
-        {
-            # Make the API request
-            $response = Invoke-FabricRestMethod `
-                -Uri $apiEndpointUrl `
-                -Method Post `
-                -Body $bodyJson
-        }
-
-        # Handle and log the response
-        switch ($statusCode)
-        {
-            200
-            {
-                Write-Message -Message "Update definition for SemanticModel '$SemanticModelId' created successfully!" -Level Info
-                return $response
-            }
-            202
-            {
-                Write-Message -Message "Update definition for SemanticModel '$SemanticModelId' accepted. Operation in progress!" -Level Info
-
-                [string]$operationId = $responseHeader["x-ms-operation-id"]
-                [string]$location = $responseHeader["Location"]
-                [string]$retryAfter = $responseHeader["Retry-After"]
-
-                Write-Message -Message "Operation ID: '$operationId'" -Level Debug
-                Write-Message -Message "Location: '$location'" -Level Debug
-                Write-Message -Message "Retry-After: '$retryAfter'" -Level Debug
-                Write-Message -Message "Getting Long Running Operation status" -Level Debug
-
-                $operationStatus = Get-FabricLongRunningOperation -operationId $operationId -location $location
-                Write-Message -Message "Long Running Operation status: $operationStatus" -Level Debug
-                # Handle operation result
-                if ($operationStatus.status -eq "Succeeded")
-                {
-                    Write-Message -Message "Operation Succeeded" -Level Debug
-                    Write-Message -Message "Update definition operation for Semantic Model '$SemanticModelId' succeeded!" -Level Info
-                    return $operationStatus
-                }
-                else
-                {
-                    Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Debug
-                    Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Error
-                    return $operationStatus
-                }
-            }
-            default
-            {
-                Write-Message -Message "Unexpected response code: $statusCode" -Level Error
-                Write-Message -Message "Error details: $($response.message)" -Level Error
-                throw "API request failed with status code $statusCode."
-            }
+    $body = @{
+        definition = @{
+            parts = @()
         }
     }
-    catch
+
+    $jsonObjectParts = Get-FileDefinitionParts -sourceDirectory $SemanticModelPathDefinition
+    $body.definition.parts = $jsonObjectParts.parts
+
+    $hasPlatformFile = $false
+    foreach ($part in $jsonObjectParts.parts)
     {
-        # Handle and log errors
-        $errorDetails = $_.Exception.Message
-        Write-Message -Message "Failed to update SemanticModel. Error: $errorDetails" -Level Error
+        if ($part.path -eq ".platform")
+        {
+            $hasPlatformFile = $true
+            Write-Message -Message "Platform File: $hasPlatformFile" -Level Debug
+        }
+    }
+
+    $uri = "workspaces/$WorkspaceId/SemanticModels/$SemanticModelId/updateDefinition"
+    if ($hasPlatformFile)
+    {
+        $uri = "$uri?updateMetadata=true"
+    }
+    Write-Message -Message "API Endpoint: $uri" -Level Debug
+
+    $bodyJson = $body | ConvertTo-Json -Depth 10
+    Write-Message -Message "Request Body: $bodyJson" -Level Debug
+
+    if ($PSCmdlet.ShouldProcess($SemanticModelId, "Update SemanticModel Definition"))
+    {
+        $apiParams = @{
+            Uri            = $uri
+            Method         = 'Post'
+            Body           = $bodyJson
+            TypeName       = 'SemanticModel'
+            ObjectIdOrName = $SemanticModelId
+            HandleResponse = $true
+        }
+
+        $response = Invoke-FabricRestMethod @apiParams
+        Write-Message -Message "Update definition for SemanticModel '$SemanticModelId' completed successfully!" -Level Info
+        $response
     }
 }

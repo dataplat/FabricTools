@@ -26,10 +26,9 @@ function Add-FabricWorkspaceRoleAssignment {
         ```
 
     .NOTES
-        - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
         - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 
-        Author: Tiago Balabuch
+        Author: Tiago Balabuch, Kamil Nowinski
     #>
     [CmdletBinding()]
     [OutputType([System.Collections.Hashtable])]
@@ -59,7 +58,7 @@ function Add-FabricWorkspaceRoleAssignment {
         Confirm-TokenState
 
         # Construct the API URL
-        $apiEndpointUrl = "{0}/workspaces/{1}/roleAssignments" -f $FabricConfig.BaseUrl, $WorkspaceId
+        $apiEndpointUrl = "workspaces/$WorkspaceId/roleAssignments"
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
         # Construct the request body
@@ -76,24 +75,13 @@ function Add-FabricWorkspaceRoleAssignment {
         Write-Message -Message "Request Body: $bodyJson" -Level Debug
 
         # Make the API request
-        $response = Invoke-FabricRestMethod `
-            -Uri $apiEndpointUrl `
-            -Method Post `
-            -Body $bodyJson
-
-        # Validate the response code
-        if ($statusCode -ne 201) {
-            Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
-            Write-Message -Message "Error: $($response.message)" -Level Error
-            Write-Message "Error Code: $($response.errorCode)" -Level Error
-            return $null
+        $apiParams = @{
+            Uri            = $apiEndpointUrl
+            Method         = 'Post'
+            Body           = $bodyJson
+            HandleResponse = $true
         }
-
-        # Handle empty response
-        if (-not $response) {
-            Write-Message -Message "No data returned from the API." -Level Warning
-            return $null
-        }
+        $response = Invoke-FabricRestMethod @apiParams
 
         Write-Message -Message "Role '$WorkspaceRole' assigned to principal '$PrincipalId' successfully in workspace '$WorkspaceId'." -Level Info
         return $response

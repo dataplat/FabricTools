@@ -44,40 +44,55 @@ Author: Tiago Balabuch, Kamil Nowinski
         [guid]$ParentDomainId
     )
 
-    # Ensure token validity
-    Confirm-TokenState
-
-    # Construct the request body
-    $body = @{
-        displayName = $DomainName
-    }
-
-    if ($DomainDescription)
+    try
     {
-        $body.description = $DomainDescription
-    }
+        # Ensure token validity
+        Confirm-TokenState
 
-    if ($ParentDomainId)
-    {
-        $body.parentDomainId = $ParentDomainId
-    }
+        # Construct the API URL
+        $apiEndpointUrl = "admin/domains"
+        Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
-    $bodyJson = $body | ConvertTo-Json -Depth 2
-    Write-Message -Message "Request Body: $bodyJson" -Level Debug
-
-    if ($PSCmdlet.ShouldProcess($DomainName, "Create Domain"))
-    {
-        $apiParams = @{
-            Uri            = "admin/domains"
-            Method         = 'Post'
-            Body           = $bodyJson
-            TypeName       = 'Domain'
-            ObjectIdOrName = $DomainName
-            HandleResponse = $true
+        # Construct the request body
+        $body = @{
+            displayName = $DomainName
         }
 
-        $response = Invoke-FabricRestMethod @apiParams
+        if ($DomainDescription)
+        {
+            $body.description = $DomainDescription
+        }
+
+        if ($ParentDomainId)
+        {
+            $body.parentDomainId = $ParentDomainId
+        }
+
+        # Convert the body to JSON
+        $bodyJson = $body | ConvertTo-Json -Depth 2
+        Write-Message -Message "Request Body: $bodyJson" -Level Debug
+
+        if ($PSCmdlet.ShouldProcess($DomainName, "Create Domain"))
+        {
+            # Make the API request
+            $apiParams = @{
+                Uri            = $apiEndpointUrl
+                Method         = 'Post'
+                Body           = $bodyJson
+                TypeName       = 'Domain'
+                ObjectIdOrName = $DomainName
+                HandleResponse = $true
+            }
+            $response = Invoke-FabricRestMethod @apiParams
+        }
+
         Write-Message -Message "Domain '$DomainName' created successfully!" -Level Info
-        $response
+        return $response
+    }
+    catch
+    {
+        # Handle and log errors
+        $errorDetails = $_.Exception.Message
+        Write-Message -Message "Failed to create domain. Error: $errorDetails" -Level Error
     }
 }

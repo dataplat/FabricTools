@@ -34,7 +34,7 @@ function Get-FabricReflex {
     - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
     - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 
-    Author: Tiago Balabuch
+    Author: Tiago Balabuch, Kamil Nowinski
 
 #>
     [CmdletBinding()]
@@ -52,7 +52,6 @@ function Get-FabricReflex {
         [string]$ReflexName
     )
     try {
-
         # Handle ambiguous input
         if ($ReflexId -and $ReflexName) {
             Write-Message -Message "Both 'ReflexId' and 'ReflexName' were provided. Please specify only one." -Level Error
@@ -62,63 +61,17 @@ function Get-FabricReflex {
         # Ensure token validity
         Confirm-TokenState
 
-        # Initialize variables
-        $continuationToken = $null
-        $Reflexes = @()
+        $apiEndpointUrl = "{0}/workspaces/{1}/reflexes" -f $FabricConfig.BaseUrl, $WorkspaceId
+        Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
-        if (-not ([AppDomain]::CurrentDomain.GetAssemblies() | Where-Object { $_.GetName().Name -eq "System.Web" })) {
-            Add-Type -AssemblyName System.Web
+        $apiParams = @{
+            Uri            = $apiEndpointUrl
+            Method         = 'Get'
+            TypeName       = 'Reflex'
+            HandleResponse = $true
+            ExtractValue   = 'True'
         }
-
-        # Loop to retrieve all capacities with continuation token
-        Write-Message -Message "Loop started to get continuation token" -Level Debug
-        $baseApiEndpointUrl = "{0}/workspaces/{1}/reflexes" -f $FabricConfig.BaseUrl, $WorkspaceId
-        #  Loop to retrieve data with continuation token
-        do {
-            # Construct the API URL
-            $apiEndpointUrl = $baseApiEndpointUrl
-
-            if ($null -ne $continuationToken) {
-                # URL-encode the continuation token
-                $encodedToken = [System.Web.HttpUtility]::UrlEncode($continuationToken)
-                $apiEndpointUrl = "{0}?continuationToken={1}" -f $apiEndpointUrl, $encodedToken
-            }
-            Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
-
-            # Make the API request
-            $response = Invoke-FabricRestMethod `
-                -Uri $apiEndpointUrl `
-                -Method Get
-
-            # Validate the response code
-            if ($statusCode -ne 200) {
-                Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
-                Write-Message -Message "Error: $($response.message)" -Level Error
-                Write-Message -Message "Error Details: $($response.moreDetails)" -Level Error
-                Write-Message "Error Code: $($response.errorCode)" -Level Error
-                return $null
-            }
-
-            # Add data to the list
-            if ($null -ne $response) {
-                Write-Message -Message "Adding data to the list" -Level Debug
-                $Reflexes += $response.value
-
-                # Update the continuation token if present
-                if ($response.PSObject.Properties.Match("continuationToken")) {
-                    Write-Message -Message "Updating the continuation token" -Level Debug
-                    $continuationToken = $response.continuationToken
-                    Write-Message -Message "Continuation token: $continuationToken" -Level Debug
-                } else {
-                    Write-Message -Message "Updating the continuation token to null" -Level Debug
-                    $continuationToken = $null
-                }
-            } else {
-                Write-Message -Message "No data received from the API." -Level Warning
-                break
-            }
-        } while ($null -ne $continuationToken)
-        Write-Message -Message "Loop finished and all data added to the list" -Level Debug
+        $Reflexes = @(Invoke-FabricRestMethod @apiParams)
 
         # Filter results based on provided parameters
         $Reflex = if ($ReflexId) {
@@ -126,7 +79,6 @@ function Get-FabricReflex {
         } elseif ($ReflexName) {
             $Reflexes | Where-Object { $_.DisplayName -eq $ReflexName }
         } else {
-            # Return all Reflexes if no filter is provided
             Write-Message -Message "No filter provided. Returning all Reflexes." -Level Debug
             $Reflexes
         }

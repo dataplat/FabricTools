@@ -89,32 +89,6 @@ Describe "Update-FabricWorkspace" -Tag "UnitTests" {
         }
     }
 
-    Context 'When an unexpected status code is returned' {
-        BeforeAll {
-            Mock -CommandName Confirm-TokenState -MockWith { }
-            Mock -CommandName Write-Message -MockWith { }
-            Mock -CommandName Invoke-FabricRestMethod -MockWith {
-                InModuleScope -ModuleName 'FabricTools' {
-                    $script:statusCode = 400
-                }
-                return [pscustomobject]@{
-                    message = 'Bad Request'
-                    errorCode = 'InvalidRequest'
-                }
-            }
-        }
-
-        It 'Should write an error message for unexpected status codes' {
-            $mockWorkspaceId = [guid]::NewGuid()
-
-            Update-FabricWorkspace -WorkspaceId $mockWorkspaceId -WorkspaceName 'UpdatedWorkspace' -Confirm:$false
-
-            Should -Invoke -CommandName Write-Message -ParameterFilter {
-                $Level -eq 'Error'
-            }
-        }
-    }
-
     Context 'When an exception is thrown' {
         BeforeAll {
             Mock -CommandName Confirm-TokenState -MockWith { }

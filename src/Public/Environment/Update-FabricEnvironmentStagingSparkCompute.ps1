@@ -113,43 +113,59 @@ Author: Tiago Balabuch, Kamil Nowinski
         [System.Object]$SparkProperties
     )
 
-    # Ensure token validity
-    Confirm-TokenState
-
-    $body = @{
-        instancePool              = @{
-            name = $InstancePoolName
-            type = $InstancePoolType
-        }
-        driverCores               = $DriverCores
-        driverMemory              = $DriverMemory
-        executorCores             = $ExecutorCores
-        executorMemory            = $ExecutorMemory
-        dynamicExecutorAllocation = @{
-            enabled      = $DynamicExecutorAllocationEnabled
-            minExecutors = $DynamicExecutorAllocationMinExecutors
-            maxExecutors = $DynamicExecutorAllocationMaxExecutors
-        }
-        runtimeVersion            = $RuntimeVersion
-        sparkProperties           = $SparkProperties
-    }
-
-    $bodyJson = $body | ConvertTo-Json -Depth 4
-    Write-Message -Message "Request Body: $bodyJson" -Level Debug
-
-    if ($PSCmdlet.ShouldProcess($EnvironmentId, "Update Environment Staging Spark Compute"))
+    try
     {
-        $apiParams = @{
-            Uri            = "workspaces/$WorkspaceId/environments/$EnvironmentId/staging/sparkcompute"
-            Method         = 'Patch'
-            Body           = $bodyJson
-            TypeName       = 'Environment'
-            ObjectIdOrName = $EnvironmentId
-            HandleResponse = $true
+        # Ensure token validity
+        Confirm-TokenState
+
+        # Construct the API URL
+        $apiEndpointUrl = "workspaces/{0}/environments/{1}/staging/sparkcompute" -f $WorkspaceId, $EnvironmentId
+        Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
+
+        # Construct the request body
+        $body = @{
+            instancePool              = @{
+                name = $InstancePoolName
+                type = $InstancePoolType
+            }
+            driverCores               = $DriverCores
+            driverMemory              = $DriverMemory
+            executorCores             = $ExecutorCores
+            executorMemory            = $ExecutorMemory
+            dynamicExecutorAllocation = @{
+                enabled      = $DynamicExecutorAllocationEnabled
+                minExecutors = $DynamicExecutorAllocationMinExecutors
+                maxExecutors = $DynamicExecutorAllocationMaxExecutors
+            }
+            runtimeVersion            = $RuntimeVersion
+            sparkProperties           = $SparkProperties
         }
 
-        $response = Invoke-FabricRestMethod @apiParams
-        Write-Message -Message "Environment staging Spark compute updated successfully!" -Level Info
-        $response
+        # Convert the body to JSON
+        $bodyJson = $body | ConvertTo-Json -Depth 4
+        Write-Message -Message "Request Body: $bodyJson" -Level Debug
+
+        if ($PSCmdlet.ShouldProcess($EnvironmentId, "Update Environment Staging Spark Compute"))
+        {
+            # Make the API request
+            $apiParams = @{
+                Uri            = $apiEndpointUrl
+                Method         = 'Patch'
+                Body           = $bodyJson
+                TypeName       = 'Environment'
+                ObjectIdOrName = $EnvironmentId
+                HandleResponse = $true
+            }
+            $response = Invoke-FabricRestMethod @apiParams
+            Write-Message -Message "Environment staging Spark compute updated successfully!" -Level Info
+        }
+        return $response
+
+    }
+    catch
+    {
+        # Handle and log errors
+        $errorDetails = $_.Exception.Message
+        Write-Message -Message "Failed to update environment staging Spark compute. Error: $errorDetails" -Level Error
     }
 }

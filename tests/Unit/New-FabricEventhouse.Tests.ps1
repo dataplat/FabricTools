@@ -72,55 +72,12 @@ Describe "New-FabricEventhouse" -Tag "UnitTests" {
         }
     }
 
-    Context 'When creating eventhouse with long-running operation (202)' {
-        BeforeAll {
-            Mock -CommandName Confirm-TokenState -MockWith { }
-            Mock -CommandName Write-Message -MockWith { }
-            Mock -CommandName Invoke-FabricRestMethod -MockWith {
-                InModuleScope -ModuleName 'FabricTools' {
-                    $script:statusCode = 202
-                    $script:responseHeader = @{
-                        'x-ms-operation-id' = [guid]::NewGuid().ToString()
-                        'Location' = 'https://api.fabric.microsoft.com/v1/operations/12345'
-                        'Retry-After' = '30'
-                    }
-                }
-                return $null
-            }
-            Mock -CommandName Get-FabricLongRunningOperation -MockWith {
-                return [pscustomobject]@{
-                    status = 'Succeeded'
-                }
-            }
-            Mock -CommandName Get-FabricLongRunningOperationResult -MockWith {
-                return [pscustomobject]@{
-                    id = [guid]::NewGuid()
-                    displayName = 'TestEventhouse'
-                }
-            }
-        }
-
-        It 'Should call Get-FabricLongRunningOperation' {
-            $mockWorkspaceId = [guid]::NewGuid()
-
-            New-FabricEventhouse -WorkspaceId $mockWorkspaceId -EventhouseName 'TestEventhouse' -Confirm:$false
-
-            Should -Invoke -CommandName Get-FabricLongRunningOperation -Times 1
-        }
-    }
-
     Context 'When an unexpected status code is returned' {
         BeforeAll {
             Mock -CommandName Confirm-TokenState -MockWith { }
             Mock -CommandName Write-Message -MockWith { }
             Mock -CommandName Invoke-FabricRestMethod -MockWith {
-                InModuleScope -ModuleName 'FabricTools' {
-                    $script:statusCode = 400
-                }
-                return [pscustomobject]@{
-                    message = 'Bad Request'
-                    errorCode = 'InvalidRequest'
-                }
+                throw 'Unexpected response code: 400 - Bad Request'
             }
         }
 

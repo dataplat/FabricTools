@@ -73,13 +73,7 @@ Describe "Remove-FabricDomain" -Tag "UnitTests" {
             Mock -CommandName Confirm-TokenState -MockWith { }
             Mock -CommandName Write-Message -MockWith { }
             Mock -CommandName Invoke-FabricRestMethod -MockWith {
-                InModuleScope -ModuleName 'FabricTools' {
-                    $script:statusCode = 404
-                }
-                return [pscustomobject]@{
-                    message = 'Not Found'
-                    errorCode = 'DomainNotFound'
-                }
+                throw 'Unexpected response code: 400 - Bad Request'
             }
         }
 

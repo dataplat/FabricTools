@@ -21,10 +21,9 @@ The `Remove-FabricKQLQueryset` function sends a DELETE request to the Fabric API
     ```
 
 .NOTES
-- Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-- Validates token expiration before making the API request.
+- Calls `Confirm-TokenState` to ensure token validity before making the API request.
 
-Author: Tiago Balabuch
+Author: Tiago Balabuch, Kamil Nowinski
 
 #>
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
@@ -43,25 +42,20 @@ Author: Tiago Balabuch
         # Ensure token validity
         Confirm-TokenState
 
-        # Construct the API URL
-        $apiEndpointUrl = "{0}/workspaces/{1}/kqlQuerysets/{2}" -f $FabricConfig.BaseUrl, $WorkspaceId, $KQLQuerysetId
-        Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
-        if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Remove KQLQueryset"))
-        {
-            # Make the API request
-            $response = Invoke-FabricRestMethod `
-                -Uri $apiEndpointUrl `
-                -Method Delete
+        # Construct the API endpoint URL
+        $apiEndpointUrl = "workspaces/$WorkspaceId/kqlQuerysets/$KQLQuerysetId"
+        Write-Message -Message "Constructed API Endpoint: $apiEndpointUrl" -Level Debug
+
+        if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Remove KQLQueryset")) {
+            # Invoke Fabric API request
+            $apiParams = @{
+                Uri            = $apiEndpointUrl
+                Method         = 'Delete'
+                HandleResponse = $true
+            }
+            $response = Invoke-FabricRestMethod @apiParams
+            Write-Message -Message "KQLQueryset '$KQLQuerysetId' deleted successfully from workspace '$WorkspaceId'." -Level Info
         }
-        # Validate the response code
-        if ($statusCode -ne 200)
-        {
-            Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
-            Write-Message -Message "Error: $($response.message)" -Level Error
-            Write-Message "Error Code: $($response.errorCode)" -Level Error
-            return $null
-        }
-        Write-Message -Message "KQLQueryset '$KQLQuerysetId' deleted successfully from workspace '$WorkspaceId'." -Level Info
 
     }
     catch

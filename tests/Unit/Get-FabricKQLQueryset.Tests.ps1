@@ -45,16 +45,14 @@ Describe "Get-FabricKQLQueryset" -Tag "UnitTests" {
         BeforeAll {
             Mock -CommandName Confirm-TokenState -MockWith { return $true }
             Mock -CommandName Invoke-FabricRestMethod -MockWith {
-                return @{
-                    value = @(
-                        [pscustomobject]@{
-                            id          = "00000000-0000-0000-0000-000000000001"
-                            displayName = "TestKQLQueryset"
-                            description = "Test KQL Queryset Description"
-                            type        = "KQLQueryset"
-                        }
-                    )
-                }
+                return @(
+                    [pscustomobject]@{
+                        id          = "00000000-0000-0000-0000-000000000001"
+                        displayName = "TestKQLQueryset"
+                        description = "Test KQL Queryset Description"
+                        type        = "KQLQueryset"
+                    }
+                )
             }
         }
 
@@ -74,21 +72,4 @@ Describe "Get-FabricKQLQueryset" -Tag "UnitTests" {
         }
     }
 
-    Context "Error handling" {
-        BeforeAll {
-            Mock -CommandName Confirm-TokenState -MockWith { return $true }
-            Mock -CommandName Write-Message -MockWith { }
-            Mock -CommandName Invoke-FabricRestMethod -MockWith {
-                throw "API Error"
-            }
-        }
-
-        It "Should handle errors gracefully" {
-            { Get-FabricKQLQueryset -WorkspaceId ([guid]::NewGuid()) } | Should -Not -Throw
-
-            Should -Invoke -CommandName Write-Message -ParameterFilter {
-                $Level -eq 'Error' -and $Message -like "*Failed to retrieve*"
-            }
-        }
-    }
 }

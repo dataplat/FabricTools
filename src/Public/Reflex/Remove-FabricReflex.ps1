@@ -25,7 +25,7 @@ function Remove-FabricReflex
     - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
     - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 
-    Author: Tiago Balabuch
+    Author: Tiago Balabuch, Kamil Nowinski
 
 #>
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
@@ -49,20 +49,14 @@ function Remove-FabricReflex
 
         if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Remove Reflex"))
         {
-            # Make the API request
-            $response = Invoke-FabricRestMethod `
-                -Uri $apiEndpointUrl `
-                -Method Delete
-        }
-
-        # Handle response
-        if ($statusCode -ne 200)
-        {
-            Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
-            Write-Message -Message "Error: $($response.message)" -Level Error
-            Write-Message -Message "Error Details: $($response.moreDetails)" -Level Error
-            Write-Message "Error Code: $($response.errorCode)" -Level Error
-            return $null
+            $apiParams = @{
+                Uri            = $apiEndpointUrl
+                Method         = 'Delete'
+                TypeName       = 'Reflex'
+                ObjectIdOrName = $ReflexId
+                HandleResponse = $true
+            }
+            Invoke-FabricRestMethod @apiParams
         }
 
         Write-Message -Message "Reflex '$ReflexId' deleted successfully from workspace '$WorkspaceId'." -Level Info

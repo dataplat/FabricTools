@@ -23,27 +23,42 @@ The unique identifier of the domain to be deleted.
 Author: Tiago Balabuch, Kamil Nowinski
 
 #>
-    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
+    [CmdletBinding(SupportsShouldProcess,ConfirmImpact = 'High')]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
         [guid]$DomainId
     )
 
-    # Ensure token validity
-    Confirm-TokenState
-
-    if ($PSCmdlet.ShouldProcess($DomainId, "Remove Domain"))
+    try
     {
-        $apiParams = @{
-            Uri            = "admin/domains/$DomainId"
-            Method         = 'Delete'
-            TypeName       = 'Domain'
-            ObjectIdOrName = $DomainId
-            HandleResponse = $true
+        # Ensure token validity
+        Confirm-TokenState
+
+        # Construct the API URL
+        $apiEndpointUrl = "admin/domains/{0}" -f $DomainId
+        Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
+
+        if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Remove Domain"))
+        {
+            # Make the API request
+            $apiParams = @{
+                Uri            = $apiEndpointUrl
+                Method         = 'Delete'
+                TypeName       = 'Domain'
+                ObjectIdOrName = $DomainId
+                HandleResponse = $true
+            }
+            $response = Invoke-FabricRestMethod @apiParams
         }
 
-        Invoke-FabricRestMethod @apiParams
         Write-Message -Message "Domain '$DomainId' deleted successfully!" -Level Info
+
+    }
+    catch
+    {
+        # Log and handle errors
+        $errorDetails = $_.Exception.Message
+        Write-Message -Message "Failed to delete domain '$DomainId'. Error: $errorDetails" -Level Error
     }
 }

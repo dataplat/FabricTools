@@ -20,10 +20,7 @@ function Revoke-FabricCapacityTenantSettingOverrides {
         ```
 
     .NOTES
-        - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-        - Calls `Confirm-TokenState` to ensure token validity before making the API request.
-
-        Author: Tiago Balabuch
+        Author: Tiago Balabuch, Kamil Nowinski
     #>
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param (
@@ -40,17 +37,20 @@ function Revoke-FabricCapacityTenantSettingOverrides {
         Confirm-TokenState
 
         # Construct the API endpoint URL for retrieving capacity tenant setting overrides
-        $apiEndpointURI = "admin/capacities/{0}/delegatedTenantSettingOverrides/{1}" -f $capacityId, $tenantSettingName
-        Write-Message -Message "Constructed API Endpoint: $apiEndpointURI" -Level Debug
+        $apiEndpointUrl = "admin/capacities/{0}/delegatedTenantSettingOverrides/{1}" -f $capacityId, $tenantSettingName
+        Write-Message -Message "Constructed API Endpoint: $apiEndpointUrl" -Level Debug
 
         if ($PSCmdlet.ShouldProcess("$tenantSettingName" , "Revoke")) {
-        # Invoke the Fabric API to retrieve capacity tenant setting overrides
-        $response = Invoke-FabricRestMethod `
-            -Uri $apiEndpointURI `
-            -Method Delete
+            # Invoke the Fabric API to remove capacity tenant setting override
+            $apiParams = @{
+                Uri            = $apiEndpointUrl
+                Method         = 'Delete'
+                HandleResponse = $true
+            }
+            $response = Invoke-FabricRestMethod @apiParams
+            Write-Message -Message "Successfully removed the tenant setting override '$tenantSettingName' from the capacity with ID '$capacityId'." -Level Info
+            return $response
         }
-        Write-Message -Message "Successfully removed the tenant setting override '$tenantSettingName' from the capacity with ID '$capacityId'." -Level Info
-        return $response
     } catch {
         # Log detailed error information if the API request fails
         $errorDetails = $_.Exception.Message

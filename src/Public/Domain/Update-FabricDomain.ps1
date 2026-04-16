@@ -52,40 +52,56 @@ Author: Tiago Balabuch, Kamil Nowinski
         [string]$DomainContributorsScope
     )
 
-    # Ensure token validity
-    Confirm-TokenState
-
-    # Construct the request body
-    $body = @{
-        displayName = $DomainName
-    }
-
-    if ($DomainDescription)
+    try
     {
-        $body.description = $DomainDescription
-    }
+        # Ensure token validity
+        Confirm-TokenState
 
-    if ($DomainContributorsScope)
-    {
-        $body.contributorsScope = $DomainContributorsScope
-    }
+        # Construct the API URL
+        $apiEndpointUrl = "admin/domains/{0}" -f $DomainId
+        Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
-    $bodyJson = $body | ConvertTo-Json -Depth 10
-    Write-Message -Message "Request Body: $bodyJson" -Level Debug
-
-    if ($PSCmdlet.ShouldProcess($DomainName, "Update Domain"))
-    {
-        $apiParams = @{
-            Uri            = "admin/domains/$DomainId"
-            Method         = 'Patch'
-            Body           = $bodyJson
-            TypeName       = 'Domain'
-            ObjectIdOrName = $DomainName
-            HandleResponse = $true
+        # Construct the request body
+        $body = @{
+            displayName = $DomainName
         }
 
-        $response = Invoke-FabricRestMethod @apiParams
+        if ($DomainDescription)
+        {
+            $body.description = $DomainDescription
+        }
+
+        if ($DomainContributorsScope)
+        {
+            $body.contributorsScope = $DomainContributorsScope
+        }
+
+        # Convert the body to JSON
+        $bodyJson = $body | ConvertTo-Json -Depth 10
+        Write-Message -Message "Request Body: $bodyJson" -Level Debug
+
+        if ($PSCmdlet.ShouldProcess($DomainName, "Update Domain"))
+        {
+            # Make the API request
+            $apiParams = @{
+                Uri            = $apiEndpointUrl
+                Method         = 'Patch'
+                Body           = $bodyJson
+                TypeName       = 'Domain'
+                ObjectIdOrName = $DomainName
+                HandleResponse = $true
+            }
+            $response = Invoke-FabricRestMethod @apiParams
+        }
+
+        # Handle results
         Write-Message -Message "Domain '$DomainName' updated successfully!" -Level Info
-        $response
+        return $response
+    }
+    catch
+    {
+        # Log and handle errors
+        $errorDetails = $_.Exception.Message
+        Write-Message -Message "Failed to update domain '$DomainId'. Error: $errorDetails" -Level Error
     }
 }

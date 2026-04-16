@@ -16,15 +16,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Renamed `Add-FabricWorkspaceCapacityAssignment` to `Add-FabricWorkspaceCapacity` (issue #42)
 - Renamed `Remove-FabricWorkspaceCapacityAssignment` to `Remove-FabricWorkspaceCapacity` (issue #42)
-- Refactored all `Invoke-FabricRestMethod` calls in Notebook cmdlets to use hash splatting instead of backtick line continuation (issue #87)
-- Refactored all `Invoke-FabricRestMethod` calls in Data Pipeline cmdlets to use hash splatting instead of backtick line continuation (issue #87)
-- Refactored all `Invoke-FabricRestMethod` calls in Lakehouse cmdlets to use hash splatting instead of backtick line continuation (issue #87)
-- Refactored Lakehouse cmdlets to use `HandleResponse = $true` on `Invoke-FabricRestMethod`, removing manual status-code switches, LRO polling, and pagination loops from each cmdlet
-- Refactored Notebook cmdlets to use `HandleResponse = $true` on `Invoke-FabricRestMethod`, removing manual status-code switches, LRO polling, and pagination loops from each cmdlet
-- Refactored all `Invoke-FabricRestMethod` calls in Domain cmdlets to use hash splatting instead of backtick line continuation (issue #87)
-- Refactored Domain cmdlets to use `HandleResponse = $true` on `Invoke-FabricRestMethod`, removing manual status-code switches, LRO polling, and pagination loops from each cmdlet
-- Refactored all `Invoke-FabricRestMethod` calls in Environment cmdlets to use hash splatting instead of backtick line continuation (issue #87)
-- Refactored Environment cmdlets to use `HandleResponse = $true` on `Invoke-FabricRestMethod`, removing manual status-code switches, LRO polling, and pagination loops from each cmdlet
+- Refactored `Invoke-FabricRestMethod` call in bunch of cmdlets to use hash splatting instead of backtick line continuation (issue #87)
+- Refactored cmdlets to use `HandleResponse = $true` on `Invoke-FabricRestMethod`, removing manual status-code switches, LRO polling, and pagination loops from each cmdlet
+- `Invoke-FabricRestMethod` handles response by default
 
 ### Fixed
 
@@ -106,7 +100,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Remove-FabricSQLDatabase` uses unified function to handle API results
 - Updated the `WorkspaceId`, `CapacitiesIds`,`CapacityId`,`CopyJobId`,`datamartId`,`DataPipelineId`,`DataWarehouseGUID`,`DomainId`,`EnvironmentId`,`EventhouseId`,`EventstreamId`,`ExternalDataShareId`,`ItemId`,`KQLDashboardId`,`KQLDatabaseId`,`KQLQuerysetId`,`LakehouseId`,`MirroredDatabaseId`,`MirroredWarehouseId`,`MLExperimentId`,`MLModelId`,`NotebookId`,`operationId`,`PaginatedReportId`,`ParentDomainId`,`parentEventhouseId`,`PrincipalId`,`ReflexId`,`ReportId`,`SemanticModelId`,`SparkCustomPoolId`,`SparkJobDefinitionId`,`SQLDatabaseId`,`SQLEndpointId`,`subscriptionID`,`UserId`,`WarehouseId`,`WorkspaceGUID`,`WorkspaceId`,`WorkspaceIds`, and `WorkspaceRoleAssignmentId` parameters to the datatype GUID [#125](https://github.com/dataplat/FabricTools/issues/125)
 - Internal function `Invoke-FabricRestMethod`: (#143)
-  - handles API response, no need to use `Test-FabricApiResponse` from parent public function 
+  - handles API response, no need to use `Test-FabricApiResponse` from parent public function
   - handles pagination automatically (when `-HandleResponse` is provided)
 - All Deployment Pipeline functions raise an error when an exception is caught. Used splatting for params.
 - Refactored SQL Database functions to use enhanced capability in `Invoke-FabricRestMethod`. Used splatting for params.
@@ -176,7 +170,7 @@ For a full list of changes and details, please see the commit history.
 - Removed unnecessary or duplicate functions (e.g., `Get-AllFabricDatasetRefreshes`, `Get-AllFabricCapacities`).
 - Removed obsolete scripts and commented-out configuration paths.
 - Removed `Invoke-FabricAPIRequest` and replaced it by `Invoke-FabricRestMethodExtended`
-- Removed `Confirm-FabricAuthToken` 
+- Removed `Confirm-FabricAuthToken`
 - Renamed `Test-TokenExpired` to `Confirm-TokenState` and extended it using `EnableTokenRefresh` Feature Flag
 - Removed `Set-FabricApiHeaders` and merged the entire logic to `Connect-FabricAccount`
 

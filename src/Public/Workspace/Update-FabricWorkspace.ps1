@@ -31,10 +31,9 @@ function Update-FabricWorkspace
         ```
 
     .NOTES
-        - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
         - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 
-        Author: Tiago Balabuch
+        Author: Tiago Balabuch, Kamil Nowinski
     #>
     [CmdletBinding(SupportsShouldProcess)]
     param (
@@ -57,9 +56,9 @@ function Update-FabricWorkspace
         # Ensure token validity
         Confirm-TokenState
 
-        # Construct the API URL
-        $apiEndpointUrl = "{0}/workspaces/{1}" -f $FabricConfig.BaseUrl, $WorkspaceId
-        Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
+        # Construct the API endpoint URL
+        $apiEndpointUrl = "workspaces/$WorkspaceId"
+        Write-Message -Message "Constructed API Endpoint: $apiEndpointUrl" -Level Debug
 
         # Construct the request body
         $body = @{
@@ -77,24 +76,17 @@ function Update-FabricWorkspace
 
         if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Update Workspace"))
         {
-            # Make the API request
-            $response = Invoke-FabricRestMethod `
-                -Uri $apiEndpointUrl `
-                -Method Patch `
-                -Body $bodyJson
+            # Invoke Fabric API request
+            $apiParams = @{
+                Uri            = $apiEndpointUrl
+                Method         = 'Patch'
+                Body           = $bodyJson
+                HandleResponse = $true
+            }
+            $response = Invoke-FabricRestMethod @apiParams
+            Write-Message -Message "Workspace '$WorkspaceName' updated successfully!" -Level Info
+            return $response
         }
-        # Validate the response code
-        if ($statusCode -ne 200)
-        {
-            Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
-            Write-Message -Message "Error: $($response.message)" -Level Error
-            Write-Message "Error Code: $($response.errorCode)" -Level Error
-            return $null
-        }
-
-        # Handle results
-        Write-Message -Message "Workspace '$WorkspaceName' updated successfully!" -Level Info
-        return $response
     }
     catch
     {

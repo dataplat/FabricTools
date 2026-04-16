@@ -29,11 +29,7 @@ function Get-FabricSQLEndpoint {
         ```
 
     .NOTES
-        - This function requires the FabricConfig object to be properly configured with BaseUrl and FabricHeaders.
-        - The function uses continuation tokens to handle paginated API responses.
-        - If no filter parameters are provided, all SQL Endpoints in the specified workspace are returned.
-
-        Author: Tiago Balabuch
+        Author: Tiago Balabuch, Kamil Nowinski
 #>
     [CmdletBinding()]
     param (
@@ -59,64 +55,19 @@ function Get-FabricSQLEndpoint {
 
         # Ensure token validity
         Confirm-TokenState
-        # Initialize variables
-        $continuationToken = $null
-        $SQLEndpoints = @()
 
-        if (-not ([AppDomain]::CurrentDomain.GetAssemblies() | Where-Object { $_.GetName().Name -eq "System.Web" })) {
-            Add-Type -AssemblyName System.Web
+        # Construct the API endpoint URL
+        $apiEndpointUrl = "workspaces/$WorkspaceId/SQLEndpoints"
+        Write-Message -Message "Constructed API Endpoint: $apiEndpointUrl" -Level Debug
+
+        # Invoke the Fabric API to retrieve SQL Endpoints
+        $apiParams = @{
+            Uri            = $apiEndpointUrl
+            Method         = 'Get'
+            ExtractValue   = 'True'
+            HandleResponse = $true
         }
-
-        # Loop to retrieve all capacities with continuation token
-        Write-Message -Message "Loop started to get continuation token" -Level Debug
-        $baseApiEndpointUrl = "{0}/workspaces/{1}/SQLEndpoints" -f $FabricConfig.BaseUrl, $WorkspaceId
-
-
-        do {
-            # Construct the API URL
-            $apiEndpointUrl = $baseApiEndpointUrl
-
-            if ($null -ne $continuationToken) {
-                # URL-encode the continuation token
-                $encodedToken = [System.Web.HttpUtility]::UrlEncode($continuationToken)
-                $apiEndpointUrl = "{0}?continuationToken={1}" -f $apiEndpointUrl, $encodedToken
-            }
-            Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
-
-            # Make the API request
-            $response = Invoke-FabricRestMethod `
-                -Uri $apiEndpointUrl `
-                -Method Get
-
-            # Validate the response code
-            if ($statusCode -ne 200) {
-                Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
-                Write-Message -Message "Error: $($response.message)" -Level Error
-                Write-Message -Message "Error Details: $($response.moreDetails)" -Level Error
-                Write-Message "Error Code: $($response.errorCode)" -Level Error
-                return $null
-            }
-
-            # Add data to the list
-            if ($null -ne $response) {
-                Write-Message -Message "Adding data to the list" -Level Debug
-                $SQLEndpoints += $response.value
-
-                # Update the continuation token if present
-                if ($response.PSObject.Properties.Match("continuationToken")) {
-                    Write-Message -Message "Updating the continuation token" -Level Debug
-                    $continuationToken = $response.continuationToken
-                    Write-Message -Message "Continuation token: $continuationToken" -Level Debug
-                } else {
-                    Write-Message -Message "Updating the continuation token to null" -Level Debug
-                    $continuationToken = $null
-                }
-            } else {
-                Write-Message -Message "No data received from the API." -Level Warning
-                break
-            }
-        } while ($null -ne $continuationToken)
-        Write-Message -Message "Loop finished and all data added to the list" -Level Debug
+        $SQLEndpoints = @(Invoke-FabricRestMethod @apiParams)
 
         # Filter results based on provided parameters
         $SQLEndpoint = if ($SQLEndpointId) {
@@ -125,16 +76,16 @@ function Get-FabricSQLEndpoint {
             $SQLEndpoints | Where-Object { $_.DisplayName -eq $SQLEndpointName }
         } else {
             # Return all SQLEndpoints if no filter is provided
-            Write-Message -Message "No filter provided. Returning all Paginated Reports." -Level Debug
+            Write-Message -Message "No filter provided. Returning all SQL Endpoints." -Level Debug
             $SQLEndpoints
         }
 
         # Handle results
         if ($SQLEndpoint) {
-            Write-Message -Message "Paginated Report found matching the specified criteria." -Level Debug
+            Write-Message -Message "SQL Endpoint found matching the specified criteria." -Level Debug
             return $SQLEndpoint
         } else {
-            Write-Message -Message "No Paginated Report found matching the provided criteria." -Level Warning
+            Write-Message -Message "No SQL Endpoint found matching the provided criteria." -Level Warning
             return $null
         }
     } catch {

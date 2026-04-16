@@ -39,13 +39,11 @@ Describe "Get-FabricSparkCustomPool" -Tag "UnitTests" {
                 InModuleScope -ModuleName 'FabricTools' {
                     $script:statusCode = 200
                 }
-                return [pscustomobject]@{
-                    value = @(
+                return @(
                         [pscustomobject]@{ id = [guid]::NewGuid(); name = 'Pool1'; nodeFamily = 'MemoryOptimized' }
                         [pscustomobject]@{ id = [guid]::NewGuid(); name = 'Pool2'; nodeFamily = 'MemoryOptimized' }
                     )
                     continuationToken = $null
-                }
             }
         }
 
@@ -75,13 +73,7 @@ Describe "Get-FabricSparkCustomPool" -Tag "UnitTests" {
             Mock -CommandName Confirm-TokenState -MockWith { }
             Mock -CommandName Write-Message -MockWith { }
             Mock -CommandName Invoke-FabricRestMethod -MockWith {
-                InModuleScope -ModuleName 'FabricTools' {
-                    $script:statusCode = 400
-                }
-                return [pscustomobject]@{
-                    message = 'Bad Request'
-                    errorCode = 'InvalidRequest'
-                }
+                throw 'Unexpected response code: 400 - Bad Request'
             }
         }
 

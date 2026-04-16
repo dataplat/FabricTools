@@ -25,7 +25,7 @@ function Get-FabricWorkspaceDatasetRefreshes {
     .NOTES
         Alias: Get-FabWorkspaceDatasetRefreshes
 
-        Author: Ioana Bouariu
+        Author: Ioana Bouariu, Kamil Nowinski
     #>
 
     # Define a function to get the refresh history of all datasets in a PowerBI workspace
@@ -33,22 +33,20 @@ function Get-FabricWorkspaceDatasetRefreshes {
         # Define a mandatory parameter for the workspace ID
         [Parameter(Mandatory = $true)]
         [Alias("Id")]
-        [guid]$WorkspaceID
+        [guid]$WorkspaceId
     )
 
     Confirm-TokenState
 
-    # Get the workspace using the workspace ID
-    $wsp = Get-FabricWorkspace -workspaceid $WorkspaceID
     # Initialize an array to store the refresh history
     $refs = @()
     # Get all datasets in the workspace
-    $datasets = Get-FabricDataset -workspaceid $wsp.Id
+    $datasets = Get-FabricDataset -WorkspaceId $WorkspaceId
 
     # Loop over each dataset
     foreach ($dataset in $datasets) {
         # Get the refresh history of the dataset and add it to the array
-        $refs += Get-FabricDatasetRefreshes -datasetid $dataset.Id -workspaceId $wsp.Id
+        $refs += Get-FabricDatasetRefreshes -DatasetId $dataset.Id -WorkspaceId $WorkspaceId
     }
     # Return the refresh history array
     return $refs

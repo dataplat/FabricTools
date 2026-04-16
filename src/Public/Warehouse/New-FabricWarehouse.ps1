@@ -25,10 +25,9 @@ function New-FabricWarehouse
         ```
 
     .NOTES
-        - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
         - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 
-        Author: Tiago Balabuch
+        Author: Tiago Balabuch, Kamil Nowinski
     #>
     [CmdletBinding(SupportsShouldProcess)]
     param (
@@ -51,8 +50,8 @@ function New-FabricWarehouse
         Confirm-TokenState
 
         # Construct the API URL
-        $apiEndpointURI = "workspaces/{0}/warehouses" -f $WorkspaceId
-        Write-Message -Message "API Endpoint: $apiEndpointURI" -Level Debug
+        $apiEndpointUrl = "workspaces/{0}/warehouses" -f $WorkspaceId
+        Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
         # Construct the request body
         $body = @{
@@ -67,13 +66,16 @@ function New-FabricWarehouse
         $bodyJson = $body | ConvertTo-Json -Depth 10
         Write-Message -Message "Request Body: $bodyJson" -Level Debug
 
-        if ($PSCmdlet.ShouldProcess($apiEndpointURI, "Create Warehouse"))
+        if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Create Warehouse"))
         {
             # Make the API request
             $apiParams = @{
-                Uri    = $apiEndpointURI
-                Method = 'Post'
-                Body   = $bodyJson
+                Uri            = $apiEndpointUrl
+                Method         = 'Post'
+                Body           = $bodyJson
+                HandleResponse = $true
+                TypeName       = 'Warehouse'
+                ObjectIdOrName = $WarehouseName
             }
             $response = Invoke-FabricRestMethod @apiParams
         }

@@ -30,10 +30,9 @@ function New-FabricCopyJob {
     ```
 
 .NOTES
-    - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
     - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 
-    Author: Tiago Balabuch
+    Author: Tiago Balabuch, Kamil Nowinski
 #>
     [CmdletBinding(SupportsShouldProcess)]
     param (
@@ -63,8 +62,8 @@ function New-FabricCopyJob {
         Confirm-TokenState
 
         # Construct the API URL
-        $apiEndpointURI = "workspaces/{0}/copyJobs" -f $WorkspaceId
-        Write-Message -Message "API Endpoint: $apiEndpointURI" -Level Debug
+        $apiEndpointUrl = "workspaces/{0}/copyJobs" -f $WorkspaceId
+        Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
         # Construct the request body
         $body = @{
@@ -98,7 +97,7 @@ function New-FabricCopyJob {
                 return $null
             }
         }
-        #Step 5: Add platform definition file content if provided
+        # Add platform definition file content if provided
         if ($CopyJobPathPlatformDefinition) {
             $CopyJobEncodedPlatformContent = Convert-ToBase64 -filePath $CopyJobPathPlatformDefinition
 
@@ -125,13 +124,16 @@ function New-FabricCopyJob {
         $bodyJson = $body | ConvertTo-Json -Depth 10
         Write-Message -Message "Request Body: $bodyJson" -Level Debug
 
-        if($PSCmdlet.ShouldProcess($apiEndpointURI, "Create Copy Job")) {
+        if($PSCmdlet.ShouldProcess($apiEndpointUrl, "Create Copy Job")) {
 
         # Make the API request
         $apiParams = @{
-            Uri    = $apiEndpointURI
-            Method = 'Post'
-            Body   = $bodyJson
+            Uri            = $apiEndpointUrl
+            Method         = 'Post'
+            Body           = $bodyJson
+            TypeName       = 'CopyJob'
+            ObjectIdOrName = $CopyJobName
+            HandleResponse = $true
         }
         $response = Invoke-FabricRestMethod @apiParams
     }

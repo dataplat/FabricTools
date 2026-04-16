@@ -74,7 +74,7 @@ Author: Tiago Balabuch, Kamil Nowinski
         $lakehouses = @(Invoke-FabricRestMethod @apiParams)
 
         # Filter results based on provided parameters
-        $lakehouse = if ($LakehouseId) {
+        $lakehouses = if ($LakehouseId) {
             $lakehouses | Where-Object { $_.Id -eq $LakehouseId }
         } elseif ($LakehouseName) {
             $lakehouses | Where-Object { $_.DisplayName -eq $LakehouseName }
@@ -83,9 +83,9 @@ Author: Tiago Balabuch, Kamil Nowinski
             $lakehouses
         }
 
-        if ($lakehouse) {
+        if ($lakehouses) {
             Write-Message -Message "Lakehouse found matching the specified criteria." -Level Debug
-            return $lakehouse
+            return $lakehouses
         } else {
             Write-Message -Message "No Lakehouse found matching the provided criteria." -Level Warning
             return $null

@@ -49,10 +49,9 @@ function Update-FabricSparkCustomPool
         ```
 
     .NOTES
-        - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
         - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 
-        Author: Tiago Balabuch
+        Author: Tiago Balabuch, Kamil Nowinski
     #>
     [CmdletBinding(SupportsShouldProcess)]
     param (
@@ -109,7 +108,7 @@ function Update-FabricSparkCustomPool
         Confirm-TokenState
 
         # Construct the API URL
-        $apiEndpointUrl = "{0}/workspaces/{1}/spark/pools/{2}" -f $FabricConfig.BaseUrl, $WorkspaceId, $SparkCustomPoolId
+        $apiEndpointUrl = "workspaces/{0}/spark/pools/{1}" -f $WorkspaceId, $SparkCustomPoolId
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
         # Construct the request body
@@ -135,26 +134,17 @@ function Update-FabricSparkCustomPool
 
         if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Update SparkCustomPool"))
         {
-
-            # Make the API request
-            $response = Invoke-FabricRestMethod `
-                -Uri $apiEndpointUrl `
-                -Method Patch `
-                -Body $bodyJson
+            $apiParams = @{
+                Uri            = $apiEndpointUrl
+                Method         = 'Patch'
+                Body           = $bodyJson
+                HandleResponse = $true
+                TypeName       = 'SparkCustomPool'
+                ObjectIdOrName = $SparkCustomPoolId
+            }
+            $response = Invoke-FabricRestMethod @apiParams
         }
 
-        # Validate the response code
-        if ($statusCode -ne 200)
-        {
-            Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
-            Write-Message -Message "Error: $($response.message)" -Level Error
-            Write-Message -Message "Error Details: $($response.moreDetails)" -Level Error
-            Write-Message "Error Code: $($response.errorCode)" -Level Error
-            return $null
-        }
-
-        # Handle results
-        Write-Message -Message "Spark Custom Pool '$SparkCustomPoolName' updated successfully!" -Level Info
         return $response
     }
     catch

@@ -28,10 +28,9 @@ function Update-FabricCopyJob
     ```
 
 .NOTES
-    - Requires the `$FabricConfig` global configuration, which includes `BaseUrl` and `FabricHeaders`.
     - Ensures token validity by calling `Confirm-TokenState` before making the API request.
 
-    Author: Tiago Balabuch
+    Author: Tiago Balabuch, Kamil Nowinski
 #>
     [CmdletBinding(SupportsShouldProcess)]
     param (
@@ -58,8 +57,8 @@ function Update-FabricCopyJob
         Confirm-TokenState
 
         # Construct the API endpoint URI
-        $apiEndpointURI = "workspaces/{0}/copyJobs/{1}" -f $WorkspaceId, $CopyJobId
-        Write-Message -Message "API Endpoint: $apiEndpointURI" -Level Debug
+        $apiEndpointUrl = "workspaces/{0}/copyJobs/{1}" -f $WorkspaceId, $CopyJobId
+        Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
         # Construct the request body
         $body = @{
@@ -75,17 +74,22 @@ function Update-FabricCopyJob
         $bodyJson = $body | ConvertTo-Json
         Write-Message -Message "Request Body: $bodyJson" -Level Debug
 
-        if ($PSCmdlet.ShouldProcess($apiEndpointURI, "Update Copy Job"))
+        if ($PSCmdlet.ShouldProcess($CopyJobName, "Update Copy Job"))
         {
-            # Make the API request
-            $response = Invoke-FabricRestMethod `
-                -Uri $apiEndpointURI `
-                -method Patch `
-                -body $bodyJson
+            $apiParams = @{
+                Uri            = "workspaces/$WorkspaceId/copyJobs/$CopyJobId"
+                Method         = 'Patch'
+                Body           = $bodyJson
+                TypeName       = 'CopyJob'
+                ObjectIdOrName = $CopyJobName
+                HandleResponse = $true
+            }
+
+            $response = Invoke-FabricRestMethod @apiParams
         }
 
         Write-Message -Message "Copy Job '$CopyJobName' updated successfully!" -Level Info
-        return $response
+        $response
     }
     catch
     {

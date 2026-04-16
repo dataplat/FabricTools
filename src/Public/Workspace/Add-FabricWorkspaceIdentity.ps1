@@ -17,10 +17,9 @@ function Add-FabricWorkspaceIdentity {
         ```
 
     .NOTES
-        - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
         - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 
-        Author: Tiago Balabuch
+        Author: Tiago Balabuch, Kamil Nowinski
     #>
     [CmdletBinding()]
     param (
@@ -35,56 +34,19 @@ function Add-FabricWorkspaceIdentity {
         Confirm-TokenState
 
         # Construct the API URL
-        $apiEndpointUrl = "{0}/workspaces/{1}/provisionIdentity" -f $FabricConfig.BaseUrl, $WorkspaceId
+        $apiEndpointUrl = "workspaces/$WorkspaceId/provisionIdentity"
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
         # Make the API request
-        $response = Invoke-FabricRestMethod `
-            -Uri $apiEndpointUrl `
-            -Method Post
-
-        # Handle and log the response
-        switch ($statusCode) {
-            200 {
-                Write-Message -Message "Workspace identity was successfully provisioned for workspace '$WorkspaceId'." -Level Info
-                return $response
-            }
-            202 {
-                Write-Message -Message "Workspace identity provisioning accepted for workspace '$WorkspaceId'. Provisioning in progress!" -Level Info
-                [string]$operationId = $responseHeader["x-ms-operation-id"]
-                [string]$location = $responseHeader["Location"]
-                [string]$retryAfter = $responseHeader["Retry-After"]
-
-                Write-Message -Message "Operation ID: '$operationId'" -Level Debug
-                Write-Message -Message "Location: '$location'" -Level Debug
-                Write-Message -Message "Retry-After: '$retryAfter'" -Level Debug
-
-                Write-Message -Message "Getting Long Running Operation status" -Level Debug
-
-
-                $operationStatus = Get-FabricLongRunningOperation -operationId $operationId
-                Write-Message -Message "Long Running Operation status: $operationStatus" -Level Debug
-                # Handle operation result
-                if ($operationStatus.status -eq "Succeeded") {
-                    Write-Message -Message "Operation Succeeded" -Level Debug
-                    Write-Message -Message "Getting Long Running Operation result" -Level Debug
-
-                    $operationResult = Get-FabricLongRunningOperationResult -operationId $operationId
-                    Write-Message -Message "Long Running Operation status: $operationResult" -Level Debug
-
-                    return $operationResult
-                } else {
-                    Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Debug
-                    Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Error
-                    return $operationStatus
-                }
-            }
-            default {
-                Write-Message -Message "Unexpected response code: $statusCode" -Level Error
-                Write-Message -Message "Error details: $($response.message)" -Level Error
-                throw "API request failed with status code $statusCode."
-            }
+        $apiParams = @{
+            Uri            = $apiEndpointUrl
+            Method         = 'Post'
+            HandleResponse = $true
         }
+        $response = Invoke-FabricRestMethod @apiParams
+
+        Write-Message -Message "Workspace identity was successfully provisioned for workspace '$WorkspaceId'." -Level Info
+        return $response
     } catch {
         # Handle and log errors
         $errorDetails = $_.Exception.Message

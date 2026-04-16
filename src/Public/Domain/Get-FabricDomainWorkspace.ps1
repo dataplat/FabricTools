@@ -29,17 +29,35 @@ Author: Tiago Balabuch, Kamil Nowinski
         [guid]$DomainId
     )
 
-    # Ensure token validity
-    Confirm-TokenState
+    try {
+        # Ensure token validity
+        Confirm-TokenState
 
-    $apiParams = @{
-        Uri            = "admin/domains/$DomainId/workspaces"
-        Method         = 'Get'
-        TypeName       = 'Domain'
-        ObjectIdOrName = $DomainId
-        HandleResponse = $true
-        ExtractValue   = 'True'
+        # Construct the API URL
+        $apiEndpointUrl = "admin/domains/{0}/workspaces" -f $DomainId
+        Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
+
+        # Make the API request
+        $apiParams = @{
+            Uri            = $apiEndpointUrl
+            Method         = 'Get'
+            TypeName       = 'Domain'
+            ObjectIdOrName = $DomainId
+            HandleResponse = $true
+            ExtractValue   = 'True'
+        }
+        $response = @(Invoke-FabricRestMethod @apiParams)
+
+        # Handle empty response
+        if ($response.Count -eq 0) {
+            Write-Message -Message "No workspace found for the '$DomainId'." -Level Warning
+            return $null
+        }
+        return $response
+
+    } catch {
+        # Capture and log error details
+        $errorDetails = $_.Exception.Message
+        Write-Message -Message "Failed to retrieve domain workspaces. Error: $errorDetails" -Level Error
     }
-
-    @(Invoke-FabricRestMethod @apiParams)
 }

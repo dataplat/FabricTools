@@ -30,7 +30,7 @@ function Start-FabricSparkJobDefinitionOnDemand
         Ensure that the necessary authentication tokens are valid before running this function.
         The function logs detailed messages for debugging and informational purposes.
 
-    Author: Tiago Balabuch
+    Author: Tiago Balabuch, Kamil Nowinski
     #>
     [CmdletBinding(SupportsShouldProcess)]
     param (
@@ -57,63 +57,22 @@ function Start-FabricSparkJobDefinitionOnDemand
         # Ensure token validity
         Confirm-TokenState
 
-        # Construct the API URL
-        $apiEndpointUrl = "{0}/workspaces/{1}/SparkJobDefinitions/{2}/jobs/instances?jobType={3}" -f $FabricConfig.BaseUrl, $WorkspaceId , $SparkJobDefinitionId, $JobType
-        Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
+        # Construct the API endpoint URL
+        $apiEndpointUrl = "workspaces/$WorkspaceId/SparkJobDefinitions/$SparkJobDefinitionId/jobs/instances?jobType=$JobType"
+        Write-Message -Message "Constructed API Endpoint: $apiEndpointUrl" -Level Debug
 
-        if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Start Spark Job Definition on demand")){
-                # Make the API request
-                $response = Invoke-FabricRestMethod `
-                    -Uri $apiEndpointUrl `
-                    -Method Post
+        if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Start Spark Job Definition on demand")) {
+            # Invoke Fabric API request
+            $apiParams = @{
+                Uri            = $apiEndpointUrl
+                Method         = 'Post'
+                HandleResponse = $true
+                NoWait         = (-not $waitForCompletion)
             }
-            Write-Message -Message "Response Code: $statusCode" -Level Debug
-            # Handle and log the response
-            switch ($statusCode)
-            {
-                201
-                {
-                    Write-Message -Message "Spark Job Definition on demand successfully initiated for SparkJobDefinition '$SparkJobDefinition.displayName'." -Level Info
-                    return $response
-                }
-                202
-                {
-                    Write-Message -Message "Spark Job Definition on demand accepted and is now running in the background. Job execution is in progress." -Level Info
-                    [string]$operationId = $responseHeader["x-ms-operation-id"]
-                    [string]$location = $responseHeader["Location"]
-                    [string]$retryAfter = $responseHeader["Retry-After"]
-
-                    Write-Message -Message "Operation ID: '$operationId'" -Level Debug
-                    Write-Message -Message "Location: '$location'" -Level Debug
-                    Write-Message -Message "Retry-After: '$retryAfter'" -Level Debug
-
-                    if ($waitForCompletion -eq $true)
-                    {
-                        Write-Message -Message "Getting Long Running Operation status" -Level Debug
-                        $operationStatus = Get-FabricLongRunningOperation -operationId $operationId -location $location -retryAfter $retryAfter
-                        Write-Message -Message "Long Running Operation status: $operationStatus" -Level Debug
-                        return $operationStatus
-                    }
-                    else
-                    {
-                        Write-Message -Message "The operation is running asynchronously." -Level Info
-                        Write-Message -Message "Use the returned details to check the operation status." -Level Info
-                        Write-Message -Message "To wait for the operation to complete, set the 'waitForCompletion' parameter to true." -Level Info
-                        $operationDetails = [PSCustomObject]@{
-                            OperationId = $operationId
-                            Location    = $location
-                            RetryAfter  = $retryAfter
-                        }
-                        return $operationDetails
-                    }
-                }
-                default
-                {
-                    Write-Message -Message "Unexpected response code: $statusCode" -Level Error
-                    Write-Message -Message "Error details: $($response.message)" -Level Error
-                    throw "API request failed with status code $statusCode."
-                }
-            }
+            $response = Invoke-FabricRestMethod @apiParams
+            Write-Message -Message "Spark Job Definition on demand successfully initiated for SparkJobDefinition." -Level Info
+            return $response
+        }
         }
         catch {
             # Handle and log errors

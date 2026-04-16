@@ -31,10 +31,9 @@ function Get-FabricWarehouse {
         ```
 
     .NOTES
-        - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
         - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 
-        Author: Tiago Balabuch
+        Author: Tiago Balabuch, Kamil Nowinski
     #>
     [CmdletBinding()]
     param (
@@ -64,13 +63,16 @@ function Get-FabricWarehouse {
 
 
         # Loop to retrieve all capacities with continuation token
-        $apiEndpointURI = "workspaces/{0}/warehouses" -f $WorkspaceId
+        $apiEndpointUrl = "workspaces/{0}/warehouses" -f $WorkspaceId
 
         $apiParams = @{
-            Uri    = $apiEndpointURI
-            Method = 'Get'
+            Uri            = $apiEndpointUrl
+            Method         = 'Get'
+            HandleResponse = $true
+            ExtractValue   = 'True'
+            TypeName       = 'Warehouse'
         }
-        $Warehouses = (Invoke-FabricRestMethod @apiParams).Value
+        $Warehouses = @(Invoke-FabricRestMethod @apiParams)
 
         # Filter results based on provided parameters
         $Warehouse = if ($WarehouseId) {

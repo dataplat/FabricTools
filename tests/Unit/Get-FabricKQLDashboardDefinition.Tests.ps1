@@ -28,15 +28,10 @@ Describe "Get-FabricKQLDashboardDefinition" -Tag "UnitTests" {
     Context "Successful definition retrieval" {
         BeforeAll {
             Mock -CommandName Invoke-FabricRestMethod -MockWith {
-                InModuleScope -ModuleName 'FabricTools' {
-                    $script:statusCode = 200
-                }
                 return [pscustomobject]@{
-                    definition = [pscustomobject]@{
-                        parts = @(
-                            [pscustomobject]@{ path = 'KQLDashboardDefinition.json'; payload = 'encodedPayload'; payloadType = 'InlineBase64' }
-                        )
-                    }
+                    path = 'KQLDashboardDefinition.json'
+                    payload = 'encodedPayload'
+                    payloadType = 'InlineBase64'
                 }
             }
             Mock -CommandName Confirm-TokenState -MockWith { return $true }

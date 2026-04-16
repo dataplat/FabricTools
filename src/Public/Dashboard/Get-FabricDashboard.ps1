@@ -35,11 +35,11 @@ function Get-FabricDashboard {
         Confirm-TokenState
 
         # Construct the API endpoint URL
-        $apiEndpointURI = "workspaces/{0}/dashboards" -f $WorkspaceId
+        $apiEndpointUrl = "workspaces/{0}/dashboards" -f $WorkspaceId
 
         # Invoke the Fabric API to retrieve capacity details
         $apiParams = @{
-            Uri    = $apiEndpointURI
+            Uri    = $apiEndpointUrl
             Method = 'Get'
         }
         $Dashboards = Invoke-FabricRestMethod @apiParams

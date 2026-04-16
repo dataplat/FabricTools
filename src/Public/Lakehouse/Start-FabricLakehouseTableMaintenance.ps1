@@ -110,7 +110,6 @@ function Start-FabricLakehouseTableMaintenance
         # Ensure token validity
         Confirm-TokenState
 
-
         $lakehouse = Get-FabricLakehouse -WorkspaceId $WorkspaceId -LakehouseId $LakehouseId
         if ($lakehouse.properties.PSObject.Properties['defaultSchema'] -and -not $SchemaName)
         {
@@ -150,11 +149,8 @@ function Start-FabricLakehouseTableMaintenance
             $body.executionData.optimizeSettings.zOrderBy = $ColumnsZOrderBy
         }
 
-
-
         if ($retentionPeriod)
         {
-
             if (-not $body.executionData.PSObject.Properties['vacuumSettings'])
             {
                 $body.executionData.vacuumSettings = @{
@@ -162,7 +158,6 @@ function Start-FabricLakehouseTableMaintenance
                 }
             }
             $body.executionData.vacuumSettings.retentionPeriod = $retentionPeriod
-
         }
 
         $bodyJson = $body | ConvertTo-Json -Depth 10

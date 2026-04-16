@@ -14,10 +14,7 @@ function Get-FabricWorkspaceTenantSettingOverrides {
         ```
 
     .NOTES
-        - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-        - Calls `Confirm-TokenState` to ensure token validity before making the API request.
-
-        Author: Tiago Balabuch
+        Author: Tiago Balabuch, Kamil Nowinski
     #>
     [CmdletBinding()]
     param ( )
@@ -27,21 +24,19 @@ function Get-FabricWorkspaceTenantSettingOverrides {
         Confirm-TokenState
 
         # Construct the API endpoint URL for retrieving workspaces tenant setting overrides
-        $apiEndpointURI = "admin/workspaces/delegatedTenantSettingOverrides"
+        $apiEndpointUrl = "admin/workspaces/delegatedTenantSettingOverrides"
 
         # Invoke the Fabric API to retrieve workspaces tenant setting overrides
-        $response = Invoke-FabricRestMethod `
-            -Uri $apiEndpointURI `
-            -Method Get
-
-        # Check if any workspaces tenant setting overrides were retrieved and handle results accordingly
-        if ($response) {
-            Write-Message -Message "Successfully retrieved workspaces tenant setting overrides." -Level Debug
-            return $response
-        } else {
-            Write-Message -Message "No workspaces tenant setting overrides found." -Level Warning
-            return $null
+        $apiParams = @{
+            Uri            = $apiEndpointUrl
+            Method         = 'Get'
+            ExtractValue   = 'Auto'
+            HandleResponse = $true
         }
+        $response = Invoke-FabricRestMethod @apiParams
+
+        Write-Message -Message "Successfully retrieved workspaces tenant setting overrides." -Level Debug
+        return $response
     } catch {
         # Log detailed error information if the API request fails
         $errorDetails = $_.Exception.Message

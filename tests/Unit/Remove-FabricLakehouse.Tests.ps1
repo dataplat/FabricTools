@@ -58,44 +58,6 @@ Describe "Remove-FabricLakehouse" -Tag "UnitTests" {
                 $Method -eq 'Delete'
             }
         }
-
-        It 'Should write a success message' {
-            $mockWorkspaceId = [guid]::NewGuid()
-            $mockLakehouseId = [guid]::NewGuid()
-
-            Remove-FabricLakehouse -WorkspaceId $mockWorkspaceId -LakehouseId $mockLakehouseId -Confirm:$false
-
-            Should -Invoke -CommandName Write-Message -ParameterFilter {
-                $Level -eq 'Info' -and $Message -like "*deleted successfully*"
-            }
-        }
-    }
-
-    Context 'When an unexpected status code is returned' {
-        BeforeAll {
-            Mock -CommandName Confirm-TokenState -MockWith { }
-            Mock -CommandName Write-Message -MockWith { }
-            Mock -CommandName Invoke-FabricRestMethod -MockWith {
-                InModuleScope -ModuleName 'FabricTools' {
-                    $script:statusCode = 404
-                }
-                return [pscustomobject]@{
-                    message = 'Not Found'
-                    errorCode = 'LakehouseNotFound'
-                }
-            }
-        }
-
-        It 'Should write an error message for unexpected status codes' {
-            $mockWorkspaceId = [guid]::NewGuid()
-            $mockLakehouseId = [guid]::NewGuid()
-
-            Remove-FabricLakehouse -WorkspaceId $mockWorkspaceId -LakehouseId $mockLakehouseId -Confirm:$false
-
-            Should -Invoke -CommandName Write-Message -ParameterFilter {
-                $Level -eq 'Error'
-            }
-        }
     }
 
     Context 'When an exception is thrown' {

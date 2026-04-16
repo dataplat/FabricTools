@@ -36,16 +36,31 @@ Author: Tiago Balabuch, Kamil Nowinski
         [guid]$EnvironmentId
     )
 
-    # Ensure token validity
-    Confirm-TokenState
+    try {
 
-    $apiParams = @{
-        Uri            = "workspaces/$WorkspaceId/environments/$EnvironmentId/staging/sparkcompute"
-        Method         = 'Get'
-        TypeName       = 'Environment'
-        ObjectIdOrName = $EnvironmentId
-        HandleResponse = $true
+        # Ensure token validity
+        Confirm-TokenState
+
+        # Construct the API URL
+        $apiEndpointUrl = "workspaces/{0}/environments/{1}/staging/sparkcompute" -f $WorkspaceId, $EnvironmentId
+        Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
+
+        # Make the API request
+        $apiParams = @{
+            Uri            = $apiEndpointUrl
+            Method         = 'Get'
+            TypeName       = 'Environment'
+            ObjectIdOrName = $EnvironmentId
+            HandleResponse = $true
+        }
+        $response = Invoke-FabricRestMethod @apiParams
+
+        # Handle results
+        return $response
+    } catch {
+        # Capture and log error details
+        $errorDetails = $_.Exception.Message
+        Write-Message -Message "Failed to retrieve environment spark compute. Error: $errorDetails" -Level Error
     }
 
-    Invoke-FabricRestMethod @apiParams
 }

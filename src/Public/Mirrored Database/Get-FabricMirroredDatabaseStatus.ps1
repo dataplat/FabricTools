@@ -24,7 +24,7 @@ function Get-FabricMirroredDatabaseStatus {
 
     .NOTES
 
-    Author: Tiago Balabuch
+    Author: Tiago Balabuch, Kamil Nowinski
 
     #>
     [CmdletBinding()]
@@ -45,24 +45,17 @@ function Get-FabricMirroredDatabaseStatus {
         $apiEndpointUrl = "{0}/workspaces/{1}/mirroredDatabases/{2}/getMirroringStatus" -f $FabricConfig.BaseUrl, $WorkspaceId, $MirroredDatabaseId
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
-        # Make the API request
-        $response = Invoke-FabricRestMethod `
-            -Uri $apiEndpointUrl `
-            -Method Post
-
-        # Validate the response code
-        if ($statusCode -ne 200) {
-            Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
-            Write-Message -Message "Error: $($response.message)" -Level Error
-            Write-Message -Message "Error Details: $($response.moreDetails)" -Level Error
-            Write-Message "Error Code: $($response.errorCode)" -Level Error
-            return $null
+        $apiParams = @{
+            Uri            = $apiEndpointUrl
+            Method         = 'Post'
+            TypeName       = 'Mirrored Database Status'
+            ObjectIdOrName = $MirroredDatabaseId
+            HandleResponse = $true
         }
-
-        # Handle results
+        $response = Invoke-FabricRestMethod @apiParams
 
         Write-Message -Message "Returning status of MirroredDatabases." -Level Debug
-        return $response
+        $response
     } catch {
         # Capture and log error details
         $errorDetails = $_.Exception.Message

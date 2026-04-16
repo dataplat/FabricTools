@@ -24,7 +24,7 @@ The `Remove-FabricKQLDatabase` function sends a DELETE request to the Fabric API
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
 - Validates token expiration before making the API request.
 
-Author: Tiago Balabuch
+Author: Tiago Balabuch, Kamil Nowinski
 
 #>
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
@@ -46,26 +46,20 @@ Author: Tiago Balabuch
         # Construct the API URL
         $apiEndpointUrl = "{0}/workspaces/{1}/kqlDatabases/{2}" -f $FabricConfig.BaseUrl, $WorkspaceId, $KQLDatabaseId
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
+
         if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Remove KQLDatabase"))
         {
-            # Check if the API endpoint is valid
-            # Make the API request
-            $response = Invoke-FabricRestMethod `
-                -Uri $apiEndpointUrl `
-                -Method Delete
+            $apiParams = @{
+                Uri            = $apiEndpointUrl
+                Method         = 'Delete'
+                TypeName       = 'KQL Database'
+                ObjectIdOrName = $KQLDatabaseId
+                HandleResponse = $true
+            }
+            Invoke-FabricRestMethod @apiParams
         }
 
-        # Validate the response code
-        if ($statusCode -ne 200)
-        {
-            Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
-            Write-Message -Message "Error: $($response.message)" -Level Error
-            Write-Message -Message "Error Details: $($response.moreDetails)" -Level Error
-            Write-Message "Error Code: $($response.errorCode)" -Level Error
-            return $null
-        }
         Write-Message -Message "KQLDatabase '$KQLDatabaseId' deleted successfully from workspace '$WorkspaceId'." -Level Info
-
     }
     catch
     {

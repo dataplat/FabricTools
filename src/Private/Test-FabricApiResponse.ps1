@@ -89,9 +89,7 @@ function Test-FabricApiResponse {
 
     switch ($statusCode) {
         200 {
-            if ($Operation -eq 'Get') {
-                $result = $Response
-            }
+            $result = $Response
         }
         201 {
             $result = $Response

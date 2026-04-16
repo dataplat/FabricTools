@@ -48,33 +48,46 @@ Author: Tiago Balabuch, Kamil Nowinski
         [array]$PrincipalIds # Array with 'id' and 'type'
     )
 
-    # Validate PrincipalIds structure
-    foreach ($principal in $PrincipalIds) {
-        if (-not ($principal.id -and $principal.type)) {
-            throw "Invalid principal detected: Each principal must include 'id' and 'type' properties. Found: $principal"
+    try {
+        # Validate PrincipalIds structure
+        foreach ($principal in $PrincipalIds) {
+            if (-not ($principal.id -and $principal.type)) {
+                throw "Invalid principal detected: Each principal must include 'id' and 'type' properties. Found: $principal"
+            }
         }
+
+        # Ensure token validity
+        Confirm-TokenState
+
+        # Construct the API URL
+        $apiEndpointUrl = "admin/domains/{0}/roleAssignments/bulkAssign" -f $DomainId
+        Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
+
+        # Construct the request body
+        $body = @{
+            type       = $DomainRole
+            principals = $PrincipalIds
+        }
+        $bodyJson = $body | ConvertTo-Json -Depth 2
+        Write-Message -Message "Request Body: $bodyJson" -Level Debug
+
+        # Make the API request
+        $apiParams = @{
+            Uri            = $apiEndpointUrl
+            Method         = 'Post'
+            Body           = $bodyJson
+            TypeName       = 'Domain'
+            ObjectIdOrName = $DomainId
+            HandleResponse = $true
+        }
+        $response = Invoke-FabricRestMethod @apiParams
+        Write-Message -Message "Bulk role assignment for domain '$DomainId' completed successfully!" -Level Info
+
+        return $response
+
+    } catch {
+        # Handle and log errors
+        $errorDetails = $_.Exception.Message
+        Write-Message -Message "Failed to bulk assign roles in domain '$DomainId'. Error: $errorDetails" -Level Error
     }
-
-    # Ensure token validity
-    Confirm-TokenState
-
-    $body = @{
-        type       = $DomainRole
-        principals = $PrincipalIds
-    }
-
-    $bodyJson = $body | ConvertTo-Json -Depth 2
-    Write-Message -Message "Request Body: $bodyJson" -Level Debug
-
-    $apiParams = @{
-        Uri            = "admin/domains/$DomainId/roleAssignments/bulkAssign"
-        Method         = 'Post'
-        Body           = $bodyJson
-        TypeName       = 'Domain'
-        ObjectIdOrName = $DomainId
-        HandleResponse = $true
-    }
-
-    Invoke-FabricRestMethod @apiParams
-    Write-Message -Message "Bulk role assignment for domain '$DomainId' completed successfully!" -Level Info
 }

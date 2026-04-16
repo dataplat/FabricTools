@@ -21,8 +21,7 @@ The `Remove-FabricLakehouse` function sends a DELETE request to the Fabric API t
     ```
 
 .NOTES
-- Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-- Validates token expiration before making the API request.
+- Calls `Confirm-TokenState` to ensure token validity before making the API request.
 
 Author: Tiago Balabuch, Kamil Nowinski
 
@@ -44,7 +43,7 @@ Author: Tiago Balabuch, Kamil Nowinski
         Confirm-TokenState
 
         # Construct the API URL
-        $apiEndpointUrl = "{0}/workspaces/{1}/lakehouses/{2}" -f $FabricConfig.BaseUrl, $WorkspaceId, $LakehouseId
+        $apiEndpointUrl = "workspaces/$WorkspaceId/lakehouses/$LakehouseId"
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
         if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Remove Lakehouse"))
         {

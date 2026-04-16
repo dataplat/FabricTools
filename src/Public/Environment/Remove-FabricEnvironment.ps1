@@ -37,20 +37,35 @@ Author: Tiago Balabuch, Kamil Nowinski
         [guid]$EnvironmentId
     )
 
-    # Ensure token validity
-    Confirm-TokenState
-
-    if ($PSCmdlet.ShouldProcess($EnvironmentId, "Remove Environment"))
+    try
     {
-        $apiParams = @{
-            Uri            = "workspaces/$WorkspaceId/environments/$EnvironmentId"
-            Method         = 'Delete'
-            TypeName       = 'Environment'
-            ObjectIdOrName = $EnvironmentId
-            HandleResponse = $true
+        # Ensure token validity
+        Confirm-TokenState
+
+        # Construct the API URL
+        $apiEndpointUrl = "workspaces/{0}/environments/{1}" -f $WorkspaceId, $EnvironmentId
+        Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
+
+        if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Remove Environment"))
+        {
+            # Make the API request
+            $apiParams = @{
+                Uri            = $apiEndpointUrl
+                Method         = 'Delete'
+                TypeName       = 'Environment'
+                ObjectIdOrName = $EnvironmentId
+                HandleResponse = $true
+            }
+            $response = Invoke-FabricRestMethod @apiParams
         }
 
-        Invoke-FabricRestMethod @apiParams
         Write-Message -Message "Environment '$EnvironmentId' deleted successfully from workspace '$WorkspaceId'." -Level Info
+
+    }
+    catch
+    {
+        # Log and handle errors
+        $errorDetails = $_.Exception.Message
+        Write-Message -Message "Failed to delete environment '$EnvironmentId' from workspace '$WorkspaceId'. Error: $errorDetails" -Level Error
     }
 }

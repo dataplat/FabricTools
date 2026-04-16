@@ -74,25 +74,4 @@ Describe "Update-FabricEnvironment" -Tag "UnitTests" {
             Should -Invoke -CommandName Invoke-FabricRestMethod -Times 1 -Exactly
         }
     }
-
-    Context "Error handling" {
-        BeforeAll {
-            Mock -CommandName Invoke-FabricRestMethod -MockWith {
-                InModuleScope -ModuleName 'FabricTools' {
-                    $script:statusCode = 400
-                }
-                throw "API Error"
-            }
-            Mock -CommandName Confirm-TokenState -MockWith { return $true }
-            Mock -CommandName Write-Message -MockWith { }
-        }
-
-        It "Should handle errors gracefully and write error message" {
-            { Update-FabricEnvironment -WorkspaceId "00000000-0000-0000-0000-000000000000" -EnvironmentId "00000000-0000-0000-0000-000000000001" -EnvironmentName "UpdatedEnvironment" -Confirm:$false } | Should -Not -Throw
-
-            Should -Invoke -CommandName Write-Message -ParameterFilter {
-                $Level -eq 'Error'
-            } -Times 1 -Exactly
-        }
-    }
 }

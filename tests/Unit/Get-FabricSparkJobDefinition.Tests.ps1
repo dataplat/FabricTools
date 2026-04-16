@@ -48,8 +48,7 @@ Describe "Get-FabricSparkJobDefinition" -Tag "UnitTests" {
                 InModuleScope -ModuleName 'FabricTools' {
                     $script:statusCode = 200
                 }
-                return @{
-                    value = @(
+                return @(
                         [pscustomobject]@{
                             id          = "00000000-0000-0000-0000-000000000001"
                             displayName = "TestSparkJobDefinition"
@@ -57,7 +56,6 @@ Describe "Get-FabricSparkJobDefinition" -Tag "UnitTests" {
                             type        = "SparkJobDefinition"
                         }
                     )
-                }
             }
         }
 

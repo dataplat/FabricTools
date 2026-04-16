@@ -33,7 +33,7 @@ An optional path to the platform-specific definition (e.g., .platform file) to u
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
 - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 
-Author: Tiago Balabuch
+Author: Tiago Balabuch, Kamil Nowinski
 
 #>
     [CmdletBinding(SupportsShouldProcess)]
@@ -137,56 +137,19 @@ Author: Tiago Balabuch
 
         $bodyJson = $body | ConvertTo-Json -Depth 10
         Write-Message -Message "Request Body: $bodyJson" -Level Debug
+
         if ($PSCmdlet.ShouldProcess($MirroredDatabaseName, "Create MirroredDatabase"))
         {
-            # Make the API request
-            $response = Invoke-FabricRestMethod `
-                -Uri $apiEndpointUrl `
-                -Method Post `
-                -Body $bodyJson
-        }
-
-        # Handle and log the response
-        switch ($statusCode)
-        {
-            201
-            {
-                Write-Message -Message "MirroredDatabase '$MirroredDatabaseName' created successfully!" -Level Info
-                return $response
+            $apiParams = @{
+                Uri            = $apiEndpointUrl
+                Method         = 'Post'
+                Body           = $bodyJson
+                TypeName       = 'Mirrored Database'
+                ObjectIdOrName = $MirroredDatabaseName
+                HandleResponse = $true
             }
-            202
-            {
-                Write-Message -Message "MirroredDatabase '$MirroredDatabaseName' creation accepted. Provisioning in progress!" -Level Info
-
-                [string]$operationId = $responseHeader["x-ms-operation-id"]
-                Write-Message -Message "Operation ID: '$operationId'" -Level Debug
-                Write-Message -Message "Getting Long Running Operation status" -Level Debug
-
-                $operationStatus = Get-FabricLongRunningOperation -operationId $operationId
-                Write-Message -Message "Long Running Operation status: $operationStatus" -Level Debug
-                # Handle operation result
-                if ($operationStatus.status -eq "Succeeded")
-                {
-                    Write-Message -Message "Operation Succeeded" -Level Debug
-                    Write-Message -Message "Getting Long Running Operation result" -Level Debug
-
-                    $operationResult = Get-FabricLongRunningOperationResult -operationId $operationId
-                    Write-Message -Message "Long Running Operation status: $operationResult" -Level Debug
-
-                    return $operationResult
-                }
-                else
-                {
-                    Write-Message -Message "Operation Failed" -Level Debug
-                    return $operationStatus
-                }
-            }
-            default
-            {
-                Write-Message -Message "Unexpected response code: $statusCode" -Level Error
-                Write-Message -Message "Error details: $($response.message)" -Level Error
-                throw "API request failed with status code $statusCode."
-            }
+            $response = Invoke-FabricRestMethod @apiParams
+            $response
         }
     }
     catch

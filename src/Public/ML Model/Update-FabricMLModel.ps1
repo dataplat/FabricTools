@@ -25,11 +25,9 @@ function Update-FabricMLModel
     ```
 
 .NOTES
-    - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
     - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 
-    Author: Tiago Balabuch
-
+    Author: Tiago Balabuch, Kamil Nowinski
 #>
     [CmdletBinding(SupportsShouldProcess)]
     param (
@@ -51,9 +49,9 @@ function Update-FabricMLModel
         # Ensure token validity
         Confirm-TokenState
 
-        # Construct the API URL
-        $apiEndpointUrl = "{0}/workspaces/{1}/mlModels/{2}" -f $FabricConfig.BaseUrl, $WorkspaceId, $MLModelId
-        Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
+        # Construct the API endpoint URL
+        $apiEndpointUrl = "workspaces/$WorkspaceId/mlModels/$MLModelId"
+        Write-Message -Message "Constructed API Endpoint: $apiEndpointUrl" -Level Debug
 
         # Construct the request body
         $body = @{
@@ -63,27 +61,19 @@ function Update-FabricMLModel
         # Convert the body to JSON
         $bodyJson = $body | ConvertTo-Json
         Write-Message -Message "Request Body: $bodyJson" -Level Debug
-        if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Update ML Model"))
-        {
-            # Make the API request
-            $response = Invoke-FabricRestMethod `
-                -Uri $apiEndpointUrl `
-                -Method Patch `
-                -Body $bodyJson
-        }
-        # Validate the response code
-        if ($statusCode -ne 200)
-        {
-            Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
-            Write-Message -Message "Error: $($response.message)" -Level Error
-            Write-Message -Message "Error Details: $($response.moreDetails)" -Level Error
-            Write-Message "Error Code: $($response.errorCode)" -Level Error
-            return $null
-        }
 
-        # Handle results
-        Write-Message -Message "ML Model '$MLModelId' updated successfully!" -Level Info
-        return $response
+        if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Update ML Model")) {
+            # Invoke Fabric API request
+            $apiParams = @{
+                Uri            = $apiEndpointUrl
+                Method         = 'Patch'
+                Body           = $bodyJson
+                HandleResponse = $true
+            }
+            $response = Invoke-FabricRestMethod @apiParams
+            Write-Message -Message "ML Model '$MLModelId' updated successfully!" -Level Info
+            return $response
+        }
     }
     catch
     {

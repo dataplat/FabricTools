@@ -9,14 +9,14 @@ function Get-FabricDatasetRefreshes {
    .PARAMETER DatasetID
       The ID of the dataset. This is a mandatory parameter.
 
-   .PARAMETER workspaceId
+   .PARAMETER WorkspaceId
       The ID of the workspace. This is a mandatory parameter.
 
    .EXAMPLE
       This command retrieves the refresh history of the specified dataset in the specified workspace.
 
       ```powershell
-      Get-FabricDatasetRefreshes -DatasetID "12345678-90ab-cdef-1234-567890abcdef" -workspaceId "abcdef12-3456-7890-abcd-ef1234567890"
+      Get-FabricDatasetRefreshes -DatasetId "12345678-90ab-cdef-1234-567890abcdef" -WorkspaceId "abcdef12-3456-7890-abcd-ef1234567890"
       ```
 
    .INPUTS
@@ -32,13 +32,13 @@ function Get-FabricDatasetRefreshes {
     # Define a mandatory parameter for the dataset ID.
     Param (
         [Parameter(Mandatory = $true)]
-        [guid]$DatasetID,
+        [guid]$DatasetId,
         [Parameter(Mandatory = $true)]
-        [guid]$workspaceId
+        [guid]$WorkspaceId
     )
 
     # Get the dataset information.
-    $di = Get-PowerBIDataset -id $DatasetID -WorkspaceId $workspaceId
+    $di = Get-PowerBIDataset -id $DatasetId -WorkspaceId $WorkspaceId
 
     # Check if the dataset is refreshable.
     if ($di.isrefreshable -eq "True") {
@@ -48,7 +48,7 @@ function Get-FabricDatasetRefreshes {
         # Create a PSCustomObject with the information about the refresh.
         $refresh = [PSCustomObject]@{
             Clock        = Get-Date
-            WorkspaceId  = $workspaceId
+            WorkspaceId  = $WorkspaceId
             Workspace    = $w.name
             DatasetId    = $di.Id
             Dataset      = $di.Name

@@ -51,35 +51,60 @@ Author: Tiago Balabuch, Kamil Nowinski
         [bool]$NonEmptyDomainsOnly = $false
     )
 
-    # Handle ambiguous input
-    if ($DomainId -and $DomainName) {
-        Write-Message -Message "Both 'DomainId' and 'DomainName' were provided. Please specify only one." -Level Error
-        return @()
-    }
+    try {
+        # Handle ambiguous input
+        if ($DomainId -and $DomainName) {
+            Write-Message -Message "Both 'DomainId' and 'DomainName' were provided. Please specify only one." -Level Error
+            return @()
+        }
 
-    # Ensure token validity
-    Confirm-TokenState
+        # Ensure token validity
+        Confirm-TokenState
 
-    $uri = "admin/domains"
-    if ($NonEmptyDomainsOnly) {
-        $uri = "$uri?nonEmptyOnly=true"
-    }
+        # Construct the API URL with filtering logic
+        $apiEndpointUrl = "admin/domains"
+        if ($NonEmptyDomainsOnly) {
+            $apiEndpointUrl = "{0}?nonEmptyOnly=true" -f $apiEndpointUrl
+        }
+        Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
-    $apiParams = @{
-        Uri            = $uri
-        Method         = 'Get'
-        TypeName       = 'Domain'
-        ObjectIdOrName = $DomainName
-        HandleResponse = $true
-    }
+        # Make the API request
+        $apiParams = @{
+            Uri            = $apiEndpointUrl
+            Method         = 'Get'
+            TypeName       = 'Domain'
+            ObjectIdOrName = $DomainName
+            HandleResponse = $true
+        }
+        $response = Invoke-FabricRestMethod @apiParams
 
-    $response = Invoke-FabricRestMethod @apiParams
+        # Handle empty response
+        if (-not $response) {
+            Write-Message -Message "No data returned from the API." -Level Warning
+            return $null
+        }
 
-    if ($DomainId) {
-        $response.domains | Where-Object { $_.Id -eq $DomainId }
-    } elseif ($DomainName) {
-        $response.domains | Where-Object { $_.DisplayName -eq $DomainName }
-    } else {
-        $response.domains
+        # Filter results based on provided parameters
+        $domains = if ($DomainId) {
+            $response.domains | Where-Object { $_.Id -eq $DomainId }
+        } elseif ($DomainName) {
+            $response.domains | Where-Object { $_.DisplayName -eq $DomainName }
+        } else {
+            # Return all domains if no filter is provided
+            Write-Message -Message "No filter provided. Returning all domains." -Level Debug
+            return $response.domains
+        }
+
+        # Handle results
+        if ($domains) {
+            return $domains
+        } else {
+            Write-Message -Message "No domain found matching the provided criteria." -Level Warning
+            return $null
+        }
+    } catch {
+        # Capture and log error details
+        $errorDetails = $_.Exception.Message
+        Write-Message -Message "Failed to retrieve environment. Error: $errorDetails" -Level Error
     }
 }

@@ -28,10 +28,9 @@ function Update-FabricEventhouse
     ```
 
 .NOTES
-    - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
     - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 
-    Author: Tiago Balabuch
+    Author: Tiago Balabuch, Kamil Nowinski
 
 #>
     [CmdletBinding(SupportsShouldProcess)]
@@ -52,13 +51,14 @@ function Update-FabricEventhouse
         [ValidateNotNullOrEmpty()]
         [string]$EventhouseDescription
     )
+
     try
     {
         # Ensure token validity
         Confirm-TokenState
 
         # Construct the API URL
-        $apiEndpointUrl = "{0}/workspaces/{1}/eventhouses/{2}" -f $FabricConfig.BaseUrl, $WorkspaceId, $EventhouseId
+        $apiEndpointUrl = "workspaces/$WorkspaceId/eventhouses/$EventhouseId"
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
         # Construct the request body
@@ -71,31 +71,23 @@ function Update-FabricEventhouse
             $body.description = $EventhouseDescription
         }
 
-        # Convert the body to JSON
         $bodyJson = $body | ConvertTo-Json
         Write-Message -Message "Request Body: $bodyJson" -Level Debug
 
-        if ($PSCmdlet.ShouldProcess("Eventhouse", "Update"))
+        if ($PSCmdlet.ShouldProcess($EventhouseName, "Update Eventhouse"))
         {
-            # Make the API request
-            $response = Invoke-FabricRestMethod `
-                -Uri $apiEndpointUrl `
-                -Method Patch `
-                -Body $bodyJson
-        }
+            $apiParams = @{
+                Uri            = $apiEndpointUrl
+                Method         = 'Patch'
+                Body           = $bodyJson
+                TypeName       = 'Eventhouse'
+                ObjectIdOrName = $EventhouseName
+                HandleResponse = $true
+            }
 
-        # Validate the response code
-        if ($statusCode -ne 200)
-        {
-            Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
-            Write-Message -Message "Error: $($response.message)" -Level Error
-            Write-Message -Message "Error Details: $($response.moreDetails)" -Level Error
-            Write-Message "Error Code: $($response.errorCode)" -Level Error
-            return $null
+            $response = Invoke-FabricRestMethod @apiParams
+            Write-Message -Message "Eventhouse '$EventhouseName' updated successfully!" -Level Info
         }
-
-        # Handle results
-        Write-Message -Message "Eventhouse '$EventhouseName' updated successfully!" -Level Info
         return $response
     }
     catch

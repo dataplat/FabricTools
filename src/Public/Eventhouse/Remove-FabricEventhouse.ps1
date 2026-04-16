@@ -15,9 +15,6 @@ function Remove-FabricEventhouse
 .PARAMETER EventhouseId
     The unique identifier of the Eventhouse to be removed.
 
-.PARAMETER EventhouseName
-    The name of the Eventhouse to delete. EventhouseId and EventhouseName cannot be used together.
-
 .EXAMPLE
     This example removes the Eventhouse with ID "eventhouse-67890" from the workspace with ID "workspace-12345".
 
@@ -26,10 +23,9 @@ function Remove-FabricEventhouse
     ```
 
 .NOTES
-    - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
     - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 
-    Author: Tiago Balabuch
+    Author: Tiago Balabuch, Kamil Nowinski
 
 .LINK
     https://learn.microsoft.com/en-us/rest/api/fabric/eventhouse/items/delete-eventhouse?tabs=HTTP
@@ -44,36 +40,31 @@ function Remove-FabricEventhouse
         [ValidateNotNullOrEmpty()]
         [guid]$EventhouseId
     )
+
     try
     {
         # Ensure token validity
         Confirm-TokenState
 
         # Construct the API URL
-        $apiEndpointUrl = "{0}/workspaces/{1}/eventhouses/{2}" -f $FabricConfig.BaseUrl, $WorkspaceId, $EventhouseId
+        $apiEndpointUrl = "workspaces/{$WorkspaceId}/eventhouses/{$EventhouseId}"
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
-        if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Remove Eventhouse"))
-        {
-            # Make the API request
-            $response = Invoke-FabricRestMethod `
-                -Uri $apiEndpointUrl `
-                -Method Delete
-        }
 
-        # Handle response
-        if ($statusCode -ne 200)
+        if ($PSCmdlet.ShouldProcess($EventhouseId, "Remove Eventhouse"))
         {
-            Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
-            Write-Message -Message "Error: $($response.message)" -Level Error
-            Write-Message -Message "Error Details: $($response.moreDetails)" -Level Error
-            Write-Message "Error Code: $($response.errorCode)" -Level Error
-            return $null
-        }
+            $apiParams = @{
+                Uri            = $apiEndpointUrl
+                Method         = 'Delete'
+                TypeName       = 'Eventhouse'
+                ObjectIdOrName = $EventhouseId
+                HandleResponse = $true
+            }
 
-        Write-Message -Message "Eventhouse '$EventhouseId' deleted successfully from workspace '$WorkspaceId'." -Level Info
+            Invoke-FabricRestMethod @apiParams
+            Write-Message -Message "Eventhouse '$EventhouseId' deleted successfully from workspace '$WorkspaceId'." -Level Info
+        }
     }
-    catch
-    {
+    catch {
         # Log and handle errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to delete Eventhouse '$EventhouseId'. Error: $errorDetails" -Level Error

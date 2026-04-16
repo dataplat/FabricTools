@@ -38,20 +38,34 @@ Author: Tiago Balabuch, Kamil Nowinski
         [guid]$EnvironmentId
     )
 
-    # Ensure token validity
-    Confirm-TokenState
-
-    if ($PSCmdlet.ShouldProcess($EnvironmentId, "Cancel Publish"))
+    try
     {
-        $apiParams = @{
-            Uri            = "workspaces/$WorkspaceId/environments/$EnvironmentId/staging/cancelPublish"
-            Method         = 'Post'
-            TypeName       = 'Environment'
-            ObjectIdOrName = $EnvironmentId
-            HandleResponse = $true
+        # Ensure token validity
+        Confirm-TokenState
+
+        # Construct the API URL
+        $apiEndpointUrl = "workspaces/{0}/environments/{1}/staging/cancelPublish" -f $WorkspaceId, $EnvironmentId
+        Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
+
+        if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Cancel Publish"))
+        {
+            # Make the API request
+            $apiParams = @{
+                Uri            = $apiEndpointUrl
+                Method         = 'Post'
+                TypeName       = 'Environment'
+                ObjectIdOrName = $EnvironmentId
+                HandleResponse = $true
+            }
+            $response = Invoke-FabricRestMethod @apiParams
+            Write-Message -Message "Publication for environment '$EnvironmentId' has been successfully canceled." -Level Info
         }
 
-        Invoke-FabricRestMethod @apiParams
-        Write-Message -Message "Publication for environment '$EnvironmentId' has been successfully canceled." -Level Info
+    }
+    catch
+    {
+        # Log and handle errors
+        $errorDetails = $_.Exception.Message
+        Write-Message -Message "Failed to cancel publication for environment '$EnvironmentId' from workspace '$WorkspaceId'. Error: $errorDetails" -Level Error
     }
 }

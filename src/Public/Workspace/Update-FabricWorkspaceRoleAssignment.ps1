@@ -28,10 +28,9 @@ function Update-FabricWorkspaceRoleAssignment
         ```
 
     .NOTES
-        - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
         - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 
-        Author: Tiago Balabuch
+        Author: Tiago Balabuch, Kamil Nowinski
 #>
     [CmdletBinding(SupportsShouldProcess)]
     param (
@@ -55,9 +54,9 @@ function Update-FabricWorkspaceRoleAssignment
         # Ensure token validity
         Confirm-TokenState
 
-        # Construct the API URL
-        $apiEndpointUrl = "{0}/workspaces/{1}/roleAssignments/{2}" -f $FabricConfig.BaseUrl, $WorkspaceId, $WorkspaceRoleAssignmentId
-        Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Message
+        # Construct the API endpoint URL
+        $apiEndpointUrl = "workspaces/$WorkspaceId/roleAssignments/$WorkspaceRoleAssignmentId"
+        Write-Message -Message "Constructed API Endpoint: $apiEndpointUrl" -Level Debug
 
         # Construct the request body
         $body = @{
@@ -70,30 +69,24 @@ function Update-FabricWorkspaceRoleAssignment
 
         if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Update Role Assignment"))
         {
-            # Make the API request
-            $response = Invoke-FabricRestMethod `
-                -Uri $apiEndpointUrl `
-                -Method Patch `
-                -Body $bodyJson
-        }
-        # Validate the response code
-        if ($statusCode -ne 200)
-        {
-            Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
-            Write-Message -Message "Error: $($response.message)" -Level Error
-            Write-Message "Error Code: $($response.errorCode)" -Level Error
-            return $null
-        }
+            # Invoke Fabric API request
+            $apiParams = @{
+                Uri            = $apiEndpointUrl
+                Method         = 'Patch'
+                Body           = $bodyJson
+                HandleResponse = $true
+            }
+            $response = Invoke-FabricRestMethod @apiParams
+            # Handle empty response
+            if (-not $response)
+            {
+                Write-Message -Message "No data returned from the API." -Level Warning
+                return $null
+            }
 
-        # Handle empty response
-        if (-not $response)
-        {
-            Write-Message -Message "No data returned from the API." -Level Warning
-            return $null
+            Write-Message -Message "Role assignment $WorkspaceRoleAssignmentId updated successfully in workspace '$WorkspaceId'." -Level Info
+            return $response
         }
-
-        Write-Message -Message "Role assignment $WorkspaceRoleAssignmentId updated successfully in workspace '$WorkspaceId'." -Level Info
-        return $response
 
     }
     catch

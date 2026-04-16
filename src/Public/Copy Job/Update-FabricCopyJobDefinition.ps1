@@ -34,12 +34,10 @@ The Copy Job content and platform-specific definitions can be provided as file p
     ```
 
 .NOTES
-- Requires the `$FabricConfig` global configuration, which must include `BaseUrl` and `FabricHeaders`.
 - Validates token expiration using `Confirm-TokenState` before making the API request.
 - Encodes file content as Base64 before sending it to the Fabric API.
-- Logs detailed messages for debugging and error handling.
 
-Author: Tiago Balabuch
+Author: Tiago Balabuch, Kamil Nowinski
 #>
     [CmdletBinding(SupportsShouldProcess)]
     param (
@@ -60,19 +58,17 @@ Author: Tiago Balabuch
         [string]$CopyJobPathPlatformDefinition
     )
 
-    try {
+        try {
         # Ensure token validity
         Confirm-TokenState
 
         # Construct the API URL
-        $apiEndpointUrl = "{0}/workspaces/{1}/copyJobs/{2}/updateDefinition" -f $FabricConfig.BaseUrl, $WorkspaceId, $CopyJobId
-
+        $apiEndpointUrl = "workspaces/$WorkspaceId/copyJobs/$CopyJobId/updateDefinition"
         if ($CopyJobPathPlatformDefinition) {
-            $apiEndpointUrl = "?updateMetadata=true" -f $apiEndpointUrl
+            $apiEndpointUrl += "?updateMetadata=true"
         }
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
-        # Construct the request body
         $body = @{
             definition = @{
                 parts = @()
@@ -113,17 +109,21 @@ Author: Tiago Balabuch
         $bodyJson = $body | ConvertTo-Json -Depth 10
         Write-Message -Message "Request Body: $bodyJson" -Level Debug
 
-        if($PSCmdlet.ShouldProcess($apiEndpointUrl, "Update Copy Job Definition")) {
-            # Make the API request
-            $response = Invoke-FabricRestMethod `
-                -BaseURI $apiEndpointUrl `
-                -Method Post `
-                -Body $bodyJson
+        if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Update Copy Job Definition"))
+        {
+            $apiParams = @{
+                Uri            = $apiEndpointUrl
+                Method         = 'Post'
+                Body           = $bodyJson
+                TypeName       = 'CopyJob'
+                ObjectIdOrName = $CopyJobId
+                HandleResponse = $true
+            }
+
+            $response = Invoke-FabricRestMethod @apiParams
+            Write-Message -Message "Copy Job '$CopyJobId' definition updated successfully!" -Level Info
         }
-
-        Write-Message -Message "Copy Job updated successfully!" -Level Info
         return $response
-
 
     } catch {
         # Handle and log errors

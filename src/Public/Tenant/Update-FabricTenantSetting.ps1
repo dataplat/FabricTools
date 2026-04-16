@@ -40,10 +40,7 @@ function Update-FabricCapacityTenantSettingOverrides
         ```
 
     .NOTES
-    - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-    - Calls `Confirm-TokenState` to ensure token validity before making the API request.
-
-    Author: Tiago Balabuch
+    Author: Tiago Balabuch, Kamil Nowinski
     #>
     [CmdletBinding(SupportsShouldProcess)]
     param (
@@ -121,8 +118,8 @@ function Update-FabricCapacityTenantSettingOverrides
         }
 
         # Construct API endpoint URL
-        $apiEndpointURI = "admin/tenantsettings/{0}/update" -f $TenantSettingName
-        Write-Message -Message "Constructed API Endpoint: $apiEndpointURI" -Level Debug
+        $apiEndpointUrl = "admin/tenantsettings/{0}/update" -f $TenantSettingName
+        Write-Message -Message "Constructed API Endpoint: $apiEndpointUrl" -Level Debug
 
         # Construct request body
         $body = @{
@@ -163,18 +160,18 @@ function Update-FabricCapacityTenantSettingOverrides
         $bodyJson = $body | ConvertTo-Json -Depth 5
         Write-Message -Message "Request Body: $bodyJson" -Level Debug
 
-        if ($PSCmdlet.ShouldProcess($apiEndpointURI, "Update Tenant Setting"))
-        {
-
+        if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Update Tenant Setting")) {
             # Invoke Fabric API request
-            $response = Invoke-FabricRestMethod `
-                -Uri $apiEndpointURI `
-                -method Post `
-                -body $bodyJson
+            $apiParams = @{
+                Uri            = $apiEndpointUrl
+                Method         = 'Post'
+                Body           = $bodyJson
+                HandleResponse = $true
+            }
+            $response = Invoke-FabricRestMethod @apiParams
+            Write-Message -Message "Successfully updated tenant setting." -Level Info
+            return $response
         }
-
-        Write-Message -Message "Successfully updated tenant setting." -Level Info
-        return $response
     }
     catch
     {

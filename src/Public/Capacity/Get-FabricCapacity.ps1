@@ -54,11 +54,11 @@ function Get-FabricCapacity {
         Confirm-TokenState
 
         # Construct the API endpoint URL
-        $apiEndpointURI = "capacities"
+        $apiEndpointUrl = "capacities"
 
         # Invoke the Fabric API to retrieve capacity details
         $apiParams = @{
-            Uri    = $apiEndpointURI
+            Uri    = $apiEndpointUrl
             Method = 'Get'
         }
         $capacities = (Invoke-FabricRestMethod @apiParams).Value

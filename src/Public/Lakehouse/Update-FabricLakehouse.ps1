@@ -34,7 +34,6 @@ The new name for the Lakehouse.
     ```
 
 .NOTES
-- Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
 - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 
 Author: Tiago Balabuch, Kamil Nowinski
@@ -65,7 +64,7 @@ Author: Tiago Balabuch, Kamil Nowinski
         Confirm-TokenState
 
         # Construct the API URL
-        $apiEndpointUrl = "{0}/workspaces/{1}/lakehouses/{2}" -f $FabricConfig.BaseUrl, $WorkspaceId, $LakehouseId
+        $apiEndpointUrl = "workspaces/{0}/lakehouses/{1}" -f $WorkspaceId, $LakehouseId
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
         # Construct the request body

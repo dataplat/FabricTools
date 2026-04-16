@@ -57,7 +57,7 @@ An optional path to the platform-specific definition (e.g., .platform file) to u
     - CreationPayload is evaluate only if Definition file is not provided.
         - invitationToken has priority over all other payload fields.
 
-Author: Tiago Balabuch
+Author: Tiago Balabuch, Kamil Nowinski
 
     #>
     [CmdletBinding(SupportsShouldProcess)]
@@ -137,8 +137,6 @@ Author: Tiago Balabuch
 
             if (-not [string]::IsNullOrEmpty($KQLDatabaseEncodedContent))
             {
-
-
                 # Add new part to the parts array
                 $body.definition.parts += @{
                     path        = "DatabaseProperties.json"
@@ -158,7 +156,6 @@ Author: Tiago Balabuch
 
                 if (-not [string]::IsNullOrEmpty($KQLDatabaseEncodedPlatformContent))
                 {
-
                     # Add new part to the parts array
                     $body.definition.parts += @{
                         path        = ".platform"
@@ -171,15 +168,14 @@ Author: Tiago Balabuch
                     Write-Message -Message "Invalid or empty content in platform definition." -Level Error
                     return $null
                 }
-
             }
+
             if ($KQLDatabasePathSchemaDefinition)
             {
                 $KQLDatabaseEncodedSchemaContent = Convert-ToBase64 -filePath $KQLDatabasePathSchemaDefinition
 
                 if (-not [string]::IsNullOrEmpty($KQLDatabaseEncodedSchemaContent))
                 {
-
                     # Add new part to the parts array
                     $body.definition.parts += @{
                         path        = "DatabaseSchema.kql"
@@ -193,7 +189,6 @@ Author: Tiago Balabuch
                     return $null
                 }
             }
-
         }
         else
         {
@@ -247,7 +242,6 @@ Author: Tiago Balabuch
             {
                 if ($KQLInvitationToken)
                 {
-
                     $body.creationPayload.invitationToken = $KQLInvitationToken
                 }
                 if ($KQLSourceClusterUri -and -not $KQLInvitationToken)
@@ -259,70 +253,23 @@ Author: Tiago Balabuch
                     $body.creationPayload.sourceDatabaseName = $KQLSourceDatabaseName
                 }
             }
-
-
         }
 
         $bodyJson = $body | ConvertTo-Json -Depth 10
         Write-Message -Message "Request Body: $bodyJson" -Level Debug
+
         if ($PSCmdlet.ShouldProcess($KQLDatabaseName, "Create KQLDatabase"))
         {
-            # Make the API request
-            $response = Invoke-FabricRestMethod `
-                -Uri $apiEndpointUrl `
-                -Method Post `
-                -Body $bodyJson
-        }
-
-        # Handle and log the response
-        switch ($statusCode)
-        {
-            201
-            {
-                Write-Message -Message "KQLDatabase '$KQLDatabaseName' created successfully!" -Level Info
-                return $response
+            $apiParams = @{
+                Uri            = $apiEndpointUrl
+                Method         = 'Post'
+                Body           = $bodyJson
+                TypeName       = 'KQL Database'
+                ObjectIdOrName = $KQLDatabaseName
+                HandleResponse = $true
             }
-            202
-            {
-                Write-Message -Message "KQLDatabase '$KQLDatabaseName' creation accepted. Provisioning in progress!" -Level Info
-
-                [string]$operationId = $responseHeader["x-ms-operation-id"]
-                [string]$location = $responseHeader["Location"]
-                [string]$retryAfter = $responseHeader["Retry-After"]
-
-                Write-Message -Message "Operation ID: '$operationId'" -Level Debug
-                Write-Message -Message "Location: '$location'" -Level Debug
-                Write-Message -Message "Retry-After: '$retryAfter'" -Level Debug
-                Write-Message -Message "Getting Long Running Operation status" -Level Debug
-
-                $operationStatus = Get-FabricLongRunningOperation -operationId $operationId
-                Write-Message -Message "Long Running Operation status: $operationStatus" -Level Debug
-                # Handle operation result
-                if ($operationStatus.status -eq "Succeeded")
-                {
-                    Write-Message -Message "Operation Succeeded" -Level Debug
-                    Write-Message -Message "Getting Long Running Operation result" -Level Debug
-
-                    $operationResult = Get-FabricLongRunningOperationResult -operationId $operationId
-                    Write-Message -Message "Long Running Operation result: $operationResult" -Level Debug
-
-                    return $operationResult
-                }
-                else
-                {
-                    Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Debug
-                    Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Error
-                    return $operationStatus
-                }
-            }
-            default
-            {
-                Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
-                Write-Message -Message "Error: $($response.message)" -Level Error
-                Write-Message -Message "Error Details: $($response.moreDetails)" -Level Error
-                Write-Message "Error Code: $($response.errorCode)" -Level Error
-                throw "API request failed with status code $statusCode."
-            }
+            $response = Invoke-FabricRestMethod @apiParams
+            $response
         }
     }
     catch

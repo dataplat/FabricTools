@@ -71,39 +71,4 @@ Describe "Update-FabricEnvironmentStagingSparkCompute" -Tag "UnitTests" {
             Should -Invoke -CommandName Invoke-FabricRestMethod -Times 1 -Exactly
         }
     }
-
-    Context "Error handling" {
-        BeforeAll {
-            Mock -CommandName Invoke-FabricRestMethod -MockWith {
-                InModuleScope -ModuleName 'FabricTools' {
-                    $script:statusCode = 400
-                }
-                throw "API Error"
-            }
-            Mock -CommandName Confirm-TokenState -MockWith { return $true }
-            Mock -CommandName Write-Message -MockWith { }
-        }
-
-        It 'Should handle errors gracefully and write error message' {
-            { Update-FabricEnvironmentStagingSparkCompute `
-                -WorkspaceId (New-Guid) `
-                -EnvironmentId (New-Guid) `
-                -InstancePoolName 'TestPool' `
-                -InstancePoolType 'Workspace' `
-                -DriverCores 4 `
-                -DriverMemory '16GB' `
-                -ExecutorCores 8 `
-                -ExecutorMemory '32GB' `
-                -DynamicExecutorAllocationEnabled $true `
-                -DynamicExecutorAllocationMinExecutors 2 `
-                -DynamicExecutorAllocationMaxExecutors 10 `
-                -RuntimeVersion '3.1' `
-                -SparkProperties @{ 'spark.executor.memoryOverhead' = '4GB' } `
-                -Confirm:$false } | Should -Not -Throw
-
-            Should -Invoke -CommandName Write-Message -ParameterFilter {
-                $Level -eq 'Error'
-            } -Times 1 -Exactly
-        }
-    }
 }

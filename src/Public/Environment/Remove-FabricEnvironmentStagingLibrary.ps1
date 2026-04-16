@@ -46,20 +46,34 @@ Author: Tiago Balabuch, Kamil Nowinski
         [string]$LibraryName
     )
 
-    # Ensure token validity
-    Confirm-TokenState
-
-    if ($PSCmdlet.ShouldProcess($LibraryName, "Remove Staging Library"))
+    try
     {
-        $apiParams = @{
-            Uri            = "workspaces/$WorkspaceId/environments/$EnvironmentId/staging/libraries?libraryToDelete=$LibraryName"
-            Method         = 'Delete'
-            TypeName       = 'Environment'
-            ObjectIdOrName = $LibraryName
-            HandleResponse = $true
+        # Ensure token validity
+        Confirm-TokenState
+
+        # Construct the API URL
+        $apiEndpointUrl = "workspaces/{0}/environments/{1}/staging/libraries?libraryToDelete={2}" -f $WorkspaceId, $EnvironmentId, $LibraryName
+        Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
+
+        if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Remove Staging Library"))
+        {
+            # Make the API request
+            $apiParams = @{
+                Uri            = $apiEndpointUrl
+                Method         = 'Delete'
+                TypeName       = 'Environment'
+                ObjectIdOrName = $LibraryName
+                HandleResponse = $true
+            }
+            $response = Invoke-FabricRestMethod @apiParams
+            Write-Message -Message "Staging library $LibraryName for the Environment '$EnvironmentId' deleted successfully from workspace '$WorkspaceId'." -Level Info
         }
 
-        Invoke-FabricRestMethod @apiParams
-        Write-Message -Message "Staging library $LibraryName for the Environment '$EnvironmentId' deleted successfully from workspace '$WorkspaceId'." -Level Info
+    }
+    catch
+    {
+        # Log and handle errors
+        $errorDetails = $_.Exception.Message
+        Write-Message -Message "Failed to delete environment '$EnvironmentId' from workspace '$WorkspaceId'. Error: $errorDetails" -Level Error
     }
 }

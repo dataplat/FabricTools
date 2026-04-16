@@ -24,10 +24,9 @@ function Get-FabricCapacityTenantSettingOverrides {
         ```
 
     .NOTES
-    - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
     - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 
-    Author: Tiago Balabuch
+    Author: Tiago Balabuch, Kamil Nowinski
     #>
     [CmdletBinding()]
     param (
@@ -41,23 +40,25 @@ function Get-FabricCapacityTenantSettingOverrides {
         Confirm-TokenState
 
         # Construct the API endpoint URL for retrieving capacity tenant setting overrides
-        if ($capacityId) {
-            $apiEndpointURI = "admin/capacities/{0}/delegatedTenantSettingOverrides" -f $capacityId
-            $message = "Successfully retrieved tenant setting overrides for capacity ID: $capacityId."
+        if ($CapacityId) {
+            $apiEndpointUrl = "admin/capacities/{0}/delegatedTenantSettingOverrides" -f $CapacityId
         } else {
-            $apiEndpointURI = "admin/capacities/delegatedTenantSettingOverrides" -f $FabricConfig.BaseUrl
-            $message = "Successfully retrieved capacity tenant setting overrides."
+            $apiEndpointUrl = "admin/capacities/delegatedTenantSettingOverrides"
         }
-        Write-Message -Message "Constructed API Endpoint: $apiEndpointURI" -Level Debug
+        Write-Message -Message "Constructed API Endpoint: $apiEndpointUrl" -Level Debug
 
-        # Invoke the Fabric API to retrieve capacity tenant setting overrides
-        $response = Invoke-FabricRestMethod `
-            -Uri $apiEndpointURI `
-            -Method Get
+        $apiParams = @{
+            Uri            = $apiEndpointUrl
+            Method         = 'Get'
+            HandleResponse = $true
+            ExtractValue   = 'True'
+            TypeName       = 'CapacityTenantSettingOverride'
+        }
+        $response = @(Invoke-FabricRestMethod @apiParams)
 
         # Check if any capacity tenant setting overrides were retrieved and handle results accordingly
         if ($response) {
-            Write-Message -Message $message -Level Debug
+            Write-Message -Message "Successfully retrieved capacity tenant setting overrides." -Level Debug
             return $response
         } else {
             Write-Message -Message "No capacity tenant setting overrides found." -Level Warning

@@ -44,34 +44,49 @@ Author: Tiago Balabuch, Kamil Nowinski
         [string]$EnvironmentDescription
     )
 
-    # Ensure token validity
-    Confirm-TokenState
-
-    $body = @{
-        displayName = $EnvironmentName
-    }
-
-    if ($EnvironmentDescription)
+    try
     {
-        $body.description = $EnvironmentDescription
-    }
+        # Ensure token validity
+        Confirm-TokenState
 
-    $bodyJson = $body | ConvertTo-Json -Depth 2
-    Write-Message -Message "Request Body: $bodyJson" -Level Debug
+        # Construct the API URL
+        $apiEndpointUrl = "workspaces/{0}/environments" -f $WorkspaceId
+        Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
-    if ($PSCmdlet.ShouldProcess($EnvironmentName, "Create Environment"))
-    {
-        $apiParams = @{
-            Uri            = "workspaces/$WorkspaceId/environments"
-            Method         = 'Post'
-            Body           = $bodyJson
-            TypeName       = 'Environment'
-            ObjectIdOrName = $EnvironmentName
-            HandleResponse = $true
+        # Construct the request body
+        $body = @{
+            displayName = $EnvironmentName
         }
 
-        $response = Invoke-FabricRestMethod @apiParams
+        if ($EnvironmentDescription)
+        {
+            $body.description = $EnvironmentDescription
+        }
+
+        $bodyJson = $body | ConvertTo-Json -Depth 2
+        Write-Message -Message "Request Body: $bodyJson" -Level Debug
+
+        if ($PSCmdlet.ShouldProcess($EnvironmentName, "Create Environment"))
+        {
+            # Make the API request
+            $apiParams = @{
+                Uri            = $apiEndpointUrl
+                Method         = 'Post'
+                Body           = $bodyJson
+                TypeName       = 'Environment'
+                ObjectIdOrName = $EnvironmentName
+                HandleResponse = $true
+            }
+            $response = Invoke-FabricRestMethod @apiParams
+        }
+
         Write-Message -Message "Environment '$EnvironmentName' created successfully!" -Level Info
-        $response
+        return $response
+    }
+    catch
+    {
+        # Handle and log errors
+        $errorDetails = $_.Exception.Message
+        Write-Message -Message "Failed to create environment. Error: $errorDetails" -Level Error
     }
 }

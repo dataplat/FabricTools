@@ -2,84 +2,61 @@ function Update-FabricSparkSettings
 {
     <#
     .SYNOPSIS
-        Updates an existing Spark custom pool in a specified Microsoft Fabric workspace.
+        Updates Spark settings in a specified Microsoft Fabric workspace.
 
     .DESCRIPTION
-        This function sends a PATCH request to the Microsoft Fabric API to update an existing Spark custom pool
-        in the specified workspace. It supports various parameters for Spark custom pool configuration.
+        This function sends a PATCH request to the Microsoft Fabric API to update Spark settings
+        in the specified workspace. It supports optional parameters for automatic logging, high concurrency,
+        pool configuration, environment, and starter pool settings.
 
     .PARAMETER WorkspaceId
-        The unique identifier of the workspace where the Spark custom pool exists. This parameter is mandatory.
-
-    .PARAMETER SparkSettingsId
-        The unique identifier of the Spark custom pool to be updated. This parameter is mandatory.
-
-    .PARAMETER InstancePoolName
-        The new name of the Spark custom pool. This parameter is mandatory.
-
-    .PARAMETER NodeFamily
-        The family of nodes to be used in the Spark custom pool. This parameter is mandatory and must be 'MemoryOptimized'.
-
-    .PARAMETER NodeSize
-        The size of the nodes to be used in the Spark custom pool. This parameter is mandatory and must be one of 'Large', 'Medium', 'Small', 'XLarge', 'XXLarge'.
-
-    .PARAMETER AutoScaleEnabled
-        Specifies whether auto-scaling is enabled for the Spark custom pool. This parameter is mandatory.
-
-    .PARAMETER AutoScaleMinNodeCount
-        The minimum number of nodes for auto-scaling in the Spark custom pool. This parameter is mandatory.
-
-    .PARAMETER AutoScaleMaxNodeCount
-        The maximum number of nodes for auto-scaling in the Spark custom pool. This parameter is mandatory.
-
-    .PARAMETER DynamicExecutorAllocationEnabled
-        Specifies whether dynamic executor allocation is enabled for the Spark custom pool. This parameter is mandatory.
-
-    .PARAMETER DynamicExecutorAllocationMinExecutors
-        The minimum number of executors for dynamic executor allocation in the Spark custom pool. This parameter is mandatory.
-
-    .PARAMETER DynamicExecutorAllocationMaxExecutors
-        The maximum number of executors for dynamic executor allocation in the Spark custom pool. This parameter is mandatory.
+        The unique identifier of the workspace whose Spark settings will be updated. This parameter is mandatory.
 
     .PARAMETER automaticLogEnabled
-        Specifies whether automatic logging is enabled for the Spark custom pool. This parameter is optional.
+        Specifies whether automatic logging is enabled. This parameter is optional.
 
     .PARAMETER notebookInteractiveRunEnabled
-        Specifies whether notebook interactive run is enabled for the Spark custom pool. This parameter is optional.
+        Specifies whether notebook interactive run (high concurrency) is enabled. This parameter is optional.
 
     .PARAMETER customizeComputeEnabled
-        Specifies whether compute customization is enabled for the Spark custom pool. This parameter is optional.
+        Specifies whether compute customization is enabled for the pool. This parameter is optional.
 
     .PARAMETER defaultPoolName
-        The name of the default pool for the Spark custom pool. This parameter is optional.
+        The name of the default pool. Must be provided together with defaultPoolType. This parameter is optional.
 
     .PARAMETER defaultPoolType
-        The type of the default pool for the Spark custom pool. This parameter is optional and must be either 'Workspace' or 'Capacity'.
+        The type of the default pool. Must be 'Workspace' or 'Capacity'. Must be provided together with defaultPoolName. This parameter is optional.
 
     .PARAMETER starterPoolMaxNode
-        The maximum number of nodes for the starter pool in the Spark custom pool. This parameter is optional.
+        The maximum number of nodes for the starter pool. This parameter is optional.
 
     .PARAMETER starterPoolMaxExecutors
-        The maximum number of executors for the starter pool in the Spark custom pool. This parameter is optional.
+        The maximum number of executors for the starter pool. This parameter is optional.
 
     .PARAMETER EnvironmentName
-        The name of the environment for the Spark custom pool. This parameter is optional.
+        The name of the environment. This parameter is optional.
 
     .PARAMETER EnvironmentRuntimeVersion
-        The runtime version of the environment for the Spark custom pool. This parameter is optional.
+        The runtime version of the environment. This parameter is optional.
 
     .EXAMPLE
-        This example updates the Spark custom pool with ID "pool-67890" in the workspace with ID "workspace-12345" with a new name and configuration.
+        This example enables automatic logging for the workspace with ID "workspace-12345".
 
         ```powershell
-        Update-FabricSparkSettings -WorkspaceId "workspace-12345" -SparkSettingsId "pool-67890" -InstancePoolName "Updated Spark Pool" -NodeFamily "MemoryOptimized" -NodeSize "Large" -AutoScaleEnabled $true -AutoScaleMinNodeCount 1 -AutoScaleMaxNodeCount 10 -DynamicExecutorAllocationEnabled $true -DynamicExecutorAllocationMinExecutors 1 -DynamicExecutorAllocationMaxExecutors 10
+        Update-FabricSparkSettings -WorkspaceId "workspace-12345" -automaticLogEnabled $true
+        ```
+
+    .EXAMPLE
+        This example sets the default pool for the workspace with ID "workspace-12345".
+
+        ```powershell
+        Update-FabricSparkSettings -WorkspaceId "workspace-12345" -defaultPoolName "MyPool" -defaultPoolType "Workspace"
         ```
 
     .NOTES
-        - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
         - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 
-        Author: Tiago Balabuch
+        Author: Tiago Balabuch, Kamil Nowinski
 
     #>
     [CmdletBinding(SupportsShouldProcess)]
@@ -133,12 +110,10 @@ function Update-FabricSparkSettings
         Confirm-TokenState
 
         # Construct the API URL
-        $apiEndpointUrl = "{0}/workspaces/{1}/spark/settings" -f $FabricConfig.BaseUrl, $WorkspaceId, $SparkSettingsId
+        $apiEndpointUrl = "workspaces/{0}/spark/settings" -f $WorkspaceId
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
         # Construct the request body
-        # Construct the request body with optional properties
-
         $body = @{ }
 
         if ($PSBoundParameters.ContainsKey('automaticLogEnabled'))
@@ -198,26 +173,17 @@ function Update-FabricSparkSettings
 
         if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Update SparkSettings"))
         {
-
-            # Make the API request
-            $response = Invoke-FabricRestMethod `
-                -Uri $apiEndpointUrl `
-                -Method Patch `
-                -Body $bodyJson
+            $apiParams = @{
+                Uri            = $apiEndpointUrl
+                Method         = 'Patch'
+                Body           = $bodyJson
+                HandleResponse = $true
+                TypeName       = 'SparkSettings'
+            }
+            $response = Invoke-FabricRestMethod @apiParams
+            Write-Message -Message "Spark Settings updated successfully!" -Level Info
         }
 
-        # Validate the response code
-        if ($statusCode -ne 200)
-        {
-            Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
-            Write-Message -Message "Error: $($response.message)" -Level Error
-            Write-Message -Message "Error Details: $($response.moreDetails)" -Level Error
-            Write-Message "Error Code: $($response.errorCode)" -Level Error
-            return $null
-        }
-
-        # Handle results
-        Write-Message -Message "Spark Custom Pool '$SparkSettingsName' updated successfully!" -Level Info
         return $response
     }
     catch

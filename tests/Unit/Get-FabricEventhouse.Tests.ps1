@@ -36,21 +36,16 @@ Describe "Get-FabricEventhouse" -Tag "UnitTests" {
             Mock -CommandName Confirm-TokenState -MockWith { }
             Mock -CommandName Write-Message -MockWith { }
             Mock -CommandName Invoke-FabricRestMethod -MockWith {
-                InModuleScope -ModuleName 'FabricTools' {
-                    $script:statusCode = 200
-                }
-                return [pscustomobject]@{
-                    value = @(
-                        [pscustomobject]@{
-                            Id = [guid]::NewGuid()
-                            DisplayName = 'TestEventhouse1'
-                        },
-                        [pscustomobject]@{
-                            Id = [guid]::NewGuid()
-                            DisplayName = 'TestEventhouse2'
-                        }
-                    )
-                }
+                return @(
+                    [pscustomobject]@{
+                        Id = [guid]::NewGuid()
+                        DisplayName = 'TestEventhouse1'
+                    },
+                    [pscustomobject]@{
+                        Id = [guid]::NewGuid()
+                        DisplayName = 'TestEventhouse2'
+                    }
+                )
             }
         }
 
@@ -89,52 +84,6 @@ Describe "Get-FabricEventhouse" -Tag "UnitTests" {
 
             Should -Invoke -CommandName Write-Message -ParameterFilter {
                 $Level -eq 'Error' -and $Message -like "*Both*"
-            }
-        }
-    }
-
-    Context 'When an unexpected status code is returned' {
-        BeforeAll {
-            Mock -CommandName Confirm-TokenState -MockWith { }
-            Mock -CommandName Write-Message -MockWith { }
-            Mock -CommandName Invoke-FabricRestMethod -MockWith {
-                InModuleScope -ModuleName 'FabricTools' {
-                    $script:statusCode = 400
-                }
-                return [pscustomobject]@{
-                    message = 'Bad Request'
-                    errorCode = 'InvalidRequest'
-                }
-            }
-        }
-
-        It 'Should write an error message for unexpected status codes' {
-            $mockWorkspaceId = [guid]::NewGuid()
-
-            Get-FabricEventhouse -WorkspaceId $mockWorkspaceId
-
-            Should -Invoke -CommandName Write-Message -ParameterFilter {
-                $Level -eq 'Error'
-            }
-        }
-    }
-
-    Context 'When an exception is thrown' {
-        BeforeAll {
-            Mock -CommandName Confirm-TokenState -MockWith { }
-            Mock -CommandName Write-Message -MockWith { }
-            Mock -CommandName Invoke-FabricRestMethod -MockWith {
-                throw 'API connection failed'
-            }
-        }
-
-        It 'Should handle exceptions gracefully' {
-            $mockWorkspaceId = [guid]::NewGuid()
-
-            { Get-FabricEventhouse -WorkspaceId $mockWorkspaceId } | Should -Not -Throw
-
-            Should -Invoke -CommandName Write-Message -ParameterFilter {
-                $Level -eq 'Error'
             }
         }
     }

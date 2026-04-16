@@ -25,10 +25,9 @@ function Revoke-FabricExternalDataShares {
     ```
 
 .NOTES
-    - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
     - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 
-    Author: Tiago Balabuch
+    Author: Tiago Balabuch, Kamil Nowinski
     #>
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param (
@@ -50,20 +49,21 @@ function Revoke-FabricExternalDataShares {
         # Ensure token validity
         Confirm-TokenState
 
-        # Loop to retrieve all capacities with continuation token
-        Write-Message -Message "Constructing API endpoint URI..." -Level Debug
-        $apiEndpointURI = "admin/workspaces/{0}/items/{1}/externalDataShares/{2}/revoke" -f $WorkspaceId, $ItemId, $ExternalDataShareId
+        # Construct the API endpoint URL
+        $apiEndpointUrl = "admin/workspaces/$WorkspaceId/items/$ItemId/externalDataShares/$ExternalDataShareId/revoke"
+        Write-Message -Message "Constructed API Endpoint: $apiEndpointUrl" -Level Debug
 
         if ($PSCmdlet.ShouldProcess("$ExternalDataShareId", "revoke")) {
-
-        $externalDataShares = Invoke-FabricRestMethod `
-            -Uri $apiEndpointURI `
-            -Method Post
+            # Invoke Fabric API request
+            $apiParams = @{
+                Uri            = $apiEndpointUrl
+                Method         = 'Post'
+                HandleResponse = $true
+            }
+            $externalDataShares = Invoke-FabricRestMethod @apiParams
+            Write-Message -Message "Successfully revoked external data shares." -Level Info
+            return $externalDataShares
         }
-
-        # Return retrieved data
-        Write-Message -Message "Successfully revoked external data shares." -Level Info
-        return $externalDataShares
     } catch {
         # Capture and log error details
         $errorDetails = $_.Exception.Message

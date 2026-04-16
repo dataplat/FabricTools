@@ -31,10 +31,7 @@ function Get-FabricSparkJobDefinitionDefinition {
         ```
 
     .NOTES
-        - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-        - Calls `Confirm-TokenState` to ensure token validity before making the API request.
-
-        Author: Tiago Balabuch
+        Author: Tiago Balabuch, Kamil Nowinski
     #>
     [CmdletBinding()]
     param (
@@ -48,71 +45,30 @@ function Get-FabricSparkJobDefinitionDefinition {
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [ValidateSet('SparkJobDefinitionV1')]
+        [ValidateSet('SparkJobDefinitionV1', 'SparkJobDefinitionV2')]
         [string]$SparkJobDefinitionFormat = "SparkJobDefinitionV1"
     )
     try {
         # Ensure token validity
         Confirm-TokenState
 
-        # Construct the API URL
-        $apiEndpointUrl = "{0}/workspaces/{1}/sparkJobDefinitions/{2}/getDefinition" -f $FabricConfig.BaseUrl, $WorkspaceId, $SparkJobDefinitionId
-
+        # Construct the API endpoint URL
+        $apiEndpointUrl = "workspaces/$WorkspaceId/sparkJobDefinitions/$SparkJobDefinitionId/getDefinition"
         if ($SparkJobDefinitionFormat) {
-            $apiEndpointUrl = "{0}?format={1}" -f $apiEndpointUrl, $SparkJobDefinitionFormat
+            $apiEndpointUrl += "?format=$SparkJobDefinitionFormat"
         }
+        Write-Message -Message "Constructed API Endpoint: $apiEndpointUrl" -Level Debug
 
-        Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
-
-        # Make the API request
-        $response = Invoke-FabricRestMethod `
-            -Uri $apiEndpointUrl `
-            -Method Post
-
-        # Validate the response code and handle the response
-        switch ($statusCode) {
-            200 {
-                Write-Message -Message "Spark Job Definition '$SparkJobDefinitionId' definition retrieved successfully!" -Level Debug
-                return $response.definition.parts
-            }
-            202 {
-
-                Write-Message -Message "Getting Spark Job Definition '$SparkJobDefinitionId' definition request accepted. Retrieving in progress!" -Level Debug
-
-                [string]$operationId = $responseHeader["x-ms-operation-id"]
-                [string]$location = $responseHeader["Location"]
-                [string]$retryAfter = $responseHeader["Retry-After"]
-
-                Write-Message -Message "Operation ID: '$operationId'" -Level Debug
-                Write-Message -Message "Location: '$location'" -Level Debug
-                Write-Message -Message "Retry-After: '$retryAfter'" -Level Debug
-                Write-Message -Message "Getting Long Running Operation status" -Level Debug
-
-                $operationStatus = Get-FabricLongRunningOperation -operationId $operationId -location $location
-                Write-Message -Message "Long Running Operation status: $operationStatus" -Level Debug
-                # Handle operation result
-                if ($operationStatus.status -eq "Succeeded") {
-                    Write-Message -Message "Operation Succeeded" -Level Debug
-                    Write-Message -Message "Getting Long Running Operation result" -Level Debug
-
-                    $operationResult = Get-FabricLongRunningOperationResult -operationId $operationId, -location $location
-                    Write-Message -Message "Long Running Operation status: $operationResult" -Level Debug
-
-                    return $operationResult.definition.parts
-                } else {
-                    Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Debug
-                    Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Error
-                    return $operationStatus
-                }
-            }
-            default {
-                Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
-                Write-Message -Message "Error: $($response.message)" -Level Error
-                Write-Message -Message "Error Details: $($response.moreDetails)" -Level Error
-                Write-Message "Error Code: $($response.errorCode)" -Level Error
-                throw "API request failed with status code $statusCode."
-            }
+        # Invoke the Fabric API to retrieve Spark Job Definition definition
+        $apiParams = @{
+            Uri            = $apiEndpointUrl
+            Method         = 'Post'
+            HandleResponse = $true
         }
+        $response = Invoke-FabricRestMethod @apiParams
+
+        # Return the response
+        return $response
     } catch {
         # Capture and log error details
         $errorDetails = $_.Exception.Message

@@ -31,7 +31,7 @@ function Stop-FabricMirroredDatabaseMirroring
     - Calls `Confirm-TokenState` to ensure token validity before making the API request.
     - This function handles asynchronous operations and retrieves operation results if required.
 
-    Author: Tiago Balabuch
+    Author: Tiago Balabuch, Kamil Nowinski
 
     #>
     [CmdletBinding(SupportsShouldProcess)]
@@ -52,25 +52,19 @@ function Stop-FabricMirroredDatabaseMirroring
 
         $apiEndpointUrl = "{0}/workspaces/{1}/mirroredDatabases/{2}/stopMirroring" -f $FabricConfig.BaseUrl, $WorkspaceId, $MirroredDatabaseId
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
+
         if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Stop MirroredDatabase Mirroring"))
         {
-            # Make the API request
-            $response = Invoke-FabricRestMethod `
-                -Uri $apiEndpointUrl `
-                -Method Post
+            $apiParams = @{
+                Uri            = $apiEndpointUrl
+                Method         = 'Post'
+                TypeName       = 'Mirrored Database Mirroring'
+                ObjectIdOrName = $MirroredDatabaseId
+                HandleResponse = $true
+            }
+            Invoke-FabricRestMethod @apiParams
         }
 
-        # Validate the response code
-        if ($statusCode -ne 200)
-        {
-            Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
-            Write-Message -Message "Error: $($response.message)" -Level Error
-            Write-Message -Message "Error Details: $($response.moreDetails)" -Level Error
-            Write-Message "Error Code: $($response.errorCode)" -Level Error
-            return $null
-        }
-
-        # Handle results
         Write-Message -Message "Database mirroring stopped successfully for MirroredDatabaseId: $MirroredDatabaseId" -Level Info
         return
     }

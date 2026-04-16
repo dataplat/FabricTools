@@ -40,10 +40,7 @@ function Update-FabricCapacityTenantSettingOverrides
         ```
 
     .NOTES
-    - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-    - Calls `Confirm-TokenState` to ensure token validity before making the API request.
-
-    Author: Tiago Balabuch
+    Author: Tiago Balabuch, Kamil Nowinski
     #>
     [CmdletBinding(SupportsShouldProcess)]
     param (
@@ -101,7 +98,7 @@ function Update-FabricCapacityTenantSettingOverrides
         }
 
         # Construct API endpoint URL
-        $apiEndpointURI = "admin/capacities/{0}/delegatedTenantSettingOverrides" -f $CapacityId
+        $apiEndpointUrl = "admin/capacities/{0}/delegatedTenantSettingOverrides" -f $CapacityId
 
         # Construct request body
         $body = @{
@@ -127,16 +124,19 @@ function Update-FabricCapacityTenantSettingOverrides
         # Convert body to JSON
         $bodyJson = $body | ConvertTo-Json -Depth 4
         Write-Message -Message "Request Body: $bodyJson" -Level Debug
-        if ($PSCmdlet.ShouldProcess($apiEndpointURI, "Update Tenant Setting Overrides")){
-            # Invoke Fabric API request
-            $response = Invoke-FabricRestMethod `
-                -Uri $apiEndpointURI `
-                -method Post `
-                -body $bodyJson
-        }
 
-        Write-Message -Message "Successfully updated capacity tenant setting overrides for CapacityId: $CapacityId and SettingTitle: $SettingTitle." -Level Info
-        return $response
+        if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Update Tenant Setting Overrides")) {
+            # Invoke Fabric API request
+            $apiParams = @{
+                Uri            = $apiEndpointUrl
+                Method         = 'Post'
+                Body           = $bodyJson
+                HandleResponse = $true
+            }
+            $response = Invoke-FabricRestMethod @apiParams
+            Write-Message -Message "Successfully updated capacity tenant setting overrides for CapacityId: $CapacityId and SettingTitle: $SettingTitle." -Level Info
+            return $response
+        }
     }
     catch
     {

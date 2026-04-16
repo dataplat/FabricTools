@@ -31,6 +31,7 @@ The unique identifier of the Fabric domain.
 .NOTES
 - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 
+
 Author: Tiago Balabuch, Kamil Nowinski
 
 #>
@@ -46,46 +47,57 @@ Author: Tiago Balabuch, Kamil Nowinski
         [guid[]]$WorkspaceIds
     )
 
-    # Ensure token validity
-    Confirm-TokenState
-
-    $endpointSuffix = if ($WorkspaceIds)
+    try
     {
-        "unassignWorkspaces"
-    }
-    else
-    {
-        "unassignAllWorkspaces"
-    }
+        # Ensure token validity
+        Confirm-TokenState
 
-    $bodyJson = if ($WorkspaceIds)
-    {
-        $body = @{ workspacesIds = $WorkspaceIds }
-        $body | ConvertTo-Json -Depth 2
-    }
-    else
-    {
-        $null
-    }
-
-    Write-Message -Message "Request Body: $bodyJson" -Level Debug
-
-    if ($PSCmdlet.ShouldProcess($DomainId, "Unassign Workspaces"))
-    {
-        $apiParams = @{
-            Uri            = "admin/domains/$DomainId/$endpointSuffix"
-            Method         = 'Post'
-            TypeName       = 'Domain'
-            ObjectIdOrName = $DomainId
-            HandleResponse = $true
-        }
-
-        if ($bodyJson)
+        # Determine the API endpoint URL based on the presence of WorkspaceIds
+        $endpointSuffix = if ($WorkspaceIds)
         {
-            $apiParams.Body = $bodyJson
+            "unassignWorkspaces"
+        }
+        else
+        {
+            "unassignAllWorkspaces"
         }
 
-        Invoke-FabricRestMethod @apiParams
+        $apiEndpointUrl = "admin/domains/{0}/{1}" -f $DomainId, $endpointSuffix
+        Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
+
+        # Construct the request body (if needed)
+        $bodyJson = if ($WorkspaceIds)
+        {
+            $body = @{ workspacesIds = $WorkspaceIds }
+            $body | ConvertTo-Json -Depth 2
+        }
+        else
+        {
+            $null
+        }
+
+        Write-Message -Message "Request Body: $bodyJson" -Level Debug
+
+        if ($PSCmdlet.ShouldProcess($DomainId, "Unassign Workspaces"))
+        {
+            # Make the API request to unassign specific workspaces
+            $apiParams = @{
+                Uri            = $apiEndpointUrl
+                Method         = 'Post'
+                Body           = $bodyJson
+                TypeName       = 'Domain'
+                ObjectIdOrName = $DomainId
+                HandleResponse = $true
+            }
+            $response = Invoke-FabricRestMethod @apiParams
+        }
+
         Write-Message -Message "Successfully unassigned workspaces to the domain with ID '$DomainId'." -Level Info
+    }
+    catch
+    {
+        # Capture and log error details
+        $errorDetails = $_.Exception.Message
+        Write-Message -Message "Failed to unassign workspaces to the domain with ID '$DomainId'. Error: $errorDetails" -Level Error
     }
 }

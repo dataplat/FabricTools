@@ -37,11 +37,11 @@ function Get-FabricDatamart {
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [guid]$datamartId,
+        [guid]$DatamartId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [string]$datamartName
+        [string]$DatamartName
     )
 
     try {
@@ -49,20 +49,20 @@ function Get-FabricDatamart {
         Confirm-TokenState
         # Initialize variables
 
-        $apiEndpointURI = "workspaces/{0}/Datamarts" -f $WorkspaceId
+        $apiEndpointUrl = "workspaces/{0}/datamarts" -f $WorkspaceId
 
         $apiParams = @{
-            Uri    = $apiEndpointURI
+            Uri    = $apiEndpointUrl
             method = 'Get'
         }
         $Datamarts = Invoke-FabricRestMethod @apiParams
 
         # Filter results based on provided parameters
 
-        $response = if ($datamartId) {
-            $Datamarts | Where-Object { $_.Id -eq $datamartId }
-        } elseif ($datamartName) {
-            $Datamarts | Where-Object { $_.DisplayName -eq $datamartName }
+        $response = if ($DatamartId) {
+            $Datamarts | Where-Object { $_.Id -eq $DatamartId }
+        } elseif ($DatamartName) {
+            $Datamarts | Where-Object { $_.DisplayName -eq $DatamartName }
         } else {
             # No filter, return all datamarts
             Write-Message -Message "No filter specified. Returning all datamarts." -Level Debug

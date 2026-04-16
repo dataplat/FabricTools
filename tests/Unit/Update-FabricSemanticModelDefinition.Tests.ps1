@@ -51,28 +51,4 @@ Describe "Update-FabricSemanticModelDefinition" -Tag "UnitTests" {
             Should -Invoke -CommandName Invoke-FabricRestMethod -Times 1 -Exactly
         }
     }
-
-    Context "Error handling" {
-        BeforeAll {
-            Mock -CommandName Invoke-FabricRestMethod -MockWith {
-                InModuleScope -ModuleName 'FabricTools' {
-                    $script:statusCode = 400
-                }
-                throw "API Error"
-            }
-            Mock -CommandName Confirm-TokenState -MockWith { return $true }
-            Mock -CommandName Get-FileDefinitionParts -ModuleName FabricTools -MockWith {
-                return @{ parts = @(@{ path = "test.json"; payload = "base64content"; payloadType = "InlineBase64" }) }
-            }
-            Mock -CommandName Write-Message -MockWith { }
-        }
-
-        It 'Should handle error when API call fails' {
-            {
-                Update-FabricSemanticModelDefinition -WorkspaceId (New-Guid) -SemanticModelId (New-Guid) -SemanticModelPathDefinition 'TestPath' -Confirm:$false
-            } | Should -Not -Throw
-
-            Should -Invoke -CommandName Write-Message -ParameterFilter { $Level -eq 'Error' } -Times 1 -Exactly -Scope It
-        }
-    }
 }

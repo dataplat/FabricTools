@@ -32,10 +32,9 @@ function New-FabricEventhouse
     ```
 
     .NOTES
-        - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
         - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 
-        Author: Tiago Balabuch
+        Author: Tiago Balabuch, Kamil Nowinski
 
     #>
     [CmdletBinding(SupportsShouldProcess)]
@@ -60,6 +59,7 @@ function New-FabricEventhouse
         [ValidateNotNullOrEmpty()]
         [string]$EventhousePathPlatformDefinition
     )
+
     try
     {
         # Ensure token validity
@@ -69,7 +69,6 @@ function New-FabricEventhouse
         $apiEndpointUrl = "{0}/workspaces/{1}/eventhouses" -f $FabricConfig.BaseUrl, $WorkspaceId
         Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
 
-        # Construct the request body
         $body = @{
             displayName = $EventhouseName
         }
@@ -78,6 +77,7 @@ function New-FabricEventhouse
         {
             $body.description = $EventhouseDescription
         }
+
         if ($EventhousePathDefinition)
         {
             $eventhouseEncodedContent = Convert-ToBase64 -filePath $EventhousePathDefinition
@@ -112,15 +112,10 @@ function New-FabricEventhouse
 
             if (-not [string]::IsNullOrEmpty($eventhouseEncodedPlatformContent))
             {
-                # Initialize definition if it doesn't exist
                 if (-not $body.definition)
                 {
-                    $body.definition = @{
-                        parts = @()
-                    }
+                    $body.definition = @{ parts = @() }
                 }
-
-                # Add new part to the parts array
                 $body.definition.parts += @{
                     path        = ".platform"
                     payload     = $eventhouseEncodedPlatformContent
@@ -134,71 +129,24 @@ function New-FabricEventhouse
             }
         }
 
-        # Convert the body to JSON
         $bodyJson = $body | ConvertTo-Json -Depth 10
         Write-Message -Message "Request Body: $bodyJson" -Level Debug
 
         if ($PSCmdlet.ShouldProcess($EventhouseName, "Create Eventhouse"))
         {
-            # Make the API request
-            $response = Invoke-FabricRestMethod `
-                -Uri $apiEndpointUrl `
-                -Method Post `
-                -Body $bodyJson
+            $apiParams = @{
+                Uri            = $apiEndpointUrl
+                Method         = 'Post'
+                Body           = $bodyJson
+                TypeName       = 'Eventhouse'
+                ObjectIdOrName = $EventhouseName
+                HandleResponse = $true
+            }
+
+            $response = Invoke-FabricRestMethod @apiParams
+            Write-Message -Message "Eventhouse '$EventhouseName' created successfully!" -Level Info
         }
-
-        Write-Message -Message "Response Code: $statusCode" -Level Debug
-
-        # Handle and log the response
-        switch ($statusCode)
-        {
-            201
-            {
-                Write-Message -Message "Eventhouse '$EventhouseName' created successfully!" -Level Info
-                return $response
-            }
-            202
-            {
-                Write-Message -Message "Eventhouse '$EventhouseName' creation accepted. Provisioning in progress!" -Level Info
-
-                [string]$operationId = $responseHeader["x-ms-operation-id"]
-                [string]$location = $responseHeader["Location"]
-                [string]$retryAfter = $responseHeader["Retry-After"]
-
-                Write-Message -Message "Operation ID: '$operationId'" -Level Debug
-                Write-Message -Message "Location: '$location'" -Level Debug
-                Write-Message -Message "Retry-After: '$retryAfter'" -Level Debug
-                Write-Message -Message "Getting Long Running Operation status" -Level Debug
-
-                $operationStatus = Get-FabricLongRunningOperation -operationId $operationId -location $location
-                Write-Message -Message "Long Running Operation status: $operationStatus" -Level Debug
-                # Handle operation result
-                if ($operationStatus.status -eq "Succeeded")
-                {
-                    Write-Message -Message "Operation Succeeded" -Level Debug
-                    Write-Message -Message "Getting Long Running Operation result" -Level Debug
-
-                    $operationResult = Get-FabricLongRunningOperationResult -operationId $operationId
-                    Write-Message -Message "Long Running Operation status: $operationResult" -Level Debug
-
-                    return $operationResult
-                }
-                else
-                {
-                    Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Debug
-                    Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Error
-                    return $operationStatus
-                }
-            }
-            default
-            {
-                Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
-                Write-Message -Message "Error: $($response.message)" -Level Error
-                Write-Message -Message "Error Details: $($response.moreDetails)" -Level Error
-                Write-Message "Error Code: $($response.errorCode)" -Level Error
-                throw "API request failed with status code $statusCode."
-            }
-        }
+        $response
     }
     catch
     {

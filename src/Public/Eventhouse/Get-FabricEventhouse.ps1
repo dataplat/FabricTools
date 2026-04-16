@@ -23,36 +23,21 @@ function Get-FabricEventhouse {
     This example will give you all Eventhouses in the Workspace.
 
     ```powershell
-    Get-FabricEventhouse `
-    -WorkspaceId '12345678-1234-1234-1234-123456789012'
+    Get-FabricEventhouse -WorkspaceId '12345678-1234-1234-1234-123456789012'
     ```
 
     .EXAMPLE
     This example will give you all Information about the Eventhouse with the name 'MyEventhouse'.
 
     ```powershell
-    Get-FabricEventhouse `
-    -WorkspaceId '12345678-1234-1234-1234-123456789012' `
-    -EventhouseName 'MyEventhouse'
+    Get-FabricEventhouse -WorkspaceId '12345678-1234-1234-1234-123456789012' -EventhouseName 'MyEventhouse'
     ```
 
     .EXAMPLE
     This example will give you all Information about the Eventhouse with the Id '12345678-1234-1234-1234-123456789012'.
 
     ```powershell
-    Get-FabricEventhouse `
-    -WorkspaceId '12345678-1234-1234-1234-123456789012' `
-    -EventhouseId '12345678-1234-1234-1234-123456789012'
-    ```
-
-        .EXAMPLE
-    This example will give you all Information about the Eventhouse with the Id '12345678-1234-1234-1234-123456789012'. It will also give you verbose output which is useful for debugging.
-
-    ```powershell
-    Get-FabricEventhouse `
-    -WorkspaceId '12345678-1234-1234-1234-123456789012' `
-    -EventhouseId '12345678-1234-1234-1234-123456789012' `
-    -Verbose
+    Get-FabricEventhouse -WorkspaceId '12345678-1234-1234-1234-123456789012' -EventhouseId '12345678-1234-1234-1234-123456789012'
     ```
 
     .LINK
@@ -62,7 +47,7 @@ function Get-FabricEventhouse {
         TODO: Add functionality to list all Eventhouses in the subscription. To do so fetch all workspaces
         and then all eventhouses in each workspace.
 
-        Author: Tiago Balabuch
+        Author: Tiago Balabuch, Kamil Nowinski
 
         #>
     [CmdletBinding()]
@@ -79,98 +64,38 @@ function Get-FabricEventhouse {
         [ValidateNotNullOrEmpty()]
         [string]$EventhouseName
     )
+
+    # Handle ambiguous input
+    if ($EventhouseId -and $EventhouseName) {
+        Write-Message -Message "Both 'EventhouseId' and 'EventhouseName' were provided. Please specify only one." -Level Error
+        return $null
+    }
+
     try {
-
-        # Handle ambiguous input
-        if ($EventhouseId -and $EventhouseName) {
-            Write-Message -Message "Both 'EventhouseId' and 'EventhouseName' were provided. Please specify only one." -Level Error
-            return $null
-        }
-
         # Ensure token validity
         Confirm-TokenState
 
-        # Initialize variables
-        $continuationToken = $null
-        $eventhouses = @()
-
-        if (-not ([AppDomain]::CurrentDomain.GetAssemblies() | Where-Object { $_.GetName().Name -eq "System.Web" })) {
-            Add-Type -AssemblyName System.Web
+        $apiParams = @{
+            Uri            = "workspaces/$WorkspaceId/eventhouses"
+            Method         = 'Get'
+            TypeName       = 'Eventhouse'
+            ObjectIdOrName = $EventhouseName
+            HandleResponse = $true
+            ExtractValue   = 'True'
         }
 
-        # Loop to retrieve all capacities with continuation token
-        Write-Message -Message "Loop started to get continuation token" -Level Debug
-        $baseApiEndpointUrl = "{0}/workspaces/{1}/eventhouses" -f $FabricConfig.BaseUrl, $WorkspaceId
-        #  Loop to retrieve data with continuation token
-        do {
-            # Construct the API URL
-            $apiEndpointUrl = $baseApiEndpointUrl
+        $eventhouses = @(Invoke-FabricRestMethod @apiParams)
 
-            if ($null -ne $continuationToken) {
-                # URL-encode the continuation token
-                $encodedToken = [System.Web.HttpUtility]::UrlEncode($continuationToken)
-                $apiEndpointUrl = "{0}?continuationToken={1}" -f $apiEndpointUrl, $encodedToken
-            }
-            Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
-
-            # Make the API request
-            $response = Invoke-FabricRestMethod `
-                -Uri $apiEndpointUrl `
-                -Method Get
-
-            # Validate the response code
-            if ($statusCode -ne 200) {
-                Write-Message -Message "Unexpected response code: $statusCode from the API." -Level Error
-                Write-Message -Message "Error: $($response.message)" -Level Error
-                Write-Message -Message "Error Details: $($response.moreDetails)" -Level Error
-                Write-Message "Error Code: $($response.errorCode)" -Level Error
-                return $null
-            }
-
-            # Add data to the list
-            if ($null -ne $response) {
-                Write-Message -Message "Adding data to the list" -Level Debug
-                $eventhouses += $response.value
-
-                # Update the continuation token if present
-                if ($response.PSObject.Properties.Match("continuationToken")) {
-                    Write-Message -Message "Updating the continuation token" -Level Debug
-                    $continuationToken = $response.continuationToken
-                    Write-Message -Message "Continuation token: $continuationToken" -Level Debug
-                } else {
-                    Write-Message -Message "Updating the continuation token to null" -Level Debug
-                    $continuationToken = $null
-                }
-            } else {
-                Write-Message -Message "No data received from the API." -Level Warning
-                break
-            }
-        } while ($null -ne $continuationToken)
-        Write-Message -Message "Loop finished and all data added to the list" -Level Debug
-
-        # Filter results based on provided parameters
-        $eventhouse = if ($EventhouseId) {
+        if ($EventhouseId) {
             $eventhouses | Where-Object { $_.Id -eq $EventhouseId }
         } elseif ($EventhouseName) {
             $eventhouses | Where-Object { $_.DisplayName -eq $EventhouseName }
         } else {
-            # Return all eventhouses if no filter is provided
-            Write-Message -Message "No filter provided. Returning all Eventhouses." -Level Debug
             $eventhouses
-        }
-
-        # Handle results
-        if ($eventhouse) {
-            Write-Message -Message "Eventhouse found in the Workspace '$WorkspaceId'." -Level Debug
-            return $eventhouse
-        } else {
-            Write-Message -Message "No Eventhouse found matching the provided criteria." -Level Warning
-            return $null
         }
     } catch {
         # Capture and log error details
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to retrieve Eventhouse. Error: $errorDetails" -Level Error
     }
-
 }

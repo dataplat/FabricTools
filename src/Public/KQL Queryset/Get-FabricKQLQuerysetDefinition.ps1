@@ -31,11 +31,9 @@ Specifies the format of the KQLQueryset definition.
     ```
 
 .NOTES
-- Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
 - Calls `Confirm-TokenState` to ensure token validity before making the API request.
-- Handles long-running operations asynchronously.
 
-Author: Tiago Balabuch
+Author: Tiago Balabuch, Kamil Nowinski
 
 #>
     [CmdletBinding()]
@@ -57,57 +55,23 @@ Author: Tiago Balabuch
         # Ensure token validity
         Confirm-TokenState
 
-        # Construct the API URL
-        $apiEndpointUrl = "{0}/workspaces/{1}/kqlQuerysets/{2}/getDefinition" -f $FabricConfig.BaseUrl, $WorkspaceId, $KQLQuerysetId
+        # Construct the API endpoint URL
+        $apiEndpointUrl = "workspaces/$WorkspaceId/kqlQuerysets/$KQLQuerysetId/getDefinition"
 
         if ($KQLQuerysetFormat) {
-            $apiEndpointUrl = "{0}?format={1}" -f $apiEndpointUrl, $KQLQuerysetFormat
+            $apiEndpointUrl = "$apiEndpointUrl?format=$KQLQuerysetFormat"
         }
-        Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
+        Write-Message -Message "Constructed API Endpoint: $apiEndpointUrl" -Level Debug
 
-        # Make the API request
-        $response = Invoke-FabricRestMethod `
-            -Uri $apiEndpointUrl `
-            -Method Post
-
-        # Validate the response code and handle the response
-        switch ($statusCode) {
-            200 {
-                Write-Message -Message "KQLQueryset '$KQLQuerysetId' definition retrieved successfully!" -Level Debug
-                return $response.definition.parts
-            }
-            202 {
-
-                Write-Message -Message "Getting KQLQueryset '$KQLQuerysetId' definition request accepted. Retrieving in progress!" -Level Debug
-
-                [string]$operationId = $responseHeader["x-ms-operation-id"]
-                Write-Message -Message "Operation ID: '$operationId'" -Level Debug
-                Write-Message -Message "Getting Long Running Operation status" -Level Debug
-
-                $operationStatus = Get-FabricLongRunningOperation -operationId $operationId
-                Write-Message -Message "Long Running Operation status: $operationStatus" -Level Debug
-                # Handle operation result
-                if ($operationStatus.status -eq "Succeeded") {
-                    Write-Message -Message "Operation Succeeded" -Level Debug
-                    Write-Message -Message "Getting Long Running Operation result" -Level Debug
-
-                    $operationResult = Get-FabricLongRunningOperationResult -operationId $operationId
-                    Write-Message -Message "Long Running Operation status: $operationResult" -Level Debug
-
-                    return $operationResult.definition.parts
-                } else {
-                    Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Debug
-                    Write-Message -Message "Operation failed. Status: $($operationStatus)" -Level Error
-                    return $operationStatus
-                }
-            }
-            default {
-                Write-Message -Message "Unexpected response code: $statusCode" -Level Error
-                Write-Message -Message "Error details: $($response.message)" -Level Error
-                throw "API request failed with status code $statusCode."
-            }
-
+        # Invoke Fabric API request
+        $apiParams = @{
+            Uri            = $apiEndpointUrl
+            Method         = 'Post'
+            HandleResponse = $true
         }
+        $response = Invoke-FabricRestMethod @apiParams
+        Write-Message -Message "KQLQueryset '$KQLQuerysetId' definition retrieved successfully!" -Level Debug
+        return $response.definition.parts
     } catch {
         # Capture and log error details
         $errorDetails = $_.Exception.Message

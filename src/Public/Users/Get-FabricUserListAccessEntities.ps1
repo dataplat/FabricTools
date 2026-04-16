@@ -28,10 +28,9 @@ function Get-FabricUserListAccessEntities {
         ```
 
     .NOTES
-        - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
         - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 
-        Author: Tiago Balabuch
+        Author: Tiago Balabuch, Kamil Nowinski
     #>
     [CmdletBinding()]
     param (
@@ -49,21 +48,25 @@ function Get-FabricUserListAccessEntities {
 
         Confirm-TokenState
 
-        # Loop to retrieve all capacities with continuation token
-        $apiEndpointURI = "admin/users/{0}/access" -f $UserId
+        $apiEndpointUrl = "admin/users/{0}/access" -f $UserId
         if ($Type) {
-            $apiEndpointURI += "?type=$Type"
+            $apiEndpointUrl += "?type=$Type"
         }
 
-        $response = Invoke-FabricRestMethod `
-            -Uri $apiEndpointURI `
-            -Method Get
+        $apiParams = @{
+            Uri            = $apiEndpointUrl
+            Method         = 'Get'
+            HandleResponse = $true
+            ExtractValue   = 'True'
+            TypeName       = 'UserAccessEntity'
+        }
+        $response = @(Invoke-FabricRestMethod @apiParams)
 
         return $response
     } catch {
         # Capture and log error details
         $errorDetails = $_.Exception.Message
-        Write-Message -Message "Failed to retrieve Warehouse. Error: $errorDetails" -Level Error
+        Write-Message -Message "Failed to retrieve user access entities. Error: $errorDetails" -Level Error
     }
 
 }

@@ -52,31 +52,54 @@ Author: Tiago Balabuch, Kamil Nowinski
         [string]$EnvironmentName
     )
 
-    # Handle ambiguous input
-    if ($EnvironmentId -and $EnvironmentName) {
-        Write-Message -Message "Both 'EnvironmentId' and 'EnvironmentName' were provided. Please specify only one." -Level Error
-        return $null
+    try {
+        # Handle ambiguous input
+        if ($EnvironmentId -and $EnvironmentName) {
+            Write-Message -Message "Both 'EnvironmentId' and 'EnvironmentName' were provided. Please specify only one." -Level Error
+            return $null
+        }
+
+        # Ensure token validity
+        Confirm-TokenState
+
+        # Construct the API URL
+        $apiEndpointUrl = "workspaces/{0}/environments" -f $WorkspaceId
+        Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
+
+        # Make the API request
+        $apiParams = @{
+            Uri            = $apiEndpointUrl
+            Method         = 'Get'
+            TypeName       = 'Environment'
+            ObjectIdOrName = $EnvironmentId
+            HandleResponse = $true
+            ExtractValue   = 'True'
+        }
+        $environments = @(Invoke-FabricRestMethod @apiParams)
+
+        # Filter results based on provided parameters
+        $environment = if ($EnvironmentId) {
+            $environments | Where-Object { $_.Id -eq $EnvironmentId }
+        } elseif ($EnvironmentName) {
+            $environments | Where-Object { $_.DisplayName -eq $EnvironmentName }
+        } else {
+            # Return all workspaces if no filter is provided
+            Write-Message -Message "No filter provided. Returning all environments." -Level Debug
+            $environments
+        }
+
+        # Handle results
+        if ($environment) {
+            Write-Message -Message "Environment found in the Workspace '$WorkspaceId'." -Level Debug
+            return $environment
+        } else {
+            Write-Message -Message "No environment found matching the provided criteria." -Level Warning
+            return $null
+        }
+    } catch {
+        # Capture and log error details
+        $errorDetails = $_.Exception.Message
+        Write-Message -Message "Failed to retrieve environment. Error: $errorDetails" -Level Error
     }
 
-    # Ensure token validity
-    Confirm-TokenState
-
-    $apiParams = @{
-        Uri            = "workspaces/$WorkspaceId/environments"
-        Method         = 'Get'
-        TypeName       = 'Environment'
-        ObjectIdOrName = $EnvironmentName
-        HandleResponse = $true
-        ExtractValue   = 'True'
-    }
-
-    $environments = @(Invoke-FabricRestMethod @apiParams)
-
-    if ($EnvironmentId) {
-        $environments | Where-Object { $_.Id -eq $EnvironmentId }
-    } elseif ($EnvironmentName) {
-        $environments | Where-Object { $_.DisplayName -eq $EnvironmentName }
-    } else {
-        $environments
-    }
 }
