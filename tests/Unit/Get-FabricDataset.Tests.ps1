@@ -32,10 +32,12 @@ Describe "Get-FabricDataset" -Tag "UnitTests" {
     Context "My Workspace (no WorkspaceId)" {
         BeforeAll {
             Mock -CommandName Confirm-TokenState -MockWith { }
+            $mockDatasetId1 = [guid]'11111111-1111-1111-1111-111111111111'
+            $mockDatasetId2 = [guid]'22222222-2222-2222-2222-222222222222'
             Mock -CommandName Invoke-FabricRestMethod -MockWith {
                 return @(
-                    [pscustomobject]@{ id = 'ds-1'; name = 'Sales Model' }
-                    [pscustomobject]@{ id = 'ds-2'; name = 'HR Model' }
+                    [pscustomobject]@{ id = $mockDatasetId1; name = 'Sales Model' }
+                    [pscustomobject]@{ id = $mockDatasetId2; name = 'HR Model' }
                 )
             }
         }
@@ -59,8 +61,8 @@ Describe "Get-FabricDataset" -Tag "UnitTests" {
         }
 
         It 'Should filter by DatasetId' {
-            $result = Get-FabricDataset -DatasetId 'ds-1'
-            $result.id | Should -Be 'ds-1'
+            $result = Get-FabricDataset -DatasetId $mockDatasetId1
+            $result.id | Should -Be $mockDatasetId1
         }
     }
 
