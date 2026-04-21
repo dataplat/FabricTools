@@ -46,7 +46,7 @@ Author: Tiago Balabuch, Kamil Nowinski
             HandleResponse = $true
             ExtractValue   = 'True'
         }
-        $response = @(Invoke-FabricRestMethod @apiParams)
+        $response = Invoke-FabricRestMethod @apiParams
 
         # Handle empty response
         if ($response.Count -eq 0) {

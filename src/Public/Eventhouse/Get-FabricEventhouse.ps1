@@ -84,7 +84,7 @@ function Get-FabricEventhouse {
             ExtractValue   = 'True'
         }
 
-        $eventhouses = @(Invoke-FabricRestMethod @apiParams)
+        $eventhouses = Invoke-FabricRestMethod @apiParams
 
         if ($EventhouseId) {
             $eventhouses | Where-Object { $_.Id -eq $EventhouseId }

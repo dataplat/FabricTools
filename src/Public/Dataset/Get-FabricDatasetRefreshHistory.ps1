@@ -89,7 +89,7 @@ function Get-FabricDatasetRefreshHistory {
             HandleResponse = $true
             ExtractValue   = 'True'
         }
-        $refreshes = @(Invoke-FabricRestMethod @apiParams)
+        $refreshes = Invoke-FabricRestMethod @apiParams
 
         if ($refreshes) {
             Write-Message -Message "Retrieved $($refreshes.Count) refresh history entries for dataset '$DatasetId'." -Level Debug

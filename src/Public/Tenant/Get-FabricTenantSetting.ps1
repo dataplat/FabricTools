@@ -50,7 +50,7 @@ function Get-FabricTenantSetting {
             ExtractValue   = 'Auto'
             HandleResponse = $true
         }
-        $settings = @(Invoke-FabricRestMethod @apiParams)
+        $settings = Invoke-FabricRestMethod @apiParams
 
         # Filter tenant settings based on the provided SettingTitle parameter (if specified)
         if ($SettingTitle) {

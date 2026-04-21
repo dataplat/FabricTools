@@ -54,7 +54,7 @@ function Get-FabricCapacityTenantSettingOverrides {
             ExtractValue   = 'True'
             TypeName       = 'CapacityTenantSettingOverride'
         }
-        $response = @(Invoke-FabricRestMethod @apiParams)
+        $response = Invoke-FabricRestMethod @apiParams
 
         # Check if any capacity tenant setting overrides were retrieved and handle results accordingly
         if ($response) {

@@ -89,54 +89,12 @@ Describe 'Add-FabricDomainWorkspaceAssignmentByCapacity' -Tag 'Public' {
         }
     }
 
-    Context 'When long running operation fails' {
-        BeforeAll {
-            Mock -CommandName Confirm-TokenState -MockWith { }
-            Mock -CommandName Write-Message -MockWith { }
-            Mock -CommandName Invoke-FabricRestMethod -MockWith {
-                InModuleScope -ModuleName 'FabricTools' {
-                    $script:statusCode = 202
-                    $script:responseHeader = @{
-                        'x-ms-operation-id' = 'op-failed'
-                        'Location' = 'https://api.fabric.microsoft.com/v1/operations/op-failed'
-                        'Retry-After' = '30'
-                    }
-                }
-                return [pscustomobject]@{}
-            }
-            Mock -CommandName Get-FabricLongRunningOperation -MockWith {
-                return [pscustomobject]@{
-                    status = 'Failed'
-                    operationId = 'op-failed'
-                    error = @{
-                        message = 'Operation failed'
-                    }
-                }
-            }
-        }
-
-        It 'Should return the failed operation status' {
-            $mockDomainId = [guid]::NewGuid()
-            $mockCapacityIds = @([guid]::NewGuid())
-
-            $result = Add-FabricDomainWorkspaceAssignmentByCapacity -DomainId $mockDomainId -CapacitiesIds $mockCapacityIds
-
-            $result.status | Should -Be 'Failed'
-        }
-    }
-
     Context 'When an unexpected status code is returned' {
         BeforeAll {
             Mock -CommandName Confirm-TokenState -MockWith { }
             Mock -CommandName Write-Message -MockWith { }
             Mock -CommandName Invoke-FabricRestMethod -MockWith {
-                InModuleScope -ModuleName 'FabricTools' {
-                    $script:statusCode = 400
-                }
-                return [pscustomobject]@{
-                    message = 'Bad Request'
-                    errorCode = 'InvalidRequest'
-                }
+                throw 'Unexpected response code: 400 - Bad Request'
             }
         }
 

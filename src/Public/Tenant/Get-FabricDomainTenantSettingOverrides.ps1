@@ -36,7 +36,7 @@ function Get-FabricDomainTenantSettingOverrides {
             ExtractValue   = 'True'
             TypeName       = 'DomainTenantSettingOverride'
         }
-        $response = @(Invoke-FabricRestMethod @apiParams)
+        $response = Invoke-FabricRestMethod @apiParams
 
         # Check if any domain tenant setting overrides were retrieved and handle results accordingly
         if ($response) {

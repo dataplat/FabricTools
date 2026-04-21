@@ -60,7 +60,7 @@ function Get-FabricUserListAccessEntities {
             ExtractValue   = 'True'
             TypeName       = 'UserAccessEntity'
         }
-        $response = @(Invoke-FabricRestMethod @apiParams)
+        $response = Invoke-FabricRestMethod @apiParams
 
         return $response
     } catch {
