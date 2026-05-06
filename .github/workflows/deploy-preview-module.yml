@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Code
-      uses: actions/checkout@v5
+      uses: actions/checkout@v4
       with:
         ref: ${{ github.head_ref }}   # checkout the correct branch name
         fetch-depth: 0
@@ -32,7 +32,7 @@ jobs:
       with:
         versionSpec: 5.x
     - name: Evaluate Next Version
-      uses: gittools/actions/gitversion/execute@v4.5.0
+      uses: gittools/actions/gitversion/execute@v4.5
       with:
         configFilePath: GitVersion.yml
     - name: Build & Package Module
@@ -54,7 +54,7 @@ jobs:
     if: ${{ success() && (github.ref == 'refs/heads/develop' || startsWith(github.ref, 'refs/tags/')) }}
     steps:
     - name: Checkout Code
-      uses: actions/checkout@v5
+      uses: actions/checkout@v4
       with:
         ref: ${{ github.head_ref }}   # checkout the correct branch name
         fetch-depth: 0
