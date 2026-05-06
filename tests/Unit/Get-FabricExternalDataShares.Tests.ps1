@@ -1,45 +1,68 @@
 #Requires -Module @{ ModuleName="Pester"; ModuleVersion="5.0"}
-param(
-    $ModuleName = "FabricTools",
-    $expectedParams = @(
-        "Verbose"
-                "Debug"
-                "ErrorAction"
-                "WarningAction"
-                "InformationAction"
-                "ProgressAction"
-                "ErrorVariable"
-                "WarningVariable"
-                "InformationVariable"
-                "OutVariable"
-                "OutBuffer"
-                "PipelineVariable"
-                
-    )
-)
+
+BeforeDiscovery {
+    $CommandName = 'Get-FabricExternalDataShares'
+}
+
+BeforeAll {
+    $ModuleName = 'FabricTools'
+    $PSDefaultParameterValues['Mock:ModuleName'] = $ModuleName
+    $PSDefaultParameterValues['InModuleScope:ModuleName'] = $ModuleName
+    $PSDefaultParameterValues['Should:ModuleName'] = $ModuleName
+
+    $Command = Get-Command -Name Get-FabricExternalDataShares
+}
 
 Describe "Get-FabricExternalDataShares" -Tag "UnitTests" {
 
-    BeforeDiscovery {
-        $command = Get-Command -Name Get-FabricExternalDataShares
-        $expected = $expectedParams
+    Context "Command definition" {
+        It 'Should have no mandatory custom parameters' {
+            # This command has no custom mandatory parameters, just common parameters
+            $Command | Should -Not -BeNullOrEmpty
+        }
     }
 
-    Context "Parameter validation" {
+    Context "Successful external data shares retrieval" {
         BeforeAll {
-            $command = Get-Command -Name Get-FabricExternalDataShares
-            $expected = $expectedParams
+            Mock -CommandName Invoke-FabricRestMethod -MockWith {
+                InModuleScope -ModuleName 'FabricTools' {
+                    $script:statusCode = 200
+                }
+                return [pscustomobject]@{
+                    value = @(
+                        [pscustomobject]@{ id = 'share-guid'; name = 'TestShare' }
+                    )
+                }
+            }
+            Mock -CommandName Confirm-TokenState -MockWith { return $true }
         }
 
-        It "Has parameter: <_>" -ForEach $expected {
-            $command | Should -HaveParameter $PSItem
+        It 'Should return external data shares' {
+            $result = Get-FabricExternalDataShares
+
+            $result | Should -Not -BeNullOrEmpty
+
+            Should -Invoke -CommandName Invoke-FabricRestMethod -Times 1 -Exactly
+        }
+    }
+
+    Context "Error handling" {
+        BeforeAll {
+            Mock -CommandName Invoke-FabricRestMethod -MockWith {
+                throw "API Error"
+            }
+            Mock -CommandName Confirm-TokenState -MockWith { return $true }
+            Mock -CommandName Write-Message -MockWith { }
         }
 
-        It "Should have exactly the number of expected parameters $($expected.Count)" {
-            $hasparms = $command.Parameters.Values.Name
-            #$hasparms.Count | Should -BeExactly $expected.Count
-            Compare-Object -ReferenceObject $expected -DifferenceObject $hasparms | Should -BeNullOrEmpty
+        It 'Should handle errors gracefully' {
+            {
+                Get-FabricExternalDataShares
+            } | Should -Not -Throw
+
+            Should -Invoke -CommandName Write-Message -ParameterFilter {
+                $Level -eq 'Error' -and $Message -like "*Failed to retrieve*"
+            }
         }
     }
 }
-

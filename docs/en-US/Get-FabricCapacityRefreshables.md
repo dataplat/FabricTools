@@ -4,7 +4,7 @@ external help file: FabricTools-Help.xml
 HelpUri: ''
 Locale: en-US
 Module Name: FabricTools
-ms.date: 07/18/2025
+ms.date: 04/08/2026
 PlatyPS schema version: 2024-05-01
 title: Get-FabricCapacityRefreshables
 ---
@@ -13,7 +13,7 @@ title: Get-FabricCapacityRefreshables
 
 ## SYNOPSIS
 
-Retrieves the top refreshable capacities for the tenant.
+Returns a list of refreshables for all capacities that the user has access to.
 
 ## SYNTAX
 
@@ -25,29 +25,40 @@ Get-FabricCapacityRefreshables [[-top] <string>] [<CommonParameters>]
 
 ## ALIASES
 
-Get-FabCapacityRefreshables
-
 ## DESCRIPTION
 
-The Get-FabricCapacityRefreshables function retrieves the top refreshable capacities for the tenant.
-It supports multiple aliases for flexibility.
+The Get-FabricCapacityRefreshables function returns refreshables (datasets with refresh activity)
+for all capacities the user has access to.
+Power BI retains a seven-day refresh history for each
+dataset, up to a maximum of 60 refreshes.
+
+Requires scope: Capacity.Read.All or Capacity.ReadWrite.All
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 
-This example retrieves the top 5 refreshable capacities for the tenant.
+Retrieves the top 10 refreshables across all capacities.
 
 ```powershell
-Get-FabricCapacityRefreshables -top 5
+Get-FabricCapacityRefreshables -top 10
+```
+
+### EXAMPLE 2
+
+Retrieves the top 5 refreshables with capacity details expanded.
+
+```powershell
+Get-FabricCapacityRefreshables -top 5 -expand 'capacity'
 ```
 
 ## PARAMETERS
 
 ### -top
 
-The number of top refreshable capacities to retrieve.
-This is a mandatory parameter.
+Required.
+Returns only the first n results.
+Must be a positive integer (minimum: 1).
 
 ```yaml
 Type: System.String
@@ -78,9 +89,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## OUTPUTS
 
 ## NOTES
-
-The function retrieves the PowerBI access token and makes a GET request to the PowerBI API to retrieve the top refreshable capacities.
-It then returns the 'value' property of the response, which contains the capacities.
 
 Author: Ioana Bouariu
 

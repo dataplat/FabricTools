@@ -1,138 +1,97 @@
 #Requires -Module @{ ModuleName="Pester"; ModuleVersion="5.0"}
-param(
-    $ModuleName = "FabricTools",
-    $expectedParams = @(
-        "SubscriptionId"
-        "ResourceGroupName"
-        "CapacityName"
-        "SkuName"
-        "Location"
-        "AdministrationMembers"
-        "Tags"
-        "NoWait"
-        "WhatIf"
-        "Confirm"
-        "Verbose"
-        "Debug"
-        "ErrorAction"
-        "WarningAction"
-        "InformationAction"
-        "ProgressAction"
-        "ErrorVariable"
-        "WarningVariable"
-        "InformationVariable"
-        "OutVariable"
-        "OutBuffer"
-        "PipelineVariable"
-    )
-)
+
+BeforeDiscovery {
+    $CommandName = 'Update-FabricCapacity'
+}
+
+BeforeAll {
+    $ModuleName = 'FabricTools'
+    $PSDefaultParameterValues['Mock:ModuleName'] = $ModuleName
+    $PSDefaultParameterValues['InModuleScope:ModuleName'] = $ModuleName
+    $PSDefaultParameterValues['Should:ModuleName'] = $ModuleName
+
+    $Command = Get-Command -Name Update-FabricCapacity
+}
 
 Describe "Update-FabricCapacity" -Tag "UnitTests" {
 
-    BeforeDiscovery {
-        $command = Get-Command -Name Update-FabricCapacity
-        $expected = $expectedParams
-    }
-
-    Context "Parameter validation" {
-        BeforeAll {
-            $command = Get-Command -Name Update-FabricCapacity
-            $expected = $expectedParams
+    Context "Command definition" {
+        It 'Should have <ExpectedParameterName> parameter' -ForEach @(
+            @{ ExpectedParameterName = 'SubscriptionId'; ExpectedParameterType = 'guid'; Mandatory = 'True' }
+            @{ ExpectedParameterName = 'ResourceGroupName'; ExpectedParameterType = 'string'; Mandatory = 'True' }
+            @{ ExpectedParameterName = 'CapacityName'; ExpectedParameterType = 'string'; Mandatory = 'True' }
+            @{ ExpectedParameterName = 'SkuName'; ExpectedParameterType = 'string'; Mandatory = 'True' }
+            @{ ExpectedParameterName = 'Location'; ExpectedParameterType = 'string'; Mandatory = 'True' }
+            @{ ExpectedParameterName = 'AdministrationMembers'; ExpectedParameterType = 'string[]'; Mandatory = 'True' }
+            @{ ExpectedParameterName = 'Tags'; ExpectedParameterType = 'hashtable'; Mandatory = 'False' }
+            @{ ExpectedParameterName = 'NoWait'; ExpectedParameterType = 'switch'; Mandatory = 'False' }
+        ) {
+            $Command | Should -HaveParameter -ParameterName $ExpectedParameterName -Type $ExpectedParameterType -Mandatory:([bool]::Parse($Mandatory))
         }
 
-        It "Has parameter: <_>" -ForEach $expected {
-            $command | Should -HaveParameter $PSItem
-        }
-
-        It "Should have exactly the number of expected parameters $($expected.Count)" {
-            $hasParams = $command.Parameters.Values.Name
-            Compare-Object -ReferenceObject $expected -DifferenceObject $hasParams | Should -BeNullOrEmpty
-        }
-    }
-
-    Context "Parameter validation rules" {
-        BeforeAll {
-            $command = Get-Command -Name Update-FabricCapacity
-        }
-
-        It "SubscriptionId should be mandatory" {
-            $command.Parameters['SubscriptionId'].Attributes.Mandatory | Should -Be $true
-        }
-
-        It "ResourceGroupName should be mandatory" {
-            $command.Parameters['ResourceGroupName'].Attributes.Mandatory | Should -Be $true
-        }
-
-        It "CapacityName should be mandatory" {
-            $command.Parameters['CapacityName'].Attributes.Mandatory | Should -Be $true
-        }
-
-        It "SkuName should be mandatory" {
-            $command.Parameters['SkuName'].Attributes.Mandatory | Should -Be $true
-        }
-
-        It "AdministrationMembers should be mandatory" {
-            $command.Parameters['AdministrationMembers'].Attributes.Mandatory | Should -Be $true
-        }
-
-        It "Tags should not be mandatory" {
-            $command.Parameters['Tags'].Attributes.Mandatory | Should -Be $false
-        }
-
-        It "NoWait should not be mandatory" {
-            $command.Parameters['NoWait'].Attributes.Mandatory | Should -Be $false
-        }
-
-        It "SubscriptionId should be of type Guid" {
-            $command.Parameters['SubscriptionId'].ParameterType.Name | Should -Be "Guid"
-        }
-
-        It "ResourceGroupName should be of type String" {
-            $command.Parameters['ResourceGroupName'].ParameterType.Name | Should -Be "String"
-        }
-
-        It "CapacityName should be of type String" {
-            $command.Parameters['CapacityName'].ParameterType.Name | Should -Be "String"
-        }
-
-        It "SkuName should be of type String" {
-            $command.Parameters['SkuName'].ParameterType.Name | Should -Be "String"
-        }
-
-        It "AdministrationMembers should be of type String array" {
-            $command.Parameters['AdministrationMembers'].ParameterType.Name | Should -Be "String[]"
-        }
-
-        It "Tags should be of type Hashtable" {
-            $command.Parameters['Tags'].ParameterType.Name | Should -Be "Hashtable"
-        }
-
-        It "NoWait should be of type SwitchParameter" {
-            $command.Parameters['NoWait'].ParameterType.Name | Should -Be "SwitchParameter"
+        It 'Should support ShouldProcess' {
+            $Command.Parameters.ContainsKey('WhatIf') | Should -BeTrue
+            $Command.Parameters.ContainsKey('Confirm') | Should -BeTrue
         }
     }
 
     Context "Parameter validation attributes" {
-        BeforeAll {
-            $command = Get-Command -Name Update-FabricCapacity
-        }
-
         It "ResourceGroupName should have ValidateLength attribute with max length 90" {
-            $validateLengthAttr = $command.Parameters['ResourceGroupName'].Attributes | Where-Object { $_.GetType().Name -eq "ValidateLengthAttribute" }
+            $validateLengthAttr = $Command.Parameters['ResourceGroupName'].Attributes | Where-Object { $_.GetType().Name -eq "ValidateLengthAttribute" }
             $validateLengthAttr | Should -Not -BeNullOrEmpty
             $validateLengthAttr.MaxLength | Should -Be 90
         }
 
         It "CapacityName should have ValidateLength attribute with min length 3 and max length 63" {
-            $validateLengthAttr = $command.Parameters['CapacityName'].Attributes | Where-Object { $_.GetType().Name -eq "ValidateLengthAttribute" }
+            $validateLengthAttr = $Command.Parameters['CapacityName'].Attributes | Where-Object { $_.GetType().Name -eq "ValidateLengthAttribute" }
             $validateLengthAttr | Should -Not -BeNullOrEmpty
             $validateLengthAttr.MinLength | Should -Be 3
             $validateLengthAttr.MaxLength | Should -Be 63
         }
 
         It "CapacityName should have ValidatePattern attribute" {
-            $validatePatternAttr = $command.Parameters['CapacityName'].Attributes | Where-Object { $_.GetType().Name -eq "ValidatePatternAttribute" }
+            $validatePatternAttr = $Command.Parameters['CapacityName'].Attributes | Where-Object { $_.GetType().Name -eq "ValidatePatternAttribute" }
             $validatePatternAttr | Should -Not -BeNullOrEmpty
+        }
+    }
+
+    Context "Successful capacity update" {
+        BeforeAll {
+            Mock -CommandName Invoke-FabricRestMethod -MockWith {
+                InModuleScope -ModuleName 'FabricTools' {
+                    $script:statusCode = 200
+                }
+                return [pscustomobject]@{
+                    id = 'capacity-guid'
+                    name = 'UpdatedCapacity'
+                    sku = [pscustomobject]@{ name = 'F2' }
+                }
+            }
+            Mock -CommandName Confirm-TokenState -MockWith { return $true }
+        }
+
+        It 'Should update capacity with valid parameters' {
+            $result = Update-FabricCapacity -SubscriptionId (New-Guid) -ResourceGroupName 'TestRG' -CapacityName 'testcapacity' -SkuName 'F2' -Location 'uksouth' -AdministrationMembers @('user@domain.com') -Confirm:$false
+
+            Should -Invoke -CommandName Invoke-FabricRestMethod -Times 1 -Exactly
+        }
+    }
+
+    Context "Error handling" {
+        BeforeAll {
+            Mock -CommandName Invoke-FabricRestMethod -MockWith {
+                InModuleScope -ModuleName 'FabricTools' {
+                    $script:statusCode = 400
+                }
+                throw "API Error"
+            }
+            Mock -CommandName Confirm-TokenState -MockWith { return $true }
+        }
+
+        It 'Should throw an error when API call fails' {
+            {
+                Update-FabricCapacity -SubscriptionId (New-Guid) -ResourceGroupName 'TestRG' -CapacityName 'testcapacity' -SkuName 'F2' -Location 'uksouth' -AdministrationMembers @('user@domain.com') -Confirm:$false
+            } | Should -Throw
         }
     }
 }

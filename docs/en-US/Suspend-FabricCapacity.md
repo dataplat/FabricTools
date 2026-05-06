@@ -4,7 +4,7 @@ external help file: FabricTools-Help.xml
 HelpUri: ''
 Locale: en-US
 Module Name: FabricTools
-ms.date: 07/18/2025
+ms.date: 04/01/2026
 PlatyPS schema version: 2024-05-01
 title: Suspend-FabricCapacity
 ---
@@ -20,13 +20,11 @@ Suspends a capacity.
 ### __AllParameterSets
 
 ```
-Suspend-FabricCapacity [-subscriptionID] <guid> [-resourcegroup] <string> [-capacity] <string>
+Suspend-FabricCapacity [-SubscriptionID] <guid> [-ResourceGroup] <string> [-Capacity] <string>
  [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## ALIASES
-
-Suspend-FabCapacity Suspend-PowerBICapacity
 
 ## DESCRIPTION
 
@@ -40,12 +38,12 @@ It supports multiple aliases for flexibility.
 This example suspends a capacity given the subscription ID, resource group, and capacity.
 
 ```powershell
-Suspend-FabricCapacity -subscriptionID "your-subscription-id" -resourcegroupID "your-resource-group" -capacityID "your-capacity"
+Suspend-FabricCapacity -SubscriptionID "your-subscription-id" -ResourceGroup "your-resource-group" -Capacity "your-capacity"
 ```
 
 ## PARAMETERS
 
-### -capacity
+### -Capacity
 
 The the capacity.
 This is a mandatory parameter.
@@ -90,7 +88,7 @@ AcceptedValues: []
 HelpMessage: ''
 ```
 
-### -resourcegroup
+### -ResourceGroup
 
 The resource group.
 This is a mandatory parameter.
@@ -113,7 +111,7 @@ AcceptedValues: []
 HelpMessage: ''
 ```
 
-### -subscriptionID
+### -SubscriptionID
 
 The ID of the subscription.
 This is a mandatory parameter.
@@ -138,7 +136,7 @@ HelpMessage: ''
 
 ### -WhatIf
 
-Tells PowerShell to run the command in a mode that only reports what would happen, but not actually let the command run or make changes.
+Runs the command in a mode that only reports what would happen without performing the actions.
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
@@ -176,9 +174,6 @@ If the 'azToken' environment variable is null, it connects to the Azure account 
 It then defines the headers for the request, defines the URI for the request, and makes a GET request to the URI.
 
 Author: Ioana Bouariu
-
-
- Define aliases for the function for flexibility.
 
 ## RELATED LINKS
 

@@ -1,46 +1,80 @@
 #Requires -Module @{ ModuleName="Pester"; ModuleVersion="5.0"}
-param(
-    $ModuleName = "FabricTools",
-    $expectedParams = @(
-        "capacityID"
-                "Verbose"
-                "Debug"
-                "ErrorAction"
-                "WarningAction"
-                "InformationAction"
-                "ProgressAction"
-                "ErrorVariable"
-                "WarningVariable"
-                "InformationVariable"
-                "OutVariable"
-                "OutBuffer"
-                "PipelineVariable"
-                
-    )
-)
+
+BeforeDiscovery {
+    $CommandName = 'Get-FabricCapacityWorkload'
+}
+
+BeforeAll {
+    $ModuleName = 'FabricTools'
+    $PSDefaultParameterValues['Mock:ModuleName'] = $ModuleName
+    $PSDefaultParameterValues['InModuleScope:ModuleName'] = $ModuleName
+    $PSDefaultParameterValues['Should:ModuleName'] = $ModuleName
+}
 
 Describe "Get-FabricCapacityWorkload" -Tag "UnitTests" {
 
-    BeforeDiscovery {
+    BeforeAll {
         $command = Get-Command -Name Get-FabricCapacityWorkload
-        $expected = $expectedParams
     }
 
-    Context "Parameter validation" {
+    Context 'Command definition' {
+        It 'Should have a command definition' {
+            $command | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Should have the expected parameter: <Name>' -ForEach @(
+            @{ Name = 'capacityID'; Mandatory = $true }
+        ) {
+            $command | Should -HaveParameter $Name -Mandatory:$Mandatory
+        }
+    }
+
+    Context 'When getting capacity workloads successfully' {
         BeforeAll {
-            $command = Get-Command -Name Get-FabricCapacityWorkload
-            $expected = $expectedParams
+            Mock -CommandName Confirm-TokenState -MockWith { }
+            Mock -CommandName Write-Message -MockWith { }
+            Mock -CommandName Invoke-FabricRestMethod -MockWith {
+                return @{
+                    value = @(
+                        [pscustomobject]@{ name = 'Lakehouse'; state = 'Enabled'; maxMemoryPercentageSetByUser = 100 }
+                        [pscustomobject]@{ name = 'Warehouse'; state = 'Enabled'; maxMemoryPercentageSetByUser = 100 }
+                    )
+                }
+            }
         }
 
-        It "Has parameter: <_>" -ForEach $expected {
-            $command | Should -HaveParameter $PSItem
+        It 'Should call Invoke-FabricRestMethod with the correct parameters' {
+            $mockCapacityId = [guid]::NewGuid()
+
+            Get-FabricCapacityWorkload -capacityID $mockCapacityId
+
+            Should -Invoke -CommandName Invoke-FabricRestMethod -Times 1 -ParameterFilter {
+                $Uri -like "*capacities/*/Workloads*"
+            }
         }
 
-        It "Should have exactly the number of expected parameters $($expected.Count)" {
-            $hasparms = $command.Parameters.Values.Name
-            #$hasparms.Count | Should -BeExactly $expected.Count
-            Compare-Object -ReferenceObject $expected -DifferenceObject $hasparms | Should -BeNullOrEmpty
+        It 'Should return the list of workloads' {
+            $mockCapacityId = [guid]::NewGuid()
+
+            $result = Get-FabricCapacityWorkload -capacityID $mockCapacityId
+
+            $result | Should -Not -BeNullOrEmpty
+        }
+    }
+
+    Context 'When an exception is thrown' {
+        BeforeAll {
+            Mock -CommandName Confirm-TokenState -MockWith { }
+            Mock -CommandName Write-Message -MockWith { }
+            Mock -CommandName Invoke-FabricRestMethod -MockWith {
+                throw 'API connection failed'
+            }
+        }
+
+        It 'Should throw an exception when API call fails' {
+            $mockCapacityId = [guid]::NewGuid()
+
+            { Get-FabricCapacityWorkload -capacityID $mockCapacityId } | Should -Throw -ExpectedMessage '*API connection failed*'
         }
     }
 }
-

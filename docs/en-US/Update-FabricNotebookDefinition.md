@@ -4,7 +4,7 @@ external help file: FabricTools-Help.xml
 HelpUri: ''
 Locale: en-US
 Module Name: FabricTools
-ms.date: 07/18/2025
+ms.date: 04/08/2026
 PlatyPS schema version: 2024-05-01
 title: Update-FabricNotebookDefinition
 ---
@@ -141,7 +141,7 @@ HelpMessage: ''
 
 ### -WhatIf
 
-Tells PowerShell to run the command in a mode that only reports what would happen, but not actually let the command run or make changes.
+Runs the command in a mode that only reports what would happen without performing the actions.
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
@@ -200,7 +200,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 - The notebook content is encoded as Base64 before being sent to the Fabric API.
 - This function handles asynchronous operations and retrieves operation results if required.
 
-Author: Tiago Balabuch
+Author: Tiago Balabuch, Kamil Nowinski
 
 ## RELATED LINKS
 

@@ -4,7 +4,7 @@ external help file: FabricTools-Help.xml
 HelpUri: ''
 Locale: en-US
 Module Name: FabricTools
-ms.date: 07/18/2025
+ms.date: 04/01/2026
 PlatyPS schema version: 2024-05-01
 title: Get-FabricDatasetRefreshes
 ---
@@ -24,8 +24,6 @@ Get-FabricDatasetRefreshes [-DatasetID] <guid> [-workspaceId] <guid> [<CommonPar
 ```
 
 ## ALIASES
-
-Get-FabDatasetRefreshes
 
 ## DESCRIPTION
 
@@ -110,12 +108,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-Alias: Get-PowerBIDatasetRefreshes, Get-FabDatasetRefreshes
-
 Author: Ioana Bouariu
 
 
-Define aliases for the function for flexibility.
+Define a mandatory parameter for the dataset ID.
 
 ## RELATED LINKS
 

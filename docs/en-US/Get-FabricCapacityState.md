@@ -4,7 +4,7 @@ external help file: FabricTools-Help.xml
 HelpUri: ''
 Locale: en-US
 Module Name: FabricTools
-ms.date: 07/18/2025
+ms.date: 04/01/2026
 PlatyPS schema version: 2024-05-01
 title: Get-FabricCapacityState
 ---
@@ -20,13 +20,11 @@ Retrieves the state of a specific capacity.
 ### __AllParameterSets
 
 ```
-Get-FabricCapacityState [-subscriptionID] <guid> [-resourcegroup] <string> [-capacity] <string>
+Get-FabricCapacityState [-SubscriptionID] <guid> [-ResourceGroup] <string> [-capacity] <string>
  [<CommonParameters>]
 ```
 
 ## ALIASES
-
-Get-FabCapacityState
 
 ## DESCRIPTION
 
@@ -40,7 +38,7 @@ It supports multiple aliases for flexibility.
 This example retrieves the state of a specific capacity given the subscription ID, resource group, and capacity.
 
 ```powershell
-Get-FabricCapacityState -subscriptionID "your-subscription-id" -resourcegroupID "your-resource-group" -capacityID "your-capacity"
+Get-FabricCapacityState -SubscriptionID "your-subscription-id" -ResourceGroup "your-resource-group" -Capacity "your-capacity"
 ```
 
 ## PARAMETERS
@@ -68,7 +66,7 @@ AcceptedValues: []
 HelpMessage: ''
 ```
 
-### -resourcegroup
+### -ResourceGroup
 
 The resource group.
 This is a mandatory parameter.
@@ -91,7 +89,7 @@ AcceptedValues: []
 HelpMessage: ''
 ```
 
-### -subscriptionID
+### -SubscriptionID
 
 The ID of the subscription.
 This is a mandatory parameter.

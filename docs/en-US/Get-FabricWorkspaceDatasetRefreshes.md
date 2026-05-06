@@ -4,7 +4,7 @@ external help file: FabricTools-Help.xml
 HelpUri: ''
 Locale: en-US
 Module Name: FabricTools
-ms.date: 07/18/2025
+ms.date: 04/01/2026
 PlatyPS schema version: 2024-05-01
 title: Get-FabricWorkspaceDatasetRefreshes
 ---
@@ -24,8 +24,6 @@ Get-FabricWorkspaceDatasetRefreshes [-WorkspaceID] <guid> [<CommonParameters>]
 ```
 
 ## ALIASES
-
-Get-FabWorkspaceDatasetRefreshes
 
 ## DESCRIPTION
 
@@ -53,7 +51,8 @@ This is a mandatory parameter.
 Type: System.Guid
 DefaultValue: ''
 SupportsWildcards: false
-Aliases: []
+Aliases:
+- Id
 ParameterSets:
 - Name: (All)
   Position: 0

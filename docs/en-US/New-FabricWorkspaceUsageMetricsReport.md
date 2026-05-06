@@ -4,7 +4,7 @@ external help file: FabricTools-Help.xml
 HelpUri: ''
 Locale: en-US
 Module Name: FabricTools
-ms.date: 07/18/2025
+ms.date: 04/01/2026
 PlatyPS schema version: 2024-05-01
 title: New-FabricWorkspaceUsageMetricsReport
 ---
@@ -25,8 +25,6 @@ New-FabricWorkspaceUsageMetricsReport [-WorkspaceId] <guid> [-WhatIf] [-Confirm]
 ```
 
 ## ALIASES
-
-New-FabWorkspaceUsageMetricsReport
 
 ## DESCRIPTION
 
@@ -69,7 +67,7 @@ HelpMessage: ''
 
 ### -WhatIf
 
-Tells PowerShell to run the command in a mode that only reports what would happen, but not actually let the command run or make changes.
+Runs the command in a mode that only reports what would happen without performing the actions.
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
@@ -98,7 +96,8 @@ This is a mandatory parameter.
 Type: System.Guid
 DefaultValue: ''
 SupportsWildcards: false
-Aliases: []
+Aliases:
+- Id
 ParameterSets:
 - Name: (All)
   Position: 0

@@ -4,7 +4,7 @@ external help file: FabricTools-Help.xml
 HelpUri: ''
 Locale: en-US
 Module Name: FabricTools
-ms.date: 07/18/2025
+ms.date: 04/01/2026
 PlatyPS schema version: 2024-05-01
 title: Get-FabricWorkspaceUser
 ---
@@ -30,8 +30,6 @@ Get-FabricWorkspaceUser -Workspace <Object[]> [<CommonParameters>]
 ```
 
 ## ALIASES
-
-Get-FabricWorkspaceUsers Get-FabWorkspaceUsers
 
 ## DESCRIPTION
 
@@ -117,7 +115,8 @@ This is a mandatory parameter if Workspace is not provided.
 Type: System.Guid
 DefaultValue: ''
 SupportsWildcards: false
-Aliases: []
+Aliases:
+- Id
 ParameterSets:
 - Name: WorkspaceId
   Position: Named

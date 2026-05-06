@@ -5,7 +5,7 @@ HelpInfoUri: https://www.github.com/dataplat/FabricTools
 Locale: en-US
 Module Guid: f2a0f9e6-fab6-41fc-9e1c-0c94ff38f794
 Module Name: FabricTools
-ms.date: 07/18/2025
+ms.date: 04/08/2026
 PlatyPS schema version: 2024-05-01
 title: FabricTools Module
 ---
@@ -38,7 +38,7 @@ Assigns workspaces to a domain based on principal IDs in Microsoft Fabric.
 
 Bulk assigns roles to principals for workspaces in a Fabric domain.
 
-### [Add-FabricWorkspaceCapacityAssignment](Add-FabricWorkspaceCapacityAssignment.md)
+### [Add-FabricWorkspaceCapacity](Add-FabricWorkspaceCapacity.md)
 
 Assigns a Fabric workspace to a specified capacity.
 
@@ -88,7 +88,7 @@ Retrieves capacity details from a specified Microsoft Fabric workspace.
 
 ### [Get-FabricCapacityRefreshables](Get-FabricCapacityRefreshables.md)
 
-Retrieves the top refreshable capacities for the tenant.
+Returns a list of refreshables for all capacities that the user has access to.
 
 ### [Get-FabricCapacitySkus](Get-FabricCapacitySkus.md)
 
@@ -138,9 +138,17 @@ Retrieves datamarts from a specified workspace.
 
 Retrieves data pipelines from a specified Microsoft Fabric workspace.
 
+### [Get-FabricDataset](Get-FabricDataset.md)
+
+Retrieves one or more Power BI datasets from My Workspace or a specific workspace.
+
 ### [Get-FabricDatasetRefreshes](Get-FabricDatasetRefreshes.md)
 
 Retrieves the refresh history of a specified dataset in a PowerBI workspace.
+
+### [Get-FabricDatasetRefreshHistory](Get-FabricDatasetRefreshHistory.md)
+
+Retrieves the refresh history of a Power BI dataset.
 
 ### [Get-FabricDebugInfo](Get-FabricDebugInfo.md)
 
@@ -302,10 +310,6 @@ Retrieves the definition of a notebook from a specific workspace in Microsoft Fa
 
 Retrieves paginated report details from a specified Microsoft Fabric workspace.
 
-### [Get-FabricRecoveryPoint](Get-FabricRecoveryPoint.md)
-
-Get a list of Fabric recovery points.
-
 ### [Get-FabricReflex](Get-FabricReflex.md)
 
 Retrieves Reflex details from a specified Microsoft Fabric workspace.
@@ -394,10 +398,6 @@ Retrieves workspace usage metrics data.
 
 Retrieves the user(s) of a workspace.
 
-### [Get-Sha256](Get-Sha256.md)
-
-Calculates the SHA256 hash of a string.
-
 ### [Import-FabricEnvironmentStagingLibrary](Import-FabricEnvironmentStagingLibrary.md)
 
 Uploads a library to the staging environment in a Microsoft Fabric workspace.
@@ -406,14 +406,9 @@ Uploads a library to the staging environment in a Microsoft Fabric workspace.
 
 Imports items using the Power BI Project format (PBIP) into a Fabric workspace from a specified file system source.
 
-### [Invoke-FabricAPIRequest_duplicate](Invoke-FabricAPIRequest_duplicate.md)
-
-Sends an HTTP request to a Fabric API endpoint and retrieves the response.
-Takes care of: authentication, 429 throttling, Long-Running-Operation (LRO) response
-
 ### [Invoke-FabricDatasetRefresh](Invoke-FabricDatasetRefresh.md)
 
-This function invokes a refresh of a PowerBI dataset
+Triggers a refresh of a Power BI dataset.
 
 ### [Invoke-FabricKQLCommand](Invoke-FabricKQLCommand.md)
 
@@ -421,12 +416,7 @@ Executes a KQL command in a Kusto Database.
 
 ### [Invoke-FabricRestMethod](Invoke-FabricRestMethod.md)
 
-Sends an HTTP request to a Fabric API endpoint and retrieves the response.
-
-### [Invoke-FabricRestMethodExtended](Invoke-FabricRestMethodExtended.md)
-
-Sends an HTTP request to a Fabric API endpoint and retrieves the response.
-Takes care of: authentication, 429 throttling, Long-Running-Operation (LRO) response
+Sends an HTTP request to a Fabric or Power BI API endpoint and retrieve the response.
 
 ### [New-FabricCopyJob](New-FabricCopyJob.md)
 
@@ -488,14 +478,6 @@ Creates a new ML Model in a specified Microsoft Fabric workspace.
 
 Creates a new notebook in a specified Microsoft Fabric workspace.
 
-### [New-FabricNotebookNEW](New-FabricNotebookNEW.md)
-
-Creates a new notebook in a specified Microsoft Fabric workspace.
-
-### [New-FabricRecoveryPoint](New-FabricRecoveryPoint.md)
-
-Create a recovery point for a Fabric data warehouse
-
 ### [New-FabricReflex](New-FabricReflex.md)
 
 Creates a new Reflex in a specified Microsoft Fabric workspace.
@@ -535,10 +517,6 @@ Retrieves the workspace usage metrics dataset ID.
 ### [Publish-FabricEnvironment](Publish-FabricEnvironment.md)
 
 Publishes a staging environment in a specified Microsoft Fabric workspace.
-
-### [Register-FabricWorkspaceToCapacity](Register-FabricWorkspaceToCapacity.md)
-
-Sets a PowerBI workspace to a capacity.
 
 ### [Remove-FabricCopyJob](Remove-FabricCopyJob.md)
 
@@ -616,10 +594,6 @@ Removes an ML Model from a specified Microsoft Fabric workspace.
 
 Deletes an Notebook from a specified workspace in Microsoft Fabric.
 
-### [Remove-FabricRecoveryPoint](Remove-FabricRecoveryPoint.md)
-
-Remove a selected Fabric Recovery Point.
-
 ### [Remove-FabricReflex](Remove-FabricReflex.md)
 
 Removes an Reflex from a specified Microsoft Fabric workspace.
@@ -652,7 +626,7 @@ Removes a warehouse from a specified Microsoft Fabric workspace.
 
 Deletes an existing Fabric workspace by its workspace ID.
 
-### [Remove-FabricWorkspaceCapacityAssignment](Remove-FabricWorkspaceCapacityAssignment.md)
+### [Remove-FabricWorkspaceCapacity](Remove-FabricWorkspaceCapacity.md)
 
 Unassigns a Fabric workspace from its capacity.
 
@@ -668,10 +642,6 @@ Deprovisions the Managed Identity for a specified Fabric workspace.
 
 Removes a role assignment from a Fabric workspace.
 
-### [Restore-FabricRecoveryPoint](Restore-FabricRecoveryPoint.md)
-
-Restore a Fabric data warehouse to a specified restore pont.
-
 ### [Resume-FabricCapacity](Resume-FabricCapacity.md)
 
 Resumes a capacity.
@@ -683,10 +653,6 @@ Removes a tenant setting override from a specific capacity in the Fabric tenant.
 ### [Revoke-FabricExternalDataShares](Revoke-FabricExternalDataShares.md)
 
 Retrieves External Data Shares details from a specified Microsoft Fabric.
-
-### [Set-FabricConfig](Set-FabricConfig.md)
-
-Register the configuration for use with all functions in the FabricTools module.
 
 ### [Start-FabricDeploymentPipelineStage](Start-FabricDeploymentPipelineStage.md)
 
@@ -716,9 +682,9 @@ Stops the mirroring of a specified mirrored database in a given workspace.
 
 Suspends a capacity.
 
-### [Unregister-FabricWorkspaceToCapacity](Unregister-FabricWorkspaceToCapacity.md)
+### [Update-FabricCapacity](Update-FabricCapacity.md)
 
-Unregisters a workspace from a capacity.
+Creates or updates a Microsoft Fabric capacity.
 
 ### [Update-FabricCapacityTenantSettingOverrides](Update-FabricCapacityTenantSettingOverrides.md)
 

@@ -1,0 +1,99 @@
+function Update-FabricReflex
+{
+<#
+.SYNOPSIS
+    Updates an existing Reflex in a specified Microsoft Fabric workspace.
+
+.DESCRIPTION
+    This function sends a PATCH request to the Microsoft Fabric API to update an existing Reflex
+    in the specified workspace. It supports optional parameters for Reflex description.
+
+.PARAMETER WorkspaceId
+    The unique identifier of the workspace where the Reflex exists. This parameter is optional.
+
+.PARAMETER ReflexId
+    The unique identifier of the Reflex to be updated. This parameter is mandatory.
+
+.PARAMETER ReflexName
+    The new name of the Reflex. This parameter is mandatory.
+
+.PARAMETER ReflexDescription
+    An optional new description for the Reflex.
+
+.EXAMPLE
+    This example updates the Reflex with ID "Reflex-67890" in the workspace with ID "workspace-12345" with a new name and description.
+
+    ```powershell
+    Update-FabricReflex -WorkspaceId "workspace-12345" -ReflexId "Reflex-67890" -ReflexName "Updated Reflex" -ReflexDescription "Updated description"
+    ```
+
+.NOTES
+    - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
+    - Calls `Confirm-TokenState` to ensure token validity before making the API request.
+
+    Author: Tiago Balabuch, Kamil Nowinski
+
+#>
+    [CmdletBinding(SupportsShouldProcess)]
+    param (
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [guid]$WorkspaceId,
+
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [guid]$ReflexId,
+
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [string]$ReflexName,
+
+        [Parameter(Mandatory = $false)]
+        [ValidateNotNullOrEmpty()]
+        [string]$ReflexDescription
+    )
+    try
+    {
+        # Ensure token validity
+        Confirm-TokenState
+
+        # Construct the API URL
+        $apiEndpointUrl = "{0}/workspaces/{1}/reflexes/{2}" -f $FabricConfig.BaseUrl, $WorkspaceId, $ReflexId
+        Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
+
+        # Construct the request body
+        $body = @{
+            displayName = $ReflexName
+        }
+
+        if ($ReflexDescription)
+        {
+            $body.description = $ReflexDescription
+        }
+
+        # Convert the body to JSON
+        $bodyJson = $body | ConvertTo-Json
+        Write-Message -Message "Request Body: $bodyJson" -Level Debug
+
+        if ($PSCmdlet.ShouldProcess("Reflex", "Update"))
+        {
+            $apiParams = @{
+                Uri            = $apiEndpointUrl
+                Method         = 'Patch'
+                Body           = $bodyJson
+                TypeName       = 'Reflex'
+                ObjectIdOrName = $ReflexName
+                HandleResponse = $true
+            }
+            $response = Invoke-FabricRestMethod @apiParams
+            Write-Message -Message "Reflex '$ReflexName' updated successfully!" -Level Info
+            $response
+        }
+    }
+    catch
+    {
+        # Handle and log errors
+        $errorDetails = $_.Exception.Message
+        Write-Message -Message "Failed to update Reflex. Error: $errorDetails" -Level Error
+    }
+}

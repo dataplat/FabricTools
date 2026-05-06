@@ -1,47 +1,84 @@
 #Requires -Module @{ ModuleName="Pester"; ModuleVersion="5.0"}
-param(
-    $ModuleName = "FabricTools",
-    $expectedParams = @(
-        "WorkspaceId"
-        "KQLDatabaseId"
-        "Verbose"
-        "Debug"
-        "ErrorAction"
-        "WarningAction"
-        "InformationAction"
-        "ProgressAction"
-        "ErrorVariable"
-        "WarningVariable"
-        "InformationVariable"
-        "OutVariable"
-        "OutBuffer"
-        "PipelineVariable"
-        "Confirm"
-        "WhatIf"
-    )
-)
+
+BeforeDiscovery {
+    $ModuleName = 'FabricTools'
+    $CommandName = 'Remove-FabricKQLDatabase'
+}
+
+BeforeAll {
+    $ModuleName = 'FabricTools'
+    $CommandName = 'Remove-FabricKQLDatabase'
+
+    # Set default parameters for module scope
+    $PSDefaultParameterValues = @{
+        "Mock:ModuleName"          = $ModuleName
+        "InModuleScope:ModuleName" = $ModuleName
+        "Should:ModuleName"        = $ModuleName
+    }
+}
 
 Describe "Remove-FabricKQLDatabase" -Tag "UnitTests" {
 
-    BeforeDiscovery {
-        $command = Get-Command -Name Remove-FabricKQLDatabase
-        $expected = $expectedParams
+    Context "Command definition" {
+        BeforeAll {
+            $command = Get-Command -Name $CommandName -Module $ModuleName
+        }
+
+        It "Command <CommandName> should exist" {
+            $command | Should -Not -BeNullOrEmpty
+        }
+
+        It "Command <CommandName> should have WorkspaceId parameter" {
+            $command | Should -HaveParameter 'WorkspaceId' -Type [guid]
+        }
+
+        It "Command <CommandName> should have KQLDatabaseId parameter" {
+            $command | Should -HaveParameter 'KQLDatabaseId' -Type [guid]
+        }
+
+        It "Command <CommandName> should support ShouldProcess" {
+            $command.Parameters.ContainsKey('Confirm') | Should -BeTrue
+            $command.Parameters.ContainsKey('WhatIf') | Should -BeTrue
+        }
     }
 
-    Context "Parameter validation" {
+    Context "Remove KQL Database successfully" {
         BeforeAll {
-            $command = Get-Command -Name Remove-FabricKQLDatabase
-            $expected = $expectedParams
+            Mock -CommandName Confirm-TokenState -MockWith { }
+            Mock -CommandName Write-Message -MockWith { }
+            Mock -CommandName Invoke-FabricRestMethod -MockWith {
+                InModuleScope -ModuleName 'FabricTools' {
+                    $script:statusCode = 200
+                }
+                return $null
+            }
         }
 
-        It "Has parameter: <_>" -ForEach $expected {
-            $command | Should -HaveParameter $PSItem
+        It "Should remove a KQL database" {
+            { Remove-FabricKQLDatabase -WorkspaceId "00000000-0000-0000-0000-000000000000" -KQLDatabaseId "00000000-0000-0000-0000-000000000001" -Confirm:$false } | Should -Not -Throw
+
+            Should -Invoke -CommandName Invoke-FabricRestMethod -Times 1 -Exactly -ParameterFilter {
+                $Uri -like "*workspaces/*/kqlDatabases/*" -and
+                $Method -eq "Delete"
+            }
+        }
+    }
+
+    Context "Error handling" {
+        BeforeAll {
+            Mock -CommandName Confirm-TokenState -MockWith { }
+            Mock -CommandName Write-Message -MockWith { }
+            Mock -CommandName Invoke-FabricRestMethod -MockWith {
+                throw "API Error"
+            }
         }
 
-        It "Should have exactly the number of expected parameters $($expected.Count)" {
-            $hasparms = $command.Parameters.Values.Name
-            #$hasparms.Count | Should -BeExactly $expected.Count
-            Compare-Object -ReferenceObject $expected -DifferenceObject $hasparms | Should -BeNullOrEmpty
+        It "Should handle error gracefully and write error message" {
+            { Remove-FabricKQLDatabase -WorkspaceId "00000000-0000-0000-0000-000000000000" -KQLDatabaseId "00000000-0000-0000-0000-000000000001" -Confirm:$false } | Should -Not -Throw
+
+            Should -Invoke -CommandName Write-Message -ParameterFilter {
+                $Level -eq 'Error'
+            }
         }
     }
 }

@@ -1,10 +1,10 @@
-$path = ".\source\public"
+$path = ".\src\public"
 $op = Get-ChildItem -Path $path -Recurse -Filter *.ps1 | Select-Object -ExpandProperty Name | Sort-Object
 $op | Out-File '.\output\FunctionList-main-public.txt'
 
 # Author Table
 # This script generates a table of PowerShell script authors from the specified directory.
-$path = ".\source\public"
+$path = ".\src\public"
 $op = Get-ChildItem -Path $path -Recurse -Filter *.ps1
 $authorTable = @{}
 $op | ForEach-Object {

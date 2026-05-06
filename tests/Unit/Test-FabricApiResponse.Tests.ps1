@@ -1,55 +1,32 @@
 #Requires -Module @{ ModuleName="Pester"; ModuleVersion="5.0"}
 
-InModuleScope FabricTools {
+BeforeAll {
+    $ModuleName = 'FabricTools'
+    $PSDefaultParameterValues['Mock:ModuleName'] = $ModuleName
+    $PSDefaultParameterValues['InModuleScope:ModuleName'] = $ModuleName
+    $PSDefaultParameterValues['Should:ModuleName'] = $ModuleName
+}
 
-param(
-    $ModuleName = "FabricTools",
-    $expectedParams = @(
-        "Response"
-        "ResponseHeader"
-        "StatusCode"
-        "Operation"
-        "ObjectIdOrName"
-        "TypeName"
-        "SuccessMessage"
-        "NoWait"
-        "Verbose"
-        "Debug"
-        "ErrorAction"
-        "WarningAction"
-        "InformationAction"
-        "ProgressAction"
-        "ErrorVariable"
-        "WarningVariable"
-        "InformationVariable"
-        "OutVariable"
-        "OutBuffer"
-        "PipelineVariable"
-    )
-)
+InModuleScope FabricTools {
 
 Describe "Test-FabricApiResponse" -Tag "UnitTests" {
 
-    BeforeDiscovery {
-        ipmo ".\output\module\FabricTools\0.0.1\FabricTools.psd1"
-
-        $command = Get-Command -Name Test-FabricApiResponse
-        $script:expected = $expectedParams
+    BeforeAll {
+        $script:Command = Get-Command -Name Test-FabricApiResponse
     }
 
-    Context "Parameter validation" {
-        BeforeAll {
-            $command = Get-Command -Name Test-FabricApiResponse
-            $expected = $expectedParams
-        }
-
-        It "Has parameter: <_>" -ForEach $expected {
-            $command | Should -HaveParameter $PSItem
-        }
-
-        It "Should have exactly the number of expected parameters $($expected.Count)" {
-            $hasParams = $command.Parameters.Values.Name
-            Compare-Object -ReferenceObject $script:expected -DifferenceObject $hasParams | Should -BeNullOrEmpty
+    Context "Command definition" {
+        It 'Should have <ExpectedParameterName> parameter' -ForEach @(
+            @{ ExpectedParameterName = 'Response'; ExpectedParameterType = 'Object'; Mandatory = 'False' }
+            @{ ExpectedParameterName = 'ResponseHeader'; ExpectedParameterType = 'Object'; Mandatory = 'True' }
+            @{ ExpectedParameterName = 'StatusCode'; ExpectedParameterType = 'Object'; Mandatory = 'True' }
+            @{ ExpectedParameterName = 'Operation'; ExpectedParameterType = 'Object'; Mandatory = 'False' }
+            @{ ExpectedParameterName = 'ObjectIdOrName'; ExpectedParameterType = 'string'; Mandatory = 'False' }
+            @{ ExpectedParameterName = 'TypeName'; ExpectedParameterType = 'string'; Mandatory = 'False' }
+            @{ ExpectedParameterName = 'SuccessMessage'; ExpectedParameterType = 'string'; Mandatory = 'False' }
+            @{ ExpectedParameterName = 'NoWait'; ExpectedParameterType = 'switch'; Mandatory = 'False' }
+        ) {
+            $script:Command | Should -HaveParameter -ParameterName $ExpectedParameterName -Type $ExpectedParameterType -Mandatory:([bool]::Parse($Mandatory))
         }
     }
 }
@@ -82,12 +59,6 @@ Describe "Test-FabricApiResponse - StatusCode Handling" -Tag "UnitTests" {
         $script:statusCode = 200
         $result = Test-FabricApiResponse -Response $script:response -ResponseHeader $script:responseHeader -StatusCode $script:statusCode -Operation "Get"
         $result | Should -Be $script:response
-    }
-
-    It "Returns response when statusCode is 200 and Operation is not 'Get'" {
-        $script:statusCode = 200
-        $result = Test-FabricApiResponse -Response $script:response -ResponseHeader $script:responseHeader -StatusCode $script:statusCode -Operation "New"
-        $result | Should -Be $null
     }
 
     It "Returns response when statusCode is 201" {

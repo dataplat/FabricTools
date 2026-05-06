@@ -5,7 +5,7 @@
     Updates the readme.md file with actual function descriptions from PowerShell function files.
 
 .DESCRIPTION
-    This script scans all PowerShell function files in the source/Public directory and its subdirectories,
+    This script scans all PowerShell function files in the src/Public directory and its subdirectories,
     extracts the .DESCRIPTION from each function's comment-based help, and replaces the placeholders
     in the documentation/readme.md file with the actual descriptions.
 
@@ -13,7 +13,7 @@
     Path to the readme.md file. Defaults to "documentation/readme.md".
 
 .PARAMETER PublicPath
-    Path to the Public directory containing function files. Defaults to "source/Public".
+    Path to the Public directory containing function files. Defaults to "src/Public".
 
 .EXAMPLE
     .\Update-ReadmeDescriptions.ps1
@@ -28,7 +28,7 @@
 
 param(
     [string]$ReadmePath = "documentation/readme.md",
-    [string]$PublicPath = "source/Public",
+    [string]$PublicPath = "src/Public",
     [switch]$Backup = $true
 )
 

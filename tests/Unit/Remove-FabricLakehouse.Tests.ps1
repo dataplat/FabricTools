@@ -1,48 +1,83 @@
 #Requires -Module @{ ModuleName="Pester"; ModuleVersion="5.0"}
-param(
-    $ModuleName = "FabricTools",
-    $expectedParams = @(
-        "WorkspaceId"
-        "LakehouseId"
-        "Verbose"
-        "Debug"
-        "ErrorAction"
-        "WarningAction"
-        "InformationAction"
-        "ProgressAction"
-        "ErrorVariable"
-        "WarningVariable"
-        "InformationVariable"
-        "OutVariable"
-        "OutBuffer"
-        "PipelineVariable"
-        "Confirm"
-        "WhatIf"
 
-    )
-)
+BeforeDiscovery {
+    $CommandName = 'Remove-FabricLakehouse'
+}
+
+BeforeAll {
+    $ModuleName = 'FabricTools'
+    $PSDefaultParameterValues['Mock:ModuleName'] = $ModuleName
+    $PSDefaultParameterValues['InModuleScope:ModuleName'] = $ModuleName
+    $PSDefaultParameterValues['Should:ModuleName'] = $ModuleName
+}
 
 Describe "Remove-FabricLakehouse" -Tag "UnitTests" {
 
-    BeforeDiscovery {
+    BeforeAll {
         $command = Get-Command -Name Remove-FabricLakehouse
-        $expected = $expectedParams
     }
 
-    Context "Parameter validation" {
+    Context 'Command definition' {
+        It 'Should have a command definition' {
+            $command | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Should have the expected parameter: <Name>' -ForEach @(
+            @{ Name = 'WorkspaceId'; Mandatory = $true }
+            @{ Name = 'LakehouseId'; Mandatory = $true }
+        ) {
+            $command | Should -HaveParameter $Name -Mandatory:$Mandatory
+        }
+
+        It 'Should support ShouldProcess' {
+            $command.Parameters.ContainsKey('WhatIf') | Should -BeTrue
+            $command.Parameters.ContainsKey('Confirm') | Should -BeTrue
+        }
+    }
+
+    Context 'When removing lakehouse successfully (200)' {
         BeforeAll {
-            $command = Get-Command -Name Remove-FabricLakehouse
-            $expected = $expectedParams
+            Mock -CommandName Confirm-TokenState -MockWith { }
+            Mock -CommandName Write-Message -MockWith { }
+            Mock -CommandName Invoke-FabricRestMethod -MockWith {
+                InModuleScope -ModuleName 'FabricTools' {
+                    $script:statusCode = 200
+                }
+                return $null
+            }
         }
 
-        It "Has parameter: <_>" -ForEach $expected {
-            $command | Should -HaveParameter $PSItem
+        It 'Should call Invoke-FabricRestMethod with the correct parameters' {
+            $mockWorkspaceId = [guid]::NewGuid()
+            $mockLakehouseId = [guid]::NewGuid()
+
+            Remove-FabricLakehouse -WorkspaceId $mockWorkspaceId -LakehouseId $mockLakehouseId -Confirm:$false
+
+            Should -Invoke -CommandName Invoke-FabricRestMethod -Times 1 -ParameterFilter {
+                $Uri -like "*workspaces/*/lakehouses/*" -and
+                $Method -eq 'Delete'
+            }
+        }
+    }
+
+    Context 'When an exception is thrown' {
+        BeforeAll {
+            Mock -CommandName Confirm-TokenState -MockWith { }
+            Mock -CommandName Write-Message -MockWith { }
+            Mock -CommandName Invoke-FabricRestMethod -MockWith {
+                throw 'API connection failed'
+            }
         }
 
-        It "Should have exactly the number of expected parameters $($expected.Count)" {
-            $hasparms = $command.Parameters.Values.Name
-            #$hasparms.Count | Should -BeExactly $expected.Count
-            Compare-Object -ReferenceObject $expected -DifferenceObject $hasparms | Should -BeNullOrEmpty
+        It 'Should handle exceptions gracefully' {
+            $mockWorkspaceId = [guid]::NewGuid()
+            $mockLakehouseId = [guid]::NewGuid()
+
+            { Remove-FabricLakehouse -WorkspaceId $mockWorkspaceId -LakehouseId $mockLakehouseId -Confirm:$false } | Should -Not -Throw
+
+            Should -Invoke -CommandName Write-Message -ParameterFilter {
+                $Level -eq 'Error' -and $Message -like "*Failed to delete Lakehouse*"
+            }
         }
     }
 }

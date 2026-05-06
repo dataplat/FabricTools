@@ -1,0 +1,57 @@
+function Convert-FromBase64 {
+    <#
+.SYNOPSIS
+    Decodes a Base64-encoded string into its original text representation.
+
+.DESCRIPTION
+    The Convert-FromBase64 function takes a Base64-encoded string as input, decodes it into a byte array,
+    and converts it back into a UTF-8 encoded string. It is useful for reversing Base64 encoding applied
+    to text or other data.
+
+.PARAMETER Base64String
+    The Base64-encoded string that you want to decode.
+
+.EXAMPLE
+    Output: Hello, World!
+
+    ```powershell
+    Convert-FromBase64 -Base64String "SGVsbG8sIFdvcmxkIQ=="
+    ```
+
+.EXAMPLE
+    Output: Some encoded text
+
+    ```powershell
+    $encodedString = "U29tZSBlbmNvZGVkIHRleHQ="
+    Convert-FromBase64 -Base64String $encodedString
+    ```
+
+.NOTES
+This function assumes the Base64 input is a valid UTF-8 encoded string.
+Any decoding errors will throw a descriptive error message.
+
+Author: Tiago Balabuch
+
+#>
+
+    param (
+        [Parameter(Mandatory = $true)]
+        [string]$Base64String
+    )
+
+    try {
+        # Convert the Base64 string to a byte array
+        $bytes = [Convert]::FromBase64String($Base64String)
+
+        # Convert the byte array back to a UTF-8 string
+        $decodedString = [System.Text.Encoding]::UTF8.GetString($bytes)
+
+        # Return the decoded string
+        return $decodedString
+    } catch {
+        # Handle and log errors
+        $errorDetails = $_.Exception.Message
+        Write-Message -Message "An error occurred while decoding from Base64: $errorDetails" -Level Error
+        throw "An error occurred while decoding from Base64: $_"
+    }
+}

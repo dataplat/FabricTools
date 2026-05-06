@@ -1,45 +1,88 @@
 #Requires -Module @{ ModuleName="Pester"; ModuleVersion="5.0"}
-param(
-    $ModuleName = "FabricTools",
-    $expectedParams = @(
-        "Verbose"
-                "Debug"
-                "ErrorAction"
-                "WarningAction"
-                "InformationAction"
-                "ProgressAction"
-                "ErrorVariable"
-                "WarningVariable"
-                "InformationVariable"
-                "OutVariable"
-                "OutBuffer"
-                "PipelineVariable"
-                
-    )
-)
+
+BeforeDiscovery {
+    $CommandName = 'Get-FabricDomainTenantSettingOverrides'
+}
+
+BeforeAll {
+    $ModuleName = 'FabricTools'
+    $PSDefaultParameterValues['Mock:ModuleName'] = $ModuleName
+    $PSDefaultParameterValues['InModuleScope:ModuleName'] = $ModuleName
+    $PSDefaultParameterValues['Should:ModuleName'] = $ModuleName
+}
 
 Describe "Get-FabricDomainTenantSettingOverrides" -Tag "UnitTests" {
 
-    BeforeDiscovery {
+    BeforeAll {
         $command = Get-Command -Name Get-FabricDomainTenantSettingOverrides
-        $expected = $expectedParams
     }
 
-    Context "Parameter validation" {
+    Context 'Command definition' {
+        It 'Should have a command definition' {
+            $command | Should -Not -BeNullOrEmpty
+        }
+    }
+
+    Context 'When getting domain tenant setting overrides successfully' {
         BeforeAll {
-            $command = Get-Command -Name Get-FabricDomainTenantSettingOverrides
-            $expected = $expectedParams
+            Mock -CommandName Confirm-TokenState -MockWith { }
+            Mock -CommandName Write-Message -MockWith { }
+            Mock -CommandName Invoke-FabricRestMethod -MockWith {
+                return @(
+                    [pscustomobject]@{ id = [guid]::NewGuid(); settingName = 'Setting1' }
+                    [pscustomobject]@{ id = [guid]::NewGuid(); settingName = 'Setting2' }
+                )
+            }
         }
 
-        It "Has parameter: <_>" -ForEach $expected {
-            $command | Should -HaveParameter $PSItem
+        It 'Should call Invoke-FabricRestMethod with the correct parameters' {
+            Get-FabricDomainTenantSettingOverrides
+
+            Should -Invoke -CommandName Invoke-FabricRestMethod -Times 1 -ParameterFilter {
+                $Uri -like "*admin/domains/delegatedTenantSettingOverrides*" -and
+                $Method -eq 'Get'
+            }
         }
 
-        It "Should have exactly the number of expected parameters $($expected.Count)" {
-            $hasparms = $command.Parameters.Values.Name
-            #$hasparms.Count | Should -BeExactly $expected.Count
-            Compare-Object -ReferenceObject $expected -DifferenceObject $hasparms | Should -BeNullOrEmpty
+        It 'Should return the list of overrides' {
+            $result = Get-FabricDomainTenantSettingOverrides
+
+            $result | Should -Not -BeNullOrEmpty
+            $result.Count | Should -Be 2
+        }
+    }
+
+    Context 'When no overrides are found' {
+        BeforeAll {
+            Mock -CommandName Confirm-TokenState -MockWith { }
+            Mock -CommandName Write-Message -MockWith { }
+            Mock -CommandName Invoke-FabricRestMethod -MockWith {
+                return $null
+            }
+        }
+
+        It 'Should return null when no overrides found' {
+            $result = Get-FabricDomainTenantSettingOverrides
+
+            $result | Should -BeNullOrEmpty
+        }
+    }
+
+    Context 'When an exception is thrown' {
+        BeforeAll {
+            Mock -CommandName Confirm-TokenState -MockWith { }
+            Mock -CommandName Write-Message -MockWith { }
+            Mock -CommandName Invoke-FabricRestMethod -MockWith {
+                throw 'API connection failed'
+            }
+        }
+
+        It 'Should handle exceptions gracefully' {
+            { Get-FabricDomainTenantSettingOverrides } | Should -Not -Throw
+
+            Should -Invoke -CommandName Write-Message -ParameterFilter {
+                $Level -eq 'Error' -and $Message -like "*Error retrieving domain tenant setting overrides*"
+            }
         }
     }
 }
-

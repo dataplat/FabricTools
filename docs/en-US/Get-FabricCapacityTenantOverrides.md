@@ -4,7 +4,7 @@ external help file: FabricTools-Help.xml
 HelpUri: ''
 Locale: en-US
 Module Name: FabricTools
-ms.date: 07/18/2025
+ms.date: 04/01/2026
 PlatyPS schema version: 2024-05-01
 title: Get-FabricCapacityTenantOverrides
 ---
@@ -24,8 +24,6 @@ Get-FabricCapacityTenantOverrides
 ```
 
 ## ALIASES
-
-Get-FabCapacityTenantOverrides
 
 ## DESCRIPTION
 

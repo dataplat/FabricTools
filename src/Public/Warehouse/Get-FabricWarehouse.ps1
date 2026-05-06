@@ -1,0 +1,102 @@
+function Get-FabricWarehouse {
+    <#
+    .SYNOPSIS
+        Retrieves warehouse details from a specified Microsoft Fabric workspace.
+
+    .DESCRIPTION
+        This function retrieves warehouse details from a specified workspace using either the provided WarehouseId or WarehouseName.
+        It handles token validation, constructs the API URL, makes the API request, and processes the response.
+
+    .PARAMETER WorkspaceId
+        The unique identifier of the workspace where the warehouse exists. This parameter is mandatory.
+
+    .PARAMETER WarehouseId
+        The unique identifier of the warehouse to retrieve. This parameter is optional.
+
+    .PARAMETER WarehouseName
+        The name of the warehouse to retrieve. This parameter is optional.
+
+    .EXAMPLE
+        This example retrieves the warehouse details for the warehouse with ID "warehouse-67890" in the workspace with ID "workspace-12345".
+
+        ```powershell
+        Get-FabricWarehouse -WorkspaceId "workspace-12345" -WarehouseId "warehouse-67890"
+        ```
+
+    .EXAMPLE
+        This example retrieves the warehouse details for the warehouse named "My Warehouse" in the workspace with ID "workspace-12345".
+
+        ```powershell
+        Get-FabricWarehouse -WorkspaceId "workspace-12345" -WarehouseName "My Warehouse"
+        ```
+
+    .NOTES
+        - Calls `Confirm-TokenState` to ensure token validity before making the API request.
+
+        Author: Tiago Balabuch, Kamil Nowinski
+    #>
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [guid]$WorkspaceId,
+
+        [Parameter(Mandatory = $false)]
+        [ValidateNotNullOrEmpty()]
+        [guid]$WarehouseId,
+
+        [Parameter(Mandatory = $false)]
+        [ValidateNotNullOrEmpty()]
+        [string]$WarehouseName
+    )
+
+    try {
+        # Handle ambiguous input
+        if ($WarehouseId -and $WarehouseName) {
+            Write-Message -Message "Both 'WarehouseId' and 'WarehouseName' were provided. Please specify only one." -Level Error
+            return $null
+        }
+
+        # Ensure token validity
+        Confirm-TokenState
+        # Initialize variables
+
+
+        # Loop to retrieve all capacities with continuation token
+        $apiEndpointUrl = "workspaces/{0}/warehouses" -f $WorkspaceId
+
+        $apiParams = @{
+            Uri            = $apiEndpointUrl
+            Method         = 'Get'
+            HandleResponse = $true
+            ExtractValue   = 'True'
+            TypeName       = 'Warehouse'
+        }
+        $Warehouses = @(Invoke-FabricRestMethod @apiParams)
+
+        # Filter results based on provided parameters
+        $Warehouse = if ($WarehouseId) {
+            $Warehouses | Where-Object { $_.Id -eq $WarehouseId }
+        } elseif ($WarehouseName) {
+            $Warehouses | Where-Object { $_.DisplayName -eq $WarehouseName }
+        } else {
+            # Return all Warehouses if no filter is provided
+            Write-Message -Message "No filter provided. Returning all Warehouses." -Level Debug
+            $Warehouses
+        }
+
+        # Handle results
+        if ($Warehouse) {
+            Write-Message -Message "Warehouse found matching the specified criteria." -Level Debug
+            return $Warehouse
+        } else {
+            Write-Message -Message "No Warehouse found matching the provided criteria." -Level Warning
+            return $null
+        }
+    } catch {
+        # Capture and log error details
+        $errorDetails = $_.Exception.Message
+        Write-Message -Message "Failed to retrieve Warehouse. Error: $errorDetails" -Level Error
+    }
+
+}

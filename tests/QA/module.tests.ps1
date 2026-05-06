@@ -91,9 +91,7 @@ BeforeDiscovery {
                 'Confirm-TokenState',
                 'Get-FabricUri',
                 'Get-FileDefinitionParts',
-                'Set-FabConfig',
-                'Write-Message',
-                'Invoke-FabricAPIRequest_duplicate'
+                'Write-Message'
             )
         })
     {
@@ -258,7 +256,7 @@ Describe "Data Types for functions" -Tag "ParameterTypes" {
 
 BeforeDiscovery {
     # Must use the imported module to build test cases.
-    $path = ".\source\public"
+    $path = ".\src\public"
     $allFunctionFiles = Get-ChildItem -Path $path -Recurse -Filter "*.ps1"
 
     # Build test cases.

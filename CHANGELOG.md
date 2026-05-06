@@ -7,13 +7,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Added `Get-FabricDataset` cmdlet to retrieve Power BI datasets from My Workspace or a specific workspace, with optional filtering by `DatasetId` or `DatasetName` (`WorkspaceId` parameter, alias `GroupId`)
+- Added `Get-FabricDatasetRefreshHistory` cmdlet to retrieve the refresh history of a Power BI dataset, with optional `WorkspaceId` (alias `GroupId`) and `Top` parameters
+- Added `Invoke-FabricDatasetRefresh` cmdlet (in `Dataset` folder) to trigger on-demand dataset refreshes, supporting both standard and enhanced refresh parameters (`Type`, `CommitMode`, `MaxParallelism`, `RetryCount`, `Timeout`, `EffectiveDate`, `ApplyRefreshPolicy`, `Objects`)
+- Updated unit tests for `Invoke-FabricDatasetRefresh` to cover the new parameter set, alias, ShouldProcess, body construction, and error handling
+
 ### Changed
 
+- Renamed `Add-FabricWorkspaceCapacityAssignment` to `Add-FabricWorkspaceCapacity` (issue #42)
+- Renamed `Remove-FabricWorkspaceCapacityAssignment` to `Remove-FabricWorkspaceCapacity` (issue #42)
+- Refactored `Invoke-FabricRestMethod` call in bunch of cmdlets to use hash splatting instead of backtick line continuation (issue #87)
+- Refactored cmdlets to use `HandleResponse = $true` on `Invoke-FabricRestMethod`, removing manual status-code switches, LRO polling, and pagination loops from each cmdlet
+- `Invoke-FabricRestMethod` handles response by default
+
 ### Fixed
+
+- `Connect-FabricAccount` now automatically re-authenticates when MFA or conditional access has expired, without requiring the `-Reset` switch
+- Made `ReportPathDefinition` parameter optional in `New-FabricReport` (issue #43)
+- Fixed PowerShell 5.1 compatibility by replacing ternary operators with if-else statements (issue #166)
+- Added PSFramework as a required module dependency to prevent "not recognized" errors on fresh environments (issue #167)
+- Added `Id` parameter alias to Workspace functions that take `WorkspaceId` to support compatibility with API field names and issue #158.
+- The module is compatible with PS 5.1 (issue #166)
 
 ### Deprecated
 
 ### Removed
+
+- Removed `Invoke-FabricAPIRequest_duplicate` and `Invoke-FabricRestMethodExtended`
+- Removed all legacy FAB and PowerBI aliases from functions to clean up the module and remove references to old PowerBI-focused codebase (issue #47).
+- Removed `Register-FabricWorkspaceToCapacity` and `Unregister-FabricWorkspaceToCapacity`, as they are no longer needed (issue #42)
+- Removed abandoned `New-FabricNotebookNEW` file (incomplete/broken duplicate of `New-FabricNotebook`)
 
 ### Security
 
@@ -24,6 +47,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added GitHub Codespaces and DevContainerSupport (Non Functional Change)
 - Added function `Update-FabricCapacity`
 - Added Error Detailed Info in `Test-FabricApiResponse` (Debug mode) when `response.error` exists
+- Enhanced Pester unit tests with coverage for many public functions including:
+  - Domain workspace assignment functions (`Add-FabricDomainWorkspaceAssignmentByCapacity`, `Add-FabricDomainWorkspaceAssignmentById`, `Add-FabricDomainWorkspaceAssignmentByPrincipal`, `Add-FabricDomainWorkspaceRoleAssignment`)
+  - Workspace functions (`Add-FabricWorkspaceCapacityAssignment`, `Add-FabricWorkspaceIdentity`, `Add-FabricWorkspaceRoleAssignment`, `Add-FabricWorkspaceToStage`, `Update-FabricWorkspace`, `Update-FabricWorkspaceRoleAssignment`)
+  - Utility functions (`Convert-FromBase64`, `Convert-ToBase64`, `Connect-FabricAccount`, `Export-FabricItem`)
+  - Update functions for various Fabric items (Notebooks, Reports, Semantic Models, Warehouses, ML models, etc.)
+  - Tests now include scenarios for successful API calls, long-running operations, error handling, and exception handling
+- Increased code coverage threshold from 0.1% to 50%
 
 ### Changed
 
@@ -70,7 +100,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Remove-FabricSQLDatabase` uses unified function to handle API results
 - Updated the `WorkspaceId`, `CapacitiesIds`,`CapacityId`,`CopyJobId`,`datamartId`,`DataPipelineId`,`DataWarehouseGUID`,`DomainId`,`EnvironmentId`,`EventhouseId`,`EventstreamId`,`ExternalDataShareId`,`ItemId`,`KQLDashboardId`,`KQLDatabaseId`,`KQLQuerysetId`,`LakehouseId`,`MirroredDatabaseId`,`MirroredWarehouseId`,`MLExperimentId`,`MLModelId`,`NotebookId`,`operationId`,`PaginatedReportId`,`ParentDomainId`,`parentEventhouseId`,`PrincipalId`,`ReflexId`,`ReportId`,`SemanticModelId`,`SparkCustomPoolId`,`SparkJobDefinitionId`,`SQLDatabaseId`,`SQLEndpointId`,`subscriptionID`,`UserId`,`WarehouseId`,`WorkspaceGUID`,`WorkspaceId`,`WorkspaceIds`, and `WorkspaceRoleAssignmentId` parameters to the datatype GUID [#125](https://github.com/dataplat/FabricTools/issues/125)
 - Internal function `Invoke-FabricRestMethod`: (#143)
-  - handles API response, no need to use `Test-FabricApiResponse` from parent public function 
+  - handles API response, no need to use `Test-FabricApiResponse` from parent public function
   - handles pagination automatically (when `-HandleResponse` is provided)
 - All Deployment Pipeline functions raise an error when an exception is caught. Used splatting for params.
 - Refactored SQL Database functions to use enhanced capability in `Invoke-FabricRestMethod`. Used splatting for params.
@@ -140,7 +170,7 @@ For a full list of changes and details, please see the commit history.
 - Removed unnecessary or duplicate functions (e.g., `Get-AllFabricDatasetRefreshes`, `Get-AllFabricCapacities`).
 - Removed obsolete scripts and commented-out configuration paths.
 - Removed `Invoke-FabricAPIRequest` and replaced it by `Invoke-FabricRestMethodExtended`
-- Removed `Confirm-FabricAuthToken` 
+- Removed `Confirm-FabricAuthToken`
 - Renamed `Test-TokenExpired` to `Confirm-TokenState` and extended it using `EnableTokenRefresh` Feature Flag
 - Removed `Set-FabricApiHeaders` and merged the entire logic to `Connect-FabricAccount`
 
