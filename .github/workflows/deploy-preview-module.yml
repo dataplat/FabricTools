@@ -1,15 +1,5 @@
 on:
-  push:
-    branches:
-      - develop
-    paths-ignore:
-      - CHANGELOG.md
-      - .vscode/**
-      - .github/**
-      - images/**
-      - tests/**
-      - '**.md'
-      - '**.yml'
+  workflow_dispatch:
 env:
   buildFolderName: output
   buildArtifactName: output
@@ -26,14 +16,14 @@ permissions:
   checks: write # to allow the workflow to create checks
   statuses: write # to allow the workflow to create statuses
 
-# This workflow is triggered on push to the develop branch and deploys the module to the PowerShell Gallery as a preview version.
+# This workflow is triggered manually and deploys the module to the PowerShell Gallery as a preview version.
 jobs:
   Build_Stage_Package_Module:
     name: Package Module
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Code
-      uses: actions/checkout@v5
+      uses: actions/checkout@v4
       with:
         ref: ${{ github.head_ref }}   # checkout the correct branch name
         fetch-depth: 0
@@ -64,7 +54,7 @@ jobs:
     if: ${{ success() && (github.ref == 'refs/heads/develop' || startsWith(github.ref, 'refs/tags/')) }}
     steps:
     - name: Checkout Code
-      uses: actions/checkout@v5
+      uses: actions/checkout@v4
       with:
         ref: ${{ github.head_ref }}   # checkout the correct branch name
         fetch-depth: 0

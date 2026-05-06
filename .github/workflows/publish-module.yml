@@ -29,11 +29,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Code
-      uses: actions/checkout@v5
+      uses: actions/checkout@v4
       with:
         ref: ${{ github.head_ref }}   # checkout the triggered ref (branch or tag)
         fetch-depth: 0
         token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Install GitVersion
+      uses: gittools/actions/gitversion/setup@v0.9.15
+      with:
+        versionSpec: 5.x
+    - name: Evaluate Next Version
+      uses: gittools/actions/gitversion/execute@v0.9.15
+      with:
+        configFilePath: GitVersion.yml
     - name: Build & Package Module
       shell: pwsh
       run: ./build.ps1 -ResolveDependency -tasks pack
@@ -53,7 +61,7 @@ jobs:
     if: ${{ success() && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/')) }}
     steps:
     - name: Checkout Code
-      uses: actions/checkout@v5
+      uses: actions/checkout@v4
       with:
         ref: ${{ github.head_ref }}   # checkout the triggered ref (branch or tag)
         fetch-depth: 0
