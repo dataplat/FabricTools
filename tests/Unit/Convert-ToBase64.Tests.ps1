@@ -37,6 +37,9 @@ Describe "Convert-ToBase64" -Tag "UnitTests" {
     }
 
     Context "Error handling" {
+        BeforeAll {
+            Mock Write-Message
+        }
         It 'Should throw when file does not exist' {
             { Convert-ToBase64 -filePath 'C:\nonexistent\file.txt' } | Should -Throw
         }

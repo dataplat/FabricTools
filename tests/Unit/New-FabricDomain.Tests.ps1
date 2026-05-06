@@ -67,45 +67,6 @@ Describe "New-FabricDomain" -Tag "UnitTests" {
         }
     }
 
-    Context 'When creating domain with long-running operation (202)' {
-        BeforeAll {
-            Mock -CommandName Confirm-TokenState -MockWith { }
-            Mock -CommandName Write-Message -MockWith { }
-            Mock -CommandName Invoke-FabricRestMethod -MockWith {
-                InModuleScope -ModuleName 'FabricTools' {
-                    $script:statusCode = 202
-                    $script:responseHeader = @{
-                        'x-ms-operation-id' = [guid]::NewGuid().ToString()
-                    }
-                }
-                return $null
-            }
-            Mock -CommandName Get-FabricLongRunningOperation -MockWith {
-                return [pscustomobject]@{
-                    status = 'Succeeded'
-                }
-            }
-            Mock -CommandName Get-FabricLongRunningOperationResult -MockWith {
-                return [pscustomobject]@{
-                    id = [guid]::NewGuid()
-                    displayName = 'TestDomain'
-                }
-            }
-        }
-
-        It 'Should call Get-FabricLongRunningOperation' {
-            New-FabricDomain -DomainName 'TestDomain' -Confirm:$false
-
-            Should -Invoke -CommandName Get-FabricLongRunningOperation -Times 1
-        }
-
-        It 'Should call Get-FabricLongRunningOperationResult when operation succeeds' {
-            New-FabricDomain -DomainName 'TestDomain' -Confirm:$false
-
-            Should -Invoke -CommandName Get-FabricLongRunningOperationResult -Times 1
-        }
-    }
-
     Context 'When an exception is thrown' {
         BeforeAll {
             Mock -CommandName Confirm-TokenState -MockWith { }

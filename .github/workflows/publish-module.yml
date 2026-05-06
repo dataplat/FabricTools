@@ -21,7 +21,7 @@ permissions:
   checks: write # to allow the workflow to create checks
   statuses: write # to allow the workflow to create statuses
 
-name: Deploy Module (only)
+name: Publish Module
 # This workflow is triggered on push to the main branch and deploys the module to the PowerShell Gallery and creates a GitHub Release.
 jobs:
   Build_Stage_Package_Module:
@@ -29,7 +29,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v5
       with:
         ref: ${{ github.head_ref }}   # checkout the triggered ref (branch or tag)
         fetch-depth: 0
@@ -51,7 +51,7 @@ jobs:
     if: ${{ success() && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/')) }}
     steps:
     - name: Checkout Code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v5
       with:
         ref: ${{ github.head_ref }}   # checkout the triggered ref (branch or tag)
         fetch-depth: 0

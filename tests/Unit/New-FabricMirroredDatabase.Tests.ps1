@@ -75,46 +75,6 @@ Describe "New-FabricMirroredDatabase" -Tag "UnitTests" {
         }
     }
 
-    Context "Long-running operation" {
-        BeforeAll {
-            Mock -CommandName Confirm-TokenState -MockWith { return $true }
-            Mock -CommandName Convert-ToBase64 -MockWith { return "base64content" }
-            Mock -CommandName Invoke-FabricRestMethod -MockWith {
-                InModuleScope -ModuleName 'FabricTools' {
-                    $script:statusCode = 202
-                    $script:responseHeader = @{
-                        'x-ms-operation-id' = "00000000-0000-0000-0000-000000000099"
-                        'Location'          = "https://api.fabric.microsoft.com/operations/00000000-0000-0000-0000-000000000099"
-                        'Retry-After'       = 1
-                    }
-                }
-                return $null
-            }
-
-            Mock -CommandName Get-FabricLongRunningOperation -MockWith {
-                return [pscustomobject]@{
-                    status = "Succeeded"
-                }
-            }
-
-            Mock -CommandName Get-FabricLongRunningOperationResult -MockWith {
-                return [pscustomobject]@{
-                    id          = "00000000-0000-0000-0000-000000000001"
-                    displayName = "TestMirroredDatabase"
-                    type        = "MirroredDatabase"
-                }
-            }
-        }
-
-        It "Should handle long-running operation" {
-            $result = New-FabricMirroredDatabase -WorkspaceId "00000000-0000-0000-0000-000000000000" -MirroredDatabaseName "TestMirroredDatabase" -MirroredDatabasePathDefinition "C:\temp\definition.json" -Confirm:$false
-            $result | Should -Not -BeNullOrEmpty
-
-            Should -Invoke -CommandName Get-FabricLongRunningOperation -Times 1 -Exactly
-            Should -Invoke -CommandName Get-FabricLongRunningOperationResult -Times 1 -Exactly
-        }
-    }
-
     Context "Error handling" {
         BeforeAll {
             Mock -CommandName Confirm-TokenState -MockWith { return $true }

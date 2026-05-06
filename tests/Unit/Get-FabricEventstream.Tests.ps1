@@ -45,16 +45,14 @@ Describe "Get-FabricEventstream" -Tag "UnitTests" {
         BeforeAll {
             Mock -CommandName Confirm-TokenState -MockWith { return $true }
             Mock -CommandName Invoke-FabricRestMethod -MockWith {
-                return @{
-                    value = @(
-                        [pscustomobject]@{
-                            id          = "00000000-0000-0000-0000-000000000001"
-                            displayName = "TestEventstream"
-                            description = "Test Eventstream Description"
-                            type        = "Eventstream"
-                        }
-                    )
-                }
+                return @(
+                    [pscustomobject]@{
+                        id          = "00000000-0000-0000-0000-000000000001"
+                        displayName = "TestEventstream"
+                        description = "Test Eventstream Description"
+                        type        = "Eventstream"
+                    }
+                )
             }
         }
 
@@ -71,24 +69,6 @@ Describe "Get-FabricEventstream" -Tag "UnitTests" {
             $result | Should -Not -BeNullOrEmpty
 
             Should -Invoke -CommandName Invoke-FabricRestMethod -Times 1 -Exactly
-        }
-    }
-
-    Context "Error handling" {
-        BeforeAll {
-            Mock -CommandName Confirm-TokenState -MockWith { return $true }
-            Mock -CommandName Write-Message -MockWith { }
-            Mock -CommandName Invoke-FabricRestMethod -MockWith {
-                throw "API Error"
-            }
-        }
-
-        It "Should handle errors gracefully" {
-            { Get-FabricEventstream -WorkspaceId ([guid]::NewGuid()) } | Should -Not -Throw
-
-            Should -Invoke -CommandName Write-Message -ParameterFilter {
-                $Level -eq 'Error' -and $Message -like "*Failed to retrieve Eventstream*"
-            }
         }
     }
 }

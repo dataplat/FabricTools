@@ -70,43 +70,6 @@ Describe "New-FabricDeploymentPipeline" -Tag "UnitTests" {
         }
     }
 
-    Context 'When creating deployment pipeline with long-running operation (202)' -Skip {
-        # Skipped: Function uses HandleResponse = $true, so Invoke-FabricRestMethod handles long-running operations internally
-        BeforeAll {
-            Mock -CommandName Confirm-TokenState -MockWith { }
-            Mock -CommandName Write-Message -MockWith { }
-            Mock -CommandName Invoke-FabricRestMethod -MockWith {
-                InModuleScope -ModuleName 'FabricTools' {
-                    $script:statusCode = 202
-                    $script:responseHeader = @{
-                        'x-ms-operation-id' = [guid]::NewGuid().ToString()
-                        'Location' = 'https://api.fabric.microsoft.com/v1/operations/12345'
-                        'Retry-After' = '30'
-                    }
-                }
-                return $null
-            }
-            Mock -CommandName Get-FabricLongRunningOperation -MockWith {
-                return [pscustomobject]@{
-                    status = 'Succeeded'
-                }
-            }
-            Mock -CommandName Get-FabricLongRunningOperationResult -MockWith {
-                return [pscustomobject]@{
-                    id = [guid]::NewGuid()
-                    displayName = 'TestDeploymentPipeline'
-                }
-            }
-        }
-
-        It 'Should call Get-FabricLongRunningOperation' {
-            $stages = @(@{ DisplayName = 'Stage1'; IsPublic = $true })
-            New-FabricDeploymentPipeline -DisplayName 'TestDeploymentPipeline' -Stages $stages -Confirm:$false
-
-            Should -Invoke -CommandName Get-FabricLongRunningOperation -Times 1
-        }
-    }
-
     Context 'When an unexpected status code is returned' -Skip {
         # Skipped: Function uses HandleResponse = $true, status codes handled internally by Invoke-FabricRestMethod
         BeforeAll {

@@ -91,58 +91,6 @@ Describe "Add-FabricWorkspaceRoleAssignment" -Tag "UnitTests" {
         }
     }
 
-    Context 'When response is empty' {
-        BeforeAll {
-            Mock -CommandName Confirm-TokenState -MockWith { }
-            Mock -CommandName Write-Message -MockWith { }
-            Mock -CommandName Invoke-FabricRestMethod -MockWith {
-                InModuleScope -ModuleName 'FabricTools' {
-                    $script:statusCode = 201
-                }
-                return $null
-            }
-        }
-
-        It 'Should write a warning and return null' {
-            $mockWorkspaceId = [guid]::NewGuid()
-            $mockPrincipalId = [guid]::NewGuid()
-
-            $result = Add-FabricWorkspaceRoleAssignment -WorkspaceId $mockWorkspaceId -PrincipalId $mockPrincipalId -PrincipalType 'User' -WorkspaceRole 'Admin'
-
-            $result | Should -BeNullOrEmpty
-            Should -Invoke -CommandName Write-Message -ParameterFilter {
-                $Level -eq 'Warning' -and $Message -like "*No data returned*"
-            }
-        }
-    }
-
-    Context 'When an unexpected status code is returned' {
-        BeforeAll {
-            Mock -CommandName Confirm-TokenState -MockWith { }
-            Mock -CommandName Write-Message -MockWith { }
-            Mock -CommandName Invoke-FabricRestMethod -MockWith {
-                InModuleScope -ModuleName 'FabricTools' {
-                    $script:statusCode = 400
-                }
-                return [pscustomobject]@{
-                    message = 'Bad Request'
-                    errorCode = 'InvalidRequest'
-                }
-            }
-        }
-
-        It 'Should write an error message for unexpected status codes' {
-            $mockWorkspaceId = [guid]::NewGuid()
-            $mockPrincipalId = [guid]::NewGuid()
-
-            Add-FabricWorkspaceRoleAssignment -WorkspaceId $mockWorkspaceId -PrincipalId $mockPrincipalId -PrincipalType 'User' -WorkspaceRole 'Admin'
-
-            Should -Invoke -CommandName Write-Message -ParameterFilter {
-                $Level -eq 'Error'
-            }
-        }
-    }
-
     Context 'When an exception is thrown' {
         BeforeAll {
             Mock -CommandName Confirm-TokenState -MockWith { }

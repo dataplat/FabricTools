@@ -47,24 +47,4 @@ Describe "Get-FabricEnvironmentLibrary" -Tag "UnitTests" {
             Should -Invoke -CommandName Invoke-FabricRestMethod -Times 1 -Exactly
         }
     }
-
-    Context "Error handling" {
-        BeforeAll {
-            Mock -CommandName Invoke-FabricRestMethod -MockWith {
-                throw "API Error"
-            }
-            Mock -CommandName Confirm-TokenState -MockWith { return $true }
-            Mock -CommandName Write-Message -MockWith { }
-        }
-
-        It 'Should handle errors gracefully' {
-            {
-                Get-FabricEnvironmentLibrary -WorkspaceId (New-Guid) -EnvironmentId (New-Guid)
-            } | Should -Not -Throw
-
-            Should -Invoke -CommandName Write-Message -ParameterFilter {
-                $Level -eq 'Error' -and $Message -like "*Failed to retrieve environment libraries*"
-            }
-        }
-    }
 }

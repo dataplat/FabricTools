@@ -1,0 +1,53 @@
+function Get-FabricWorkspaceDatasetRefreshes {
+    <#
+    .SYNOPSIS
+        Retrieves the refresh history of all datasets in a specified PowerBI workspace.
+
+    .DESCRIPTION
+        The Get-FabricWorkspaceDatasetRefreshes function uses the PowerBI cmdlets to retrieve the refresh history of all datasets in a specified workspace.
+        It uses the workspace ID to get the workspace and its datasets, and then retrieves the refresh history for each dataset.
+
+    .PARAMETER WorkspaceID
+        The ID of the PowerBI workspace. This is a mandatory parameter.
+
+    .EXAMPLE
+        This command retrieves the refresh history of all datasets in the workspace with the specified ID. .INPUTS String. You can pipe a string that contains the workspace ID to Get-FabricWorkspaceDatasetRefreshes.
+
+        ```powershell
+        Get-FabricWorkspaceDatasetRefreshes -WorkspaceID "12345678-90ab-cdef-1234-567890abcdef"
+        ```
+    .INPUTS
+        Guid. You can pipe a string that contains the workspace ID to Get-FabricWorkspaceDatasetRefreshes.
+
+    .OUTPUTS
+        Array. Get-FabricWorkspaceDatasetRefreshes returns an array of refresh history objects.
+
+    .NOTES
+        Alias: Get-FabWorkspaceDatasetRefreshes
+
+        Author: Ioana Bouariu, Kamil Nowinski
+    #>
+
+    # Define a function to get the refresh history of all datasets in a PowerBI workspace
+    param(
+        # Define a mandatory parameter for the workspace ID
+        [Parameter(Mandatory = $true)]
+        [Alias("Id")]
+        [guid]$WorkspaceId
+    )
+
+    Confirm-TokenState
+
+    # Initialize an array to store the refresh history
+    $refs = @()
+    # Get all datasets in the workspace
+    $datasets = Get-FabricDataset -WorkspaceId $WorkspaceId
+
+    # Loop over each dataset
+    foreach ($dataset in $datasets) {
+        # Get the refresh history of the dataset and add it to the array
+        $refs += Get-FabricDatasetRefreshes -DatasetId $dataset.Id -WorkspaceId $WorkspaceId
+    }
+    # Return the refresh history array
+    return $refs
+}

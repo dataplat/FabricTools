@@ -45,7 +45,7 @@ Describe "Get-FabricMirroredDatabaseDefinition" -Tag "UnitTests" {
             $result = Get-FabricMirroredDatabaseDefinition -WorkspaceId (New-Guid) -MirroredDatabaseId (New-Guid)
 
             $result | Should -Not -BeNullOrEmpty
-            $result.path | Should -Be 'MirroredDatabaseDefinition.json'
+            $result.definition.parts[0].path | Should -Be 'MirroredDatabaseDefinition.json'
 
             Should -Invoke -CommandName Invoke-FabricRestMethod -Times 1 -Exactly
         }

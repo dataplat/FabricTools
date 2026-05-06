@@ -46,7 +46,7 @@ Describe "Get-FabricSparkJobDefinitionDefinition" -Tag "UnitTests" {
             $result = Get-FabricSparkJobDefinitionDefinition -WorkspaceId (New-Guid) -SparkJobDefinitionId (New-Guid)
 
             $result | Should -Not -BeNullOrEmpty
-            $result.path | Should -Be 'SparkJobDefinition.json'
+            $result.definition.parts[0].path | Should -Be 'SparkJobDefinition.json'
 
             Should -Invoke -CommandName Invoke-FabricRestMethod -Times 1 -Exactly
         }

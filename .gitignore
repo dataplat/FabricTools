@@ -33,3 +33,6 @@ package-lock.json
 
 # Agents
 .agents/
+
+# Claude Code
+.claude/

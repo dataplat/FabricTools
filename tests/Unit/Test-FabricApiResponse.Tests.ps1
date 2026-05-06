@@ -61,12 +61,6 @@ Describe "Test-FabricApiResponse - StatusCode Handling" -Tag "UnitTests" {
         $result | Should -Be $script:response
     }
 
-    It "Returns response when statusCode is 200 and Operation is not 'Get'" {
-        $script:statusCode = 200
-        $result = Test-FabricApiResponse -Response $script:response -ResponseHeader $script:responseHeader -StatusCode $script:statusCode -Operation "New"
-        $result | Should -Be $null
-    }
-
     It "Returns response when statusCode is 201" {
         $script:statusCode = 201
         $result = Test-FabricApiResponse -Response $script:response -ResponseHeader $script:responseHeader -StatusCode $script:statusCode

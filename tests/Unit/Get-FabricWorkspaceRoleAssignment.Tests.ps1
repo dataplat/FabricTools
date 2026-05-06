@@ -45,13 +45,11 @@ Describe "Get-FabricWorkspaceRoleAssignment" -Tag "UnitTests" {
                 InModuleScope -ModuleName 'FabricTools' {
                     $script:statusCode = 200
                 }
-                return [pscustomobject]@{
-                    value = @(
+                return @(
                         [pscustomobject]@{ id = [guid]::NewGuid(); principal = @{ id = [guid]::NewGuid(); displayName = 'User1'; type = 'User'; userDetails = @{ userPrincipalName = 'user1@test.com' }; servicePrincipalDetails = $null }; role = 'Admin' }
                         [pscustomobject]@{ id = [guid]::NewGuid(); principal = @{ id = [guid]::NewGuid(); displayName = 'User2'; type = 'User'; userDetails = @{ userPrincipalName = 'user2@test.com' }; servicePrincipalDetails = $null }; role = 'Member' }
                     )
                     continuationToken = $null
-                }
             }
         }
 
@@ -83,13 +81,11 @@ Describe "Get-FabricWorkspaceRoleAssignment" -Tag "UnitTests" {
                 InModuleScope -ModuleName 'FabricTools' {
                     $script:statusCode = 200
                 }
-                return [pscustomobject]@{
-                    value = @(
+                return @(
                         [pscustomobject]@{ id = [guid]::NewGuid(); principal = @{ id = [guid]::NewGuid(); displayName = 'User1'; type = 'User'; userDetails = @{ userPrincipalName = 'user1@test.com' }; servicePrincipalDetails = $null }; role = 'Admin' }
                         [pscustomobject]@{ id = [guid]::NewGuid(); principal = @{ id = [guid]::NewGuid(); displayName = 'User2'; type = 'User'; userDetails = @{ userPrincipalName = 'user2@test.com' }; servicePrincipalDetails = $null }; role = 'Member' }
                     )
                     continuationToken = $null
-                }
             }
         }
 
@@ -111,10 +107,8 @@ Describe "Get-FabricWorkspaceRoleAssignment" -Tag "UnitTests" {
                 InModuleScope -ModuleName 'FabricTools' {
                     $script:statusCode = 200
                 }
-                return [pscustomobject]@{
-                    value = @()
+                return  @()
                     continuationToken = $null
-                }
             }
         }
 

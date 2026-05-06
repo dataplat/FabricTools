@@ -45,8 +45,7 @@ Describe "Get-FabricMirroredDatabase" -Tag "UnitTests" {
         BeforeAll {
             Mock -CommandName Confirm-TokenState -MockWith { return $true }
             Mock -CommandName Invoke-FabricRestMethod -MockWith {
-                return @{
-                    value = @(
+                return @(
                         [pscustomobject]@{
                             id          = "00000000-0000-0000-0000-000000000001"
                             displayName = "TestMirroredDatabase"
@@ -54,7 +53,6 @@ Describe "Get-FabricMirroredDatabase" -Tag "UnitTests" {
                             type        = "MirroredDatabase"
                         }
                     )
-                }
             }
         }
 

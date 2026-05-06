@@ -1,4 +1,4 @@
-Import-Module .\source\FabricTools.psm1 -Force
+Import-Module .\src\FabricTools.psm1 -Force
 
 $script:capturedHeaders = $null
 

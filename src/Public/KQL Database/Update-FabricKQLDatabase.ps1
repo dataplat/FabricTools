@@ -1,0 +1,106 @@
+function Update-FabricKQLDatabase
+{
+<#
+.SYNOPSIS
+Updates the properties of a Fabric KQLDatabase.
+
+.DESCRIPTION
+The `Update-FabricKQLDatabase` function updates the name and/or description of a specified Fabric KQLDatabase by making a PATCH request to the API.
+
+.PARAMETER WorkspaceId
+The unique identifier of the workspace where the KQLDatabase resides.
+
+.PARAMETER KQLDatabaseId
+The unique identifier of the KQLDatabase to be updated.
+
+.PARAMETER KQLDatabaseName
+The new name for the KQLDatabase.
+
+.PARAMETER KQLDatabaseDescription
+(Optional) The new description for the KQLDatabase.
+
+.EXAMPLE
+    Updates the name of the KQLDatabase with the ID "KQLDatabase123" to "NewKQLDatabaseName".
+
+    ```powershell
+    Update-FabricKQLDatabase -KQLDatabaseId "KQLDatabase123" -KQLDatabaseName "NewKQLDatabaseName"
+    ```
+
+.EXAMPLE
+    Updates both the name and description of the KQLDatabase "KQLDatabase123".
+
+    ```powershell
+    Update-FabricKQLDatabase -KQLDatabaseId "KQLDatabase123" -KQLDatabaseName "NewName" -KQLDatabaseDescription "Updated description"
+    ```
+
+.NOTES
+- Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
+- Calls `Confirm-TokenState` to ensure token validity before making the API request.
+
+Author: Tiago Balabuch, Kamil Nowinski
+
+#>
+    [CmdletBinding(SupportsShouldProcess)]
+    param (
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [guid]$WorkspaceId,
+
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [guid]$KQLDatabaseId,
+
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [string]$KQLDatabaseName,
+
+        [Parameter(Mandatory = $false)]
+        [ValidateNotNullOrEmpty()]
+        [string]$KQLDatabaseDescription
+    )
+
+    try
+    {
+        # Ensure token validity
+        Confirm-TokenState
+
+        # Construct the API URL
+        $apiEndpointUrl = "{0}/workspaces/{1}/kqlDatabases/{2}" -f $FabricConfig.BaseUrl, $WorkspaceId, $KQLDatabaseId
+        Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
+
+        # Construct the request body
+        $body = @{
+            displayName = $KQLDatabaseName
+        }
+
+        if ($KQLDatabaseDescription)
+        {
+            $body.description = $KQLDatabaseDescription
+        }
+
+        # Convert the body to JSON
+        $bodyJson = $body | ConvertTo-Json
+        Write-Message -Message "Request Body: $bodyJson" -Level Debug
+
+        if ($PSCmdlet.ShouldProcess($KQLDatabaseId, "Update KQLDatabase"))
+        {
+            $apiParams = @{
+                Uri            = $apiEndpointUrl
+                Method         = 'Patch'
+                Body           = $bodyJson
+                TypeName       = 'KQL Database'
+                ObjectIdOrName = $KQLDatabaseName
+                HandleResponse = $true
+            }
+            $response = Invoke-FabricRestMethod @apiParams
+            Write-Message -Message "KQLDatabase '$KQLDatabaseName' updated successfully!" -Level Info
+            $response
+        }
+    }
+    catch
+    {
+        # Handle and log errors
+        $errorDetails = $_.Exception.Message
+        Write-Message -Message "Failed to update KQLDatabase. Error: $errorDetails" -Level Error
+    }
+}

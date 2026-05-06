@@ -39,18 +39,16 @@ Describe "Get-FabricWarehouse" -Tag "UnitTests" {
                 InModuleScope -ModuleName 'FabricTools' {
                     $script:statusCode = 200
                 }
-                return [pscustomobject]@{
-                    value = @(
-                        [pscustomobject]@{
-                            Id = [guid]::NewGuid()
-                            DisplayName = 'TestWarehouse1'
-                        },
-                        [pscustomobject]@{
-                            Id = [guid]::NewGuid()
-                            DisplayName = 'TestWarehouse2'
-                        }
-                    )
-                }
+                return @(
+                    [pscustomobject]@{
+                        Id = [guid]::NewGuid()
+                        DisplayName = 'TestWarehouse1'
+                    },
+                    [pscustomobject]@{
+                        Id = [guid]::NewGuid()
+                        DisplayName = 'TestWarehouse2'
+                    }
+                )
             }
         }
 

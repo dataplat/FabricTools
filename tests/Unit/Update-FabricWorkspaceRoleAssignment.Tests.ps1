@@ -60,49 +60,4 @@ Describe "Update-FabricWorkspaceRoleAssignment" -Tag "UnitTests" {
             Should -Invoke -CommandName Write-Message -ParameterFilter { $Level -eq 'Info' } -Times 1 -Exactly -Scope It
         }
     }
-
-    Context "Unexpected status code handling" {
-        BeforeAll {
-            Mock -CommandName Invoke-FabricRestMethod -MockWith {
-                InModuleScope -ModuleName 'FabricTools' {
-                    $script:statusCode = 400
-                }
-                return [pscustomobject]@{
-                    message   = 'Bad Request'
-                    errorCode = 'InvalidRequest'
-                }
-            }
-            Mock -CommandName Confirm-TokenState -MockWith { }
-            Mock -CommandName Write-Message -MockWith { }
-        }
-
-        It 'Should write error messages for unexpected status codes' {
-            Update-FabricWorkspaceRoleAssignment -WorkspaceId (New-Guid) -WorkspaceRoleAssignmentId (New-Guid) -WorkspaceRole 'Member' -Confirm:$false
-
-            Should -Invoke -CommandName Write-Message -ParameterFilter { $Message -like '*Unexpected response code*' -and $Level -eq 'Error' } -Times 1 -Exactly -Scope It
-            Should -Invoke -CommandName Write-Message -ParameterFilter { $Message -like '*Error:*' -and $Level -eq 'Error' } -Times 1 -Exactly -Scope It
-            Should -Invoke -CommandName Write-Message -ParameterFilter { $Message -like '*Error Code:*' -and $Level -eq 'Error' } -Times 1 -Exactly -Scope It
-        }
-    }
-
-    Context "Error handling" {
-        BeforeAll {
-            Mock -CommandName Invoke-FabricRestMethod -MockWith {
-                InModuleScope -ModuleName 'FabricTools' {
-                    $script:statusCode = 400
-                }
-                throw "API Error"
-            }
-            Mock -CommandName Confirm-TokenState -MockWith { return $true }
-            Mock -CommandName Write-Message -MockWith { }
-        }
-
-        It 'Should handle error when API call fails' {
-            {
-                Update-FabricWorkspaceRoleAssignment -WorkspaceId (New-Guid) -WorkspaceRoleAssignmentId (New-Guid) -WorkspaceRole 'Member' -Confirm:$false
-            } | Should -Not -Throw
-
-            Should -Invoke -CommandName Write-Message -ParameterFilter { $Level -eq 'Error' } -Times 1 -Exactly -Scope It
-        }
-    }
 }

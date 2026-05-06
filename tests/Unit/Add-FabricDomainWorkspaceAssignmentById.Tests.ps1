@@ -85,13 +85,7 @@ Describe 'Add-FabricDomainWorkspaceAssignmentById' -Tag 'Public' {
             Mock -CommandName Confirm-TokenState -MockWith { }
             Mock -CommandName Write-Message -MockWith { }
             Mock -CommandName Invoke-FabricRestMethod -MockWith {
-                InModuleScope -ModuleName 'FabricTools' {
-                    $script:statusCode = 400
-                }
-                return [pscustomobject]@{
-                    message = 'Bad Request'
-                    errorCode = 'InvalidRequest'
-                }
+                throw 'Unexpected response code: 400 - Bad Request'
             }
         }
 

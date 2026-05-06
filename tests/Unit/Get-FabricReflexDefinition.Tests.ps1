@@ -46,7 +46,7 @@ Describe "Get-FabricReflexDefinition" -Tag "UnitTests" {
             $result = Get-FabricReflexDefinition -WorkspaceId (New-Guid) -ReflexId (New-Guid)
 
             $result | Should -Not -BeNullOrEmpty
-            $result.path | Should -Be 'ReflexDefinition.json'
+            $result.definition.parts[0].path | Should -Be 'ReflexDefinition.json'
 
             Should -Invoke -CommandName Invoke-FabricRestMethod -Times 1 -Exactly
         }

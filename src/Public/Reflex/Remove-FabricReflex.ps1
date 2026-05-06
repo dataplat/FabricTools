@@ -1,0 +1,70 @@
+function Remove-FabricReflex
+{
+<#
+.SYNOPSIS
+    Removes an Reflex from a specified Microsoft Fabric workspace.
+
+.DESCRIPTION
+    This function sends a DELETE request to the Microsoft Fabric API to remove an Reflex
+    from the specified workspace using the provided WorkspaceId and ReflexId.
+
+.PARAMETER WorkspaceId
+    The unique identifier of the workspace from which the Reflex will be removed.
+
+.PARAMETER ReflexId
+    The unique identifier of the Reflex to be removed.
+
+.EXAMPLE
+    This example removes the Reflex with ID "Reflex-67890" from the workspace with ID "workspace-12345".
+
+    ```powershell
+    Remove-FabricReflex -WorkspaceId "workspace-12345" -ReflexId "Reflex-67890"
+    ```
+
+.NOTES
+    - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
+    - Calls `Confirm-TokenState` to ensure token validity before making the API request.
+
+    Author: Tiago Balabuch, Kamil Nowinski
+
+#>
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
+    param (
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [guid]$WorkspaceId,
+
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [guid]$ReflexId
+    )
+    try
+    {
+        # Ensure token validity
+        Confirm-TokenState
+
+        # Construct the API URL
+        $apiEndpointUrl = "{0}/workspaces/{1}/reflexes/{2}" -f $FabricConfig.BaseUrl, $WorkspaceId, $ReflexId
+        Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
+
+        if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Remove Reflex"))
+        {
+            $apiParams = @{
+                Uri            = $apiEndpointUrl
+                Method         = 'Delete'
+                TypeName       = 'Reflex'
+                ObjectIdOrName = $ReflexId
+                HandleResponse = $true
+            }
+            Invoke-FabricRestMethod @apiParams
+        }
+
+        Write-Message -Message "Reflex '$ReflexId' deleted successfully from workspace '$WorkspaceId'." -Level Info
+    }
+    catch
+    {
+        # Log and handle errors
+        $errorDetails = $_.Exception.Message
+        Write-Message -Message "Failed to delete Reflex '$ReflexId'. Error: $errorDetails" -Level Error
+    }
+}

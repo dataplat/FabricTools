@@ -39,18 +39,16 @@ Describe "Get-FabricSemanticModel" -Tag "UnitTests" {
                 InModuleScope -ModuleName 'FabricTools' {
                     $script:statusCode = 200
                 }
-                return [pscustomobject]@{
-                    value = @(
-                        [pscustomobject]@{
-                            Id = [guid]::NewGuid()
-                            DisplayName = 'TestSemanticModel1'
-                        },
-                        [pscustomobject]@{
-                            Id = [guid]::NewGuid()
-                            DisplayName = 'TestSemanticModel2'
-                        }
-                    )
-                }
+                return @(
+                    [pscustomobject]@{
+                        Id = [guid]::NewGuid()
+                        DisplayName = 'TestSemanticModel1'
+                    },
+                    [pscustomobject]@{
+                        Id = [guid]::NewGuid()
+                        DisplayName = 'TestSemanticModel2'
+                    }
+                )
             }
         }
 
@@ -98,13 +96,7 @@ Describe "Get-FabricSemanticModel" -Tag "UnitTests" {
             Mock -CommandName Confirm-TokenState -MockWith { }
             Mock -CommandName Write-Message -MockWith { }
             Mock -CommandName Invoke-FabricRestMethod -MockWith {
-                InModuleScope -ModuleName 'FabricTools' {
-                    $script:statusCode = 400
-                }
-                return [pscustomobject]@{
-                    message = 'Bad Request'
-                    errorCode = 'InvalidRequest'
-                }
+                throw 'Unexpected response code: 400 - Bad Request'
             }
         }
 
