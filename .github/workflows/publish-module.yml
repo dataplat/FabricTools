@@ -37,6 +37,8 @@ jobs:
     - name: Build & Package Module
       shell: pwsh
       run: ./build.ps1 -ResolveDependency -tasks pack
+      env:
+        ModuleVersion: ${{ env.gitVersion.NuGetVersionV2 }}
     - name: Publish Build Artifact
       uses: actions/upload-artifact@v4
       with:
