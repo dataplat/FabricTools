@@ -7,9 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Added `-UseDeviceAuthentication` switch to `Connect-FabricAccount` to force device code authentication instead of the interactive broker/browser flow
+
 ### Changed
 
 ### Fixed
+
+- `Connect-FabricAccount` now automatically falls back to device code authentication when interactive/broker (WAM) sign-in fails, e.g. in terminal hosts such as Warp on Windows where the account picker cannot render
 
 ### Deprecated
 
