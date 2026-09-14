@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- `Remove-FabricItem` confirms each item individually instead of once for the whole batch, so `-WhatIf` lists the items by name and ID and `-Confirm` prompts per item rather than authorising the entire batch with a single answer
+- `Remove-FabricItem` reports item counts through `Write-Message` rather than `Write-Output`, so the count is no longer emitted into the pipeline as output
+
 ### Fixed
 
 - `Connect-FabricAccount` now automatically falls back to device code authentication when interactive/broker (WAM) sign-in fails, e.g. in terminal hosts such as Warp on Windows where the account picker cannot render
