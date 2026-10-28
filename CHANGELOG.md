@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Added `Refresh-FabricSQLEndpoint` to refresh SQL analytics endpoint metadata.
 - Added `WorkspaceName` (alias `Name`) to `Remove-FabricWorkspace` to delete a workspace by its exact display name, refusing deletion when no workspace or multiple workspaces match (issue #157).
 - Added `Start-FabricNotebook` to run a notebook by ID or unique workspace-scoped name, wait for its job status by default, or return promptly with `-NoWait`. Supports `-WhatIf`, Retry-After polling, and execution failure details (#194).
 - Added `-UseDeviceAuthentication` switch to `Connect-FabricAccount` to force device code authentication instead of the interactive broker/browser flow

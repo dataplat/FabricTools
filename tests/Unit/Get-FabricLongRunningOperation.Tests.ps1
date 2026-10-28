@@ -20,6 +20,7 @@ Describe "Get-FabricLongRunningOperation" -Tag "UnitTests" {
             @{ ExpectedParameterName = 'operationId'; ExpectedParameterType = 'string'; Mandatory = 'False' }
             @{ ExpectedParameterName = 'location'; ExpectedParameterType = 'string'; Mandatory = 'False' }
             @{ ExpectedParameterName = 'retryAfter'; ExpectedParameterType = 'int'; Mandatory = 'False' }
+            @{ ExpectedParameterName = 'Timeout'; ExpectedParameterType = 'int'; Mandatory = 'False' }
         ) {
             $Command | Should -HaveParameter -ParameterName $ExpectedParameterName -Type $ExpectedParameterType -Mandatory:([bool]::Parse($Mandatory))
         }
@@ -46,6 +47,42 @@ Describe "Get-FabricLongRunningOperation" -Tag "UnitTests" {
             $result.status | Should -Be 'Succeeded'
 
             Should -Invoke -CommandName Invoke-FabricRestMethod -Times 1 -Exactly
+        }
+    }
+
+    Context "Timeout handling" {
+        BeforeAll {
+            Mock -CommandName Invoke-FabricRestMethod -MockWith {
+                [pscustomobject]@{ status = 'Running' }
+            }
+            Mock -CommandName Confirm-TokenState -MockWith { }
+            Mock -CommandName Write-Message -MockWith { }
+            Mock -CommandName Start-Sleep -MockWith {
+                throw 'Sleep intercepted'
+            }
+        }
+
+        It 'Should cap the polling interval to the remaining timeout' {
+            {
+                Get-FabricLongRunningOperation -OperationId 'test-operation-id' -RetryAfter 120 -Timeout 1
+            } | Should -Throw
+
+            Should -Invoke -CommandName Start-Sleep -Times 1 -ParameterFilter {
+                $Seconds -le 60
+            }
+        }
+
+        It 'Should cap the status request timeout to the remaining time' {
+            Mock -CommandName Start-Sleep -MockWith { }
+            Mock -CommandName Invoke-FabricRestMethod -MockWith {
+                [pscustomobject]@{ status = 'Succeeded' }
+            }
+
+            Get-FabricLongRunningOperation -OperationId 'test-operation-id' -Timeout 1 | Out-Null
+
+            Should -Invoke -CommandName Invoke-FabricRestMethod -Times 1 -ParameterFilter {
+                $RequestTimeoutSeconds -gt 0 -and $RequestTimeoutSeconds -le 60
+            }
         }
     }
 

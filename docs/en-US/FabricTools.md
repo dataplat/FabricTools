@@ -358,6 +358,10 @@ Retrieves Fabric SQL Database details.
 
 Retrieves SQL Endpoints from a specified workspace in Fabric.
 
+### [Refresh-FabricSQLEndpoint](Refresh-FabricSQLEndpoint.md)
+
+Refreshes the metadata of a SQL analytics endpoint.
+
 ### [Get-FabricTenantSetting](Get-FabricTenantSetting.md)
 
 Retrieves tenant settings from the Fabric environment.

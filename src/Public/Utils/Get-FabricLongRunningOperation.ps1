@@ -16,6 +16,9 @@ The URL provided in the Location header of the initial request. This is used to 
 .PARAMETER RetryAfter
 The interval (in seconds) to wait between polling the operation status. The default is 5 seconds.
 
+.PARAMETER Timeout
+The maximum time, in minutes, to wait for the operation. A value of 0 waits indefinitely.
+
 .EXAMPLE
     This command polls the status of the operation with the given operationId every 10 seconds until it completes. ```powershell ```
 
@@ -36,11 +39,21 @@ Author: Tiago Balabuch
         [string]$Location,
 
         [Parameter(Mandatory = $false)]
-        [int]$RetryAfter = 5
+        [int]$RetryAfter = 5,
+
+        [Parameter(Mandatory = $false)]
+        [ValidateRange(0, [int]::MaxValue)]
+        [int]$Timeout = 0,
+
+        [Parameter(DontShow)]
+        [ValidateRange(0, [int]::MaxValue)]
+        [int]$TimeoutSeconds = 0
     )
 
     Write-Message -Message "[Get-FabricLongRunningOperation]::Begin" -Level Debug
     Confirm-TokenState
+    $stopwatch = [System.Diagnostics.Stopwatch]::StartNew()
+    $timeoutBudgetSeconds = if ($TimeoutSeconds -gt 0) { $TimeoutSeconds } else { [long]$Timeout * 60 }
 
     # Construct the API URL
     if (-not $OperationId) {
@@ -62,17 +75,43 @@ Author: Tiago Balabuch
     try {
         do {
 
-            # Wait before the next request
-            if ($RetryAfter) {
-                Write-Message -Message "Waiting $RetryAfter seconds..." -Level Verbose
-                Start-Sleep -Seconds $RetryAfter
-            } else {
-                Write-Message -Message "Waiting 5 seconds..." -Level Verbose
-                Start-Sleep -Seconds 5  # Default retry interval if no Retry-After header
+            if ($timeoutBudgetSeconds -gt 0) {
+                $remainingSeconds = $timeoutBudgetSeconds - $stopwatch.Elapsed.TotalSeconds
+                if ($remainingSeconds -le 0) {
+                    throw "Operation timed out after $Timeout minutes."
+                }
+            }
+
+            $sleepSeconds = if ($RetryAfter) { $RetryAfter } else { 5 }
+            if ($timeoutBudgetSeconds -gt 0) {
+                $sleepSeconds = [Math]::Min($sleepSeconds, [Math]::Ceiling($remainingSeconds))
+            }
+
+            Write-Message -Message "Waiting $sleepSeconds seconds..." -Level Verbose
+            Start-Sleep -Seconds $sleepSeconds
+
+            if ($timeoutBudgetSeconds -gt 0 -and $stopwatch.Elapsed.TotalSeconds -ge $timeoutBudgetSeconds) {
+                throw "Operation timed out after $Timeout minutes."
+            }
+
+            $apiParams = @{
+                Uri    = $apiEndpointUrl
+                Method = 'Get'
+            }
+            if ($timeoutBudgetSeconds -gt 0) {
+                $remainingSeconds = $timeoutBudgetSeconds - $stopwatch.Elapsed.TotalSeconds
+                if ($remainingSeconds -le 0) {
+                    throw "Operation timed out after $Timeout minutes."
+                }
+                $apiParams.RequestTimeoutSeconds = [int][Math]::Min([Math]::Max(1, [Math]::Floor($remainingSeconds)), [int]::MaxValue)
             }
 
             # Make the API request
-            $response = Invoke-FabricRestMethod -Uri $apiEndpointUrl -Method Get
+            $response = Invoke-FabricRestMethod @apiParams
+
+            if ($timeoutBudgetSeconds -gt 0 -and $stopwatch.Elapsed.TotalSeconds -ge $timeoutBudgetSeconds) {
+                throw "Operation timed out after $Timeout minutes."
+            }
 
             # Parse the response
             $jsonOperation = $response | ConvertTo-Json
