@@ -219,6 +219,27 @@ AcceptedValues: []
 HelpMessage: ''
 ```
 
+### -UseDeviceAuthentication
+
+Forces device code authentication instead of the interactive broker or browser flow. Use this when the interactive sign-in UI cannot be displayed. If this parameter isn't specified, the cmdlet falls back to device code authentication when interactive sign-in fails.
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+DefaultValue: False
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: Use device code authentication instead of the interactive broker/browser flow.
+```
+
 ### -WhatIf
 
 Runs the command in a mode that only reports what would happen without performing the actions.
@@ -263,6 +284,7 @@ Revision History:
 - 2024-12-22 - FGE: Added Verbose Output
 - 2025-05-26 - Jojobit: Added Service Principal support, with secure string handling and parameter descriptions, as supported by the original FabTools module
 - 2025-06-02 - KNO: Added Reset switch to force re-authentication and token refresh
+- 2026-08-23 - PBO: Added UseDeviceAuthentication switch and automatic fallback to device code auth when interactive/broker sign-in fails (e.g. Warp terminal)
 
 Author: Frank Geisler, Kamil Nowinski
 
