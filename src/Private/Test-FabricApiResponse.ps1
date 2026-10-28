@@ -33,6 +33,9 @@ function Test-FabricApiResponse {
 .PARAMETER NoWait
     If specified, the function will not wait for the operation to complete and will return immediately.
 
+.PARAMETER Timeout
+    The maximum time, in minutes, to wait for a long-running operation. A value of 0 waits indefinitely.
+
 .EXAMPLE
     Test-FabricApiResponse -statusCode 201 -response $response -responseHeader $header -Name "MyResource" -typeName "Fabric Item"
 
@@ -77,7 +80,15 @@ function Test-FabricApiResponse {
         [string] $SuccessMessage,
 
         [Parameter(Mandatory = $false)]
-        [switch] $NoWait = $false
+        [switch] $NoWait = $false,
+
+        [Parameter(Mandatory = $false)]
+        [ValidateRange(0, [int]::MaxValue)]
+        [int] $Timeout = 0,
+
+        [Parameter(DontShow)]
+        [ValidateRange(0, [int]::MaxValue)]
+        [int] $TimeoutSeconds = 0
     )
 
     Write-Message -Message "::Begin" -Level Debug
@@ -112,7 +123,7 @@ function Test-FabricApiResponse {
             Write-Message -Message "Operation ID: '$operationId'" -Level "Debug"
             Write-Message -Message "Getting Long Running Operation status" -Level Debug
 
-            $operationStatus = Get-FabricLongRunningOperation -operationId $operationId -location $res.Location -retryAfter $res.RetryAfter
+            $operationStatus = Get-FabricLongRunningOperation -operationId $operationId -location $res.Location -retryAfter $res.RetryAfter -Timeout $Timeout -TimeoutSeconds $TimeoutSeconds
             Write-Message -Message "Long Running Operation status: $operationStatus" -Level Debug
             # Handle operation result
             if ($operationStatus.status -eq "Succeeded") {
@@ -135,6 +146,9 @@ function Test-FabricApiResponse {
             $retryAfter = $responseHeader['Retry-After']
             $retryAfterStr = $retryAfter[0].ToString()
             $retryAfterInt = [int]$retryAfterStr
+            if ($TimeoutSeconds -gt 0) {
+                $retryAfterInt = [Math]::Min($retryAfterInt, $TimeoutSeconds)
+            }
             Start-Sleep -Seconds $retryAfterInt
             return "Command:Repeat"
         }

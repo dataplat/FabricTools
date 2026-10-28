@@ -25,6 +25,7 @@ Describe "Test-FabricApiResponse" -Tag "UnitTests" {
             @{ ExpectedParameterName = 'TypeName'; ExpectedParameterType = 'string'; Mandatory = 'False' }
             @{ ExpectedParameterName = 'SuccessMessage'; ExpectedParameterType = 'string'; Mandatory = 'False' }
             @{ ExpectedParameterName = 'NoWait'; ExpectedParameterType = 'switch'; Mandatory = 'False' }
+            @{ ExpectedParameterName = 'Timeout'; ExpectedParameterType = 'int'; Mandatory = 'False' }
         ) {
             $script:Command | Should -HaveParameter -ParameterName $ExpectedParameterName -Type $ExpectedParameterType -Mandatory:([bool]::Parse($Mandatory))
         }
@@ -74,6 +75,15 @@ Describe "Test-FabricApiResponse - StatusCode Handling" -Tag "UnitTests" {
         $result | Should -Be $expectedResult
         Should -Invoke Get-FabricLongRunningOperation -Exactly 1
         Should -Invoke Get-FabricLongRunningOperationResult -Exactly 1
+    }
+
+    It "Passes the timeout to long-running operation polling" {
+        $script:statusCode = 202
+        Test-FabricApiResponse -Response $script:response -ResponseHeader $script:responseHeader -StatusCode $script:statusCode -Timeout 3 | Out-Null
+
+        Should -Invoke Get-FabricLongRunningOperation -Exactly 1 -ParameterFilter {
+            $Timeout -eq 3
+        }
     }
 
     It "Returns PSCustomObject with 3 properties when statusCode is 202 and -NoWait is specified" {

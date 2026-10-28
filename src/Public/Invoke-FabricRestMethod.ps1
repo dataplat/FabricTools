@@ -31,6 +31,9 @@ Function Invoke-FabricRestMethod {
     A switch parameter to indicate that the function should not wait for the response. This is useful for asynchronous operations.
     Default is False. If set to True, the function will return immediately without waiting for the operation to complete.
 
+.PARAMETER Timeout
+    The maximum time, in minutes, to wait for a long-running operation. A value of 0 waits indefinitely.
+
 .PARAMETER HandleResponse
     A switch parameter to indicate that the response should be handled after call API. Default is False.
     The operation will be processed based on the response status code and supports Throttling (429) and Long-Running Operations.
@@ -88,6 +91,14 @@ Function Invoke-FabricRestMethod {
 
         [Parameter(Mandatory = $false)]
         [switch] $NoWait = $false,
+
+        [Parameter(Mandatory = $false)]
+        [ValidateRange(0, [int]::MaxValue)]
+        [int] $Timeout = 0,
+
+        [Parameter(DontShow)]
+        [ValidateRange(0, [int]::MaxValue)]
+        [int] $RequestTimeoutSeconds = 0,
 
         [Parameter(Mandatory = $false)]
         [switch] $HandleResponse = $true,
@@ -165,6 +176,8 @@ Function Invoke-FabricRestMethod {
 
     $continuationToken = $null
     $repeat = $false
+    $timeoutBudgetSeconds = [long]$Timeout * 60
+    $timeoutStopwatch = if ($Timeout -gt 0) { [System.Diagnostics.Stopwatch]::StartNew() } else { $null }
 
     do {
         $apiEndpointUrl = $Uri
@@ -186,7 +199,28 @@ Function Invoke-FabricRestMethod {
             StatusCodeVariable = "statusCode"
         }
 
+        $requestTimeoutSeconds = $RequestTimeoutSeconds
+        if ($Timeout -gt 0) {
+            $remainingTimeoutSeconds = $timeoutBudgetSeconds - $timeoutStopwatch.Elapsed.TotalSeconds
+            if ($remainingTimeoutSeconds -le 0) {
+                throw "API request timed out after $Timeout minutes."
+            }
+            if ($requestTimeoutSeconds -eq 0 -or $remainingTimeoutSeconds -lt $requestTimeoutSeconds) {
+                $requestTimeoutSeconds = [Math]::Max(1, [Math]::Floor($remainingTimeoutSeconds))
+            }
+        }
+
+        if ($RequestTimeoutSeconds -gt 0) {
+            $request.TimeoutSec = [int][Math]::Min($requestTimeoutSeconds, [int]::MaxValue)
+        } elseif ($Timeout -gt 0) {
+            $request.TimeoutSec = [int][Math]::Min($requestTimeoutSeconds, [int]::MaxValue)
+        }
+
         $response = Invoke-RestMethod @request
+
+        if ($Timeout -gt 0 -and $timeoutStopwatch.Elapsed.TotalSeconds -ge $timeoutBudgetSeconds) {
+            throw "API request timed out after $Timeout minutes."
+        }
 
         # Needed for backward compatibility, example: Get-FabricWorkspace
         $script:statusCode = $statusCode
@@ -201,6 +235,12 @@ Function Invoke-FabricRestMethod {
                 ObjectIdOrName = $ObjectIdOrName
                 TypeName = $TypeName
                 NoWait = $NoWait
+                Timeout = $Timeout
+                TimeoutSeconds = if ($Timeout -gt 0) {
+                    [int][Math]::Min([Math]::Max(1, [Math]::Floor($timeoutBudgetSeconds - $timeoutStopwatch.Elapsed.TotalSeconds)), [int]::MaxValue)
+                } else {
+                    0
+                }
                 SuccessMessage = $SuccessMessage
             }
             $response = Test-FabricApiResponse @params
