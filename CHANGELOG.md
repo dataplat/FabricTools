@@ -3,6 +3,12 @@
 The format is based on and uses the types of changes according to [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- Added `Start-FabricNotebook` to run a notebook by ID or unique workspace-scoped name, wait for its job status by default, or return promptly with `-NoWait`. Supports `-WhatIf`, Retry-After polling, and execution failure details (#194).
+
 ## 0.32.0 - 2026-05-06
 
 ### Added
