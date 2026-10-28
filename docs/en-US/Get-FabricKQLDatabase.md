@@ -49,6 +49,14 @@ Retrieves all KQLDatabases in workspace "12345".
 Get-FabricKQLDatabase -WorkspaceId "12345"
 ```
 
+### EXAMPLE 3
+
+Retrieves all KQLDatabases from every accessible workspace.
+
+```powershell
+Get-FabricWorkspace | Get-FabricKQLDatabase
+```
+
 ## PARAMETERS
 
 ### -KQLDatabaseId
@@ -95,19 +103,20 @@ HelpMessage: ''
 
 ### -WorkspaceId
 
-(Mandatory) The ID of the workspace to query KQLDatabases.
+(Mandatory) The ID of the workspace to query KQLDatabases. Accepts pipeline input by value or by the WorkspaceId or Id property.
 
 ```yaml
 Type: System.Guid
 DefaultValue: ''
 SupportsWildcards: false
-Aliases: []
+Aliases:
+- Id
 ParameterSets:
 - Name: (All)
   Position: 0
   IsRequired: true
-  ValueFromPipeline: false
-  ValueFromPipelineByPropertyName: false
+  ValueFromPipeline: true
+  ValueFromPipelineByPropertyName: true
   ValueFromRemainingArguments: false
 DontShow: false
 AcceptedValues: []
@@ -135,4 +144,3 @@ Author: Tiago Balabuch
 ## RELATED LINKS
 
 {{ Fill in the related links here }}
-
