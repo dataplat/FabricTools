@@ -18,12 +18,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - `Connect-FabricAccount` now automatically falls back to device code authentication when interactive/broker (WAM) sign-in fails, e.g. in terminal hosts such as Warp on Windows where the account picker cannot render
+- Fixed `Get-FabricWorkspace | Get-FabricKQLDatabase` by allowing `WorkspaceId` pipeline input and processing each workspace (issue #162).
 
 ### Deprecated
 
 ### Removed
 
 ### Security
+
 
 ## 0.32.0 - 2026-05-06
 
