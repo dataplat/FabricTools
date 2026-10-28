@@ -6,6 +6,7 @@ function Connect-FabricAccount {
 
 .DESCRIPTION
     Connects to the Fabric WebAPI by using the cmdlet Connect-AzAccount. This function retrieves the authentication token for the Fabric API and sets up the headers for API calls.
+    User sign-in uses interactive authentication by default. Use -UseDeviceAuthentication if the interactive broker or browser cannot be used.
 
 .PARAMETER TenantId
     The TenantId of the Azure Active Directory tenant you want to connect to and in which your Fabric Capacity is.
@@ -17,7 +18,7 @@ function Connect-FabricAccount {
     The **secure string** representing the service principal secret.
 
 .PARAMETER Credential
-    A PSCredential object representing a user credential (username and secure password).
+    A PSCredential object containing a service principal's application ID as the username and client secret as the password. This is not for signing in as a user with a username and password.
 
 .PARAMETER Reset
     A switch parameter. If provided, the function resets the Fabric authentication token.
@@ -36,11 +37,11 @@ function Connect-FabricAccount {
     ```
 
 .EXAMPLE
-    Prompts for Service Principal id and secret and connects as that Service Principal
+    Connects as a service principal using a PSCredential object. The username is the service principal's application ID.
 
     ```powershell
-    $credential = Get-Credential
-    Connect-FabricAccount -TenantId 'xxx' -credential $credential
+    $credential = Get-Credential -UserName '<service-principal-app-id>' -Message 'Enter the service principal client secret'
+    Connect-FabricAccount -TenantId '<tenant-id>' -Credential $credential
     ```
 
 .EXAMPLE
@@ -106,7 +107,7 @@ function Connect-FabricAccount {
         [Alias('AppSecret')]
         [SecureString] $ServicePrincipalSecret,
 
-        [Parameter(Mandatory = $false, HelpMessage = "User credential.")]
+        [Parameter(Mandatory = $false, HelpMessage = "Service principal application ID and client secret.")]
         [PSCredential] $Credential,
 
         [Parameter(Mandatory = $false, HelpMessage = "Refresh current session.")]
