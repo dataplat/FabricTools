@@ -34,6 +34,7 @@ Get-FabricWorkspaceUser -Workspace <Object[]> [<CommonParameters>]
 ## DESCRIPTION
 
 The Get-FabricWorkspaceUser function retrieves the details of the users of a workspace.
+Each returned user includes the workspace name and ID for context.
 
 ## EXAMPLES
 
@@ -65,20 +66,10 @@ Get-FabricWorkspaceUser -Workspace (Get-FabricWorkspace -WorkspaceName 'prod-wor
 
 ### EXAMPLE 4
 
-This example retrieves the users of all of the workspaces. IMPORTANT: This will not return the workspace name or ID at present.
+This example retrieves the users of all of the workspaces, including each user's workspace name and ID.
 
 ```powershell
 Get-FabricWorkspace| Get-FabricWorkspaceUser
-```
-
-### EXAMPLE 5
-
-This example retrieves the users of all of the workspaces and returns the workspace name as well.
-
-```powershell
-Get-FabricWorkspace| Foreach-Object {
-    Get-FabricWorkspaceUser -WorkspaceId $_.Id | Select-Object @{Name='WorkspaceName';Expression={$_.displayName;}}, *
-}
 ```
 
 ## PARAMETERS
@@ -156,4 +147,3 @@ Author: Ioana Bouariu
 ## RELATED LINKS
 
 {{ Fill in the related links here }}
-

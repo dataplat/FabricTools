@@ -91,17 +91,15 @@ Describe "Get-FabricWorkspaceUser" -Tag "UnitTests" {
 
         BeforeEach {
             Mock -CommandName Confirm-TokenState -MockWith { }
-            Mock -CommandName Get-FabricWorkspace -MockWith {
-                return @(
-                    @{
-                        displayName = 'prod-workspace'
-                        Id          = [guid]::NewGuid().Guid.ToString()
-                    }, @{
-                        displayName = "test-workspace"
-                        Id          = [guid]::NewGuid().Guid.ToString()
-                    }
-                )
-            }
+            $workspaces = @(
+                @{
+                    displayName = 'prod-workspace'
+                    Id          = '11111111-1111-1111-1111-111111111111'
+                }, @{
+                    displayName = 'test-workspace'
+                    Id          = '22222222-2222-2222-2222-222222222222'
+                }
+            )
             Mock -CommandName Invoke-FabricRestMethod -MockWith {
                 return @{
                     value = @(
@@ -124,12 +122,30 @@ Describe "Get-FabricWorkspaceUser" -Tag "UnitTests" {
         }
 
         It "Should return users for multiple workspaces passed to the Workspace parameter" {
-            {Get-FabricWorkspaceUser -Workspace (Get-FabricWorkspace) }| Should -Not -BeNullOrEmpty
+            $result = @(Get-FabricWorkspaceUser -Workspace $workspaces)
+
+            $result | Should -Not -BeNullOrEmpty
         }
 
         It "Should return users for multiple workspaces passed to the Workspace parameter from the pipeline" {
-            { Get-FabricWorkspace | Get-FabricWorkspaceUser
-            } | Should -Not -BeNullOrEmpty
+            $result = @($workspaces | Get-FabricWorkspaceUser)
+
+            $result | Should -Not -BeNullOrEmpty
+        }
+
+        It "Should include workspace name and ID on users returned for multiple workspaces" {
+            $result = @($workspaces | Get-FabricWorkspaceUser)
+            $prodUsers = @($result | Where-Object WorkspaceName -EQ 'prod-workspace')
+            $testUsers = @($result | Where-Object WorkspaceName -EQ 'test-workspace')
+
+            $result.Count | Should -Be 4
+            $prodUsers.Count | Should -Be 2
+            $prodUsers[0].WorkspaceId | Should -Be '11111111-1111-1111-1111-111111111111'
+            $prodUsers[1].WorkspaceId | Should -Be '11111111-1111-1111-1111-111111111111'
+            $testUsers.Count | Should -Be 2
+            $testUsers[0].WorkspaceId | Should -Be '22222222-2222-2222-2222-222222222222'
+            $testUsers[1].WorkspaceId | Should -Be '22222222-2222-2222-2222-222222222222'
+            $result[0].emailAddress | Should -Be 'name@domain.com'
         }
     }
 
