@@ -72,20 +72,19 @@ Describe "New-FabricSQLDatabase" -Tag "UnitTests" {
         }
     }
 
-    Context 'When creating SQL database with long running operation (202)' -Skip {
+    Context 'When creating SQL database with long running operation (202)' {
         BeforeAll {
             Mock -CommandName Confirm-TokenState -MockWith { }
             Mock -CommandName Write-Message -MockWith { }
             Mock -CommandName Invoke-FabricRestMethod -MockWith {
                 InModuleScope -ModuleName 'FabricTools' {
-                    $script:statusCode = 202
-                    $script:responseHeader = @{
+                    $headers = @{
                         'x-ms-operation-id' = [guid]::NewGuid().ToString()
                         'Location' = 'https://api.fabric.microsoft.com/operations/123'
                         'Retry-After' = 10
                     }
+                    Test-FabricApiResponse -ResponseHeader $headers -StatusCode 202 -Operation 'New' -ObjectIdOrName 'NewSQLDatabase' -TypeName 'SQL Database'
                 }
-                return $null
             }
             Mock -CommandName Get-FabricLongRunningOperation -MockWith {
                 return [pscustomobject]@{
@@ -106,6 +105,7 @@ Describe "New-FabricSQLDatabase" -Tag "UnitTests" {
 
             $result = New-FabricSQLDatabase -WorkspaceId $mockWorkspaceId -Name 'NewSQLDatabase' -Confirm:$false
 
+            $result.displayName | Should -Be 'NewSQLDatabase'
             Should -Invoke -CommandName Get-FabricLongRunningOperation -Times 1
         }
     }
@@ -148,7 +148,7 @@ Describe "New-FabricSQLDatabase" -Tag "UnitTests" {
         It 'Should handle exceptions gracefully' {
             $mockWorkspaceId = [guid]::NewGuid()
 
-            { New-FabricSQLDatabase -WorkspaceId $mockWorkspaceId -Name 'NewSQLDatabase' -Confirm:$false } | Should -Not -Throw
+            { New-FabricSQLDatabase -WorkspaceId $mockWorkspaceId -Name 'NewSQLDatabase' -Confirm:$false -ErrorAction Stop } | Should -Throw '*API connection failed*'
 
             Should -Invoke -CommandName Write-Message -ParameterFilter {
                 $Level -eq 'Error' -and $Message -like "*Failed to create SQL Database*"

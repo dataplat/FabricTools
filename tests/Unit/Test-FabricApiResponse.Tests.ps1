@@ -76,6 +76,21 @@ Describe "Test-FabricApiResponse - StatusCode Handling" -Tag "UnitTests" {
         Should -Invoke Get-FabricLongRunningOperationResult -Exactly 1
     }
 
+    It "Uses scalar values from enumerable 202 response headers" {
+        $headers = [System.Collections.Generic.Dictionary[string, System.Collections.Generic.IEnumerable[string]]]::new()
+        $headers.Add('x-ms-operation-id', [string[]]@('operation-123', 'ignored-operation'))
+        $headers.Add('Location', [string[]]@('https://api.fabric.microsoft.com/operations/123', 'ignored-location'))
+        $headers.Add('Retry-After', [string[]]@('10', 'ignored-retry'))
+
+        Test-FabricApiResponse -ResponseHeader $headers -StatusCode 202 -Operation 'New' -ObjectIdOrName 'TestObject' -TypeName 'TestType' | Should -Be 'Completed'
+
+        Should -Invoke Get-FabricLongRunningOperation -Exactly 1 -ParameterFilter {
+            $operationId -eq 'operation-123' -and
+            $location -eq 'https://api.fabric.microsoft.com/operations/123' -and
+            $retryAfter -eq '10'
+        }
+    }
+
     It "Returns PSCustomObject with 3 properties when statusCode is 202 and -NoWait is specified" {
         $script:statusCode = 202
         $result = Test-FabricApiResponse -Response $script:response -ResponseHeader $script:responseHeader -StatusCode $script:statusCode $script:responseHeader -NoWait
