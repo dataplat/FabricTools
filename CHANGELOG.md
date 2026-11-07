@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Added Git integration cmdlets (#48): `Connect-FabricGit` (with `-Initialize` to connect and initialize in one call), `Disconnect-FabricGit`, `Get-FabricGitConnection`, `Initialize-FabricGitConnection`, `Get-FabricGitStatus` (with `-ChangesOnly` / `-ConflictsOnly`), `Invoke-FabricGitCommit` (all or selected items, accepts pipeline input from `Get-FabricGitStatus`), `Invoke-FabricGitUpdate`, `Get-FabricGitCredential` and `Update-FabricGitCredential`. Commit and update look up the workspace head and remote commit hash automatically unless `-NoAutoResolve` is used.
+- Added Activator aliases for all Reflex cmdlets.
 - Added `Refresh-FabricSQLEndpoint` to refresh SQL analytics endpoint metadata.
 - Added `-SQLDatabaseName` (alias `Name`) to `Remove-FabricSQLDatabase`, requiring a unique exact name match within the specified workspace before deletion (#210).
 - Added `WorkspaceName` (alias `Name`) to `Remove-FabricWorkspace` to delete a workspace by its exact display name, refusing deletion when no workspace or multiple workspaces match (issue #157).
