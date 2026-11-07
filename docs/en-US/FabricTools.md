@@ -142,13 +142,9 @@ Retrieves data pipelines from a specified Microsoft Fabric workspace.
 
 Retrieves one or more Power BI datasets from My Workspace or a specific workspace.
 
-### [Get-FabricDatasetRefreshes](Get-FabricDatasetRefreshes.md)
-
-Retrieves the refresh history of a specified dataset in a PowerBI workspace.
-
 ### [Get-FabricDatasetRefreshHistory](Get-FabricDatasetRefreshHistory.md)
 
-Retrieves the refresh history of a Power BI dataset.
+Retrieves refresh history for a Power BI dataset or all datasets in a workspace.
 
 ### [Get-FabricDebugInfo](Get-FabricDebugInfo.md)
 
@@ -377,10 +373,6 @@ Retrieves warehouse details from a specified Microsoft Fabric workspace.
 ### [Get-FabricWorkspace](Get-FabricWorkspace.md)
 
 Retrieves details of a Microsoft Fabric workspace by its ID or name.
-
-### [Get-FabricWorkspaceDatasetRefreshes](Get-FabricWorkspaceDatasetRefreshes.md)
-
-Retrieves the refresh history of all datasets in a specified PowerBI workspace.
 
 ### [Get-FabricWorkspaceRoleAssignment](Get-FabricWorkspaceRoleAssignment.md)
 

@@ -188,6 +188,10 @@ Function Invoke-FabricRestMethod {
 
         $response = Invoke-RestMethod @request
 
+        if ($null -eq $responseHeader) {
+            $responseHeader = @{}
+        }
+
         # Needed for backward compatibility, example: Get-FabricWorkspace
         $script:statusCode = $statusCode
         $script:responseHeader = $responseHeader

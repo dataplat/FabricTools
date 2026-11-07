@@ -58,8 +58,9 @@ function Test-FabricApiResponse {
         [Parameter(Mandatory = $false)]     # Response is $null when Response Code is 202
         $Response,
 
-        [Parameter(Mandatory = $true)]
-        $ResponseHeader,
+        [Parameter(Mandatory = $false)]
+        [AllowNull()]
+        $ResponseHeader = @{},
 
         [Parameter(Mandatory = $true)]
         $StatusCode,
@@ -81,6 +82,10 @@ function Test-FabricApiResponse {
     )
 
     Write-Message -Message "::Begin" -Level Debug
+
+    if ($null -eq $ResponseHeader) {
+        $ResponseHeader = @{}
+    }
 
     #$responseHeader = $script:responseHeader
     #$statusCode = $script:statusCode
