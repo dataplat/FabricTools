@@ -58,6 +58,10 @@ Assigns a workspace to a deployment pipeline stage.
 
 Connects to the Fabric WebAPI.
 
+### [Connect-FabricGit](Connect-FabricGit.md)
+
+Connects a Fabric workspace to a Git repository and branch.
+
 ### [Convert-FromBase64](Convert-FromBase64.md)
 
 Decodes a Base64-encoded string into its original text representation.
@@ -65,6 +69,10 @@ Decodes a Base64-encoded string into its original text representation.
 ### [Convert-ToBase64](Convert-ToBase64.md)
 
 Encodes the content of a file into a Base64-encoded string.
+
+### [Disconnect-FabricGit](Disconnect-FabricGit.md)
+
+Disconnects a Fabric workspace from its Git repository.
 
 ### [Export-FabricItem](Export-FabricItem.md)
 
@@ -221,6 +229,18 @@ Retrieves the definition of a Eventstream from a specific workspace in Microsoft
 ### [Get-FabricExternalDataShares](Get-FabricExternalDataShares.md)
 
 Retrieves External Data Shares details from a specified Microsoft Fabric.
+
+### [Get-FabricGitConnection](Get-FabricGitConnection.md)
+
+Gets the Git connection details of a Fabric workspace.
+
+### [Get-FabricGitCredential](Get-FabricGitCredential.md)
+
+Gets the Git credentials configuration of the current user for a Fabric workspace.
+
+### [Get-FabricGitStatus](Get-FabricGitStatus.md)
+
+Gets the Git status of the items in a Fabric workspace.
 
 ### [Get-FabricItem](Get-FabricItem.md)
 
@@ -402,9 +422,21 @@ Uploads a library to the staging environment in a Microsoft Fabric workspace.
 
 Imports items using the Power BI Project format (PBIP) into a Fabric workspace from a specified file system source.
 
+### [Initialize-FabricGitConnection](Initialize-FabricGitConnection.md)
+
+Initializes the Git connection of a Fabric workspace.
+
 ### [Invoke-FabricDatasetRefresh](Invoke-FabricDatasetRefresh.md)
 
 Triggers a refresh of a Power BI dataset.
+
+### [Invoke-FabricGitCommit](Invoke-FabricGitCommit.md)
+
+Commits changes from a Fabric workspace to the connected Git branch.
+
+### [Invoke-FabricGitUpdate](Invoke-FabricGitUpdate.md)
+
+Updates a Fabric workspace with the latest commits from the connected Git branch.
 
 ### [Invoke-FabricKQLCommand](Invoke-FabricKQLCommand.md)
 
@@ -725,6 +757,10 @@ Updates the properties of a Fabric Eventstream.
 ### [Update-FabricEventstreamDefinition](Update-FabricEventstreamDefinition.md)
 
 Updates the definition of a Eventstream in a Microsoft Fabric workspace.
+
+### [Update-FabricGitCredential](Update-FabricGitCredential.md)
+
+Updates the Git credentials configuration of the current user for a Fabric workspace.
 
 ### [Update-FabricKQLDashboard](Update-FabricKQLDashboard.md)
 
