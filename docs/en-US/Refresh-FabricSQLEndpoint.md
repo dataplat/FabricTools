@@ -2,44 +2,42 @@
 document type: cmdlet
 external help file: FabricTools-Help.xml
 HelpUri: ''
+itemType: SQL Endpoints
 Locale: en-US
 Module Name: FabricTools
-ms.date: 03/31/2026
+ms.date: 11/07/2026
 PlatyPS schema version: 2024-05-01
-title: Remove-FabricWorkspaceCapacityAssignment
+title: Refresh-FabricSQLEndpoint
 ---
 
-# Remove-FabricWorkspaceCapacityAssignment
+# Refresh-FabricSQLEndpoint
 
 ## SYNOPSIS
 
-Unassigns a Fabric workspace from its capacity.
+Refreshes the metadata of a SQL analytics endpoint.
 
 ## SYNTAX
 
 ### __AllParameterSets
 
 ```
-Remove-FabricWorkspaceCapacityAssignment [-WorkspaceId] <guid> [-WhatIf] [-Confirm]
- [<CommonParameters>]
+Refresh-FabricSQLEndpoint [-WorkspaceId] <guid> [-SQLEndpointId] <guid> [[-Timeout] <int>] [-NoWait]
+ [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## ALIASES
 
-Unassign-FabricWorkspaceCapacity
-
 ## DESCRIPTION
 
-The `Remove-FabricWorkspaceCapacityAssignment` function sends a POST request to unassign a workspace from its assigned capacity.
+Starts a refresh of the metadata for a SQL analytics endpoint in a specified workspace.
+By default, the function waits for the long-running operation to complete.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 
-Unassign the workspace with ID "workspace123" from its capacity.
-
 ```powershell
-Remove-FabricWorkspaceCapacityAssignment -WorkspaceId "workspace123"
+Refresh-FabricSQLEndpoint -WorkspaceId $workspaceId -SQLEndpointId $sqlEndpointId
 ```
 
 ## PARAMETERS
@@ -57,6 +55,70 @@ Aliases:
 ParameterSets:
 - Name: (All)
   Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -NoWait
+
+If specified, returns immediately after the refresh request is accepted.
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+DefaultValue: False
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -SQLEndpointId
+
+The ID of the SQL analytics endpoint to refresh.
+
+```yaml
+Type: System.Guid
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: 1
+  IsRequired: true
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -Timeout
+
+The maximum time, in minutes, to wait for the refresh operation.
+A value of 0 waits indefinitely.
+
+```yaml
+Type: System.Int32
+DefaultValue: 15
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: 2
   IsRequired: false
   ValueFromPipeline: false
   ValueFromPipelineByPropertyName: false
@@ -90,14 +152,13 @@ HelpMessage: ''
 
 ### -WorkspaceId
 
-The unique identifier of the workspace to be unassigned from its capacity.
+The ID of the workspace containing the SQL analytics endpoint.
 
 ```yaml
 Type: System.Guid
 DefaultValue: ''
 SupportsWildcards: false
-Aliases:
-- Id
+Aliases: []
 ParameterSets:
 - Name: (All)
   Position: 0
@@ -123,10 +184,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-- Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-- Calls `Confirm-TokenState` to ensure token validity before making the API request.
-
-Author: Tiago Balabuch
+Author: Kamil Nowinski
 
 ## RELATED LINKS
 

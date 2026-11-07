@@ -25,6 +25,7 @@ Describe "Remove-FabricSQLDatabase" -Tag "UnitTests" {
         It 'Should have the expected parameter: <Name>' -ForEach @(
             @{ Name = 'WorkspaceId'; Mandatory = $true }
             @{ Name = 'SQLDatabaseId'; Mandatory = $true }
+            @{ Name = 'SQLDatabaseName'; Mandatory = $true }
         ) {
             $command | Should -HaveParameter $Name -Mandatory:$Mandatory
         }
@@ -32,6 +33,12 @@ Describe "Remove-FabricSQLDatabase" -Tag "UnitTests" {
         It 'Should support ShouldProcess' {
             $command.Parameters.ContainsKey('WhatIf') | Should -BeTrue
             $command.Parameters.ContainsKey('Confirm') | Should -BeTrue
+        }
+
+        It 'Should require exactly one database identifier' {
+            {
+                Remove-FabricSQLDatabase -WorkspaceId ([guid]::NewGuid()) -SQLDatabaseId ([guid]::NewGuid()) -SQLDatabaseName 'TestDatabase' -Confirm:$false
+            } | Should -Throw
         }
     }
 
@@ -64,6 +71,62 @@ Describe "Remove-FabricSQLDatabase" -Tag "UnitTests" {
             $mockSQLDatabaseId = [guid]::NewGuid()
 
             { Remove-FabricSQLDatabase -WorkspaceId $mockWorkspaceId -SQLDatabaseId $mockSQLDatabaseId -Confirm:$false } | Should -Not -Throw
+        }
+    }
+
+    Context 'When resolving a SQL database name' {
+        BeforeAll {
+            Mock -CommandName Confirm-TokenState -MockWith { }
+            Mock -CommandName Write-Message -MockWith { }
+            Mock -CommandName Get-FabricSQLDatabase -MockWith {
+                [PSCustomObject]@{ id = '11111111-1111-1111-1111-111111111111'; displayName = 'TestDatabase' }
+            }
+            Mock -CommandName Invoke-FabricRestMethod -MockWith { }
+        }
+
+        It 'Should delete the database found by its exact name' {
+            Remove-FabricSQLDatabase -WorkspaceId ([guid]::NewGuid()) -SQLDatabaseName 'TestDatabase' -Confirm:$false
+
+            Should -Invoke Get-FabricSQLDatabase -Times 1 -Exactly -ParameterFilter {
+                $WorkspaceId -and $SQLDatabaseName -eq 'TestDatabase'
+            }
+            Should -Invoke Invoke-FabricRestMethod -Times 1 -Exactly -ParameterFilter {
+                $Uri -like 'workspaces/*/sqldatabases/11111111-1111-1111-1111-111111111111' -and
+                $Method -eq 'DELETE' -and $ObjectIdOrName -eq 'TestDatabase'
+            }
+        }
+
+        It 'Should support the Name alias' {
+            Remove-FabricSQLDatabase -WorkspaceId ([guid]::NewGuid()) -Name 'TestDatabase' -Confirm:$false
+
+            Should -Invoke Get-FabricSQLDatabase -Times 1 -ParameterFilter {
+                $SQLDatabaseName -eq 'TestDatabase'
+            }
+        }
+
+        It 'Should not delete when no database matches' {
+            Mock -CommandName Get-FabricSQLDatabase -MockWith { return $null }
+
+            Remove-FabricSQLDatabase -WorkspaceId ([guid]::NewGuid()) -SQLDatabaseName 'MissingDatabase' -Confirm:$false
+
+            Should -Invoke Invoke-FabricRestMethod -Times 0
+            Should -Invoke Write-Message -Times 1 -ParameterFilter {
+                $Level -eq 'Error' -and $Message -like '*No SQL Database found*'
+            }
+        }
+
+        It 'Should not delete when multiple databases match' {
+            Mock -CommandName Get-FabricSQLDatabase -MockWith {
+                [PSCustomObject]@{ id = [guid]::NewGuid(); displayName = 'TestDatabase' }
+                [PSCustomObject]@{ id = [guid]::NewGuid(); displayName = 'TestDatabase' }
+            }
+
+            Remove-FabricSQLDatabase -WorkspaceId ([guid]::NewGuid()) -SQLDatabaseName 'TestDatabase' -Confirm:$false
+
+            Should -Invoke Invoke-FabricRestMethod -Times 0
+            Should -Invoke Write-Message -Times 1 -ParameterFilter {
+                $Level -eq 'Error' -and $Message -like '*Multiple SQL Databases found*'
+            }
         }
     }
 

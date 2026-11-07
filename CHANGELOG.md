@@ -3,6 +3,43 @@
 The format is based on and uses the types of changes according to [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.33.0 - 2026-11-08
+
+### Added
+
+- Added Git integration cmdlets (#48): `Connect-FabricGit` (with `-Initialize` to connect and initialize in one call), `Disconnect-FabricGit`, `Get-FabricGitConnection`, `Initialize-FabricGitConnection`, `Get-FabricGitStatus` (with `-ChangesOnly` / `-ConflictsOnly`), `Invoke-FabricGitCommit` (all or selected items, accepts pipeline input from `Get-FabricGitStatus`), `Invoke-FabricGitUpdate`, `Get-FabricGitCredential` and `Update-FabricGitCredential`. Commit and update look up the workspace head and remote commit hash automatically unless `-NoAutoResolve` is used.
+- Added Activator aliases for all Reflex cmdlets.
+- Added `Refresh-FabricSQLEndpoint` to refresh SQL analytics endpoint metadata.
+- Added `-SQLDatabaseName` (alias `Name`) to `Remove-FabricSQLDatabase`, requiring a unique exact name match within the specified workspace before deletion (#210).
+- Added `WorkspaceName` (alias `Name`) to `Remove-FabricWorkspace` to delete a workspace by its exact display name, refusing deletion when no workspace or multiple workspaces match (issue #157).
+- Added `Start-FabricNotebook` to run a notebook by ID or unique workspace-scoped name, wait for its job status by default, or return promptly with `-NoWait`. Supports `-WhatIf`, Retry-After polling, and execution failure details (#194).
+- Added `-UseDeviceAuthentication` switch to `Connect-FabricAccount` to force device code authentication instead of the interactive broker/browser flow
+- Added a documentation website generated from `docs/en-US` (`site/Build-DocsSite.ps1`), with search by command name, item type and verb, and a page per command. It is deployed to GitHub Pages from `main` (#3).
+- Help files in `docs/en-US` now carry an `itemType` frontmatter key (the `src/Public` folder of the cmdlet, or `Core`), written by the `generate_docs` and `Generate_help_from_built_module` build tasks.
+
+### Changed
+
+- `Remove-FabricWorkspace` reports the workspace name after successful deletion, resolving it from the ID when necessary (#50).
+- `Get-FabricWorkspaceUser` now includes the workspace name and ID on each returned user.
+- `Get-FabricDatasetRefreshHistory` supports workspace-wide mode when `-DatasetId` is omitted and `-WorkspaceId` is supplied.
+- `Remove-FabricItem` confirms each item individually instead of once for the whole batch, so `-WhatIf` lists the items by name and ID and `-Confirm` prompts per item rather than authorising the entire batch with a single answer
+- `Remove-FabricItem` reports item counts through `Write-Message` rather than `Write-Output`, so the count is no longer emitted into the pipeline as output
+
+### Fixed
+
+- Fixed long-running operation handling when response headers contain enumerable values, and surfaced `New-FabricSQLDatabase` failures as PowerShell errors (#209).
+- `Connect-FabricAccount` now automatically falls back to device code authentication when interactive/broker (WAM) sign-in fails, e.g. in terminal hosts such as Warp on Windows where the account picker cannot render
+- Fixed `Get-FabricWorkspace | Get-FabricKQLDatabase` by allowing `WorkspaceId` pipeline input and processing each workspace (issue #162).
+
+### Deprecated
+
+### Removed
+
+- Removed `Get-FabricDatasetRefreshes`, `Get-FabricWorkspaceDatasetRefreshes`, and the alias `Get-FabWorkspaceDatasetRefreshes`. Use `Get-FabricDatasetRefreshHistory` instead.
+- Removed stale help files for `Add-FabricWorkspaceCapacityAssignment` and `Remove-FabricWorkspaceCapacityAssignment`, which are not part of the module.
+
+### Security
+
 ## 0.32.0 - 2026-05-06
 
 ### Added

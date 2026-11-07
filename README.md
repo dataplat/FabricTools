@@ -62,7 +62,7 @@ Once imported, you can call any of the functions provided by the module. For exa
 Register-FabricWorkspaceToCapacity -WorkspaceId "Workspace-GUID" -CapacityId "Capacity-GUID"
 ```
 
-Refer to the individual function documentation for detailed usage instructions.
+Refer to the individual function documentation for detailed usage instructions. You can search all commands by name or item type on the documentation website: <https://dataplat.github.io/FabricTools/>.
 
 Every now and again the authentication token might time out. Run this to get a new one:
 ```powershell

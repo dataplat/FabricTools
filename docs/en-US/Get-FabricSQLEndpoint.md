@@ -2,9 +2,10 @@
 document type: cmdlet
 external help file: FabricTools-Help.xml
 HelpUri: ''
+itemType: SQL Endpoints
 Locale: en-US
 Module Name: FabricTools
-ms.date: 04/01/2026
+ms.date: 11/07/2026
 PlatyPS schema version: 2024-05-01
 title: Get-FabricSQLEndpoint
 ---
@@ -130,11 +131,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-- This function requires the FabricConfig object to be properly configured with BaseUrl and FabricHeaders.
-- The function uses continuation tokens to handle paginated API responses.
-- If no filter parameters are provided, all SQL Endpoints in the specified workspace are returned.
-
-Author: Tiago Balabuch
+Author: Tiago Balabuch, Kamil Nowinski
 
 ## RELATED LINKS
 

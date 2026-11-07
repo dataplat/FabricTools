@@ -18,13 +18,14 @@ Describe "Test-FabricApiResponse" -Tag "UnitTests" {
     Context "Command definition" {
         It 'Should have <ExpectedParameterName> parameter' -ForEach @(
             @{ ExpectedParameterName = 'Response'; ExpectedParameterType = 'Object'; Mandatory = 'False' }
-            @{ ExpectedParameterName = 'ResponseHeader'; ExpectedParameterType = 'Object'; Mandatory = 'True' }
+            @{ ExpectedParameterName = 'ResponseHeader'; ExpectedParameterType = 'Object'; Mandatory = 'False' }
             @{ ExpectedParameterName = 'StatusCode'; ExpectedParameterType = 'Object'; Mandatory = 'True' }
             @{ ExpectedParameterName = 'Operation'; ExpectedParameterType = 'Object'; Mandatory = 'False' }
             @{ ExpectedParameterName = 'ObjectIdOrName'; ExpectedParameterType = 'string'; Mandatory = 'False' }
             @{ ExpectedParameterName = 'TypeName'; ExpectedParameterType = 'string'; Mandatory = 'False' }
             @{ ExpectedParameterName = 'SuccessMessage'; ExpectedParameterType = 'string'; Mandatory = 'False' }
             @{ ExpectedParameterName = 'NoWait'; ExpectedParameterType = 'switch'; Mandatory = 'False' }
+            @{ ExpectedParameterName = 'Timeout'; ExpectedParameterType = 'int'; Mandatory = 'False' }
         ) {
             $script:Command | Should -HaveParameter -ParameterName $ExpectedParameterName -Type $ExpectedParameterType -Mandatory:([bool]::Parse($Mandatory))
         }
@@ -67,6 +68,11 @@ Describe "Test-FabricApiResponse - StatusCode Handling" -Tag "UnitTests" {
         $result | Should -Be $script:response
     }
 
+    It "Accepts a null response header for a successful response" {
+        Test-FabricApiResponse -Response $script:response -ResponseHeader $null -StatusCode 200 -Operation "Get" |
+            Should -Be $script:response
+    }
+
     It "Returns operation result when statusCode is 202 and operation succeeds" {
         $script:statusCode = 202
         $expectedResult = "Completed"
@@ -74,6 +80,30 @@ Describe "Test-FabricApiResponse - StatusCode Handling" -Tag "UnitTests" {
         $result | Should -Be $expectedResult
         Should -Invoke Get-FabricLongRunningOperation -Exactly 1
         Should -Invoke Get-FabricLongRunningOperationResult -Exactly 1
+    }
+
+    It "Passes the timeout to long-running operation polling" {
+        $script:statusCode = 202
+        Test-FabricApiResponse -Response $script:response -ResponseHeader $script:responseHeader -StatusCode $script:statusCode -Timeout 3 | Out-Null
+
+        Should -Invoke Get-FabricLongRunningOperation -Exactly 1 -ParameterFilter {
+            $Timeout -eq 3
+        }
+    }
+
+    It "Uses scalar values from enumerable 202 response headers" {
+        $headers = [System.Collections.Generic.Dictionary[string, System.Collections.Generic.IEnumerable[string]]]::new()
+        $headers.Add('x-ms-operation-id', [string[]]@('11111111-1111-1111-1111-111111111111', '22222222-2222-2222-2222-222222222222'))
+        $headers.Add('Location', [string[]]@('https://api.fabric.microsoft.com/operations/123', 'ignored-location'))
+        $headers.Add('Retry-After', [string[]]@('10', 'ignored-retry'))
+
+        Test-FabricApiResponse -ResponseHeader $headers -StatusCode 202 -Operation 'New' -ObjectIdOrName 'TestObject' -TypeName 'TestType' | Should -Be 'Completed'
+
+        Should -Invoke Get-FabricLongRunningOperation -Exactly 1 -ParameterFilter {
+            $operationId -eq [guid]'11111111-1111-1111-1111-111111111111' -and
+            $location -eq 'https://api.fabric.microsoft.com/operations/123' -and
+            $retryAfter -eq '10'
+        }
     }
 
     It "Returns PSCustomObject with 3 properties when statusCode is 202 and -NoWait is specified" {

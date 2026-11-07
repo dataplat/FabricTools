@@ -33,6 +33,9 @@ function Test-FabricApiResponse {
 .PARAMETER NoWait
     If specified, the function will not wait for the operation to complete and will return immediately.
 
+.PARAMETER Timeout
+    The maximum time, in minutes, to wait for a long-running operation. A value of 0 waits indefinitely.
+
 .EXAMPLE
     Test-FabricApiResponse -statusCode 201 -response $response -responseHeader $header -Name "MyResource" -typeName "Fabric Item"
 
@@ -58,8 +61,9 @@ function Test-FabricApiResponse {
         [Parameter(Mandatory = $false)]     # Response is $null when Response Code is 202
         $Response,
 
-        [Parameter(Mandatory = $true)]
-        $ResponseHeader,
+        [Parameter(Mandatory = $false)]
+        [AllowNull()]
+        $ResponseHeader = @{},
 
         [Parameter(Mandatory = $true)]
         $StatusCode,
@@ -77,10 +81,22 @@ function Test-FabricApiResponse {
         [string] $SuccessMessage,
 
         [Parameter(Mandatory = $false)]
-        [switch] $NoWait = $false
+        [switch] $NoWait = $false,
+
+        [Parameter(Mandatory = $false)]
+        [ValidateRange(0, [int]::MaxValue)]
+        [int] $Timeout = 0,
+
+        [Parameter(DontShow)]
+        [ValidateRange(0, [int]::MaxValue)]
+        [int] $TimeoutSeconds = 0
     )
 
     Write-Message -Message "::Begin" -Level Debug
+
+    if ($null -eq $ResponseHeader) {
+        $ResponseHeader = @{}
+    }
 
     #$responseHeader = $script:responseHeader
     #$statusCode = $script:statusCode
@@ -96,11 +112,11 @@ function Test-FabricApiResponse {
         }
         202 {
             Write-Message -Message "$Operation Request for $TypeName '$ObjectIdOrName' accepted. Provisioning in progress!" -Level Info
-            [string]$operationId = $responseHeader["x-ms-operation-id"]
+            $operationId = [string](@($ResponseHeader['x-ms-operation-id'])[0])
             [PSCustomObject] $res = @{
-                Location     = $responseHeader["Location"]
-                RetryAfter   = $responseHeader["Retry-After"]
-                OperationId  = $responseHeader["x-ms-operation-id"]
+                Location     = [string](@($ResponseHeader['Location'])[0])
+                RetryAfter   = [string](@($ResponseHeader['Retry-After'])[0])
+                OperationId  = $operationId
             }
 
             if ($NoWait) {
@@ -112,7 +128,7 @@ function Test-FabricApiResponse {
             Write-Message -Message "Operation ID: '$operationId'" -Level "Debug"
             Write-Message -Message "Getting Long Running Operation status" -Level Debug
 
-            $operationStatus = Get-FabricLongRunningOperation -operationId $operationId -location $res.Location -retryAfter $res.RetryAfter
+            $operationStatus = Get-FabricLongRunningOperation -operationId $operationId -location $res.Location -retryAfter $res.RetryAfter -Timeout $Timeout -TimeoutSeconds $TimeoutSeconds
             Write-Message -Message "Long Running Operation status: $operationStatus" -Level Debug
             # Handle operation result
             if ($operationStatus.status -eq "Succeeded") {
@@ -135,6 +151,9 @@ function Test-FabricApiResponse {
             $retryAfter = $responseHeader['Retry-After']
             $retryAfterStr = $retryAfter[0].ToString()
             $retryAfterInt = [int]$retryAfterStr
+            if ($TimeoutSeconds -gt 0) {
+                $retryAfterInt = [Math]::Min($retryAfterInt, $TimeoutSeconds)
+            }
             Start-Sleep -Seconds $retryAfterInt
             return "Command:Repeat"
         }

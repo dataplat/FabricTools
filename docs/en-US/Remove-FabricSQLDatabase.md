@@ -2,9 +2,10 @@
 document type: cmdlet
 external help file: FabricTools-Help.xml
 HelpUri: ''
+itemType: SQL Database
 Locale: en-US
 Module Name: FabricTools
-ms.date: 04/01/2026
+ms.date: 11/07/2026
 PlatyPS schema version: 2024-05-01
 title: Remove-FabricSQLDatabase
 ---
@@ -13,14 +14,21 @@ title: Remove-FabricSQLDatabase
 
 ## SYNOPSIS
 
-Deletes a SQL Database from a specified workspace in Microsoft Fabric.
+Deletes a SQL Database from a specified workspace in Microsoft Fabric by ID or exact name.
 
 ## SYNTAX
 
-### __AllParameterSets
+### ById (Default)
 
 ```
-Remove-FabricSQLDatabase [-WorkspaceId] <guid> [-SQLDatabaseId] <guid> [-WhatIf] [-Confirm]
+Remove-FabricSQLDatabase -WorkspaceId <guid> -SQLDatabaseId <guid> [-WhatIf] [-Confirm]
+ [<CommonParameters>]
+```
+
+### ByName
+
+```
+Remove-FabricSQLDatabase -WorkspaceId <guid> -SQLDatabaseName <string> [-WhatIf] [-Confirm]
  [<CommonParameters>]
 ```
 
@@ -28,7 +36,8 @@ Remove-FabricSQLDatabase [-WorkspaceId] <guid> [-SQLDatabaseId] <guid> [-WhatIf]
 
 ## DESCRIPTION
 
-The `Remove-FabricSQLDatabase` function sends a DELETE request to the Fabric API to remove a specified SQLDatabase from a given workspace.
+When a name is provided, exactly one SQL Database in the workspace must match.
+If no database or multiple databases match, no deletion is performed.
 
 ## EXAMPLES
 
@@ -38,6 +47,14 @@ Deletes the SQL Database with ID "67890" from workspace "12345".
 
 ```powershell
 Remove-FabricSQLDatabas -WorkspaceId "12345" -SQLDatabaseId "67890"
+```
+
+### EXAMPLE 2
+
+Deletes the SQL Database with the exact name "MyDatabase" from workspace "12345".
+
+```powershell
+Remove-FabricSQLDatabase -WorkspaceId "12345" -SQLDatabaseName "MyDatabase"
 ```
 
 ## PARAMETERS
@@ -66,7 +83,7 @@ HelpMessage: ''
 
 ### -SQLDatabaseId
 
-(Mandatory) The ID of the SQL Database to be deleted.
+The ID of the SQL Database to be deleted.
 
 ```yaml
 Type: System.Guid
@@ -74,8 +91,32 @@ DefaultValue: ''
 SupportsWildcards: false
 Aliases: []
 ParameterSets:
-- Name: (All)
-  Position: 1
+- Name: ById
+  Position: Named
+  IsRequired: true
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -SQLDatabaseName
+
+The exact name of the SQL Database to be deleted.
+Supports the alias Name.
+Use SQLDatabaseId if the name is ambiguous.
+
+```yaml
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases:
+- Name
+ParameterSets:
+- Name: ByName
+  Position: Named
   IsRequired: true
   ValueFromPipeline: false
   ValueFromPipelineByPropertyName: false
@@ -118,7 +159,7 @@ SupportsWildcards: false
 Aliases: []
 ParameterSets:
 - Name: (All)
-  Position: 0
+  Position: Named
   IsRequired: true
   ValueFromPipeline: false
   ValueFromPipelineByPropertyName: false

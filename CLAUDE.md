@@ -111,8 +111,12 @@ $response
 3. Use `Invoke-FabricRestMethod` for all API calls — follow the hash splatting + `HandleResponse = $true` conventions above
 4. Use `Write-Message` (PSFramework) for logging, not `Write-Verbose`/`Write-Host`
 5. Create matching test file at `tests/Unit/Verb-FabricNoun.Tests.ps1`
-6. Build, then regenerate docs: `./build.ps1 -Tasks Generate_help_from_built_module`
+6. Build, then regenerate docs: `./build.ps1 -Tasks generate_docs` (writes `docs/en-US/<Cmdlet>.md`, including the `itemType` frontmatter key taken from the `src/Public/<FeatureArea>` folder)
 7. Update `CHANGELOG.md` under `## [Unreleased]` using Keep a Changelog format
+
+## Documentation Website
+
+`site/Build-DocsSite.ps1` generates a static website from `docs/en-US` into `output/site` (see `site/README.md`). Commands are grouped and filtered by the `itemType` frontmatter key, so never edit `itemType` by hand — move the cmdlet to the right `src/Public` folder and regenerate docs. `.github/workflows/docs.yml` deploys the site to GitHub Pages from `main`. Preview locally with `./site/Build-DocsSite.ps1 -LocalPreview`.
 
 ## Testing
 

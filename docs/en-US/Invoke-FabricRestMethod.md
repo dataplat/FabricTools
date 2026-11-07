@@ -2,9 +2,10 @@
 document type: cmdlet
 external help file: FabricTools-Help.xml
 HelpUri: ''
+itemType: Core
 Locale: en-US
 Module Name: FabricTools
-ms.date: 04/01/2026
+ms.date: 11/07/2026
 PlatyPS schema version: 2024-05-01
 title: Invoke-FabricRestMethod
 ---
@@ -20,10 +21,10 @@ Sends an HTTP request to a Fabric or Power BI API endpoint and retrieve the resp
 ### __AllParameterSets
 
 ```
-Invoke-FabricRestMethod [-Uri] <string> [[-Method] <string>] [[-Body] <Object>]
- [[-ExtractValue] <string>] [[-TypeName] <string>] [[-ObjectIdOrName] <string>]
- [[-SuccessMessage] <string>] [-TestTokenExpired] [-PowerBIApi] [-NoWait] [-HandleResponse]
- [<CommonParameters>]
+Invoke-FabricRestMethod [-Uri] <string> [[-Method] <string>] [[-Body] <Object>] [[-Timeout] <int>]
+ [[-RequestTimeoutSeconds] <int>] [[-ExtractValue] <string>] [[-TypeName] <string>]
+ [[-ObjectIdOrName] <string>] [[-SuccessMessage] <string>] [-TestTokenExpired] [-PowerBIApi]
+ [-NoWait] [-HandleResponse] [<CommonParameters>]
 ```
 
 ## ALIASES
@@ -89,7 +90,7 @@ SupportsWildcards: false
 Aliases: []
 ParameterSets:
 - Name: (All)
-  Position: 3
+  Position: 5
   IsRequired: false
   ValueFromPipeline: false
   ValueFromPipelineByPropertyName: false
@@ -107,7 +108,7 @@ The operation will be processed based on the response status code and supports T
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
-DefaultValue: False
+DefaultValue: True
 SupportsWildcards: false
 Aliases: []
 ParameterSets:
@@ -183,7 +184,7 @@ SupportsWildcards: false
 Aliases: []
 ParameterSets:
 - Name: (All)
-  Position: 5
+  Position: 7
   IsRequired: false
   ValueFromPipeline: false
   ValueFromPipelineByPropertyName: false
@@ -214,6 +215,27 @@ AcceptedValues: []
 HelpMessage: ''
 ```
 
+### -RequestTimeoutSeconds
+
+An internal request timeout, in seconds, used to keep long-running operation status requests within the remaining timeout budget.
+
+```yaml
+Type: System.Int32
+DefaultValue: 0
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: 4
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
 ### -SuccessMessage
 
 Optional.
@@ -229,7 +251,7 @@ SupportsWildcards: false
 Aliases: []
 ParameterSets:
 - Name: (All)
-  Position: 6
+  Position: 8
   IsRequired: false
   ValueFromPipeline: false
   ValueFromPipelineByPropertyName: false
@@ -263,6 +285,28 @@ AcceptedValues: []
 HelpMessage: ''
 ```
 
+### -Timeout
+
+The maximum time, in minutes, to wait for a long-running operation.
+A value of 0 waits indefinitely.
+
+```yaml
+Type: System.Int32
+DefaultValue: 0
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: 3
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
 ### -TypeName
 
 Optional.
@@ -278,7 +322,7 @@ SupportsWildcards: false
 Aliases: []
 ParameterSets:
 - Name: (All)
-  Position: 4
+  Position: 6
   IsRequired: false
   ValueFromPipeline: false
   ValueFromPipelineByPropertyName: false

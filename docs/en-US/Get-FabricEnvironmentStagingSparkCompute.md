@@ -2,9 +2,10 @@
 document type: cmdlet
 external help file: FabricTools-Help.xml
 HelpUri: ''
+itemType: Environment
 Locale: en-US
 Module Name: FabricTools
-ms.date: 04/01/2026
+ms.date: 11/07/2026
 PlatyPS schema version: 2024-05-01
 title: Get-FabricEnvironmentStagingSparkCompute
 ---
@@ -99,10 +100,9 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-- Requires the `$FabricConfig` global object, including `BaseUrl` and `FabricHeaders`.
 - Uses `Confirm-TokenState` to validate the token before making API calls.
 
-Author: Tiago Balabuch
+Author: Tiago Balabuch, Kamil Nowinski
 
 ## RELATED LINKS
 

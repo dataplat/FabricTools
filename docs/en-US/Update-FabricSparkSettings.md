@@ -2,9 +2,10 @@
 document type: cmdlet
 external help file: FabricTools-Help.xml
 HelpUri: ''
+itemType: Spark
 Locale: en-US
 Module Name: FabricTools
-ms.date: 04/01/2026
+ms.date: 11/07/2026
 PlatyPS schema version: 2024-05-01
 title: Update-FabricSparkSettings
 ---
@@ -13,7 +14,7 @@ title: Update-FabricSparkSettings
 
 ## SYNOPSIS
 
-Updates an existing Spark custom pool in a specified Microsoft Fabric workspace.
+Updates Spark settings in a specified Microsoft Fabric workspace.
 
 ## SYNTAX
 
@@ -31,25 +32,34 @@ Update-FabricSparkSettings [-WorkspaceId] <guid> [[-automaticLogEnabled] <bool>]
 
 ## DESCRIPTION
 
-This function sends a PATCH request to the Microsoft Fabric API to update an existing Spark custom pool
+This function sends a PATCH request to the Microsoft Fabric API to update Spark settings
 in the specified workspace.
-It supports various parameters for Spark custom pool configuration.
+It supports optional parameters for automatic logging, high concurrency,
+pool configuration, environment, and starter pool settings.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 
-This example updates the Spark custom pool with ID "pool-67890" in the workspace with ID "workspace-12345" with a new name and configuration.
+This example enables automatic logging for the workspace with ID "workspace-12345".
 
 ```powershell
-Update-FabricSparkSettings -WorkspaceId "workspace-12345" -SparkSettingsId "pool-67890" -InstancePoolName "Updated Spark Pool" -NodeFamily "MemoryOptimized" -NodeSize "Large" -AutoScaleEnabled $true -AutoScaleMinNodeCount 1 -AutoScaleMaxNodeCount 10 -DynamicExecutorAllocationEnabled $true -DynamicExecutorAllocationMinExecutors 1 -DynamicExecutorAllocationMaxExecutors 10
+Update-FabricSparkSettings -WorkspaceId "workspace-12345" -automaticLogEnabled $true
+```
+
+### EXAMPLE 2
+
+This example sets the default pool for the workspace with ID "workspace-12345".
+
+```powershell
+Update-FabricSparkSettings -WorkspaceId "workspace-12345" -defaultPoolName "MyPool" -defaultPoolType "Workspace"
 ```
 
 ## PARAMETERS
 
 ### -automaticLogEnabled
 
-Specifies whether automatic logging is enabled for the Spark custom pool.
+Specifies whether automatic logging is enabled.
 This parameter is optional.
 
 ```yaml
@@ -93,7 +103,7 @@ HelpMessage: ''
 
 ### -customizeComputeEnabled
 
-Specifies whether compute customization is enabled for the Spark custom pool.
+Specifies whether compute customization is enabled for the pool.
 This parameter is optional.
 
 ```yaml
@@ -115,7 +125,8 @@ HelpMessage: ''
 
 ### -defaultPoolName
 
-The name of the default pool for the Spark custom pool.
+The name of the default pool.
+Must be provided together with defaultPoolType.
 This parameter is optional.
 
 ```yaml
@@ -137,8 +148,10 @@ HelpMessage: ''
 
 ### -defaultPoolType
 
-The type of the default pool for the Spark custom pool.
-This parameter is optional and must be either 'Workspace' or 'Capacity'.
+The type of the default pool.
+Must be 'Workspace' or 'Capacity'.
+Must be provided together with defaultPoolName.
+This parameter is optional.
 
 ```yaml
 Type: System.String
@@ -159,7 +172,7 @@ HelpMessage: ''
 
 ### -EnvironmentName
 
-The name of the environment for the Spark custom pool.
+The name of the environment.
 This parameter is optional.
 
 ```yaml
@@ -181,7 +194,7 @@ HelpMessage: ''
 
 ### -EnvironmentRuntimeVersion
 
-The runtime version of the environment for the Spark custom pool.
+The runtime version of the environment.
 This parameter is optional.
 
 ```yaml
@@ -203,7 +216,7 @@ HelpMessage: ''
 
 ### -notebookInteractiveRunEnabled
 
-Specifies whether notebook interactive run is enabled for the Spark custom pool.
+Specifies whether notebook interactive run (high concurrency) is enabled.
 This parameter is optional.
 
 ```yaml
@@ -225,7 +238,7 @@ HelpMessage: ''
 
 ### -starterPoolMaxExecutors
 
-The maximum number of executors for the starter pool in the Spark custom pool.
+The maximum number of executors for the starter pool.
 This parameter is optional.
 
 ```yaml
@@ -247,7 +260,7 @@ HelpMessage: ''
 
 ### -starterPoolMaxNode
 
-The maximum number of nodes for the starter pool in the Spark custom pool.
+The maximum number of nodes for the starter pool.
 This parameter is optional.
 
 ```yaml
@@ -291,7 +304,7 @@ HelpMessage: ''
 
 ### -WorkspaceId
 
-The unique identifier of the workspace where the Spark custom pool exists.
+The unique identifier of the workspace whose Spark settings will be updated.
 This parameter is mandatory.
 
 ```yaml
@@ -324,10 +337,9 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-- Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
 - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 
-Author: Tiago Balabuch
+Author: Tiago Balabuch, Kamil Nowinski
 
 ## RELATED LINKS
 

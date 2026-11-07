@@ -29,6 +29,7 @@ function Remove-FabricReflex
 
 #>
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
+    [Alias('Remove-FabricActivator')]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]

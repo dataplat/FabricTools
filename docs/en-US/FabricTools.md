@@ -5,7 +5,7 @@ HelpInfoUri: https://www.github.com/dataplat/FabricTools
 Locale: en-US
 Module Guid: f2a0f9e6-fab6-41fc-9e1c-0c94ff38f794
 Module Name: FabricTools
-ms.date: 04/08/2026
+ms.date: 11/07/2026
 PlatyPS schema version: 2024-05-01
 title: FabricTools Module
 ---
@@ -58,6 +58,10 @@ Assigns a workspace to a deployment pipeline stage.
 
 Connects to the Fabric WebAPI.
 
+### [Connect-FabricGit](Connect-FabricGit.md)
+
+Connects a Fabric workspace to a Git repository and branch.
+
 ### [Convert-FromBase64](Convert-FromBase64.md)
 
 Decodes a Base64-encoded string into its original text representation.
@@ -65,6 +69,10 @@ Decodes a Base64-encoded string into its original text representation.
 ### [Convert-ToBase64](Convert-ToBase64.md)
 
 Encodes the content of a file into a Base64-encoded string.
+
+### [Disconnect-FabricGit](Disconnect-FabricGit.md)
+
+Disconnects a Fabric workspace from its Git repository.
 
 ### [Export-FabricItem](Export-FabricItem.md)
 
@@ -141,10 +149,6 @@ Retrieves data pipelines from a specified Microsoft Fabric workspace.
 ### [Get-FabricDataset](Get-FabricDataset.md)
 
 Retrieves one or more Power BI datasets from My Workspace or a specific workspace.
-
-### [Get-FabricDatasetRefreshes](Get-FabricDatasetRefreshes.md)
-
-Retrieves the refresh history of a specified dataset in a PowerBI workspace.
 
 ### [Get-FabricDatasetRefreshHistory](Get-FabricDatasetRefreshHistory.md)
 
@@ -225,6 +229,18 @@ Retrieves the definition of a Eventstream from a specific workspace in Microsoft
 ### [Get-FabricExternalDataShares](Get-FabricExternalDataShares.md)
 
 Retrieves External Data Shares details from a specified Microsoft Fabric.
+
+### [Get-FabricGitConnection](Get-FabricGitConnection.md)
+
+Gets the Git connection details of a Fabric workspace.
+
+### [Get-FabricGitCredential](Get-FabricGitCredential.md)
+
+Gets the Git credentials configuration of the current user for a Fabric workspace.
+
+### [Get-FabricGitStatus](Get-FabricGitStatus.md)
+
+Gets the Git status of the items in a Fabric workspace.
 
 ### [Get-FabricItem](Get-FabricItem.md)
 
@@ -378,10 +394,6 @@ Retrieves warehouse details from a specified Microsoft Fabric workspace.
 
 Retrieves details of a Microsoft Fabric workspace by its ID or name.
 
-### [Get-FabricWorkspaceDatasetRefreshes](Get-FabricWorkspaceDatasetRefreshes.md)
-
-Retrieves the refresh history of all datasets in a specified PowerBI workspace.
-
 ### [Get-FabricWorkspaceRoleAssignment](Get-FabricWorkspaceRoleAssignment.md)
 
 Retrieves role assignments for a specified Fabric workspace.
@@ -406,9 +418,21 @@ Uploads a library to the staging environment in a Microsoft Fabric workspace.
 
 Imports items using the Power BI Project format (PBIP) into a Fabric workspace from a specified file system source.
 
+### [Initialize-FabricGitConnection](Initialize-FabricGitConnection.md)
+
+Initializes the Git connection of a Fabric workspace.
+
 ### [Invoke-FabricDatasetRefresh](Invoke-FabricDatasetRefresh.md)
 
 Triggers a refresh of a Power BI dataset.
+
+### [Invoke-FabricGitCommit](Invoke-FabricGitCommit.md)
+
+Commits changes from a Fabric workspace to the connected Git branch.
+
+### [Invoke-FabricGitUpdate](Invoke-FabricGitUpdate.md)
+
+Updates a Fabric workspace with the latest commits from the connected Git branch.
 
 ### [Invoke-FabricKQLCommand](Invoke-FabricKQLCommand.md)
 
@@ -518,6 +542,10 @@ Retrieves the workspace usage metrics dataset ID.
 
 Publishes a staging environment in a specified Microsoft Fabric workspace.
 
+### [Refresh-FabricSQLEndpoint](Refresh-FabricSQLEndpoint.md)
+
+Refreshes the metadata of a SQL analytics endpoint.
+
 ### [Remove-FabricCopyJob](Remove-FabricCopyJob.md)
 
 Deletes a Copy Job from a specified Microsoft Fabric workspace.
@@ -616,7 +644,7 @@ Removes an SparkJobDefinition from a specified Microsoft Fabric workspace.
 
 ### [Remove-FabricSQLDatabase](Remove-FabricSQLDatabase.md)
 
-Deletes a SQL Database from a specified workspace in Microsoft Fabric.
+Deletes a SQL Database from a specified workspace in Microsoft Fabric by ID or exact name.
 
 ### [Remove-FabricWarehouse](Remove-FabricWarehouse.md)
 
@@ -624,7 +652,7 @@ Removes a warehouse from a specified Microsoft Fabric workspace.
 
 ### [Remove-FabricWorkspace](Remove-FabricWorkspace.md)
 
-Deletes an existing Fabric workspace by its workspace ID.
+Deletes an existing Fabric workspace by its workspace ID or name.
 
 ### [Remove-FabricWorkspaceCapacity](Remove-FabricWorkspaceCapacity.md)
 
@@ -665,6 +693,10 @@ Initiates a table maintenance job for a specified Lakehouse in a Fabric workspac
 ### [Start-FabricMirroredDatabaseMirroring](Start-FabricMirroredDatabaseMirroring.md)
 
 Starts the mirroring of a specified mirrored database in a given workspace.
+
+### [Start-FabricNotebook](Start-FabricNotebook.md)
+
+Starts a notebook in Microsoft Fabric.
 
 ### [Start-FabricSparkJobDefinitionOnDemand](Start-FabricSparkJobDefinitionOnDemand.md)
 
@@ -729,6 +761,10 @@ Updates the properties of a Fabric Eventstream.
 ### [Update-FabricEventstreamDefinition](Update-FabricEventstreamDefinition.md)
 
 Updates the definition of a Eventstream in a Microsoft Fabric workspace.
+
+### [Update-FabricGitCredential](Update-FabricGitCredential.md)
+
+Updates the Git credentials configuration of the current user for a Fabric workspace.
 
 ### [Update-FabricKQLDashboard](Update-FabricKQLDashboard.md)
 
@@ -824,7 +860,7 @@ Updates the definition of an existing SparkJobDefinition in a specified Microsof
 
 ### [Update-FabricSparkSettings](Update-FabricSparkSettings.md)
 
-Updates an existing Spark custom pool in a specified Microsoft Fabric workspace.
+Updates Spark settings in a specified Microsoft Fabric workspace.
 
 ### [Update-FabricWarehouse](Update-FabricWarehouse.md)
 
@@ -841,3 +877,4 @@ Updates the role assignment for a specific principal in a Fabric workspace.
 ### [Write-FabricLakehouseTableData](Write-FabricLakehouseTableData.md)
 
 Loads data into a specified table in a Lakehouse within a Fabric workspace.
+

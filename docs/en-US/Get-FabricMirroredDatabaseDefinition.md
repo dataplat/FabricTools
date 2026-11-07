@@ -2,9 +2,10 @@
 document type: cmdlet
 external help file: FabricTools-Help.xml
 HelpUri: ''
+itemType: Mirrored Database
 Locale: en-US
 Module Name: FabricTools
-ms.date: 04/01/2026
+ms.date: 11/07/2026
 PlatyPS schema version: 2024-05-01
 title: Get-FabricMirroredDatabaseDefinition
 ---
@@ -110,7 +111,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 - Handles long-running operations asynchronously.
 
-Author: Tiago Balabuch
+Author: Tiago Balabuch, Kamil Nowinski
 
 ## RELATED LINKS
 

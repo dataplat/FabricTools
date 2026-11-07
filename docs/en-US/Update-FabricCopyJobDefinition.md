@@ -2,9 +2,10 @@
 document type: cmdlet
 external help file: FabricTools-Help.xml
 HelpUri: ''
+itemType: Copy Job
 Locale: en-US
 Module Name: FabricTools
-ms.date: 04/01/2026
+ms.date: 11/07/2026
 PlatyPS schema version: 2024-05-01
 title: Update-FabricCopyJobDefinition
 ---
@@ -195,12 +196,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-- Requires the `$FabricConfig` global configuration, which must include `BaseUrl` and `FabricHeaders`.
 - Validates token expiration using `Confirm-TokenState` before making the API request.
 - Encodes file content as Base64 before sending it to the Fabric API.
-- Logs detailed messages for debugging and error handling.
 
-Author: Tiago Balabuch
+Author: Tiago Balabuch, Kamil Nowinski
 
 ## RELATED LINKS
 

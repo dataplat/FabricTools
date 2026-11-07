@@ -23,6 +23,7 @@ Describe "Invoke-FabricRestMethod" -Tag "UnitTests" {
             @{ ExpectedParameterName = 'TestTokenExpired'; ExpectedParameterType = 'switch'; Mandatory = 'False' }
             @{ ExpectedParameterName = 'PowerBIApi'; ExpectedParameterType = 'switch'; Mandatory = 'False' }
             @{ ExpectedParameterName = 'NoWait'; ExpectedParameterType = 'switch'; Mandatory = 'False' }
+            @{ ExpectedParameterName = 'Timeout'; ExpectedParameterType = 'int'; Mandatory = 'False' }
             @{ ExpectedParameterName = 'HandleResponse'; ExpectedParameterType = 'switch'; Mandatory = 'False' }
             @{ ExpectedParameterName = 'ExtractValue'; ExpectedParameterType = 'string'; Mandatory = 'False' }
             @{ ExpectedParameterName = 'TypeName'; ExpectedParameterType = 'string'; Mandatory = 'False' }
@@ -33,19 +34,34 @@ Describe "Invoke-FabricRestMethod" -Tag "UnitTests" {
         }
     }
 
+    AfterAll {
+        Remove-Variable -Name statusCode, responseHeader -Scope Global -ErrorAction SilentlyContinue
+    }
+
     Context "Successful REST call" {
         BeforeAll {
             Mock -CommandName Invoke-RestMethod -MockWith {
+                param($StatusCodeVariable, $ResponseHeadersVariable)
+                Set-Variable -Name $StatusCodeVariable -Value 200 -Scope Global
+                Set-Variable -Name $ResponseHeadersVariable -Value $null -Scope Global
                 return @{
                     value = @(@{ id = 'test-id'; name = 'test-name' })
                 }
             }
             Mock -CommandName Confirm-TokenState -MockWith { return $true }
+            Mock -CommandName Test-FabricApiResponse -MockWith {
+                param($Response, $ResponseHeader, $StatusCode)
+                return $Response
+            }
         }
 
         It 'Should invoke REST method successfully' {
             InModuleScope -ModuleName 'FabricTools' {
                 { Invoke-FabricRestMethod -Uri 'https://api.fabric.microsoft.com/v1/workspaces' } | Should -Not -Throw
+
+                Should -Invoke -CommandName Test-FabricApiResponse -Times 1 -Exactly -ParameterFilter {
+                    $ResponseHeader -is [hashtable]
+                }
             }
         }
     }
@@ -53,6 +69,9 @@ Describe "Invoke-FabricRestMethod" -Tag "UnitTests" {
     Context "Error handling" {
         BeforeAll {
             Mock -CommandName Invoke-RestMethod -MockWith {
+                param($StatusCodeVariable, $ResponseHeadersVariable)
+                Set-Variable -Name $StatusCodeVariable -Value 200 -Scope Global
+                Set-Variable -Name $ResponseHeadersVariable -Value $null -Scope Global
                 return @{
                     errorCode = 'TestError'
                     message = 'API Error'
@@ -81,6 +100,9 @@ Describe "Invoke-FabricRestMethod" -Tag "UnitTests" {
             }
 
             Mock -CommandName Invoke-RestMethod -MockWith {
+                param($StatusCodeVariable, $ResponseHeadersVariable)
+                Set-Variable -Name $StatusCodeVariable -Value 200 -Scope Global
+                Set-Variable -Name $ResponseHeadersVariable -Value $null -Scope Global
                 return @{ value = @(); statusCode = 200 }
             }
 
@@ -94,6 +116,16 @@ Describe "Invoke-FabricRestMethod" -Tag "UnitTests" {
                 Should -Invoke -CommandName Invoke-RestMethod -Times 1 -ParameterFilter {
                     $Headers -ne $null -and $Headers['User-Agent'] -eq 'TestUA/1.2'
                 } -Because 'Invoke-RestMethod should be called with User-Agent header set to configured value'
+            }
+        }
+
+        It 'Should convert the timeout from minutes to seconds for the request' {
+            InModuleScope -ModuleName 'FabricTools' {
+                Invoke-FabricRestMethod -Uri 'https://api.fabric.microsoft.com/v1/test' -Timeout 2 -HandleResponse:$false | Out-Null
+
+                Should -Invoke -CommandName Invoke-RestMethod -Times 1 -ParameterFilter {
+                    $TimeoutSec -gt 0 -and $TimeoutSec -le 120
+                }
             }
         }
     }
