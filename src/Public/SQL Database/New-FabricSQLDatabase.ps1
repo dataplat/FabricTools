@@ -91,5 +91,6 @@ function New-FabricSQLDatabase
         # Handle and log errors
         $errorDetails = $_.Exception.Message
         Write-Message -Message "Failed to create SQL Database. Error: $errorDetails" -Level Error
+        Write-Error -ErrorRecord $_
     }
 }

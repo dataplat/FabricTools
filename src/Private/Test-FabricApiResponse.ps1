@@ -107,11 +107,11 @@ function Test-FabricApiResponse {
         }
         202 {
             Write-Message -Message "$Operation Request for $TypeName '$ObjectIdOrName' accepted. Provisioning in progress!" -Level Info
-            [string]$operationId = $responseHeader["x-ms-operation-id"]
+            $operationId = [string](@($ResponseHeader['x-ms-operation-id'])[0])
             [PSCustomObject] $res = @{
-                Location     = $responseHeader["Location"]
-                RetryAfter   = $responseHeader["Retry-After"]
-                OperationId  = $responseHeader["x-ms-operation-id"]
+                Location     = [string](@($ResponseHeader['Location'])[0])
+                RetryAfter   = [string](@($ResponseHeader['Retry-After'])[0])
+                OperationId  = $operationId
             }
 
             if ($NoWait) {
