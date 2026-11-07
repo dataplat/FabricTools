@@ -74,6 +74,9 @@ Describe "Remove-FabricWorkspace" -Tag "UnitTests" {
                 $Uri -eq 'workspaces/11111111-1111-1111-1111-111111111111' -and
                 $Method -eq 'Delete' -and $HandleResponse
             }
+            Should -Invoke -CommandName Write-Message -Times 1 -Exactly -ParameterFilter {
+                $Level -eq 'Info' -and $Message -eq "Workspace 'TestWorkspace' deleted successfully!"
+            }
         }
 
         It 'Should not delete when no workspace matches' {
@@ -140,10 +143,12 @@ Describe "Remove-FabricWorkspace" -Tag "UnitTests" {
             Should -Invoke -CommandName Invoke-FabricRestMethod -Times 0
         }
 
-        It 'Should preserve positional ID deletion without looking up names' {
+        It 'Should preserve positional ID deletion and resolve the workspace name' {
             Remove-FabricWorkspace '11111111-1111-1111-1111-111111111111' -Confirm:$false
 
-            Should -Invoke -CommandName Get-FabricWorkspace -Times 0
+            Should -Invoke -CommandName Get-FabricWorkspace -Times 1 -Exactly -ParameterFilter {
+                $WorkspaceId -eq [guid]'11111111-1111-1111-1111-111111111111'
+            }
             Should -Invoke -CommandName Invoke-FabricRestMethod -Times 1 -Exactly -ParameterFilter {
                 $Uri -eq 'workspaces/11111111-1111-1111-1111-111111111111' -and $Method -eq 'Delete'
             }
@@ -154,6 +159,9 @@ Describe "Remove-FabricWorkspace" -Tag "UnitTests" {
         BeforeAll {
             Mock -CommandName Confirm-TokenState -MockWith { }
             Mock -CommandName Write-Message -MockWith { }
+            Mock -CommandName Get-FabricWorkspace -MockWith {
+                [PSCustomObject]@{ Id = $WorkspaceId; DisplayName = 'TestWorkspace' }
+            }
             Mock -CommandName Invoke-FabricRestMethod -MockWith {
                 InModuleScope -ModuleName 'FabricTools' {
                     $script:statusCode = 200
@@ -179,7 +187,7 @@ Describe "Remove-FabricWorkspace" -Tag "UnitTests" {
             Remove-FabricWorkspace -WorkspaceId $mockWorkspaceId -Confirm:$false
 
             Should -Invoke -CommandName Write-Message -ParameterFilter {
-                $Level -eq 'Info' -and $Message -like "*deleted successfully*"
+                $Level -eq 'Info' -and $Message -eq "Workspace 'TestWorkspace' deleted successfully!"
             }
         }
     }
