@@ -78,14 +78,14 @@ Describe "Test-FabricApiResponse - StatusCode Handling" -Tag "UnitTests" {
 
     It "Uses scalar values from enumerable 202 response headers" {
         $headers = [System.Collections.Generic.Dictionary[string, System.Collections.Generic.IEnumerable[string]]]::new()
-        $headers.Add('x-ms-operation-id', [string[]]@('operation-123', 'ignored-operation'))
+        $headers.Add('x-ms-operation-id', [string[]]@('11111111-1111-1111-1111-111111111111', '22222222-2222-2222-2222-222222222222'))
         $headers.Add('Location', [string[]]@('https://api.fabric.microsoft.com/operations/123', 'ignored-location'))
         $headers.Add('Retry-After', [string[]]@('10', 'ignored-retry'))
 
         Test-FabricApiResponse -ResponseHeader $headers -StatusCode 202 -Operation 'New' -ObjectIdOrName 'TestObject' -TypeName 'TestType' | Should -Be 'Completed'
 
         Should -Invoke Get-FabricLongRunningOperation -Exactly 1 -ParameterFilter {
-            $operationId -eq 'operation-123' -and
+            $operationId -eq [guid]'11111111-1111-1111-1111-111111111111' -and
             $location -eq 'https://api.fabric.microsoft.com/operations/123' -and
             $retryAfter -eq '10'
         }
