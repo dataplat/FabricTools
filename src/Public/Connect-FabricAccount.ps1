@@ -6,6 +6,7 @@ function Connect-FabricAccount {
 
 .DESCRIPTION
     Connects to the Fabric WebAPI by using the cmdlet Connect-AzAccount. This function retrieves the authentication token for the Fabric API and sets up the headers for API calls.
+    User sign-in uses interactive authentication by default. Use -UseDeviceAuthentication if the interactive broker or browser cannot be used.
 
 .PARAMETER TenantId
     The TenantId of the Azure Active Directory tenant you want to connect to and in which your Fabric Capacity is.
@@ -17,10 +18,16 @@ function Connect-FabricAccount {
     The **secure string** representing the service principal secret.
 
 .PARAMETER Credential
-    A PSCredential object representing a user credential (username and secure password).
+    A PSCredential object containing a service principal's application ID as the username and client secret as the password. This is not for signing in as a user with a username and password.
 
 .PARAMETER Reset
     A switch parameter. If provided, the function resets the Fabric authentication token.
+
+.PARAMETER UseDeviceAuthentication
+    A switch parameter. Forces device code authentication instead of the interactive broker/browser flow.
+    Use this when the interactive account picker cannot be displayed by the host terminal (for example Warp on Windows,
+    which does not expose a window handle the WAM broker can parent its UI to). When this switch is not specified,
+    Connect-FabricAccount still falls back to device code authentication automatically if interactive sign-in fails.
 
 .EXAMPLE
     Connects to the stated Tenant with existing credentials
@@ -30,11 +37,11 @@ function Connect-FabricAccount {
     ```
 
 .EXAMPLE
-    Prompts for Service Principal id and secret and connects as that Service Principal
+    Connects as a service principal using a PSCredential object. The username is the service principal's application ID.
 
     ```powershell
-    $credential = Get-Credential
-    Connect-FabricAccount -TenantId 'xxx' -credential $credential
+    $credential = Get-Credential -UserName '<service-principal-app-id>' -Message 'Enter the service principal client secret'
+    Connect-FabricAccount -TenantId '<tenant-id>' -Credential $credential
     ```
 
 .EXAMPLE
@@ -47,6 +54,13 @@ function Connect-FabricAccount {
 
     $ServicePrincipalSecretSecure = ($ServicePrincipalSecret | ConvertTo-SecureString -AsPlainText -Force)
     Connect-FabricAccount -TenantId $TenantID -ServicePrincipalId $ServicePrincipalId -ServicePrincipalSecret $ServicePrincipalSecretSecure -Reset
+    ```
+
+.EXAMPLE
+    Connects using device code authentication (useful in terminals such as Warp where the account picker cannot render)
+
+    ```powershell
+    Connect-FabricAccount -UseDeviceAuthentication
     ```
 
 .EXAMPLE
@@ -72,6 +86,7 @@ function Connect-FabricAccount {
     - 2024-12-22 - FGE: Added Verbose Output
     - 2025-05-26 - Jojobit: Added Service Principal support, with secure string handling and parameter descriptions, as supported by the original FabTools module
     - 2025-06-02 - KNO: Added Reset switch to force re-authentication and token refresh
+    - 2026-08-23 - PBO: Added UseDeviceAuthentication switch and automatic fallback to device code auth when interactive/broker sign-in fails (e.g. Warp terminal)
 
     Author: Frank Geisler, Kamil Nowinski
 
@@ -92,11 +107,14 @@ function Connect-FabricAccount {
         [Alias('AppSecret')]
         [SecureString] $ServicePrincipalSecret,
 
-        [Parameter(Mandatory = $false, HelpMessage = "User credential.")]
+        [Parameter(Mandatory = $false, HelpMessage = "Service principal application ID and client secret.")]
         [PSCredential] $Credential,
 
         [Parameter(Mandatory = $false, HelpMessage = "Refresh current session.")]
-        [switch] $Reset
+        [switch] $Reset,
+
+        [Parameter(Mandatory = $false, HelpMessage = "Use device code authentication instead of the interactive broker/browser flow.")]
+        [switch] $UseDeviceAuthentication
     )
 
     begin {
@@ -135,13 +153,29 @@ function Connect-FabricAccount {
             }
             else {
                 Write-Message "Connecting to Azure Account using current user..." -Level Verbose
+                $connectAzAccountParams = @{}
                 if ($TenantId) {
-                    $null = Connect-AzAccount -Tenant $TenantId
+                    $connectAzAccountParams['Tenant'] = $TenantId
                 }
                 else {
-                    # If no TenantId is provided, connect to the default tenant
                     Write-Message "No TenantId provided, connecting to default tenant..." -Level Verbose
-                    $null = Connect-AzAccount
+                }
+
+                if ($UseDeviceAuthentication) {
+                    Write-Message "Using device code authentication as requested..." -Level Verbose
+                    $null = Connect-AzAccount @connectAzAccountParams -UseDeviceAuthentication
+                }
+                else {
+                    try {
+                        $null = Connect-AzAccount @connectAzAccountParams -ErrorAction Stop
+                    }
+                    catch {
+                        # Interactive/broker (WAM) sign-in can silently fail to render its account picker in some
+                        # terminal hosts (e.g. Warp on Windows does not expose a window handle for WAM to parent
+                        # its UI to). Fall back to device code authentication instead of failing outright.
+                        Write-Message "Interactive sign-in failed, possibly because this terminal does not support the account picker (e.g. Warp): $($_.Exception.Message). Falling back to device code authentication..." -Level Warning
+                        $null = Connect-AzAccount @connectAzAccountParams -UseDeviceAuthentication
+                    }
                 }
             }
             $azContext = Get-AzContext

@@ -43,7 +43,8 @@ Describe "Get-FabricKQLDatabase" -Tag "UnitTests" {
 
     Context "Get KQL Database successfully" {
         BeforeAll {
-            Mock -CommandName Confirm-TokenState -MockWith { return $true }
+            Mock -CommandName Confirm-TokenState -MockWith { }
+            Mock -CommandName Write-Message -MockWith { }
             Mock -CommandName Invoke-FabricRestMethod -MockWith {
                 return @(
                     [pscustomobject]@{
@@ -65,10 +66,52 @@ Describe "Get-FabricKQLDatabase" -Tag "UnitTests" {
         }
 
         It "Should return specific KQL database by Id" {
-            $result = Get-FabricKQLDatabase -WorkspaceId ([guid]::NewGuid()) -KQLDatabaseId ([guid]::NewGuid())
+            $result = Get-FabricKQLDatabase -WorkspaceId ([guid]::NewGuid()) -KQLDatabaseId "00000000-0000-0000-0000-000000000001"
             $result | Should -Not -BeNullOrEmpty
 
             Should -Invoke -CommandName Invoke-FabricRestMethod -Times 1 -Exactly
+        }
+
+        It "Should accept workspace pipeline input by <InputType>" -ForEach @(
+            @{ InputType = 'value' }
+            @{ InputType = 'WorkspaceId property' }
+            @{ InputType = 'Id property' }
+        ) {
+            $workspaceId = [guid]::NewGuid()
+            $workspace = switch ($InputType) {
+                'value' { $workspaceId }
+                'WorkspaceId property' { [pscustomobject]@{ WorkspaceId = $workspaceId } }
+                'Id property' { [pscustomobject]@{ Id = $workspaceId.ToString(); DisplayName = 'TestWorkspace' } }
+            }
+
+            $result = $workspace | Get-FabricKQLDatabase -ErrorAction Stop
+
+            $result.displayName | Should -Be "TestKQLDatabase"
+            Should -Invoke -CommandName Invoke-FabricRestMethod -Times 1 -Exactly -ParameterFilter {
+                $Uri -like "*/workspaces/$workspaceId/kqlDatabases" -and $Method -eq 'Get'
+            }
+        }
+
+        It "Should retrieve KQL databases for every workspace returned by Get-FabricWorkspace" {
+            Mock -CommandName Invoke-FabricRestMethod -MockWith {
+                if ($Uri -eq 'workspaces') {
+                    return @(
+                        [pscustomobject]@{ Id = '00000000-0000-0000-0000-000000000002'; DisplayName = 'Workspace1' }
+                        [pscustomobject]@{ Id = '00000000-0000-0000-0000-000000000003'; DisplayName = 'Workspace2' }
+                    )
+                }
+                return [pscustomobject]@{ Id = '00000000-0000-0000-0000-000000000001'; DisplayName = 'TestKQLDatabase' }
+            }
+
+            $result = @(Get-FabricWorkspace | Get-FabricKQLDatabase -KQLDatabaseName 'TestKQLDatabase' -ErrorAction Stop)
+
+            $result.Count | Should -Be 2
+            Should -Invoke -CommandName Invoke-FabricRestMethod -Times 1 -Exactly -ParameterFilter {
+                $Uri -like '*/workspaces/00000000-0000-0000-0000-000000000002/kqlDatabases'
+            }
+            Should -Invoke -CommandName Invoke-FabricRestMethod -Times 1 -Exactly -ParameterFilter {
+                $Uri -like '*/workspaces/00000000-0000-0000-0000-000000000003/kqlDatabases'
+            }
         }
     }
 

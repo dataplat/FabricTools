@@ -5,9 +5,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added `-SQLDatabaseName` (alias `Name`) to `Remove-FabricSQLDatabase`, requiring a unique exact name match within the specified workspace before deletion (#210).
+- Added `WorkspaceName` (alias `Name`) to `Remove-FabricWorkspace` to delete a workspace by its exact display name, refusing deletion when no workspace or multiple workspaces match (issue #157).
+- Added `Start-FabricNotebook` to run a notebook by ID or unique workspace-scoped name, wait for its job status by default, or return promptly with `-NoWait`. Supports `-WhatIf`, Retry-After polling, and execution failure details (#194).
+- Added `-UseDeviceAuthentication` switch to `Connect-FabricAccount` to force device code authentication instead of the interactive broker/browser flow
+
 ### Changed
 
 - `Get-FabricWorkspaceUser` now includes the workspace name and ID on each returned user.
+- `Remove-FabricItem` confirms each item individually instead of once for the whole batch, so `-WhatIf` lists the items by name and ID and `-Confirm` prompts per item rather than authorising the entire batch with a single answer
+- `Remove-FabricItem` reports item counts through `Write-Message` rather than `Write-Output`, so the count is no longer emitted into the pipeline as output
+
+### Fixed
+
+- Fixed long-running operation handling when response headers contain enumerable values, and surfaced `New-FabricSQLDatabase` failures as PowerShell errors (#209).
+- `Connect-FabricAccount` now automatically falls back to device code authentication when interactive/broker (WAM) sign-in fails, e.g. in terminal hosts such as Warp on Windows where the account picker cannot render
+- Fixed `Get-FabricWorkspace | Get-FabricKQLDatabase` by allowing `WorkspaceId` pipeline input and processing each workspace (issue #162).
+
+### Deprecated
+
+### Removed
+### Security
+### Security
 
 ## 0.32.0 - 2026-05-06
 

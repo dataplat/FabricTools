@@ -21,8 +21,8 @@ Connects to the Fabric WebAPI.
 
 ```
 Connect-FabricAccount [[-TenantId] <guid>] [[-ServicePrincipalId] <guid>]
- [[-ServicePrincipalSecret] <securestring>] [[-Credential] <pscredential>] [-Reset] [-WhatIf]
- [-Confirm] [<CommonParameters>]
+ [[-ServicePrincipalSecret] <securestring>] [[-Credential] <pscredential>] [-Reset]
+ [-UseDeviceAuthentication] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## ALIASES
@@ -31,6 +31,7 @@ Connect-FabricAccount [[-TenantId] <guid>] [[-ServicePrincipalId] <guid>]
 
 Connects to the Fabric WebAPI by using the cmdlet Connect-AzAccount.
 This function retrieves the authentication token for the Fabric API and sets up the headers for API calls.
+User sign-in uses interactive authentication by default. Use -UseDeviceAuthentication if the interactive broker or browser cannot be used.
 
 ## EXAMPLES
 
@@ -44,11 +45,11 @@ Connect-FabricAccount -TenantId '12345678-1234-1234-1234-123456789012'
 
 ### EXAMPLE 2
 
-Prompts for Service Principal id and secret and connects as that Service Principal
+Connects as a service principal using a PSCredential object. The username is the service principal's application ID.
 
 ```powershell
-$credential = Get-Credential
-Connect-FabricAccount -TenantId 'xxx' -credential $credential
+$credential = Get-Credential -UserName '<service-principal-app-id>' -Message 'Enter the service principal client secret'
+Connect-FabricAccount -TenantId '<tenant-id>' -Credential $credential
 ```
 
 ### EXAMPLE 3
@@ -65,6 +66,14 @@ Connect-FabricAccount -TenantId $TenantID -ServicePrincipalId $ServicePrincipalI
 ```
 
 ### EXAMPLE 4
+
+Connects using device code authentication when interactive sign-in is unavailable.
+
+```powershell
+Connect-FabricAccount -UseDeviceAuthentication
+```
+
+### EXAMPLE 5
 
 Connects as Service Principal using credential object
 
@@ -104,7 +113,7 @@ HelpMessage: ''
 
 ### -Credential
 
-A PSCredential object representing a user credential (username and secure password).
+A PSCredential object containing a service principal's application ID as the username and client secret as the password. This is not for signing in as a user with a username and password.
 
 ```yaml
 Type: System.Management.Automation.PSCredential
@@ -210,6 +219,27 @@ AcceptedValues: []
 HelpMessage: ''
 ```
 
+### -UseDeviceAuthentication
+
+Forces device code authentication instead of the interactive broker or browser flow. Use this when the interactive sign-in UI cannot be displayed. If this parameter isn't specified, the cmdlet falls back to device code authentication when interactive sign-in fails.
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+DefaultValue: False
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: Use device code authentication instead of the interactive broker/browser flow.
+```
+
 ### -WhatIf
 
 Runs the command in a mode that only reports what would happen without performing the actions.
@@ -254,6 +284,7 @@ Revision History:
 - 2024-12-22 - FGE: Added Verbose Output
 - 2025-05-26 - Jojobit: Added Service Principal support, with secure string handling and parameter descriptions, as supported by the original FabTools module
 - 2025-06-02 - KNO: Added Reset switch to force re-authentication and token refresh
+- 2026-08-23 - PBO: Added UseDeviceAuthentication switch and automatic fallback to device code auth when interactive/broker sign-in fails (e.g. Warp terminal)
 
 Author: Frank Geisler, Kamil Nowinski
 

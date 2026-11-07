@@ -7,7 +7,7 @@ Retrieves an KQLDatabase or a list of KQLDatabases from a specified workspace in
 The `Get-FabricKQLDatabase` function sends a GET request to the Fabric API to retrieve KQLDatabase details for a given workspace. It can filter the results by `KQLDatabaseName`.
 
 .PARAMETER WorkspaceId
-(Mandatory) The ID of the workspace to query KQLDatabases.
+(Mandatory) The ID of the workspace to query KQLDatabases. Accepts pipeline input by value or by the WorkspaceId or Id property.
 
 .PARAMETER KQLDatabaseId
 (Optional) The ID of a specific KQLDatabase to retrieve.
@@ -29,6 +29,13 @@ The `Get-FabricKQLDatabase` function sends a GET request to the Fabric API to re
     Get-FabricKQLDatabase -WorkspaceId "12345"
     ```
 
+.EXAMPLE
+    Retrieves all KQLDatabases from every accessible workspace.
+
+    ```powershell
+    Get-FabricWorkspace | Get-FabricKQLDatabase
+    ```
+
 .NOTES
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
 - Calls `Confirm-TokenState` to ensure token validity before making the API request.
@@ -38,8 +45,9 @@ Author: Tiago Balabuch, Kamil Nowinski
     #>
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory = $true)]
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         [ValidateNotNullOrEmpty()]
+        [Alias("Id")]
         [guid]$WorkspaceId,
 
         [Parameter(Mandatory = $false)]
@@ -51,50 +59,52 @@ Author: Tiago Balabuch, Kamil Nowinski
         [string]$KQLDatabaseName
     )
 
-    try {
-        # Handle ambiguous input
-        if ($KQLDatabaseId -and $KQLDatabaseName) {
-            Write-Message -Message "Both 'KQLDatabaseId' and 'KQLDatabaseName' were provided. Please specify only one." -Level Error
-            return $null
+    process {
+        try {
+            # Handle ambiguous input
+            if ($KQLDatabaseId -and $KQLDatabaseName) {
+                Write-Message -Message "Both 'KQLDatabaseId' and 'KQLDatabaseName' were provided. Please specify only one." -Level Error
+                return $null
+            }
+
+            # Ensure token validity
+            Confirm-TokenState
+
+            $apiEndpointUrl = "{0}/workspaces/{1}/kqlDatabases" -f $FabricConfig.BaseUrl, $WorkspaceId
+            Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
+
+            $apiParams = @{
+                Uri            = $apiEndpointUrl
+                Method         = 'Get'
+                TypeName       = 'KQL Database'
+                HandleResponse = $true
+                ExtractValue   = 'True'
+            }
+            $KQLDatabases = @(Invoke-FabricRestMethod @apiParams)
+
+            # Filter results based on provided parameters
+            $KQLDatabase = if ($KQLDatabaseId) {
+                $KQLDatabases | Where-Object { $_.Id -eq $KQLDatabaseId }
+            } elseif ($KQLDatabaseName) {
+                $KQLDatabases | Where-Object { $_.DisplayName -eq $KQLDatabaseName }
+            } else {
+                Write-Message -Message "No filter provided. Returning all KQLDatabases." -Level Debug
+                $KQLDatabases
+            }
+
+            # Handle results
+            if ($KQLDatabase) {
+                Write-Message -Message "KQLDatabase found matching the specified criteria." -Level Debug
+                return $KQLDatabase
+            } else {
+                Write-Message -Message "No KQLDatabase found matching the provided criteria." -Level Warning
+                return $null
+            }
+        } catch {
+            # Capture and log error details
+            $errorDetails = $_.Exception.Message
+            Write-Message -Message "Failed to retrieve KQLDatabase. Error: $errorDetails" -Level Error
         }
-
-        # Ensure token validity
-        Confirm-TokenState
-
-        $apiEndpointUrl = "{0}/workspaces/{1}/kqlDatabases" -f $FabricConfig.BaseUrl, $WorkspaceId
-        Write-Message -Message "API Endpoint: $apiEndpointUrl" -Level Debug
-
-        $apiParams = @{
-            Uri            = $apiEndpointUrl
-            Method         = 'Get'
-            TypeName       = 'KQL Database'
-            HandleResponse = $true
-            ExtractValue   = 'True'
-        }
-        $KQLDatabases = @(Invoke-FabricRestMethod @apiParams)
-
-        # Filter results based on provided parameters
-        $KQLDatabase = if ($KQLDatabaseId) {
-            $KQLDatabases | Where-Object { $_.Id -eq $KQLDatabaseId }
-        } elseif ($KQLDatabaseName) {
-            $KQLDatabases | Where-Object { $_.DisplayName -eq $KQLDatabaseName }
-        } else {
-            Write-Message -Message "No filter provided. Returning all KQLDatabases." -Level Debug
-            $KQLDatabases
-        }
-
-        # Handle results
-        if ($KQLDatabase) {
-            Write-Message -Message "KQLDatabase found matching the specified criteria." -Level Debug
-            return $KQLDatabase
-        } else {
-            Write-Message -Message "No KQLDatabase found matching the provided criteria." -Level Warning
-            return $null
-        }
-    } catch {
-        # Capture and log error details
-        $errorDetails = $_.Exception.Message
-        Write-Message -Message "Failed to retrieve KQLDatabase. Error: $errorDetails" -Level Error
     }
 
 }
