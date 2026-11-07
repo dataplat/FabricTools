@@ -72,7 +72,6 @@ Author: Ioana Bouariu
         {
             $Workspace = Get-FabricWorkspace -WorkspaceId $WorkspaceId
         }
-        $returnValue = @()
     }
 
     process
@@ -94,13 +93,9 @@ Author: Ioana Bouariu
                 {
                     Add-Member -InputObject $user -MemberType NoteProperty -Name WorkspaceName -Value $space.displayName -Force
                     Add-Member -InputObject $user -MemberType NoteProperty -Name WorkspaceId -Value $space.id -Force
-                    $returnValue += $user
+                    $user
                 }
             }
         }
-    }
-    end
-    {
-        $returnValue
     }
 }
