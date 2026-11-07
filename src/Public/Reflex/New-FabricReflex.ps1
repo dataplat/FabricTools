@@ -38,6 +38,7 @@ function New-FabricReflex
 
 #>
     [CmdletBinding(SupportsShouldProcess)]
+    [Alias('New-FabricActivator')]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]

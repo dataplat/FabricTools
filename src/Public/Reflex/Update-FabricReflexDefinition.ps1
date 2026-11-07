@@ -35,6 +35,7 @@ function Update-FabricReflexDefinition
 
 #>
     [CmdletBinding(SupportsShouldProcess)]
+    [Alias('Update-FabricActivatorDefinition')]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]

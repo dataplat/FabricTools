@@ -38,6 +38,7 @@ function Get-FabricReflex {
 
 #>
     [CmdletBinding()]
+    [Alias('Get-FabricActivator')]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
