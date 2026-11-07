@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Added Activator aliases for all Reflex cmdlets.
 - Added `Refresh-FabricSQLEndpoint` to refresh SQL analytics endpoint metadata.
 - Added `-SQLDatabaseName` (alias `Name`) to `Remove-FabricSQLDatabase`, requiring a unique exact name match within the specified workspace before deletion (#210).
 - Added `WorkspaceName` (alias `Name`) to `Remove-FabricWorkspace` to delete a workspace by its exact display name, refusing deletion when no workspace or multiple workspaces match (issue #157).
