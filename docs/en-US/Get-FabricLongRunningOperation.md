@@ -21,7 +21,7 @@ Monitors the status of a long-running operation in Microsoft Fabric.
 
 ```
 Get-FabricLongRunningOperation [[-OperationId] <string>] [[-Location] <string>]
- [[-RetryAfter] <int>] [<CommonParameters>]
+ [[-RetryAfter] <int>] [[-Timeout] <int>] [<CommonParameters>]
 ```
 
 ## ALIASES
@@ -109,6 +109,28 @@ AcceptedValues: []
 HelpMessage: ''
 ```
 
+### -Timeout
+
+The maximum time, in minutes, to wait for the operation.
+A value of 0 waits indefinitely.
+
+```yaml
+Type: System.Int32
+DefaultValue: 0
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: 3
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
 ### CommonParameters
 
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable,
@@ -127,4 +149,3 @@ Author: Tiago Balabuch
 ## RELATED LINKS
 
 {{ Fill in the related links here }}
-

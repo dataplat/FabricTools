@@ -34,6 +34,9 @@ Function Invoke-FabricRestMethod {
 .PARAMETER Timeout
     The maximum time, in minutes, to wait for a long-running operation. A value of 0 waits indefinitely.
 
+.PARAMETER RequestTimeoutSeconds
+    An internal request timeout, in seconds, used to keep long-running operation status requests within the remaining timeout budget.
+
 .PARAMETER HandleResponse
     A switch parameter to indicate that the response should be handled after call API. Default is False.
     The operation will be processed based on the response status code and supports Throttling (429) and Long-Running Operations.

@@ -19,6 +19,9 @@ The interval (in seconds) to wait between polling the operation status. The defa
 .PARAMETER Timeout
 The maximum time, in minutes, to wait for the operation. A value of 0 waits indefinitely.
 
+.PARAMETER TimeoutSeconds
+The remaining timeout budget, in seconds, passed internally to limit long-running operation polling.
+
 .EXAMPLE
     This command polls the status of the operation with the given operationId every 10 seconds until it completes. ```powershell ```
 
