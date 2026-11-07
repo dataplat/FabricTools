@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `WorkspaceName` (alias `Name`) to `Remove-FabricWorkspace` to delete a workspace by its exact display name, refusing deletion when no workspace or multiple workspaces match (issue #157).
 - Added `Start-FabricNotebook` to run a notebook by ID or unique workspace-scoped name, wait for its job status by default, or return promptly with `-NoWait`. Supports `-WhatIf`, Retry-After polling, and execution failure details (#194).
 - Added `-UseDeviceAuthentication` switch to `Connect-FabricAccount` to force device code authentication instead of the interactive broker/browser flow
+- Added a documentation website generated from `docs/en-US` (`site/Build-DocsSite.ps1`), with search by command name, item type and verb, and a page per command. It is deployed to GitHub Pages from `main` (#3).
+- Help files in `docs/en-US` now carry an `itemType` frontmatter key (the `src/Public` folder of the cmdlet, or `Core`), written by the `generate_docs` and `Generate_help_from_built_module` build tasks.
 
 ### Changed
 
@@ -34,6 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 - Removed `Get-FabricDatasetRefreshes`, `Get-FabricWorkspaceDatasetRefreshes`, and the alias `Get-FabWorkspaceDatasetRefreshes`. Use `Get-FabricDatasetRefreshHistory` instead.
+- Removed stale help files for `Add-FabricWorkspaceCapacityAssignment` and `Remove-FabricWorkspaceCapacityAssignment`, which are not part of the module.
 
 ### Security
 
