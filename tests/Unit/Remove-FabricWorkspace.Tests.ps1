@@ -143,10 +143,12 @@ Describe "Remove-FabricWorkspace" -Tag "UnitTests" {
             Should -Invoke -CommandName Invoke-FabricRestMethod -Times 0
         }
 
-        It 'Should preserve positional ID deletion without looking up names' {
+        It 'Should preserve positional ID deletion and resolve the workspace name' {
             Remove-FabricWorkspace '11111111-1111-1111-1111-111111111111' -Confirm:$false
 
-            Should -Invoke -CommandName Get-FabricWorkspace -Times 0
+            Should -Invoke -CommandName Get-FabricWorkspace -Times 1 -Exactly -ParameterFilter {
+                $WorkspaceId -eq [guid]'11111111-1111-1111-1111-111111111111'
+            }
             Should -Invoke -CommandName Invoke-FabricRestMethod -Times 1 -Exactly -ParameterFilter {
                 $Uri -eq 'workspaces/11111111-1111-1111-1111-111111111111' -and $Method -eq 'Delete'
             }
