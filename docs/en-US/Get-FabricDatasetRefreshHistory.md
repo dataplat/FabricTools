@@ -13,25 +13,38 @@ title: Get-FabricDatasetRefreshHistory
 
 ## SYNOPSIS
 
-Retrieves the refresh history of a Power BI dataset.
+Retrieves refresh history for a Power BI dataset or all datasets in a workspace.
 
 ## SYNTAX
 
-### __AllParameterSets
+### DatasetInMyWorkspace
 
 ```
-Get-FabricDatasetRefreshHistory [-DatasetId] <guid> [[-WorkspaceId] <guid>] [[-Top] <int>]
- [<CommonParameters>]
+Get-FabricDatasetRefreshHistory [-DatasetId] <guid> [-Top <int>] [<CommonParameters>]
+```
+
+### DatasetInWorkspace
+
+```
+Get-FabricDatasetRefreshHistory [-DatasetId] <guid> [-WorkspaceId] <guid> [-Top <int>] [<CommonParameters>]
+```
+
+### Workspace
+
+```
+Get-FabricDatasetRefreshHistory -WorkspaceId <guid> [-Top <int>] [<CommonParameters>]
 ```
 
 ## ALIASES
 
+`WorkspaceId`: `GroupId`
+
 ## DESCRIPTION
 
-Calls the Power BI REST API to retrieve the refresh history for a specified dataset.
-When `GroupId` is supplied the request targets the dataset inside a specific workspace
-(`groups/{groupId}/datasets/{datasetId}/refreshes`); otherwise it targets the dataset
-in My Workspace (`datasets/{datasetId}/refreshes`).
+Calls the Power BI REST API to retrieve refresh history for a dataset or all datasets in a
+workspace. When `GroupId` is supplied the request targets the dataset inside a specific
+workspace (`groups/{groupId}/datasets/{datasetId}/refreshes`); otherwise it targets the
+dataset in My Workspace (`datasets/{datasetId}/refreshes`).
 
 ## EXAMPLES
 
@@ -54,11 +67,20 @@ Get-FabricDatasetRefreshHistory `
     -Top 10
 ```
 
+### EXAMPLE 3
+
+Retrieves the latest refresh for every dataset in a workspace.
+
+```powershell
+Get-FabricDatasetRefreshHistory -WorkspaceId "abcdef12-3456-7890-abcd-ef1234567890" -Top 1
+```
+
 ## PARAMETERS
 
 ### -DatasetId
 
-(Mandatory) The unique identifier of the dataset whose refresh history to retrieve.
+The unique identifier of the dataset whose refresh history to retrieve. Omit this parameter
+with `WorkspaceId` to retrieve refresh history for every dataset in the workspace.
 
 ```yaml
 Type: System.Guid
@@ -66,7 +88,16 @@ DefaultValue: ''
 SupportsWildcards: false
 Aliases: []
 ParameterSets:
-- Name: (All)
+- Name: DatasetInMyWorkspace
+  Position: 0
+  IsRequired: true
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+  DontShow: false
+  AcceptedValues: []
+  HelpMessage: ''
+- Name: DatasetInWorkspace
   Position: 0
   IsRequired: true
   ValueFromPipeline: false
@@ -81,7 +112,7 @@ HelpMessage: ''
 
 (Optional) The number of refresh history entries to return.
 Must be at least 1.
-Defaults to 60 (Power BI API default).
+When omitted, the Power BI API default of up to 60 entries is returned.
 
 ```yaml
 Type: System.Int32
@@ -102,8 +133,9 @@ HelpMessage: ''
 
 ### -WorkspaceId
 
-(Optional) The unique identifier of the workspace that contains the dataset.
-When omitted, the My Workspace endpoint is used.
+The unique identifier of the workspace that contains the dataset(s). Required when
+`DatasetId` is omitted; when `DatasetId` is also supplied, it targets that dataset in the
+workspace. When omitted, the My Workspace endpoint is used.
 
 ```yaml
 Type: System.Guid
@@ -112,9 +144,18 @@ SupportsWildcards: false
 Aliases:
 - GroupId
 ParameterSets:
-- Name: (All)
+- Name: DatasetInWorkspace
   Position: 1
-  IsRequired: false
+  IsRequired: true
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+  DontShow: false
+  AcceptedValues: []
+  HelpMessage: ''
+- Name: Workspace
+  Position: 1
+  IsRequired: true
   ValueFromPipeline: false
   ValueFromPipelineByPropertyName: false
   ValueFromRemainingArguments: false
@@ -147,4 +188,3 @@ Author: Kamil Nowinski
 ## RELATED LINKS
 
 {{ Fill in the related links here }}
-

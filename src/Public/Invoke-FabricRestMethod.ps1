@@ -218,6 +218,10 @@ Function Invoke-FabricRestMethod {
 
         $response = Invoke-RestMethod @request
 
+        if ($null -eq $responseHeader) {
+            $responseHeader = @{}
+        }
+
         if ($Timeout -gt 0 -and $timeoutStopwatch.Elapsed.TotalSeconds -ge $timeoutBudgetSeconds) {
             throw "API request timed out after $Timeout minutes."
         }

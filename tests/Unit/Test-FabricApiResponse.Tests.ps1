@@ -18,7 +18,7 @@ Describe "Test-FabricApiResponse" -Tag "UnitTests" {
     Context "Command definition" {
         It 'Should have <ExpectedParameterName> parameter' -ForEach @(
             @{ ExpectedParameterName = 'Response'; ExpectedParameterType = 'Object'; Mandatory = 'False' }
-            @{ ExpectedParameterName = 'ResponseHeader'; ExpectedParameterType = 'Object'; Mandatory = 'True' }
+            @{ ExpectedParameterName = 'ResponseHeader'; ExpectedParameterType = 'Object'; Mandatory = 'False' }
             @{ ExpectedParameterName = 'StatusCode'; ExpectedParameterType = 'Object'; Mandatory = 'True' }
             @{ ExpectedParameterName = 'Operation'; ExpectedParameterType = 'Object'; Mandatory = 'False' }
             @{ ExpectedParameterName = 'ObjectIdOrName'; ExpectedParameterType = 'string'; Mandatory = 'False' }
@@ -66,6 +66,11 @@ Describe "Test-FabricApiResponse - StatusCode Handling" -Tag "UnitTests" {
         $script:statusCode = 201
         $result = Test-FabricApiResponse -Response $script:response -ResponseHeader $script:responseHeader -StatusCode $script:statusCode
         $result | Should -Be $script:response
+    }
+
+    It "Accepts a null response header for a successful response" {
+        Test-FabricApiResponse -Response $script:response -ResponseHeader $null -StatusCode 200 -Operation "Get" |
+            Should -Be $script:response
     }
 
     It "Returns operation result when statusCode is 202 and operation succeeds" {

@@ -35,7 +35,6 @@ Generated on 2026-04-08.
 - Get-FabricDatamart
 - Get-FabricDataPipeline
 - Get-FabricDataset
-- Get-FabricDatasetRefreshes
 - Get-FabricDatasetRefreshHistory
 - Get-FabricDebugInfo
 - Get-FabricDeploymentPipeline
@@ -94,7 +93,6 @@ Generated on 2026-04-08.
 - Get-FabricUserListAccessEntities
 - Get-FabricWarehouse
 - Get-FabricWorkspace
-- Get-FabricWorkspaceDatasetRefreshes
 - Get-FabricWorkspaceRoleAssignment
 - Get-FabricWorkspaceTenantSettingOverrides
 - Get-FabricWorkspaceUsageMetricsData
