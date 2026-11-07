@@ -33,19 +33,34 @@ Describe "Invoke-FabricRestMethod" -Tag "UnitTests" {
         }
     }
 
+    AfterAll {
+        Remove-Variable -Name statusCode, responseHeader -Scope Global -ErrorAction SilentlyContinue
+    }
+
     Context "Successful REST call" {
         BeforeAll {
             Mock -CommandName Invoke-RestMethod -MockWith {
+                param($StatusCodeVariable, $ResponseHeadersVariable)
+                Set-Variable -Name $StatusCodeVariable -Value 200 -Scope Global
+                Set-Variable -Name $ResponseHeadersVariable -Value $null -Scope Global
                 return @{
                     value = @(@{ id = 'test-id'; name = 'test-name' })
                 }
             }
             Mock -CommandName Confirm-TokenState -MockWith { return $true }
+            Mock -CommandName Test-FabricApiResponse -MockWith {
+                param($Response, $ResponseHeader, $StatusCode)
+                return $Response
+            }
         }
 
         It 'Should invoke REST method successfully' {
             InModuleScope -ModuleName 'FabricTools' {
                 { Invoke-FabricRestMethod -Uri 'https://api.fabric.microsoft.com/v1/workspaces' } | Should -Not -Throw
+
+                Should -Invoke -CommandName Test-FabricApiResponse -Times 1 -Exactly -ParameterFilter {
+                    $ResponseHeader -is [hashtable]
+                }
             }
         }
     }
@@ -53,6 +68,9 @@ Describe "Invoke-FabricRestMethod" -Tag "UnitTests" {
     Context "Error handling" {
         BeforeAll {
             Mock -CommandName Invoke-RestMethod -MockWith {
+                param($StatusCodeVariable, $ResponseHeadersVariable)
+                Set-Variable -Name $StatusCodeVariable -Value 200 -Scope Global
+                Set-Variable -Name $ResponseHeadersVariable -Value $null -Scope Global
                 return @{
                     errorCode = 'TestError'
                     message = 'API Error'
@@ -81,6 +99,9 @@ Describe "Invoke-FabricRestMethod" -Tag "UnitTests" {
             }
 
             Mock -CommandName Invoke-RestMethod -MockWith {
+                param($StatusCodeVariable, $ResponseHeadersVariable)
+                Set-Variable -Name $StatusCodeVariable -Value 200 -Scope Global
+                Set-Variable -Name $ResponseHeadersVariable -Value $null -Scope Global
                 return @{ value = @(); statusCode = 200 }
             }
 

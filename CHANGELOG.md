@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - `Get-FabricWorkspaceUser` now includes the workspace name and ID on each returned user.
+- `Get-FabricDatasetRefreshHistory` supports workspace-wide mode when `-DatasetId` is omitted and `-WorkspaceId` is supplied.
 - `Remove-FabricItem` confirms each item individually instead of once for the whole batch, so `-WhatIf` lists the items by name and ID and `-Confirm` prompts per item rather than authorising the entire batch with a single answer
 - `Remove-FabricItem` reports item counts through `Write-Message` rather than `Write-Output`, so the count is no longer emitted into the pipeline as output
 
@@ -27,7 +28,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Deprecated
 
 ### Removed
-### Security
+
+- Removed `Get-FabricDatasetRefreshes`, `Get-FabricWorkspaceDatasetRefreshes`, and the alias `Get-FabWorkspaceDatasetRefreshes`. Use `Get-FabricDatasetRefreshHistory` instead.
+
 ### Security
 
 ## 0.32.0 - 2026-05-06
