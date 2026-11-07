@@ -65,6 +65,18 @@ Describe "Get-FabricDatasetRefreshHistory" -Tag "UnitTests" {
             }
         }
 
+        It 'Should retrieve history when dataset metadata is unavailable' {
+            Mock -CommandName Get-FabricDataset -MockWith { return $null }
+
+            $result = Get-FabricDatasetRefreshHistory -DatasetId $mockDatasetId
+
+            $result[0].DatasetId | Should -Be $mockDatasetId
+            $result[0].DatasetName | Should -BeNullOrEmpty
+            Should -Invoke -CommandName Invoke-FabricRestMethod -Times 1 -Exactly -ParameterFilter {
+                $Uri -eq "datasets/$mockDatasetId/refreshes"
+            }
+        }
+
         It 'Should return all refresh history entries' {
             $result = Get-FabricDatasetRefreshHistory -DatasetId $mockDatasetId
             @($result).Count | Should -Be 2

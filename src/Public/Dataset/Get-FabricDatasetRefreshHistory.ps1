@@ -84,6 +84,9 @@ function Get-FabricDatasetRefreshHistory {
                 $datasetParams.WorkspaceId = $WorkspaceId
             }
             $datasets = @(Get-FabricDataset @datasetParams)
+            if (-not $datasets) {
+                $datasets = @([pscustomobject]@{ Id = $DatasetId; Name = $null })
+            }
         } else {
             $datasets = @(Get-FabricDataset -WorkspaceId $WorkspaceId)
         }
