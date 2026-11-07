@@ -91,17 +91,15 @@ Describe "Get-FabricWorkspaceUser" -Tag "UnitTests" {
 
         BeforeEach {
             Mock -CommandName Confirm-TokenState -MockWith { }
-            Mock -CommandName Get-FabricWorkspace -MockWith {
-                return @(
-                    @{
-                        displayName = 'prod-workspace'
-                        Id          = '11111111-1111-1111-1111-111111111111'
-                    }, @{
-                        displayName = "test-workspace"
-                        Id          = '22222222-2222-2222-2222-222222222222'
-                    }
-                )
-            }
+            $workspaces = @(
+                @{
+                    displayName = 'prod-workspace'
+                    Id          = '11111111-1111-1111-1111-111111111111'
+                }, @{
+                    displayName = 'test-workspace'
+                    Id          = '22222222-2222-2222-2222-222222222222'
+                }
+            )
             Mock -CommandName Invoke-FabricRestMethod -MockWith {
                 return @{
                     value = @(
@@ -124,16 +122,19 @@ Describe "Get-FabricWorkspaceUser" -Tag "UnitTests" {
         }
 
         It "Should return users for multiple workspaces passed to the Workspace parameter" {
-            {Get-FabricWorkspaceUser -Workspace (Get-FabricWorkspace) }| Should -Not -BeNullOrEmpty
+            $result = @(Get-FabricWorkspaceUser -Workspace $workspaces)
+
+            $result | Should -Not -BeNullOrEmpty
         }
 
         It "Should return users for multiple workspaces passed to the Workspace parameter from the pipeline" {
-            { Get-FabricWorkspace | Get-FabricWorkspaceUser
-            } | Should -Not -BeNullOrEmpty
+            $result = @($workspaces | Get-FabricWorkspaceUser)
+
+            $result | Should -Not -BeNullOrEmpty
         }
 
         It "Should include workspace name and ID on users returned for multiple workspaces" {
-            $result = @(Get-FabricWorkspace | Get-FabricWorkspaceUser)
+            $result = @($workspaces | Get-FabricWorkspaceUser)
             $prodUsers = @($result | Where-Object WorkspaceName -EQ 'prod-workspace')
             $testUsers = @($result | Where-Object WorkspaceName -EQ 'test-workspace')
 
