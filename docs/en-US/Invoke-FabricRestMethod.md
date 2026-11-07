@@ -23,7 +23,7 @@ Sends an HTTP request to a Fabric or Power BI API endpoint and retrieve the resp
 Invoke-FabricRestMethod [-Uri] <string> [[-Method] <string>] [[-Body] <Object>]
  [[-ExtractValue] <string>] [[-TypeName] <string>] [[-ObjectIdOrName] <string>]
  [[-SuccessMessage] <string>] [-TestTokenExpired] [-PowerBIApi] [-NoWait] [-HandleResponse]
- [<CommonParameters>]
+ [-Timeout <int>] [<CommonParameters>]
 ```
 
 ## ALIASES
@@ -263,6 +263,28 @@ AcceptedValues: []
 HelpMessage: ''
 ```
 
+### -Timeout
+
+The maximum time, in minutes, to wait for a long-running operation.
+A value of 0 waits indefinitely.
+
+```yaml
+Type: System.Int32
+DefaultValue: 0
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
 ### -TypeName
 
 Optional.
@@ -330,4 +352,3 @@ Author: Kamil Nowinski
 ## RELATED LINKS
 
 {{ Fill in the related links here }}
-
