@@ -2,9 +2,10 @@
 document type: cmdlet
 external help file: FabricTools-Help.xml
 HelpUri: ''
+itemType: Item
 Locale: en-US
 Module Name: FabricTools
-ms.date: 04/01/2026
+ms.date: 11/07/2026
 PlatyPS schema version: 2024-05-01
 title: Remove-FabricItem
 ---
@@ -28,18 +29,41 @@ Remove-FabricItem [-WorkspaceId] <guid> [[-filter] <string>] [[-itemID] <guid>] 
 
 ## DESCRIPTION
 
-The Remove-FabricItems function removes selected items from a specified Fabric workspace.
-It uses the workspace ID and an optional filter to select the items to remove.
-If a filter is provided, only items whose DisplayName matches the filter are removed.
+The Remove-FabricItem function removes items from a specified Fabric workspace.
+
+Supply `ItemID` to remove a single item.
+Otherwise the items in the workspace are listed and
+removed; pass `Filter` to narrow that list to items whose DisplayName matches a wildcard
+pattern.
+Without a filter, every item in the workspace is removed.
+
+Each item is confirmed individually, so `-WhatIf` lists precisely what would be removed and
+`-Confirm` prompts per item rather than once for the whole batch.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 
-This command removes all items from the workspace with the specified ID whose DisplayName includes "test". .INPUTS String. You can pipe two strings that contain the workspace ID and filter to Remove-FabricItems.
+Removes every item in the workspace whose DisplayName contains "test".
 
 ```powershell
 Remove-FabricItem -WorkspaceID "12345678-90ab-cdef-1234-567890abcdef" -Filter "*test*"
+```
+
+### EXAMPLE 2
+
+Removes a single item by ID.
+
+```powershell
+Remove-FabricItem -WorkspaceID "12345678-90ab-cdef-1234-567890abcdef" -ItemID "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"
+```
+
+### EXAMPLE 3
+
+Lists every item that would be removed from the workspace, without removing anything.
+
+```powershell
+Remove-FabricItem -WorkspaceID "12345678-90ab-cdef-1234-567890abcdef" -WhatIf
 ```
 
 ## PARAMETERS
@@ -68,8 +92,9 @@ HelpMessage: ''
 
 ### -filter
 
-An optional filter to select items to remove.
-If provided, only items whose DisplayName matches the filter are removed.
+A wildcard pattern matched against each item's DisplayName.
+Only matching items are removed.
+If omitted, every item in the workspace is removed.
 
 ```yaml
 Type: System.String
@@ -90,8 +115,7 @@ HelpMessage: ''
 
 ### -itemID
 
-The ID of a specific item to remove.
-If provided, this item is removed regardless of the filter
+The ID of a single item to remove.
 
 ```yaml
 Type: System.Guid
@@ -174,6 +198,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 {{ Fill in the Description }}
 
 ## NOTES
+
+Revision History:
+
+- 2026-08-25 - PBO: Confirm each item individually so the prompt and -WhatIf name the item
+  being removed, rather than confirming the whole batch once.
 
 Author: Rui Romano
 https://github.com/microsoft/Analysis-Services/tree/master/pbidevmode/fabricps-pbip

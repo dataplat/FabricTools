@@ -80,6 +80,10 @@ task Generate_help_from_built_module {
 
     Get-GenerateHelpPSVariables
 
+    # Item type = folder under src/Public ('Core' for root-level cmdlets); written to frontmatter as 'itemType'.
+    # The help is generated in a child process, so the map is passed in as JSON.
+    $itemTypeMapJson = (Get-CommandItemTypeMap -PublicPath (Join-Path $SourcePath 'Public') | ConvertTo-Json -Compress) -replace "'", "''"
+
     $generateHelpCommands = @"
     `$env:PSModulePath = '$Env:PSModulePath'
     `$targetModule = Import-Module -Name '$ProjectName' -ErrorAction Stop -Passthru
@@ -92,6 +96,8 @@ task Generate_help_from_built_module {
 
     `$docOutputFolder = Join-Path '$DocOutputFolder' -ChildPath '$ProjectName'
 
+    `$itemTypeMap = '$itemTypeMapJson' | ConvertFrom-Json -AsHashtable
+
     `$commandsArray = @()
     foreach (`$publicFunction in `$targetModule.ExportedFunctions.Keys) {
         `$command = Get-Command -Name `$publicFunction -Module `$targetModule
@@ -102,6 +108,7 @@ task Generate_help_from_built_module {
             HelpVersion  = `$targetModule.Version
             Locale       = '$HelpCultureInfo'
             Encoding     = 'utf8'
+            Metadata     = @{ itemType = `$(if (`$itemTypeMap[`$publicFunction]) { `$itemTypeMap[`$publicFunction] } else { 'Core' }) }
             Force        = `$true
         }
         `$Output = New-MarkdownCommandHelp @newMarkdownCommandHelpParams

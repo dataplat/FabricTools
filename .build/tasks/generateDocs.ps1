@@ -93,6 +93,9 @@ task generate_docs {
 
     $docOutputFolder = Join-Path $DocOutputFolder -ChildPath $ProjectName
 
+    # Item type = folder under src/Public ('Core' for root-level cmdlets); written to frontmatter as 'itemType'
+    $itemTypeMap = Get-CommandItemTypeMap -PublicPath (Join-Path $SourcePath 'Public')
+
     $commandsArray = @()
     foreach ($publicFunction in $targetModule.ExportedFunctions.Keys) {
         $command = Get-Command -Name $publicFunction -Module $targetModule
@@ -103,6 +106,7 @@ task generate_docs {
             HelpVersion  = $targetModule.Version
             Locale       = $HelpCultureInfo
             Encoding     = "utf8"
+            Metadata     = @{ itemType = $(if ($itemTypeMap[$publicFunction]) { $itemTypeMap[$publicFunction] } else { 'Core' }) }
             Force        = $true
         }
         $Output = New-MarkdownCommandHelp @newMarkdownCommandHelpParams

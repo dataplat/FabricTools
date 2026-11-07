@@ -2,9 +2,10 @@
 document type: cmdlet
 external help file: FabricTools-Help.xml
 HelpUri: ''
+itemType: Dataset
 Locale: en-US
 Module Name: FabricTools
-ms.date: 04/08/2026
+ms.date: 11/07/2026
 PlatyPS schema version: 2024-05-01
 title: Get-FabricDatasetRefreshHistory
 ---
@@ -13,20 +14,21 @@ title: Get-FabricDatasetRefreshHistory
 
 ## SYNOPSIS
 
-Retrieves refresh history for a Power BI dataset or all datasets in a workspace.
+Retrieves the refresh history of a Power BI dataset.
 
 ## SYNTAX
 
-### DatasetInMyWorkspace
+### DatasetInMyWorkspace (Default)
 
 ```
-Get-FabricDatasetRefreshHistory [-DatasetId] <guid> [-Top <int>] [<CommonParameters>]
+Get-FabricDatasetRefreshHistory -DatasetId <guid> [-Top <int>] [<CommonParameters>]
 ```
 
 ### DatasetInWorkspace
 
 ```
-Get-FabricDatasetRefreshHistory [-DatasetId] <guid> [-WorkspaceId] <guid> [-Top <int>] [<CommonParameters>]
+Get-FabricDatasetRefreshHistory -DatasetId <guid> -WorkspaceId <guid> [-Top <int>]
+ [<CommonParameters>]
 ```
 
 ### Workspace
@@ -37,14 +39,13 @@ Get-FabricDatasetRefreshHistory -WorkspaceId <guid> [-Top <int>] [<CommonParamet
 
 ## ALIASES
 
-`WorkspaceId`: `GroupId`
-
 ## DESCRIPTION
 
-Calls the Power BI REST API to retrieve refresh history for a dataset or all datasets in a
-workspace. When `GroupId` is supplied the request targets the dataset inside a specific
-workspace (`groups/{groupId}/datasets/{datasetId}/refreshes`); otherwise it targets the
-dataset in My Workspace (`datasets/{datasetId}/refreshes`).
+Calls the Power BI REST API to retrieve refresh history for a dataset or all datasets
+in a workspace.
+When `GroupId` is supplied the request targets the dataset inside a
+specific workspace (`groups/{groupId}/datasets/{datasetId}/refreshes`); otherwise it
+targets the dataset in My Workspace (`datasets/{datasetId}/refreshes`).
 
 ## EXAMPLES
 
@@ -79,8 +80,9 @@ Get-FabricDatasetRefreshHistory -WorkspaceId "abcdef12-3456-7890-abcd-ef12345678
 
 ### -DatasetId
 
-The unique identifier of the dataset whose refresh history to retrieve. Omit this parameter
-with `WorkspaceId` to retrieve refresh history for every dataset in the workspace.
+The unique identifier of the dataset whose refresh history to retrieve.
+Omit this
+parameter with `WorkspaceId` to retrieve refresh history for every dataset in the workspace.
 
 ```yaml
 Type: System.Guid
@@ -88,17 +90,14 @@ DefaultValue: ''
 SupportsWildcards: false
 Aliases: []
 ParameterSets:
-- Name: DatasetInMyWorkspace
-  Position: 0
+- Name: DatasetInWorkspace
+  Position: Named
   IsRequired: true
   ValueFromPipeline: false
   ValueFromPipelineByPropertyName: false
   ValueFromRemainingArguments: false
-  DontShow: false
-  AcceptedValues: []
-  HelpMessage: ''
-- Name: DatasetInWorkspace
-  Position: 0
+- Name: DatasetInMyWorkspace
+  Position: Named
   IsRequired: true
   ValueFromPipeline: false
   ValueFromPipelineByPropertyName: false
@@ -121,7 +120,7 @@ SupportsWildcards: false
 Aliases: []
 ParameterSets:
 - Name: (All)
-  Position: 2
+  Position: Named
   IsRequired: false
   ValueFromPipeline: false
   ValueFromPipelineByPropertyName: false
@@ -133,9 +132,9 @@ HelpMessage: ''
 
 ### -WorkspaceId
 
-The unique identifier of the workspace that contains the dataset(s). Required when
-`DatasetId` is omitted; when `DatasetId` is also supplied, it targets that dataset in the
-workspace. When omitted, the My Workspace endpoint is used.
+The unique identifier of the workspace that contains the dataset(s).
+When omitted,
+the My Workspace endpoint is used and `DatasetId` is required.
 
 ```yaml
 Type: System.Guid
@@ -144,17 +143,14 @@ SupportsWildcards: false
 Aliases:
 - GroupId
 ParameterSets:
-- Name: DatasetInWorkspace
-  Position: 1
+- Name: Workspace
+  Position: Named
   IsRequired: true
   ValueFromPipeline: false
   ValueFromPipelineByPropertyName: false
   ValueFromRemainingArguments: false
-  DontShow: false
-  AcceptedValues: []
-  HelpMessage: ''
-- Name: Workspace
-  Position: 1
+- Name: DatasetInWorkspace
+  Position: Named
   IsRequired: true
   ValueFromPipeline: false
   ValueFromPipelineByPropertyName: false
@@ -188,3 +184,4 @@ Author: Kamil Nowinski
 ## RELATED LINKS
 
 {{ Fill in the related links here }}
+

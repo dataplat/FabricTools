@@ -2,9 +2,10 @@
 document type: cmdlet
 external help file: FabricTools-Help.xml
 HelpUri: ''
+itemType: Lakehouse
 Locale: en-US
 Module Name: FabricTools
-ms.date: 04/08/2026
+ms.date: 11/07/2026
 PlatyPS schema version: 2024-05-01
 title: Remove-FabricLakehouse
 ---
@@ -141,8 +142,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-- Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
-- Validates token expiration before making the API request.
+- Calls `Confirm-TokenState` to ensure token validity before making the API request.
 
 Author: Tiago Balabuch, Kamil Nowinski
 

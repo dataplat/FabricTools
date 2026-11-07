@@ -2,9 +2,10 @@
 document type: cmdlet
 external help file: FabricTools-Help.xml
 HelpUri: ''
+itemType: Datamart
 Locale: en-US
 Module Name: FabricTools
-ms.date: 04/01/2026
+ms.date: 11/07/2026
 PlatyPS schema version: 2024-05-01
 title: Get-FabricDatamart
 ---
@@ -20,7 +21,7 @@ Retrieves datamarts from a specified workspace.
 ### __AllParameterSets
 
 ```
-Get-FabricDatamart [-WorkspaceId] <guid> [[-datamartId] <guid>] [[-datamartName] <string>]
+Get-FabricDatamart [-WorkspaceId] <guid> [[-DatamartId] <guid>] [[-DatamartName] <string>]
  [<CommonParameters>]
 ```
 
@@ -43,7 +44,7 @@ Get-FabricDatamart -WorkspaceId "12345"
 
 ## PARAMETERS
 
-### -datamartId
+### -DatamartId
 
 The ID of the specific datamart to retrieve.
 This parameter is optional.
@@ -65,7 +66,7 @@ AcceptedValues: []
 HelpMessage: ''
 ```
 
-### -datamartName
+### -DatamartName
 
 The name of the specific datamart to retrieve.
 This parameter is optional.

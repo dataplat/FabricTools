@@ -5,7 +5,7 @@ HelpInfoUri: https://www.github.com/dataplat/FabricTools
 Locale: en-US
 Module Guid: f2a0f9e6-fab6-41fc-9e1c-0c94ff38f794
 Module Name: FabricTools
-ms.date: 04/08/2026
+ms.date: 11/07/2026
 PlatyPS schema version: 2024-05-01
 title: FabricTools Module
 ---
@@ -152,7 +152,7 @@ Retrieves one or more Power BI datasets from My Workspace or a specific workspac
 
 ### [Get-FabricDatasetRefreshHistory](Get-FabricDatasetRefreshHistory.md)
 
-Retrieves refresh history for a Power BI dataset or all datasets in a workspace.
+Retrieves the refresh history of a Power BI dataset.
 
 ### [Get-FabricDebugInfo](Get-FabricDebugInfo.md)
 
@@ -374,10 +374,6 @@ Retrieves Fabric SQL Database details.
 
 Retrieves SQL Endpoints from a specified workspace in Fabric.
 
-### [Refresh-FabricSQLEndpoint](Refresh-FabricSQLEndpoint.md)
-
-Refreshes the metadata of a SQL analytics endpoint.
-
 ### [Get-FabricTenantSetting](Get-FabricTenantSetting.md)
 
 Retrieves tenant settings from the Fabric environment.
@@ -546,6 +542,10 @@ Retrieves the workspace usage metrics dataset ID.
 
 Publishes a staging environment in a specified Microsoft Fabric workspace.
 
+### [Refresh-FabricSQLEndpoint](Refresh-FabricSQLEndpoint.md)
+
+Refreshes the metadata of a SQL analytics endpoint.
+
 ### [Remove-FabricCopyJob](Remove-FabricCopyJob.md)
 
 Deletes a Copy Job from a specified Microsoft Fabric workspace.
@@ -644,7 +644,7 @@ Removes an SparkJobDefinition from a specified Microsoft Fabric workspace.
 
 ### [Remove-FabricSQLDatabase](Remove-FabricSQLDatabase.md)
 
-Deletes a SQL Database from a specified workspace in Microsoft Fabric.
+Deletes a SQL Database from a specified workspace in Microsoft Fabric by ID or exact name.
 
 ### [Remove-FabricWarehouse](Remove-FabricWarehouse.md)
 
@@ -652,7 +652,7 @@ Removes a warehouse from a specified Microsoft Fabric workspace.
 
 ### [Remove-FabricWorkspace](Remove-FabricWorkspace.md)
 
-Deletes an existing Fabric workspace by its workspace ID.
+Deletes an existing Fabric workspace by its workspace ID or name.
 
 ### [Remove-FabricWorkspaceCapacity](Remove-FabricWorkspaceCapacity.md)
 
@@ -693,6 +693,10 @@ Initiates a table maintenance job for a specified Lakehouse in a Fabric workspac
 ### [Start-FabricMirroredDatabaseMirroring](Start-FabricMirroredDatabaseMirroring.md)
 
 Starts the mirroring of a specified mirrored database in a given workspace.
+
+### [Start-FabricNotebook](Start-FabricNotebook.md)
+
+Starts a notebook in Microsoft Fabric.
 
 ### [Start-FabricSparkJobDefinitionOnDemand](Start-FabricSparkJobDefinitionOnDemand.md)
 
@@ -856,7 +860,7 @@ Updates the definition of an existing SparkJobDefinition in a specified Microsof
 
 ### [Update-FabricSparkSettings](Update-FabricSparkSettings.md)
 
-Updates an existing Spark custom pool in a specified Microsoft Fabric workspace.
+Updates Spark settings in a specified Microsoft Fabric workspace.
 
 ### [Update-FabricWarehouse](Update-FabricWarehouse.md)
 
@@ -873,3 +877,4 @@ Updates the role assignment for a specific principal in a Fabric workspace.
 ### [Write-FabricLakehouseTableData](Write-FabricLakehouseTableData.md)
 
 Loads data into a specified table in a Lakehouse within a Fabric workspace.
+
