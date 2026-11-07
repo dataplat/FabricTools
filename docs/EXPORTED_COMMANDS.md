@@ -2,7 +2,7 @@
 
 This list was generated from the filenames in `docs/en-US` and represents the documented public commands in this repository.
 
-Generated on 2026-04-08.
+Generated on 2026-11-07.
 
 - Add-FabricDomainWorkspaceAssignmentByCapacity
 - Add-FabricDomainWorkspaceAssignmentById
@@ -14,8 +14,10 @@ Generated on 2026-04-08.
 - Add-FabricWorkspaceRoleAssignment
 - Add-FabricWorkspaceToStage
 - Connect-FabricAccount
+- Connect-FabricGit
 - Convert-FromBase64
 - Convert-ToBase64
+- Disconnect-FabricGit
 - Export-FabricItem
 - Get-FabricAPIclusterURI
 - Get-FabricAuthToken
@@ -55,6 +57,9 @@ Generated on 2026-04-08.
 - Get-FabricEventstream
 - Get-FabricEventstreamDefinition
 - Get-FabricExternalDataShares
+- Get-FabricGitConnection
+- Get-FabricGitCredential
+- Get-FabricGitStatus
 - Get-FabricItem
 - Get-FabricKQLDashboard
 - Get-FabricKQLDashboardDefinition
@@ -99,7 +104,10 @@ Generated on 2026-04-08.
 - Get-FabricWorkspaceUser
 - Import-FabricEnvironmentStagingLibrary
 - Import-FabricItem
+- Initialize-FabricGitConnection
 - Invoke-FabricDatasetRefresh
+- Invoke-FabricGitCommit
+- Invoke-FabricGitUpdate
 - Invoke-FabricKQLCommand
 - Invoke-FabricRestMethod
 - New-FabricCopyJob
@@ -127,6 +135,7 @@ Generated on 2026-04-08.
 - New-FabricWorkspace
 - New-FabricWorkspaceUsageMetricsReport
 - Publish-FabricEnvironment
+- Refresh-FabricSQLEndpoint
 - Remove-FabricCopyJob
 - Remove-FabricDataPipeline
 - Remove-FabricDeploymentPipeline
@@ -165,6 +174,7 @@ Generated on 2026-04-08.
 - Start-FabricDeploymentPipelineStage
 - Start-FabricLakehouseTableMaintenance
 - Start-FabricMirroredDatabaseMirroring
+- Start-FabricNotebook
 - Start-FabricSparkJobDefinitionOnDemand
 - Stop-FabricEnvironmentPublish
 - Stop-FabricMirroredDatabaseMirroring
@@ -181,6 +191,7 @@ Generated on 2026-04-08.
 - Update-FabricEventhouseDefinition
 - Update-FabricEventstream
 - Update-FabricEventstreamDefinition
+- Update-FabricGitCredential
 - Update-FabricKQLDashboard
 - Update-FabricKQLDashboardDefinition
 - Update-FabricKQLDatabase

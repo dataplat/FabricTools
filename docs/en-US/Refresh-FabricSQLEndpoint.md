@@ -2,9 +2,11 @@
 document type: cmdlet
 external help file: FabricTools-Help.xml
 HelpUri: ''
+itemType: SQL Endpoints
 Locale: en-US
 Module Name: FabricTools
-ms.date: 10/28/2026
+ms.date: 11/07/2026
+PlatyPS schema version: 2024-05-01
 title: Refresh-FabricSQLEndpoint
 ---
 
@@ -16,10 +18,14 @@ Refreshes the metadata of a SQL analytics endpoint.
 
 ## SYNTAX
 
+### __AllParameterSets
+
 ```
-Refresh-FabricSQLEndpoint [-WorkspaceId] <guid> [-SQLEndpointId] <guid> [[-Timeout] <int>]
- [-NoWait] [-WhatIf] [-Confirm] [<CommonParameters>]
+Refresh-FabricSQLEndpoint [-WorkspaceId] <guid> [-SQLEndpointId] <guid> [[-Timeout] <int>] [-NoWait]
+ [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
+
+## ALIASES
 
 ## DESCRIPTION
 
@@ -36,19 +42,41 @@ Refresh-FabricSQLEndpoint -WorkspaceId $workspaceId -SQLEndpointId $sqlEndpointI
 
 ## PARAMETERS
 
-### -WorkspaceId
+### -Confirm
 
-The ID of the workspace containing the SQL analytics endpoint.
+Prompts you for confirmation before running the cmdlet.
 
 ```yaml
-Type: System.Guid
+Type: System.Management.Automation.SwitchParameter
 DefaultValue: ''
+SupportsWildcards: false
+Aliases:
+- cf
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -NoWait
+
+If specified, returns immediately after the refresh request is accepted.
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+DefaultValue: False
 SupportsWildcards: false
 Aliases: []
 ParameterSets:
 - Name: (All)
-  Position: 0
-  IsRequired: true
+  Position: Named
+  IsRequired: false
   ValueFromPipeline: false
   ValueFromPipelineByPropertyName: false
   ValueFromRemainingArguments: false
@@ -80,7 +108,8 @@ HelpMessage: ''
 
 ### -Timeout
 
-The maximum time, in minutes, to wait for the refresh operation. A value of 0 waits indefinitely.
+The maximum time, in minutes, to wait for the refresh operation.
+A value of 0 waits indefinitely.
 
 ```yaml
 Type: System.Int32
@@ -99,19 +128,41 @@ AcceptedValues: []
 HelpMessage: ''
 ```
 
-### -NoWait
+### -WhatIf
 
-If specified, returns immediately after the refresh request is accepted.
+Runs the command in a mode that only reports what would happen without performing the actions.
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
-DefaultValue: False
+DefaultValue: ''
 SupportsWildcards: false
-Aliases: []
+Aliases:
+- wi
 ParameterSets:
 - Name: (All)
   Position: Named
   IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -WorkspaceId
+
+The ID of the workspace containing the SQL analytics endpoint.
+
+```yaml
+Type: System.Guid
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: 0
+  IsRequired: true
   ValueFromPipeline: false
   ValueFromPipelineByPropertyName: false
   ValueFromRemainingArguments: false
@@ -127,6 +178,15 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 -ProgressAction, -Verbose, -WarningAction, and -WarningVariable. For more information, see
 [about_CommonParameters](https://go.microsoft.com/fwlink/?LinkID=113216).
 
+## INPUTS
+
+## OUTPUTS
+
 ## NOTES
 
 Author: Kamil Nowinski
+
+## RELATED LINKS
+
+{{ Fill in the related links here }}
+

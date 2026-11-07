@@ -2,9 +2,10 @@
 document type: cmdlet
 external help file: FabricTools-Help.xml
 HelpUri: https://learn.microsoft.com/en-us/rest/api/fabric/eventhouse/items/list-eventhouses?tabs=HTTP
+itemType: Eventhouse
 Locale: en-US
 Module Name: FabricTools
-ms.date: 04/01/2026
+ms.date: 11/07/2026
 PlatyPS schema version: 2024-05-01
 title: Get-FabricEventhouse
 ---
@@ -41,8 +42,7 @@ parameters cannot be used together.
 This example will give you all Eventhouses in the Workspace.
 
 ```powershell
-Get-FabricEventhouse `
--WorkspaceId '12345678-1234-1234-1234-123456789012'
+Get-FabricEventhouse -WorkspaceId '12345678-1234-1234-1234-123456789012'
 ```
 
 ### EXAMPLE 2
@@ -50,9 +50,7 @@ Get-FabricEventhouse `
 This example will give you all Information about the Eventhouse with the name 'MyEventhouse'.
 
 ```powershell
-Get-FabricEventhouse `
--WorkspaceId '12345678-1234-1234-1234-123456789012' `
--EventhouseName 'MyEventhouse'
+Get-FabricEventhouse -WorkspaceId '12345678-1234-1234-1234-123456789012' -EventhouseName 'MyEventhouse'
 ```
 
 ### EXAMPLE 3
@@ -60,20 +58,7 @@ Get-FabricEventhouse `
 This example will give you all Information about the Eventhouse with the Id '12345678-1234-1234-1234-123456789012'.
 
 ```powershell
-Get-FabricEventhouse `
--WorkspaceId '12345678-1234-1234-1234-123456789012' `
--EventhouseId '12345678-1234-1234-1234-123456789012'
-```
-
-### EXAMPLE 4
-
-This example will give you all Information about the Eventhouse with the Id '12345678-1234-1234-1234-123456789012'. It will also give you verbose output which is useful for debugging.
-
-```powershell
-Get-FabricEventhouse `
--WorkspaceId '12345678-1234-1234-1234-123456789012' `
--EventhouseId '12345678-1234-1234-1234-123456789012' `
--Verbose
+Get-FabricEventhouse -WorkspaceId '12345678-1234-1234-1234-123456789012' -EventhouseId '12345678-1234-1234-1234-123456789012'
 ```
 
 ## PARAMETERS
@@ -164,7 +149,7 @@ TODO: Add functionality to list all Eventhouses in the subscription.
 To do so fetch all workspaces
 and then all eventhouses in each workspace.
 
-Author: Tiago Balabuch
+Author: Tiago Balabuch, Kamil Nowinski
 
 ## RELATED LINKS
 

@@ -2,9 +2,10 @@
 document type: cmdlet
 external help file: FabricTools-Help.xml
 HelpUri: ''
+itemType: Lakehouse
 Locale: en-US
 Module Name: FabricTools
-ms.date: 04/08/2026
+ms.date: 11/07/2026
 PlatyPS schema version: 2024-05-01
 title: Write-FabricLakehouseTableData
 ---

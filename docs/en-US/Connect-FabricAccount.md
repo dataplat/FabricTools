@@ -2,9 +2,10 @@
 document type: cmdlet
 external help file: FabricTools-Help.xml
 HelpUri: ''
+itemType: Core
 Locale: en-US
 Module Name: FabricTools
-ms.date: 04/01/2026
+ms.date: 11/07/2026
 PlatyPS schema version: 2024-05-01
 title: Connect-FabricAccount
 ---
@@ -31,7 +32,8 @@ Connect-FabricAccount [[-TenantId] <guid>] [[-ServicePrincipalId] <guid>]
 
 Connects to the Fabric WebAPI by using the cmdlet Connect-AzAccount.
 This function retrieves the authentication token for the Fabric API and sets up the headers for API calls.
-User sign-in uses interactive authentication by default. Use -UseDeviceAuthentication if the interactive broker or browser cannot be used.
+User sign-in uses interactive authentication by default.
+Use -UseDeviceAuthentication if the interactive broker or browser cannot be used.
 
 ## EXAMPLES
 
@@ -67,7 +69,7 @@ Connect-FabricAccount -TenantId $TenantID -ServicePrincipalId $ServicePrincipalI
 
 ### EXAMPLE 4
 
-Connects using device code authentication when interactive sign-in is unavailable.
+Connects using device code authentication (useful in terminals such as Warp where the account picker cannot render)
 
 ```powershell
 Connect-FabricAccount -UseDeviceAuthentication
@@ -113,7 +115,8 @@ HelpMessage: ''
 
 ### -Credential
 
-A PSCredential object containing a service principal's application ID as the username and client secret as the password. This is not for signing in as a user with a username and password.
+A PSCredential object containing a service principal's application ID as the username and client secret as the password.
+This is not for signing in as a user with a username and password.
 
 ```yaml
 Type: System.Management.Automation.PSCredential
@@ -221,7 +224,12 @@ HelpMessage: ''
 
 ### -UseDeviceAuthentication
 
-Forces device code authentication instead of the interactive broker or browser flow. Use this when the interactive sign-in UI cannot be displayed. If this parameter isn't specified, the cmdlet falls back to device code authentication when interactive sign-in fails.
+A switch parameter.
+Forces device code authentication instead of the interactive broker/browser flow.
+Use this when the interactive account picker cannot be displayed by the host terminal (for example Warp on Windows,
+which does not expose a window handle the WAM broker can parent its UI to).
+When this switch is not specified,
+Connect-FabricAccount still falls back to device code authentication automatically if interactive sign-in fails.
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
@@ -237,7 +245,7 @@ ParameterSets:
   ValueFromRemainingArguments: false
 DontShow: false
 AcceptedValues: []
-HelpMessage: Use device code authentication instead of the interactive broker/browser flow.
+HelpMessage: ''
 ```
 
 ### -WhatIf
@@ -284,7 +292,8 @@ Revision History:
 - 2024-12-22 - FGE: Added Verbose Output
 - 2025-05-26 - Jojobit: Added Service Principal support, with secure string handling and parameter descriptions, as supported by the original FabTools module
 - 2025-06-02 - KNO: Added Reset switch to force re-authentication and token refresh
-- 2026-08-23 - PBO: Added UseDeviceAuthentication switch and automatic fallback to device code auth when interactive/broker sign-in fails (e.g. Warp terminal)
+- 2026-08-23 - PBO: Added UseDeviceAuthentication switch and automatic fallback to device code auth when interactive/broker sign-in fails (e.g.
+Warp terminal)
 
 Author: Frank Geisler, Kamil Nowinski
 

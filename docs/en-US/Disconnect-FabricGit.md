@@ -2,6 +2,7 @@
 document type: cmdlet
 external help file: FabricTools-Help.xml
 HelpUri: ''
+itemType: Git
 Locale: en-US
 Module Name: FabricTools
 ms.date: 11/07/2026

@@ -2,9 +2,10 @@
 document type: cmdlet
 external help file: FabricTools-Help.xml
 HelpUri: ''
+itemType: SQL Database
 Locale: en-US
 Module Name: FabricTools
-ms.date: 04/01/2026
+ms.date: 11/07/2026
 PlatyPS schema version: 2024-05-01
 title: Remove-FabricSQLDatabase
 ---
@@ -17,7 +18,7 @@ Deletes a SQL Database from a specified workspace in Microsoft Fabric by ID or e
 
 ## SYNTAX
 
-### ById
+### ById (Default)
 
 ```
 Remove-FabricSQLDatabase -WorkspaceId <guid> -SQLDatabaseId <guid> [-WhatIf] [-Confirm]
@@ -33,11 +34,10 @@ Remove-FabricSQLDatabase -WorkspaceId <guid> -SQLDatabaseName <string> [-WhatIf]
 
 ## ALIASES
 
-- `SQLDatabaseName`: `Name`
-
 ## DESCRIPTION
 
-When a name is provided, exactly one SQL Database in the workspace must match. If no database or multiple databases match, no deletion is performed.
+When a name is provided, exactly one SQL Database in the workspace must match.
+If no database or multiple databases match, no deletion is performed.
 
 ## EXAMPLES
 
@@ -46,7 +46,7 @@ When a name is provided, exactly one SQL Database in the workspace must match. I
 Deletes the SQL Database with ID "67890" from workspace "12345".
 
 ```powershell
-Remove-FabricSQLDatabase -WorkspaceId "12345" -SQLDatabaseId "67890"
+Remove-FabricSQLDatabas -WorkspaceId "12345" -SQLDatabaseId "67890"
 ```
 
 ### EXAMPLE 2
@@ -104,7 +104,9 @@ HelpMessage: ''
 
 ### -SQLDatabaseName
 
-The exact name of the SQL Database to be deleted. Supports the alias Name. Use SQLDatabaseId if the name is ambiguous.
+The exact name of the SQL Database to be deleted.
+Supports the alias Name.
+Use SQLDatabaseId if the name is ambiguous.
 
 ```yaml
 Type: System.String
@@ -148,7 +150,7 @@ HelpMessage: ''
 
 ### -WorkspaceId
 
-The ID of the workspace containing the SQLDatabase to delete.
+(Mandatory) The ID of the workspace containing the SQLDatabase to delete.
 
 ```yaml
 Type: System.Guid
@@ -156,13 +158,7 @@ DefaultValue: ''
 SupportsWildcards: false
 Aliases: []
 ParameterSets:
-- Name: ById
-  Position: Named
-  IsRequired: true
-  ValueFromPipeline: false
-  ValueFromPipelineByPropertyName: false
-  ValueFromRemainingArguments: false
-- Name: ByName
+- Name: (All)
   Position: Named
   IsRequired: true
   ValueFromPipeline: false
@@ -193,3 +189,4 @@ Author: Kamil Nowinski
 ## RELATED LINKS
 
 {{ Fill in the related links here }}
+

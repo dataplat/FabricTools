@@ -2,9 +2,10 @@
 document type: cmdlet
 external help file: FabricTools-Help.xml
 HelpUri: ''
+itemType: KQL Database
 Locale: en-US
 Module Name: FabricTools
-ms.date: 04/01/2026
+ms.date: 11/07/2026
 PlatyPS schema version: 2024-05-01
 title: Get-FabricKQLDatabase
 ---
@@ -103,7 +104,8 @@ HelpMessage: ''
 
 ### -WorkspaceId
 
-(Mandatory) The ID of the workspace to query KQLDatabases. Accepts pipeline input by value or by the WorkspaceId or Id property.
+(Mandatory) The ID of the workspace to query KQLDatabases.
+Accepts pipeline input by value or by the WorkspaceId or Id property.
 
 ```yaml
 Type: System.Guid
@@ -132,6 +134,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
+### System.Guid
+
+{{ Fill in the Description }}
+
 ## OUTPUTS
 
 ## NOTES
@@ -139,8 +145,9 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 - Requires `$FabricConfig` global configuration, including `BaseUrl` and `FabricHeaders`.
 - Calls `Confirm-TokenState` to ensure token validity before making the API request.
 
-Author: Tiago Balabuch
+Author: Tiago Balabuch, Kamil Nowinski
 
 ## RELATED LINKS
 
 {{ Fill in the related links here }}
+

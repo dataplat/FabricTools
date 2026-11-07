@@ -2,9 +2,10 @@
 document type: cmdlet
 external help file: FabricTools-Help.xml
 HelpUri: ''
+itemType: Utils
 Locale: en-US
 Module Name: FabricTools
-ms.date: 04/01/2026
+ms.date: 11/07/2026
 PlatyPS schema version: 2024-05-01
 title: Get-FabricLongRunningOperation
 ---
@@ -21,7 +22,7 @@ Monitors the status of a long-running operation in Microsoft Fabric.
 
 ```
 Get-FabricLongRunningOperation [[-OperationId] <string>] [[-Location] <string>]
- [[-RetryAfter] <int>] [[-Timeout] <int>] [<CommonParameters>]
+ [[-RetryAfter] <int>] [[-Timeout] <int>] [[-TimeoutSeconds] <int>] [<CommonParameters>]
 ```
 
 ## ALIASES
@@ -131,6 +132,27 @@ AcceptedValues: []
 HelpMessage: ''
 ```
 
+### -TimeoutSeconds
+
+The remaining timeout budget, in seconds, passed internally to limit long-running operation polling.
+
+```yaml
+Type: System.Int32
+DefaultValue: 0
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: 4
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
 ### CommonParameters
 
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable,
@@ -149,3 +171,4 @@ Author: Tiago Balabuch
 ## RELATED LINKS
 
 {{ Fill in the related links here }}
+
