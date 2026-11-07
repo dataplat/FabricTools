@@ -49,6 +49,8 @@ function Remove-FabricWorkspace {
         # Ensure token validity
         Confirm-TokenState
 
+        $workspaceNameForMessage = $WorkspaceName
+
         if ($PSCmdlet.ParameterSetName -eq 'ByName') {
             $workspaces = @(Get-FabricWorkspace -WorkspaceName $WorkspaceName | Where-Object { $null -ne $_ })
             if ($workspaces.Count -eq 0) {
@@ -60,6 +62,7 @@ function Remove-FabricWorkspace {
                 return $null
             }
             $WorkspaceId = [guid]$workspaces[0].Id
+            $workspaceNameForMessage = $workspaces[0].DisplayName
             if ($WorkspaceId -eq [guid]::Empty) {
                 throw "The workspace '$WorkspaceName' has no valid workspace ID."
             }
@@ -71,6 +74,18 @@ function Remove-FabricWorkspace {
 
         if ($PSCmdlet.ShouldProcess($apiEndpointUrl, "Delete Workspace"))
         {
+            if (-not $workspaceNameForMessage) {
+                try {
+                    $workspace = Get-FabricWorkspace -WorkspaceId $WorkspaceId
+                    $workspaceNameForMessage = $workspace.DisplayName
+                } catch {
+                    $workspaceNameForMessage = $null
+                }
+                if (-not $workspaceNameForMessage) {
+                    $workspaceNameForMessage = $WorkspaceId
+                }
+            }
+
             # Invoke Fabric API request
             $apiParams = @{
                 Uri            = $apiEndpointUrl
@@ -78,7 +93,7 @@ function Remove-FabricWorkspace {
                 HandleResponse = $true
             }
             $response = Invoke-FabricRestMethod @apiParams
-            Write-Message -Message "Workspace '$WorkspaceId' deleted successfully!" -Level Info
+            Write-Message -Message "Workspace '$workspaceNameForMessage' deleted successfully!" -Level Info
             return $null
         }
 

@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- `Remove-FabricWorkspace` reports the workspace name after successful deletion, resolving it from the ID when necessary (#50).
 - `Get-FabricWorkspaceUser` now includes the workspace name and ID on each returned user.
 - `Get-FabricDatasetRefreshHistory` supports workspace-wide mode when `-DatasetId` is omitted and `-WorkspaceId` is supplied.
 - `Remove-FabricItem` confirms each item individually instead of once for the whole batch, so `-WhatIf` lists the items by name and ID and `-Confirm` prompts per item rather than authorising the entire batch with a single answer
