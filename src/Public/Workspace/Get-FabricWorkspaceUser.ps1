@@ -6,6 +6,7 @@ Retrieves the user(s) of a workspace.
 
 .DESCRIPTION
 The Get-FabricWorkspaceUser function retrieves the details of the users of a workspace.
+Each returned user includes the workspace name and ID for context.
 
 .PARAMETER WorkspaceId
 The ID of the workspace. This is a mandatory parameter if Workspace is not provided.
@@ -37,19 +38,10 @@ The workspace object. This normally comes from the Get-FabricWorkspace cmdlet. T
     ```
 
 .EXAMPLE
-    This example retrieves the users of all of the workspaces. IMPORTANT: This will not return the workspace name or ID at present.
+    This example retrieves the users of all of the workspaces, including each user's workspace name and ID.
 
     ```powershell
     Get-FabricWorkspace| Get-FabricWorkspaceUser
-    ```
-
-.EXAMPLE
-    This example retrieves the users of all of the workspaces and returns the workspace name as well.
-
-    ```powershell
-    Get-FabricWorkspace| Foreach-Object {
-        Get-FabricWorkspaceUser -WorkspaceId $_.Id | Select-Object @{Name='WorkspaceName';Expression={$_.displayName;}}, *
-    }
     ```
 
 .NOTES
@@ -98,8 +90,12 @@ Author: Ioana Bouariu
             if ($response)
             {
 
-                # Add the users to the return value.
-                $returnValue += $response
+                foreach ($user in $response)
+                {
+                    Add-Member -InputObject $user -MemberType NoteProperty -Name WorkspaceName -Value $space.displayName -Force
+                    Add-Member -InputObject $user -MemberType NoteProperty -Name WorkspaceId -Value $space.id -Force
+                    $returnValue += $user
+                }
             }
         }
     }

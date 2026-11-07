@@ -95,10 +95,10 @@ Describe "Get-FabricWorkspaceUser" -Tag "UnitTests" {
                 return @(
                     @{
                         displayName = 'prod-workspace'
-                        Id          = [guid]::NewGuid().Guid.ToString()
+                        Id          = '11111111-1111-1111-1111-111111111111'
                     }, @{
                         displayName = "test-workspace"
-                        Id          = [guid]::NewGuid().Guid.ToString()
+                        Id          = '22222222-2222-2222-2222-222222222222'
                     }
                 )
             }
@@ -130,6 +130,21 @@ Describe "Get-FabricWorkspaceUser" -Tag "UnitTests" {
         It "Should return users for multiple workspaces passed to the Workspace parameter from the pipeline" {
             { Get-FabricWorkspace | Get-FabricWorkspaceUser
             } | Should -Not -BeNullOrEmpty
+        }
+
+        It "Should include workspace name and ID on users returned for multiple workspaces" {
+            $result = @(Get-FabricWorkspace | Get-FabricWorkspaceUser)
+            $prodUsers = @($result | Where-Object WorkspaceName -EQ 'prod-workspace')
+            $testUsers = @($result | Where-Object WorkspaceName -EQ 'test-workspace')
+
+            $result.Count | Should -Be 4
+            $prodUsers.Count | Should -Be 2
+            $prodUsers[0].WorkspaceId | Should -Be '11111111-1111-1111-1111-111111111111'
+            $prodUsers[1].WorkspaceId | Should -Be '11111111-1111-1111-1111-111111111111'
+            $testUsers.Count | Should -Be 2
+            $testUsers[0].WorkspaceId | Should -Be '22222222-2222-2222-2222-222222222222'
+            $testUsers[1].WorkspaceId | Should -Be '22222222-2222-2222-2222-222222222222'
+            $result[0].emailAddress | Should -Be 'name@domain.com'
         }
     }
 
