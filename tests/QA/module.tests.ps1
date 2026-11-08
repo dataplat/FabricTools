@@ -305,7 +305,6 @@ BeforeDiscovery {
         migrates it.
     #>
     $aliasPendingFolders = @(
-        'Mirrored Database'
         'Mirrored Warehouse'
         'ML Experiment'
         'ML Model'
