@@ -305,7 +305,6 @@ BeforeDiscovery {
         migrates it.
     #>
     $aliasPendingFolders = @(
-        'Deployment Pipeline'
         'Domain'
         'Environment'
         'Eventhouse'
