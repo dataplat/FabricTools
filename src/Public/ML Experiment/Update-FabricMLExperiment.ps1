@@ -40,10 +40,12 @@ function Update-FabricMLExperiment
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Id')]
         [guid]$MLExperimentId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Name', 'DisplayName')]
         [string]$MLExperimentName,
 
         [Parameter(Mandatory = $false)]

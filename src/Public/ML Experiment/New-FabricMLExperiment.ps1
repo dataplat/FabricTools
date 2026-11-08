@@ -37,6 +37,7 @@ function New-FabricMLExperiment
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Name', 'DisplayName')]
         [string]$MLExperimentName,
 
         [Parameter(Mandatory = $false)]
