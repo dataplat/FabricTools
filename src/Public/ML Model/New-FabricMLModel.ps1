@@ -37,6 +37,7 @@ function New-FabricMLModel
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Name', 'DisplayName')]
         [string]$MLModelName,
 
         [Parameter(Mandatory = $false)]
