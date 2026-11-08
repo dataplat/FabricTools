@@ -31,6 +31,7 @@ Author: Kamil Nowinski
     param
     (
         [Parameter(Mandatory = $false)]
+        [Alias('Id')]
         [guid]$connectionId
     )
 
