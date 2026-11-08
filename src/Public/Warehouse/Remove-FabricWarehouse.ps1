@@ -33,6 +33,7 @@ function Remove-FabricWarehouse
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Id')]
         [guid]$WarehouseId
     )
     try

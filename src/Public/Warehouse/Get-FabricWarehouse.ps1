@@ -43,10 +43,12 @@ function Get-FabricWarehouse {
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Id')]
         [guid]$WarehouseId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Name', 'DisplayName')]
         [string]$WarehouseName
     )
 
