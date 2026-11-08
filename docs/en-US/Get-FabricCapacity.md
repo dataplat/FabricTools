@@ -5,7 +5,7 @@ HelpUri: ''
 itemType: Capacity
 Locale: en-US
 Module Name: FabricTools
-ms.date: 11/07/2026
+ms.date: 11/08/2026
 PlatyPS schema version: 2024-05-01
 title: Get-FabricCapacity
 ---
@@ -60,7 +60,8 @@ This parameter is optional.
 Type: System.Guid
 DefaultValue: ''
 SupportsWildcards: false
-Aliases: []
+Aliases:
+- Id
 ParameterSets:
 - Name: (All)
   Position: 0
@@ -82,7 +83,9 @@ This parameter is optional.
 Type: System.String
 DefaultValue: ''
 SupportsWildcards: false
-Aliases: []
+Aliases:
+- Name
+- DisplayName
 ParameterSets:
 - Name: (All)
   Position: 1

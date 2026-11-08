@@ -5,7 +5,7 @@ HelpUri: ''
 itemType: Item
 Locale: en-US
 Module Name: FabricTools
-ms.date: 11/07/2026
+ms.date: 11/08/2026
 PlatyPS schema version: 2024-05-01
 title: Get-FabricItem
 ---
@@ -58,7 +58,8 @@ If not specified, all items will be retrieved.
 Type: System.Guid
 DefaultValue: ''
 SupportsWildcards: false
-Aliases: []
+Aliases:
+- Id
 ParameterSets:
 - Name: (All)
   Position: Named
