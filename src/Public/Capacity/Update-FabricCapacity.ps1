@@ -80,6 +80,7 @@ function Update-FabricCapacity
         [ValidateNotNullOrEmpty()]
         [ValidateLength(3, 63)]
         [ValidatePattern('^[a-z][a-z0-9]*$')]
+        [Alias('Name', 'DisplayName')]
         [string]$CapacityName,
 
         [Parameter(Mandatory = $true)]

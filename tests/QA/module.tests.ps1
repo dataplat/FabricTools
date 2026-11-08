@@ -305,7 +305,6 @@ BeforeDiscovery {
         migrates it.
     #>
     $aliasPendingFolders = @(
-        'Capacity'
         'Config'
         'Copy Job'
         'Data Pipeline'
