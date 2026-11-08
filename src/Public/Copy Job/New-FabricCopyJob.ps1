@@ -42,6 +42,7 @@ function New-FabricCopyJob {
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Name', 'DisplayName')]
         [string]$CopyJobName,
 
         [Parameter(Mandatory = $false)]

@@ -40,10 +40,12 @@ function Update-FabricCopyJob
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Id')]
         [guid]$CopyJobId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Name', 'DisplayName')]
         [string]$CopyJobName,
 
         [Parameter(Mandatory = $false)]
