@@ -37,6 +37,7 @@ Author: Tiago Balabuch, Kamil Nowinski
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Name', 'DisplayName')]
         [string]$EnvironmentName,
 
         [Parameter(Mandatory = $false)]
