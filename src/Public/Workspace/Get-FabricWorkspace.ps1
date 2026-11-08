@@ -41,6 +41,7 @@ function Get-FabricWorkspace {
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Name', 'DisplayName')]
         [string]$WorkspaceName
     )
 
