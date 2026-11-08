@@ -43,6 +43,7 @@ Author: Tiago Balabuch, Kamil Nowinski
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Name', 'DisplayName')]
         [string]$LakehouseName,
 
         [Parameter(Mandatory = $false)]
