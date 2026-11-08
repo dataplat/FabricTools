@@ -43,11 +43,12 @@ function Remove-FabricSQLDatabase
 
         [Parameter(Mandatory = $true, ParameterSetName = 'ById')]
         [ValidateNotNullOrEmpty()]
+        [Alias('Id')]
         [guid]$SQLDatabaseId,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'ByName')]
         [ValidateNotNullOrEmpty()]
-        [Alias('Name')]
+        [Alias('Name', 'DisplayName')]
         [string]$SQLDatabaseName
     )
 
