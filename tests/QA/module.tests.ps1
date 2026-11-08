@@ -305,7 +305,6 @@ BeforeDiscovery {
         migrates it.
     #>
     $aliasPendingFolders = @(
-        'Domain'
         'Environment'
         'Eventhouse'
         'Eventstream'

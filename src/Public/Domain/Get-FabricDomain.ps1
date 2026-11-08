@@ -40,10 +40,12 @@ Author: Tiago Balabuch, Kamil Nowinski
     param (
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Id')]
         [guid]$DomainId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Name', 'DisplayName')]
         [string]$DomainName,
 
         [Parameter(Mandatory = $false)]

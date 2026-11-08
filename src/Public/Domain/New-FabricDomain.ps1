@@ -33,6 +33,7 @@ Author: Tiago Balabuch, Kamil Nowinski
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Name', 'DisplayName')]
         [string]$DomainName,
 
         [Parameter(Mandatory = $false)]
