@@ -305,7 +305,6 @@ BeforeDiscovery {
         migrates it.
     #>
     $aliasPendingFolders = @(
-        'Reflex'
         'Report'
         'Semantic Model'
         'Spark'

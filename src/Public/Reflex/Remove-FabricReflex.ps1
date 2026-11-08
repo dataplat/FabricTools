@@ -37,6 +37,7 @@ function Remove-FabricReflex
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Id')]
         [guid]$ReflexId
     )
     try
