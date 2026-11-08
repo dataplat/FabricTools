@@ -58,6 +58,7 @@ function New-FabricSparkCustomPool
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Name', 'DisplayName')]
         [string]$SparkCustomPoolName,
 
         [Parameter(Mandatory = $true)]

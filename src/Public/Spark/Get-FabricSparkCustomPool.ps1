@@ -50,10 +50,12 @@ function Get-FabricSparkCustomPool {
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Id')]
         [guid]$SparkCustomPoolId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Name', 'DisplayName')]
         [string]$SparkCustomPoolName
     )
 
