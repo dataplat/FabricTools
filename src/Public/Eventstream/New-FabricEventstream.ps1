@@ -45,6 +45,7 @@ Author: Tiago Balabuch, Kamil Nowinski
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Name', 'DisplayName')]
         [string]$EventstreamName,
 
         [Parameter(Mandatory = $false)]

@@ -305,7 +305,6 @@ BeforeDiscovery {
         migrates it.
     #>
     $aliasPendingFolders = @(
-        'Eventstream'
         'Item'
         'KQL Dashboard'
         'KQL Database'
