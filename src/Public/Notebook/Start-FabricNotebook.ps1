@@ -55,10 +55,12 @@ function Start-FabricNotebook {
 
         [Parameter(Mandatory = $true, ParameterSetName = 'ById')]
         [ValidateNotNullOrEmpty()]
+        [Alias('Id')]
         [guid]$NotebookId,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'ByName')]
         [ValidateNotNullOrEmpty()]
+        [Alias('Name', 'DisplayName')]
         [string]$NotebookName,
 
         [Parameter()]
