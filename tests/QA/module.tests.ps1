@@ -305,7 +305,6 @@ BeforeDiscovery {
         migrates it.
     #>
     $aliasPendingFolders = @(
-        'Item'
         'KQL Dashboard'
         'KQL Database'
         'KQL Queryset'
