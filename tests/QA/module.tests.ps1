@@ -305,7 +305,6 @@ BeforeDiscovery {
         migrates it.
     #>
     $aliasPendingFolders = @(
-        'SQL Endpoints'
         'Warehouse'
         'Workspace'
     )
