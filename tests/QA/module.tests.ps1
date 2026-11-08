@@ -339,6 +339,18 @@ BeforeDiscovery {
         'Workspace'
     )
 
+    <#
+        Known exceptions ('<Command>/<Parameter>/<Alias>'): the alias is already
+        taken by the parent WorkspaceId parameter. Moving it would break existing
+        scripts that use -Id, so these are left as they are.
+    #>
+    $aliasExceptions = @(
+        'Get-FabricKQLDatabase/KQLDatabaseId/Id'
+        'Get-FabricWorkspaceRoleAssignment/WorkspaceRoleAssignmentId/Id'
+        'Remove-FabricWorkspaceRoleAssignment/WorkspaceRoleAssignmentId/Id'
+        'Update-FabricWorkspaceRoleAssignment/WorkspaceRoleAssignmentId/Id'
+    )
+
     $aliasRules = @(
         @{ Suffix = 'Id'; Aliases = @('Id') }
         @{ Suffix = 'Name'; Aliases = @('Name', 'DisplayName') }
@@ -367,6 +379,11 @@ BeforeDiscovery {
             {
                 # A real parameter with that name already exists - nothing to alias.
                 if ($command.Parameters.ContainsKey($alias))
+                {
+                    continue
+                }
+
+                if ("$($command.Name)/$($parameter.Name)/$alias" -in $aliasExceptions)
                 {
                     continue
                 }
