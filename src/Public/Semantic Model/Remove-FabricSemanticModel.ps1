@@ -34,6 +34,7 @@ function Remove-FabricSemanticModel
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Id')]
         [guid]$SemanticModelId
     )
     try
