@@ -114,12 +114,33 @@ $response
 ## Adding a New Cmdlet
 
 1. Create `src/Public/<FeatureArea>/Verb-FabricNoun.ps1`
-2. Add comprehensive comment-based help (`.SYNOPSIS`, `.DESCRIPTION`, `.PARAMETER`, `.EXAMPLE`)
+2. Add comprehensive comment-based help (`.SYNOPSIS`, `.DESCRIPTION`, `.PARAMETER`, `.EXAMPLE`). In `.EXAMPLE` blocks, use splatting when an example passes more than two or three parameters, or when a single line would be hard to read (see [Help Examples](#help-examples))
 3. Use `Invoke-FabricRestMethod` for all API calls — follow the hash splatting + `HandleResponse = $true` conventions above
 4. Use `Write-Message` (PSFramework) for logging, not `Write-Verbose`/`Write-Host`
 5. Create matching test file at `tests/Unit/Verb-FabricNoun.Tests.ps1`
 6. Build, then regenerate docs: `./build.ps1 -Tasks generate_docs` (writes `docs/en-US/<Cmdlet>.md`, including the `itemType` frontmatter key taken from the `src/Public/<FeatureArea>` folder)
 7. Update `CHANGELOG.md` under `## [Unreleased]` using Keep a Changelog format
+
+## Help Examples
+
+If an example uses more than two or three parameters, or putting them all on one line would make it hard to read, present the parameters as a splatted hashtable (aligned `=`, no backtick line continuation). Short examples stay on one line:
+
+```powershell
+<#
+.EXAMPLE
+    Verb-FabricNoun -WorkspaceId 'guid' -Name $objectName
+
+.EXAMPLE
+    $params = @{
+        Workspace = 'WorkspaceName'
+        SetId     = 'xxxx-yyyy'
+        Format    = 'json'
+    }
+    Verb-FabricNoun @params
+#>
+```
+
+Switch parameters are passed as `$true` in the hashtable (e.g. `ReturnRawResult = $true`).
 
 ## Documentation Website
 
