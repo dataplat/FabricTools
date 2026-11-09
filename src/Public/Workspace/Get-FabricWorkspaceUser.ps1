@@ -85,7 +85,7 @@ Author: Ioana Bouariu
             # Make a GET request to the PowerBI API to retrieve the users of the workspace.
             # The function returns the 'value' property of the response, which contains the users.
 
-            $response = (Invoke-FabricRestMethod -Method get -PowerBIApi -Uri $Uri).value
+            $response = (Invoke-FabricRestMethod -Method get -ApiType PowerBI -Uri $Uri).value
             if ($response)
             {
 

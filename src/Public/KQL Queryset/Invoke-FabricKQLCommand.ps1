@@ -1,204 +1,163 @@
 function Invoke-FabricKQLCommand {
-
     <#
 .SYNOPSIS
     Executes a KQL command in a Kusto Database.
 
 .DESCRIPTION
-    Executes a KQL command in a Kusto Database. The KQL command is executed in the Kusto Database that is specified by the KQLDatabaseName or KQLDatabaseId parameter. The KQL command is executed in the context of the Fabric Real-Time Intelligence session that is established by the Connect-RTISession cmdlet. The cmdlet distinguishes between management commands and query commands. Management commands are executed in the management API, while query commands are executed in the query API. The distinction is made by checking if the KQL command starts with a dot. If it does, it is a management command else it is a query command. If the KQL command is a management command, it is crucial to have the execute database script <| in the beginning, otherwise the Kusto API will not execute the script. This cmdlet will automatically add the .execute database script <| in the beginning of the KQL command if it is a management command and if it is not already present. If the KQL Command is a query command, the result is returned as an array of PowerShell objects by default. If the parameter -ReturnRawResult is used, the raw result of the KQL query is returned which is a JSON object.
+    Executes a KQL command in the KQL Database specified by the KQLDatabaseName or KQLDatabaseId parameter.
+    The command is sent to the query service of the database (the 'queryServiceUri' property of the KQL Database)
+    using an access token for the Kusto API (configuration key 'FabricTools.KustoApi.ResourceUrl'), which is
+    acquired on first use and cached for the session.
+
+    The cmdlet distinguishes between management commands and queries: a command starting with a dot is a management
+    command and is sent to the management endpoint (/v1/rest/mgmt), anything else is a query and is sent to the
+    query endpoint (/v1/rest/query).
+    Management commands are wrapped in '.execute database script <|' unless the command already contains it.
+
+    Query results are returned as an array of PowerShell objects (one per row) by default.
+    Use -Raw to get the raw response of the Kusto API.
 
 .PARAMETER WorkspaceId
-    Id of the Fabric Workspace for which the KQL command should be executed. The value for WorkspaceId is a GUID.
+    Id of the Fabric Workspace that contains the KQL Database. The value for WorkspaceId is a GUID.
     An example of a GUID is '12345678-1234-1234-1234-123456789012'.
 
 .PARAMETER KQLDatabaseName
-    The name of the KQLDatabase in which the KQL command should be executed. This parameter cannot be used together with KQLDatabaseId.
+    The name of the KQL Database in which the KQL command should be executed. Cannot be used together with KQLDatabaseId.
 
 .PARAMETER KQLDatabaseId
-    The Id of the KQLDatabase in which the KQL command should be executed. This parameter cannot be used together with KQLDatabaseName.
+    The Id of the KQL Database in which the KQL command should be executed. Cannot be used together with KQLDatabaseName.
     The value for KQLDatabaseId is a GUID. An example of a GUID is '12345678-1234-1234-1234-123456789012'.
 
 .PARAMETER KQLCommand
-    The KQL command that should be executed in the Kusto Database.
-    The KQL command is a string. An example of a string is '.create table MyTable (MyColumn: string)'.
+    The KQL command or query that should be executed in the KQL Database.
+    An example is '.create table MyTable (MyColumn: string)'.
 
-.PARAMETER ReturnRawResult
-    When this switch is used, the raw result of the KQL command is returned. By default, the result is returned as
-    a PowerShell object.
-
-.EXAMPLE
-    This example will create a table named 'MyTable' with a column named 'MyColumn' in the KQLDatabase 'MyKQLDatabase'.
-
-    ```powershell
-    Invoke-FabricKQLCommand -WorkspaceId '12345678-1234-1234-1234-123456789012' -KQLDatabaseName 'MyKQLDatabase'-KQLCommand '.create table MyTable (MyColumn: string)
-    ```
+.PARAMETER Raw
+    When this switch is used, the raw response of the Kusto API is returned instead of an array of PowerShell objects.
+    Alias: ReturnRawResult (the former parameter name).
+    Management commands always return the raw response.
 
 .EXAMPLE
-    This example will Execute the Query 'productcategory | take 100' in the KQLDatabase 'MyEventhouse2' and it will return the result as an array of PowerShell objects.
+    $params = @{
+        WorkspaceId     = '12345678-1234-1234-1234-123456789012'
+        KQLDatabaseName = 'MyKQLDatabase'
+        KQLCommand      = '.create table MyTable (MyColumn: string)'
+    }
+    Invoke-FabricKQLCommand @params
 
-    ```powershell
-    Invoke-FabricKQLCommand `
-        -WorkspaceId '2c4ccbb5-9b13-4495-9ab3-ba41152733d9' `
-        -KQLDatabaseName 'MyEventhouse2' `
-        -ReturnRawResult `
-        -KQLCommand 'productcategory
-                    | take 100'
-    ```
+    Creates a table named 'MyTable' with a column named 'MyColumn' in the KQL Database 'MyKQLDatabase'.
+
+.EXAMPLE
+    $params = @{
+        WorkspaceId     = '12345678-1234-1234-1234-123456789012'
+        KQLDatabaseName = 'MyEventhouse'
+        KQLCommand      = 'productcategory | take 100'
+    }
+    Invoke-FabricKQLCommand @params
+
+    Runs the query in the KQL Database 'MyEventhouse' and returns the rows as an array of PowerShell objects.
+
+.EXAMPLE
+    $params = @{
+        WorkspaceId     = '12345678-1234-1234-1234-123456789012'
+        KQLDatabaseId   = '87654321-4321-4321-4321-210987654321'
+        KQLCommand      = 'StormEvents | count'
+        Raw             = $true
+    }
+    Invoke-FabricKQLCommand @params
+
+    Runs the query in the KQL Database with the given Id and returns the raw response of the Kusto API.
 
 .NOTES
-    Revision History:
-
-    2024-12-22 - FGE: Added Verbose Output
-    2024-12-27 - FGE: Major Update to support KQL Queries and Management Commands
-
-    Author: Frank Geisler
-
+    Author: Frank Geisler, Kamil Nowinski
     #>
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = 'ByName')]
     param (
-
         [Parameter(Mandatory = $true)]
         [guid]$WorkspaceId,
 
+        [Parameter(Mandatory = $true, ParameterSetName = 'ByName')]
+        [ValidateNotNullOrEmpty()]
         [string]$KQLDatabaseName,
 
+        [Parameter(Mandatory = $true, ParameterSetName = 'ById')]
         [guid]$KQLDatabaseId,
 
         [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
         [string]$KQLCommand,
 
-        [switch]$ReturnRawResult
+        [Alias('ReturnRawResult')]
+        [switch]$Raw
     )
 
-    begin {
+    Confirm-TokenState
 
-        Confirm-TokenState
-
-        Write-Verbose "Check if KQLDatabaseName and KQLDatabaseId are used together"
-        if ($PSBoundParameters.ContainsKey("KQLDatabaseName") -and $PSBoundParameters.ContainsKey("KQLDatabaseId")) {
-            throw "Parameters KQLDatabaseName and KQLDatabaseId cannot be used together"
-        }
-
-        Write-Verbose "Get Kusto Database"
-        if ($PSBoundParameters.ContainsKey("KQLDatabaseName")) {
-            Write-Verbose "Getting Kusto Database by Name: $KQLDatabaseName"
-            $kustDB = Get-FabricKQLDatabase `
-                -WorkspaceId $WorkspaceId `
-                -KQLDatabaseName $KQLDatabaseName
-        }
-
-        if ($PSBoundParameters.ContainsKey("KQLDatabaseId")) {
-            Write-Verbose "Getting Kusto Database by Id: $KQLDatabaseId"
-            $kustDB = Get-FabricKQLDatabase `
-                -WorkspaceId $WorkspaceId `
-                -KQLDatabaseId $KQLDatabaseId
-        }
-
-        Write-Verbose "Check if Kusto Database was found"
-        if ($null -eq $kustDB) {
-            throw "Kusto Database not found"
-        }
-
-        Write-Verbose "Generate the Management API URL"
-        $mgmtAPI = "$($kustDB.queryServiceUri)/v1/rest/mgmt"
-
-        Write-Verbose "Generate the query API URL"
-        $queryAPI = "$($kustDB.queryServiceUri)/v1/rest/query"
-
-
-        $KQLCommand = $KQLCommand | Out-String
-
-        Write-Verbose "Check if the KQL command starts with a dot so it is a management command. Otherwise it is a query command"
-        if (-not ($KQLCommand -match "^\.")) {
-            $isManamgentCommand = $false
-            Write-Verbose "The command is a query command."
-        } else {
-            $isManamgentCommand = $true
-            Write-Verbose "The command is a management command. It is crucial to have the .execute database script <| in the beginning, otherwise the Kusto API will not execute the script."
-            if (-not ($KQLCommand -match "\.execute database script <\|")) {
-                $KQLCommand = ".execute database script <| $KQLCommand"
-            }
-        }
+    # Resolve the KQL Database
+    $getDatabaseParams = @{ WorkspaceId = $WorkspaceId }
+    if ($PSCmdlet.ParameterSetName -eq 'ById') {
+        $getDatabaseParams.KQLDatabaseId = $KQLDatabaseId
+    } else {
+        $getDatabaseParams.KQLDatabaseName = $KQLDatabaseName
+    }
+    $kqlDatabase = Get-FabricKQLDatabase @getDatabaseParams | Select-Object -First 1
+    if ($null -eq $kqlDatabase) {
+        throw "KQL Database '$($KQLDatabaseName)$($KQLDatabaseId)' not found in workspace '$WorkspaceId'."
     }
 
-    process {
+    $queryServiceUri = $kqlDatabase.properties.queryServiceUri
+    if ([string]::IsNullOrWhiteSpace($queryServiceUri)) {
+        throw "KQL Database '$($kqlDatabase.displayName)' has no query service URI."
+    }
+    Write-Message -Message "Query service URI: $queryServiceUri" -Level Debug
 
-        Write-Verbose "The KQL-Command is: $KQLCommand"
-
-        Write-Verbose "Create body of the request"
-        $body = @{
-            'csl' = $KQLCommand;
-            'db'  = $kustDB.displayName
-        } | ConvertTo-Json -Depth 1
-
-
-        if ($isManamgentCommand) {
-            Write-Verbose "Calling Management API"
-            Write-Verbose "----------------------"
-            Write-Verbose "Sending the following values to the Query API:"
-            Write-Verbose "Headers: $($FabricSession.headerParams | Format-List | Out-String)"
-            Write-Verbose "Method: POST"
-            Write-Verbose "URI: $mgmtAPI"
-            Write-Verbose "Body of request: $body"
-            Write-Verbose "ContentType: application/json"
-
-            $result = Invoke-RestMethod `
-                -Headers $headerParams `
-                -Method POST `
-                -Uri $mgmtAPI `
-                -Body ($body) `
-                -ContentType "application/json; charset=utf-8"
-
-            Write-Verbose "Result of the Management API: $($result | `
-                                                            ConvertTo-Json `
-                                                                -Depth 10)"
-            $result
-        } else {
-            Write-Verbose "Calling Query API"
-            Write-Verbose "-----------------"
-            Write-Verbose "Sending the following values to the Query API:"
-            Write-Verbose "Headers: $($FabricSession.headerParams | Format-List | Out-String)"
-            Write-Verbose "Method: POST"
-            Write-Verbose "URI: $queryAPI"
-            Write-Verbose "Body of request: $body"
-            Write-Verbose "ContentType: application/json"
-
-            $result = Invoke-RestMethod `
-                -Headers $headerParams `
-                -Method POST `
-                -Uri $queryAPI `
-                -Body ($body) `
-                -ContentType "application/json; charset=utf-8"
-            Write-Verbose "Result of the Query API: $($result | `
-                                                        ConvertTo-Json `
-                                                             -Depth 10)"
-
-
-
-            if ($ReturnRawResult) {
-                $result
-            } else {
-                $myRecords = @()
-
-                for ($j = 0; $j -lt $Result.tables[0].rows.Count; $j++) {
-                    $myTableRow = [PSCustomObject]@{ }
-
-                    for ($i = 0; $i -lt $Result.tables[0].rows[0].Count; $i++) {
-                        $myTableRow | `
-                                Add-Member `
-                                -MemberType NoteProperty `
-                                -Name $Result.Tables[0].Columns[$i].ColumnName `
-                                -Value $Result.Tables[0].rows[$j][$i]
-                    }
-                    $myRecords += $myTableRow
-                }
-
-                $myRecords
-            }
-
+    # Commands starting with a dot are management commands, everything else is a query
+    $isManagementCommand = $KQLCommand.TrimStart().StartsWith('.')
+    if ($isManagementCommand) {
+        $endpoint = 'mgmt'
+        if ($KQLCommand -notmatch '\.execute database script <\|') {
+            $KQLCommand = ".execute database script <| $KQLCommand"
         }
+    } else {
+        $endpoint = 'query'
+    }
+    Write-Message -Message "Executing KQL $($endpoint) command: $KQLCommand" -Level Verbose
+
+    $apiEndpointUrl = "{0}/v1/rest/{1}" -f $queryServiceUri.TrimEnd('/'), $endpoint
+
+    $body = @{
+        db  = $kqlDatabase.displayName
+        csl = $KQLCommand
+    }
+    $bodyJson = $body | ConvertTo-Json -Depth 10
+
+    $apiParams = @{
+        Uri            = $apiEndpointUrl
+        Method         = 'Post'
+        Body           = $bodyJson
+        ApiType        = 'Kusto'
+        TypeName       = 'KQL Database'
+        ObjectIdOrName = $kqlDatabase.displayName
+        HandleResponse = $true
+        ExtractValue   = 'False'
+    }
+    $response = Invoke-FabricRestMethod @apiParams
+
+    if ($isManagementCommand -or $Raw) {
+        return $response
     }
 
-    end { }
-
+    # Convert the primary result table into PowerShell objects
+    $table = @($response.Tables)[0]
+    if ($null -eq $table) {
+        return
+    }
+    $columnNames = @($table.Columns | ForEach-Object { $_.ColumnName })
+    foreach ($row in $table.Rows) {
+        $record = [ordered]@{}
+        for ($i = 0; $i -lt $columnNames.Count; $i++) {
+            $record[$columnNames[$i]] = $row[$i]
+        }
+        [PSCustomObject]$record
+    }
 }

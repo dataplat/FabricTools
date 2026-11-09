@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-FabricTools is a PowerShell module (~211 public cmdlets) for automating Microsoft Fabric and Power BI administration. It is currently in **Public Preview** and targets PowerShell 5.1+ on Windows and Linux. PRs go against the `batch_changes` branch.
+FabricTools is a PowerShell module (~211 public cmdlets) for automating Microsoft Fabric and Power BI administration. It is currently in **Public Preview** and targets PowerShell 5.1+ on Windows and Linux. PRs always target the `develop` branch.
 
 ## Build & Development Commands
 
@@ -80,6 +80,13 @@ PSFramework              # Logging & configuration
 In order to prepare input parameters for `Invoke-FabricRestMethod` function - **always use hash splatting** (no backtick line continuation):
 
 ```powershell
+$apiEndpointUrl = "{0}/workspaces/{1}/notebooks" -f $FabricConfig.BaseUrl, $WorkspaceId
+
+$body = @{
+    displayName = $NotebookName
+}
+$bodyJson = $body | ConvertTo-Json -Depth 10
+
 $apiParams = @{
     Uri            = $apiEndpointUrl
     Method         = 'Post'
@@ -104,15 +111,47 @@ $response
 
 **`NoWait` parameter** — for operations that support a `$waitForCompletion` bool param, map it as `NoWait = (-not $waitForCompletion)`.
 
+**`ApiType` parameter** — selects the target API; its base URL and access token are resolved from PSFramework config by the private `Get-FabricApiSession`. Never pass auth headers or add API-specific switches.
+
+| ApiType | Base URL for relative `Uri` | Token |
+| --- | --- | --- |
+| `Fabric` (default) | `FabricTools.FabricApi.BaseUrl` | `FabricSession` |
+| `PowerBI` | `FabricTools.PowerBiApi.BaseUrl` | `FabricSession` |
+| `Azure` | `FabricTools.AzureApi.BaseUrl` | `AzureSession` |
+| `Kusto` | none, pass the full `queryServiceUri`-based URL | `KustoSession`, acquired on first use |
+
+The `-PowerBIApi` switch is hidden and kept only for backward compatibility; use `ApiType = 'PowerBI'`.
+
 ## Adding a New Cmdlet
 
 1. Create `src/Public/<FeatureArea>/Verb-FabricNoun.ps1`
-2. Add comprehensive comment-based help (`.SYNOPSIS`, `.DESCRIPTION`, `.PARAMETER`, `.EXAMPLE`)
+2. Add comprehensive comment-based help (`.SYNOPSIS`, `.DESCRIPTION`, `.PARAMETER`, `.EXAMPLE`). In `.EXAMPLE` blocks, use splatting when an example passes more than two or three parameters, or when a single line would be hard to read (see [Help Examples](#help-examples))
 3. Use `Invoke-FabricRestMethod` for all API calls — follow the hash splatting + `HandleResponse = $true` conventions above
 4. Use `Write-Message` (PSFramework) for logging, not `Write-Verbose`/`Write-Host`
 5. Create matching test file at `tests/Unit/Verb-FabricNoun.Tests.ps1`
 6. Build, then regenerate docs: `./build.ps1 -Tasks generate_docs` (writes `docs/en-US/<Cmdlet>.md`, including the `itemType` frontmatter key taken from the `src/Public/<FeatureArea>` folder)
 7. Update `CHANGELOG.md` under `## [Unreleased]` using Keep a Changelog format
+
+## Help Examples
+
+If an example uses more than two or three parameters, or putting them all on one line would make it hard to read, present the parameters as a splatted hashtable (aligned `=`, no backtick line continuation). Short examples stay on one line:
+
+```powershell
+<#
+.EXAMPLE
+    Verb-FabricNoun -WorkspaceId 'guid' -Name $objectName
+
+.EXAMPLE
+    $params = @{
+        Workspace = 'WorkspaceName'
+        SetId     = 'xxxx-yyyy'
+        Format    = 'json'
+    }
+    Verb-FabricNoun @params
+#>
+```
+
+Switch parameters are passed as `$true` in the hashtable (e.g. `Raw = $true`).
 
 ## Documentation Website
 

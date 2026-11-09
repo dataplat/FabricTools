@@ -84,7 +84,7 @@ Describe "Invoke-FabricDatasetRefresh" -Tag "UnitTests" {
             Should -Invoke -CommandName Invoke-FabricRestMethod -Times 1 -ParameterFilter {
                 $Uri -eq "datasets/$mockDatasetId/refreshes" -and
                 $Method -eq 'Post' -and
-                $PowerBIApi -eq $true
+                $ApiType -eq 'PowerBI'
             }
         }
 

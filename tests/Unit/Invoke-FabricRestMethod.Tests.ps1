@@ -22,6 +22,7 @@ Describe "Invoke-FabricRestMethod" -Tag "UnitTests" {
             @{ ExpectedParameterName = 'Body'; ExpectedParameterType = 'object'; Mandatory = 'False' }
             @{ ExpectedParameterName = 'TestTokenExpired'; ExpectedParameterType = 'switch'; Mandatory = 'False' }
             @{ ExpectedParameterName = 'PowerBIApi'; ExpectedParameterType = 'switch'; Mandatory = 'False' }
+            @{ ExpectedParameterName = 'ApiType'; ExpectedParameterType = 'string'; Mandatory = 'False' }
             @{ ExpectedParameterName = 'NoWait'; ExpectedParameterType = 'switch'; Mandatory = 'False' }
             @{ ExpectedParameterName = 'Timeout'; ExpectedParameterType = 'int'; Mandatory = 'False' }
             @{ ExpectedParameterName = 'HandleResponse'; ExpectedParameterType = 'switch'; Mandatory = 'False' }
@@ -126,6 +127,95 @@ Describe "Invoke-FabricRestMethod" -Tag "UnitTests" {
                 Should -Invoke -CommandName Invoke-RestMethod -Times 1 -ParameterFilter {
                     $TimeoutSec -gt 0 -and $TimeoutSec -le 120
                 }
+            }
+        }
+    }
+
+    Context "ApiType routing" {
+        BeforeAll {
+            Mock -CommandName Get-PSFConfigValue -MockWith {
+                param($FullName)
+                switch ($FullName) {
+                    'FabricTools.UserAgent' { return 'TestUA/1.2' }
+                    'FabricTools.FabricApi.ContentType' { return 'application/json; charset=utf-8' }
+                    Default { return $null }
+                }
+            }
+
+            Mock -CommandName Get-FabricApiSession -MockWith {
+                param($ApiType)
+                $baseUrl = switch ($ApiType) {
+                    'Fabric' { 'https://api.fabric.microsoft.com/v1' }
+                    'PowerBI' { 'https://api.powerbi.com/v1.0/myorg' }
+                    'Azure' { 'https://management.azure.com' }
+                    'Kusto' { $null }
+                }
+                [pscustomobject]@{
+                    ApiType = $ApiType
+                    BaseUrl = $baseUrl
+                    Headers = @{ Authorization = "Bearer $ApiType-token" }
+                }
+            }
+
+            Mock -CommandName Invoke-RestMethod -MockWith {
+                param($StatusCodeVariable, $ResponseHeadersVariable)
+                Set-Variable -Name $StatusCodeVariable -Value 200 -Scope Global
+                Set-Variable -Name $ResponseHeadersVariable -Value $null -Scope Global
+                return @{ statusCode = 200 }
+            }
+        }
+
+        It 'Should use the Fabric API by default' {
+            InModuleScope -ModuleName 'FabricTools' {
+                Invoke-FabricRestMethod -Uri 'workspaces' | Out-Null
+
+                Should -Invoke -CommandName Get-FabricApiSession -Times 1 -Exactly -ParameterFilter { $ApiType -eq 'Fabric' }
+                Should -Invoke -CommandName Invoke-RestMethod -Times 1 -Exactly -ParameterFilter {
+                    $Uri -eq 'https://api.fabric.microsoft.com/v1/workspaces' -and
+                    $Headers['Authorization'] -eq 'Bearer Fabric-token' -and
+                    $Headers['User-Agent'] -eq 'TestUA/1.2'
+                }
+            }
+        }
+
+        It 'Should use the base URL and headers of ApiType <_>' -ForEach @('PowerBI', 'Azure') {
+            InModuleScope -ModuleName 'FabricTools' -Parameters @{ apiType = $_ } {
+                param($apiType)
+                Invoke-FabricRestMethod -Uri 'test' -ApiType $apiType | Out-Null
+
+                $expectedBaseUrl = @{ PowerBI = 'https://api.powerbi.com/v1.0/myorg'; Azure = 'https://management.azure.com' }[$apiType]
+                Should -Invoke -CommandName Invoke-RestMethod -Times 1 -Exactly -ParameterFilter {
+                    $Uri -eq "$expectedBaseUrl/test" -and $Headers['Authorization'] -eq "Bearer $apiType-token"
+                }
+            }
+        }
+
+        It 'Should map the PowerBIApi switch to ApiType PowerBI' {
+            InModuleScope -ModuleName 'FabricTools' {
+                Invoke-FabricRestMethod -Uri 'datasets' -PowerBIApi | Out-Null
+
+                Should -Invoke -CommandName Get-FabricApiSession -Times 1 -Exactly -ParameterFilter { $ApiType -eq 'PowerBI' }
+                Should -Invoke -CommandName Invoke-RestMethod -Times 1 -Exactly -ParameterFilter {
+                    $Uri -eq 'https://api.powerbi.com/v1.0/myorg/datasets'
+                }
+            }
+        }
+
+        It 'Should keep a full Uri and use the Kusto headers for ApiType Kusto' {
+            InModuleScope -ModuleName 'FabricTools' {
+                Invoke-FabricRestMethod -Uri 'https://test.kusto.fabric.microsoft.com/v1/rest/query' -Method Post -ApiType Kusto | Out-Null
+
+                Should -Invoke -CommandName Invoke-RestMethod -Times 1 -Exactly -ParameterFilter {
+                    $Uri -eq 'https://test.kusto.fabric.microsoft.com/v1/rest/query' -and
+                    $Headers['Authorization'] -eq 'Bearer Kusto-token'
+                }
+            }
+        }
+
+        It 'Should throw for a relative Uri with ApiType Kusto' {
+            InModuleScope -ModuleName 'FabricTools' {
+                { Invoke-FabricRestMethod -Uri 'v1/rest/query' -ApiType Kusto } | Should -Throw -ExpectedMessage "*has no base URL*"
+                Should -Invoke -CommandName Invoke-RestMethod -Times 0 -Exactly
             }
         }
     }

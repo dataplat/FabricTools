@@ -181,7 +181,7 @@ function Invoke-FabricDatasetRefresh {
                 Uri            = $apiEndpointUrl
                 Method         = 'Post'
                 Body           = $bodyJson
-                PowerBIApi     = $true
+                ApiType        = 'PowerBI'
                 TypeName       = 'Dataset'
                 ObjectIdOrName = $DatasetId
                 HandleResponse = $true
