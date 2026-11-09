@@ -140,7 +140,7 @@ If an example uses more than two or three parameters, or putting them all on one
 #>
 ```
 
-Switch parameters are passed as `$true` in the hashtable (e.g. `ReturnRawResult = $true`).
+Switch parameters are passed as `$true` in the hashtable (e.g. `Raw = $true`).
 
 ## Documentation Website
 

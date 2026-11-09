@@ -21,15 +21,15 @@ Executes a KQL command in a Kusto Database.
 ### ByName (Default)
 
 ```
-Invoke-FabricKQLCommand -WorkspaceId <guid> -KQLDatabaseName <string> -KQLCommand <string>
- [-ReturnRawResult] [<CommonParameters>]
+Invoke-FabricKQLCommand -WorkspaceId <guid> -KQLDatabaseName <string> -KQLCommand <string> [-Raw]
+ [<CommonParameters>]
 ```
 
 ### ById
 
 ```
-Invoke-FabricKQLCommand -WorkspaceId <guid> -KQLDatabaseId <guid> -KQLCommand <string>
- [-ReturnRawResult] [<CommonParameters>]
+Invoke-FabricKQLCommand -WorkspaceId <guid> -KQLDatabaseId <guid> -KQLCommand <string> [-Raw]
+ [<CommonParameters>]
 ```
 
 ## ALIASES
@@ -46,7 +46,7 @@ query endpoint (/v1/rest/query).
 Management commands are wrapped in '.execute database script <|' unless the command already contains it.
 
 Query results are returned as an array of PowerShell objects (one per row) by default.
-Use -ReturnRawResult to get the raw response of the Kusto API.
+Use -Raw to get the raw response of the Kusto API.
 
 ## EXAMPLES
 
@@ -78,7 +78,7 @@ $params = @{
     WorkspaceId     = '12345678-1234-1234-1234-123456789012'
     KQLDatabaseId   = '87654321-4321-4321-4321-210987654321'
     KQLCommand      = 'StormEvents | count'
-    ReturnRawResult = $true
+    Raw             = $true
 }
 Invoke-FabricKQLCommand @params
 
@@ -154,16 +154,18 @@ AcceptedValues: []
 HelpMessage: ''
 ```
 
-### -ReturnRawResult
+### -Raw
 
 When this switch is used, the raw response of the Kusto API is returned instead of an array of PowerShell objects.
+Alias: ReturnRawResult (the former parameter name).
 Management commands always return the raw response.
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
 DefaultValue: False
 SupportsWildcards: false
-Aliases: []
+Aliases:
+- ReturnRawResult
 ParameterSets:
 - Name: (All)
   Position: Named

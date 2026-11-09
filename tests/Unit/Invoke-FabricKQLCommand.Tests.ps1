@@ -21,9 +21,13 @@ Describe "Invoke-FabricKQLCommand" -Tag "UnitTests" {
             @{ ExpectedParameterName = 'KQLDatabaseName'; ExpectedParameterType = 'string'; Mandatory = 'True' }
             @{ ExpectedParameterName = 'KQLDatabaseId'; ExpectedParameterType = 'guid'; Mandatory = 'True' }
             @{ ExpectedParameterName = 'KQLCommand'; ExpectedParameterType = 'string'; Mandatory = 'True' }
-            @{ ExpectedParameterName = 'ReturnRawResult'; ExpectedParameterType = 'switch'; Mandatory = 'False' }
+            @{ ExpectedParameterName = 'Raw'; ExpectedParameterType = 'switch'; Mandatory = 'False' }
         ) {
             $Command | Should -HaveParameter -ParameterName $ExpectedParameterName -Type $ExpectedParameterType -Mandatory:([bool]::Parse($Mandatory))
+        }
+
+        It 'Should keep ReturnRawResult as an alias of Raw' {
+            $Command.Parameters['Raw'].Aliases | Should -Contain 'ReturnRawResult'
         }
 
         It 'Should not allow KQLDatabaseName and KQLDatabaseId together' {
@@ -101,8 +105,9 @@ Describe "Invoke-FabricKQLCommand" -Tag "UnitTests" {
             $result[1].Count | Should -Be 2
         }
 
-        It 'Should return the raw response when ReturnRawResult is used' {
-            $result = Invoke-FabricKQLCommand -WorkspaceId (New-Guid) -KQLDatabaseName 'TestDB' -KQLCommand 'T' -ReturnRawResult
+        It 'Should return the raw response when <_> is used' -ForEach @('Raw', 'ReturnRawResult') {
+            $switchParam = @{ $_ = $true }
+            $result = Invoke-FabricKQLCommand -WorkspaceId (New-Guid) -KQLDatabaseName 'TestDB' -KQLCommand 'T' @switchParam
 
             $result.Tables[0].TableName | Should -Be 'Table_0'
         }

@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- `Invoke-FabricKQLCommand` aligned with the module's patterns (#163): uses `Invoke-FabricRestMethod` for a single API call, requires either `-KQLDatabaseName` or `-KQLDatabaseId` (mutually exclusive parameter sets), and logs via `Write-Message`.
+- `Invoke-FabricKQLCommand` aligned with the module's patterns (#163): uses `Invoke-FabricRestMethod` for a single API call, requires either `-KQLDatabaseName` or `-KQLDatabaseId` (mutually exclusive parameter sets), and logs via `Write-Message`. The `-ReturnRawResult` switch is renamed to `-Raw`; `-ReturnRawResult` still works as an alias.
 - Added an optional `-Headers` parameter to `Invoke-FabricRestMethod` to call endpoints that need a different access token than the Fabric API (e.g. the Kusto query service).
 
 ### Fixed

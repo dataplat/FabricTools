@@ -14,7 +14,7 @@ function Invoke-FabricKQLCommand {
     Management commands are wrapped in '.execute database script <|' unless the command already contains it.
 
     Query results are returned as an array of PowerShell objects (one per row) by default.
-    Use -ReturnRawResult to get the raw response of the Kusto API.
+    Use -Raw to get the raw response of the Kusto API.
 
 .PARAMETER WorkspaceId
     Id of the Fabric Workspace that contains the KQL Database. The value for WorkspaceId is a GUID.
@@ -31,8 +31,9 @@ function Invoke-FabricKQLCommand {
     The KQL command or query that should be executed in the KQL Database.
     An example is '.create table MyTable (MyColumn: string)'.
 
-.PARAMETER ReturnRawResult
+.PARAMETER Raw
     When this switch is used, the raw response of the Kusto API is returned instead of an array of PowerShell objects.
+    Alias: ReturnRawResult (the former parameter name).
     Management commands always return the raw response.
 
 .EXAMPLE
@@ -60,7 +61,7 @@ function Invoke-FabricKQLCommand {
         WorkspaceId     = '12345678-1234-1234-1234-123456789012'
         KQLDatabaseId   = '87654321-4321-4321-4321-210987654321'
         KQLCommand      = 'StormEvents | count'
-        ReturnRawResult = $true
+        Raw             = $true
     }
     Invoke-FabricKQLCommand @params
 
@@ -85,7 +86,8 @@ function Invoke-FabricKQLCommand {
         [ValidateNotNullOrEmpty()]
         [string]$KQLCommand,
 
-        [switch]$ReturnRawResult
+        [Alias('ReturnRawResult')]
+        [switch]$Raw
     )
 
     Confirm-TokenState
@@ -149,7 +151,7 @@ function Invoke-FabricKQLCommand {
     }
     $response = Invoke-FabricRestMethod @apiParams
 
-    if ($isManagementCommand -or $ReturnRawResult) {
+    if ($isManagementCommand -or $Raw) {
         return $response
     }
 
