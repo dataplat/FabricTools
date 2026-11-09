@@ -26,6 +26,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+- Removed the unused `MicrosoftPowerBIMgmt.Profile` dependency (#224). No FabricTools cmdlet uses it: authentication relies on Az.Accounts, and Power BI REST calls go through `Invoke-FabricRestMethod -ApiType PowerBI`. **Possible breaking change:** importing FabricTools no longer loads `MicrosoftPowerBIMgmt.Profile`, so scripts that used its cmdlets (e.g. `Connect-PowerBIServiceAccount`, `Invoke-PowerBIRestMethod`) without importing it must now run `Import-Module MicrosoftPowerBIMgmt.Profile` themselves. `Install-Module FabricTools` no longer installs it.
+- Removed outdated wording about "Fabric-friendly aliases for PowerBI functions" from the module description and README; those aliases were already removed (#47).
+
 ### Security
 
 ## 0.33.0 - 2026-11-08
