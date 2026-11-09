@@ -111,6 +111,17 @@ $response
 
 **`NoWait` parameter** — for operations that support a `$waitForCompletion` bool param, map it as `NoWait = (-not $waitForCompletion)`.
 
+**`ApiType` parameter** — selects the target API; its base URL and access token are resolved from PSFramework config by the private `Get-FabricApiSession`. Never pass auth headers or add API-specific switches.
+
+| ApiType | Base URL for relative `Uri` | Token |
+| --- | --- | --- |
+| `Fabric` (default) | `FabricTools.FabricApi.BaseUrl` | `FabricSession` |
+| `PowerBI` | `FabricTools.PowerBiApi.BaseUrl` | `FabricSession` |
+| `Azure` | `FabricTools.AzureApi.BaseUrl` | `AzureSession` |
+| `Kusto` | none, pass the full `queryServiceUri`-based URL | `KustoSession`, acquired on first use |
+
+The `-PowerBIApi` switch is hidden and kept only for backward compatibility; use `ApiType = 'PowerBI'`.
+
 ## Adding a New Cmdlet
 
 1. Create `src/Public/<FeatureArea>/Verb-FabricNoun.ps1`
