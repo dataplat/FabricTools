@@ -44,6 +44,7 @@ function Get-FabricCopyJob {
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Id')]
         [guid]$CopyJobId,
 
         [Parameter(Mandatory = $false)]

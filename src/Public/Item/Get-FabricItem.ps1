@@ -44,6 +44,7 @@ Author: Rui Romano
         [string]$type,
 
         [Parameter(Mandatory = $false)]
+        [Alias('Id')]
         [guid]$itemID
     )
 

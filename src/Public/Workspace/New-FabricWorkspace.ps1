@@ -32,6 +32,7 @@ Author: Tiago Balabuch, Kamil Nowinski
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Name', 'DisplayName')]
         [string]$WorkspaceName,
 
         [Parameter(Mandatory = $false)]

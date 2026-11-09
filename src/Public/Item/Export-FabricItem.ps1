@@ -48,6 +48,7 @@ https://github.com/microsoft/Analysis-Services/tree/master/pbidevmode/fabricps-p
         [guid]$WorkspaceId,
         [scriptblock]$filter = { $_.type -in @("Report", "SemanticModel", "Notebook", "SparkJobDefinitionV1") },
         [Parameter(Mandatory = $false)]
+        [Alias('Id')]
         [guid]$itemID
     )
     if ($PSBoundParameters.ContainsKey('itemID')) {

@@ -40,10 +40,12 @@ function Update-FabricSparkJobDefinition
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Id')]
         [guid]$SparkJobDefinitionId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Name', 'DisplayName')]
         [string]$SparkJobDefinitionName,
 
         [Parameter(Mandatory = $false)]

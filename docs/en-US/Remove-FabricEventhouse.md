@@ -5,7 +5,7 @@ HelpUri: https://learn.microsoft.com/en-us/rest/api/fabric/eventhouse/items/dele
 itemType: Eventhouse
 Locale: en-US
 Module Name: FabricTools
-ms.date: 11/07/2026
+ms.date: 11/08/2026
 PlatyPS schema version: 2024-05-01
 title: Remove-FabricEventhouse
 ---
@@ -74,7 +74,8 @@ The unique identifier of the Eventhouse to be removed.
 Type: System.Guid
 DefaultValue: ''
 SupportsWildcards: false
-Aliases: []
+Aliases:
+- Id
 ParameterSets:
 - Name: (All)
   Position: 1

@@ -61,6 +61,7 @@ function Update-FabricSparkCustomPool
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Id')]
         [guid]$SparkCustomPoolId,
 
         [Parameter(Mandatory = $true)]

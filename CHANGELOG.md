@@ -3,6 +3,23 @@
 The format is based on and uses the types of changes according to [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- Added consistent parameter aliases for the resource a cmdlet acts on (#83): `<Noun>Id` parameters accept `-Id` and `<Noun>Name` parameters accept `-Name` and `-DisplayName` (e.g. `Get-FabricLakehouse -WorkspaceId $ws -Name 'Sales'`). Existing parameter names are unchanged. Parent-resource parameters such as `-WorkspaceId` on item cmdlets are not aliased. Note: abbreviated parameter names that become ambiguous (e.g. `-I`, `-N`) must be spelled out further.
+- Added a QA test (tag `ParameterAliases`) enforcing the resource parameter alias convention for all exported cmdlets.
+
+### Changed
+
+### Fixed
+
+### Deprecated
+
+### Removed
+
+### Security
+
 ## 0.33.0 - 2026-11-08
 
 ### Added

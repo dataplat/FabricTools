@@ -43,6 +43,7 @@ function New-FabricSparkJobDefinition
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Name', 'DisplayName')]
         [string]$SparkJobDefinitionName,
 
         [Parameter(Mandatory = $false)]

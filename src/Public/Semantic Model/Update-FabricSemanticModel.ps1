@@ -40,10 +40,12 @@ function Update-FabricSemanticModel
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Id')]
         [guid]$SemanticModelId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Name', 'DisplayName')]
         [string]$SemanticModelName,
 
         [Parameter(Mandatory = $false)]

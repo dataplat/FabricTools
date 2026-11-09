@@ -68,6 +68,7 @@ Author: Tiago Balabuch, Kamil Nowinski
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Name', 'DisplayName')]
         [string]$KQLDatabaseName,
 
         [Parameter(Mandatory = $false)]

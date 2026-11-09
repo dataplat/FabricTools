@@ -46,6 +46,7 @@ function New-FabricReflex
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Name', 'DisplayName')]
         [string]$ReflexName,
 
         [Parameter(Mandatory = $false)]

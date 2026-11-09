@@ -5,7 +5,7 @@ HelpUri: ''
 itemType: Eventstream
 Locale: en-US
 Module Name: FabricTools
-ms.date: 11/07/2026
+ms.date: 11/08/2026
 PlatyPS schema version: 2024-05-01
 title: Get-FabricEventstream
 ---
@@ -66,7 +66,8 @@ An example of a GUID is '12345678-1234-1234-1234-123456789012'.
 Type: System.Guid
 DefaultValue: ''
 SupportsWildcards: false
-Aliases: []
+Aliases:
+- Id
 ParameterSets:
 - Name: (All)
   Position: 1
@@ -87,7 +88,9 @@ HelpMessage: ''
 Type: System.String
 DefaultValue: ''
 SupportsWildcards: false
-Aliases: []
+Aliases:
+- Name
+- DisplayName
 ParameterSets:
 - Name: (All)
   Position: 2

@@ -44,6 +44,7 @@ Author: Tiago Balabuch, Kamil Nowinski
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Name', 'DisplayName')]
         [string]$KQLQuerysetName,
 
         [Parameter(Mandatory = $false)]

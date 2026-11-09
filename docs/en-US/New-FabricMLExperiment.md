@@ -5,7 +5,7 @@ HelpUri: ''
 itemType: ML Experiment
 Locale: en-US
 Module Name: FabricTools
-ms.date: 11/07/2026
+ms.date: 11/08/2026
 PlatyPS schema version: 2024-05-01
 title: New-FabricMLExperiment
 ---
@@ -97,7 +97,9 @@ This parameter is mandatory.
 Type: System.String
 DefaultValue: ''
 SupportsWildcards: false
-Aliases: []
+Aliases:
+- Name
+- DisplayName
 ParameterSets:
 - Name: (All)
   Position: 1

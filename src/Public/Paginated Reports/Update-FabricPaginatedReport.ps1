@@ -42,10 +42,12 @@ function Update-FabricPaginatedReport
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Id')]
         [guid]$PaginatedReportId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Name', 'DisplayName')]
         [string]$PaginatedReportName,
 
         [Parameter(Mandatory = $false)]

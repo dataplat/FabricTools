@@ -44,10 +44,12 @@ Author: Tiago Balabuch, Kamil Nowinski
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Id')]
         [guid]$KQLDashboardId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Name', 'DisplayName')]
         [string]$KQLDashboardName
     )
 

@@ -5,7 +5,7 @@ HelpUri: https://learn.microsoft.com/en-us/rest/api/fabric/eventhouse/items/list
 itemType: Eventhouse
 Locale: en-US
 Module Name: FabricTools
-ms.date: 11/07/2026
+ms.date: 11/08/2026
 PlatyPS schema version: 2024-05-01
 title: Get-FabricEventhouse
 ---
@@ -74,7 +74,8 @@ An example of a GUID is '12345678-1234-1234-1234-123456789012'.
 Type: System.Guid
 DefaultValue: ''
 SupportsWildcards: false
-Aliases: []
+Aliases:
+- Id
 ParameterSets:
 - Name: (All)
   Position: 1
@@ -96,7 +97,9 @@ This parameter cannot be used together with EventhouseID.
 Type: System.String
 DefaultValue: ''
 SupportsWildcards: false
-Aliases: []
+Aliases:
+- Name
+- DisplayName
 ParameterSets:
 - Name: (All)
   Position: 2

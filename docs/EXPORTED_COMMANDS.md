@@ -2,14 +2,13 @@
 
 This list was generated from the filenames in `docs/en-US` and represents the documented public commands in this repository.
 
-Generated on 2026-11-07.
+Generated on 2026-11-08.
 
 - Add-FabricDomainWorkspaceAssignmentByCapacity
 - Add-FabricDomainWorkspaceAssignmentById
 - Add-FabricDomainWorkspaceAssignmentByPrincipal
 - Add-FabricDomainWorkspaceRoleAssignment
 - Add-FabricWorkspaceCapacity
-- Add-FabricWorkspaceCapacityAssignment
 - Add-FabricWorkspaceIdentity
 - Add-FabricWorkspaceRoleAssignment
 - Add-FabricWorkspaceToStage
@@ -164,7 +163,6 @@ Generated on 2026-11-07.
 - Remove-FabricWarehouse
 - Remove-FabricWorkspace
 - Remove-FabricWorkspaceCapacity
-- Remove-FabricWorkspaceCapacityAssignment
 - Remove-FabricWorkspaceFromStage
 - Remove-FabricWorkspaceIdentity
 - Remove-FabricWorkspaceRoleAssignment

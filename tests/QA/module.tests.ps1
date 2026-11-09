@@ -288,3 +288,94 @@ Describe 'Author for functions' {
         }
     }
 }
+
+BeforeDiscovery {
+    <#
+        Parameter alias convention (issue #83).
+        The parameter that identifies the resource a cmdlet acts on must also be
+        reachable by a generic name:
+          <Noun>Id   -> -Id
+          <Noun>Name -> -Name, -DisplayName
+        <Noun> is the cmdlet noun without the 'Fabric' prefix, so parent-resource
+        parameters (e.g. WorkspaceId on Get-FabricLakehouse) and cmdlets taking two
+        unrelated ids (e.g. Add-FabricWorkspaceCapacity) are not affected.
+
+        Feature folders (src/Public/<Folder>) listed below are not migrated yet and
+        are reported as skipped. Remove a folder from this list in the PR that
+        migrates it.
+    #>
+    $aliasPendingFolders = @(
+    )
+
+    <#
+        Known exceptions ('<Command>/<Parameter>/<Alias>'): the alias is already
+        taken by the parent WorkspaceId parameter. Moving it would break existing
+        scripts that use -Id, so these are left as they are.
+    #>
+    $aliasExceptions = @(
+        'Get-FabricKQLDatabase/KQLDatabaseId/Id'
+        'Get-FabricWorkspaceRoleAssignment/WorkspaceRoleAssignmentId/Id'
+        'Remove-FabricWorkspaceRoleAssignment/WorkspaceRoleAssignmentId/Id'
+        'Update-FabricWorkspaceRoleAssignment/WorkspaceRoleAssignmentId/Id'
+    )
+
+    $aliasRules = @(
+        @{ Suffix = 'Id'; Aliases = @('Id') }
+        @{ Suffix = 'Name'; Aliases = @('Name', 'DisplayName') }
+    )
+
+    $publicPath = Join-Path -Path ("$($PSScriptRoot)\..\.." | Convert-Path) -ChildPath 'src\Public'
+    $publicFiles = Get-ChildItem -Path $publicPath -Recurse -Filter '*.ps1'
+
+    $aliasTestCases = @()
+
+    foreach ($command in $mut.ExportedCommands.Values | Where-Object -FilterScript { $_.CommandType -eq 'Function' })
+    {
+        $noun = $command.Noun -replace '^Fabric', ''
+        $sourceFile = $publicFiles | Where-Object -FilterScript { $_.BaseName -eq $command.Name } | Select-Object -First 1
+        $folder = if ($sourceFile) { $sourceFile.Directory.Name } else { '' }
+
+        foreach ($rule in $aliasRules)
+        {
+            $parameter = $command.Parameters["$noun$($rule.Suffix)"]
+            if (-not $parameter)
+            {
+                continue
+            }
+
+            foreach ($alias in $rule.Aliases)
+            {
+                # A real parameter with that name already exists - nothing to alias.
+                if ($command.Parameters.ContainsKey($alias))
+                {
+                    continue
+                }
+
+                if ("$($command.Name)/$($parameter.Name)/$alias" -in $aliasExceptions)
+                {
+                    continue
+                }
+
+                $aliasTestCases += @{
+                    CommandName   = $command.Name
+                    ParameterName = $parameter.Name
+                    Aliases       = @($parameter.Aliases)
+                    Alias         = $alias
+                    Folder        = $folder
+                    Pending       = $folder -in $aliasPendingFolders
+                }
+            }
+        }
+    }
+}
+
+Describe 'Parameter aliases for resource Id and Name' -Tag 'ParameterAliases' {
+    It '<CommandName> -<ParameterName> should have alias -<Alias>' -ForEach $aliasTestCases {
+        if ($Pending -and $Alias -notin $Aliases)
+        {
+            Set-ItResult -Skipped -Because "folder '$Folder' is not migrated yet (issue #83)"
+        }
+
+        $Aliases | Should -Contain $Alias -Because "the resource parameter of $CommandName should be reachable as -$Alias (issue #83)"
+    }
+}

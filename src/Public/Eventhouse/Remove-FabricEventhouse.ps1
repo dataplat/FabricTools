@@ -38,6 +38,7 @@ function Remove-FabricEventhouse
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Id')]
         [guid]$EventhouseId
     )
 

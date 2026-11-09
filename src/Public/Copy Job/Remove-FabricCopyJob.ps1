@@ -33,6 +33,7 @@ function Remove-FabricCopyJob {
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Id')]
         [guid]$CopyJobId
     )
 
