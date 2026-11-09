@@ -201,14 +201,16 @@ Function Invoke-FabricRestMethod {
     do {
         $apiEndpointUrl = $Uri
         if ($null -ne $continuationToken) {
+            # Request the next page; append to an existing query string (e.g. '?maxResults=1') with '&'
             $encodedToken = [System.Web.HttpUtility]::UrlEncode($continuationToken)
-            $apiEndpointUrl = "{0}?continuationToken={1}" -f $apiEndpointUrl, $encodedToken
+            $separator = if ($Uri.Contains('?')) { '&' } else { '?' }
+            $apiEndpointUrl = "{0}{1}continuationToken={2}" -f $Uri, $separator, $encodedToken
         }
         Write-Message -Message "API Endpoint: $Method $apiEndpointUrl" -Level Verbose
 
         $request = @{
             Headers = $requestHeaders
-            Uri = $Uri
+            Uri = $apiEndpointUrl
             Method = $Method
             Body = $Body
             ContentType = $contentType

@@ -219,4 +219,62 @@ Describe "Invoke-FabricRestMethod" -Tag "UnitTests" {
             }
         }
     }
+
+    Context "Pagination (continuation tokens)" {
+        BeforeAll {
+            Mock -CommandName Get-PSFConfigValue -MockWith {
+                param($FullName)
+                switch ($FullName) {
+                    'FabricTools.FabricApi.ContentType' { return 'application/json; charset=utf-8' }
+                    Default { return $null }
+                }
+            }
+
+            Mock -CommandName Get-FabricApiSession -MockWith {
+                [pscustomobject]@{
+                    ApiType = 'Fabric'
+                    BaseUrl = 'https://api.fabric.microsoft.com/v1'
+                    Headers = @{ Authorization = 'Bearer fabric-token' }
+                }
+            }
+
+            # Two pages: the first returns a continuation token, the second (requested with the token) does not
+            Mock -CommandName Invoke-RestMethod -MockWith {
+                param($Uri, $StatusCodeVariable, $ResponseHeadersVariable)
+                Set-Variable -Name $StatusCodeVariable -Value 200 -Scope Global
+                Set-Variable -Name $ResponseHeadersVariable -Value $null -Scope Global
+                if ($Uri -match 'continuationToken=') {
+                    [pscustomobject]@{ value = @([pscustomobject]@{ id = '3' }) }
+                } else {
+                    [pscustomobject]@{
+                        value             = @([pscustomobject]@{ id = '1' }, [pscustomobject]@{ id = '2' })
+                        continuationToken = 'page 2+token'
+                    }
+                }
+            }
+        }
+
+        It 'Should request the next page with the continuation token and return all items' {
+            InModuleScope -ModuleName 'FabricTools' {
+                $result = @(Invoke-FabricRestMethod -Uri 'connections' -ExtractValue 'True' -Timeout 1)
+
+                $result.id | Should -Be @('1', '2', '3')
+                Should -Invoke -CommandName Invoke-RestMethod -Times 2 -Exactly
+                Should -Invoke -CommandName Invoke-RestMethod -Times 1 -Exactly -ParameterFilter {
+                    $Uri -eq 'https://api.fabric.microsoft.com/v1/connections?continuationToken=page+2%2btoken'
+                }
+            }
+        }
+
+        It 'Should append the continuation token with & when the Uri already has a query string' {
+            InModuleScope -ModuleName 'FabricTools' {
+                $result = @(Invoke-FabricRestMethod -Uri 'workspaces/ws/items?type=Lakehouse' -ExtractValue 'True' -Timeout 1)
+
+                $result.id | Should -Be @('1', '2', '3')
+                Should -Invoke -CommandName Invoke-RestMethod -Times 1 -Exactly -ParameterFilter {
+                    $Uri -eq 'https://api.fabric.microsoft.com/v1/workspaces/ws/items?type=Lakehouse&continuationToken=page+2%2btoken'
+                }
+            }
+        }
+    }
 }
