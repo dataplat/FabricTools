@@ -35,7 +35,7 @@ BeforeAll {
     $script:TableName       = "IntTestTable_$timestamp"
 
     # Discover first active Fabric capacity (required to create Fabric items).
-    # Use Get-FabricCapacity (Fabric API, Id is a GUID), not Get-FabricCapacities (Azure resources, Id is an ARM resource ID).
+    # Use the Fabric API cmdlet (Id is a GUID), not the Azure resource listing (Id is an ARM resource ID).
     $capacity = Get-FabricCapacity | Where-Object { $_.state -eq 'Active' } | Select-Object -First 1
     if (-not $capacity) {
         Write-Warning "No active Fabric capacity found. Integration tests will be skipped."
