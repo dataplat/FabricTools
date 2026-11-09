@@ -34,10 +34,11 @@ BeforeAll {
     $script:EventhouseName  = "IntTest_EH_$timestamp"
     $script:TableName       = "IntTestTable_$timestamp"
 
-    # Discover first available capacity (required to create Fabric items)
-    $capacity = Get-FabricCapacity | Select-Object -First 1
+    # Discover first active Fabric capacity (required to create Fabric items).
+    # Use Get-FabricCapacity (Fabric API, Id is a GUID), not Get-FabricCapacities (Azure resources, Id is an ARM resource ID).
+    $capacity = Get-FabricCapacity | Where-Object { $_.state -eq 'Active' } | Select-Object -First 1
     if (-not $capacity) {
-        Write-Warning "No Fabric capacity found. Integration tests will be skipped."
+        Write-Warning "No active Fabric capacity found. Integration tests will be skipped."
     } else {
         $script:CapacityId = $capacity.Id
         Write-Host "Using capacity: '$($capacity.DisplayName)' ($($capacity.Id))"
