@@ -34,20 +34,17 @@ Describe "Get-FabricCapacity" -Tag "UnitTests" {
         BeforeAll {
             Mock -CommandName Confirm-TokenState -MockWith { }
             Mock -CommandName Write-Message -MockWith { }
+            # Invoke-FabricRestMethod (ExtractValue = 'True') returns the items of the 'value' array
             Mock -CommandName Invoke-FabricRestMethod -MockWith {
-                return [pscustomobject]@{
-                    Value = @(
-                        [pscustomobject]@{
-                            Id = [guid]::NewGuid()
-                            DisplayName = 'TestCapacity1'
-                            Sku = 'F64'
-                        },
-                        [pscustomobject]@{
-                            Id = [guid]::NewGuid()
-                            DisplayName = 'TestCapacity2'
-                            Sku = 'F128'
-                        }
-                    )
+                [pscustomobject]@{
+                    Id = '11111111-1111-1111-1111-111111111111'
+                    DisplayName = 'TestCapacity1'
+                    Sku = 'F64'
+                }
+                [pscustomobject]@{
+                    Id = '22222222-2222-2222-2222-222222222222'
+                    DisplayName = 'TestCapacity2'
+                    Sku = 'F128'
                 }
             }
         }
@@ -57,7 +54,9 @@ Describe "Get-FabricCapacity" -Tag "UnitTests" {
 
             Should -Invoke -CommandName Invoke-FabricRestMethod -Times 1 -ParameterFilter {
                 $Uri -like "*capacities*" -and
-                $Method -eq 'Get'
+                $Method -eq 'Get' -and
+                $HandleResponse -eq $true -and
+                $ExtractValue -eq 'True'
             }
         }
 
@@ -66,6 +65,20 @@ Describe "Get-FabricCapacity" -Tag "UnitTests" {
 
             $result | Should -Not -BeNullOrEmpty
             $result.Count | Should -Be 2
+        }
+
+        It 'Should return the capacity matching capacityId' {
+            $result = @(Get-FabricCapacity -capacityId '22222222-2222-2222-2222-222222222222')
+
+            $result.Count | Should -Be 1
+            $result[0].DisplayName | Should -Be 'TestCapacity2'
+        }
+
+        It 'Should return the capacity matching capacityName' {
+            $result = @(Get-FabricCapacity -capacityName 'TestCapacity1')
+
+            $result.Count | Should -Be 1
+            $result[0].Sku | Should -Be 'F64'
         }
     }
 

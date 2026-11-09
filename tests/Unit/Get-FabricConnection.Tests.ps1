@@ -48,7 +48,9 @@ Describe "Get-FabricConnection" -Tag "UnitTests" {
             Get-FabricConnection
 
             Should -Invoke -CommandName Invoke-FabricRestMethod -Times 1 -ParameterFilter {
-                $Uri -like "*connections*"
+                $Uri -eq 'connections' -and
+                $HandleResponse -eq $true -and
+                $ExtractValue -eq 'True'
             }
         }
 
@@ -82,8 +84,15 @@ Describe "Get-FabricConnection" -Tag "UnitTests" {
             Get-FabricConnection -connectionId $mockConnectionId
 
             Should -Invoke -CommandName Invoke-FabricRestMethod -Times 1 -ParameterFilter {
-                $Uri -like "*connections/*"
+                $Uri -eq "connections/$mockConnectionId"
             }
+        }
+
+        It 'Should return the connection when retrieved by ID' {
+            $result = Get-FabricConnection -connectionId ([guid]::NewGuid())
+
+            $result | Should -Not -BeNullOrEmpty
+            $result.displayName | Should -Be 'Connection1'
         }
     }
 

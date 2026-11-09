@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Fixed `Invoke-FabricKQLCommand` failing with "Invalid URI: The hostname could not be parsed" (#163): the query service URI is now read from the KQL Database `properties`, and requests are authenticated with a Kusto API token (`-ApiType Kusto`) instead of an undefined header variable. Query results with zero rows no longer fail.
+- Fixed `Get-FabricCapacity`, `Get-FabricDataPipeline`, `Get-FabricWorkspaceUser`, `Get-FabricCapacityRefreshables`, `Get-FabricCapacityWorkload`, `Get-FabricConnection`, `Get-FabricItem` and `Export-FabricItem` returning no items (#226): they read `.value` from output that `Invoke-FabricRestMethod` had already unwrapped. They now use `ExtractValue = 'True'`. `Get-FabricItem -itemID` and `Get-FabricConnection -connectionId` now return the requested object (previously nothing).
 
 ### Deprecated
 

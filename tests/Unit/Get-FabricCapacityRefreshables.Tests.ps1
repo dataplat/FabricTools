@@ -33,13 +33,10 @@ Describe "Get-FabricCapacityRefreshables" -Tag "UnitTests" {
         BeforeAll {
             Mock -CommandName Confirm-TokenState -MockWith { }
             Mock -CommandName Write-Message -MockWith { }
+            # Invoke-FabricRestMethod (ExtractValue = 'True') returns the items of the 'value' array
             Mock -CommandName Invoke-FabricRestMethod -MockWith {
-                return @{
-                    value = @(
-                        [pscustomobject]@{ id = [guid]::NewGuid(); name = 'SemanticModel1'; refreshSchedule = @{} }
-                        [pscustomobject]@{ id = [guid]::NewGuid(); name = 'SemanticModel2'; refreshSchedule = @{} }
-                    )
-                }
+                [pscustomobject]@{ id = [guid]::NewGuid(); name = 'SemanticModel1'; refreshSchedule = @{} }
+                [pscustomobject]@{ id = [guid]::NewGuid(); name = 'SemanticModel2'; refreshSchedule = @{} }
             }
         }
 
@@ -47,14 +44,17 @@ Describe "Get-FabricCapacityRefreshables" -Tag "UnitTests" {
             Get-FabricCapacityRefreshables
 
             Should -Invoke -CommandName Invoke-FabricRestMethod -Times 1 -ParameterFilter {
-                $Uri -like "*capacities/refreshables*"
+                $Uri -like "*capacities/refreshables*" -and
+                $ApiType -eq 'PowerBI' -and
+                $ExtractValue -eq 'True'
             }
         }
 
         It 'Should return the list of refreshables' {
-            $result = Get-FabricCapacityRefreshables
+            $result = @(Get-FabricCapacityRefreshables)
 
-            $result | Should -Not -BeNullOrEmpty
+            $result.Count | Should -Be 2
+            $result[0].name | Should -Be 'SemanticModel1'
         }
     }
 

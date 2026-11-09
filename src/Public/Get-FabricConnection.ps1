@@ -40,12 +40,20 @@ Author: Kamil Nowinski
     }
 
     process {
+        $apiParams = @{
+            Method         = 'Get'
+            TypeName       = 'Connection'
+            HandleResponse = $true
+        }
         if ($connectionId) {
-            $result = Invoke-FabricRestMethod -Uri "/connections/$($connectionId)" -Method GET
-        } else {
-            $result = Invoke-FabricRestMethod -Uri "/connections" -Method GET
+            # Single connection: the response is the connection object itself
+            $apiParams.Uri = "connections/$($connectionId)"
+            $apiParams.ObjectIdOrName = $connectionId
+            return Invoke-FabricRestMethod @apiParams
         }
 
-        return $result.value
+        $apiParams.Uri = "connections"
+        $apiParams.ExtractValue = 'True'
+        Invoke-FabricRestMethod @apiParams
     }
 }

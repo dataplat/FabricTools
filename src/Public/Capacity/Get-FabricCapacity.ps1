@@ -60,10 +60,13 @@ function Get-FabricCapacity {
 
         # Invoke the Fabric API to retrieve capacity details
         $apiParams = @{
-            Uri    = $apiEndpointUrl
-            Method = 'Get'
+            Uri            = $apiEndpointUrl
+            Method         = 'Get'
+            TypeName       = 'Capacity'
+            HandleResponse = $true
+            ExtractValue   = 'True'
         }
-        $capacities = (Invoke-FabricRestMethod @apiParams).Value
+        $capacities = @(Invoke-FabricRestMethod @apiParams)
 
         # Filter results based on provided parameters
         $response = if ($capacityId) {

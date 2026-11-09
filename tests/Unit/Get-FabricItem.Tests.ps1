@@ -35,20 +35,17 @@ Describe "Get-FabricItem" -Tag "UnitTests" {
         BeforeAll {
             Mock -CommandName Confirm-TokenState -MockWith { }
             Mock -CommandName Write-Message -MockWith { }
+            # Invoke-FabricRestMethod (ExtractValue = 'True') returns the items of the 'value' array
             Mock -CommandName Invoke-FabricRestMethod -MockWith {
-                return [pscustomobject]@{
-                    value = @(
-                        [pscustomobject]@{
-                            id = [guid]::NewGuid()
-                            displayName = 'TestItem1'
-                            type = 'Lakehouse'
-                        },
-                        [pscustomobject]@{
-                            id = [guid]::NewGuid()
-                            displayName = 'TestItem2'
-                            type = 'Notebook'
-                        }
-                    )
+                [pscustomobject]@{
+                    id = [guid]::NewGuid()
+                    displayName = 'TestItem1'
+                    type = 'Lakehouse'
+                }
+                [pscustomobject]@{
+                    id = [guid]::NewGuid()
+                    displayName = 'TestItem2'
+                    type = 'Notebook'
                 }
             }
         }
@@ -60,7 +57,9 @@ Describe "Get-FabricItem" -Tag "UnitTests" {
 
             Should -Invoke -CommandName Invoke-FabricRestMethod -Times 1 -ParameterFilter {
                 $Uri -like "*workspaces/*/items*" -and
-                $Method -eq 'Get'
+                $Method -eq 'Get' -and
+                $HandleResponse -eq $true -and
+                $ExtractValue -eq 'True'
             }
         }
 
@@ -79,14 +78,10 @@ Describe "Get-FabricItem" -Tag "UnitTests" {
             Mock -CommandName Confirm-TokenState -MockWith { }
             Mock -CommandName Write-Message -MockWith { }
             Mock -CommandName Invoke-FabricRestMethod -MockWith {
-                return [pscustomobject]@{
-                    value = @(
-                        [pscustomobject]@{
-                            id = [guid]::NewGuid()
-                            displayName = 'TestLakehouse'
-                            type = 'Lakehouse'
-                        }
-                    )
+                [pscustomobject]@{
+                    id = [guid]::NewGuid()
+                    displayName = 'TestLakehouse'
+                    type = 'Lakehouse'
                 }
             }
         }
@@ -124,6 +119,13 @@ Describe "Get-FabricItem" -Tag "UnitTests" {
             Should -Invoke -CommandName Invoke-FabricRestMethod -Times 1 -ParameterFilter {
                 $Uri -like "*workspaces/*/items/*"
             }
+        }
+
+        It 'Should return the item when retrieved by ID' {
+            $result = Get-FabricItem -workspaceId ([guid]::NewGuid()) -itemID ([guid]::NewGuid())
+
+            $result | Should -Not -BeNullOrEmpty
+            $result.displayName | Should -Be 'TestItem'
         }
     }
 }

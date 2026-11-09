@@ -33,13 +33,10 @@ Describe "Get-FabricCapacityWorkload" -Tag "UnitTests" {
         BeforeAll {
             Mock -CommandName Confirm-TokenState -MockWith { }
             Mock -CommandName Write-Message -MockWith { }
+            # Invoke-FabricRestMethod (ExtractValue = 'True') returns the items of the 'value' array
             Mock -CommandName Invoke-FabricRestMethod -MockWith {
-                return @{
-                    value = @(
-                        [pscustomobject]@{ name = 'Lakehouse'; state = 'Enabled'; maxMemoryPercentageSetByUser = 100 }
-                        [pscustomobject]@{ name = 'Warehouse'; state = 'Enabled'; maxMemoryPercentageSetByUser = 100 }
-                    )
-                }
+                [pscustomobject]@{ name = 'Lakehouse'; state = 'Enabled'; maxMemoryPercentageSetByUser = 100 }
+                [pscustomobject]@{ name = 'Warehouse'; state = 'Enabled'; maxMemoryPercentageSetByUser = 100 }
             }
         }
 
@@ -49,16 +46,19 @@ Describe "Get-FabricCapacityWorkload" -Tag "UnitTests" {
             Get-FabricCapacityWorkload -capacityID $mockCapacityId
 
             Should -Invoke -CommandName Invoke-FabricRestMethod -Times 1 -ParameterFilter {
-                $Uri -like "*capacities/*/Workloads*"
+                $Uri -like "*capacities/*/Workloads*" -and
+                $ApiType -eq 'PowerBI' -and
+                $ExtractValue -eq 'True'
             }
         }
 
         It 'Should return the list of workloads' {
             $mockCapacityId = [guid]::NewGuid()
 
-            $result = Get-FabricCapacityWorkload -capacityID $mockCapacityId
+            $result = @(Get-FabricCapacityWorkload -capacityID $mockCapacityId)
 
-            $result | Should -Not -BeNullOrEmpty
+            $result.Count | Should -Be 2
+            $result[1].name | Should -Be 'Warehouse'
         }
     }
 

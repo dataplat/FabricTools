@@ -51,7 +51,13 @@ Author: Ioana Bouariu
     Confirm-TokenState
 
     # Make a GET request to the PowerBI API to retrieve the top refreshable capacities.
-    # The function returns the 'value' property of the response.
-    $result = Invoke-FabricRestMethod -Method GET -ApiType PowerBI -Uri "capacities/refreshables?`$top=$top"
-    $result.value
+    $apiParams = @{
+        Uri            = "capacities/refreshables?`$top=$top"
+        Method         = 'Get'
+        ApiType        = 'PowerBI'
+        TypeName       = 'Capacity Refreshable'
+        HandleResponse = $true
+        ExtractValue   = 'True'
+    }
+    Invoke-FabricRestMethod @apiParams
 }

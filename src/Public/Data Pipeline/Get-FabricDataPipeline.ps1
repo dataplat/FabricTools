@@ -68,10 +68,13 @@ function Get-FabricDataPipeline {
 
         # Invoke the Fabric API to retrieve data pipeline details
         $apiParams = @{
-            Uri    = $apiEndpointUrl
-            Method = 'Get'
+            Uri            = $apiEndpointUrl
+            Method         = 'Get'
+            TypeName       = 'DataPipeline'
+            HandleResponse = $true
+            ExtractValue   = 'True'
         }
-        $DataPipelines = (Invoke-FabricRestMethod @apiParams).Value
+        $DataPipelines = @(Invoke-FabricRestMethod @apiParams)
 
         # Filter results based on provided parameters
         $response = if ($DataPipelineId) {

@@ -56,17 +56,24 @@ Author: Rui Romano
         if ($PSCmdlet.ParameterSetName -eq 'WorkspaceObject') {
             $workspaceID = $Workspace.id
         }
-        if ($itemID) {
-            $result = Invoke-FabricRestMethod -Uri "workspaces/$($workspaceID)/items/$($itemID)" -Method Get
-        } else {
-            if ($type) {
-                $result = Invoke-FabricRestMethod -Uri "workspaces/$($workspaceID)/items?type=$type" -Method Get
-            } else {
-                # Invoke the Fabric API to get the workspaces
-                $result = Invoke-FabricRestMethod -Uri "workspaces/$($workspaceID)/items" -Method Get
-            }
-            # Output the result
-            return $result.value
+        $apiParams = @{
+            Method         = 'Get'
+            TypeName       = 'Item'
+            HandleResponse = $true
         }
+        if ($itemID) {
+            # Single item: the response is the item object itself
+            $apiParams.Uri = "workspaces/$($workspaceID)/items/$($itemID)"
+            $apiParams.ObjectIdOrName = $itemID
+            return Invoke-FabricRestMethod @apiParams
+        }
+
+        if ($type) {
+            $apiParams.Uri = "workspaces/$($workspaceID)/items?type=$type"
+        } else {
+            $apiParams.Uri = "workspaces/$($workspaceID)/items"
+        }
+        $apiParams.ExtractValue = 'True'
+        Invoke-FabricRestMethod @apiParams
     }
 }
