@@ -46,7 +46,7 @@ Dependencies MUST be declared and resolved using the build tools (the manifest's
 
 - The module supports PowerShell 5.1 and later as specified in the manifest; contributors MUST ensure compatibility with supported editions.
 - The module is currently published as Public PREVIEW; it MUST NOT be used in production environments without explicit risk acceptance.
-- Required modules listed in `src/FabricTools.psd1` (for example `Az.Accounts`, `MicrosoftPowerBIMgmt.Profile`, `Az.Resources`) MUST be respected; dependency resolution SHOULD use `PSResourceGet` or the included build helpers.
+- Required modules listed in `src/FabricTools.psd1` (for example `Az.Accounts`, `Az.Resources`, `PSFramework`) MUST be respected; dependency resolution SHOULD use `PSResourceGet` or the included build helpers.
 - All security disclosures and vulnerability reports MUST follow `SECURITY.md` and be handled confidentially.
 
 ## Development Workflow & Quality Gates

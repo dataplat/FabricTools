@@ -70,8 +70,7 @@ PSFramework is used for all configuration values (not custom config). Key config
 
 ```
 Az.Accounts              # Azure authentication
-Az.Resources             # Azure resource management  
-MicrosoftPowerBIMgmt.Profile  # Power BI backward compat
+Az.Resources             # Azure resource management
 PSFramework              # Logging & configuration
 ```
 

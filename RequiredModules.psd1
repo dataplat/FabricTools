@@ -23,6 +23,5 @@
     'PSFramework'                  = 'latest'
     'Az.Accounts'                  = '5.3.0'
     'Az.Resources'                 = '8.1.1'
-    'MicrosoftPowerBIMgmt'         = '1.2.1111'
     'Microsoft.PowerShell.PlatyPS' = 'latest'
 }

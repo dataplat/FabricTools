@@ -20,7 +20,6 @@ Do NOT use it with Production environments.
 - Retrieve and manipulate Microsoft Fabric tenant settings.
 - Handle Microsoft Fabric access tokens for authentication.
 - Suspend and resume Microsoft Fabric capacities.
-- Fabric-friendly aliases for lots of the old PowerBI cmdlets
 
 ## Getting Started
 
@@ -31,7 +30,7 @@ These instructions will get you a copy of the project up and running on your loc
 - PowerShell 5.1 or higher
 - Access to PowerBI service and Azure subscription (for certain functions)
 - Necessary permissions to manage PowerBI workspaces and Fabric capacities
-- The following PowerShell modules: MicrosoftPowerBIMgmt, Az.Accounts, Az.Resources
+- The following PowerShell modules: Az.Accounts, Az.Resources, PSFramework (installed automatically with `Install-Module FabricTools`)
 
 ### Installing
 

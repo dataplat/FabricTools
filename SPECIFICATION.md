@@ -10,7 +10,7 @@ FabricTools is a PowerShell module that provides administrative and automation c
   - `ModuleVersion`: 0.31.0
   - `RootModule`: FabricTools.psm1 (generated at build time)
   - `PowerShellVersion` minimum: 5.1
-  - `RequiredModules`: `Az.Accounts`, `MicrosoftPowerBIMgmt.Profile`, `Az.Resources` (minimum versions specified in the manifest)
+  - `RequiredModules`: `Az.Accounts`, `Az.Resources`, `PSFramework` (minimum versions specified in the manifest)
 - Repository README: [README.md](README.md)
 
 ## Source layout
