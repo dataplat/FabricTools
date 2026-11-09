@@ -98,7 +98,7 @@ function Get-FabricDataset {
         $apiParams = @{
             Uri            = $apiEndpointUrl
             Method         = 'Get'
-            PowerBIApi     = $true
+            ApiType        = 'PowerBI'
             TypeName       = 'Dataset'
             HandleResponse = $true
             ExtractValue   = 'True'

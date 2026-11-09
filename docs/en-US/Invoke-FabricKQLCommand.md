@@ -38,7 +38,8 @@ Invoke-FabricKQLCommand -WorkspaceId <guid> -KQLDatabaseId <guid> -KQLCommand <s
 
 Executes a KQL command in the KQL Database specified by the KQLDatabaseName or KQLDatabaseId parameter.
 The command is sent to the query service of the database (the 'queryServiceUri' property of the KQL Database)
-using an access token for the Kusto API (configuration key 'FabricTools.KustoApi.BaseUrl').
+using an access token for the Kusto API (configuration key 'FabricTools.KustoApi.ResourceUrl'), which is
+acquired on first use and cached for the session.
 
 The cmdlet distinguishes between management commands and queries: a command starting with a dot is a management
 command and is sent to the management endpoint (/v1/rest/mgmt), anything else is a query and is sent to the

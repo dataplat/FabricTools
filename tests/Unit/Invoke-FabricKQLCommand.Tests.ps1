@@ -39,9 +39,6 @@ Describe "Invoke-FabricKQLCommand" -Tag "UnitTests" {
     Context "Successful KQL command invocation" {
         BeforeAll {
             Mock -CommandName Confirm-TokenState -MockWith { }
-            Mock -CommandName Get-AzAccessToken -MockWith {
-                [pscustomobject]@{ Token = 'kusto-token' }
-            }
             Mock -CommandName Get-FabricKQLDatabase -MockWith {
                 [pscustomobject]@{
                     id          = '11111111-1111-1111-1111-111111111111'
@@ -70,18 +67,15 @@ Describe "Invoke-FabricKQLCommand" -Tag "UnitTests" {
             }
         }
 
-        It 'Should send a query to the query endpoint with a Kusto token' {
+        It 'Should send a query to the query endpoint of the Kusto API' {
             Invoke-FabricKQLCommand -WorkspaceId (New-Guid) -KQLDatabaseName 'TestDB' -KQLCommand 'T | take 10' | Out-Null
 
-            Should -Invoke -CommandName Get-AzAccessToken -Times 1 -Exactly -ParameterFilter {
-                $ResourceUrl -eq 'https://api.kusto.windows.net'
-            }
             Should -Invoke -CommandName Invoke-FabricRestMethod -Times 1 -Exactly -ParameterFilter {
                 $Uri -eq 'https://test.kusto.fabric.microsoft.com/v1/rest/query' -and
                 $Method -eq 'Post' -and
                 ($Body | ConvertFrom-Json).db -eq 'TestDB' -and
                 ($Body | ConvertFrom-Json).csl -eq 'T | take 10' -and
-                $Headers.Authorization -eq 'Bearer kusto-token' -and
+                $ApiType -eq 'Kusto' -and
                 $HandleResponse -eq $true
             }
         }
@@ -134,9 +128,6 @@ Describe "Invoke-FabricKQLCommand" -Tag "UnitTests" {
     Context "Error handling" {
         BeforeAll {
             Mock -CommandName Confirm-TokenState -MockWith { }
-            Mock -CommandName Get-AzAccessToken -MockWith {
-                [pscustomobject]@{ Token = 'kusto-token' }
-            }
         }
 
         It 'Should throw when the KQL Database is not found' {

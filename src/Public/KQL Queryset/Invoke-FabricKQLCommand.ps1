@@ -6,7 +6,8 @@ function Invoke-FabricKQLCommand {
 .DESCRIPTION
     Executes a KQL command in the KQL Database specified by the KQLDatabaseName or KQLDatabaseId parameter.
     The command is sent to the query service of the database (the 'queryServiceUri' property of the KQL Database)
-    using an access token for the Kusto API (configuration key 'FabricTools.KustoApi.BaseUrl').
+    using an access token for the Kusto API (configuration key 'FabricTools.KustoApi.ResourceUrl'), which is
+    acquired on first use and cached for the session.
 
     The cmdlet distinguishes between management commands and queries: a command starting with a dot is a management
     command and is sent to the management endpoint (/v1/rest/mgmt), anything else is a query and is sent to the
@@ -110,15 +111,6 @@ function Invoke-FabricKQLCommand {
     }
     Write-Message -Message "Query service URI: $queryServiceUri" -Level Debug
 
-    # The Kusto query service requires a token issued for the Kusto API, not the Fabric API
-    $kustoResourceUrl = Get-PSFConfigValue -FullName 'FabricTools.KustoApi.BaseUrl'
-    Write-Message -Message "Get authentication token from $kustoResourceUrl" -Level Verbose
-    $kustoToken = (Get-AzAccessToken -ResourceUrl $kustoResourceUrl -ErrorAction Stop).Token
-    if ($kustoToken -is [securestring]) {
-        $kustoToken = [System.Net.NetworkCredential]::new('', $kustoToken).Password
-    }
-    $kustoHeaders = @{ Authorization = "Bearer $kustoToken" }
-
     # Commands starting with a dot are management commands, everything else is a query
     $isManagementCommand = $KQLCommand.TrimStart().StartsWith('.')
     if ($isManagementCommand) {
@@ -143,7 +135,7 @@ function Invoke-FabricKQLCommand {
         Uri            = $apiEndpointUrl
         Method         = 'Post'
         Body           = $bodyJson
-        Headers        = $kustoHeaders
+        ApiType        = 'Kusto'
         TypeName       = 'KQL Database'
         ObjectIdOrName = $kqlDatabase.displayName
         HandleResponse = $true

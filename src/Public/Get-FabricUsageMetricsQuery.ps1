@@ -79,6 +79,6 @@ Author: Ioana Bouariu
     }
     # Make a POST request to the PowerBI API to retrieve the usage metrics for the specified dataset.
     # The function returns the response of the POST request.
-    Invoke-FabricRestMethod -Method POST -PowerBIApi -Uri "groups/$groupId/datasets/$DatasetID/executeQueries" -Body $reportBody
+    Invoke-FabricRestMethod -Method POST -ApiType PowerBI -Uri "groups/$groupId/datasets/$DatasetID/executeQueries" -Body $reportBody
 
 }

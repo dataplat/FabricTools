@@ -9,7 +9,12 @@ Set-PSFConfig -Name 'FabricTools.FabricSession.Headers'        -Value @{}
 Set-PSFConfig -Name 'FabricTools.FabricSession.TokenExpiresOn' -Value $null
 Set-PSFConfig -Name 'FabricTools.FabricSession.AccessToken'    -Value $null
 
-Set-PSFConfig -Name 'FabricTools.KustoApi.BaseUrl'             -Value 'https://api.kusto.windows.net'
+Set-PSFConfig -Name 'FabricTools.KustoApi.ResourceUrl'         -Value 'https://api.kusto.windows.net'
+
+Set-PSFConfig -Name 'FabricTools.KustoSession.Headers'         -Value @{}
+Set-PSFConfig -Name 'FabricTools.KustoSession.TokenExpiresOn'  -Value $null
+Set-PSFConfig -Name 'FabricTools.KustoSession.AccessToken'     -Value $null
+
 Set-PSFConfig -Name 'FabricTools.AzureApi.BaseUrl'             -Value "https://management.azure.com"
 
 Set-PSFConfig -Name 'FabricTools.AzureSession.AccessToken'     -Value $null

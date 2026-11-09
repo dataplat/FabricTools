@@ -52,6 +52,6 @@ Author: Ioana Bouariu
 
     # Make a GET request to the PowerBI API to retrieve the top refreshable capacities.
     # The function returns the 'value' property of the response.
-    $result = Invoke-FabricRestMethod -Method GET -PowerBIApi -Uri "capacities/refreshables?`$top=$top"
+    $result = Invoke-FabricRestMethod -Method GET -ApiType PowerBI -Uri "capacities/refreshables?`$top=$top"
     $result.value
 }

@@ -2,17 +2,20 @@ Function Invoke-FabricRestMethod {
 
 <#
 .SYNOPSIS
-    Sends an HTTP request to a Fabric or Power BI API endpoint and retrieve the response.
+    Sends an HTTP request to a Fabric, Power BI, Kusto or Azure API endpoint and retrieve the response.
 
 .DESCRIPTION
-    Sends an HTTP request to a Fabric or Power BI API endpoint and retrieve the response.
+    Sends an HTTP request to a Fabric, Power BI, Kusto or Azure API endpoint and retrieve the response.
+    The ApiType parameter selects the base URL and the access token used for the request.
     Supports pagination by recognizing continuation tokens in the response.
     Supports handling of long-running operations and throttling (error 429) responses. Facilitates both synchronous and asynchronous operations.
     Message logging is provided for debugging and informational purposes.
 
 .PARAMETER Uri
-    The URI of the Fabric API endpoint to send the request to.
-    Can be a relative path (e.g., "workspaces") or a full URL (e.g., "https://api.fabric.microsoft.com/v1/workspaces").
+    The URI of the API endpoint to send the request to.
+    Can be a relative path (e.g., "workspaces"), which is appended to the base URL of the selected ApiType,
+    or a full URL (e.g., "https://api.fabric.microsoft.com/v1/workspaces").
+    A full URL is required for ApiType 'Kusto'.
 
 .PARAMETER Method
     The HTTP method to be used for the request. Valid values are 'GET', 'POST', 'DELETE', 'PUT', and 'PATCH'. The default value is 'GET'.
@@ -24,13 +27,15 @@ Function Invoke-FabricRestMethod {
     A switch parameter to test if the Fabric token is expired before making the request. If the token is expired, it will attempt to refresh it.
     Default is False. If set to True, the function will check the token state before making the request.
 
-.PARAMETER PowerBIApi
-    A switch parameter to indicate that the request should be sent to the Power BI API instead of the Fabric API.
+.PARAMETER ApiType
+    The API the request is sent to. It determines the base URL for a relative Uri and the access token used. Default is 'Fabric'.
+    - Fabric:  Fabric REST API (FabricTools.FabricApi.BaseUrl), Fabric token.
+    - PowerBI: Power BI REST API (FabricTools.PowerBiApi.BaseUrl), Fabric token.
+    - Kusto:   Kusto query service of a KQL Database (full Uri required), Kusto token acquired on first use.
+    - Azure:   Azure Resource Manager API (FabricTools.AzureApi.BaseUrl), Azure token.
 
-.PARAMETER Headers
-    Optional. A hashtable of request headers (including 'Authorization') to use instead of the Fabric session headers.
-    Use it to call endpoints that require a different access token, e.g. the Kusto (KQL Database) query service.
-    The User-Agent header is added automatically.
+.PARAMETER PowerBIApi
+    Obsolete. Use '-ApiType PowerBI' instead. Kept for backward compatibility.
 
 .PARAMETER NoWait
     A switch parameter to indicate that the function should not wait for the response. This is useful for asynchronous operations.
@@ -73,6 +78,11 @@ Function Invoke-FabricRestMethod {
 
     This example sends a POST request to the "/api/resource" endpoint of the Fabric API with a request body.
 
+.EXAMPLE
+    Invoke-FabricRestMethod -Uri "datasets" -ApiType PowerBI
+
+    This example sends a GET request to the "https://api.powerbi.com/v1.0/myorg/datasets" endpoint of the Power BI API.
+
 .NOTES
     - Requires `$FabricConfig` global configuration, including `BaseUrl`.
 
@@ -95,10 +105,11 @@ Function Invoke-FabricRestMethod {
         [switch] $TestTokenExpired,
 
         [Parameter(Mandatory = $false)]
-        [switch] $PowerBIApi,
+        [ValidateSet('Fabric', 'PowerBI', 'Kusto', 'Azure')]
+        [string] $ApiType = 'Fabric',
 
-        [Parameter(Mandatory = $false)]
-        [hashtable] $Headers,
+        [Parameter(DontShow)]
+        [switch] $PowerBIApi,
 
         [Parameter(Mandatory = $false)]
         [switch] $NoWait = $false,
@@ -144,15 +155,18 @@ Function Invoke-FabricRestMethod {
     }
 
     $Method = $Method.ToUpperInvariant()
-    $baseUrl = $FabricConfig.BaseUrl
+
+    # Backward compatibility: -PowerBIApi is equivalent to -ApiType PowerBI
     if ($PowerBIApi) {
-        $baseUrl = Get-PSFConfigValue -FullName 'FabricTools.PowerBiApi.BaseUrl'
+        $ApiType = 'PowerBI'
     }
+    $apiSession = Get-FabricApiSession -ApiType $ApiType
 
     if ($Uri -notmatch '^https?://.*') {
-        $Uri = "{0}/{1}" -f $baseUrl, $Uri
-    } elseif ($PowerBIApi) {
-        Write-Message -Message "PowerBIApi param is ignored when full Uri is provided." -Level Warning
+        if (-not $apiSession.BaseUrl) {
+            throw "ApiType '$ApiType' has no base URL. Provide a full Uri (e.g. 'https://...')."
+        }
+        $Uri = "{0}/{1}" -f $apiSession.BaseUrl, $Uri
     }
 
     if ($Body -is [hashtable]) {
@@ -164,12 +178,7 @@ Function Invoke-FabricRestMethod {
         Write-Message -Message "No request body provided." -Level Debug
     }
 
-    $sessionHeaders = if ($Headers) {
-        Write-Message -Message "Using custom headers for request." -Level Debug
-        $Headers
-    } else {
-        Get-PSFConfigValue -FullName 'FabricTools.FabricSession.Headers'
-    }
+    $sessionHeaders = $apiSession.Headers
     $contentType = Get-PSFConfigValue -FullName 'FabricTools.FabricApi.ContentType'
     $userAgent = Get-PSFConfigValue -FullName 'FabricTools.UserAgent' -ErrorAction SilentlyContinue
 
