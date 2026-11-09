@@ -12,7 +12,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- `Invoke-FabricKQLCommand` aligned with the module's patterns (#163): uses `Invoke-FabricRestMethod` for a single API call, requires either `-KQLDatabaseName` or `-KQLDatabaseId` (mutually exclusive parameter sets), and logs via `Write-Message`.
+- Added an optional `-Headers` parameter to `Invoke-FabricRestMethod` to call endpoints that need a different access token than the Fabric API (e.g. the Kusto query service).
+
 ### Fixed
+
+- Fixed `Invoke-FabricKQLCommand` failing with "Invalid URI: The hostname could not be parsed" (#163): the query service URI is now read from the KQL Database `properties`, and requests are authenticated with a Kusto API token instead of an undefined header variable. Query results with zero rows no longer fail.
 
 ### Deprecated
 

@@ -22,6 +22,7 @@ Describe "Invoke-FabricRestMethod" -Tag "UnitTests" {
             @{ ExpectedParameterName = 'Body'; ExpectedParameterType = 'object'; Mandatory = 'False' }
             @{ ExpectedParameterName = 'TestTokenExpired'; ExpectedParameterType = 'switch'; Mandatory = 'False' }
             @{ ExpectedParameterName = 'PowerBIApi'; ExpectedParameterType = 'switch'; Mandatory = 'False' }
+            @{ ExpectedParameterName = 'Headers'; ExpectedParameterType = 'hashtable'; Mandatory = 'False' }
             @{ ExpectedParameterName = 'NoWait'; ExpectedParameterType = 'switch'; Mandatory = 'False' }
             @{ ExpectedParameterName = 'Timeout'; ExpectedParameterType = 'int'; Mandatory = 'False' }
             @{ ExpectedParameterName = 'HandleResponse'; ExpectedParameterType = 'switch'; Mandatory = 'False' }
@@ -125,6 +126,47 @@ Describe "Invoke-FabricRestMethod" -Tag "UnitTests" {
 
                 Should -Invoke -CommandName Invoke-RestMethod -Times 1 -ParameterFilter {
                     $TimeoutSec -gt 0 -and $TimeoutSec -le 120
+                }
+            }
+        }
+    }
+
+    Context "Custom headers" {
+        BeforeAll {
+            Mock -CommandName Get-PSFConfigValue -MockWith {
+                param($FullName)
+                switch ($FullName) {
+                    'FabricTools.UserAgent' { return 'TestUA/1.2' }
+                    'FabricTools.FabricSession.Headers' { return @{ Authorization = 'Bearer fabric-token' } }
+                    'FabricTools.FabricApi.ContentType' { return 'application/json; charset=utf-8' }
+                    Default { return $null }
+                }
+            }
+
+            Mock -CommandName Invoke-RestMethod -MockWith {
+                param($StatusCodeVariable, $ResponseHeadersVariable)
+                Set-Variable -Name $StatusCodeVariable -Value 200 -Scope Global
+                Set-Variable -Name $ResponseHeadersVariable -Value $null -Scope Global
+                return @{ statusCode = 200 }
+            }
+        }
+
+        It 'Should use the session headers when Headers is not provided' {
+            InModuleScope -ModuleName 'FabricTools' {
+                Invoke-FabricRestMethod -Uri 'https://api.fabric.microsoft.com/v1/test' | Out-Null
+
+                Should -Invoke -CommandName Invoke-RestMethod -Times 1 -Exactly -ParameterFilter {
+                    $Headers['Authorization'] -eq 'Bearer fabric-token'
+                }
+            }
+        }
+
+        It 'Should use the provided Headers instead of the session headers' {
+            InModuleScope -ModuleName 'FabricTools' {
+                Invoke-FabricRestMethod -Uri 'https://test.kusto.fabric.microsoft.com/v1/rest/query' -Method Post -Headers @{ Authorization = 'Bearer kusto-token' } | Out-Null
+
+                Should -Invoke -CommandName Invoke-RestMethod -Times 1 -Exactly -ParameterFilter {
+                    $Headers['Authorization'] -eq 'Bearer kusto-token' -and $Headers['User-Agent'] -eq 'TestUA/1.2'
                 }
             }
         }

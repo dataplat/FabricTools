@@ -5,7 +5,7 @@ HelpUri: ''
 itemType: Core
 Locale: en-US
 Module Name: FabricTools
-ms.date: 11/07/2026
+ms.date: 11/09/2026
 PlatyPS schema version: 2024-05-01
 title: Invoke-FabricRestMethod
 ---
@@ -21,10 +21,11 @@ Sends an HTTP request to a Fabric or Power BI API endpoint and retrieve the resp
 ### __AllParameterSets
 
 ```
-Invoke-FabricRestMethod [-Uri] <string> [[-Method] <string>] [[-Body] <Object>] [[-Timeout] <int>]
- [[-RequestTimeoutSeconds] <int>] [[-ExtractValue] <string>] [[-TypeName] <string>]
- [[-ObjectIdOrName] <string>] [[-SuccessMessage] <string>] [-TestTokenExpired] [-PowerBIApi]
- [-NoWait] [-HandleResponse] [<CommonParameters>]
+Invoke-FabricRestMethod [-Uri] <string> [[-Method] <string>] [[-Body] <Object>]
+ [[-Headers] <hashtable>] [[-Timeout] <int>] [[-RequestTimeoutSeconds] <int>]
+ [[-ExtractValue] <string>] [[-TypeName] <string>] [[-ObjectIdOrName] <string>]
+ [[-SuccessMessage] <string>] [-TestTokenExpired] [-PowerBIApi] [-NoWait] [-HandleResponse]
+ [<CommonParameters>]
 ```
 
 ## ALIASES
@@ -90,7 +91,7 @@ SupportsWildcards: false
 Aliases: []
 ParameterSets:
 - Name: (All)
-  Position: 5
+  Position: 6
   IsRequired: false
   ValueFromPipeline: false
   ValueFromPipelineByPropertyName: false
@@ -114,6 +115,31 @@ Aliases: []
 ParameterSets:
 - Name: (All)
   Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -Headers
+
+Optional.
+A hashtable of request headers (including 'Authorization') to use instead of the Fabric session headers.
+Use it to call endpoints that require a different access token, e.g.
+the Kusto (KQL Database) query service.
+The User-Agent header is added automatically.
+
+```yaml
+Type: System.Collections.Hashtable
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: 3
   IsRequired: false
   ValueFromPipeline: false
   ValueFromPipelineByPropertyName: false
@@ -184,7 +210,7 @@ SupportsWildcards: false
 Aliases: []
 ParameterSets:
 - Name: (All)
-  Position: 7
+  Position: 8
   IsRequired: false
   ValueFromPipeline: false
   ValueFromPipelineByPropertyName: false
@@ -226,7 +252,7 @@ SupportsWildcards: false
 Aliases: []
 ParameterSets:
 - Name: (All)
-  Position: 4
+  Position: 5
   IsRequired: false
   ValueFromPipeline: false
   ValueFromPipelineByPropertyName: false
@@ -251,7 +277,7 @@ SupportsWildcards: false
 Aliases: []
 ParameterSets:
 - Name: (All)
-  Position: 8
+  Position: 9
   IsRequired: false
   ValueFromPipeline: false
   ValueFromPipelineByPropertyName: false
@@ -297,7 +323,7 @@ SupportsWildcards: false
 Aliases: []
 ParameterSets:
 - Name: (All)
-  Position: 3
+  Position: 4
   IsRequired: false
   ValueFromPipeline: false
   ValueFromPipelineByPropertyName: false
@@ -322,7 +348,7 @@ SupportsWildcards: false
 Aliases: []
 ParameterSets:
 - Name: (All)
-  Position: 6
+  Position: 7
   IsRequired: false
   ValueFromPipeline: false
   ValueFromPipelineByPropertyName: false

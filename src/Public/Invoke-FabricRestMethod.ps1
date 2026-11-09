@@ -27,6 +27,11 @@ Function Invoke-FabricRestMethod {
 .PARAMETER PowerBIApi
     A switch parameter to indicate that the request should be sent to the Power BI API instead of the Fabric API.
 
+.PARAMETER Headers
+    Optional. A hashtable of request headers (including 'Authorization') to use instead of the Fabric session headers.
+    Use it to call endpoints that require a different access token, e.g. the Kusto (KQL Database) query service.
+    The User-Agent header is added automatically.
+
 .PARAMETER NoWait
     A switch parameter to indicate that the function should not wait for the response. This is useful for asynchronous operations.
     Default is False. If set to True, the function will return immediately without waiting for the operation to complete.
@@ -93,6 +98,9 @@ Function Invoke-FabricRestMethod {
         [switch] $PowerBIApi,
 
         [Parameter(Mandatory = $false)]
+        [hashtable] $Headers,
+
+        [Parameter(Mandatory = $false)]
         [switch] $NoWait = $false,
 
         [Parameter(Mandatory = $false)]
@@ -147,12 +155,6 @@ Function Invoke-FabricRestMethod {
         Write-Message -Message "PowerBIApi param is ignored when full Uri is provided." -Level Warning
     }
 
-    $Headers = $FabricSession.HeaderParams
-    if ($Uri.StartsWith($AzureSession.BaseApiUrl)) {
-        $Headers = $AzureSession.HeaderParams
-        Write-Message -Message "Using AzureSession headers for request." -Level Debug
-    }
-
     if ($Body -is [hashtable]) {
         $Body = $Body | ConvertTo-Json -Depth 10
         Write-Message -Message "Request Body: $Body" -Level Debug
@@ -162,7 +164,12 @@ Function Invoke-FabricRestMethod {
         Write-Message -Message "No request body provided." -Level Debug
     }
 
-    $sessionHeaders = Get-PSFConfigValue -FullName 'FabricTools.FabricSession.Headers'
+    $sessionHeaders = if ($Headers) {
+        Write-Message -Message "Using custom headers for request." -Level Debug
+        $Headers
+    } else {
+        Get-PSFConfigValue -FullName 'FabricTools.FabricSession.Headers'
+    }
     $contentType = Get-PSFConfigValue -FullName 'FabricTools.FabricApi.ContentType'
     $userAgent = Get-PSFConfigValue -FullName 'FabricTools.UserAgent' -ErrorAction SilentlyContinue
 

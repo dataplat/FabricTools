@@ -5,7 +5,7 @@ HelpUri: ''
 itemType: KQL Queryset
 Locale: en-US
 Module Name: FabricTools
-ms.date: 11/07/2026
+ms.date: 11/09/2026
 PlatyPS schema version: 2024-05-01
 title: Invoke-FabricKQLCommand
 ---
@@ -18,59 +18,62 @@ Executes a KQL command in a Kusto Database.
 
 ## SYNTAX
 
-### __AllParameterSets
+### ByName (Default)
 
 ```
-Invoke-FabricKQLCommand [-WorkspaceId] <guid> [[-KQLDatabaseName] <string>]
- [[-KQLDatabaseId] <guid>] [-KQLCommand] <string> [-ReturnRawResult] [<CommonParameters>]
+Invoke-FabricKQLCommand -WorkspaceId <guid> -KQLDatabaseName <string> -KQLCommand <string>
+ [-ReturnRawResult] [<CommonParameters>]
+```
+
+### ById
+
+```
+Invoke-FabricKQLCommand -WorkspaceId <guid> -KQLDatabaseId <guid> -KQLCommand <string>
+ [-ReturnRawResult] [<CommonParameters>]
 ```
 
 ## ALIASES
 
 ## DESCRIPTION
 
-Executes a KQL command in a Kusto Database.
-The KQL command is executed in the Kusto Database that is specified by the KQLDatabaseName or KQLDatabaseId parameter.
-The KQL command is executed in the context of the Fabric Real-Time Intelligence session that is established by the Connect-RTISession cmdlet.
-The cmdlet distinguishes between management commands and query commands.
-Management commands are executed in the management API, while query commands are executed in the query API.
-The distinction is made by checking if the KQL command starts with a dot.
-If it does, it is a management command else it is a query command.
-If the KQL command is a management command, it is crucial to have the execute database script <| in the beginning, otherwise the Kusto API will not execute the script.
-This cmdlet will automatically add the .execute database script <| in the beginning of the KQL command if it is a management command and if it is not already present.
-If the KQL Command is a query command, the result is returned as an array of PowerShell objects by default.
-If the parameter -ReturnRawResult is used, the raw result of the KQL query is returned which is a JSON object.
+Executes a KQL command in the KQL Database specified by the KQLDatabaseName or KQLDatabaseId parameter.
+The command is sent to the query service of the database (the 'queryServiceUri' property of the KQL Database)
+using an access token for the Kusto API (configuration key 'FabricTools.KustoApi.BaseUrl').
+
+The cmdlet distinguishes between management commands and queries: a command starting with a dot is a management
+command and is sent to the management endpoint (/v1/rest/mgmt), anything else is a query and is sent to the
+query endpoint (/v1/rest/query).
+Management commands are wrapped in '.execute database script <|' unless the command already contains it.
+
+Query results are returned as an array of PowerShell objects (one per row) by default.
+Use -ReturnRawResult to get the raw response of the Kusto API.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 
-This example will create a table named 'MyTable' with a column named 'MyColumn' in the KQLDatabase 'MyKQLDatabase'.
+Invoke-FabricKQLCommand -WorkspaceId '12345678-1234-1234-1234-123456789012' -KQLDatabaseName 'MyKQLDatabase' -KQLCommand '.create table MyTable (MyColumn: string)'
 
-```powershell
-Invoke-FabricKQLCommand -WorkspaceId '12345678-1234-1234-1234-123456789012' -KQLDatabaseName 'MyKQLDatabase'-KQLCommand '.create table MyTable (MyColumn: string)
-```
+Creates a table named 'MyTable' with a column named 'MyColumn' in the KQL Database 'MyKQLDatabase'.
 
 ### EXAMPLE 2
 
-This example will Execute the Query 'productcategory | take 100' in the KQLDatabase 'MyEventhouse2' and it will return the result as an array of PowerShell objects.
+Invoke-FabricKQLCommand -WorkspaceId '12345678-1234-1234-1234-123456789012' -KQLDatabaseName 'MyEventhouse' -KQLCommand 'productcategory | take 100'
 
-```powershell
-Invoke-FabricKQLCommand `
-    -WorkspaceId '2c4ccbb5-9b13-4495-9ab3-ba41152733d9' `
-    -KQLDatabaseName 'MyEventhouse2' `
-    -ReturnRawResult `
-    -KQLCommand 'productcategory
-                | take 100'
-```
+Runs the query in the KQL Database 'MyEventhouse' and returns the rows as an array of PowerShell objects.
+
+### EXAMPLE 3
+
+Invoke-FabricKQLCommand -WorkspaceId '12345678-1234-1234-1234-123456789012' -KQLDatabaseId '87654321-4321-4321-4321-210987654321' -KQLCommand 'StormEvents | count' -ReturnRawResult
+
+Runs the query in the KQL Database with the given Id and returns the raw response of the Kusto API.
 
 ## PARAMETERS
 
 ### -KQLCommand
 
-The KQL command that should be executed in the Kusto Database.
-The KQL command is a string.
-An example of a string is '.create table MyTable (MyColumn: string)'.
+The KQL command or query that should be executed in the KQL Database.
+An example is '.create table MyTable (MyColumn: string)'.
 
 ```yaml
 Type: System.String
@@ -79,7 +82,7 @@ SupportsWildcards: false
 Aliases: []
 ParameterSets:
 - Name: (All)
-  Position: 3
+  Position: Named
   IsRequired: true
   ValueFromPipeline: false
   ValueFromPipelineByPropertyName: false
@@ -91,8 +94,8 @@ HelpMessage: ''
 
 ### -KQLDatabaseId
 
-The Id of the KQLDatabase in which the KQL command should be executed.
-This parameter cannot be used together with KQLDatabaseName.
+The Id of the KQL Database in which the KQL command should be executed.
+Cannot be used together with KQLDatabaseName.
 The value for KQLDatabaseId is a GUID.
 An example of a GUID is '12345678-1234-1234-1234-123456789012'.
 
@@ -102,9 +105,9 @@ DefaultValue: ''
 SupportsWildcards: false
 Aliases: []
 ParameterSets:
-- Name: (All)
-  Position: 2
-  IsRequired: false
+- Name: ById
+  Position: Named
+  IsRequired: true
   ValueFromPipeline: false
   ValueFromPipelineByPropertyName: false
   ValueFromRemainingArguments: false
@@ -115,8 +118,8 @@ HelpMessage: ''
 
 ### -KQLDatabaseName
 
-The name of the KQLDatabase in which the KQL command should be executed.
-This parameter cannot be used together with KQLDatabaseId.
+The name of the KQL Database in which the KQL command should be executed.
+Cannot be used together with KQLDatabaseId.
 
 ```yaml
 Type: System.String
@@ -124,9 +127,9 @@ DefaultValue: ''
 SupportsWildcards: false
 Aliases: []
 ParameterSets:
-- Name: (All)
-  Position: 1
-  IsRequired: false
+- Name: ByName
+  Position: Named
+  IsRequired: true
   ValueFromPipeline: false
   ValueFromPipelineByPropertyName: false
   ValueFromRemainingArguments: false
@@ -137,9 +140,8 @@ HelpMessage: ''
 
 ### -ReturnRawResult
 
-When this switch is used, the raw result of the KQL command is returned.
-By default, the result is returned as
-a PowerShell object.
+When this switch is used, the raw response of the Kusto API is returned instead of an array of PowerShell objects.
+Management commands always return the raw response.
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
@@ -160,7 +162,7 @@ HelpMessage: ''
 
 ### -WorkspaceId
 
-Id of the Fabric Workspace for which the KQL command should be executed.
+Id of the Fabric Workspace that contains the KQL Database.
 The value for WorkspaceId is a GUID.
 An example of a GUID is '12345678-1234-1234-1234-123456789012'.
 
@@ -171,7 +173,7 @@ SupportsWildcards: false
 Aliases: []
 ParameterSets:
 - Name: (All)
-  Position: 0
+  Position: Named
   IsRequired: true
   ValueFromPipeline: false
   ValueFromPipelineByPropertyName: false
@@ -194,12 +196,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-Revision History:
-
-2024-12-22 - FGE: Added Verbose Output
-2024-12-27 - FGE: Major Update to support KQL Queries and Management Commands
-
-Author: Frank Geisler
+Author: Frank Geisler, Kamil Nowinski
 
 ## RELATED LINKS
 
