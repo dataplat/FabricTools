@@ -52,19 +52,35 @@ Use -ReturnRawResult to get the raw response of the Kusto API.
 
 ### EXAMPLE 1
 
-Invoke-FabricKQLCommand -WorkspaceId '12345678-1234-1234-1234-123456789012' -KQLDatabaseName 'MyKQLDatabase' -KQLCommand '.create table MyTable (MyColumn: string)'
+$params = @{
+    WorkspaceId     = '12345678-1234-1234-1234-123456789012'
+    KQLDatabaseName = 'MyKQLDatabase'
+    KQLCommand      = '.create table MyTable (MyColumn: string)'
+}
+Invoke-FabricKQLCommand @params
 
 Creates a table named 'MyTable' with a column named 'MyColumn' in the KQL Database 'MyKQLDatabase'.
 
 ### EXAMPLE 2
 
-Invoke-FabricKQLCommand -WorkspaceId '12345678-1234-1234-1234-123456789012' -KQLDatabaseName 'MyEventhouse' -KQLCommand 'productcategory | take 100'
+$params = @{
+    WorkspaceId     = '12345678-1234-1234-1234-123456789012'
+    KQLDatabaseName = 'MyEventhouse'
+    KQLCommand      = 'productcategory | take 100'
+}
+Invoke-FabricKQLCommand @params
 
 Runs the query in the KQL Database 'MyEventhouse' and returns the rows as an array of PowerShell objects.
 
 ### EXAMPLE 3
 
-Invoke-FabricKQLCommand -WorkspaceId '12345678-1234-1234-1234-123456789012' -KQLDatabaseId '87654321-4321-4321-4321-210987654321' -KQLCommand 'StormEvents | count' -ReturnRawResult
+$params = @{
+    WorkspaceId     = '12345678-1234-1234-1234-123456789012'
+    KQLDatabaseId   = '87654321-4321-4321-4321-210987654321'
+    KQLCommand      = 'StormEvents | count'
+    ReturnRawResult = $true
+}
+Invoke-FabricKQLCommand @params
 
 Runs the query in the KQL Database with the given Id and returns the raw response of the Kusto API.
 
