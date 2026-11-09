@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-FabricTools is a PowerShell module (~211 public cmdlets) for automating Microsoft Fabric and Power BI administration. It is currently in **Public Preview** and targets PowerShell 5.1+ on Windows and Linux. PRs go against the `batch_changes` branch.
+FabricTools is a PowerShell module (~211 public cmdlets) for automating Microsoft Fabric and Power BI administration. It is currently in **Public Preview** and targets PowerShell 5.1+ on Windows and Linux. PRs always target the `develop` branch.
 
 ## Build & Development Commands
 
@@ -80,6 +80,13 @@ PSFramework              # Logging & configuration
 In order to prepare input parameters for `Invoke-FabricRestMethod` function - **always use hash splatting** (no backtick line continuation):
 
 ```powershell
+$apiEndpointUrl = "{0}/workspaces/{1}/notebooks" -f $FabricConfig.BaseUrl, $WorkspaceId
+
+$body = @{
+    displayName = $NotebookName
+}
+$bodyJson = $body | ConvertTo-Json -Depth 10
+
 $apiParams = @{
     Uri            = $apiEndpointUrl
     Method         = 'Post'
