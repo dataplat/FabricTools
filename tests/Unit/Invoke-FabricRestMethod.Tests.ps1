@@ -20,6 +20,7 @@ Describe "Invoke-FabricRestMethod" -Tag "UnitTests" {
             @{ ExpectedParameterName = 'Uri'; ExpectedParameterType = 'string'; Mandatory = 'True' }
             @{ ExpectedParameterName = 'Method'; ExpectedParameterType = 'string'; Mandatory = 'False' }
             @{ ExpectedParameterName = 'Body'; ExpectedParameterType = 'object'; Mandatory = 'False' }
+            @{ ExpectedParameterName = 'SuppressBodyLogging'; ExpectedParameterType = 'switch'; Mandatory = 'False' }
             @{ ExpectedParameterName = 'TestTokenExpired'; ExpectedParameterType = 'switch'; Mandatory = 'False' }
             @{ ExpectedParameterName = 'PowerBIApi'; ExpectedParameterType = 'switch'; Mandatory = 'False' }
             @{ ExpectedParameterName = 'ApiType'; ExpectedParameterType = 'string'; Mandatory = 'False' }
@@ -53,6 +54,46 @@ Describe "Invoke-FabricRestMethod" -Tag "UnitTests" {
             Mock -CommandName Test-FabricApiResponse -MockWith {
                 param($Response, $ResponseHeader, $StatusCode)
                 return $Response
+            }
+        }
+
+        Context "Sensitive request body logging" {
+            BeforeEach {
+                Mock -CommandName Invoke-RestMethod -MockWith {
+                    param($StatusCodeVariable, $ResponseHeadersVariable)
+                    Set-Variable -Name $StatusCodeVariable -Value 200 -Scope Global
+                    Set-Variable -Name $ResponseHeadersVariable -Value $null -Scope Global
+                    return @{ ok = $true }
+                }
+                Mock -CommandName Confirm-TokenState -MockWith { return $true }
+                Mock -CommandName Test-FabricApiResponse -MockWith { param($Response) return $Response }
+                Mock -CommandName Write-Message -MockWith { }
+                Mock -CommandName Get-FabricApiSession -MockWith {
+                    [pscustomobject]@{ BaseUrl = 'https://api.fabric.microsoft.com/v1'; Headers = @{} }
+                }
+                Mock -CommandName Get-PSFConfigValue -MockWith {
+                    param($FullName)
+                    if ($FullName -eq 'FabricTools.FabricApi.ContentType') { return 'application/json' }
+                    $null
+                }
+            }
+
+            It 'Redacts a sensitive body from logs while sending it in the request' {
+                InModuleScope -ModuleName 'FabricTools' {
+                    $secret = 'do-not-log-this-secret'
+                    $body = @{ credential = $secret }
+                    Invoke-FabricRestMethod -Uri 'connections' -Method Post -Body $body -SuppressBodyLogging | Out-Null
+
+                    Should -Invoke -CommandName Write-Message -Times 1 -Exactly -ParameterFilter {
+                        $Message -eq 'Request Body: <redacted>'
+                    }
+                    Should -Invoke -CommandName Write-Message -Times 0 -ParameterFilter {
+                        $Message -like '*do-not-log-this-secret*'
+                    }
+                    Should -Invoke -CommandName Invoke-RestMethod -Times 1 -ParameterFilter {
+                        $Body -like '*do-not-log-this-secret*'
+                    }
+                }
             }
         }
 

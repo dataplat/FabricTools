@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Added connection management cmdlets, pipeline execution and job-instance lookup, and item schedule cmdlets for Cron, Daily, and Weekly configurations.
 - Added consistent parameter aliases for the resource a cmdlet acts on (#83): `<Noun>Id` parameters accept `-Id` and `<Noun>Name` parameters accept `-Name` and `-DisplayName` (e.g. `Get-FabricLakehouse -WorkspaceId $ws -Name 'Sales'`). Existing parameter names are unchanged. Parent-resource parameters such as `-WorkspaceId` on item cmdlets are not aliased. Note: abbreviated parameter names that become ambiguous (e.g. `-I`, `-N`) must be spelled out further.
 - Added a QA test (tag `ParameterAliases`) enforcing the resource parameter alias convention for all exported cmdlets.
 

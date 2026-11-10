@@ -102,6 +102,9 @@ Function Invoke-FabricRestMethod {
         $Body,
 
         [Parameter(Mandatory = $false)]
+        [switch] $SuppressBodyLogging,
+
+        [Parameter(Mandatory = $false)]
         [switch] $TestTokenExpired,
 
         [Parameter(Mandatory = $false)]
@@ -171,9 +174,11 @@ Function Invoke-FabricRestMethod {
 
     if ($Body -is [hashtable]) {
         $Body = $Body | ConvertTo-Json -Depth 10
-        Write-Message -Message "Request Body: $Body" -Level Debug
+        $bodyLog = if ($SuppressBodyLogging) { '<redacted>' } else { $Body }
+        Write-Message -Message "Request Body: $bodyLog" -Level Debug
     } elseif ($Body -is [string]) {
-        Write-Message -Message "Request Body: $Body" -Level Debug
+        $bodyLog = if ($SuppressBodyLogging) { '<redacted>' } else { $Body }
+        Write-Message -Message "Request Body: $bodyLog" -Level Debug
     } else {
         Write-Message -Message "No request body provided." -Level Debug
     }
