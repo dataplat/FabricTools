@@ -11,7 +11,7 @@ function Get-FabricItemJobInstance {
         The ID of the workspace containing the item.
 
     .PARAMETER ItemId
-        The ID of the item.
+        The ID of the item whose job instances are retrieved.
 
     .PARAMETER JobType
         The job type to list, such as Pipeline or RunNotebook.
@@ -28,8 +28,14 @@ function Get-FabricItemJobInstance {
         ```powershell
         Get-FabricItemJobInstance -WorkspaceId '11111111-1111-1111-1111-111111111111' -ItemId '22222222-2222-2222-2222-222222222222' -JobType Pipeline -JobInstanceId '33333333-3333-3333-3333-333333333333'
         ```
+
+    .NOTES
+        https://learn.microsoft.com/en-us/rest/api/fabric/core/job-scheduler/list-item-job-instances
+
+        Author: Kamil Nowinski
     #>
     [CmdletBinding()]
+    [OutputType([System.Object[]])]
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
@@ -63,5 +69,6 @@ function Get-FabricItemJobInstance {
 
     $apiParams.Uri = "workspaces/$WorkspaceId/items/$ItemId/jobs/instances?jobType=$([uri]::EscapeDataString($JobType))"
     $apiParams.ExtractValue = 'True'
-    @(Invoke-FabricRestMethod @apiParams)
+    $jobInstances = @(Invoke-FabricRestMethod @apiParams)
+    $jobInstances
 }

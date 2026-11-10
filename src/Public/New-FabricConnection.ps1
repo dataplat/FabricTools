@@ -37,6 +37,11 @@ function New-FabricConnection {
         $credential = Get-Credential
         New-FabricConnection -ConnectionName 'FUAM API' -BaseUrl 'https://api.contoso.com' -Audience 'api://contoso' -CredentialType ServicePrincipal -TenantId '11111111-1111-1111-1111-111111111111' -Credential $credential
         ```
+
+    .NOTES
+        https://learn.microsoft.com/en-us/rest/api/fabric/core/connections/create-connection
+
+        Author: Kamil Nowinski
     #>
     [CmdletBinding(SupportsShouldProcess)]
     param (

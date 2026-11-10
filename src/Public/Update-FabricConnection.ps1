@@ -10,7 +10,7 @@ function Update-FabricConnection {
         The ID of the connection to update.
 
     .PARAMETER ConnectionName
-        The new display name.
+        The new display name to assign to the connection.
 
     .PARAMETER CredentialType
         The replacement credential type: ServicePrincipal, Anonymous, or Basic.
@@ -28,6 +28,11 @@ function Update-FabricConnection {
         ```powershell
         Update-FabricConnection -ConnectionId '11111111-1111-1111-1111-111111111111' -ConnectionName 'Updated API'
         ```
+
+    .NOTES
+        https://learn.microsoft.com/en-us/rest/api/fabric/core/connections/update-connection
+
+        Author: Kamil Nowinski
     #>
     [CmdletBinding(SupportsShouldProcess)]
     param (

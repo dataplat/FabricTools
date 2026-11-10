@@ -36,6 +36,8 @@ function Start-FabricDataPipeline {
 
     .NOTES
         Requires an authenticated Fabric session.
+
+        Author: Kamil Nowinski
     #>
     [CmdletBinding(SupportsShouldProcess, DefaultParameterSetName = 'ById')]
     param (

@@ -10,7 +10,7 @@ function New-FabricItemSchedule {
         The ID of the workspace containing the item.
 
     .PARAMETER ItemId
-        The ID of the item.
+        The ID of the item for which the schedule is created.
 
     .PARAMETER JobType
         The job type, such as Pipeline or RunNotebook.
@@ -43,6 +43,11 @@ function New-FabricItemSchedule {
         ```powershell
         New-FabricItemSchedule -WorkspaceId '11111111-1111-1111-1111-111111111111' -ItemId '22222222-2222-2222-2222-222222222222' -JobType Pipeline -ScheduleType Daily -Times '08:00' -StartDateTime '2026-11-09T00:00:00' -EndDateTime '2026-12-31T23:59:59' -TimeZone 'UTC'
         ```
+
+    .NOTES
+        https://learn.microsoft.com/en-us/rest/api/fabric/core/job-scheduler/create-item-schedule
+
+        Author: Kamil Nowinski
     #>
     [CmdletBinding(SupportsShouldProcess)]
     param (

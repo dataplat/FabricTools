@@ -35,6 +35,7 @@ Author: Kamil Nowinski
 #>
 
     [CmdletBinding()]
+    [OutputType([System.Object[]])]
     param
     (
         [Parameter(Mandatory = $false)]
@@ -71,11 +72,11 @@ Author: Kamil Nowinski
         $apiParams.ExtractValue = 'True'
         $connections = @(Invoke-FabricRestMethod @apiParams)
         if ($ConnectionName) {
-            $matches = @($connections | Where-Object { $_.DisplayName -eq $ConnectionName })
-            if ($matches.Count -gt 1) {
+            $matchingConnections = @($connections | Where-Object { $_.DisplayName -eq $ConnectionName })
+            if ($matchingConnections.Count -gt 1) {
                 throw "Connection name '$ConnectionName' is ambiguous. Specify connectionId."
             }
-            return $matches
+            return $matchingConnections
         }
         $connections
     }

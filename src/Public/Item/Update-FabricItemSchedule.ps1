@@ -10,7 +10,7 @@ function Update-FabricItemSchedule {
         The ID of the workspace containing the item.
 
     .PARAMETER ItemId
-        The ID of the item.
+        The ID of the item that owns the schedule.
 
     .PARAMETER JobType
         The job type, such as Pipeline or RunNotebook.
@@ -46,6 +46,11 @@ function Update-FabricItemSchedule {
         ```powershell
         Update-FabricItemSchedule -WorkspaceId '11111111-1111-1111-1111-111111111111' -ItemId '22222222-2222-2222-2222-222222222222' -JobType Pipeline -ScheduleId '33333333-3333-3333-3333-333333333333' -Enabled $false
         ```
+
+    .NOTES
+        https://learn.microsoft.com/en-us/rest/api/fabric/core/job-scheduler/update-item-schedule
+
+        Author: Kamil Nowinski
     #>
     [CmdletBinding(SupportsShouldProcess)]
     param (
