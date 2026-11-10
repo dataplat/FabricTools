@@ -1,7 +1,11 @@
 # FabricTools PowerShell Module
 
 [![PowerShell Gallery Version](https://img.shields.io/powershellgallery/v/FabricTools?label=PowerShell%20Gallery&color=blue)](https://www.powershellgallery.com/packages/FabricTools)
-![PowerShell Gallery Downloads](https://img.shields.io/powershellgallery/dt/FabricTools?label=PSGallery%20downloads) 
+![PowerShell Gallery Downloads](https://img.shields.io/powershellgallery/dt/FabricTools?label=PSGallery%20downloads)
+[![Documentation](https://img.shields.io/badge/docs-command%20reference-0a7bbb?logo=gitbook&logoColor=white)](https://dataplat.github.io/FabricTools/)
+
+> 📖 **[Browse the FabricTools documentation →](https://dataplat.github.io/FabricTools/)**
+> Search all cmdlets by name or item type, with syntax, parameters and examples for each.
 
 <img align="left" src="images/FabricToolsLogo.png" alt="drawing" width="128"/>
 
