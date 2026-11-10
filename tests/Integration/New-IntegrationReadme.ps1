@@ -52,7 +52,7 @@ $suites = foreach ($file in $testFiles) {
     # Extract unique FabricTools function calls (*-Fabric*)
     $functions = [regex]::Matches($content, '\b([A-Z][a-zA-Z]+-Fabric[A-Za-z]+)\b') |
         ForEach-Object { $_.Groups[1].Value } |
-        Where-Object { $_ -notmatch '^(Mock|Should|Invoke)' } |
+        Where-Object { $_ -notmatch '^(Mock|Should)' } |
         Sort-Object -Unique
 
     [PSCustomObject]@{

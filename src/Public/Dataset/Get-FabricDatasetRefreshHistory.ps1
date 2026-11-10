@@ -110,7 +110,7 @@ function Get-FabricDatasetRefreshHistory {
             $apiParams = @{
                 Uri            = $apiEndpointUrl
                 Method         = 'Get'
-                PowerBIApi     = $true
+                ApiType        = 'PowerBI'
                 TypeName       = 'Dataset'
                 ObjectIdOrName = $currentDatasetId
                 HandleResponse = $true

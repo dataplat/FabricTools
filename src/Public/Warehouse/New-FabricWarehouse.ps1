@@ -37,6 +37,7 @@ function New-FabricWarehouse
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Name', 'DisplayName')]
         [string]$WarehouseName,
 
         [Parameter(Mandatory = $false)]

@@ -32,8 +32,7 @@ Copyright         = 'Copyright (c) 2025 by FabricTools Team'
 Description       = 'A module to be able to do more with Microsoft Fabric.
     It lets you pause and resume Fabric capacities.
     Adds functionality previously only available with the REST API as PowerShell functions.
-    There are also functions to make it easier to monitor usage metrics and refreshes.
-    It also adds Fabric-friendly aliases for PowerBI functions to make it easier to use the module.'
+    There are also functions to make it easier to monitor usage metrics and refreshes.'
 
 # Minimum version of the PowerShell engine required by this module
 PowerShellVersion = '5.1'
@@ -56,7 +55,6 @@ PowerShellVersion = '5.1'
 # Modules that must be imported into the global environment prior to importing this module
 RequiredModules = @(
     @{ ModuleName = 'Az.Accounts' ; ModuleVersion = '5.0.0' },
-    @{ ModuleName = 'MicrosoftPowerBIMgmt.Profile' ; ModuleVersion = '1.2.1111' },
     @{ ModuleName = 'Az.Resources' ; ModuleVersion = '6.15.1' },
     @{ ModuleName = 'PSFramework' ; ModuleVersion = '1.13.426' }
 )

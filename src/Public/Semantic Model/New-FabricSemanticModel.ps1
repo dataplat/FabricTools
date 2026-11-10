@@ -40,6 +40,7 @@ function New-FabricSemanticModel
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Name', 'DisplayName')]
         [string]$SemanticModelName,
 
         [Parameter(Mandatory = $false)]

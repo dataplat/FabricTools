@@ -34,6 +34,7 @@ function Remove-FabricSparkJobDefinition
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Id')]
         [guid]$SparkJobDefinitionId
     )
     try

@@ -44,6 +44,7 @@ function Update-FabricWorkspace
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Name', 'DisplayName')]
         [string]$WorkspaceName,
 
         [Parameter(Mandatory = $false)]

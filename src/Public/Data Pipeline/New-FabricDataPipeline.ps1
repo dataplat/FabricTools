@@ -39,6 +39,7 @@ function New-FabricDataPipeline
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Name', 'DisplayName')]
         [string]$DataPipelineName,
 
         [Parameter(Mandatory = $false)]

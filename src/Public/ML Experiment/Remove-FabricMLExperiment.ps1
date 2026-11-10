@@ -34,6 +34,7 @@ function Remove-FabricMLExperiment
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Id')]
         [guid]$MLExperimentId
     )
     try

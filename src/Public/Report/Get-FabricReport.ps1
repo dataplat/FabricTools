@@ -44,10 +44,12 @@ function Get-FabricReport {
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Id')]
         [guid]$ReportId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Name', 'DisplayName')]
         [string]$ReportName
     )
     try {

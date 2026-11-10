@@ -58,10 +58,12 @@ function Get-FabricEventhouse {
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Id')]
         [guid]$EventhouseId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Name', 'DisplayName')]
         [string]$EventhouseName
     )
 

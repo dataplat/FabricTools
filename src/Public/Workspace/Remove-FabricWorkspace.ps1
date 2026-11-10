@@ -40,7 +40,7 @@ function Remove-FabricWorkspace {
 
         [Parameter(Mandatory = $true, ParameterSetName = 'ByName')]
         [ValidateNotNullOrEmpty()]
-        [Alias("Name")]
+        [Alias("Name", "DisplayName")]
         [string]$WorkspaceName
     )
 

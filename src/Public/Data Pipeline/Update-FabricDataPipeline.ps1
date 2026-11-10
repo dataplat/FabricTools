@@ -41,10 +41,12 @@ function Update-FabricDataPipeline
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Id')]
         [guid]$DataPipelineId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Name', 'DisplayName')]
         [string]$DataPipelineName,
 
         [Parameter(Mandatory = $false)]

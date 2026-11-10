@@ -27,6 +27,7 @@ Author: Tiago Balabuch, Kamil Nowinski
     param (
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Id')]
         [guid]$DomainId
     )
 

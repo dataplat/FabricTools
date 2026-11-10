@@ -35,6 +35,7 @@ function Remove-FabricSparkCustomPool
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Id')]
         [guid]$SparkCustomPoolId
     )
     try

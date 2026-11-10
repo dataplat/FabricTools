@@ -35,6 +35,7 @@ function Refresh-FabricSQLEndpoint {
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Id')]
         [guid]$SQLEndpointId,
 
         [Parameter(Mandatory = $false)]

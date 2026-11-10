@@ -41,10 +41,12 @@ function Get-FabricMLModel {
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Id')]
         [guid]$MLModelId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Name', 'DisplayName')]
         [string]$MLModelName
     )
 

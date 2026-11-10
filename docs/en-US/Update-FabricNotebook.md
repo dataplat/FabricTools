@@ -5,7 +5,7 @@ HelpUri: ''
 itemType: Notebook
 Locale: en-US
 Module Name: FabricTools
-ms.date: 11/07/2026
+ms.date: 11/08/2026
 PlatyPS schema version: 2024-05-01
 title: Update-FabricNotebook
 ---
@@ -102,7 +102,8 @@ The unique identifier of the Notebook to be updated.
 Type: System.Guid
 DefaultValue: ''
 SupportsWildcards: false
-Aliases: []
+Aliases:
+- Id
 ParameterSets:
 - Name: (All)
   Position: 1
@@ -123,7 +124,9 @@ The new name for the Notebook.
 Type: System.String
 DefaultValue: ''
 SupportsWildcards: false
-Aliases: []
+Aliases:
+- Name
+- DisplayName
 ParameterSets:
 - Name: (All)
   Position: 2

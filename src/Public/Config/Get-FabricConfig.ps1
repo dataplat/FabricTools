@@ -29,6 +29,7 @@ The name of the configuration to be retrieved.
 
 #>
     param (
+        [Alias('Name', 'DisplayName')]
         [String] $ConfigName
     )
 

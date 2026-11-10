@@ -201,6 +201,11 @@ function Connect-FabricAccount {
             Set-PSFConfig -FullName 'FabricTools.FabricSession.Headers' -Value $headerParams
             Set-PSFConfig -FullName 'FabricTools.FabricApi.TenantId' -Value $accessToken.TenantId
             Set-PSFConfig -FullName 'FabricTools.FabricSession.TokenExpiresOn' -Value $accessToken.ExpiresOn
+
+            # Kusto token is acquired on first use (Get-FabricApiSession); drop any token of a previous sign-in
+            Set-PSFConfig -FullName 'FabricTools.KustoSession.AccessToken' -Value $null
+            Set-PSFConfig -FullName 'FabricTools.KustoSession.Headers' -Value @{}
+            Set-PSFConfig -FullName 'FabricTools.KustoSession.TokenExpiresOn' -Value $null
         }
 
         if ($PSCmdlet.ShouldProcess("Setting Azure authentication token and headers for $($azContext.Account)")) {

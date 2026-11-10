@@ -69,6 +69,7 @@ Function Remove-FabricItem {
       [Parameter(Mandatory = $false)]
       [string]$filter,
       [Parameter(Mandatory = $false)]
+      [Alias('Id')]
       [guid]$itemID
    )
 

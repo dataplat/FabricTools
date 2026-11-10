@@ -5,7 +5,7 @@ HelpInfoUri: https://www.github.com/dataplat/FabricTools
 Locale: en-US
 Module Guid: f2a0f9e6-fab6-41fc-9e1c-0c94ff38f794
 Module Name: FabricTools
-ms.date: 11/07/2026
+ms.date: 11/09/2026
 PlatyPS schema version: 2024-05-01
 title: FabricTools Module
 ---
@@ -18,7 +18,6 @@ A module to be able to do more with Microsoft Fabric.
     It lets you pause and resume Fabric capacities.
     Adds functionality previously only available with the REST API as PowerShell functions.
     There are also functions to make it easier to monitor usage metrics and refreshes.
-    It also adds Fabric-friendly aliases for PowerBI functions to make it easier to use the module.
 
 ## FabricTools
 
@@ -440,7 +439,7 @@ Executes a KQL command in a Kusto Database.
 
 ### [Invoke-FabricRestMethod](Invoke-FabricRestMethod.md)
 
-Sends an HTTP request to a Fabric or Power BI API endpoint and retrieve the response.
+Sends an HTTP request to a Fabric, Power BI, Kusto or Azure API endpoint and retrieve the response.
 
 ### [New-FabricCopyJob](New-FabricCopyJob.md)
 

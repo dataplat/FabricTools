@@ -20,8 +20,10 @@ Describe "Invoke-FabricRestMethod" -Tag "UnitTests" {
             @{ ExpectedParameterName = 'Uri'; ExpectedParameterType = 'string'; Mandatory = 'True' }
             @{ ExpectedParameterName = 'Method'; ExpectedParameterType = 'string'; Mandatory = 'False' }
             @{ ExpectedParameterName = 'Body'; ExpectedParameterType = 'object'; Mandatory = 'False' }
+            @{ ExpectedParameterName = 'SuppressBodyLogging'; ExpectedParameterType = 'switch'; Mandatory = 'False' }
             @{ ExpectedParameterName = 'TestTokenExpired'; ExpectedParameterType = 'switch'; Mandatory = 'False' }
             @{ ExpectedParameterName = 'PowerBIApi'; ExpectedParameterType = 'switch'; Mandatory = 'False' }
+            @{ ExpectedParameterName = 'ApiType'; ExpectedParameterType = 'string'; Mandatory = 'False' }
             @{ ExpectedParameterName = 'NoWait'; ExpectedParameterType = 'switch'; Mandatory = 'False' }
             @{ ExpectedParameterName = 'Timeout'; ExpectedParameterType = 'int'; Mandatory = 'False' }
             @{ ExpectedParameterName = 'HandleResponse'; ExpectedParameterType = 'switch'; Mandatory = 'False' }
@@ -52,6 +54,46 @@ Describe "Invoke-FabricRestMethod" -Tag "UnitTests" {
             Mock -CommandName Test-FabricApiResponse -MockWith {
                 param($Response, $ResponseHeader, $StatusCode)
                 return $Response
+            }
+        }
+
+        Context "Sensitive request body logging" {
+            BeforeEach {
+                Mock -CommandName Invoke-RestMethod -MockWith {
+                    param($StatusCodeVariable, $ResponseHeadersVariable)
+                    Set-Variable -Name $StatusCodeVariable -Value 200 -Scope Global
+                    Set-Variable -Name $ResponseHeadersVariable -Value $null -Scope Global
+                    return @{ ok = $true }
+                }
+                Mock -CommandName Confirm-TokenState -MockWith { return $true }
+                Mock -CommandName Test-FabricApiResponse -MockWith { param($Response) return $Response }
+                Mock -CommandName Write-Message -MockWith { }
+                Mock -CommandName Get-FabricApiSession -MockWith {
+                    [pscustomobject]@{ BaseUrl = 'https://api.fabric.microsoft.com/v1'; Headers = @{} }
+                }
+                Mock -CommandName Get-PSFConfigValue -MockWith {
+                    param($FullName)
+                    if ($FullName -eq 'FabricTools.FabricApi.ContentType') { return 'application/json' }
+                    $null
+                }
+            }
+
+            It 'Redacts a sensitive body from logs while sending it in the request' {
+                InModuleScope -ModuleName 'FabricTools' {
+                    $secret = 'do-not-log-this-secret'
+                    $body = @{ credential = $secret }
+                    Invoke-FabricRestMethod -Uri 'connections' -Method Post -Body $body -SuppressBodyLogging | Out-Null
+
+                    Should -Invoke -CommandName Write-Message -Times 1 -Exactly -ParameterFilter {
+                        $Message -eq 'Request Body: <redacted>'
+                    }
+                    Should -Invoke -CommandName Write-Message -Times 0 -ParameterFilter {
+                        $Message -like '*do-not-log-this-secret*'
+                    }
+                    Should -Invoke -CommandName Invoke-RestMethod -Times 1 -ParameterFilter {
+                        $Body -like '*do-not-log-this-secret*'
+                    }
+                }
             }
         }
 
@@ -125,6 +167,153 @@ Describe "Invoke-FabricRestMethod" -Tag "UnitTests" {
 
                 Should -Invoke -CommandName Invoke-RestMethod -Times 1 -ParameterFilter {
                     $TimeoutSec -gt 0 -and $TimeoutSec -le 120
+                }
+            }
+        }
+    }
+
+    Context "ApiType routing" {
+        BeforeAll {
+            Mock -CommandName Get-PSFConfigValue -MockWith {
+                param($FullName)
+                switch ($FullName) {
+                    'FabricTools.UserAgent' { return 'TestUA/1.2' }
+                    'FabricTools.FabricApi.ContentType' { return 'application/json; charset=utf-8' }
+                    Default { return $null }
+                }
+            }
+
+            Mock -CommandName Get-FabricApiSession -MockWith {
+                param($ApiType)
+                $baseUrl = switch ($ApiType) {
+                    'Fabric' { 'https://api.fabric.microsoft.com/v1' }
+                    'PowerBI' { 'https://api.powerbi.com/v1.0/myorg' }
+                    'Azure' { 'https://management.azure.com' }
+                    'Kusto' { $null }
+                }
+                [pscustomobject]@{
+                    ApiType = $ApiType
+                    BaseUrl = $baseUrl
+                    Headers = @{ Authorization = "Bearer $ApiType-token" }
+                }
+            }
+
+            Mock -CommandName Invoke-RestMethod -MockWith {
+                param($StatusCodeVariable, $ResponseHeadersVariable)
+                Set-Variable -Name $StatusCodeVariable -Value 200 -Scope Global
+                Set-Variable -Name $ResponseHeadersVariable -Value $null -Scope Global
+                return @{ statusCode = 200 }
+            }
+        }
+
+        It 'Should use the Fabric API by default' {
+            InModuleScope -ModuleName 'FabricTools' {
+                Invoke-FabricRestMethod -Uri 'workspaces' | Out-Null
+
+                Should -Invoke -CommandName Get-FabricApiSession -Times 1 -Exactly -ParameterFilter { $ApiType -eq 'Fabric' }
+                Should -Invoke -CommandName Invoke-RestMethod -Times 1 -Exactly -ParameterFilter {
+                    $Uri -eq 'https://api.fabric.microsoft.com/v1/workspaces' -and
+                    $Headers['Authorization'] -eq 'Bearer Fabric-token' -and
+                    $Headers['User-Agent'] -eq 'TestUA/1.2'
+                }
+            }
+        }
+
+        It 'Should use the base URL and headers of ApiType <_>' -ForEach @('PowerBI', 'Azure') {
+            InModuleScope -ModuleName 'FabricTools' -Parameters @{ apiType = $_ } {
+                param($apiType)
+                Invoke-FabricRestMethod -Uri 'test' -ApiType $apiType | Out-Null
+
+                $expectedBaseUrl = @{ PowerBI = 'https://api.powerbi.com/v1.0/myorg'; Azure = 'https://management.azure.com' }[$apiType]
+                Should -Invoke -CommandName Invoke-RestMethod -Times 1 -Exactly -ParameterFilter {
+                    $Uri -eq "$expectedBaseUrl/test" -and $Headers['Authorization'] -eq "Bearer $apiType-token"
+                }
+            }
+        }
+
+        It 'Should map the PowerBIApi switch to ApiType PowerBI' {
+            InModuleScope -ModuleName 'FabricTools' {
+                Invoke-FabricRestMethod -Uri 'datasets' -PowerBIApi | Out-Null
+
+                Should -Invoke -CommandName Get-FabricApiSession -Times 1 -Exactly -ParameterFilter { $ApiType -eq 'PowerBI' }
+                Should -Invoke -CommandName Invoke-RestMethod -Times 1 -Exactly -ParameterFilter {
+                    $Uri -eq 'https://api.powerbi.com/v1.0/myorg/datasets'
+                }
+            }
+        }
+
+        It 'Should keep a full Uri and use the Kusto headers for ApiType Kusto' {
+            InModuleScope -ModuleName 'FabricTools' {
+                Invoke-FabricRestMethod -Uri 'https://test.kusto.fabric.microsoft.com/v1/rest/query' -Method Post -ApiType Kusto | Out-Null
+
+                Should -Invoke -CommandName Invoke-RestMethod -Times 1 -Exactly -ParameterFilter {
+                    $Uri -eq 'https://test.kusto.fabric.microsoft.com/v1/rest/query' -and
+                    $Headers['Authorization'] -eq 'Bearer Kusto-token'
+                }
+            }
+        }
+
+        It 'Should throw for a relative Uri with ApiType Kusto' {
+            InModuleScope -ModuleName 'FabricTools' {
+                { Invoke-FabricRestMethod -Uri 'v1/rest/query' -ApiType Kusto } | Should -Throw -ExpectedMessage "*has no base URL*"
+                Should -Invoke -CommandName Invoke-RestMethod -Times 0 -Exactly
+            }
+        }
+    }
+
+    Context "Pagination (continuation tokens)" {
+        BeforeAll {
+            Mock -CommandName Get-PSFConfigValue -MockWith {
+                param($FullName)
+                switch ($FullName) {
+                    'FabricTools.FabricApi.ContentType' { return 'application/json; charset=utf-8' }
+                    Default { return $null }
+                }
+            }
+
+            Mock -CommandName Get-FabricApiSession -MockWith {
+                [pscustomobject]@{
+                    ApiType = 'Fabric'
+                    BaseUrl = 'https://api.fabric.microsoft.com/v1'
+                    Headers = @{ Authorization = 'Bearer fabric-token' }
+                }
+            }
+
+            # Two pages: the first returns a continuation token, the second (requested with the token) does not
+            Mock -CommandName Invoke-RestMethod -MockWith {
+                param($Uri, $StatusCodeVariable, $ResponseHeadersVariable)
+                Set-Variable -Name $StatusCodeVariable -Value 200 -Scope Global
+                Set-Variable -Name $ResponseHeadersVariable -Value $null -Scope Global
+                if ($Uri -match 'continuationToken=') {
+                    [pscustomobject]@{ value = @([pscustomobject]@{ id = '3' }) }
+                } else {
+                    [pscustomobject]@{
+                        value             = @([pscustomobject]@{ id = '1' }, [pscustomobject]@{ id = '2' })
+                        continuationToken = 'page 2+token'
+                    }
+                }
+            }
+        }
+
+        It 'Should request the next page with the continuation token and return all items' {
+            InModuleScope -ModuleName 'FabricTools' {
+                $result = @(Invoke-FabricRestMethod -Uri 'connections' -ExtractValue 'True' -Timeout 1)
+
+                $result.id | Should -Be @('1', '2', '3')
+                Should -Invoke -CommandName Invoke-RestMethod -Times 2 -Exactly
+                Should -Invoke -CommandName Invoke-RestMethod -Times 1 -Exactly -ParameterFilter {
+                    $Uri -eq 'https://api.fabric.microsoft.com/v1/connections?continuationToken=page+2%2btoken'
+                }
+            }
+        }
+
+        It 'Should append the continuation token with & when the Uri already has a query string' {
+            InModuleScope -ModuleName 'FabricTools' {
+                $result = @(Invoke-FabricRestMethod -Uri 'workspaces/ws/items?type=Lakehouse' -ExtractValue 'True' -Timeout 1)
+
+                $result.id | Should -Be @('1', '2', '3')
+                Should -Invoke -CommandName Invoke-RestMethod -Times 1 -Exactly -ParameterFilter {
+                    $Uri -eq 'https://api.fabric.microsoft.com/v1/workspaces/ws/items?type=Lakehouse&continuationToken=page+2%2btoken'
                 }
             }
         }

@@ -35,6 +35,7 @@ function Remove-FabricDataPipeline
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Id')]
         [guid]$DataPipelineId
     )
     try

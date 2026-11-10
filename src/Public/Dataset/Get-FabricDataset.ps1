@@ -67,10 +67,12 @@ function Get-FabricDataset {
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Id')]
         [guid]$DatasetId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Name', 'DisplayName')]
         [string]$DatasetName
     )
 
@@ -96,7 +98,7 @@ function Get-FabricDataset {
         $apiParams = @{
             Uri            = $apiEndpointUrl
             Method         = 'Get'
-            PowerBIApi     = $true
+            ApiType        = 'PowerBI'
             TypeName       = 'Dataset'
             HandleResponse = $true
             ExtractValue   = 'True'

@@ -39,6 +39,7 @@ Author: Tiago Balabuch, Kamil Nowinski
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Id')]
         [guid]$EventstreamId
         #TODO Add EventstreamName parameter to validate the name of the Eventstream to delete.
     )

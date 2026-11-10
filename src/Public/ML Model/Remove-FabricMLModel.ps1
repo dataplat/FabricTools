@@ -34,6 +34,7 @@ function Remove-FabricMLModel
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Id')]
         [guid]$MLModelId
     )
     try

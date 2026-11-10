@@ -42,6 +42,7 @@ function New-FabricReport
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Name', 'DisplayName')]
         [string]$ReportName,
 
         [Parameter(Mandatory = $false)]

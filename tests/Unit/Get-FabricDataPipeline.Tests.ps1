@@ -35,21 +35,15 @@ Describe "Get-FabricDataPipeline" -Tag "UnitTests" {
         BeforeAll {
             Mock -CommandName Confirm-TokenState -MockWith { }
             Mock -CommandName Write-Message -MockWith { }
+            # Invoke-FabricRestMethod (ExtractValue = 'True') returns the items of the 'value' array
             Mock -CommandName Invoke-FabricRestMethod -MockWith {
-                InModuleScope -ModuleName 'FabricTools' {
-                    $script:statusCode = 200
+                [pscustomobject]@{
+                    Id = '11111111-1111-1111-1111-111111111111'
+                    DisplayName = 'TestDataPipeline1'
                 }
-                return [pscustomobject]@{
-                    value = @(
-                        [pscustomobject]@{
-                            Id = [guid]::NewGuid()
-                            DisplayName = 'TestDataPipeline1'
-                        },
-                        [pscustomobject]@{
-                            Id = [guid]::NewGuid()
-                            DisplayName = 'TestDataPipeline2'
-                        }
-                    )
+                [pscustomobject]@{
+                    Id = '22222222-2222-2222-2222-222222222222'
+                    DisplayName = 'TestDataPipeline2'
                 }
             }
         }
@@ -61,7 +55,9 @@ Describe "Get-FabricDataPipeline" -Tag "UnitTests" {
 
             Should -Invoke -CommandName Invoke-FabricRestMethod -Times 1 -ParameterFilter {
                 $Uri -like "*workspaces/*/dataPipelines*" -and
-                $Method -eq 'Get'
+                $Method -eq 'Get' -and
+                $HandleResponse -eq $true -and
+                $ExtractValue -eq 'True'
             }
         }
 
@@ -72,6 +68,13 @@ Describe "Get-FabricDataPipeline" -Tag "UnitTests" {
 
             $result | Should -Not -BeNullOrEmpty
             $result.Count | Should -Be 2
+        }
+
+        It 'Should return the data pipeline matching DataPipelineName' {
+            $result = @(Get-FabricDataPipeline -WorkspaceId ([guid]::NewGuid()) -DataPipelineName 'TestDataPipeline2')
+
+            $result.Count | Should -Be 1
+            $result[0].Id | Should -Be '22222222-2222-2222-2222-222222222222'
         }
     }
 

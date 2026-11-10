@@ -43,10 +43,12 @@ function Update-FabricReflex
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Id')]
         [guid]$ReflexId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Name', 'DisplayName')]
         [string]$ReflexName,
 
         [Parameter(Mandatory = $false)]

@@ -80,12 +80,19 @@ Author: Ioana Bouariu
         foreach ($space in $Workspace)
         {
 
-            $Uri = "groups/{0}/users" -f $space.id
+            $apiEndpointUrl = "groups/{0}/users" -f $space.id
 
             # Make a GET request to the PowerBI API to retrieve the users of the workspace.
-            # The function returns the 'value' property of the response, which contains the users.
-
-            $response = (Invoke-FabricRestMethod -Method get -PowerBIApi -Uri $Uri).value
+            $apiParams = @{
+                Uri            = $apiEndpointUrl
+                Method         = 'Get'
+                ApiType        = 'PowerBI'
+                TypeName       = 'Workspace User'
+                ObjectIdOrName = $space.id
+                HandleResponse = $true
+                ExtractValue   = 'True'
+            }
+            $response = @(Invoke-FabricRestMethod @apiParams)
             if ($response)
             {
 

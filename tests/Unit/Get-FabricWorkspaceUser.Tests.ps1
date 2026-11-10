@@ -47,23 +47,21 @@ Describe "Get-FabricWorkspaceUser" -Tag "UnitTests" {
                     displayName = 'TestWorkspace'
                 }
             }
+            # Invoke-FabricRestMethod (ExtractValue = 'True') returns the items of the 'value' array
             Mock -CommandName Invoke-FabricRestMethod -MockWith {
-                return @{
-                    value = @(
-                        @{
-                            emailAddress         = 'name@domain.com'
-                            groupUserAccessRight = 'Admin'
-                            displayName          = 'Fabric'
-                            identifier           = 'name@domain.com'
-                            principalType        = 'User'
-                        }, @{
-                            emailAddress         = 'viewer@domain.com'
-                            groupUserAccessRight = 'Viewer'
-                            displayName          = 'Fabric viewer'
-                            identifier           = 'viewer@domain.com'
-                            principalType        = 'User'
-                        }
-                    )
+                [pscustomobject]@{
+                    emailAddress         = 'name@domain.com'
+                    groupUserAccessRight = 'Admin'
+                    displayName          = 'Fabric'
+                    identifier           = 'name@domain.com'
+                    principalType        = 'User'
+                }
+                [pscustomobject]@{
+                    emailAddress         = 'viewer@domain.com'
+                    groupUserAccessRight = 'Viewer'
+                    displayName          = 'Fabric viewer'
+                    identifier           = 'viewer@domain.com'
+                    principalType        = 'User'
                 }
             }
         }
@@ -74,16 +72,20 @@ Describe "Get-FabricWorkspaceUser" -Tag "UnitTests" {
             Get-FabricWorkspaceUser -WorkspaceId $mockWorkspaceId
 
             Should -Invoke -CommandName Invoke-FabricRestMethod -Times 1 -ParameterFilter {
-                $Uri -like "*groups/*/users*"
+                $Uri -like "*groups/*/users*" -and
+                $ApiType -eq 'PowerBI' -and
+                $HandleResponse -eq $true -and
+                $ExtractValue -eq 'True'
             }
         }
 
         It 'Should return the list of users' {
             $mockWorkspaceId = [guid]::NewGuid()
 
-            $result = Get-FabricWorkspaceUser -WorkspaceId $mockWorkspaceId
+            $result = @(Get-FabricWorkspaceUser -WorkspaceId $mockWorkspaceId)
 
-            $result | Should -Not -BeNullOrEmpty
+            $result.Count | Should -Be 2
+            $result[0].emailAddress | Should -Be 'name@domain.com'
         }
     }
 
@@ -100,23 +102,21 @@ Describe "Get-FabricWorkspaceUser" -Tag "UnitTests" {
                     Id          = '22222222-2222-2222-2222-222222222222'
                 }
             )
+            # Invoke-FabricRestMethod (ExtractValue = 'True') returns the items of the 'value' array
             Mock -CommandName Invoke-FabricRestMethod -MockWith {
-                return @{
-                    value = @(
-                        @{
-                            emailAddress         = 'name@domain.com'
-                            groupUserAccessRight = 'Admin'
-                            displayName          = 'Fabric'
-                            identifier           = 'name@domain.com'
-                            principalType        = 'User'
-                        }, @{
-                            emailAddress         = 'viewer@domain.com'
-                            groupUserAccessRight = 'Viewer'
-                            displayName          = 'Fabric viewer'
-                            identifier           = 'viewer@domain.com'
-                            principalType        = 'User'
-                        }
-                    )
+                [pscustomobject]@{
+                    emailAddress         = 'name@domain.com'
+                    groupUserAccessRight = 'Admin'
+                    displayName          = 'Fabric'
+                    identifier           = 'name@domain.com'
+                    principalType        = 'User'
+                }
+                [pscustomobject]@{
+                    emailAddress         = 'viewer@domain.com'
+                    groupUserAccessRight = 'Viewer'
+                    displayName          = 'Fabric viewer'
+                    identifier           = 'viewer@domain.com'
+                    principalType        = 'User'
                 }
             }
         }

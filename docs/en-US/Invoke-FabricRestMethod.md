@@ -5,7 +5,7 @@ HelpUri: ''
 itemType: Core
 Locale: en-US
 Module Name: FabricTools
-ms.date: 11/07/2026
+ms.date: 11/09/2026
 PlatyPS schema version: 2024-05-01
 title: Invoke-FabricRestMethod
 ---
@@ -14,24 +14,26 @@ title: Invoke-FabricRestMethod
 
 ## SYNOPSIS
 
-Sends an HTTP request to a Fabric or Power BI API endpoint and retrieve the response.
+Sends an HTTP request to a Fabric, Power BI, Kusto or Azure API endpoint and retrieve the response.
 
 ## SYNTAX
 
 ### __AllParameterSets
 
 ```
-Invoke-FabricRestMethod [-Uri] <string> [[-Method] <string>] [[-Body] <Object>] [[-Timeout] <int>]
- [[-RequestTimeoutSeconds] <int>] [[-ExtractValue] <string>] [[-TypeName] <string>]
- [[-ObjectIdOrName] <string>] [[-SuccessMessage] <string>] [-TestTokenExpired] [-PowerBIApi]
- [-NoWait] [-HandleResponse] [<CommonParameters>]
+Invoke-FabricRestMethod [-Uri] <string> [[-Method] <string>] [[-Body] <Object>]
+ [[-ApiType] <string>] [[-Timeout] <int>] [[-RequestTimeoutSeconds] <int>]
+ [[-ExtractValue] <string>] [[-TypeName] <string>] [[-ObjectIdOrName] <string>]
+ [[-SuccessMessage] <string>] [-TestTokenExpired] [-PowerBIApi] [-NoWait] [-HandleResponse]
+ [<CommonParameters>]
 ```
 
 ## ALIASES
 
 ## DESCRIPTION
 
-Sends an HTTP request to a Fabric or Power BI API endpoint and retrieve the response.
+Sends an HTTP request to a Fabric, Power BI, Kusto or Azure API endpoint and retrieve the response.
+The ApiType parameter selects the base URL and the access token used for the request.
 Supports pagination by recognizing continuation tokens in the response.
 Supports handling of long-running operations and throttling (error 429) responses.
 Facilitates both synchronous and asynchronous operations.
@@ -51,7 +53,40 @@ Invoke-FabricRestMethod -uri "/api/resource" -method "POST" -body $requestBody
 
 This example sends a POST request to the "/api/resource" endpoint of the Fabric API with a request body.
 
+### EXAMPLE 3
+
+Invoke-FabricRestMethod -Uri "datasets" -ApiType PowerBI
+
+This example sends a GET request to the "https://api.powerbi.com/v1.0/myorg/datasets" endpoint of the Power BI API.
+
 ## PARAMETERS
+
+### -ApiType
+
+The API the request is sent to.
+It determines the base URL for a relative Uri and the access token used.
+Default is 'Fabric'.
+- Fabric:  Fabric REST API (FabricTools.FabricApi.BaseUrl), Fabric token.
+- PowerBI: Power BI REST API (FabricTools.PowerBiApi.BaseUrl), Fabric token.
+- Kusto:   Kusto query service of a KQL Database (full Uri required), Kusto token acquired on first use.
+- Azure:   Azure Resource Manager API (FabricTools.AzureApi.BaseUrl), Azure token.
+
+```yaml
+Type: System.String
+DefaultValue: Fabric
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: 3
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
 
 ### -Body
 
@@ -90,7 +125,7 @@ SupportsWildcards: false
 Aliases: []
 ParameterSets:
 - Name: (All)
-  Position: 5
+  Position: 6
   IsRequired: false
   ValueFromPipeline: false
   ValueFromPipelineByPropertyName: false
@@ -98,6 +133,22 @@ ParameterSets:
 DontShow: false
 AcceptedValues: []
 HelpMessage: ''
+```
+
+### -SuppressBodyLogging
+
+Redacts the request body from Debug logging. Use for requests containing
+credentials or other sensitive values.
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
 ```
 
 ### -HandleResponse
@@ -184,7 +235,7 @@ SupportsWildcards: false
 Aliases: []
 ParameterSets:
 - Name: (All)
-  Position: 7
+  Position: 8
   IsRequired: false
   ValueFromPipeline: false
   ValueFromPipelineByPropertyName: false
@@ -196,7 +247,9 @@ HelpMessage: ''
 
 ### -PowerBIApi
 
-A switch parameter to indicate that the request should be sent to the Power BI API instead of the Fabric API.
+Obsolete.
+Use '-ApiType PowerBI' instead.
+Kept for backward compatibility.
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
@@ -226,7 +279,7 @@ SupportsWildcards: false
 Aliases: []
 ParameterSets:
 - Name: (All)
-  Position: 4
+  Position: 5
   IsRequired: false
   ValueFromPipeline: false
   ValueFromPipelineByPropertyName: false
@@ -251,7 +304,7 @@ SupportsWildcards: false
 Aliases: []
 ParameterSets:
 - Name: (All)
-  Position: 8
+  Position: 9
   IsRequired: false
   ValueFromPipeline: false
   ValueFromPipelineByPropertyName: false
@@ -297,7 +350,7 @@ SupportsWildcards: false
 Aliases: []
 ParameterSets:
 - Name: (All)
-  Position: 3
+  Position: 4
   IsRequired: false
   ValueFromPipeline: false
   ValueFromPipelineByPropertyName: false
@@ -322,7 +375,7 @@ SupportsWildcards: false
 Aliases: []
 ParameterSets:
 - Name: (All)
-  Position: 6
+  Position: 7
   IsRequired: false
   ValueFromPipeline: false
   ValueFromPipelineByPropertyName: false
@@ -334,8 +387,10 @@ HelpMessage: ''
 
 ### -Uri
 
-The URI of the Fabric API endpoint to send the request to.
-Can be a relative path (e.g., "workspaces") or a full URL (e.g., "https://api.fabric.microsoft.com/v1/workspaces").
+The URI of the API endpoint to send the request to.
+Can be a relative path (e.g., "workspaces"), which is appended to the base URL of the selected ApiType,
+or a full URL (e.g., "https://api.fabric.microsoft.com/v1/workspaces").
+A full URL is required for ApiType 'Kusto'.
 
 ```yaml
 Type: System.String
@@ -374,4 +429,3 @@ Author: Kamil Nowinski
 ## RELATED LINKS
 
 {{ Fill in the related links here }}
-

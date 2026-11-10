@@ -3,6 +3,50 @@
 The format is based on and uses the types of changes according to [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+### Changed
+
+### Fixed
+
+### Deprecated
+
+### Removed
+
+### Security
+
+## 0.34.0 - 2026-11-10
+
+### Added
+
+- Added connection management cmdlets, pipeline execution and job-instance lookup, and item schedule cmdlets for Cron, Daily, and Weekly configurations.
+- Added consistent parameter aliases for the resource a cmdlet acts on (#83): `<Noun>Id` parameters accept `-Id` and `<Noun>Name` parameters accept `-Name` and `-DisplayName` (e.g. `Get-FabricLakehouse -WorkspaceId $ws -Name 'Sales'`). Existing parameter names are unchanged. Parent-resource parameters such as `-WorkspaceId` on item cmdlets are not aliased. Note: abbreviated parameter names that become ambiguous (e.g. `-I`, `-N`) must be spelled out further.
+- Added a QA test (tag `ParameterAliases`) enforcing the resource parameter alias convention for all exported cmdlets.
+- Added the Cmdlet Maturity Model (#183): every public cmdlet gets a level from 0 (Experimental) to 5 (Production Ready). The levels and criteria are documented in `docs/maturity-model.md`, and the current level of each cmdlet is listed in `docs/MATURITY.md`. Levels 1-4 are computed from the source (help, coding conventions, unit and integration tests); Experimental, Production Ready sign-off and check exemptions are recorded in `.build/Maturity.psd1`. Regenerate the report with `./build.ps1 -Tasks generate_maturity_report`.
+
+### Changed
+
+- `Invoke-FabricKQLCommand` aligned with the module's patterns (#163): uses `Invoke-FabricRestMethod` for a single API call, requires either `-KQLDatabaseName` or `-KQLDatabaseId` (mutually exclusive parameter sets), and logs via `Write-Message`. The `-ReturnRawResult` switch is renamed to `-Raw`; `-ReturnRawResult` still works as an alias.
+- Added `-ApiType` (`Fabric` (default), `PowerBI`, `Kusto`, `Azure`) to `Invoke-FabricRestMethod`, which selects the base URL and access token of the target API from configuration (#163). The Kusto token is acquired on first use and cached in the new `FabricTools.KustoSession.*` configuration; `Connect-FabricAccount` clears it on sign-in. The configuration key `FabricTools.KustoApi.BaseUrl` is renamed to `FabricTools.KustoApi.ResourceUrl`.
+- The `-PowerBIApi` switch of `Invoke-FabricRestMethod` is now hidden and maps to `-ApiType PowerBI`; it is kept for backward compatibility. Module cmdlets use `-ApiType PowerBI`.
+
+### Fixed
+
+- Fixed `Invoke-FabricKQLCommand` failing with "Invalid URI: The hostname could not be parsed" (#163): the query service URI is now read from the KQL Database `properties`, and requests are authenticated with a Kusto API token (`-ApiType Kusto`) instead of an undefined header variable. Query results with zero rows no longer fail.
+- Fixed `Get-FabricCapacity`, `Get-FabricDataPipeline`, `Get-FabricWorkspaceUser`, `Get-FabricCapacityRefreshables`, `Get-FabricCapacityWorkload`, `Get-FabricConnection`, `Get-FabricItem` and `Export-FabricItem` returning no items (#226): they read `.value` from output that `Invoke-FabricRestMethod` had already unwrapped. They now use `ExtractValue = 'True'`. `Get-FabricItem -itemID` and `Get-FabricConnection -connectionId` now return the requested object (previously nothing).
+- Fixed `Invoke-FabricRestMethod` looping forever on paginated list responses (#228): the continuation token was never sent, so the first page was requested again and again. The token is now appended to the request, with `&` when the `Uri` already has a query string. Affects every list cmdlet whose results span more than one page.
+
+### Deprecated
+
+### Removed
+
+- Removed the unused `MicrosoftPowerBIMgmt.Profile` dependency (#224). No FabricTools cmdlet uses it: authentication relies on Az.Accounts, and Power BI REST calls go through `Invoke-FabricRestMethod -ApiType PowerBI`. **Possible breaking change:** importing FabricTools no longer loads `MicrosoftPowerBIMgmt.Profile`, so scripts that used its cmdlets (e.g. `Connect-PowerBIServiceAccount`, `Invoke-PowerBIRestMethod`) without importing it must now run `Import-Module MicrosoftPowerBIMgmt.Profile` themselves. `Install-Module FabricTools` no longer installs it.
+- Removed outdated wording about "Fabric-friendly aliases for PowerBI functions" from the module description and README; those aliases were already removed (#47).
+
+### Security
+
 ## 0.33.0 - 2026-11-08
 
 ### Added

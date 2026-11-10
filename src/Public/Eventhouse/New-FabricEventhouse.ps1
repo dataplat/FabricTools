@@ -45,6 +45,7 @@ function New-FabricEventhouse
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Name', 'DisplayName')]
         [string]$EventhouseName,
 
         [Parameter(Mandatory = $false)]

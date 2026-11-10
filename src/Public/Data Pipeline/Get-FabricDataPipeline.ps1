@@ -44,10 +44,12 @@ function Get-FabricDataPipeline {
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Id')]
         [guid]$DataPipelineId,
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Name', 'DisplayName')]
         [string]$DataPipelineName
     )
 
@@ -66,10 +68,13 @@ function Get-FabricDataPipeline {
 
         # Invoke the Fabric API to retrieve data pipeline details
         $apiParams = @{
-            Uri    = $apiEndpointUrl
-            Method = 'Get'
+            Uri            = $apiEndpointUrl
+            Method         = 'Get'
+            TypeName       = 'DataPipeline'
+            HandleResponse = $true
+            ExtractValue   = 'True'
         }
-        $DataPipelines = (Invoke-FabricRestMethod @apiParams).Value
+        $DataPipelines = @(Invoke-FabricRestMethod @apiParams)
 
         # Filter results based on provided parameters
         $response = if ($DataPipelineId) {

@@ -60,6 +60,33 @@ Describe "Export-FabricItem" -Tag "UnitTests" {
         }
     }
 
+    Context "Listing items in the workspace" {
+        BeforeAll {
+            Mock -CommandName Confirm-TokenState -MockWith { return $true }
+            # Listing: Invoke-FabricRestMethod (ExtractValue = 'True') returns the items of the 'value' array
+            Mock -CommandName Invoke-FabricRestMethod -ParameterFilter { $Uri -like '*/items' } -MockWith {
+                [pscustomobject]@{ id = '11111111-1111-1111-1111-111111111111'; displayName = 'TestNotebook'; type = 'Notebook' }
+                [pscustomobject]@{ id = '22222222-2222-2222-2222-222222222222'; displayName = 'TestLakehouse'; type = 'Lakehouse' }
+            }
+            # getDefinition: no parts, so nothing is written to disk
+            Mock -CommandName Invoke-FabricRestMethod -ParameterFilter { $Uri -like '*/getDefinition' } -MockWith {
+                [pscustomobject]@{ definition = [pscustomobject]@{ parts = @() } }
+            }
+        }
+
+        It 'Should list the workspace items and export those matching the filter' {
+            $output = Export-FabricItem -workspaceId ([guid]::NewGuid()) -path 'TestDrive:\export'
+
+            $output | Should -Contain 'Existing items: 1'
+            Should -Invoke -CommandName Invoke-FabricRestMethod -Times 1 -Exactly -ParameterFilter {
+                $Uri -like '*/items' -and $ExtractValue -eq 'True'
+            }
+            Should -Invoke -CommandName Invoke-FabricRestMethod -Times 1 -Exactly -ParameterFilter {
+                $Uri -like '*/items/11111111-1111-1111-1111-111111111111/getDefinition'
+            }
+        }
+    }
+
     Context "Error handling" {
         BeforeAll {
             Mock -CommandName Invoke-FabricRestMethod -MockWith {

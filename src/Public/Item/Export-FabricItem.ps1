@@ -48,6 +48,7 @@ https://github.com/microsoft/Analysis-Services/tree/master/pbidevmode/fabricps-p
         [guid]$WorkspaceId,
         [scriptblock]$filter = { $_.type -in @("Report", "SemanticModel", "Notebook", "SparkJobDefinitionV1") },
         [Parameter(Mandatory = $false)]
+        [Alias('Id')]
         [guid]$itemID
     )
     if ($PSBoundParameters.ContainsKey('itemID')) {
@@ -73,12 +74,17 @@ https://github.com/microsoft/Analysis-Services/tree/master/pbidevmode/fabricps-p
         # Display a message indicating the items were exported
         Write-Output "Items exported to $path"
     } else {
-        $items = Invoke-FabricRestMethod -Uri "workspaces/$workspaceId/items" -Method Get
+        $apiParams = @{
+            Uri            = "workspaces/$workspaceId/items"
+            Method         = 'Get'
+            TypeName       = 'Item'
+            HandleResponse = $true
+            ExtractValue   = 'True'
+        }
+        $items = @(Invoke-FabricRestMethod @apiParams)
 
         if ($filter) {
-            $items = $items.value | Where-Object $filter
-        } else {
-            $items = $items.value
+            $items = @($items | Where-Object $filter)
         }
 
         Write-Output "Existing items: $($items.Count)"

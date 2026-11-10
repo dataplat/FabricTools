@@ -35,6 +35,7 @@ function Remove-FabricReport
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Id')]
         [guid]$ReportId
     )
     try

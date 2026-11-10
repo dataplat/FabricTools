@@ -41,10 +41,12 @@ function Update-FabricEventhouse
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Id')]
         [guid]$EventhouseId,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Name', 'DisplayName')]
         [string]$EventhouseName,
 
         [Parameter(Mandatory = $false)]

@@ -37,6 +37,7 @@ function Update-FabricMLModel
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Id')]
         [guid]$MLModelId,
 
         [Parameter(Mandatory = $false)]

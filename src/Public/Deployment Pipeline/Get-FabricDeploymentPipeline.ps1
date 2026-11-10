@@ -40,6 +40,7 @@ Author: Kamil Nowinski
     param(
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
+        [Alias('Id')]
         [Guid]$DeploymentPipelineId,
 
         [Parameter(Mandatory = $false)]
