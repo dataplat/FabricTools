@@ -70,7 +70,7 @@ function Start-FabricDataPipeline {
             TestTokenExpired = $true
         }
         $pipelines = @(Invoke-FabricRestMethod @apiParams |
-            Where-Object { $_.DisplayName -ceq $DataPipelineName })
+            Where-Object { $_.DisplayName -eq $DataPipelineName })
         if ($pipelines.Count -eq 0) {
             throw "Data pipeline '$DataPipelineName' was not found in workspace '$WorkspaceId'."
         }
