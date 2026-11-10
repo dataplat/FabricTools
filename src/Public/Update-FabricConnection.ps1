@@ -25,7 +25,9 @@ function Update-FabricConnection {
         Optional privacy level for replacement credentials.
 
     .EXAMPLE
+        ```powershell
         Update-FabricConnection -ConnectionId '11111111-1111-1111-1111-111111111111' -ConnectionName 'Updated API'
+        ```
     #>
     [CmdletBinding(SupportsShouldProcess)]
     param (

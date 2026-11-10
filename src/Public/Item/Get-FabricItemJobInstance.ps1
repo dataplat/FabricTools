@@ -20,10 +20,14 @@ function Get-FabricItemJobInstance {
         The ID of a job instance to retrieve. Omit to list recent instances.
 
     .EXAMPLE
+        ```powershell
         Get-FabricItemJobInstance -WorkspaceId '11111111-1111-1111-1111-111111111111' -ItemId '22222222-2222-2222-2222-222222222222' -JobType Pipeline
+        ```
 
     .EXAMPLE
+        ```powershell
         Get-FabricItemJobInstance -WorkspaceId '11111111-1111-1111-1111-111111111111' -ItemId '22222222-2222-2222-2222-222222222222' -JobType Pipeline -JobInstanceId '33333333-3333-3333-3333-333333333333'
+        ```
     #>
     [CmdletBinding()]
     param (
@@ -52,7 +56,7 @@ function Get-FabricItemJobInstance {
         HandleResponse   = $true
         TestTokenExpired = $true
     }
-    if ($JobInstanceId) {
+    if ($PSBoundParameters.ContainsKey('JobInstanceId')) {
         $apiParams.Uri = "workspaces/$WorkspaceId/items/$ItemId/jobs/instances/${JobInstanceId}?jobType=$([uri]::EscapeDataString($JobType))"
         return Invoke-FabricRestMethod @apiParams
     }

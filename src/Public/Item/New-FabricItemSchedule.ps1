@@ -40,7 +40,9 @@ function New-FabricItemSchedule {
         Creates the schedule enabled. Defaults to true.
 
     .EXAMPLE
+        ```powershell
         New-FabricItemSchedule -WorkspaceId '11111111-1111-1111-1111-111111111111' -ItemId '22222222-2222-2222-2222-222222222222' -JobType Pipeline -ScheduleType Daily -Times '08:00' -StartDateTime '2026-11-09T00:00:00' -EndDateTime '2026-12-31T23:59:59' -TimeZone 'UTC'
+        ```
     #>
     [CmdletBinding(SupportsShouldProcess)]
     param (

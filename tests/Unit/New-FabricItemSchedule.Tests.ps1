@@ -22,6 +22,36 @@ Describe 'New-FabricItemSchedule' -Tag 'UnitTests' {
         }
     }
 
+    It 'Creates Daily and Weekly recurrence configurations' -ForEach @(
+        @{ Type = 'Daily'; Times = @('08:00'); Weekdays = @() }
+        @{ Type = 'Weekly'; Times = @('08:00', '16:00'); Weekdays = @('Monday', 'Friday') }
+    ) {
+        InModuleScope FabricTools -Parameters @{ Type = $Type; Times = $Times; Weekdays = $Weekdays } {
+            param($Type, $Times, $Weekdays)
+            $ws = [guid]::NewGuid()
+            $item = [guid]::NewGuid()
+            $params = @{
+                WorkspaceId = $ws
+                ItemId = $item
+                JobType = 'Pipeline'
+                ScheduleType = $Type
+                Times = $Times
+                StartDateTime = '2026-11-09T00:00:00Z'
+                EndDateTime = '2026-11-10T00:00:00Z'
+                TimeZone = 'UTC'
+                Confirm = $false
+            }
+            if ($Weekdays.Count) {
+                $params.Weekdays = $Weekdays
+            }
+            New-FabricItemSchedule @params
+            Should -Invoke Invoke-FabricRestMethod -Times 1 -ParameterFilter {
+                $Body.configuration.type -eq $Type -and
+                $Body.configuration.times.Count -eq $Times.Count
+            }
+        }
+    }
+
     It 'Requires times and weekdays for a Weekly configuration' {
         InModuleScope FabricTools {
             { New-FabricItemSchedule -WorkspaceId ([guid]::NewGuid()) -ItemId ([guid]::NewGuid()) -JobType Pipeline -ScheduleType Weekly -StartDateTime '2026-11-09T00:00:00Z' -EndDateTime '2026-11-10T00:00:00Z' -TimeZone UTC -Confirm:$false } | Should -Throw '*Times and Weekdays*'

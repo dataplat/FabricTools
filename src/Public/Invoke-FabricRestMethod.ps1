@@ -23,6 +23,9 @@ Function Invoke-FabricRestMethod {
 .PARAMETER Body
     The body of the request, if applicable. This can be a hashtable or a string. If a hashtable is provided, it will be converted to JSON format.
 
+.PARAMETER SuppressBodyLogging
+    Redacts the request body from Debug logging. Use for requests containing credentials or other sensitive values.
+
 .PARAMETER TestTokenExpired
     A switch parameter to test if the Fabric token is expired before making the request. If the token is expired, it will attempt to refresh it.
     Default is False. If set to True, the function will check the token state before making the request.

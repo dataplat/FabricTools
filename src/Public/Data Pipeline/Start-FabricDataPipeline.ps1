@@ -24,11 +24,15 @@ function Start-FabricDataPipeline {
         Returns the current job instance without waiting for completion.
 
     .EXAMPLE
+        ```powershell
         Start-FabricDataPipeline -WorkspaceId '11111111-1111-1111-1111-111111111111' -DataPipelineName 'Daily load'
+        ```
 
     .EXAMPLE
+        ```powershell
         $parameters = @{ loadDate = '2026-11-09' }
         Start-FabricDataPipeline -WorkspaceId '11111111-1111-1111-1111-111111111111' -DataPipelineId '22222222-2222-2222-2222-222222222222' -Parameters $parameters -NoWait
+        ```
 
     .NOTES
         Requires an authenticated Fabric session.

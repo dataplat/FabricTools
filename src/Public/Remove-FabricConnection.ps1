@@ -7,7 +7,9 @@ function Remove-FabricConnection {
         The ID of the connection to remove.
 
     .EXAMPLE
+        ```powershell
         Remove-FabricConnection -ConnectionId '11111111-1111-1111-1111-111111111111'
+        ```
     #>
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param (

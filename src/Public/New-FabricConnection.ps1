@@ -33,8 +33,10 @@ function New-FabricConnection {
         Skips testing the connection when creating it.
 
     .EXAMPLE
+        ```powershell
         $credential = Get-Credential
         New-FabricConnection -ConnectionName 'FUAM API' -BaseUrl 'https://api.contoso.com' -Audience 'api://contoso' -CredentialType ServicePrincipal -TenantId '11111111-1111-1111-1111-111111111111' -Credential $credential
+        ```
     #>
     [CmdletBinding(SupportsShouldProcess)]
     param (
@@ -45,6 +47,7 @@ function New-FabricConnection {
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
+        [ValidateScript({ $_.IsAbsoluteUri -and $_.Scheme -eq 'https' })]
         [uri]$BaseUrl,
 
         [Parameter(Mandatory = $true)]

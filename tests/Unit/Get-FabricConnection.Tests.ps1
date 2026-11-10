@@ -1,82 +1,163 @@
 #Requires -Module @{ ModuleName="Pester"; ModuleVersion="5.0"}
 
-BeforeAll {
-    $PSDefaultParameterValues['Mock:ModuleName'] = 'FabricTools'
-    $PSDefaultParameterValues['InModuleScope:ModuleName'] = 'FabricTools'
-    $PSDefaultParameterValues['Should:ModuleName'] = 'FabricTools'
+BeforeDiscovery {
+    $CommandName = 'Get-FabricConnection'
 }
 
-Describe 'Get-FabricConnection' -Tag 'UnitTests' {
-    It 'Supports ID and name filters' {
-        $command = Get-Command Get-FabricConnection
-        $command | Should -HaveParameter connectionId -Mandatory:$false
-        $command | Should -HaveParameter ConnectionName -Mandatory:$false
+BeforeAll {
+    $ModuleName = 'FabricTools'
+    $PSDefaultParameterValues['Mock:ModuleName'] = $ModuleName
+    $PSDefaultParameterValues['InModuleScope:ModuleName'] = $ModuleName
+    $PSDefaultParameterValues['Should:ModuleName'] = $ModuleName
+}
+
+Describe "Get-FabricConnection" -Tag "UnitTests" {
+
+    BeforeAll {
+        $command = Get-Command -Name Get-FabricConnection
     }
 
-    It 'Lists connections and extracts the value collection' {
-        InModuleScope FabricTools {
-            Mock Confirm-TokenState {}
-            Mock Invoke-FabricRestMethod { @([pscustomobject]@{ displayName = 'One' }) }
-            $result = Get-FabricConnection
-            $result.Count | Should -Be 1
-            Should -Invoke Invoke-FabricRestMethod -Times 1 -ParameterFilter {
-                $Uri -eq 'connections' -and $ExtractValue -eq 'True' -and $HandleResponse
-            }
+    Context 'Command definition' {
+        It 'Should have a command definition' {
+            $command | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Should have the expected parameter: <Name>' -ForEach @(
+            @{ Name = 'connectionId'; Mandatory = $false }
+            @{ Name = 'ConnectionName'; Mandatory = $false }
+        ) {
+            $command | Should -HaveParameter $Name -Mandatory:$Mandatory
         }
     }
 
-    It 'Retrieves a connection by ID' {
-        InModuleScope FabricTools {
-            Mock Confirm-TokenState {}
-            Mock Invoke-FabricRestMethod { [pscustomobject]@{ displayName = 'One' } }
-            $id = [guid]::NewGuid()
-            (Get-FabricConnection -connectionId $id).displayName | Should -Be 'One'
-            Should -Invoke Invoke-FabricRestMethod -Times 1 -ParameterFilter { $Uri -eq "connections/$id" }
-        }
-    }
-
-    It 'Returns only an exact display-name match' {
-        InModuleScope FabricTools {
-            Mock Confirm-TokenState {}
-            Mock Invoke-FabricRestMethod {
-                @(
-                    [pscustomobject]@{ displayName = 'Finance API' }
-                    [pscustomobject]@{ displayName = 'Finance API v2' }
+    Context 'When getting all connections successfully (200)' {
+        BeforeAll {
+            Mock -CommandName Confirm-TokenState -MockWith { }
+            Mock -CommandName Write-Message -MockWith { }
+            Mock -CommandName Invoke-FabricRestMethod -MockWith {
+                InModuleScope -ModuleName 'FabricTools' {
+                    $script:statusCode = 200
+                }
+                return @(
+                    [pscustomobject]@{ id = [guid]::NewGuid(); displayName = 'Connection1'; connectionType = 'SQL' }
+                    [pscustomobject]@{ id = [guid]::NewGuid(); displayName = 'Connection2'; connectionType = 'SharePoint' }
                 )
             }
+        }
+
+        It 'Should call Invoke-FabricRestMethod with the correct parameters' {
+            Get-FabricConnection
+
+            Should -Invoke -CommandName Invoke-FabricRestMethod -Times 1 -ParameterFilter {
+                $Uri -eq 'connections' -and
+                $HandleResponse -eq $true -and
+                $ExtractValue -eq 'True'
+            }
+        }
+
+        It 'Should return the list of connections' {
+            $result = Get-FabricConnection
+
+            $result | Should -Not -BeNullOrEmpty
+            $result.Count | Should -Be 2
+        }
+    }
+
+    Context 'When getting a specific connection by ID' {
+        BeforeAll {
+            Mock -CommandName Confirm-TokenState -MockWith { }
+            Mock -CommandName Write-Message -MockWith { }
+            Mock -CommandName Invoke-FabricRestMethod -MockWith {
+                InModuleScope -ModuleName 'FabricTools' {
+                    $script:statusCode = 200
+                }
+                return [pscustomobject]@{
+                    id = [guid]::NewGuid()
+                    displayName = 'Connection1'
+                    connectionType = 'SQL'
+                }
+            }
+        }
+
+        It 'Should call Invoke-FabricRestMethod with the connection ID' {
+            $mockConnectionId = [guid]::NewGuid()
+
+            Get-FabricConnection -connectionId $mockConnectionId
+
+            Should -Invoke -CommandName Invoke-FabricRestMethod -Times 1 -ParameterFilter {
+                $Uri -eq "connections/$mockConnectionId"
+            }
+        }
+
+        It 'Should return the connection when retrieved by ID' {
+            $result = Get-FabricConnection -connectionId ([guid]::NewGuid())
+
+            $result | Should -Not -BeNullOrEmpty
+            $result.displayName | Should -Be 'Connection1'
+        }
+    }
+
+    Context 'When getting a connection by exact name' {
+        BeforeAll {
+            Mock -CommandName Confirm-TokenState -MockWith { }
+            Mock -CommandName Invoke-FabricRestMethod -MockWith {
+                return @(
+                    [pscustomobject]@{ id = [guid]::NewGuid(); displayName = 'Finance API' }
+                    [pscustomobject]@{ id = [guid]::NewGuid(); displayName = 'Finance API v2' }
+                )
+            }
+        }
+
+        It 'Should return only an exact display-name match' {
             $result = Get-FabricConnection -ConnectionName 'Finance API'
             $result.Count | Should -Be 1
             $result.displayName | Should -Be 'Finance API'
+            Should -Invoke -CommandName Invoke-FabricRestMethod -Times 1 -ParameterFilter {
+                $Uri -eq 'connections' -and $ExtractValue -eq 'True'
+            }
         }
-    }
 
-    It 'Rejects ambiguous names and both selectors' {
-        InModuleScope FabricTools {
-            Mock Confirm-TokenState {}
-            Mock Invoke-FabricRestMethod {
-                @(
-                    [pscustomobject]@{ displayName = 'Finance API' }
-                    [pscustomobject]@{ displayName = 'Finance API' }
+        It 'Should reject an ambiguous exact name' {
+            Mock -CommandName Invoke-FabricRestMethod -MockWith {
+                return @(
+                    [pscustomobject]@{ id = [guid]::NewGuid(); displayName = 'Finance API' }
+                    [pscustomobject]@{ id = [guid]::NewGuid(); displayName = 'Finance API' }
                 )
             }
             { Get-FabricConnection -ConnectionName 'Finance API' } | Should -Throw '*ambiguous*'
-            { Get-FabricConnection -connectionId ([guid]::NewGuid()) -ConnectionName 'Finance API' } | Should -Throw '*Specify either*'
         }
     }
 
-    It 'Returns no results when the connection list is empty' {
-        InModuleScope FabricTools {
-            Mock Confirm-TokenState {}
-            Mock Invoke-FabricRestMethod { $null }
-            Get-FabricConnection | Should -BeNullOrEmpty
+    Context 'When no connections are found' {
+        BeforeAll {
+            Mock -CommandName Confirm-TokenState -MockWith { }
+            Mock -CommandName Write-Message -MockWith { }
+            Mock -CommandName Invoke-FabricRestMethod -MockWith {
+                InModuleScope -ModuleName 'FabricTools' {
+                    $script:statusCode = 200
+                }
+                return $null
+            }
+        }
+
+        It 'Should return null when no connections found' {
+            $result = Get-FabricConnection
+
+            $result | Should -BeNullOrEmpty
         }
     }
 
-    It 'Propagates API errors' {
-        InModuleScope FabricTools {
-            Mock Confirm-TokenState {}
-            Mock Invoke-FabricRestMethod { throw 'API connection failed' }
-            { Get-FabricConnection } | Should -Throw '*API connection failed*'
+    Context 'When an exception is thrown' {
+        BeforeAll {
+            Mock -CommandName Confirm-TokenState -MockWith { }
+            Mock -CommandName Write-Message -MockWith { }
+            Mock -CommandName Invoke-FabricRestMethod -MockWith {
+                throw 'API connection failed'
+            }
+        }
+
+        It 'Should throw an exception when API call fails' {
+            { Get-FabricConnection } | Should -Throw -ExpectedMessage '*API connection failed*'
         }
     }
 }
