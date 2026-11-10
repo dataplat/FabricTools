@@ -135,6 +135,22 @@ AcceptedValues: []
 HelpMessage: ''
 ```
 
+### -SuppressBodyLogging
+
+Redacts the request body from Debug logging. Use for requests containing
+credentials or other sensitive values.
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+```
+
 ### -HandleResponse
 
 A switch parameter to indicate that the response should be handled after call API.
@@ -413,4 +429,3 @@ Author: Kamil Nowinski
 ## RELATED LINKS
 
 {{ Fill in the related links here }}
-

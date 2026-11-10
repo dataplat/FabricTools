@@ -24,6 +24,7 @@ Describe "Get-FabricConnection" -Tag "UnitTests" {
 
         It 'Should have the expected parameter: <Name>' -ForEach @(
             @{ Name = 'connectionId'; Mandatory = $false }
+            @{ Name = 'ConnectionName'; Mandatory = $false }
         ) {
             $command | Should -HaveParameter $Name -Mandatory:$Mandatory
         }
@@ -93,6 +94,37 @@ Describe "Get-FabricConnection" -Tag "UnitTests" {
 
             $result | Should -Not -BeNullOrEmpty
             $result.displayName | Should -Be 'Connection1'
+        }
+    }
+
+    Context 'When getting a connection by exact name' {
+        BeforeAll {
+            Mock -CommandName Confirm-TokenState -MockWith { }
+            Mock -CommandName Invoke-FabricRestMethod -MockWith {
+                return @(
+                    [pscustomobject]@{ id = [guid]::NewGuid(); displayName = 'Finance API' }
+                    [pscustomobject]@{ id = [guid]::NewGuid(); displayName = 'Finance API v2' }
+                )
+            }
+        }
+
+        It 'Should return only an exact display-name match' {
+            $result = Get-FabricConnection -ConnectionName 'Finance API'
+            $result.Count | Should -Be 1
+            $result.displayName | Should -Be 'Finance API'
+            Should -Invoke -CommandName Invoke-FabricRestMethod -Times 1 -ParameterFilter {
+                $Uri -eq 'connections' -and $ExtractValue -eq 'True'
+            }
+        }
+
+        It 'Should reject an ambiguous exact name' {
+            Mock -CommandName Invoke-FabricRestMethod -MockWith {
+                return @(
+                    [pscustomobject]@{ id = [guid]::NewGuid(); displayName = 'Finance API' }
+                    [pscustomobject]@{ id = [guid]::NewGuid(); displayName = 'Finance API' }
+                )
+            }
+            { Get-FabricConnection -ConnectionName 'Finance API' } | Should -Throw '*ambiguous*'
         }
     }
 

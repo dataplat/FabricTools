@@ -21,7 +21,24 @@ Retrieves Fabric connections.
 ### __AllParameterSets
 
 ```
-Get-FabricConnection [[-connectionId] <guid>] [<CommonParameters>]
+Get-FabricConnection [[-connectionId] <guid>] [-ConnectionName <string>] [<CommonParameters>]
+```
+
+### -ConnectionName
+
+The exact display name of the connection to retrieve. An error is raised if
+multiple connections have that name.
+
+```yaml
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases:
+- Name
+- DisplayName
+ParameterSets:
+- Name: (All)
+  IsRequired: false
 ```
 
 ## ALIASES
@@ -29,7 +46,7 @@ Get-FabricConnection [[-connectionId] <guid>] [<CommonParameters>]
 ## DESCRIPTION
 
 The Get-FabricConnection function retrieves Fabric connections.
-It can retrieve all connections or the specified one only.
+It can retrieve all connections, a connection by ID, or a connection by exact display name.
 
 ## EXAMPLES
 
@@ -44,6 +61,14 @@ This example retrieves all connections from Fabric
 Get-FabricConnection -connectionId "12345"
 
 This example retrieves specific connection from Fabric with ID "12345".
+
+### EXAMPLE 3
+
+```powershell
+Get-FabricConnection -ConnectionName 'Finance API'
+```
+
+Retrieves the connection with the exact display name.
 
 ## PARAMETERS
 
@@ -90,4 +115,3 @@ Author: Kamil Nowinski
 ## RELATED LINKS
 
 {{ Fill in the related links here }}
-
