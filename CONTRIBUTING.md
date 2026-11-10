@@ -114,6 +114,14 @@ The workflow for using this and developing the code is shown below.
 
 11. When the process finishes, the documentation should be updated. Now push your branch to GitHub and create a PR against the repo.
 
+## Cmdlet maturity
+
+Every public cmdlet has a maturity level from 0 (Experimental) to 5 (Production Ready). The levels, their criteria and how to move a cmdlet up a level are described in [docs/maturity-model.md](docs/maturity-model.md); the current level of each cmdlet is in [docs/MATURITY.md](docs/MATURITY.md). New cmdlets should reach level 3 (Unit Tested). When your change affects a cmdlet's level, regenerate the report and commit it:
+
+```PowerShell
+./build.ps1 -Tasks generate_maturity_report
+```
+
 ## Thanks!
 
 We will review your PR and get back to you as soon as we can. We are all volunteers and do this in our spare time, so please be patient with us. We will try to get back to you within a week, but it may take longer if we are busy.

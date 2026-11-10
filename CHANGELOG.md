@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added consistent parameter aliases for the resource a cmdlet acts on (#83): `<Noun>Id` parameters accept `-Id` and `<Noun>Name` parameters accept `-Name` and `-DisplayName` (e.g. `Get-FabricLakehouse -WorkspaceId $ws -Name 'Sales'`). Existing parameter names are unchanged. Parent-resource parameters such as `-WorkspaceId` on item cmdlets are not aliased. Note: abbreviated parameter names that become ambiguous (e.g. `-I`, `-N`) must be spelled out further.
 - Added a QA test (tag `ParameterAliases`) enforcing the resource parameter alias convention for all exported cmdlets.
+- Added the Cmdlet Maturity Model (#183): every public cmdlet gets a level from 0 (Experimental) to 5 (Production Ready). The levels and criteria are documented in `docs/maturity-model.md`, and the current level of each cmdlet is listed in `docs/MATURITY.md`. Levels 1-4 are computed from the source (help, coding conventions, unit and integration tests); Experimental, Production Ready sign-off and check exemptions are recorded in `.build/Maturity.psd1`. Regenerate the report with `./build.ps1 -Tasks generate_maturity_report`.
 
 ### Changed
 
